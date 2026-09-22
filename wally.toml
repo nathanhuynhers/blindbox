@@ -1,0 +1,9 @@
+[package]
+name = "nathan/roblox-game"
+description = "Roblox game"
+version = "0.1.0"
+realm = "shared"
+registry = "https://github.com/UpliftGames/wally-index"
+private = true
+
+[dependencies]

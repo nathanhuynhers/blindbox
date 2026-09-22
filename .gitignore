@@ -1,0 +1,27 @@
+# Generated place files (authored model assets remain eligible for version control)
+/*.rbxl
+/*.rbxlx
+/build/
+
+# Roblox Studio lock files
+*.rbxlx.lock
+*.rbxl.lock
+*.rbxmx.lock
+*.rbxm.lock
+
+/sourcemap.json
+
+# Wally output; commit wally.toml and wally.lock
+/Packages/
+/ServerPackages/
+/DevPackages/
+
+# Generated Selene Roblox standard library
+/roblox.yml
+
+# Local credentials and OS files
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
