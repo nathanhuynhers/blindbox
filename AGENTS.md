@@ -1,5 +1,15 @@
 # Engineering instructions
 
+## Game planning and task scope
+
+- Read [the game design](docs/GAME_DESIGN.md) and [MVP scope](docs/MVP.md) before gameplay work.
+  Use [architecture](docs/ARCHITECTURE.md), [data model](docs/DATA_MODEL.md), and
+  [economy](docs/ECONOMY.md) for the relevant system boundaries and provisional tuning.
+- Follow [the roadmap](docs/ROADMAP.md) for scoped tasks, verification, and review gates.
+  These documents are proposals, not evidence of implemented features or authorization to
+  build future milestones. Implement only the task authorized by the user; preserve the
+  distinction between confirmed direction, prototype defaults, and unresolved design choices.
+
 ## Before changing code
 
 - Inspect the existing architecture, source files, Rojo mappings, and tool configuration first.
