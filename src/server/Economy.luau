@@ -1,0 +1,27 @@
+--!strict
+return table.freeze({
+	expansionCost = 4000,
+	themeCost = 1200,
+	goalReward = 100,
+	setBonus = 1,
+	startingCoins = 450,
+	price = 150,
+	redeemCost = 6,
+	capacity = 200,
+	coinLimit = 1000000000,
+	scrapLimit = 1000000,
+	entries = {
+		{ id = "grove.pebble", rate = 1, weight = 20 },
+		{ id = "grove.sprout", rate = 1.5, weight = 20 },
+		{ id = "grove.acorn", rate = 2, weight = 20 },
+		{ id = "grove.mushroom", rate = 3, weight = 15 },
+		{ id = "grove.moth", rate = 4, weight = 15 },
+		{ id = "grove.star", rate = 7, weight = 10 },
+		{ id = "tide.bubble", rate = 1.25, weight = 20 },
+		{ id = "tide.coral", rate = 1.75, weight = 20 },
+		{ id = "tide.shell", rate = 2, weight = 20 },
+		{ id = "tide.jelly", rate = 3.25, weight = 15 },
+		{ id = "tide.ray", rate = 4, weight = 15 },
+		{ id = "tide.pearl", rate = 7.5, weight = 10 },
+	},
+})

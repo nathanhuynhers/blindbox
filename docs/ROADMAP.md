@@ -1,8 +1,13 @@
-# Development roadmap
+ # Development roadmap
 
-Status: proposed sequence, not authorization to implement. Each milestone is a review gate.
-Authorize one bounded task at a time; finishing a task does not authorize the next milestone.
-The docs describe intended behavior, while source files show what actually exists.
+Status: the user accepted the MVP after manual playtesting and authorized autonomous full-game
+implementation. Milestones 2-5 are implemented in the current candidate; milestone 6 has code,
+original procedural assets and automated checks, with native storage/device/multiplayer release
+validation still pending. See [scope](FULL_GAME.md) and [operations](OPERATIONS.md).
+
+Implementation approvals between these milestones are superseded by the user's broader request.
+Public deployment, paid mechanics and trading remain outside scope. The milestone definitions
+below are review criteria, not claims that every runtime test has passed.
 
 ## Milestone 0 — Review the plan
 
@@ -16,14 +21,15 @@ The docs describe intended behavior, while source files show what actually exist
   only if changes affect tooling, mappings, or source. Do not provision dependencies for this
   documentation-only task.
 
-Before milestone 1, approve session-only resets, three fixed slots, one six-figure placeholder
-collection, manual capped-bank collection, and recycle-to-choice duplicates. Final names, art,
-rarity labels, and exact numbers can remain tuning decisions. Requesting changes to this plan
-does not itself authorize implementation.
+The MVP retains session-only resets, three fixed slots, one six-figure placeholder collection,
+and recycle-to-choice duplicates. Automatic display income replaces bank collection; visitors
+are decorative. Names, theme, art, rarity labels, and exact numbers remain prototype decisions.
+Source files and the verification record identify implemented behavior and checks actually run.
+Do not infer Studio acceptance or authorization for later milestones from the implementation.
 
 ## Milestone 1 — First playable loop (the entire MVP)
 
-- **Goal:** prove open -> collect -> display -> earn -> buy again, with composition and useful
+- **Goal:** prove open -> own -> display -> earn -> buy again, with rarity upgrades and useful
   duplicates. Use [MVP acceptance criteria](MVP.md) as the release checklist.
 - **Systems:** public catalog/types, server state and transactions, box/inventory/display/income,
   validated remotes, combined inventory/index UI, fixed room geometry, local visitors.
@@ -32,19 +38,19 @@ does not itself authorize implementation.
   labeled, and observations inform a continue/revise decision. Do not substitute more content
   for a failed loop.
 - **Studio:** fresh player tutorial; common-only and duplicate-heavy sessions; reveal skip;
-  two clients attempting cross-owner actions; idle/full bank; leave/rejoin reset; low frame rate;
+  two clients attempting cross-owner actions; idle automatic income; leave/rejoin reset; low frame rate;
   mouse/touch controls; 10- and 30-minute pacing observations.
 - **Automatic checks:** catalog validation, deterministic roll boundaries, conservation and
-  reservation rules, diversity/cap arithmetic, malformed requests, replay/stale requests,
+  reservation rules, rate/fraction arithmetic, malformed requests, replay/stale requests,
   teardown bounds, source format/lint/build, and Luau diagnostics.
 
-Suggested separately authorized tasks, each leaving an inspectable playable increment:
+Implementation steps within the single MVP scope, each leaving an inspectable increment:
 
 1. **Buy and reveal:** six-entry catalog, minimal session state, authoritative one-box purchase,
    tiny reveal and count UI. Verify balance/item conservation and repeated request behavior.
-2. **Place and earn:** one room, three slots, minimal place/remove UI, capped bank and collect
-   action, simple visitors. Complete the first loop; test ownership with two clients.
-3. **Compose and complete:** distinct-figure bonus, expanded index, recycle/redeem actions,
+2. **Place and earn:** one room, three slots, minimal place/remove UI, automatic display income
+   and decorative visitors. Complete the first loop; test ownership with two clients.
+3. **Upgrade and complete:** per-figure/total rate presentation, expanded index, recycle/redeem actions,
    completion stamp and onboarding prompts. Test common usefulness and worst-case duplicates.
 4. **Evaluate:** usability and abuse checks, fix observed issues, record tuning evidence. Avoid
    starting persistence until the review establishes a reason to keep developing this loop.
@@ -56,14 +62,14 @@ Suggested separately authorized tasks, each leaving an inspectable playable incr
   use of existing placement and income rules, persistent one-time starter grant.
 - **Dependencies:** positive milestone 1 review; explicit persistence implementation/library
   decision and inventory identity review. No library is approved by this roadmap.
-- **Definition of done:** rejoin restores balances, inventory, discoveries, slots, bank, and
+- **Definition of done:** rejoin restores balances, inventory, discoveries, slots, and
   progression; failed loads cannot overwrite saves; conflicting sessions cannot mutate the
   same profile; one expansion remains economically bounded. Acknowledgement/durability and
   crash-loss behavior are documented and tested before external progression testing.
 - **Studio:** leave/rejoin, expansion then rejoin, failure messages, shutdown/restart, competing
   sessions, corrupted/old-version fixtures, and poor connectivity using isolated test data.
 - **Automatic checks:** migration fixtures, load-vs-absent distinction, save retries, session
-  exclusion, grant recovery, unlock affordability/idempotency, rate-cap behavior and regression suite.
+  exclusion, grant recovery, unlock affordability/idempotency, income settlement and regression suite.
 
 Task sequence: saving/restoring the existing loop first; recovery and conflict tests next;
 one expansion last. Do not build every future backend service before another playable benefit.
@@ -76,7 +82,7 @@ one expansion last. Do not build every future backend service before another pla
 - **Dependencies:** milestone 2 data safety, approved original content budget, and revised
   slot/bonus budget supporting actual set sizes. No variants by default.
 - **Definition of done:** new content is added through definitions/assets; common figures remain
-  relevant; completing a set grants its cosmetic once; no dominant rare-only strategy emerges.
+  relevant; completing a set grants its cosmetic once; rarity upgrades remain valuable and set bonuses stay modest.
 - **Studio:** compare themed versus mixed displays, new/old collection pacing, plaque readability,
   returning-player experience, and existing collection completion after content changes.
 - **Automatic checks:** definition references, bonus eligibility/caps, completion reward claims,
@@ -103,12 +109,12 @@ one expansion last. Do not build every future backend service before another pla
   inspection. Likes, wishlists, featured rooms, and leaderboards require later individual tasks.
 - **Dependencies:** safe room ownership, stable public/private projections, performance budgets,
   and enough visual variety to make visits interesting.
-- **Definition of done:** a guest can visit/inspect but cannot modify or collect from the host;
+- **Definition of done:** a guest can visit/inspect but cannot modify the host's state;
   observer visitors/models stay bounded; hosts leaving cleanly returns visitors to a valid state.
 - **Studio:** multiple hosts/guests, join/leave during visits, attempted unauthorized edits,
   touch navigation, crowded room performance and visual clutter.
 - **Automatic checks:** public-state allowlist, access rules, cleanup, bounded replication and
-  unchanged inventory/bank after guest interactions.
+  unchanged inventory/balances after guest interactions.
 
 Trading is not included. A separate go/no-go proposal must address per-item identity migration,
 two-profile transfers, duplication/replay attacks, recovery, audit, and economy effects before
@@ -150,7 +156,7 @@ trading work is authorized. Variants/crafting are likewise separate optional bra
    intended behavior changed. Run affected checks again after corrections.
 6. Report changed behavior, verification actually run, limitations, and precise Studio playtest
    steps still needed. Never claim a playtest without running it. Pause at the agreed task gate;
-   broader milestones and public deployment need their own authorization.
+   public deployment and features outside the approved full-game scope need separate authorization.
 
 A useful task request names the milestone/subtask, desired behavior, exclusions, acceptance
 criteria, and whether Studio validation is available. Documentation-only changes need link and
