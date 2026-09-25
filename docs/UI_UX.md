@@ -26,13 +26,10 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   preview/unsafe status. Ordinary saving/saved transitions are silent. Desktop uses individual
   left-side icon controls that expand on hover, focus or selection. Narrow/touch layouts use
   compact bottom navigation. Labels are Collection, Room, Shop, Goals and Social.
-- **Book:** collection tabs sit above a bound, layered spread with a shaded spine. Its paper,
-  ink, ornaments, portraits and binding change with collection. Wide layouts keep the grid on
-  the left and a large figure detail on the right. Narrow layouts open details in place of the
-  grid. Cards emphasize a render, short name and rarity; unknowns show silhouettes and question
-  marks. Details contain owned/available quantities, Coins/sec, Display, eligible recycling,
-  redemption and odds. All/Owned filtering retains every catalog entry in the measured grid.
-  Completion is acknowledged in the discovered count, with the existing plaque in Goals.
+- **Book:** the approved physical-book implementation now owns its cover/page stacks, deep fold,
+  side index tabs, six mounted portraits, right-page product showcase and optional artwork slots.
+  Grove/Tide themes transform the book; global controls remain neutral. See the dedicated
+  [Collection implementation, asset map and Studio review](COLLECTION_UI.md).
 - **Shop:** a neutral boutique surface contains large themed package presentations. The box
   preview occupies roughly 60% of each collection card. Name, catalog-derived figure count,
   exact price and OPEN follow it. A visible `i Odds` control opens all per-figure probabilities
@@ -57,7 +54,8 @@ Only book and shop dim the background. Generic sheets and room controls leave th
 
 `UILayout` defines each presentation's bounds within the Core UI safe area. Desktop reserves
 space for the rail; mobile uses bottom navigation. Short landscape hides navigation while a
-screen is open, keeps close/motion accessible, and places book collection tabs beside its pages.
+screen is open and keeps Close accessible. Collection uses left index tabs at every size; its
+Motion preference remains accessible from other screens.
 Closing returns navigation. Wide books use two pages; small screens focus on one page at a time.
 
 `Scroll.bind` still measures content plus padding rather than relying on automatic canvas height.

@@ -61,7 +61,9 @@ resize preserve access to every figure. Independent presentation hosts replace t
 package-led shop, compact daily/social sheets and bottom room controls. Narrow/touch windows use
 bottom navigation; short landscape gives its space to the active screen until close. `UILayout`
 owns bounds, while `CollectionStyle`/`CollectionArt` isolate collection identity from neutral
-`UITheme` controls. Details replace the book grid on narrow screens. See the
+`UITheme` controls. Details replace the book grid on narrow screens. `CollectionSelection`, `CollectionLayout`,
+`CollectionSkin`, `CollectionTabs`, `CollectionControls` and `CollectionAssets` separate state,
+physical presentation and uploaded/native artwork; see [Collection](COLLECTION_UI.md). See the
 [UI behavior, module boundaries and Studio checklist](UI_UX.md).
 
 Opening presentation is separate: `OpeningResult` derives immutable presentation metadata from

@@ -6,7 +6,7 @@ local Preview = {}
 export type Preview =
 	{ frame: ViewportFrame, figure: (string?, boolean) -> (), box: (string) -> () }
 -- Asset slot: one model per preview. Snapshot updates reuse it until identity changes.
-function Preview.create(parent: Instance, scope: Scope.Scope): Preview
+function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boolean?): Preview
 	local frame = Instance.new("ViewportFrame")
 	frame.Name = "Portrait"
 	frame.Size = UDim2.fromScale(1, 1)
@@ -24,9 +24,18 @@ function Preview.create(parent: Instance, scope: Scope.Scope): Preview
 	local visible: boolean? = nil
 	local colors: { [BasePart]: Color3 } = {}
 	local extent = 1.7
+	local dimensions = Vector3.new(3.4, 3.4, 3.4)
 	local function fit()
 		local aspect = math.max(0.2, frame.AbsoluteSize.X / math.max(1, frame.AbsoluteSize.Y))
 		local distance = extent / (math.tan(math.rad(17.5)) * math.min(1, aspect)) * 1.3
+		if productShot then
+			-- Fit actual width/height rather than a sphere; tall figures fill a portrait slot.
+			local tangent = math.tan(math.rad(17.5))
+			distance = (
+				math.max(dimensions.Y / (2 * tangent), dimensions.X / (2 * tangent * aspect))
+				+ dimensions.Z * 0.5
+			) * 1.08
+		end
 		camera.CFrame = CFrame.lookAt(Vector3.new(0, 0.35, -distance), Vector3.zero)
 	end
 	local function replace(nextModel: Model?)
@@ -38,6 +47,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope): Preview
 		visible = nil
 		if nextModel then
 			local bounds, size = nextModel:GetBoundingBox()
+			dimensions = size
 			nextModel:PivotTo(CFrame.new(-bounds.Position) * nextModel:GetPivot())
 			extent = math.max(size.X, size.Y, size.Z) * 0.5
 			nextModel.Parent = frame

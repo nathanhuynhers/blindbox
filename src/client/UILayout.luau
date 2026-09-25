@@ -12,18 +12,22 @@ function Layout.screen(id: string, width: number, height: number, desktop: boole
 	local availableWidth = math.max(1, width - left - right)
 	local availableHeight = math.max(1, height - top - bottom)
 	local maxWidth = if id == "Collection"
-		then 1120
+		then 1500
 		elseif id == "Shop" then 920
 		elseif id == "Goals" then 620
 		elseif id == "Visits" then 780
 		else 740
 	local maxHeight = if id == "Collection"
-		then 660
+		then 860
 		elseif id == "Shop" then 690
 		elseif id == "Goals" then 430
 		elseif id == "Visits" then 450
 		else 330
 	local w, h = math.min(availableWidth, maxWidth), math.min(availableHeight, maxHeight)
+	if id == "Collection" and w >= 940 then
+		-- Keep the approved broad open-book silhouette rather than stretching its pages tall.
+		h = math.min(h, (w - 126) / 1.95)
+	end
 	return {
 		x = left + (availableWidth - w) * (if id == "Goals" then 1 else 0.5),
 		y = top + (availableHeight - h) * (if id == "Display" then 1 else 0.5),

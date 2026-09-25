@@ -15,6 +15,7 @@ modules = {
     "Rules": "server", "Protocol": "server", "Transactions": "server",
     "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
+    "CollectionLayout": "client", "CollectionSelection": "client",
     "UIState": "client", "UIScope": "client", "UILayout": "client", "CollectionStyle": "client",
 }
 for name, folder in modules.items():
@@ -48,6 +49,10 @@ if result.returncode:
     raise SystemExit(result.returncode)
 (out / "UI.spec.luau").write_text((root / "tests" / "UI.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
 result = subprocess.run([sys.argv[1], str(out / "UI.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+(out / "Collection.spec.luau").write_text((root / "tests" / "Collection.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "Collection.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 fixtures = [

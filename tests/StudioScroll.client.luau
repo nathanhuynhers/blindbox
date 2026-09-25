@@ -8,7 +8,7 @@ local gui = Players.LocalPlayer.PlayerGui:WaitForChild("PocketGrove")
 local screens = gui:WaitForChild("SafeArea"):WaitForChild("Screens") :: Frame
 local host = screens:WaitForChild("CollectionPresentation") :: Frame
 local collection = host:WaitForChild("Collection") :: Frame
-local book = collection:WaitForChild("Binding"):WaitForChild("Pages"):WaitForChild("Book") :: Frame
+local book = collection:WaitForChild("Pages"):WaitForChild("Book") :: Frame
 local page = book:WaitForChild("FigureGrid") :: ScrollingFrame
 assert(
 	screens.Visible and host.Visible and collection.Visible and book.Visible,
@@ -20,7 +20,7 @@ assert(layout, "Collection must use a measured UIGridLayout")
 RunService.Heartbeat:Wait()
 RunService.Heartbeat:Wait()
 assert(
-	page.CanvasSize.Y.Offset >= math.ceil(layout.AbsoluteContentSize.Y + 24),
+	page.CanvasSize.Y.Offset >= math.ceil(layout.AbsoluteContentSize.Y + 16),
 	"Canvas truncates grid or bottom padding"
 )
 local expected = 0

@@ -213,6 +213,20 @@ function Interface.create(
 		-- Short/touch layouts reserve a separate top row so controls never overlap currency.
 		controls.Position = UDim2.fromOffset(size.X - 166, if size.X < 480 then 8 else 10)
 		hud.root.Visible = not opened or size.X >= 480
+		if current == "Collection" and opened then
+			controls.Size = UDim2.fromOffset(44, 44)
+			controls.Position = UDim2.fromOffset(
+				active.Position.X.Offset + active.Size.X.Offset - 44,
+				math.max(8, active.Position.Y.Offset - 22)
+			)
+			close.button.Position = UDim2.fromOffset(0, 0)
+			motion.button.Visible = false
+			hud.root.Visible = true
+		else
+			controls.Size = UDim2.fromOffset(154, 44)
+			close.button.Position = UDim2.fromOffset(110, 0)
+			motion.button.Visible = true
+		end
 		shade.Visible = opened and (current == "Collection" or current == "Shop")
 		shade.BackgroundTransparency = 0.72
 		nav.layout(size, desktop)
