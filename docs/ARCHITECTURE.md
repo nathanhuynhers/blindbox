@@ -49,12 +49,26 @@ Leaving/shutdown attempts a bounded final save/release, with lease expiry as cra
 ## Client presentation
 
 `init.client.luau` queues one mutation at a time and retries the same ID after delayed replies.
-It reconciles ordered owner snapshots. `Interface.luau` owns Collection, Display, Shop, Goals
-and Visits pages, reveals, room-rate label, status, filters and motion reduction. `Widgets.luau`
-contains focused UI construction helpers. `Scroll.luau` explicitly measures layout content and
-padding, listens for content/viewport changes, and cleans up listeners. This replaces reliance
-on automatic canvas sizing that truncated the collection in the MVP. Layout uses the actual
-safe-area Frame size so the lower menu is clear of the feedback bar on small devices.
+It reconciles ordered owner snapshots and exposes pending-request state to the UI. `Interface`
+composes dedicated HUD, navigation, book/details, shop, showroom, goals and visits modules.
+`UITheme`, `Widgets`, `UIIcons` and `UIPreview` provide common tokens, touch controls, progress,
+original icon shapes and static asset slots. `UIState` derives read-only presentation metadata;
+`UIScope` owns connections/tweens/timers. A bounded `Notifications` component handles feedback.
+
+`Scroll.bind` accepts both list and grid layouts and measures content plus padding explicitly.
+Nested tile groups report their measured height to the outer list. Filtering and safe-area
+resize preserve access to every figure. Short windows use a navigation rail; larger windows
+use a centered panel and bottom navigation. Details stack on narrow screens. See the
+[UI behavior, module boundaries and Studio checklist](UI_UX.md).
+
+Opening presentation is separate: `OpeningResult` derives immutable presentation metadata from
+the pre-request and confirmed reply snapshots; `OpeningController` owns one opening session,
+input focus, sound timing and teardown. `OpeningState` is a deterministic clock/interaction
+state machine. `OpeningView`, `OpeningBox`, `OpeningConfig` and `OpeningAudio` own procedural
+viewport packaging, rarity visuals, responsive UI and optional licensed sound cues. Buy/Daily
+show a box, Redeem goes directly to the figure spotlight. Skipping or interrupting presentation
+cannot affect the already-granted item. See [opening behavior and Studio checks](OPENING.md).
+No opening-specific remotes or server logic were introduced.
 
 `Visitors.luau` animates at most two local decorative visitors in the currently visited room
 at 20 updates/second. Motion reduction hides them. Visitors never report or change payouts.
@@ -77,4 +91,5 @@ Rojo 7.7.0 keeps Server as a Script, Client as a LocalScript, Shared as a Folder
 Packages Folder in ReplicatedStorage. Wally remains empty. Pinned StyLua/Selene are unchanged.
 Server modules are never mapped to ReplicatedStorage. Generated builds, tools and API caches
 are ignored. The standalone harness runs actual domain/persistence/scroll modules; only engine
-resolution/colors/UI property signals are shimmed. It does not prove Roblox runtime behavior.
+resolution/colors/UI property signals are shimmed. It also checks the client opening clock and
+confirmed-result adapter. It does not prove Roblox runtime behavior.

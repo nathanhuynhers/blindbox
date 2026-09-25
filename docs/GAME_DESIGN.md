@@ -49,10 +49,11 @@ rewards. Starter funds are a one-time new-profile grant in persistent mode.
 
 ## Interface and boundaries
 
-Collection, Display, Shop, Goals and Visits have separate scrollable pages with measured content
-height. Collection filters reveal all figures or only owned figures. The HUD shows balance, rate
-and saving status. Touch-sized controls, silhouettes, labels and motion reduction support
-readability; phone and gamepad behavior still need engine/device testing.
+The client uses a minimal currency HUD, icon navigation, a collection book with portrait grids
+and figure details, a visual box shop, display-slot/palette cards, daily progress and public
+showroom cards. Prices, rates, odds and ownership remain accessible without permanent system
+paragraphs. Safe-area layouts, measured scrolling and reduced motion support readability;
+[UI device and gamepad acceptance](UI_UX.md) still requires Studio testing.
 
 The implementation excludes trading, unique-copy variants, offline income, paid items, battle
 passes and public deployment. Original content and code are ready for closed testing, not a claim

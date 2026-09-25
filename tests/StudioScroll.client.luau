@@ -1,25 +1,58 @@
 --!strict
--- Run in the CLIENT Command Bar during Studio Play, after opening Collection.
--- Not included in the game build. Repeat with each collection and mobile viewport.
+-- Run in the CLIENT Command Bar during Play, with Book open and All figures selected.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-assert(RunService:IsStudio(), "Studio-only visual regression check")
+local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
+assert(RunService:IsStudio(), "Studio-only regression check")
 local gui = Players.LocalPlayer.PlayerGui:WaitForChild("PocketGrove")
-local bounds = gui:WaitForChild("SafeArea")
-local menu = bounds:WaitForChild("Menu")
-local page = menu:WaitForChild("Collection") :: ScrollingFrame
-local layout = page:FindFirstChildOfClass("UIListLayout")
-assert(layout)
+local menu = gui:WaitForChild("SafeArea"):WaitForChild("Menu") :: Frame
+local collection = menu:WaitForChild("Screens"):WaitForChild("Collection") :: Frame
+local book = collection:WaitForChild("Book") :: Frame
+local page = book:WaitForChild("FigureGrid") :: ScrollingFrame
+assert(
+	menu.Visible and collection.Visible and book.Visible,
+	"Open Book and return from figure details first"
+)
+assert(not collection:GetAttribute("OwnedOnly"), "Choose All figures before this check")
+local layout = page:FindFirstChildOfClass("UIGridLayout")
+assert(layout, "Collection must use a measured UIGridLayout")
 RunService.Heartbeat:Wait()
-assert(page.CanvasSize.Y.Offset >= math.ceil(layout.AbsoluteContentSize.Y + 16), "Canvas truncates content")
-local cards, visible = 0, 0
-for _, child in page:GetChildren() do
-	if child:IsA("TextButton") and (string.match(child.Name, "^grove%.") or string.match(child.Name, "^tide%.")) then
-		cards += 1
-		if child.Visible then visible += 1 end
+RunService.Heartbeat:Wait()
+assert(
+	page.CanvasSize.Y.Offset >= math.ceil(layout.AbsoluteContentSize.Y + 24),
+	"Canvas truncates grid or bottom padding"
+)
+local expected = 0
+for _, figure in Catalog.figures do
+	if figure.collection == collection:GetAttribute("CollectionId") then
+		expected += 1
 	end
 end
-assert(cards == 12, "All collection figures must exist")
-assert(visible == 6, "Disable owned-only filtering before running this check")
-page.CanvasPosition = Vector2.new(0, math.max(0, page.AbsoluteCanvasSize.Y - page.AbsoluteWindowSize.Y))
-print("PASS: 12 figures exist; selected collection's 6 cards fit the canvas. Inspect the final visible card.")
+local cards, visible = 0, 0
+local final: TextButton? = nil
+for _, child in page:GetChildren() do
+	if child:IsA("TextButton") and Catalog.byId[child.Name] then
+		cards += 1
+		if child.Visible then
+			visible += 1
+			assert(child.AbsoluteSize.X <= page.AbsoluteWindowSize.X, "Card wider than viewport")
+			if not final or child.LayoutOrder > final.LayoutOrder then
+				final = child
+			end
+		end
+	end
+end
+assert(cards == #Catalog.figures, "Every figure must have a card")
+assert(visible == expected, "Collection filtering lost a figure")
+page.CanvasPosition =
+	Vector2.new(0, math.max(0, page.AbsoluteCanvasSize.Y - page.AbsoluteWindowSize.Y))
+RunService.Heartbeat:Wait()
+assert(final, "No visible final card")
+assert(
+	final.AbsolutePosition.Y + final.AbsoluteSize.Y
+		<= page.AbsolutePosition.Y + page.AbsoluteWindowSize.Y + 2,
+	"Final card is clipped at maximum scroll"
+)
+print(
+	"PASS: all catalog cards exist; collection grid and final card fit. Repeat after resize/filter/respawn."
+)

@@ -53,12 +53,25 @@ The regression suite runs actual domain, request, schema and storage-transform c
 - Four scroll-content/lifecycle assertions with engine property/signal shims; these verify the
   sizing logic, not actual Roblox layout rendering.
 - Four invalid economy/catalog startup fixtures.
+- 1,118 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
+- 1,732 opening-state/result checks: timing, all-phase skip/cancel, rapid inputs, reduced motion,
+  confirmed NEW/duplicate metadata, delayed snapshots and unsupported/failed replies.
 
 `tests/StudioScroll.client.luau` is an additional engine regression script. During Play, open
-Collection with the all-figures filter and paste its contents into the **client** Command Bar.
-It checks all twelve cards exist, six match the selected collection, and content plus padding
-fits the canvas, then scrolls to the final card. Repeat for both collections and phone sizes.
+Book with All figures selected and the detail view closed and paste its contents into the **client** Command Bar.
+It derives card counts from the catalog, checks the selected collection and measured grid canvas,
+then scrolls to and checks the final card. Repeat for both collections and phone sizes.
 This script is not mapped into the game and has not been run by the agent.
+
+The new opening has its own [visual/input acceptance checklist](OPENING.md#studio-acceptance-checklist)
+and `tests/StudioOpening.client.luau` fixture launcher. Run it in the client Command Bar to compare
+all rarities, both cartons, NEW/duplicates and reduced motion without changing RNG or granting
+items. Neither these Studio checks nor the launcher's lifecycle assertions have been run by the
+agent. Real purchase/retry testing is separate from those presentation-only fixtures.
+
+The redesigned regular UI has a [dedicated device/input checklist](UI_UX.md#verification-and-studio-checklist)
+and read-only `tests/StudioUI.client.luau` checks for target sizes, canvas bounds and safe areas.
+Run that script from the client Command Bar on each screen. These engine checks remain unrun.
 
 ## Required closed tests
 

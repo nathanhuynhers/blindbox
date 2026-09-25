@@ -1,7 +1,7 @@
 --!strict
 -- Explicit content height avoids AutomaticCanvasSize cutting off nested viewport cards.
 local Scroll = {}
-function Scroll.bind(frame: ScrollingFrame, layout: UIListLayout, padding: number): () -> ()
+function Scroll.bind(frame: ScrollingFrame, layout: UIGridStyleLayout, padding: number): () -> ()
 	frame.AutomaticCanvasSize = Enum.AutomaticSize.None
 	frame.ScrollingDirection = Enum.ScrollingDirection.Y
 	frame.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar

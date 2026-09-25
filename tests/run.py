@@ -14,6 +14,8 @@ modules = {
     "Types": "shared", "Catalog": "shared", "Economy": "server",
     "Rules": "server", "Protocol": "server", "Transactions": "server",
     "Profile": "server", "Persistence": "server", "Scroll": "client",
+    "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
+    "UIState": "client", "UIScope": "client",
 }
 for name, folder in modules.items():
     source = (root / "src" / folder / f"{name}.luau").read_text(encoding="utf-8-sig")
@@ -25,7 +27,7 @@ for name, folder in modules.items():
             source = source.replace(f"require({expression})", f'require("./{dependency}")')
     if name == "Scroll":
         source = source.replace("--!strict", "--!strict\nlocal Enum = {AutomaticSize={None=0},ScrollingDirection={Y=1},ScrollBarInset={ScrollBar=1}}\nlocal UDim2 = {fromOffset=function(x,y) return {X={Offset=x},Y={Offset=y}} end}")
-    if name == "Catalog":
+    if name in ("Catalog", "OpeningConfig"):
         source = source.replace("--!strict", "--!strict\nlocal Color3 = { fromRGB = function(r: number, g: number, b: number) return {r, g, b} end }")
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
 (out / "Mvp.spec.luau").write_text((root / "tests" / "Mvp.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
@@ -38,6 +40,14 @@ if result.returncode:
     raise SystemExit(result.returncode)
 (out / "Scroll.spec.luau").write_text((root / "tests" / "Scroll.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
 result = subprocess.run([sys.argv[1], str(out / "Scroll.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+(out / "Opening.spec.luau").write_text((root / "tests" / "Opening.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "Opening.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+(out / "UI.spec.luau").write_text((root / "tests" / "UI.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "UI.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 fixtures = [
