@@ -9,23 +9,45 @@ local Icons = require(script.Parent.UIIcons)
 local Preview = require(script.Parent.UIPreview)
 local Showroom = {}
 function Showroom.create(parent: Instance, ctx: Context.Context)
-	local page = W.scroll(parent, "Display", ctx.scope)
+	local root = W.frame(parent, "Display", Theme.paper)
+	root.BackgroundTransparency = 0.08
+	W.corner(root, 16)
+	W.outline(root, Theme.card, 0.2)
+	local page = W.scroll(root, "ShelfControls", ctx.scope)
+	page.Position = UDim2.fromOffset(0, 80)
+	page.Size = UDim2.new(1, 0, 1, -80)
+	local palettePage = W.scroll(root, "RoomPalettes", ctx.scope)
+	palettePage.Position = page.Position
+	palettePage.Size = page.Size
+	palettePage.Visible = false
+	local mode: W.Action? = nil
+	local function togglePalette()
+		palettePage.Visible = not palettePage.Visible
+		page.Visible = not palettePage.Visible
+		if mode then
+			mode.set(if palettePage.Visible then "< Shelf" else "Room style", true)
+		end
+	end
+	mode = W.action(root, "Room style", ctx.scope, ctx.effects, togglePalette, true)
+	assert(mode, "Room style control was not created")
+	mode.button.Position = UDim2.new(1, -116, 0, 8)
+	mode.button.Size = UDim2.fromOffset(104, 44)
 	local selected: string? = nil
-	local summary = W.card(page, "DisplaySummary", 120)
-	summary.LayoutOrder = 1
+	local summary = W.frame(root, "DisplaySummary")
+	summary.Size = UDim2.new(1, -124, 0, 80)
 	local income = W.title(summary, "", 34)
-	W.inset(income, 8, 34)
+	W.inset(income, 8, 30)
+	income.TextSize = 21
 	local bonus = W.label(summary, "", 32, 15)
-	W.inset(bonus, 44, 32)
-	local hint = W.label(summary, "Edit near your own shelf", 30, 14)
-	W.inset(hint, 82, 30)
-	hint.TextColor3 = Theme.muted
+	W.inset(bonus, 40, 34)
+	bonus.TextSize = 12
+
 	local choice = W.action(page, "", ctx.scope, ctx.effects, function()
 		selected = nil
 	end, true)
 	choice.button.LayoutOrder = 2
 	choice.button.Visible = false
-	local tiles = W.tiles(page, ctx.scope, 128, 4, 280)
+	local tiles = W.tiles(page, ctx.scope, 126, 4, 210)
 	tiles.LayoutOrder = 3
 	local slots: {
 		{
@@ -41,21 +63,22 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 	} =
 		{}
 	for slot = 1, 4 do
-		local card = W.card(tiles, "Slot" .. slot, 280)
+		local card = W.card(tiles, "Slot" .. slot, 210)
 		card.LayoutOrder = slot
 		local label = W.label(card, "Slot " .. slot, 26, 14)
 		W.inset(label, 4, 26)
 		local portrait = Preview.create(card, ctx.scope)
-		portrait.frame.Position = UDim2.fromOffset(6, 30)
-		portrait.frame.Size = UDim2.new(1, -12, 0, 108)
+		portrait.frame.Position = UDim2.fromOffset(6, 20)
+		portrait.frame.Size = UDim2.new(1, -12, 0, 68)
 		local placeholder = Icons.create(card, "Display", Theme.muted)
-		placeholder.Position = UDim2.new(0.5, -22, 0, 60)
+		placeholder.Position = UDim2.new(0.5, -22, 0, 34)
 		placeholder.Size = UDim2.fromOffset(44, 44)
 		local lock = Icons.create(card, "Lock", Theme.muted)
 		lock.Position = placeholder.Position
 		lock.Size = placeholder.Size
 		local name = W.label(card, "", 38, 14)
-		W.inset(name, 138, 38)
+		W.inset(name, 88, 26)
+		name.TextSize = 12
 		name.TextXAlignment = Enum.TextXAlignment.Center
 		local action = W.action(card, "Choose", ctx.scope, ctx.effects, function()
 			local snapshot = ctx.snapshot()
@@ -70,11 +93,12 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 				ctx.pick(slot)
 			end
 		end)
-		W.inset(action.button, 180, 44)
+		W.inset(action.button, 118, 44)
 		local remove = W.action(card, "Remove", ctx.scope, ctx.effects, function()
 			ctx.send("Remove", nil, slot, nil)
 		end, true)
-		W.inset(remove.button, 230, 44)
+		W.inset(remove.button, 164, 44)
+		remove.button:SetAttribute("Quiet", true)
 		slots[slot] = {
 			root = card,
 			portrait = portrait,
@@ -90,9 +114,9 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 		ctx.visit(0)
 	end, true)
 	home.button.LayoutOrder = 4
-	local paletteTitle = W.title(page, "Make it yours", 40)
+	local paletteTitle = W.title(palettePage, "Room palettes", 32)
 	paletteTitle.LayoutOrder = 5
-	local palettes = W.tiles(page, ctx.scope, 150, 3, 202)
+	local palettes = W.tiles(palettePage, ctx.scope, 150, 3, 202)
 	palettes.LayoutOrder = 6
 	local paletteActions: { [string]: W.Action } = {}
 	local themeIds: { string } = {}
@@ -130,14 +154,14 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 		paletteActions[id] = action
 	end
 	local function update(snapshot: Types.Snapshot)
-		income.Text = string.format("%g Coins/sec", snapshot.rate)
-		bonus.Text = if snapshot.bonus > 0
-			then string.format("Set bonus active  ·  +%g/sec", snapshot.bonus)
-			else string.format(
-				"Set bonus +1/sec  ·  %d / 3 unique",
-				State.bonusProgress(snapshot)
-			)
-		hint.Text = "Match one collection · Edit near your shelf"
+		income.Text = "My showroom"
+		bonus.Text = string.format(
+			"%g Coins/sec\n%s",
+			snapshot.rate,
+			if snapshot.bonus > 0
+				then string.format("Set bonus +%g/sec", snapshot.bonus)
+				else string.format("Matching set %d/3 (+1/sec)", State.bonusProgress(snapshot))
+		)
 		choice.button.Visible = selected ~= nil
 		if selected then
 			choice.set("Placing " .. Catalog.byId[selected].name .. "  ·  Cancel", true)
@@ -145,7 +169,7 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 		for slot, card in slots do
 			local id = snapshot.slots[slot] or ""
 			local locked = slot > snapshot.unlocked
-			card.label.Text = if locked then "More display space" else "Slot " .. slot
+			card.label.Text = if locked then "Extra slot" else "Slot " .. slot
 			card.root.BackgroundColor3 = if locked then Theme.soft else Theme.card
 			card.portrait.figure(if id == "" then nil else id, true)
 			card.placeholder.Visible = id == "" and not locked
@@ -153,7 +177,7 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 			card.name.Text = if locked
 				then State.number(snapshot.expansionCost) .. " Coins"
 				elseif id ~= "" then Catalog.byId[id].name
-				else "A spot for a little friend"
+				else "Choose a figure"
 			if locked then
 				card.action.set(
 					"Unlock slot",
@@ -166,7 +190,7 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 					ctx.canAct() and free > 0 and selected ~= id
 				)
 			else
-				card.action.set(if id == "" then "Choose figure" else "Change", ctx.canAct())
+				card.action.set(if id == "" then "Choose" else "Change", ctx.canAct())
 			end
 			card.remove.button.Visible = not locked and id ~= ""
 			card.remove.set("Remove", ctx.canAct())
@@ -190,10 +214,20 @@ function Showroom.create(parent: Instance, ctx: Context.Context)
 		end
 	end)
 	return {
-		root = page,
+		root = root,
+		back = function(): boolean
+			if palettePage.Visible then
+				togglePalette()
+				return true
+			end
+			return false
+		end,
 		update = update,
 		select = function(id: string?)
 			selected = id
+			if palettePage.Visible then
+				togglePalette()
+			end
 			local snapshot = ctx.snapshot()
 			if snapshot then
 				update(snapshot)

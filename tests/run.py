@@ -15,7 +15,7 @@ modules = {
     "Rules": "server", "Protocol": "server", "Transactions": "server",
     "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
-    "UIState": "client", "UIScope": "client",
+    "UIState": "client", "UIScope": "client", "UILayout": "client", "CollectionStyle": "client",
 }
 for name, folder in modules.items():
     source = (root / "src" / folder / f"{name}.luau").read_text(encoding="utf-8-sig")
@@ -27,7 +27,7 @@ for name, folder in modules.items():
             source = source.replace(f"require({expression})", f'require("./{dependency}")')
     if name == "Scroll":
         source = source.replace("--!strict", "--!strict\nlocal Enum = {AutomaticSize={None=0},ScrollingDirection={Y=1},ScrollBarInset={ScrollBar=1}}\nlocal UDim2 = {fromOffset=function(x,y) return {X={Offset=x},Y={Offset=y}} end}")
-    if name in ("Catalog", "OpeningConfig"):
+    if name in ("Catalog", "OpeningConfig", "CollectionStyle"):
         source = source.replace("--!strict", "--!strict\nlocal Color3 = { fromRGB = function(r: number, g: number, b: number) return {r, g, b} end }")
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
 (out / "Mvp.spec.luau").write_text((root / "tests" / "Mvp.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")

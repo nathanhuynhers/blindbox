@@ -40,7 +40,11 @@ function Icons.create(parent: Instance, name: string, color: Color3): Frame
 		shape(0.07, 0.21, 0.86, 0.14)
 		shape(0.37, 0.02, 0.26, 0.22, true)
 	elseif name == "Goals" then
-		shape(0.24, 0.24, 0.52, 0.52, false, 45)
+		shape(0.17, 0.15, 0.66, 0.76)
+		shape(0.34, 0.04, 0.32, 0.19)
+		local tick = Icons.create(root, "Check", Color3.fromRGB(236, 231, 243))
+		tick.Size = UDim2.fromScale(0.58, 0.58)
+		tick.Position = UDim2.fromScale(0.21, 0.28)
 	elseif name == "Scrap" then
 		shape(0.12, 0.1, 0.65, 0.29, false, -8)
 		shape(0.28, 0.49, 0.58, 0.33, false, 12)
@@ -59,7 +63,27 @@ function Icons.create(parent: Instance, name: string, color: Color3): Frame
 		shape(0.1, 0.43, 0.8, 0.12, false, 45)
 		shape(0.1, 0.43, 0.8, 0.12, false, -45)
 	else
-		shape(0.08, 0.08, 0.84, 0.84, true)
+		shape(0.03, 0.03, 0.94, 0.94, true)
+		local inset = Instance.new("Frame")
+		inset.Size = UDim2.fromScale(0.68, 0.68)
+		inset.Position = UDim2.fromScale(0.16, 0.16)
+		inset.BackgroundTransparency = 1
+		inset.Parent = root
+		local round = Instance.new("UICorner")
+		round.CornerRadius = UDim.new(1, 0)
+		round.Parent = inset
+		local ring = Instance.new("UIStroke")
+		ring.Color = Color3.fromRGB(156, 111, 40)
+		ring.Thickness = 1
+		ring.Parent = inset
+		local glint = Instance.new("TextLabel")
+		glint.BackgroundTransparency = 1
+		glint.Size = UDim2.fromScale(1, 1)
+		glint.Font = Enum.Font.GothamBold
+		glint.Text = "+"
+		glint.TextSize = 18
+		glint.TextColor3 = ring.Color
+		glint.Parent = root
 	end
 	return root
 end

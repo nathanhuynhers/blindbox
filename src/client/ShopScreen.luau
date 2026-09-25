@@ -6,22 +6,32 @@ local Theme = require(script.Parent.UITheme)
 local State = require(script.Parent.UIState)
 local W = require(script.Parent.Widgets)
 local Preview = require(script.Parent.UIPreview)
+local Art = require(script.Parent.CollectionArt)
+local Style = require(script.Parent.CollectionStyle)
 local Shop = {}
 function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
-	local root = W.frame(parent, "Shop")
+	local root = W.frame(parent, "Shop", Theme.paper)
+	W.corner(root, 16)
+	W.outline(root, Theme.card, 0.1)
 	local page = W.scroll(root, "BoxShop", ctx.scope)
-	local heading = W.title(page, "A little surprise awaits", 42)
+	local heading = W.title(page, "BLIND BOXES", 44)
 	heading.LayoutOrder = 1
-	local tiles = W.tiles(page, ctx.scope, 240, math.min(3, #Catalog.collections), 382)
+	heading.TextXAlignment = Enum.TextXAlignment.Center
+	heading.TextSize = 23
+	local tiles = W.tiles(page, ctx.scope, 230, math.min(3, #Catalog.collections), 504)
 	tiles.LayoutOrder = 2
 	local note = W.label(page, "One figure per box. Extras can become Scrap.", 42, 14)
 	note.LayoutOrder = 3
 	note.TextColor3 = Theme.muted
 	local odds = W.frame(root, "BoxOdds")
 	odds.Visible = false
+	local oddsOpener: GuiObject? = nil
 	local back = W.action(odds, "<  Boxes", ctx.scope, ctx.effects, function()
 		odds.Visible = false
 		page.Visible = true
+		if oddsOpener then
+			W.focus(oddsOpener)
+		end
 	end, true)
 	back.button.Position = UDim2.fromOffset(12, 0)
 	back.button.Size = UDim2.fromOffset(130, 44)
@@ -49,23 +59,44 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 	end
 	local cards: { [string]: { price: TextLabel, open: W.Action, daily: W.Action } } = {}
 	for order, collection in Catalog.collections do
-		local card = W.card(tiles, collection.id, 382)
+		local card = W.card(tiles, collection.id, 504)
 		card.LayoutOrder = order
-		local art = W.frame(card, "BoxArt", collection.color:Lerp(Theme.card, 0.6))
-		art.Size = UDim2.new(1, -16, 0, 178)
-		art.Position = UDim2.fromOffset(8, 8)
-		W.corner(art)
+		local style = Style.get(collection.id)
+		card.BackgroundColor3 = style.page
+		W.outline(card, style.trim, 0.45)
+		local art = W.frame(card, "BoxArt")
+		art.Size = UDim2.new(1, -8, 0, 302)
+		art.Position = UDim2.fromOffset(4, 4)
+		Art.create(art).set(collection.id)
 		Preview.create(art, ctx.scope).box(collection.id)
-		local title = W.title(card, collection.name, 36)
-		W.inset(title, 192, 36)
-		title.TextSize = 22
-		local price = W.label(card, "", 26, 18)
-		W.inset(price, 230, 26)
+		local title = W.title(card, collection.name, 34)
+		W.inset(title, 310, 34)
+		title.TextSize = 24
+		title.Font = Enum.Font.FredokaOne
+		title.TextColor3 = style.ink
+		title.TextXAlignment = Enum.TextXAlignment.Center
+		local total = 0
+		for _, figure in Catalog.figures do
+			if figure.collection == collection.id then
+				total += 1
+			end
+		end
+		local count = W.label(card, total .. " to collect", 24, 14)
+		W.inset(count, 346, 24)
+		count.TextXAlignment = Enum.TextXAlignment.Center
+		local price = W.label(card, "", 30, 19)
+		W.inset(price, 374, 30)
+		price.TextXAlignment = Enum.TextXAlignment.Center
 		local open = W.action(card, "Open box", ctx.scope, ctx.effects, function()
 			ctx.send("Buy", nil, nil, collection.id)
 		end)
-		W.inset(open.button, 268, 48)
-		local chances = W.action(card, "Odds", ctx.scope, ctx.effects, function()
+		W.inset(open.button, 408, 48)
+		open.button:SetAttribute("Accent", style.accent)
+		local chances = W.action(card, "i  Odds", ctx.scope, ctx.effects, function()
+			local opener = card:FindFirstChild("i  Odds")
+			if opener and opener:IsA("GuiObject") then
+				oddsOpener = opener
+			end
 			oddsTitle.Text = collection.name .. " · Odds"
 			for id, row in rows do
 				row.root.Visible = Catalog.byId[id].collection == collection.id
@@ -75,13 +106,14 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			page.Visible = false
 			W.focus(back.button)
 		end, true)
-		chances.button.Position = UDim2.fromOffset(12, 326)
-		chances.button.Size = UDim2.new(0.3, -12, 0, 44)
+		chances.button.Position = UDim2.new(1, -88, 0, 12)
+		chances.button.Size = UDim2.fromOffset(76, 44)
 		local daily = W.action(card, "Daily free", ctx.scope, ctx.effects, function()
 			ctx.send("Daily", nil, nil, collection.id)
 		end, true)
-		daily.button.Position = UDim2.new(0.3, 4, 0, 326)
-		daily.button.Size = UDim2.new(0.7, -16, 0, 44)
+		daily.button.Position = UDim2.fromOffset(12, 458)
+		daily.button.Size = UDim2.new(1, -24, 0, 44)
+		daily.button:SetAttribute("Quiet", true)
 		cards[collection.id] = { price = price, open = open, daily = daily }
 	end
 	return {
@@ -98,7 +130,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			for _, card in cards do
 				card.price.Text = State.number(snapshot.price) .. " Coins"
 				card.open.set(
-					if snapshot.coins >= snapshot.price then "Open box" else "Need more Coins",
+					if snapshot.coins >= snapshot.price then "OPEN" else "Need more Coins",
 					ctx.canAct() and snapshot.coins >= snapshot.price
 				)
 				card.daily.set(

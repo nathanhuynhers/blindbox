@@ -5,12 +5,13 @@ local RunService = game:GetService("RunService")
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 assert(RunService:IsStudio(), "Studio-only regression check")
 local gui = Players.LocalPlayer.PlayerGui:WaitForChild("PocketGrove")
-local menu = gui:WaitForChild("SafeArea"):WaitForChild("Menu") :: Frame
-local collection = menu:WaitForChild("Screens"):WaitForChild("Collection") :: Frame
-local book = collection:WaitForChild("Book") :: Frame
+local screens = gui:WaitForChild("SafeArea"):WaitForChild("Screens") :: Frame
+local host = screens:WaitForChild("CollectionPresentation") :: Frame
+local collection = host:WaitForChild("Collection") :: Frame
+local book = collection:WaitForChild("Binding"):WaitForChild("Pages"):WaitForChild("Book") :: Frame
 local page = book:WaitForChild("FigureGrid") :: ScrollingFrame
 assert(
-	menu.Visible and collection.Visible and book.Visible,
+	screens.Visible and host.Visible and collection.Visible and book.Visible,
 	"Open Book and return from figure details first"
 )
 assert(not collection:GetAttribute("OwnedOnly"), "Choose All figures before this check")

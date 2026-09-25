@@ -57,8 +57,11 @@ original icon shapes and static asset slots. `UIState` derives read-only present
 
 `Scroll.bind` accepts both list and grid layouts and measures content plus padding explicitly.
 Nested tile groups report their measured height to the outer list. Filtering and safe-area
-resize preserve access to every figure. Short windows use a navigation rail; larger windows
-use a centered panel and bottom navigation. Details stack on narrow screens. See the
+resize preserve access to every figure. Independent presentation hosts replace the common menu shell: desktop rail, themed book spread,
+package-led shop, compact daily/social sheets and bottom room controls. Narrow/touch windows use
+bottom navigation; short landscape gives its space to the active screen until close. `UILayout`
+owns bounds, while `CollectionStyle`/`CollectionArt` isolate collection identity from neutral
+`UITheme` controls. Details replace the book grid on narrow screens. See the
 [UI behavior, module boundaries and Studio checklist](UI_UX.md).
 
 Opening presentation is separate: `OpeningResult` derives immutable presentation metadata from

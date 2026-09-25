@@ -48,21 +48,34 @@ for _, object in gui:GetDescendants() do
 	end
 end
 local bounds = gui:WaitForChild("SafeArea") :: Frame
-local menu = bounds:WaitForChild("Menu") :: Frame
-if menu.Visible then
-	assert(menu.AbsolutePosition.X >= bounds.AbsolutePosition.X, "Menu left edge leaves safe area")
-	assert(menu.AbsolutePosition.Y >= bounds.AbsolutePosition.Y, "Menu top leaves safe area")
-	assert(
-		menu.AbsolutePosition.X + menu.AbsoluteSize.X
-			<= bounds.AbsolutePosition.X + bounds.AbsoluteSize.X + 1,
-		"Menu right edge leaves safe area"
-	)
-	assert(
-		menu.AbsolutePosition.Y + menu.AbsoluteSize.Y
-			<= bounds.AbsolutePosition.Y + bounds.AbsoluteSize.Y + 1,
-		"Menu bottom leaves safe area"
-	)
+local screens = bounds:WaitForChild("Screens") :: Frame
+for _, host in screens:GetChildren() do
+	if host:IsA("Frame") and visible(host) then
+		assert(
+			host.AbsolutePosition.X >= bounds.AbsolutePosition.X,
+			"Presentation left edge leaves safe area"
+		)
+		assert(
+			host.AbsolutePosition.Y >= bounds.AbsolutePosition.Y,
+			"Presentation top leaves safe area"
+		)
+		assert(
+			host.AbsolutePosition.X + host.AbsoluteSize.X
+				<= bounds.AbsolutePosition.X + bounds.AbsoluteSize.X + 1,
+			"Presentation right edge leaves safe area"
+		)
+		assert(
+			host.AbsolutePosition.Y + host.AbsoluteSize.Y
+				<= bounds.AbsolutePosition.Y + bounds.AbsoluteSize.Y + 1,
+			"Presentation bottom leaves safe area"
+		)
+	end
 end
+assert(
+	not bounds:WaitForChild("Hud"):FindFirstChild("SaveStatus"),
+	"Saving must not occupy a permanent HUD control"
+)
+
 print(
 	string.format(
 		"PASS: %d visible interactive targets, %d measured scroll containers. UI descendants: %d. Compare after repeated navigation without gameplay changes.",

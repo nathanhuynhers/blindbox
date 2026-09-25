@@ -7,7 +7,8 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Scope = require(script.Parent.UIScope)
 local Context = require(script.Parent.UIContext)
 local Theme = require(script.Parent.UITheme)
-local State = require(script.Parent.UIState)
+local Layout = require(script.Parent.UILayout)
+local Icons = require(script.Parent.UIIcons)
 local W = require(script.Parent.Widgets)
 local Hud = require(script.Parent.Hud)
 local Navigation = require(script.Parent.Navigation)
@@ -37,6 +38,7 @@ function Interface.create(
 	local current = "Collection"
 	local targetSlot: number? = nil
 	local blockedStatus: string? = nil
+	local previewShown = false
 	local gui = Instance.new("ScreenGui")
 	gui.Name = "PocketGrove"
 	gui.ResetOnSpawn = false
@@ -55,23 +57,24 @@ function Interface.create(
 	shade.Modal = true
 	shade.AutoButtonColor = false
 	shade.Parent = bounds
-	local shadow = W.frame(bounds, "MenuShadow", Theme.shadow)
-	shadow.BackgroundTransparency = 0.72
-	W.corner(shadow, 24)
-	local panel = W.frame(bounds, "Menu", Theme.paper)
-	W.corner(panel, 22)
-	panel.SelectionGroup = true
-	local title = W.title(panel, "Collection", 28)
-	title.Position = UDim2.fromOffset(16, 2)
-	title.Size = UDim2.new(1, -174, 0, 28)
-	title.TextSize = 23
-	local balance = W.label(panel, "Loading...", 18, 13)
-	balance.Position = UDim2.fromOffset(16, 30)
-	balance.Size = UDim2.new(1, -174, 0, 18)
-	balance.TextColor3 = Theme.muted
-	local pagesRoot = W.frame(panel, "Screens")
-	pagesRoot.Position = UDim2.fromOffset(4, 56)
-	pagesRoot.Size = UDim2.new(1, -8, 1, -64)
+	local pagesRoot = W.frame(bounds, "Screens")
+	local controls = W.frame(bounds, "ScreenControls")
+	controls.ZIndex = 5
+	controls.Size = UDim2.fromOffset(154, 44)
+	local hosts: { [string]: Frame } = {}
+	for _, id in { "Collection", "Display", "Shop", "Goals", "Visits" } do
+		local host = W.frame(pagesRoot, id .. "Presentation")
+		host.SelectionGroup = true
+		host.Active = true
+		host:SetAttribute("Presentation", true)
+		hosts[id] = host
+		if id ~= "Collection" then
+			local shadow = W.frame(host, "Shadow", Theme.shadow)
+			shadow.Position = UDim2.fromOffset(0, 6)
+			shadow.BackgroundTransparency = 0.84
+			W.corner(shadow, 18)
+		end
+	end
 	local notices = Notifications.create(bounds, scope)
 	local navigate: (string) -> () = function() end
 	local inspect: (string) -> () = function() end
@@ -115,24 +118,26 @@ function Interface.create(
 			notices.show(text, "info")
 		end,
 	}
-	local collection = Collection.create(pagesRoot, ctx)
-	local showroom = Showroom.create(pagesRoot, ctx)
+	local collection = Collection.create(hosts.Collection, ctx)
+	local showroom = Showroom.create(hosts.Display, ctx)
 	local pages: { [string]: Context.Screen } = {
 		Collection = { root = collection.root, update = collection.update, back = collection.back },
-		Display = { root = showroom.root, update = showroom.update },
-		Shop = Shop.create(pagesRoot, ctx),
-		Goals = Goals.create(pagesRoot, ctx),
-		Visits = Visits.create(pagesRoot, ctx),
+		Display = { root = showroom.root, update = showroom.update, back = showroom.back },
+		Shop = Shop.create(hosts.Shop, ctx),
+		Goals = Goals.create(hosts.Goals, ctx),
+		Visits = Visits.create(hosts.Visits, ctx),
 	}
 	local hud = Hud.create(bounds, ctx)
 	local refresh: () -> () = function() end
 	local resize: () -> () = function() end
+	local selectPage: () -> () = function() end
 	local nav = Navigation.create(bounds, ctx, function(id)
 		if opened and current == id then
 			opened = false
 			targetSlot = nil
 			resize()
 			refresh()
+			selectPage()
 		else
 			if id == "Collection" then
 				collection.showBook()
@@ -140,17 +145,20 @@ function Interface.create(
 			navigate(id)
 		end
 	end)
-	local close = W.action(panel, "X", scope, ctx.effects, function()
+	local close = W.action(controls, "", scope, ctx.effects, function()
 		opened = false
 		targetSlot = nil
 		resize()
 		refresh()
+		selectPage()
 	end, true)
 	close.button.Name = "CloseMenu"
 	close.button.Size = UDim2.fromOffset(44, 44)
-	close.button.Position = UDim2.new(1, -52, 0, 6)
+	close.button.Position = UDim2.fromOffset(110, 0)
+	local closeIcon = Icons.create(close.button, "Close", Theme.ink)
+	closeIcon.Position = UDim2.fromOffset(10, 10)
 	local motion: W.Action? = nil
-	motion = W.action(panel, "Motion: on", scope, ctx.effects, function()
+	motion = W.action(controls, "Motion: on", scope, ctx.effects, function()
 		effects = not effects
 		if motion then
 			motion.set(if effects then "Motion: on" else "Motion: low", true, not effects)
@@ -159,7 +167,7 @@ function Interface.create(
 	assert(motion, "Motion control was not created")
 	motion.button.Name = "MotionPreference"
 	motion.button.Size = UDim2.fromOffset(96, 44)
-	motion.button.Position = UDim2.new(1, -156, 0, 6)
+	motion.button.Position = UDim2.fromOffset(6, 0)
 	local nextStep = W.action(bounds, "Find your first box", scope, ctx.effects, function()
 		navigate(if snapshot and snapshot.step == 2 then "Collection" else "Shop")
 	end)
@@ -185,44 +193,45 @@ function Interface.create(
 	local function gamepad(): boolean
 		return string.find(Input:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
 	end
-	local function selectPage()
+	selectPage = function()
 		if gamepad() then
 			GuiService.SelectedObject = if opened then close.button else nav.actions[current].button
 		end
 	end
 	resize = function()
 		local size = bounds.AbsoluteSize
-		local rail = opened and size.Y < 500
-		local width = if rail
-			then math.max(160, size.X - 88)
-			else math.min(1000, math.max(180, size.X - 24))
-		local height = if rail then size.Y - 16 else math.min(680, math.max(140, size.Y - 156))
-		panel.AnchorPoint = if rail then Vector2.zero else Vector2.new(0.5, 0)
-		panel.Position = if rail then UDim2.fromOffset(80, 8) else UDim2.new(0.5, 0, 0, 72)
-		panel.Size = UDim2.fromOffset(width, height)
-		shadow.AnchorPoint = panel.AnchorPoint
-		shadow.Size = panel.Size
-		shadow.Position = panel.Position + UDim2.fromOffset(0, 6)
-		panel.Visible = opened
-		shadow.Visible = opened
-		shade.Visible = opened
-		hud.root.Visible = not rail
-		balance.Visible = rail
-		title.Position = UDim2.fromOffset(16, if rail then 2 else 12)
-		nav.layout(size, rail)
-		notices.root.Position = if rail
-			then UDim2.new(0.5, 32, 1, -12)
-			else UDim2.new(0.5, 0, 1, -82)
-		notices.root.Size = UDim2.new(1, if rail then -104 else -32, 0, notices.root.Size.Y.Offset)
+		local desktop = Layout.desktop(size.X, size.Y, Input.TouchEnabled)
+		for id, host in hosts do
+			local rect = Layout.screen(id, size.X, size.Y, desktop)
+			host.Position = UDim2.fromOffset(rect.x, rect.y)
+			host.Size = UDim2.fromOffset(rect.width, rect.height)
+			host.Visible = opened and current == id
+		end
+		pagesRoot.Visible = opened
+		controls.Visible = opened
+		local active = hosts[current]
+		-- Short/touch layouts reserve a separate top row so controls never overlap currency.
+		controls.Position = UDim2.fromOffset(size.X - 166, if size.X < 480 then 8 else 10)
+		hud.root.Visible = not opened or size.X >= 480
+		shade.Visible = opened and (current == "Collection" or current == "Shop")
+		shade.BackgroundTransparency = 0.72
+		nav.layout(size, desktop)
+		nav.root.Visible = not opened or size.Y >= 420
+		nextStep.button.Position = UDim2.new(0.5, 0, 1, if desktop then -24 else -80)
+		notices.root.Position = UDim2.new(
+			0.5,
+			if desktop then 48 else 0,
+			1,
+			if opened and size.Y < 420 then -12 elseif desktop then -16 else -76
+		)
+		notices.root.Size =
+			UDim2.new(1, if desktop then -180 else -32, 0, notices.root.Size.Y.Offset)
+		active:SetAttribute("SlotPicker", if targetSlot then targetSlot else nil)
 	end
 	refresh = function()
 		for id, page in pages do
 			page.root.Visible = current == id
 		end
-		title.Text = if current == "Display"
-			then "Showroom"
-			elseif current == "Collection" and targetSlot then "Pick for slot " .. targetSlot
-			else current
 		local state = snapshot
 		nav.set(if opened then current else nil, state ~= nil and state.dailyReady)
 		nextStep.button.Visible = not opened and state ~= nil and state.ready and state.step <= 2
@@ -230,15 +239,15 @@ function Interface.create(
 			hud.update(state)
 			if not state.ready and blockedStatus ~= state.saveStatus then
 				notices.show(state.saveStatus, "error")
+			elseif
+				state.ready
+				and not previewShown
+				and string.find(string.lower(state.saveStatus), "preview", 1, true)
+			then
+				previewShown = true
+				notices.show(state.saveStatus, "info")
 			end
 			blockedStatus = if state.ready then nil else state.saveStatus
-			balance.Text = if pending
-				then "Waiting for server..."
-				elseif not state.ready then "Progress paused"
-				else State.number(state.coins)
-					.. " Coins  ·  "
-					.. State.number(state.scrap)
-					.. " Scrap"
 			nextStep.set(
 				if state.step == 2 then "Display your first figure" else "Find your first box",
 				true
@@ -302,7 +311,6 @@ function Interface.create(
 		selectPage()
 	end
 	scope.connect(shade.Activated, back)
-	scope.connect(panel:GetPropertyChangedSignal("Visible"), selectPage)
 	scope.connect(bounds:GetPropertyChangedSignal("AbsoluteSize"), resize)
 	scope.connect(GuiService:GetPropertyChangedSignal("SelectedObject"), function()
 		local selected = GuiService.SelectedObject

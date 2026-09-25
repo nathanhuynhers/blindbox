@@ -5,12 +5,14 @@ local Theme = require(script.Parent.UITheme)
 local W = require(script.Parent.Widgets)
 local Notifications = {}
 function Notifications.create(parent: Instance, scope: Scope.Scope)
-	local root = W.card(parent, "Notification", 68)
+	local root = W.card(parent, "Notification", 48)
 	root.AnchorPoint = Vector2.new(0.5, 1)
 	root.Position = UDim2.new(0.5, 0, 1, -82)
-	root.Size = UDim2.new(1, -32, 0, 68)
+	root.Size = UDim2.new(1, -32, 0, 48)
 	root.ZIndex = 20
 	root.Visible = false
+	root.BackgroundTransparency = 0.04
+	W.outline(root, Theme.card, 0.2)
 	local limit = Instance.new("UISizeConstraint")
 	limit.MaxSize = Vector2.new(540, 180)
 	limit.Parent = root
@@ -27,7 +29,7 @@ function Notifications.create(parent: Instance, scope: Scope.Scope)
 			text.Font,
 			Vector2.new(math.max(80, root.AbsoluteSize.X - 24), 1000)
 		)
-		local height = math.clamp(size.Y + 20, 68, 180)
+		local height = math.clamp(size.Y + 20, 48, 180)
 		root.Size = UDim2.new(root.Size.X.Scale, root.Size.X.Offset, 0, height)
 		W.inset(text, 10, height - 20)
 	end

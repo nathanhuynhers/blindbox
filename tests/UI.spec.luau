@@ -152,4 +152,65 @@ scope.add(function()
 end)
 scope.connect(signal, function() end)
 check(alive == 0 and destroyed[3] == 3, "late registration after teardown cannot leak")
-print("PASS: " .. checks .. " UI projection, responsive grid and lifecycle checks")
+local Layout = require("./UILayout")
+local Style = require("./CollectionStyle")
+check(Layout.desktop(1280, 720, false), "desktop gets the floating rail")
+check(not Layout.desktop(568, 284, true), "short touch screens do not get a forced desktop rail")
+check(not Layout.desktop(1024, 768, true), "touch tablet keeps compact bottom navigation")
+for _, viewport in
+	{
+		{ 320, 480 },
+		{ 360, 760 },
+		{ 568, 284 },
+		{ 844, 342 },
+		{ 1024, 720 },
+		{ 1280, 680 },
+		{
+			1920,
+			1040,
+		},
+	}
+do
+	for _, touch in { true, false } do
+		local desktop = Layout.desktop(viewport[1], viewport[2], touch)
+		for _, screenId in { "Collection", "Display", "Shop", "Goals", "Visits" } do
+			local rect = Layout.screen(screenId, viewport[1], viewport[2], desktop)
+			check(
+				rect.x >= 0
+					and rect.y >= 0
+					and rect.x + rect.width <= viewport[1]
+					and rect.y + rect.height <= viewport[2],
+				"presentation stays in safe area"
+			)
+			check(
+				rect.width >= 290 and rect.height >= 200,
+				"usable presentation area on supported devices"
+			)
+			if desktop then
+				check(rect.x >= 144, "desktop navigation does not cover presentation")
+			end
+		end
+	end
+end
+local book = Layout.screen("Collection", 1280, 720, true)
+local room = Layout.screen("Display", 1280, 720, true)
+local goals = Layout.screen("Goals", 1280, 720, true)
+check(room.height < book.height and room.y > book.y, "room controls preserve the upper world view")
+check(
+	goals.width < book.width and goals.height < book.height,
+	"daily sheet has its own compact composition"
+)
+check(
+	Style.get("grove").motif == "leaf" and Style.get("tide").motif == "shell",
+	"collection art identities are independent"
+)
+check(Style.get("future").motif == "spark", "unknown collection gets neutral fallback art")
+for _, collection in Catalog.collections do
+	check(
+		Style.collections[collection.id] ~= nil,
+		"every shipped collection has explicit art direction"
+	)
+end
+print(
+	"PASS: " .. checks .. " UI projection, responsive layout, collection style and lifecycle checks"
+)

@@ -1,112 +1,99 @@
-# Collectible UI
+# Collectible UI visual redesign
 
 Implemented client candidate. **Studio visual, input, mobile and multiplayer acceptance is still
-pending.** The opening modules, shared catalog/types, server gameplay, persistence, economy and
-Rojo mappings are unchanged. There are no new remotes, packages, art downloads or progression systems.
+pending.** The server, catalog, economy, networking, persistence and blind-box opening system
+remain unchanged. The reference image guides composition, not its example names, prices or rates.
+Current figure and packaging models remain procedural placeholders, not the illustrated reference art.
 
-## Player experience
+## Two visual layers
 
-- **HUD/navigation:** small Coin and Scrap capsules leave the world visible. Tap Coins for the
-  full balance and Coins/sec, or Scrap for its full balance and the book. Large balances use
-  K/M/B abbreviations in the HUD only; prices remain exact. A compact saving-state control
-  exposes the server's full status when tapped, including unsaved Studio preview. New save
-  pauses also show an error toast. Book, Room, Shop, Goals and Visits use original icons and
-  short labels. The menu begins closed, with one first-box/first-display suggestion when relevant.
-- **Collection book:** collection name, discovered count and progress precede a portrait grid.
-  Arrows switch collections; All figures/Owned only changes the filter. Unknown figures retain
-  their silhouette, rarity and question mark; discoveries show name and quantity. Selecting
-  a card opens its larger portrait, collection/rarity, owned/free counts, income, display status,
-  odds, display action, Scrap redemption and eligible recycling. Completion and recycled
-  discoveries continue to derive from server snapshots.
-- **Shop:** themed 3D cartons, collection names, exact prices and Open actions replace purchase
-  paragraphs. Every box has a clearly labeled Odds button showing all per-figure percentages
-  from the snapshot. Daily free/claimed is visible on each card; the one daily claim is shared
-  across collections, as before. Insufficient funds disable purchase without hiding its price.
-- **Showroom:** four visual slots show their figure, empty state or lock. Choose/Change opens an
-  owned-figure picker; selecting the figure and Display places it in the chosen slot. From the
-  regular book, Display first asks which slot to use. Remove frees a copy. The fourth-slot card
-  shows the server's price and Unlock action, then becomes an ordinary empty slot on confirmation.
-  Income, matching-set progress and shelf proximity guidance are concise. Miniature palette
-  previews show wall/floor/accent combinations with price, Use palette or Equipped states.
-- **Goals:** the existing daily display task has three progress markers, reward and a claim
-  state. A separate daily-box card offers one collection choice and shows the UTC reset after
-  claiming. Collection completion cards show progress toward the existing showroom plaques.
-- **Visits:** same-server player cards show public names, display portraits, public income and
-  Visit/You're here states. Return home stays available. No private balances or inventories
-  are consulted or displayed for another player.
-- **Feedback:** one bounded toast replaces the old permanent instructional bar. Repeated
-  identical messages do not stack. Errors last longer and use distinct text color; action
-  success messages are concise. Buttons distinguish selection, focus, press and disabled state.
+The global identity is ivory, dark neutral text and restrained lilac accents, with small floating
+controls, fine borders and translucent surfaces. HUD, navigation, Goals, Social, notifications,
+settings and generic room controls have no collection motifs. Currency uses gold accents.
 
-## Design and responsibility boundaries
+`CollectionStyle` supplies page, wash, cover, ink, accent, trim and motif per collection.
+`CollectionArt` renders original native gradient and corner ornaments without uploaded assets.
+Grove uses warm paper, botanical leaves and an earthy binding. Tide uses pale blue pages,
+watery gradients, coral shell fans and bubble outlines. Unknown collections get a neutral
+fallback; adding a collection's art direction is a config entry using an existing motif, or an
+additional motif renderer. Economy/catalog definitions do not contain UI styling logic.
 
-`UITheme` centralizes cream/sage colors, spacing, rounded corners, Fredoka headings, Gotham
-body text, touch targets and animation timing. Rarity colors reuse `OpeningConfig` so the book
-and opening match. `Widgets` supplies cards, labels, actions, progress bars and measured list/grid
-containers. `UIIcons` is an original native-shape icon adapter. `UIPreview` owns the reusable
-static viewport slot, auto-fits figures/boxes and replaces its model only when identity changes.
+## Different presentations
 
-`Hud`, `Navigation`, `CollectionScreen`, `FigureCard`, `FigureDetails`, `ShopScreen`,
-`ShowroomScreen`, `GoalsScreen`, `VisitsScreen` and `Notifications` own their visual concerns.
-`Interface` composes them and coordinates navigation, chosen slots, preference and focus.
-`UIContext` holds typed callbacks; `UIState` contains read-only projections and sizing rules;
-`UIScope` owns screen connections and tween/timer cleanup. Screens are created once and reused.
-All models descend from the owning GUI. No permanent UI animation loop was added.
+- **HUD and navigation:** floating Coin/Scrap capsules leave the world visible. Coins shows the
+  exact balance and rate; Scrap links to the book. There is no permanent save button. Preview
+  is announced once; changed failure/paused states get an error toast. Tapping Coins can recall
+  preview/unsafe status. Ordinary saving/saved transitions are silent. Desktop uses individual
+  left-side icon controls that expand on hover, focus or selection. Narrow/touch layouts use
+  compact bottom navigation. Labels are Collection, Room, Shop, Goals and Social.
+- **Book:** collection tabs sit above a bound, layered spread with a shaded spine. Its paper,
+  ink, ornaments, portraits and binding change with collection. Wide layouts keep the grid on
+  the left and a large figure detail on the right. Narrow layouts open details in place of the
+  grid. Cards emphasize a render, short name and rarity; unknowns show silhouettes and question
+  marks. Details contain owned/available quantities, Coins/sec, Display, eligible recycling,
+  redemption and odds. All/Owned filtering retains every catalog entry in the measured grid.
+  Completion is acknowledged in the discovered count, with the existing plaque in Goals.
+- **Shop:** a neutral boutique surface contains large themed package presentations. The box
+  preview occupies roughly 60% of each collection card. Name, catalog-derived figure count,
+  exact price and OPEN follow it. A visible `i Odds` control opens all per-figure probabilities
+  before purchase. The daily free action remains secondary; its one claim is shared across boxes.
+- **Room:** a smaller bottom overlay leaves the upper room visible and undimmed. It shows
+  income, matching-set progress, four figure slots and a separate Room style palette drawer.
+  Choose/Change opens the owned picker; Display places into a chosen slot or asks for a slot.
+  Remove, the existing fourth-slot unlock, palette prices and Return home remain available.
+- **Goals:** a compact neutral sheet pairs daily display progress/reward with a daily-box choice
+  on wider layouts; narrow layouts stack them. Collection plaque progress follows below.
+- **Social:** a separate showroom directory presents names, staged display previews, public
+  figure count/rate, Visit and Return home. It uses only the existing public snapshots.
+- **Feedback:** a bounded measured toast wraps messages, deduplicates repeats and expires.
+  Errors last longer. Buttons retain disabled, pressed, focus and selected states, with subtle
+  press animation respecting the session motion preference.
 
-The client coordinator reports whether a mutation is pending. Affordances disable during that
-request, paused storage and opening focus. The server continues to validate price, ownership,
-reservation, capacity, proximity and every mutation; UI affordances are not authorization.
-No ownership, currency or daily marker is optimistically updated.
+There is no shared enclosing menu panel, global page title or permanent balance/status header.
+`Interface` coordinates independent presentation hosts and floating close/motion controls.
+Only book and shop dim the background. Generic sheets and room controls leave the world clear.
 
-## Responsive layout, input and motion
+## Layout, authority and lifecycle
 
-The ScreenGui uses Roblox's Core UI safe insets. Normal screens sit in a centered, bounded panel
-above a bottom navigation bar; narrower screens use fewer card columns. Short screens move
-navigation into a left rail and use the remaining space for the panel, with currency in its
-header. On exceptionally short screens the rail scrolls instead of shrinking its 44px targets.
-Collection details switch between a side portrait and a stacked scrolling presentation.
+`UILayout` defines each presentation's bounds within the Core UI safe area. Desktop reserves
+space for the rail; mobile uses bottom navigation. Short landscape hides navigation while a
+screen is open, keeps close/motion accessible, and places book collection tabs beside its pages.
+Closing returns navigation. Wide books use two pages; small screens focus on one page at a time.
 
-List/grid canvases explicitly measure `AbsoluteContentSize` plus padding via `Scroll.bind`,
-including nested tile-container height changes. Filtering, viewport resizing and layout updates
-recompute sizes. There is no reliance on automatic canvas height for viewport cards. All figures
-remain represented in the book; filtering hides cards without deleting catalog entries.
+`Scroll.bind` still measures content plus padding rather than relying on automatic canvas height.
+Lists, grids and nested tile-container heights respond to filtering and resizing. No catalog
+figure is dropped to fit a fixed viewport. `tests/StudioScroll.client.luau` targets the new book
+hierarchy and checks the last card at maximum scroll.
 
-Mouse/touch use Activated controls. Gamepad Y opens the menu, B returns/closes, shoulders switch
-screens and A uses normal GUI selection. Focused controls inside a scroll container are brought
-into view. The opening's higher-priority bindings retain ownership while it is active. The
-normal GUI hides for an opening and restores its current screen afterward.
+The existing module boundaries are preserved: screen modules own presentation, `UIState` owns
+read-only projections, `UIScope` owns connections/timers/tweens, and `UIPreview` owns static model
+slots. Screen instances are reused. No idle animation loop or external dependency was added.
+The server still validates every action, price, reservation, proximity, reward and balance.
+Pending requests disable mutations; the client never optimistically changes inventory or Coins.
 
-Motion preference is now in every menu header. Reduced motion disables new press-scale tweens;
-color, focus borders, layout and progress stay readable. The same `effects()` preference still
-drives the existing opening controller and decorative visitors. It remains a session preference,
-matching the previous behavior; no persistent setting was added.
-
-## Asset replacement
-
-Current figure and box models remain original procedural placeholders. `UIPreview` is the slot
-for production models/renders, `OpeningBox` remains the existing packaging adapter, `UIIcons`
-can later use original image icons, and the simple palette miniatures can receive room art.
-Changing those adapters does not require rewriting the screen flows. No production audio/art
-was acquired, and the separate opening task was not redone.
+Gamepad Y opens/closes, B backs out, shoulders switch screens, and A activates selected controls.
+Selection inside scrolling containers is brought into view. The existing opening owns its higher
+priority bindings, hides this UI and restores focus afterward. Opening files are unchanged.
+Motion preference remains session-only and still controls the existing reveal/visitor behavior.
 
 ## Verification and Studio checklist
 
-Automated: the existing domain, persistence, opening and four scrolling checks remain; 1,118 new
+Automated: the existing domain, persistence, opening and four scrolling checks remain; 1,292
 checks cover read-only inventory/discovery projections, reservations, collection selection,
-bonus preview vs the real domain, responsive grid bounds, numeric presentation and scope teardown.
+bonus preview vs the real domain, responsive grid/presentation bounds, collection theme fallbacks, numeric presentation and scope teardown.
 These checks do **not** prove Roblox layout, rendering or input behavior.
 
 Use current Rojo sync or the rebuilt `RobloxWorkspace.rbxlx`, then Play in unsaved preview.
 Watch client/server Output. Paste `tests/StudioUI.client.luau` into the **client Command Bar**
 on each screen to check target sizes, canvas bounds and safe-area containment. It is read-only.
-Run `tests/StudioScroll.client.luau` with Book open, details closed and All figures selected;
+Run `tests/StudioScroll.client.luau` with Book grid visible and All figures selected;
 it scrolls to and verifies the last card. Neither script is mapped into the game build.
 
 1. **Desktop 16:9:** test 1280×720 and 1920×1080. Start with the menu closed, open each nav item,
-   close it with X/backdrop, and verify the world stays readable. Check exact balance/status
+   close it with X/backdrop, and verify the world stays readable. Check exact balance
    popups and every price. Confirm the selected tab and focus/pressed/disabled treatments differ.
 2. **Mobile/tablet:** test 320×568 portrait, 568×320 landscape and a tablet aspect ratio. Resize
-   with each screen open, especially Book, figure details and Odds. Scroll the rail if needed.
+   with each screen open, especially Book, figure details and Odds. On short landscape, open a screen and confirm the bottom navigation gives way to content; X/B restores it.
    Check safe-area edges, readable text, visible prices, unclipped portraits and touch targets.
 3. **Book:** run the scroll script for both collections. Reach the final card with wheel, touch
    and gamepad; switch collections and All/Owned repeatedly. Progress must update immediately.
@@ -131,7 +118,7 @@ it scrolls to and verifies the last card. Neither script is mapped into the game
 10. **Opening integration:** buy, daily-claim and redeem from the redesigned screens. Check that
     the existing opening owns input, hides normal UI, retains NEW/duplicate behavior and restores
     the prior screen after Continue, Skip or reset. Use its existing fixture/checklist separately.
-11. **Reduced motion/gamepad:** toggle Motion: low in a menu header, then navigate and open a
+11. **Reduced motion/gamepad:** toggle Motion: low in the floating screen controls, then navigate and open a
     box. Check no new press-scale animation, simplified existing reveal and hidden visitors.
     With gamepad, test Y/B/shoulders/A, book detail/back, Odds/back and reaching offscreen controls.
 12. **Respawn/lifecycle:** reset while browsing, in a detail screen and during opening. Switch

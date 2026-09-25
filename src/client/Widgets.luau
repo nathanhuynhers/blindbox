@@ -34,6 +34,22 @@ function W.card(parent: Instance, name: string, height: number): Frame
 	W.corner(card)
 	return card
 end
+function W.outline(object: GuiObject, color: Color3, transparency: number?): UIStroke
+	local stroke = Instance.new("UIStroke")
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	stroke.Color = color
+	stroke.Transparency = transparency or 0
+	stroke.Thickness = 1
+	stroke.Parent = object
+	return stroke
+end
+function W.gradient(object: GuiObject, first: Color3, last: Color3, rotation: number?): UIGradient
+	local gradient = Instance.new("UIGradient")
+	gradient.Color = ColorSequence.new(first, last)
+	gradient.Rotation = rotation or 90
+	gradient.Parent = object
+	return gradient
+end
 function W.label(parent: Instance, text: string, height: number, size: number?): TextLabel
 	local label = Instance.new("TextLabel")
 	label.Size = UDim2.new(1, 0, 0, height)
@@ -162,7 +178,8 @@ function W.action(
 	button.TextWrapped = true
 	button.AutoButtonColor = false
 	button.Parent = parent
-	W.corner(button, 14)
+	button.BorderSizePixel = 0
+	W.corner(button, 12)
 	local stroke = Instance.new("UIStroke")
 	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	stroke.Color = Theme.primary
@@ -174,14 +191,21 @@ function W.action(
 	local enabled, selected, hovered = true, false, false
 	local tween: Tween? = nil
 	local function paint()
+		local custom = button:GetAttribute("Accent")
+		local accent = if typeof(custom) == "Color3" then custom else Theme.primary
+		local surface = button:GetAttribute("Surface")
+		local quiet = button:GetAttribute("Quiet") == true
 		button.BackgroundColor3 = if not enabled
 			then Theme.disabled
-			elseif selected or not subtle then Theme.primary
-			else Theme.soft
+			elseif selected or not subtle then accent
+			elseif typeof(surface) == "Color3" then surface
+			else Theme.card
 		button.TextColor3 = if enabled and (selected or not subtle) then Theme.card else Theme.ink
-		button.BackgroundTransparency = if hovered and enabled then 0.13 else 0
-		stroke.Transparency = if selected or hovered then 0.2 else 1
+		button.BackgroundTransparency = if quiet and not selected and not hovered then 1 else 0.04
+		stroke.Color = accent
+		stroke.Transparency = if selected or hovered then 0.25 elseif quiet then 1 else 0.88
 	end
+	scope.connect(button.AttributeChanged, paint)
 	local function animate(value: number)
 		if tween then
 			tween:Cancel()

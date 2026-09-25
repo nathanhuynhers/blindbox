@@ -49,9 +49,9 @@ rewards. Starter funds are a one-time new-profile grant in persistent mode.
 
 ## Interface and boundaries
 
-The client uses a minimal currency HUD, icon navigation, a collection book with portrait grids
-and figure details, a visual box shop, display-slot/palette cards, daily progress and public
-showroom cards. Prices, rates, odds and ownership remain accessible without permanent system
+The client uses a neutral minimal currency HUD and floating icon navigation. Collections have
+independently themed book pages, portrait grids and figure details. Package-led shopping,
+small showroom controls, compact daily sheets and public showroom cards have distinct layouts. Prices, rates, odds and ownership remain accessible without permanent system
 paragraphs. Safe-area layouts, measured scrolling and reduced motion support readability;
 [UI device and gamepad acceptance](UI_UX.md) still requires Studio testing.
 

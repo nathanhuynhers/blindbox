@@ -6,14 +6,23 @@ local W = require(script.Parent.Widgets)
 local Preview = require(script.Parent.UIPreview)
 local Visits = {}
 function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
-	local page = W.scroll(parent, "Visits", ctx.scope)
+	local root = W.frame(parent, "Visits", Theme.paper)
+	W.corner(root, 16)
+	W.outline(root, Theme.card, 0.15)
+	local title = W.title(root, "The showroom circle", 38)
+	W.inset(title, 10, 38)
+	title.TextSize = 23
+	local page = W.scroll(root, "ShowroomDirectory", ctx.scope)
+	page.Position = UDim2.fromOffset(0, 52)
+	page.Size = UDim2.new(1, 0, 1, -52)
 	local home = W.action(page, "Return home", ctx.scope, ctx.effects, function()
 		ctx.visit(0)
 	end, true)
 	home.button.LayoutOrder = 1
+	home.button:SetAttribute("Quiet", true)
 	local heading = W.label(page, "Showrooms in this server", 34, 18)
 	heading.LayoutOrder = 2
-	local tiles = W.tiles(page, ctx.scope, 245, 3, 226)
+	local tiles = W.tiles(page, ctx.scope, 218, 3, 226)
 	tiles.LayoutOrder = 3
 	local cards: {
 		{
@@ -30,6 +39,11 @@ function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local card = W.card(tiles, "Room" .. index, 226)
 		card.LayoutOrder = index
 		card.Visible = false
+		local stage = W.frame(card, "DisplayStage", Theme.soft)
+		stage.Position = UDim2.fromOffset(6, 78)
+		stage.Size = UDim2.new(1, -12, 0, 88)
+		W.corner(stage, 8)
+		W.gradient(stage, Theme.paper, Theme.soft, 90)
 		local name = W.title(card, "", 42)
 		W.inset(name, 8, 42)
 		name.TextSize = 21
@@ -60,7 +74,7 @@ function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
 		}
 	end
 	return {
-		root = page,
+		root = root,
 		update = function(snapshot: Types.Snapshot)
 			for index, card in cards do
 				local room = snapshot.rooms[index]

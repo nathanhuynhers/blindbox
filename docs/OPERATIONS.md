@@ -53,7 +53,7 @@ The regression suite runs actual domain, request, schema and storage-transform c
 - Four scroll-content/lifecycle assertions with engine property/signal shims; these verify the
   sizing logic, not actual Roblox layout rendering.
 - Four invalid economy/catalog startup fixtures.
-- 1,118 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
+- 1,292 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
 - 1,732 opening-state/result checks: timing, all-phase skip/cancel, rapid inputs, reduced motion,
   confirmed NEW/duplicate metadata, delayed snapshots and unsupported/failed replies.
 

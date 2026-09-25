@@ -13,6 +13,9 @@ This is the current product-direction backlog after the first full-game candidat
    - Replace the current text-heavy prototype interface with polished, visual Roblox UI.
    - Reduce instructional text, improve hierarchy, use icons/cards/progress visuals, and design for mouse, touch, and gamepad.
    - The current UI is functional scaffolding and does not need to be visually preserved.
+   - The second visual candidate separates neutral global controls from collection art direction
+     and replaces the shared menu shell with distinct presentations. Studio visual/device
+     acceptance is pending; see [UI candidate and checklist](UI_UX.md).
 
 3. **Production-quality collectible models**
    - Replace procedural placeholder figures with original, desirable collectible characters.

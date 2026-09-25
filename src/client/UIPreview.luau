@@ -11,7 +11,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope): Preview
 	frame.Name = "Portrait"
 	frame.Size = UDim2.fromScale(1, 1)
 	frame.BackgroundTransparency = 1
-	frame.Ambient = Color3.fromRGB(202, 214, 206)
+	frame.Ambient = Color3.fromRGB(216, 215, 224)
 	frame.LightColor = Color3.fromRGB(255, 246, 225)
 	frame.LightDirection = Vector3.new(-1, -1, -2)
 	frame.Parent = parent
@@ -61,7 +61,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope): Preview
 			if visible ~= discovered then
 				visible = discovered
 				for part, color in colors do
-					part.Color = if discovered then color else Color3.fromRGB(76, 99, 93)
+					part.Color = if discovered then color else Color3.fromRGB(120, 114, 130)
 				end
 			end
 		end,

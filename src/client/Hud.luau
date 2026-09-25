@@ -14,7 +14,21 @@ function Hud.create(parent: Instance, ctx: Context.Context)
 		local snapshot = ctx.snapshot()
 		if snapshot then
 			ctx.message(
-				State.number(snapshot.coins) .. " Coins  ·  " .. snapshot.rate .. " Coins/sec"
+				State.number(snapshot.coins)
+					.. " Coins  /  "
+					.. snapshot.rate
+					.. " Coins/sec"
+					.. (
+						if not snapshot.ready
+								or string.find(
+									string.lower(snapshot.saveStatus),
+									"preview",
+									1,
+									true
+								)
+							then "\n" .. snapshot.saveStatus
+							else ""
+					)
 			)
 		end
 	end, true)
@@ -41,22 +55,11 @@ function Hud.create(parent: Instance, ctx: Context.Context)
 	local scraps = W.label(scrap.button, "...", 44, 15)
 	scraps.Position = UDim2.fromOffset(34, 2)
 	scraps.Size = UDim2.new(1, -40, 0, 44)
-	local status = W.action(root, "...", ctx.scope, ctx.effects, function()
-		local snapshot = ctx.snapshot()
-		if snapshot then
-			ctx.message(snapshot.saveStatus)
-		end
-	end, true)
-	status.button.Name = "SaveStatus"
-	status.button.Size = UDim2.fromOffset(88, 44)
-	status.button.Position = UDim2.new(1, -88, 0, 2)
 	local function resize()
-		local width = math.min(150, math.max(100, root.AbsoluteSize.X - 170))
+		local width = math.min(150, math.max(100, root.AbsoluteSize.X - 96))
 		coins.button.Size = UDim2.fromOffset(width, 48)
 		scrap.button.Position = UDim2.fromOffset(width + 8, 0)
 		scrap.button.Size = UDim2.fromOffset(76, 48)
-		status.button.Position = UDim2.new(1, -78, 0, 2)
-		status.button.Size = UDim2.fromOffset(78, 44)
 	end
 	ctx.scope.connect(root:GetPropertyChangedSignal("AbsoluteSize"), resize)
 	resize()
@@ -65,16 +68,6 @@ function Hud.create(parent: Instance, ctx: Context.Context)
 		update = function(snapshot: Types.Snapshot)
 			amount.Text = State.compact(snapshot.coins)
 			scraps.Text = State.compact(snapshot.scrap)
-			local raw = string.lower(snapshot.saveStatus)
-			status.set(
-				if not snapshot.ready
-					then "Paused"
-					elseif string.find(raw, "preview", 1, true) then "Unsaved"
-					elseif string.find(raw, "saved", 1, true) then "Saved"
-					else "Saving",
-				true
-			)
-			status.button.TextColor3 = if not snapshot.ready then Theme.error else Theme.muted
 		end,
 	}
 end
