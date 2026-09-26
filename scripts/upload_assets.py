@@ -25,7 +25,8 @@ MAX_BYTES = 20_000_000  # Conservative decimal interpretation of Roblox's 20 MB 
 KEY = re.compile(r"[A-Z][A-Za-z0-9]*(?:\.[A-Z][A-Za-z0-9]*)+")
 ID = re.compile(r"[1-9][0-9]*")
 OPERATION = re.compile(r"operations/[A-Za-z0-9_-]+")
-FORMATS = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
+IMAGE_FORMATS = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
+MODEL_FORMATS = {".glb": "model/gltf-binary"}
 
 
 class PipelineError(Exception):
@@ -88,7 +89,7 @@ def load_api_key(root: Path) -> str:
 
 
 def image_info(path: Path) -> tuple[bytes, str, int, int]:
-    if path.suffix.lower() not in FORMATS or not path.is_file():
+    if path.suffix.lower() not in IMAGE_FORMATS or not path.is_file():
         raise PipelineError("Source must be an existing PNG or JPEG file.")
     if not 0 < path.stat().st_size <= MAX_BYTES:
         raise PipelineError("Source must be non-empty and no larger than 20 MB.")
@@ -146,7 +147,48 @@ def image_info(path: Path) -> tuple[bytes, str, int, int]:
             offset += length
     if not 0 < width < 8000 or not 0 < height < 8000:
         raise PipelineError("Image dimensions must be positive and each smaller than 8000 pixels.")
-    return data, FORMATS[path.suffix.lower()], width, height
+    return data, IMAGE_FORMATS[path.suffix.lower()], width, height
+
+
+def model_info(path: Path, required_nodes: object) -> tuple[bytes, str, list[str]]:
+    if path.suffix.lower() not in MODEL_FORMATS or not path.is_file():
+        raise PipelineError("Model source must be an existing GLB file.")
+    if not 0 < path.stat().st_size <= MAX_BYTES:
+        raise PipelineError("Model source must be non-empty and no larger than 20 MB.")
+    data = path.read_bytes()
+    if len(data) < 20 or data[:4] != b"glTF":
+        raise PipelineError("GLB signature is invalid.")
+    version, declared = struct.unpack_from("<II", data, 4)
+    if version != 2 or declared != len(data):
+        raise PipelineError("GLB must be version 2 with a complete declared length.")
+    offset, document = 12, None
+    while offset + 8 <= len(data):
+        size, kind = struct.unpack_from("<II", data, offset)
+        offset += 8
+        end = offset + size
+        if end > len(data):
+            raise PipelineError("GLB contains an incomplete chunk.")
+        if kind == 0x4E4F534A and document is None:
+            try:
+                document = json.loads(data[offset:end].rstrip(b"\x00 ").decode("utf-8"))
+            except (UnicodeDecodeError, ValueError):
+                raise PipelineError("GLB JSON metadata is invalid.") from None
+        offset = end
+    if offset != len(data) or not isinstance(document, dict):
+        raise PipelineError("GLB is missing valid JSON metadata.")
+    nodes = document.get("nodes")
+    if not isinstance(nodes, list):
+        raise PipelineError("GLB contains no node hierarchy.")
+    names = [node.get("name") for node in nodes if isinstance(node, dict)]
+    names = [name for name in names if isinstance(name, str) and name]
+    if required_nodes is not None:
+        if (not isinstance(required_nodes, list)
+                or any(not isinstance(name, str) or not name for name in required_nodes)):
+            raise PipelineError("requiredNodes must be a list of non-empty GLB node names.")
+        missing = [name for name in required_nodes if name not in names]
+        if missing:
+            raise PipelineError("GLB is missing required semantic nodes: " + ", ".join(missing))
+    return data, MODEL_FORMATS[path.suffix.lower()], names
 
 
 def creator_value(value: object) -> dict:
@@ -167,17 +209,24 @@ def prepare(root: Path, entry: dict) -> dict:
     path = (root / source).resolve()
     if not path.is_relative_to((root / "assets").resolve()):
         raise PipelineError("Source paths must remain inside assets/ (including symlink targets).")
-    if not re.fullmatch(r"[a-z0-9]+(?:_[a-z0-9]+)*\.(png|jpe?g)", path.name):
-        raise PipelineError("Use lowercase snake_case PNG/JPEG filenames.")
-    if entry.get("assetType", "Image") != "Image":
-        raise PipelineError("This version supports Image assets only; model adapters can be added later.")
+    asset_type = entry.get("assetType", "Image")
+    extension = "png|jpe?g" if asset_type == "Image" else "glb"
+    if not re.fullmatch(rf"[a-z0-9]+(?:_[a-z0-9]+)*\.({extension})", path.name):
+        raise PipelineError("Use a lowercase snake_case filename supported by its asset type.")
+    if asset_type not in ("Image", "Model"):
+        raise PipelineError("This pipeline supports Image and GLB Model assets only.")
     display = entry.get("displayName", path.stem)
     if not isinstance(display, str) or not 1 <= len(display) <= 50 or any(ord(c) < 32 for c in display):
         raise PipelineError("Display name must be 1-50 characters without control characters.")
-    data, mime, width, height = image_info(path)
+    if asset_type == "Image":
+        data, mime, width, height = image_info(path)
+        detail = {"width": width, "height": height}
+    else:
+        data, mime, nodes = model_info(path, entry.get("requiredNodes"))
+        detail = {"nodes": nodes}
     return {"key": key, "source": path.relative_to(root).as_posix(), "displayName": display,
-            "assetType": "Image", "sha256": hashlib.sha256(data).hexdigest(),
-            "data": data, "mime": mime, "width": width, "height": height}
+            "assetType": asset_type, "sha256": hashlib.sha256(data).hexdigest(),
+            "data": data, "mime": mime, **detail}
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -277,7 +326,8 @@ def generate(root: Path, mapping: dict) -> None:
     lines.append("} :: { [string]: string }")
     if not mapping:
         lines = lines[:2] + ["return {} :: { [string]: string }"]
-    atomic_write(root / "src/shared/AssetIds.luau", "\n".join(lines) + "\n")
+    # The repository's StyLua configuration requires Windows line endings for Luau sources.
+    atomic_write(root / "src/shared/AssetIds.luau", ("\n".join(lines) + "\n").replace("\n", "\r\n"))
 
 
 @contextmanager
@@ -306,7 +356,7 @@ def upload(root: Path, items: list[dict], creator: dict, cloud: Cloud, replace: 
         old = mapping.get(key)
         same = old and old.get("sha256") == item["sha256"] and old.get("creator") == creator and old.get("assetType") == item["assetType"]
         if old and not same and not replace and key not in journal:
-            raise PipelineError("An asset is already mapped. Use --replace to explicitly create a new image asset.")
+            raise PipelineError("An asset is already mapped. Use --replace to explicitly create a new asset.")
     for item in items:
         key = item["key"]
         identity = {field: item[field] for field in ("source", "sha256", "assetType")}
@@ -395,7 +445,10 @@ def main(argv: list[str] | None = None) -> int:
             if value is not None:
                 creator_value(value)
             for item in items:
-                print(f"Valid {item['key']}: {item['width']}x{item['height']}, {len(item['data'])} bytes")
+                detail = (f"{item['width']}x{item['height']}"
+                          if item["assetType"] == "Image"
+                          else f"{len(item['nodes'])} semantic nodes")
+                print(f"Valid {item['key']}: {detail}, {len(item['data'])} bytes")
             if value is None:
                 print("Creator is not configured; set it before uploading.")
             return 0

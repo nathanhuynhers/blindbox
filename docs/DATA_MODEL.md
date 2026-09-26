@@ -22,6 +22,10 @@ These IDs must not be reused or renamed without a migration. See [architecture](
 | goalProgress | Highest simultaneous distinct display count today, capped at 3 |
 | goalClaimed | Boolean; true requires progress 3 |
 
+The `slots`, `unlocked`, `theme`, and `themes` fields above describe the implemented schema, even
+though some source and UI names still say room/showroom. Semantically, `slots` are active economic
+**Display** slots. They are not Showroom placements.
+
 Every slot reserves one owned copy. For each figure, reservations cannot exceed quantity.
 Recycling requires at least two owned copies and one unreserved copy. Replacing/removing changes
 reservations only. Discovery is permanent and completion plaques are derived per fixed collection;
@@ -51,13 +55,28 @@ No client can choose storage mode, owner identity, key, lease token or profile c
 
 State adds mutation revision, monotonic accrual time and a fractional Coin remainder. They are
 not persisted; loading starts the accrual clock now, with no offline income. Transactions own
-rate-limit tokens and recent request receipts. Server lifecycle owns room models, character
+rate-limit tokens and recent request receipts. Server lifecycle owns legacy main-plot/Display models, character
 connections and pending spawn tasks. Storage owns ready/busy flags and renewal deadlines.
 
 Owner snapshots contain owned counts, discovery, slots, balances, progression, public economic
-previews, save status and the public room directory. A monotonic snapshot sequence orders passive
+previews, save status and the public main-plot Display directory. A monotonic snapshot sequence orders passive
 income updates. Private storage tokens/keys, callbacks and other owners' balances are omitted.
 Profiles and snapshot maps are cloned before asynchronous or network boundaries.
+
+## Approved future migration direction
+
+The target direction separates economic Display state from non-economic Showroom state; see
+[Display and Showrooms](DISPLAY_AND_SHOWROOMS.md). A later schema version should conceptually own:
+
+- Display capacity from 3 through 6 and its active figure reservations;
+- Showroom ownership, themes, figure placement, furniture placement, and featured-room state;
+- a deliberate migration for existing palette ownership/equipped state.
+
+The illustrative schema in the canonical design is not authorization to change schema version 2
+in place. Existing `slots`/`unlocked` values and palette purchases must remain loadable. Showroom
+placements must not contribute to passive income or consume Display capacity. If a physical copy
+cannot be reserved by both systems, that reservation rule must be specified and migrated explicitly
+before implementation rather than inferred from the planning example.
 
 Normal action replies are not a promise of durable saving. Claim markers and their results share
 one snapshot; crash rollback affects them together. Persistence/rollback testing and operating

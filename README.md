@@ -8,6 +8,10 @@ collections, automatic display income, a fourth-slot unlock, three room palettes
 plaques, daily boxes/goals, persistent profiles, and same-server visits. A tabbed interface
 replaces the MVP menu; scrolling follows measured content height so every figure is reachable.
 
+In current product terminology, the implemented earning shelf is the **Display**. Planned
+non-economic customizable **Showrooms** and the Showroom Gallery are documented separately and
+are not implemented yet; see [Display and Showrooms](docs/DISPLAY_AND_SHOWROOMS.md).
+
 Open `RobloxWorkspace.rbxlx` in Studio to try it. Studio defaults to **unsaved preview**;
 live servers require a successful persistent load. See [full-game scope](docs/FULL_GAME.md),
 [architecture](docs/ARCHITECTURE.md), [economy](docs/ECONOMY.md), and
@@ -64,7 +68,7 @@ rojo serve default.project.json
 Connect through the Studio Rojo plugin. If the server was already running when
 the project mapping changed, restart it and reconnect. Confirm that
 `ReplicatedStorage.Packages` appears alongside `Shared`, then use Play to check
-the showroom and Output. Open a box, place the selected figure, and watch Coins increase.
+the main-plot Display and Output. Open a box, place the selected figure, and watch Coins increase.
 No gameplay dependencies are installed. The HUD identifies whether you are in unsaved Studio preview or using persistent progress.
 
 Follow [the full-game test and release checklist](docs/OPERATIONS.md) before release.

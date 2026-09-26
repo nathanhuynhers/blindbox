@@ -3,6 +3,8 @@
 Status: user playtested and accepted the MVP, reporting collection scroll truncation.
 The new candidate fixes scrolling and expands beyond this historical scope; see [full-game scope](FULL_GAME.md).
 The acceptance criteria below document the original MVP, not the current larger feature set.
+Its use of "showroom" means the passive-income **Display** in current terminology, not the later
+non-economic Showrooms defined in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
 See [the verification and playtest checklist](STUDIO_TESTS.md).
 [Game design](GAME_DESIGN.md) describes the vision; this document limits scope.
 Milestone 1 in [the roadmap](ROADMAP.md) is the entire MVP, delivered in small playable steps.
@@ -14,7 +16,7 @@ Milestone 1 in [the roadmap](ROADMAP.md) is the entire MVP, delivered in small p
 | Content | One original six-figure collection, three configurable tiers, one box |
 | Opening | Server resolves purchase and grant together; short skippable reveal |
 | Inventory/index | One combined panel: counts, discovered entries, silhouettes, completion stamp |
-| Display | One simple personal showroom per player; one shelf with three fixed slots; place/replace/remove |
+| Display | One simple personal main-plot Display per player; one shelf with three fixed slots; place/replace/remove |
 | Display rates | Rarity-based per-figure rates, small within-tier differences; sum occupied slots; no diversity/set bonus |
 | Income | Server credits Coins automatically while in-game; no counter, bank, or offline income |
 | Visitors | At most two local decorative visitors for the owner's room; fixed waypoints, no effect on income |
@@ -34,7 +36,7 @@ crafting screen; put these actions in the combined inventory/index panel.
 
 ## Explicit exclusions
 
-No saving/loading, cross-session rewards, showroom expansion, free placement, furniture shop,
+No saving/loading, cross-session rewards, Display expansion, Showrooms, free placement, furniture shop,
 multiple collections, variants, upgraded figures, unowned box inventory, full-set income bonuses,
 visitor preferences, pathfinding, offline earnings, quests, daily rewards, streaks, seasons,
 trading, visits browser, likes, leaderboards, monetization, analytics service, or dependencies.

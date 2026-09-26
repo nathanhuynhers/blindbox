@@ -10,6 +10,7 @@ export type Theme = {
 	secondary: Color3,
 	wash: Color3,
 	ink: Color3,
+	trim: Color3,
 }
 
 local neutral: Theme = {
@@ -20,6 +21,7 @@ local neutral: Theme = {
 	secondary = Color3.fromRGB(224, 198, 146),
 	wash = Color3.fromRGB(248, 241, 225),
 	ink = Color3.fromRGB(67, 50, 37),
+	trim = Color3.fromRGB(205, 160, 88),
 }
 
 ShopTheme.collections = {
@@ -31,6 +33,7 @@ ShopTheme.collections = {
 		secondary = Color3.fromRGB(217, 196, 135),
 		wash = Color3.fromRGB(238, 239, 207),
 		ink = Color3.fromRGB(67, 73, 45),
+		trim = Color3.fromRGB(203, 161, 86),
 	},
 	tide = {
 		collectionId = "tide",
@@ -40,6 +43,7 @@ ShopTheme.collections = {
 		secondary = Color3.fromRGB(238, 158, 146),
 		wash = Color3.fromRGB(218, 240, 241),
 		ink = Color3.fromRGB(42, 80, 99),
+		trim = Color3.fromRGB(220, 180, 116),
 	},
 } :: { [string]: Theme }
 

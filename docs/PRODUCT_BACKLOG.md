@@ -26,10 +26,13 @@ This is the current product-direction backlog after the first full-game candidat
    - Visual grid/book with silhouettes for undiscovered figures, discovery state, quantities, rarity, collection completion, and a focused detail view.
    - Make completing a collection feel celebratory.
 
-5. **Showroom customization**
-   - Make showrooms personal rather than just income shelves.
+5. **Separate Display from Showrooms**
+   - Migrate the current earning shelf/Room into the focused three-to-six-slot Display system.
+   - Build non-economic Showrooms separately; do not turn economic Display optimization into decorating.
    - Explore shelves, wallpaper, floors, rugs, plants, lighting, display cases, furniture, plaques, and collection-themed rewards.
-   - Collection completion should unlock matching cosmetic/showroom rewards where appropriate.
+   - Collection completion unlocks its associated Showroom; additional blank/custom rooms can be acquired separately.
+   - Preserve schema-v2 slots and palette ownership through an explicit migration.
+   - Follow the implementation order and unresolved decisions in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
 
 ## Phase 2: Build depth
 
@@ -46,7 +49,8 @@ This is the current product-direction backlog after the first full-game candidat
    - Potential rewards: showroom space, cosmetics, shelves, titles, and other expression.
 
 9. **Social showroom features**
-   - Build on same-server visits with showroom likes, favorite/rarest figure showcases, collection inspection, completion badges, and recent-pull presentation.
+   - Replace/extend current main-plot Display visits with one scalable Gallery entrance and safe visits to unlocked Showrooms.
+   - Later consider likes, favorite/rarest figure showcases, collection inspection, completion badges, and recent-pull presentation.
 
 10. **More collections and content pipeline**
     - Make adding an original collection a repeatable content update rather than an architecture rewrite.
@@ -68,7 +72,7 @@ This is the current product-direction backlog after the first full-game candidat
 ## Product principles
 
 - The core fantasy is: **open cute blind boxes, build a collection, create a beautiful showroom, and show it to other players.**
-- Collecting and decorating should reinforce each other.
+- Display earning, collecting, and Showroom decorating should reinforce each other without making Showrooms economic.
 - Prefer visual communication over walls of text.
 - Avoid turning the game into a generic exponential-upgrade simulator.
 - New systems should strengthen collecting, expression, anticipation, or social pride.

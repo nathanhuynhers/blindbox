@@ -10,7 +10,9 @@ local Rooms = require(script.Rooms)
 local Storage = require(script.Storage)
 local Settings = require(script.Settings)
 local World = require(script.World)
+local ModelAssets = require(script.ModelAssets)
 local gardens = World.create()
+local productionModels = ModelAssets.publish()
 type Session = {
 	transaction: Transactions.Session,
 	room: Rooms.Room,
@@ -297,5 +299,6 @@ game:BindToClose(function()
 		task.wait(0.1)
 	end
 	folder:Destroy()
+	productionModels:Destroy()
 	gardens:Destroy()
 end)

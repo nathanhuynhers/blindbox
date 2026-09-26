@@ -36,5 +36,6 @@ Manifest.Collection = {
 	},
 }
 Manifest.Global = { IconCollection = "Global.IconCollection" }
+Manifest.Models = { BlindBoxBase = "Models.BlindBoxBase" }
 
 return Manifest

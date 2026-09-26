@@ -106,5 +106,14 @@
     },
     "sha256": "fc48dda5fe90cbe6af3980ee0b02a38217558332ebd3338f6f6d828e813c345d",
     "source": "assets/ui/shop/tidepool-tales/tidepool_tales_shop_pattern.png"
+  },
+  "Models.BlindBoxBase": {
+    "assetId": "79870100381887",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "9bad381e0e12ef02115db560681b360db90af192d7456b5e43f5ec6a73a8cb0d",
+    "source": "assets/models/blind-box/blind_box_base.glb"
   }
 }

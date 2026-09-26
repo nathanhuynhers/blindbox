@@ -195,6 +195,7 @@ function W.action(
 		local accent = if typeof(custom) == "Color3" then custom else Theme.primary
 		local surface = button:GetAttribute("Surface")
 		local quiet = button:GetAttribute("Quiet") == true
+		local restingStroke = button:GetAttribute("RestingStrokeTransparency")
 		button.BackgroundColor3 = if not enabled
 			then Theme.disabled
 			elseif selected or not subtle then accent
@@ -203,7 +204,11 @@ function W.action(
 		button.TextColor3 = if enabled and (selected or not subtle) then Theme.card else Theme.ink
 		button.BackgroundTransparency = if quiet and not selected and not hovered then 1 else 0.04
 		stroke.Color = accent
-		stroke.Transparency = if selected or hovered then 0.25 elseif quiet then 1 else 0.88
+		stroke.Transparency = if selected or hovered
+			then 0.25
+			elseif quiet then 1
+			elseif typeof(restingStroke) == "number" then restingStroke
+			else 0.88
 	end
 	scope.connect(button.AttributeChanged, paint)
 	local function animate(value: number)

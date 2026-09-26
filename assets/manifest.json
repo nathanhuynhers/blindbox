@@ -3,6 +3,26 @@
     "userId": "103346374"
   },
   "assets": {
+    "blind_box_base": {
+      "key": "Models.BlindBoxBase",
+      "source": "assets/models/blind-box/blind_box_base.glb",
+      "displayName": "Blind Box Base",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BlindBox_Root",
+        "BoxBody",
+        "FrontPatternPanel",
+        "SidePatternPanel",
+        "TopPatternPanel",
+        "EmblemBadge",
+        "CollectionNamePlate",
+        "FrontFrameTrim",
+        "SideFrameTrim",
+        "TopFrameTrim",
+        "LidCap",
+        "BottomCap"
+      ]
+    },
     "collection_book_open": {
       "key": "Collection.BookOpen",
       "source": "assets/ui/collection/shared/collection_book_open.png",

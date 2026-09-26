@@ -23,6 +23,12 @@ offline income, trading or escalating multipliers are implemented.
 | Completion | Permanent index recognition and derived room plaque for each completed collection |
 | Bounds | 200 total copies; 1 billion Coins; 1 million Scrap |
 
+These are implemented candidate values. The approved future Display supports at most six slots,
+but slot 4/5/6 unlock paths and prices are not finalized. The current 4,000-Coin fourth slot must
+not be extrapolated into prices for slots 5 and 6. Showrooms and Showroom placements generate zero
+Coins. Current palettes and plaques are legacy prototype cosmetics awaiting a migration decision;
+their existing purchases remain valid data.
+
 `rate = sum(baseCoinsPerSecond for each occupied slot) + eligibleThemedBonus`
 
 Only displayed copies earn, including repeats. Inventory-only figures do not. Three weakest

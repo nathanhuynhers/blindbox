@@ -6,8 +6,9 @@ and persistence acceptance tests remain open. Numbers remain tuning values, not 
 
 ## Vision and loop
 
-Build a collectible showroom worth visiting. Open boxes, discover original cute figures, choose
-your best display, earn Coins automatically, expand your shelf and finish themed collections.
+Build a collectible world worth visiting. Open boxes, discover original cute figures, choose
+your best active Display earners, generate Coins automatically, finish themed collections, and
+build expressive Showrooms that other players can visit.
 Rarity is the main income driver, with small fixed differences between figures within each tier.
 A higher-tier figure always earns more than a lower-tier figure. Every displayed copy contributes
 its rate; copies in inventory do not earn. There is no income counter or visitor-controlled payout.
@@ -19,17 +20,24 @@ Buying a box resolves charge, random result and grant together on the server. Re
 and skippable; closing one cannot affect ownership. Odds and duplicate value are visible before
 purchase. A combined collection index shows silhouettes, discoveries, quantities and free copies.
 
-## Display and expression
+## Display economy and Showroom expression
 
-A personal decorated showroom starts with three fixed slots. One fourth slot costs a visible
-fixed Coin price. Selecting and replacing figures reserves copies without consuming them.
-The interface shows individual and total Coins/sec. Three distinct figures from the same
-collection add a modest +1/sec once. Set bonuses never compound as multipliers.
+A **Display** is the small utility system on the player's main plot. Only copies assigned to its
+active slots generate Coins. The approved long-term structure starts with three slots and supports
+up to six; unlock methods for slots 4-6 remain TBD. The current candidate implements only one
+fixed-price fourth-slot unlock. Selecting and replacing figures reserves copies without consuming
+them. The interface shows individual and total Coins/sec. Three distinct figures from the same
+collection currently add a modest +1/sec once. Set bonuses never compound as multipliers.
 
-Three room palettes provide a small cosmetic purchase choice. Completing each fixed collection
-adds a permanent index acknowledgement and cosmetic room plaque, derived from saved discovery.
-Expansion and cosmetics are bounded; neither starts an endless upgrade tree. Server-authorized
-same-server visits show public displays but never expose private balances or allow guest edits.
+**Showrooms** are separate non-economic spaces for collection completion, customization, social
+visiting, and flexing. They generate zero Coins. Completing a collection should unlock its themed
+Showroom; separately acquired blank/custom rooms remain possible. One scalable Showroom Gallery
+entrance represents all rooms on the main plot. See [the canonical direction](DISPLAY_AND_SHOWROOMS.md).
+
+The current candidate's three room palettes and completion plaques belong to the older combined
+room/Display prototype. Their saved ownership must survive migration and should eventually feed
+Showroom cosmetics. Current same-server visits show public main-plot Displays; future gallery and
+Showroom visiting is not implemented. Guests never receive private balances or editing authority.
 
 ## Income, duplicates and returning
 
@@ -51,7 +59,7 @@ rewards. Starter funds are a one-time new-profile grant in persistent mode.
 
 The client uses a neutral minimal currency HUD and floating icon navigation. Collections have
 independently themed book pages, portrait grids and figure details. Package-led shopping,
-small showroom controls, compact daily sheets and public showroom cards have distinct layouts. Prices, rates, odds and ownership remain accessible without permanent system
+small Display controls, compact daily sheets and public Display cards have distinct layouts. Prices, rates, odds and ownership remain accessible without permanent system
 paragraphs. Safe-area layouts, measured scrolling and reduced motion support readability;
 [UI device and gamepad acceptance](UI_UX.md) still requires Studio testing.
 

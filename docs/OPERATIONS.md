@@ -5,6 +5,10 @@ verified in live Roblox servers. The agent has no Studio control connector and h
 new engine, mobile, multiplayer or real DataStore tests. Existing MVP playtesting is not proof
 that newly added features pass those tests.
 
+This checklist covers the implemented legacy main-plot **Display** and its visits. It does not
+test the planned non-economic Showrooms or Showroom Gallery in
+[Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+
 ## Run now
 
 Open `RobloxWorkspace.rbxlx` and Play, or sync the source through Rojo. Studio starts in an
@@ -119,7 +123,7 @@ closed; they are never replaced with defaults. No paid receipts or cross-player 
 Leases last 120 seconds. Autosaves run about every 30 seconds; gameplay stops after 85 seconds
 without a confirmed renewal or immediately on a save failure. Bounded retries use the same
 snapshot and save generation. A response lost after commit is reconciled using the writer token
-and generation; an expired or replaced owner cannot write. Room mutations never yield.
+and generation; an expired or replaced owner cannot write. Legacy Display/main-plot mutations never yield.
 
 Action replies acknowledge **in-memory progress**. A hard crash may roll progress back to the
 last successful save, normally up to an autosave interval plus request latency, and potentially

@@ -59,6 +59,14 @@ for _, object in gui:GetDescendants() do
 end
 local bounds = gui:WaitForChild("SafeArea") :: Frame
 local screens = bounds:WaitForChild("Screens") :: Frame
+local shopHost = screens:WaitForChild("ShopPresentation") :: Frame
+local blur = game:GetService("Lighting"):FindFirstChild("InterfaceBackgroundBlur")
+if not shopHost.Visible then
+	assert(
+		not blur or not blur:IsA("BlurEffect") or not blur.Enabled,
+		"Shop blur must be disabled after leaving the Shop"
+	)
+end
 for _, host in screens:GetChildren() do
 	if host:IsA("Frame") and visible(host) then
 		assert(

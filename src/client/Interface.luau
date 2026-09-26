@@ -13,6 +13,7 @@ local W = require(script.Parent.Widgets)
 local Hud = require(script.Parent.Hud)
 local Navigation = require(script.Parent.Navigation)
 local Notifications = require(script.Parent.Notifications)
+local BackgroundTreatment = require(script.Parent.BackgroundTreatment)
 local Collection = require(script.Parent.CollectionScreen)
 local Shop = require(script.Parent.ShopScreen)
 local Showroom = require(script.Parent.ShowroomScreen)
@@ -46,17 +47,8 @@ function Interface.create(
 	gui.ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets
 	gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 	local bounds = W.frame(gui, "SafeArea")
-	local shade = Instance.new("TextButton")
-	shade.Name = "Backdrop"
-	shade.Size = UDim2.fromScale(1, 1)
-	shade.Text = ""
-	shade.BackgroundColor3 = Theme.shadow
-	shade.BackgroundTransparency = 0.6
-	shade.BorderSizePixel = 0
-	shade.Selectable = false
-	shade.Modal = true
-	shade.AutoButtonColor = false
-	shade.Parent = bounds
+	local background = BackgroundTreatment.create(bounds, scope)
+	local shade = background.overlay
 	local pagesRoot = W.frame(bounds, "Screens")
 	local controls = W.frame(bounds, "ScreenControls")
 	controls.ZIndex = 5
@@ -68,7 +60,7 @@ function Interface.create(
 		host.Active = true
 		host:SetAttribute("Presentation", true)
 		hosts[id] = host
-		if id ~= "Collection" then
+		if id ~= "Collection" and id ~= "Shop" then
 			local shadow = W.frame(host, "Shadow", Theme.shadow)
 			shadow.Position = UDim2.fromOffset(0, 6)
 			shadow.BackgroundTransparency = 0.84
@@ -227,8 +219,17 @@ function Interface.create(
 			close.button.Position = UDim2.fromOffset(110, 0)
 			motion.button.Visible = true
 		end
-		shade.Visible = opened and (current == "Collection" or current == "Shop")
-		shade.BackgroundTransparency = 0.72
+		if opened and current == "Shop" then
+			background.set({
+				color = Color3.fromRGB(73, 52, 38),
+				transparency = 0.62,
+				blur = 8,
+			})
+		elseif opened and current == "Collection" then
+			background.set({ color = Theme.shadow, transparency = 0.72, blur = 0 })
+		else
+			background.set(nil)
+		end
 		nav.layout(size, desktop)
 		nav.root.Visible = not opened or size.Y >= 420
 		nextStep.button.Position = UDim2.new(0.5, 0, 1, if desktop then -24 else -80)
@@ -438,6 +439,11 @@ function Interface.create(
 		openingFocus = function(value: boolean)
 			focused = value
 			gui.Enabled = not value
+			if value then
+				background.set(nil)
+			else
+				resize()
+			end
 			refresh()
 		end,
 		destroy = function()

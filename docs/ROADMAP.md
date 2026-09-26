@@ -9,6 +9,10 @@ Implementation approvals between these milestones are superseded by the user's b
 Public deployment, paid mechanics and trading remain outside scope. The milestone definitions
 below are review criteria, not claims that every runtime test has passed.
 
+Terminology has changed since milestones 1-6 were written. Their implemented "room/showroom"
+means the economic main-plot **Display**. The separately approved non-economic **Showrooms** and
+Showroom Gallery are future work described in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+
 ## Milestone 0 — Review the plan
 
 - **Goal:** agree on a small experiment using the existing working tooling.
@@ -55,9 +59,9 @@ Implementation steps within the single MVP scope, each leaving an inspectable in
 4. **Evaluate:** usability and abuse checks, fix observed issues, record tuning evidence. Avoid
    starting persistence until the review establishes a reason to keep developing this loop.
 
-## Milestone 2 — A showroom worth returning to
+## Milestone 2 — Persistent Display progression (implemented legacy scope)
 
-- **Goal:** retain progress safely and offer one bounded showroom expansion.
+- **Goal:** retain progress safely and offer one bounded Display-slot expansion.
 - **Systems:** persistence/migrations/session ownership, one fixed-cost slot unlock, continued
   use of existing placement and income rules, persistent one-time starter grant.
 - **Dependencies:** positive milestone 1 review; explicit persistence implementation/library
@@ -90,7 +94,7 @@ one expansion last. Do not build every future backend service before another pla
 
 ## Milestone 4 — Modest reasons to return
 
-- **Goal:** test repeat-session appeal after collection/showroom play is enjoyable.
+- **Goal:** test repeat-session appeal after collection/Display play is enjoyable.
 - **Systems:** one daily free box and one simple collection/display goal, added sequentially.
   Streaks, rotating availability, and seasons remain deferred unless evidence supports them.
 - **Dependencies:** reliable persistent claims, server time rules, economy review, and returning
@@ -102,12 +106,12 @@ one expansion last. Do not build every future backend service before another pla
 - **Automatic checks:** injected-time boundary tests, repeated claims, concurrent requests,
   inventory-full reward handling, save interruption and grant reconciliation.
 
-## Milestone 5 — Show others the collection
+## Milestone 5 — Main-plot Display visits (implemented legacy scope)
 
-- **Goal:** validate social pride with same-server showroom visits and public display inspection.
+- **Goal:** validate social pride with same-server main-plot visits and public Display inspection.
 - **Systems:** visit navigation, observer presentation with visibility limits, public catalog
   inspection. Likes, wishlists, featured rooms, and leaderboards require later individual tasks.
-- **Dependencies:** safe room ownership, stable public/private projections, performance budgets,
+- **Dependencies:** safe main-plot ownership, stable public/private projections, performance budgets,
   and enough visual variety to make visits interesting.
 - **Definition of done:** a guest can visit/inspect but cannot modify the host's state;
   observer visitors/models stay bounded; hosts leaving cleanly returns visitors to a valid state.
@@ -115,6 +119,23 @@ one expansion last. Do not build every future backend service before another pla
   touch navigation, crowded room performance and visual clutter.
 - **Automatic checks:** public-state allowlist, access rules, cleanup, bounded replication and
   unchanged inventory/balances after guest interactions.
+
+## Post-candidate direction — Display and Showrooms
+
+This is approved planning direction, not an implemented milestone:
+
+1. Rename/refactor legacy Room/Showroom terminology to Display without changing income or saves.
+2. Migrate Display from the implemented 3-4 capacity to an architecture supporting 3-6 slots.
+   Slot 4/5/6 prices and unlock types remain TBD.
+3. Preserve existing slot reservations, palette ownership, income settlement, and public projection
+   through an explicit profile/protocol/world/UI migration.
+4. Introduce Showroom ownership and placement as a separate, zero-income system.
+5. Derive collection-themed Showroom unlocks from completion and support optional blank rooms.
+6. Add one scalable Gallery entrance, then a placeholder interior, safe visits, controlled placement
+   anchors, and data-driven customization before final room art.
+
+Each step needs its own authorization and acceptance checks. Do not infer final prices, room sizes,
+placement counts, Secret rewards, or advanced free placement from this roadmap summary.
 
 Trading is not included. A separate go/no-go proposal must address per-item identity migration,
 two-profile transfers, duplication/replay attacks, recovery, audit, and economy effects before

@@ -13,4 +13,5 @@ return {
 	["Collection.TidepoolTales.CornerTopRight"] = "93882183382743",
 	["Collection.TidepoolTales.Emblem"] = "118737797825057",
 	["Collection.TidepoolTales.ShopPattern"] = "95708306454837",
+	["Models.BlindBoxBase"] = "79870100381887",
 } :: { [string]: string }

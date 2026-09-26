@@ -42,8 +42,8 @@ errors throughout. Tests below must be recorded as pass/fail with notes, not ass
    Recycle six eligible extras and redeem an undiscovered figure; verify discovery and counts.
    All six discoveries must show the collection-complete stamp. The automated suite seeds
    its own isolated state for completion; there is no client grant/debug remote.
-4. **Two clients:** start a local server with two players. Each gets a distinct room, inventory
-   and balance. Walk into the other room and attempt placement/removal; it cannot change the
+4. **Two clients:** start a local server with two players. Each gets a distinct main-plot Display, inventory
+   and balance. Walk into the other main plot and attempt placement/removal; it cannot change the
    host's display or state. From far away, editing your own shelf fails. Buying/recycling can
    occur anywhere. Rejoin one client and verify fresh 450 Coins, empty collection and no
    offline income; the other player's session must remain unchanged.
@@ -56,9 +56,9 @@ errors throughout. Tests below must be recorded as pass/fail with notes, not ass
 6. **Delayed replies:** emulate network latency, click Open rapidly and dismiss reveals. One
    request remains pending; retries use the same ID. Verify no second deduction/grant from a
    retry, no stale snapshot overwrite, and normal controls resume after the reply.
-7. **Lifecycle:** respawn, leave while spawning and reconnect repeatedly. Room counts track
+7. **Lifecycle:** respawn, leave while spawning and reconnect repeatedly. Main-plot counts track
    connected players, displays disappear on owner departure, and local decorative visitors
-   stay at most two. Check for lingering rooms/tasks/errors. Hiding/deleting visitor visuals
+   stay at most two. Check for lingering main plots/tasks/errors. Hiding/deleting visitor visuals
    or lowering frame rate must not change server income. Idle in-game for several minutes;
    Coins keep accruing automatically.
 8. **Input/layout:** use mouse and Studio device emulation for phone portrait/landscape.

@@ -4,10 +4,16 @@ The user accepted the MVP and authorized the full-game roadmap. The new candidat
 that feature set; real storage, device and multi-client acceptance are still pending. See
 [scope](FULL_GAME.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
 
+This document describes implemented code. In current product terminology, the implemented
+income shelf and its surrounding plot are the **Display/main plot**, even where legacy modules,
+instances, or snapshot fields still use `Room` or `Showroom`. The separate non-economic Showroom
+and Showroom Gallery architecture is approved direction but is not implemented; see
+[Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+
 ## Server ownership
 
 - `init.server.luau`: player lifecycle, server-created remotes, the single elapsed-income
-  scheduler, sanitized owner snapshots, public showroom directory, and visit navigation.
+  scheduler, sanitized owner snapshots, public Display directory, and main-plot visit navigation.
 - `Transactions.luau`: exact parsed intents, token-bucket limits, mutation revisions and bounded
   receipts (64 / 120 seconds). Mutations never yield. The callback Player determines ownership.
 - `Protocol.luau`: bounded payloads and allowlisted figure/collection/palette/slot IDs. Actions
@@ -50,7 +56,8 @@ Leaving/shutdown attempts a bounded final save/release, with lease expiry as cra
 
 `init.client.luau` queues one mutation at a time and retries the same ID after delayed replies.
 It reconciles ordered owner snapshots and exposes pending-request state to the UI. `Interface`
-composes dedicated HUD, navigation, book/details, shop, showroom, goals and visits modules.
+composes dedicated HUD, navigation, book/details, shop, legacy Display controls (`ShowroomScreen`),
+goals and main-plot visit modules.
 `UITheme`, `Widgets`, `UIIcons` and `UIPreview` provide common tokens, touch controls, progress,
 original icon shapes and static asset slots. `UIState` derives read-only presentation metadata;
 `UIScope` owns connections/tweens/timers. A bounded `Notifications` component handles feedback.
@@ -58,7 +65,7 @@ original icon shapes and static asset slots. `UIState` derives read-only present
 `Scroll.bind` accepts both list and grid layouts and measures content plus padding explicitly.
 Nested tile groups report their measured height to the outer list. Filtering and safe-area
 resize preserve access to every figure. Independent presentation hosts replace the common menu shell: desktop rail, themed book spread,
-package-led shop, compact daily/social sheets and bottom room controls. Narrow/touch windows use
+package-led shop, compact daily/social sheets and bottom Display controls. Narrow/touch windows use
 bottom navigation; short landscape gives its space to the active screen until close. `UILayout`
 owns bounds, while `CollectionStyle`/`CollectionArt` isolate collection identity from neutral
 `UITheme` controls. Details replace the book grid on narrow screens. `CollectionSelection`, `CollectionLayout`,
@@ -75,7 +82,7 @@ show a box, Redeem goes directly to the figure spotlight. Skipping or interrupti
 cannot affect the already-granted item. See [opening behavior and Studio checks](OPENING.md).
 No opening-specific remotes or server logic were introduced.
 
-`Visitors.luau` animates at most two local decorative visitors in the currently visited room
+`Visitors.luau` animates at most two local decorative visitors in the currently visited main plot
 at 20 updates/second. Motion reduction hides them. Visitors never report or change payouts.
 UI connections, models, spawn tasks and room instances have explicit owners and teardown.
 
@@ -90,8 +97,8 @@ native fallbacks remain until explicit adoption. See [asset pipeline](ASSET_PIPE
 
 The Shop is a neutral reusable shell composed by `ShopScreen`. `ShopTheme` contains only
 collection asset keys and palette inputs; `ShopState` derives figures, unique progress and
-rarity odds from Catalog/snapshots; `ShopLayout` owns responsive geometry; `ShopBox` and
-`ShopArtwork` provide the standardized package and exclusive native fallback. Catalog iteration
+rarity odds from Catalog/snapshots; `ShopLayout` owns responsive geometry; `BlindBoxPreview`,
+`BlindBoxSkin`, and `ShopArtwork` provide the standardized 3D package and exclusive native fallback. Catalog iteration
 creates the carousel and possible-figure entries, so another collection does not require a Shop
 layout fork. Buy still uses the existing server-authoritative intent and opening-result path.
 
@@ -101,7 +108,16 @@ Visit requests accept only a bounded integer host ID (0 means home), resolve an 
 check the caller's living character, and apply a two-second cooldown. The server determines
 the destination. Public directory entries contain owner ID/name, displayed IDs, rate and theme.
 No private inventory or balances are sent to guests. Host departure returns tracked guests home.
-The server limits active/initializing rooms to 24; configure the experience player cap accordingly.
+The server limits active/initializing main plots to 24; configure the experience player cap accordingly.
+These visits expose the owner's economic Display. They are not the future walkable Showroom Gallery.
+
+## Planned Display/Showroom boundary
+
+A future implementation must keep the server-authoritative Display income aggregate separate from
+Showroom ownership, customization, and visitor permissions. Showroom placement cannot affect rate.
+The gallery should expose only allowlisted cosmetic/completion data and must not reuse the current
+public economic projection as a complete room profile. Existing schema-v2 slots and palettes require
+an explicit migration; current module names alone are not a data migration plan.
 
 ## Preserved tooling and evidence
 

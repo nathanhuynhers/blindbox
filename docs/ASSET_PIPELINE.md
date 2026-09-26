@@ -1,6 +1,6 @@
 # Asset pipeline
 
-The pipeline registers artwork; individual UI adoptions are explicit. Both Collection
+The pipeline registers artwork and reviewed GLB models; individual UI adoptions are explicit. Both Collection
 screens now use production corners and tab emblems; see the [batch receipt](COLLECTION_ASSET_BATCH.md). Python 3.10+ and Git
 are required; there are no added packages. Run commands from the repository root.
 
@@ -8,16 +8,22 @@ are required; there are no added packages. Run commands from the repository root
 
 Place reviewed artwork under [assets](../assets/README.md): `ui/global`,
 `ui/collection/shared`, `ui/collection/pocket-grove`, `ui/collection/tidepool-tales`,
-`figures/pocket-grove`, `figures/tidepool-tales`, `boxes`, or `showroom`.
+`figures/pocket-grove`, `figures/tidepool-tales`, `boxes`, `display`, or `showroom`.
+Display assets belong to the economic main-plot fixture; Showroom assets belong to the separate
+zero-income gallery/room system described in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
 If an export needs processing elsewhere, keep the reviewed output in `assets/processed`
-and point the manifest at that file. The uploader never resizes or re-encodes images;
-transparent PNG bytes are sent unchanged.
+and point the manifest at that file. The uploader never resizes, re-encodes or transforms source
+content; transparent PNG and GLB bytes are sent unchanged.
 
 Use lowercase snake_case filenames, such as `collection_book_open.png`,
 `pocket_grove_emblem.png`, `tidepool_corner_bottom_right.png`, and `icon_collection.png`.
 Use stable dotted PascalCase semantic keys, such as `Collection.PocketGrove.Emblem`.
 The alias is the short command name; the semantic key is the permanent code reference.
 Replacing a file does not require renaming its key or editing UI references.
+
+Reviewed reusable models live under `assets/models/<model-slug>/`. Model entries use
+`assetType: Model`, a lowercase snake_case `.glb` source, and may declare `requiredNodes`.
+Dry-run validation checks the GLB 2.0 container and every declared semantic node before upload.
 
 ## One-time configuration and secrets
 
@@ -66,6 +72,21 @@ Success prints the semantic name and asset ID. No arguments never upload anythin
 An unchanged file/owner/type already recorded under that key is skipped. Renaming its
 source path updates provenance without another upload. Name changes alone do not modify
 Roblox metadata; manage that through Creator Dashboard.
+
+The reusable blind-box model is selected explicitly in the same way:
+
+```powershell
+python scripts/upload_assets.py blind_box_base --dry-run
+python scripts/upload_assets.py blind_box_base
+```
+
+It uploads `assets/models/blind-box/blind_box_base.glb` as `Models.BlindBoxBase` with MIME type
+`model/gltf-binary`. Roblox imports the GLB as a package Model containing MeshParts. The runtime
+loader validates the same semantic contract before replicating a sanitized preview template.
+
+The first production upload completed under creator user `103346374` as Model asset
+`79870100381887`. Its source SHA-256 is
+`9bad381e0e12ef02115db560681b360db90af192d7456b5e43f5ec6a73a8cb0d`.
 
 ## Selected group
 
@@ -144,7 +165,7 @@ optional typed convenience constants to `AssetManifest` when adopting the new co
 ## API behavior, validation and recovery
 
 The uploader sends multipart `request` metadata and original `fileContent` bytes to
-`POST https://apis.roblox.com/assets/v1/assets`, with `assetType: Image` so the returned ID
+`POST https://apis.roblox.com/assets/v1/assets`, with the manifest's `Image` or `Model` asset type so the returned ID
 is an image resource suitable for UI. It polls the returned operation through
 `GET https://apis.roblox.com/assets/v1/operations/{operationId}` until `done`/failure.
 See [Roblox's endpoint schemas](https://github.com/Roblox/creator-docs/blob/main/content/en-us/reference/cloud/assets/v1.json).

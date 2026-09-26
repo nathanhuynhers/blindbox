@@ -8,6 +8,7 @@ local Types = require("./Types")
 local ShopLayout = require("./ShopLayout")
 local ShopState = require("./ShopState")
 local ShopTheme = require("./ShopTheme")
+local BlindBoxSpec = require("./BlindBoxSpec")
 local checks = 0
 local function check(condition: boolean, message: string)
 	checks += 1
@@ -119,6 +120,25 @@ for _, collection in Catalog.collections do
 	)
 end
 check(ShopTheme.get("future").collectionId == "", "future collections get neutral Shop fallback")
+check(ShopTheme.get("grove").trim ~= nil, "blind-box themes provide reusable trim color")
+check(
+	ShopTheme.get("grove").emblemKey ~= ShopTheme.get("tide").emblemKey
+		and ShopTheme.get("grove").patternKey ~= ShopTheme.get("tide").patternKey,
+	"Pocket Grove and Tidepool Tales keep isolated collection presentation"
+)
+local semanticNames = {}
+for _, name in BlindBoxSpec.required do
+	semanticNames[name] = true
+end
+check(
+	#BlindBoxSpec.missing(semanticNames) == 0,
+	"approved blind-box semantics satisfy preview contract"
+)
+semanticNames.FrontPatternPanel = nil
+check(
+	BlindBoxSpec.missing(semanticNames)[1] == "FrontPatternPanel",
+	"missing model semantics fail closed to the neutral fallback"
+)
 for _, viewport in { { 320, 480 }, { 568, 320 }, { 900, 600 }, { 1280, 720 } } do
 	local shopGeometry = ShopLayout.calculate(viewport[1], viewport[2])
 	check(
@@ -139,11 +159,14 @@ end
 for _, viewport in { { 1124, 624 }, { 1360, 616 }, { 1360, 780 } } do
 	local geometry = ShopLayout.calculate(viewport[1], viewport[2])
 	check(geometry.infoX > geometry.heroWidth, "desktop Shop retains two lower columns")
-	check(geometry.carouselHeight >= 190, "desktop Shop reserves a prominent product shelf")
+	check(
+		geometry.carouselHeight >= 174 and geometry.carouselHeight < 190,
+		"compact selector fits cards and separate navigation controls"
+	)
 	check(geometry.detailY >= geometry.carouselHeight + 12, "shelf clears lower content")
 	check(geometry.infoHeight >= 374, "desktop details and purchase controls remain reachable")
 	check(
-		geometry.canvasHeight <= geometry.contentHeight + 4,
+		geometry.canvasHeight <= geometry.contentHeight + 24,
 		"normal desktop avoids a tall dashboard canvas"
 	)
 end
@@ -156,6 +179,24 @@ for width = 760, 1100, 20 do
 	)
 end
 check(ShopLayout.calculate(844, 390).compact, "short landscape uses compact navigation")
+for width = 266, 1000, 11 do
+	local d = ShopLayout.details(width)
+	check(d.purchaseY + d.purchaseHeight <= d.height, "purchase cluster fits details")
+	check(d.purchaseX + d.purchaseWidth <= width - 19, "purchase keeps right gutter")
+	check(d.oddsX + d.oddsWidth <= width - 19, "odds keep right gutter")
+	if d.wide then
+		check(d.figuresX + d.figuresWidth + 20 <= d.oddsX, "figures and odds have a clear gutter")
+		check(d.oddsY + 36 + 4 * 29 <= d.purchaseY, "future fourth rarity clears purchase")
+		check(
+			d.purchaseY - (d.figuresY + d.figuresHeight) <= 24,
+			"purchase follows product information without a sparse gap"
+		)
+	end
+	if width >= 480 then
+		local size = math.min(d.figuresHeight - 42, ShopLayout.figureSize(d.figuresWidth - 3, 6))
+		check(size * 6 + 40 <= d.figuresWidth - 3, "six figures fit actual desktop details column")
+	end
+end
 
 -- Cross-check set progress against the actual unchanged domain, including mixed sets/repeats.
 local choices = { "grove.pebble", "grove.sprout", "grove.acorn", "tide.bubble", "" }

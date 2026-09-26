@@ -15,6 +15,8 @@ assets/
   figures/
     pocket-grove/
     tidepool-tales/
+  models/
+    blind-box/    # reviewed reusable GLB source models
   boxes/
   showroom/
   processed/      # optional reviewed exports; no automatic conversion
@@ -23,3 +25,7 @@ assets/
 ```
 
 See [the pipeline guide](../docs/ASSET_PIPELINE.md) for commands, replacement and recovery.
+
+`models/blind-box/blind_box_base.glb` is the reviewed reusable Shop package geometry. It is
+uploaded as one Model asset; collection pattern, emblem, name and colors remain separate runtime
+theme inputs.

@@ -2,6 +2,10 @@
 
 > **Status:** Idea bank / planning document. Nothing in this document should be treated as finalized pricing, balance, or launch scope.
 
+Terminology follows [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md): Display is the capped
+Coin-generating slot system; Showrooms are zero-income customization/social spaces. Ideas below
+must not blur those responsibilities or imply that either future system is already implemented.
+
 ## Monetization Philosophy
 
 Blind Box should monetize the player's desire to **keep collecting, opening, progressing, decorating, and showing off their collection**.
@@ -121,21 +125,30 @@ These are especially interesting because the purchase creates a reason to remain
 
 ---
 
-## Display Room Monetization
+## Display and Showroom Cosmetics
 
-The display/collection system should become one of the game's strongest cosmetic monetization opportunities.
+Showrooms can become one of the game's strongest cosmetic monetization opportunities because they
+support expression and social visibility without changing passive income.
 
-Potential purchases:
+Potential Showroom purchases:
 
 - Larger collection room
-- Additional display rooms
+- Additional blank/custom Showrooms
 - Premium shelves
 - Premium furniture packs
 - Animated display pedestals
 - Special lighting
 - Room effects
 - Character/figure auras
-- Additional display capacity
+
+Potential Display purchases must remain separate and require an economy/fairness decision:
+
+- Cosmetic pedestal/trim skins
+- Subtle Display effects
+- Possibly one or more slots within the locked six-slot maximum
+
+The exact unlock method for Display slots 4-6 is TBD. This idea bank does not approve a Game Pass,
+Coin price, or paid-only path, and no purchase may exceed the six-slot cap without an economy redesign.
 
 ### Room Themes
 
@@ -149,7 +162,7 @@ Examples:
 - Space
 - Seasonal themes
 
-High-end room themes can become premium prestige purchases because other players can visit and see them.
+High-end Showroom themes can become premium prestige purchases because other players can visit and see them.
 
 ---
 
@@ -261,7 +274,7 @@ Potential future systems:
 - Send cosmetic gifts
 - Purchase a gift bundle for a friend
 
-Social gifting could fit especially well if collection rooms and multiplayer visiting become important.
+Social gifting could fit especially well if Showrooms and multiplayer visiting become important.
 
 ---
 
@@ -300,7 +313,7 @@ Social visibility increases the value of cosmetic purchases while keeping collec
 Potential premium purchases for highly invested players:
 
 - Elaborate animated room themes
-- Premium animated displays
+- Premium animated Showroom pedestals and cosmetic Display skins
 - Premium opening animations
 - Large room expansions
 - Exclusive cosmetic effects
@@ -365,7 +378,7 @@ Storage should only be added if inventory limits make sense for gameplay.
 
 Luck monetization should wait until rarity odds, Secrets, pity behavior, and paid-random-item compliance are fully designed.
 
-Room cosmetics should become a major monetization pillar once player collection rooms are developed enough to make cosmetics desirable.
+Showroom cosmetics should become a major monetization pillar once Showrooms are developed enough to make cosmetics desirable.
 
 ---
 
@@ -399,7 +412,7 @@ The economy must remain enjoyable for free players while giving paying players m
 - Do not make paid progression eliminate the core gameplay loop.
 - Do not make normal free progression intentionally miserable just to force purchases.
 - Do not lock the game's most important gameplay systems exclusively behind Robux.
-- Cosmetic purchases should remain valuable through social visibility and collection-room visiting.
+- Cosmetic purchases should remain valuable through social visibility and Showroom visiting.
 - Randomized purchases involving Robux or Robux-purchasable currency must follow Roblox's applicable paid-random-item requirements.
 - Luck boosts must be considered part of the randomized-item design and compliance work.
 - Advertised limited offers and timers must reflect the real availability of the offer.

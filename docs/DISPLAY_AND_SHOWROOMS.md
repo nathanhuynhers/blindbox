@@ -4,6 +4,19 @@
 >
 > This replaces the older use of "showroom" for the passive-income shelf. The two systems are now intentionally separate.
 
+This document defines approved product direction, not implemented behavior. The current candidate
+still has a three-to-four-slot earning area named `Room`/`Showroom` in parts of the UI and source,
+room palettes attached to that area, and same-server visits to players' main plots. Those systems
+must be migrated without implying that the six-slot Display or Showroom Gallery already ships.
+
+Related documents distinguish those states explicitly:
+
+- [Current implementation scope](FULL_GAME.md)
+- [Current stored schema and migration direction](DATA_MODEL.md)
+- [Implemented architecture and legacy names](ARCHITECTURE.md)
+- [Future implementation order](ROADMAP.md)
+- [Current economy values versus future slot decisions](ECONOMY.md)
+
 ## Core Separation
 
 Pocket Grove has two different player-facing systems:
@@ -50,6 +63,10 @@ The player should be able to look at the plot and immediately understand which f
 - The hard maximum should remain six unless the economy is intentionally redesigned later.
 
 The existing prototype's four-slot limit is no longer the intended final structure.
+
+The three-to-six capacity change requires a new profile schema migration, protocol validation,
+world geometry, UI, public projection, and economy review. It must not be implemented as a client-only
+visual expansion or by silently extending persisted slot arrays.
 
 ## Figure Rules
 
@@ -318,6 +335,10 @@ Target terminology:
 - collection of Showrooms -> **Showroom Gallery**
 
 Current room palettes should eventually belong to the Showroom customization system rather than the Coin-generating Display.
+
+Until that migration is implemented, existing palette ownership and equipped state remain valid
+saved player data. A future migration must preserve them or deliberately map them to equivalent
+Showroom cosmetics; it must not discard them as obsolete fields.
 
 The existing Display functionality should be preserved while it is renamed/refactored.
 

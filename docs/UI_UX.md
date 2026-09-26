@@ -5,6 +5,11 @@ pending.** The server, catalog, economy, networking, persistence and blind-box o
 remain unchanged. The reference image guides composition, not its example names, prices or rates.
 Current figure and packaging models remain procedural placeholders, not the illustrated reference art.
 
+Terminology note: this document describes the implemented candidate. Its **Room** navigation item,
+`ShowroomScreen`, palettes, and Social visit cards operate on the economic main-plot **Display**.
+They are legacy names, not the future non-economic Showrooms or Showroom Gallery described in
+[Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+
 ## Two visual layers
 
 The global identity is ivory, dark neutral text and restrained lilac accents, with small floating
@@ -30,17 +35,17 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   side index tabs, six mounted portraits, right-page product showcase and optional artwork slots.
   Grove/Tide themes transform the book; global controls remain neutral. See the dedicated
   [Collection implementation, asset map and Studio review](COLLECTION_UI.md).
-- **Shop:** a neutral boutique surface contains large themed package presentations. The box
-  preview occupies roughly 60% of each collection card. Name, catalog-derived figure count,
-  exact price and OPEN follow it. A visible `i Odds` control opens all per-figure probabilities
-  before purchase. The daily free action remains secondary; its one claim is shared across boxes.
-- **Room:** a smaller bottom overlay leaves the upper room visible and undimmed. It shows
+- **Shop:** a transparent neutral boutique presentation uses compact collection cards above one
+  reusable themed 3D product, an editorial detail panel, six possible figures, catalog-derived
+  rarity odds, fixed one-box price/action, and a secondary daily claim. Collection themes change
+  only card/product/emblem/accent presentation. See [Shop implementation](SHOP_UI.md).
+- **Room (legacy label for Display):** a smaller bottom overlay leaves the upper main plot visible and undimmed. It shows
   income, matching-set progress, four figure slots and a separate Room style palette drawer.
   Choose/Change opens the owned picker; Display places into a chosen slot or asks for a slot.
   Remove, the existing fourth-slot unlock, palette prices and Return home remain available.
 - **Goals:** a compact neutral sheet pairs daily display progress/reward with a daily-box choice
   on wider layouts; narrow layouts stack them. Collection plaque progress follows below.
-- **Social:** a separate showroom directory presents names, staged display previews, public
+- **Social:** a separate Display/main-plot directory presents names, staged Display previews, public
   figure count/rate, Visit and Return home. It uses only the existing public snapshots.
 - **Feedback:** a bounded measured toast wraps messages, deduplicates repeats and expires.
   Errors last longer. Buttons retain disabled, pressed, focus and selected states, with subtle
@@ -48,7 +53,8 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
 
 There is no shared enclosing menu panel, global page title or permanent balance/status header.
 `Interface` coordinates independent presentation hosts and floating close/motion controls.
-Only book and shop dim the background. Generic sheets and room controls leave the world clear.
+Book and Shop use presentation treatments; Shop applies the reusable mild world blur and warm dim
+overlay. Generic sheets and Display controls leave the world clear. The Shop UI remains crisp.
 
 ## Layout, authority and lifecycle
 

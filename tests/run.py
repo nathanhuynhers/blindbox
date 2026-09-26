@@ -11,7 +11,7 @@ root = Path(__file__).resolve().parents[1]
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
-    "AssetIds": "shared", "AssetManifest": "shared",
+    "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "CollectionAssets": "client",
     "Types": "shared", "Catalog": "shared", "Economy": "server",
     "Rules": "server", "Protocol": "server", "Transactions": "server",
@@ -65,9 +65,12 @@ if result.returncode:
 result = subprocess.run([sys.argv[1], str(out / "AssetManifest.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
-for name in ("AssetMountEngine", "CollectionAssets.spec"):
+for name in ("AssetMountEngine", "CollectionAssets.spec", "BlindBox.spec"):
     (out / f"{name}.luau").write_text((root / "tests" / f"{name}.luau").read_text(encoding="utf-8"), encoding="utf-8")
 result = subprocess.run([sys.argv[1], str(out / "CollectionAssets.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+result = subprocess.run([sys.argv[1], str(out / "BlindBox.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 fixtures = [

@@ -25,6 +25,15 @@ def png(width=1, height=1):
             + chunk(b"IDAT", zlib.compress(b"\x00\xff\x00\x00\x00")) + chunk(b"IEND", b""))
 
 
+def glb(nodes=("BlindBox_Root", "BoxBody")):
+    document = json.dumps({"asset": {"version": "2.0"},
+                           "nodes": [{"name": name} for name in nodes]},
+                          separators=(",", ":")).encode()
+    document += b" " * (-len(document) % 4)
+    chunk = struct.pack("<II", len(document), 0x4E4F534A) + document
+    return struct.pack("<4sII", b"glTF", 2, 12 + len(chunk)) + chunk
+
+
 class PipelineTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -65,6 +74,22 @@ class PipelineTests(unittest.TestCase):
         path.write_bytes(data[:-2])
         with self.assertRaises(pipeline.PipelineError):
             pipeline.image_info(path)
+
+    def test_glb_model_semantic_nodes_and_corruption(self):
+        path = self.root / "assets/blind_box_base.glb"
+        path.write_bytes(glb())
+        entry = {"key": "Models.BlindBoxBase", "source": "assets/blind_box_base.glb",
+                 "assetType": "Model", "requiredNodes": ["BlindBox_Root", "BoxBody"]}
+        item = pipeline.prepare(self.root, entry)
+        self.assertEqual(item["mime"], "model/gltf-binary")
+        self.assertEqual(item["assetType"], "Model")
+        self.assertEqual(item["nodes"], ["BlindBox_Root", "BoxBody"])
+        with self.assertRaisesRegex(pipeline.PipelineError, "missing required semantic nodes"):
+            pipeline.prepare(self.root, {**entry, "requiredNodes": ["FrontPatternPanel"]})
+        for invalid in (b"", b"not glb", glb()[:-1]):
+            path.write_bytes(invalid)
+            with self.assertRaises(pipeline.PipelineError):
+                pipeline.prepare(self.root, entry)
 
     def test_reject_escaping_path_invalid_name_key_and_type(self):
         for change in ({"source": "../secret.png"}, {"source": "assets/Bad Name.png"},
@@ -191,6 +216,19 @@ class PipelineTests(unittest.TestCase):
         self.assertIn(png(), body)
         self.assertNotIn(b"synthetic-test-credential", body)
         self.assertTrue(content_type.startswith("multipart/form-data; boundary="))
+
+    def test_multipart_uses_model_type_and_glb_content_type(self):
+        path = self.root / "assets/blind_box_base.glb"
+        path.write_bytes(glb())
+        item = pipeline.prepare(self.root, {"key": "Models.BlindBoxBase",
+            "source": "assets/blind_box_base.glb", "assetType": "Model"})
+        cloud = pipeline.Cloud("synthetic-test-credential")
+        cloud.request = Mock(return_value={"path": "operations/abc"})
+        cloud.create(item, self.creator)
+        body = cloud.request.call_args.args[2]
+        self.assertIn(b'"assetType": "Model"', body)
+        self.assertIn(b"Content-Type: model/gltf-binary", body)
+        self.assertIn(glb(), body)
 
     def test_env_precedence_and_ignore_guard_only_with_synthetic_key(self):
         (self.root / ".env").write_text('ROBLOX_API_KEY="synthetic-file-key"\n', encoding="utf-8")
