@@ -13,13 +13,13 @@ function Layout.screen(id: string, width: number, height: number, desktop: boole
 	local availableHeight = math.max(1, height - top - bottom)
 	local maxWidth = if id == "Collection"
 		then 1500
-		elseif id == "Shop" then 920
+		elseif id == "Shop" then 1360
 		elseif id == "Goals" then 620
 		elseif id == "Visits" then 780
 		else 740
 	local maxHeight = if id == "Collection"
 		then 860
-		elseif id == "Shop" then 690
+		elseif id == "Shop" then 780
 		elseif id == "Goals" then 430
 		elseif id == "Visits" then 450
 		else 330

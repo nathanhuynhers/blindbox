@@ -33,6 +33,18 @@ function Controls.action(
 	label.Position = UDim2.fromOffset(6, 0)
 	label.Font = Enum.Font.FredokaOne
 	label.TextXAlignment = Enum.TextXAlignment.Center
+	if kind == "filter" then
+		slot.root.Position = UDim2.fromOffset(0, 6)
+		slot.root.Size = UDim2.new(1, 0, 0, 32)
+		label.Position = UDim2.fromOffset(6, 6)
+		label.Size = UDim2.new(1, -12, 0, 32)
+		label.TextSize = 13
+		rim.Thickness = 1
+	elseif kind == "secondary" then
+		label.TextSize = 12
+		rim.Thickness = 1
+		depth.Position = UDim2.fromOffset(0, 2)
+	end
 	local function set(value: string, enabled: boolean, selected: boolean?)
 		action.set("", enabled, selected)
 		label.Text = value

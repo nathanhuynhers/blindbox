@@ -48,6 +48,16 @@ function State.number(value: number): string
 	local result = string.reverse(reversed)
 	return string.gsub(result, "^,", "")
 end
+function State.percent(value: number): string
+	if value ~= value or value == math.huge or value == -math.huge then
+		return "0%"
+	end
+	local rounded = math.floor(math.clamp(value, 0, 100) * 100 + 0.5) / 100
+	local result = string.format("%.2f", rounded)
+	result = string.gsub(result, "0+$", "")
+	result = string.gsub(result, "%.$", "")
+	return result .. "%"
+end
 function State.bonusProgress(snapshot: Types.Snapshot): number
 	local seen: { [string]: boolean } = {}
 	local counts: { [string]: number } = {}

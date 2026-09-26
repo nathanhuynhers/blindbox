@@ -14,15 +14,20 @@ soft underlays and a multi-stop shaded fold provide depth. Catalog-generated ind
 from the left. Their emblems, labels and discovery counts remain independent of global navigation.
 Grove has leaves/flowers and warm paper; Tide has shell fans, bubbles, coral and pale blue paper.
 
-Cards have recessed portrait wells, small rarity badges and a blue selected outline. Unknowns
-retain real model silhouettes with neutral colors and a question mark; their names and rarity
-badges are hidden. The right page hides unknown metadata as well. Discovery history continues
-showing a discovered figure after recycling its copies. Model framing uses actual bounds only for
-Collection; other screens keep their existing preview fitting.
+Cards have recessed portrait wells, small rarity badges and a subtle collection-tinted selected
+border/wash that does not change card geometry. Unknown cards retain real model silhouettes with
+neutral colors and a question mark; their names and rarity badges stay hidden on the card. The
+right page keeps the name hidden as `???` while showing rarity, authoritative pull chance and the
+standard discovery prompt. Discovery history continues showing a discovered figure after
+recycling its copies. Model framing uses actual bounds only for Collection; other screens keep
+their existing preview fitting.
 
 The right page uses the largest available portrait area next to compact information on wide pages;
-narrower pages stack the hero over readable controls in a measured scroll container. Display is
-green; Recycle is amber and disabled when no eligible extra exists. Redemption remains accessible.
+narrower pages stack the hero over readable controls in a measured scroll container. Name, rarity,
+pull chance, owned count and income form one information column. Pull chance comes from the server
+snapshot generated from the same configured weights used by the roll. Display is the primary green
+action; Recycle and Redeem share a quieter secondary row. Recycling remains disabled when no
+eligible extra exists and redemption remains accessible.
 Common/Uncommon/Rare use green/periwinkle/purple Collection badges. Opening rarity colors, catalog
 rarities, rates and odds are unchanged. A six-thumbnail strip and previous/next controls provide
 selection without another modal. The strip disappears when it cannot fit its 44px targets.
@@ -47,9 +52,9 @@ never remove catalog entries or change ownership. Overflow stays scrollable.
 - `CollectionTabs`: physical catalog-generated index tabs and progress.
 - `CollectionArt`: book emblems/corner illustrations; the existing Shop renderer is unchanged.
 - `CollectionStyle`: existing per-collection colors plus separate Collection rarity badge colors.
-- `CollectionControls`: specialized glossy paper, green Display and amber Recycle surfaces.
+- `CollectionControls`: specialized glossy paper, green primary Display and quieter secondary/filter surfaces.
 - `FigureCard` / `FigureDetails`: mounted portraits and the right-page showcase.
-- `CollectionAssets`: optional uploaded artwork, with native fallback retained while loading/failing.
+- `CollectionAssets`: optional uploaded artwork; resolved IDs select production artwork exclusively, and missing/invalid IDs select the retained native fallback.
 
 All asset IDs currently are empty. There are no downloaded assets, fake IDs or baked dynamic labels.
 The precise insertion points in `src/client/CollectionAssets.luau` are:
@@ -98,7 +103,8 @@ Use the current sync or rebuilt `RobloxWorkspace.rbxlx`, open Collection, then:
    agree. Run `tests/StudioCollection.client.luau` in the **client Command Bar** for read-only
    structural, model/silhouette and selection assertions. It does not approve the visual result.
 3. Inspect unknown, discovered, zero-copy-discovered, duplicate and fully reserved figures.
-   Unknown names/rarity/metadata remain hidden. Try Display from the book and a chosen shelf slot;
+   Unknown names/models remain hidden while rarity and pull chance stay visible. Try Display from
+   the book and a chosen shelf slot;
    recycle an extra, protect the last copy/reserved copies, and redeem with sufficient Scrap.
    Compare counts/rates to server replies; use a second client for isolation.
 4. Run `tests/StudioScroll.client.luau` with All figures and the grid visible for both collections.

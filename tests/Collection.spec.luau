@@ -35,17 +35,19 @@ do
 	)
 	local gridHeight = book.pageHeight - book.header
 	local columns, width, height = Layout.grid(book.pageWidth + 8, gridHeight, book.spread)
+	local scrollGutter = if book.spread then 0 else 6
 	check(
-		columns * width + (columns - 1) * Layout.gridGap + Layout.gridPadding * 2
+		columns * width
+				+ (columns - 1) * Layout.gridGap
+				+ Layout.gridPadding * 2
+				+ Layout.gridRightPaddingExtra
+				+ scrollGutter
 			<= book.pageWidth + 8,
-		"portrait mounts fit available page width"
+		"portrait mounts fit the actual asymmetrically padded grid width"
 	)
 	check(width >= 44 and height >= 158, "portrait slots stay readable and touchable")
-	if viewport[1] >= 1280 then
-		check(
-			book.spread and columns == 3,
-			"reference desktop has three portraits across two pages"
-		)
+	if book.spread then
+		check(columns == 3, "every desktop spread has three portraits across two rows")
 		check(
 			2 * height + Layout.gridGap + Layout.gridPadding * 2 <= gridHeight,
 			"six desktop figures fit in two rows"

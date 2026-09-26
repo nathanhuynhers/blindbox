@@ -6,6 +6,7 @@ export type Figure = {
 	color: Color3,
 	shape: string,
 	collection: string,
+	description: string?,
 }
 export type Intent = {
 	action: string,

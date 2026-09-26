@@ -334,22 +334,38 @@ function Interface.create(
 		local ancestor = selected.Parent
 		while ancestor and ancestor ~= gui do
 			if ancestor:IsA("ScrollingFrame") then
-				local top = selected.AbsolutePosition.Y - ancestor.AbsolutePosition.Y
-				local bottom = top + selected.AbsoluteSize.Y
-				local shift = if top < 4
-					then top - 4
-					elseif bottom > ancestor.AbsoluteWindowSize.Y - 4 then bottom
-						- ancestor.AbsoluteWindowSize.Y
-						+ 4
-					else 0
-				ancestor.CanvasPosition = Vector2.new(
-					0,
-					math.clamp(
-						ancestor.CanvasPosition.Y + shift,
+				local nextX, nextY = ancestor.CanvasPosition.X, ancestor.CanvasPosition.Y
+				if ancestor.ScrollingDirection ~= Enum.ScrollingDirection.Y then
+					local left = selected.AbsolutePosition.X - ancestor.AbsolutePosition.X
+					local right = left + selected.AbsoluteSize.X
+					local shift = if left < 4
+						then left - 4
+						elseif right > ancestor.AbsoluteWindowSize.X - 4 then right
+							- ancestor.AbsoluteWindowSize.X
+							+ 4
+						else 0
+					nextX = math.clamp(
+						nextX + shift,
+						0,
+						math.max(0, ancestor.AbsoluteCanvasSize.X - ancestor.AbsoluteWindowSize.X)
+					)
+				end
+				if ancestor.ScrollingDirection ~= Enum.ScrollingDirection.X then
+					local top = selected.AbsolutePosition.Y - ancestor.AbsolutePosition.Y
+					local bottom = top + selected.AbsoluteSize.Y
+					local shift = if top < 4
+						then top - 4
+						elseif bottom > ancestor.AbsoluteWindowSize.Y - 4 then bottom
+							- ancestor.AbsoluteWindowSize.Y
+							+ 4
+						else 0
+					nextY = math.clamp(
+						nextY + shift,
 						0,
 						math.max(0, ancestor.AbsoluteCanvasSize.Y - ancestor.AbsoluteWindowSize.Y)
 					)
-				)
+				end
+				ancestor.CanvasPosition = Vector2.new(nextX, nextY)
 				break
 			end
 			ancestor = ancestor.Parent

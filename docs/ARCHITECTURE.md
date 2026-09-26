@@ -82,6 +82,19 @@ UI connections, models, spawn tasks and room instances have explicit owners and 
 Shared Catalog/Types/FigureModel contain only public definitions, contracts and original
 procedural art. Figure identity is a quantity stack; trading/unique variants are not implemented.
 
+Shared `AssetManifest` resolves semantic artwork keys through generated `AssetIds`; absent
+entries resolve to an empty string. The local standard-library Python uploader records public
+IDs/provenance in `assets/uploads.json` and regenerates only the dedicated ID module. Credentials
+stay in the local environment. Uploading does not activate UI artwork; existing Collection
+native fallbacks remain until explicit adoption. See [asset pipeline](ASSET_PIPELINE.md).
+
+The Shop is a neutral reusable shell composed by `ShopScreen`. `ShopTheme` contains only
+collection asset keys and palette inputs; `ShopState` derives figures, unique progress and
+rarity odds from Catalog/snapshots; `ShopLayout` owns responsive geometry; `ShopBox` and
+`ShopArtwork` provide the standardized package and exclusive native fallback. Catalog iteration
+creates the carousel and possible-figure entries, so another collection does not require a Shop
+layout fork. Buy still uses the existing server-authoritative intent and opening-result path.
+
 ## Social boundary
 
 Visit requests accept only a bounded integer host ID (0 means home), resolve an online host,

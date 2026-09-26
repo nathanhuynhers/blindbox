@@ -23,7 +23,7 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 	assert(padding, "Detail padding missing")
 	local list = page:FindFirstChildOfClass("UIListLayout")
 	assert(list, "Detail layout missing")
-	list.Padding = UDim.new(0, Layout.contentGap)
+	list.Padding = UDim.new(0, 8)
 	local hero = W.frame(page, "FigureHero")
 	hero.LayoutOrder = 1
 	local glow = W.frame(hero, "SoftSpotlight", Color3.new(1, 1, 1))
@@ -53,7 +53,7 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 	name.LayoutOrder = 2
 	name.Font = Enum.Font.FredokaOne
 	name.TextSize = 26
-	name.Size = UDim2.new(1, 0, 0, 0)
+	name.Size = UDim2.fromScale(1, 0)
 	name.AutomaticSize = Enum.AutomaticSize.Y
 	name.TextYAlignment = Enum.TextYAlignment.Top
 	local badgeRow = W.frame(page, "BadgeRow")
@@ -64,30 +64,38 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 	stats.Name = "FigureStats"
 	stats.LayoutOrder = 4
 	stats.TextYAlignment = Enum.TextYAlignment.Top
+	local flavor = W.label(page, "", 42, 13)
+	flavor.Name = "FigureFlavor"
+	flavor.LayoutOrder = 5
+	flavor.TextYAlignment = Enum.TextYAlignment.Top
 	local place = Controls.action(page, "Display", "display", ctx, function()
 		local id = root:GetAttribute("FigureId")
 		if typeof(id) == "string" then
 			ctx.place(id)
 		end
 	end)
-	place.button.LayoutOrder = 5
-	local recycle = Controls.action(page, "Recycle (+1 Scrap)", "recycle", ctx, function()
+	place.button.LayoutOrder = 6
+	place.button.Size = UDim2.new(1, 0, 0, 44)
+	local secondary = W.frame(page, "SecondaryActions")
+	secondary.LayoutOrder = 7
+	secondary.Size = UDim2.new(1, 0, 0, 44)
+	local recycle = Controls.action(secondary, "Recycle\n+1 Scrap", "secondary", ctx, function()
 		local id = root:GetAttribute("FigureId")
 		if typeof(id) == "string" then
 			ctx.send("Recycle", id, nil, nil)
 		end
 	end)
-	recycle.button.LayoutOrder = 6
-	local redeem = Controls.action(page, "", "paper", ctx, function()
+	recycle.button.Name = "Recycle"
+	recycle.button.Size = UDim2.new(0.5, -3, 1, 0)
+	local redeem = Controls.action(secondary, "", "secondary", ctx, function()
 		local id = root:GetAttribute("FigureId")
 		if typeof(id) == "string" then
 			ctx.send("Redeem", id, nil, nil)
 		end
 	end)
 	redeem.button.Name = "Redeem"
-	redeem.button.LayoutOrder = 7
-	local note = W.label(page, "", 46, 12)
-	note.LayoutOrder = 8
+	redeem.button.Position = UDim2.new(0.5, 3, 0, 0)
+	redeem.button.Size = UDim2.new(0.5, -3, 1, 0)
 	local backButton = Controls.action(root, "<", "paper", ctx, back)
 	backButton.button.Name = "BackToFigures"
 	backButton.button.Position = UDim2.fromOffset(0, 0)
@@ -142,38 +150,45 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 			pedestal.BackgroundColor3 = style.trim
 			name.TextColor3 = style.ink
 			stats.TextColor3 = style.ink
-			note.TextColor3 = style.ink
+			flavor.TextColor3 = style.ink
 		end
 		glow.BackgroundColor3 = if discovered then Style.rarity(figure.rarity) else style.wash
 		mystery.Visible = not discovered
 		name.Text = if discovered then figure.name else "???"
-		badgeRow.Visible = discovered
 		badge.set(figure.rarity)
-		stats.Visible = discovered
-		stats.Size = UDim2.new(1, 0, 0, if owned > free then 60 else 40)
-		stats.Text = string.format(
-			"Owned: %d\n%g Coins/sec%s",
-			owned,
-			snapshot.rates[id] or 0,
-			if owned > free then "\nAvailable: " .. free else ""
-		)
+		local chance = State.percent(snapshot.odds[id] or 0)
+		stats.Size = UDim2.new(1, 0, 0, if discovered then 64 else 24)
+		stats.Text = if discovered
+			then string.format(
+				"Pull chance    %s\nOwned          %d\nIncome         %g Coins/sec",
+				chance,
+				owned,
+				snapshot.rates[id] or 0
+			)
+			else "Pull chance    " .. chance
+		local description = figure.description
+		flavor.Text = if discovered
+			then if description and description ~= "" then description else ""
+			else "A discovery waiting to happen."
+		flavor.Visible = flavor.Text ~= ""
 		place.button.Visible = discovered
 		place.set(
 			if free > 0 then "Display" elseif owned > 0 then "All displayed" else "Not owned",
 			ctx.canAct() and free > 0
 		)
 		recycle.button.Visible = discovered
-		recycle.set("Recycle (+1 Scrap)", ctx.canAct() and State.recycle(snapshot, id))
+		recycle.button.Size = UDim2.new(0.5, -3, 1, 0)
+		recycle.set("Recycle\n+1 Scrap", ctx.canAct() and State.recycle(snapshot, id))
+		redeem.button.Position = if discovered
+			then UDim2.new(0.5, 3, 0, 0)
+			else UDim2.fromOffset(0, 0)
+		redeem.button.Size = if discovered then UDim2.new(0.5, -3, 1, 0) else UDim2.fromScale(1, 1)
 		redeem.set(
-			"Redeem: " .. snapshot.redeemCost .. " Scrap",
+			if discovered
+				then "Redeem\n" .. snapshot.redeemCost .. " Scrap"
+				else "Redeem - " .. snapshot.redeemCost .. " Scrap",
 			ctx.canAct() and snapshot.scrap >= snapshot.redeemCost
 		)
-		note.Text = if not discovered
-			then "A discovery waiting to happen."
-			elseif
-				not State.recycle(snapshot, id)
-			then "Recycling needs an extra, undisplayed copy."
-			else "Keeps your last copy and displayed figures."
 	end
 	ctx.scope.connect(root:GetPropertyChangedSignal("AbsoluteSize"), resize)
 	resize()

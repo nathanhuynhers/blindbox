@@ -1,0 +1,110 @@
+{
+  "Collection.PocketGrove.CornerBottomLeft": {
+    "assetId": "124027410851506",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1907fc2b74cfa349948b6cdcd7f74597f87622dc33822e03d0b39a6e10ddd8ae",
+    "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_bottom_left.png"
+  },
+  "Collection.PocketGrove.CornerBottomRight": {
+    "assetId": "114755829243574",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e11f0e9b68ceeceb4d1429884758fb098d8c8b4dffbf9b376ed12fb98a93867b",
+    "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_bottom_right.png"
+  },
+  "Collection.PocketGrove.CornerTopLeft": {
+    "assetId": "97261354573044",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1a84ed3d2113a1c1d5d68803a07a4e3e29faddaf3ed9c000c69e00081eb264a3",
+    "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_top_left.png"
+  },
+  "Collection.PocketGrove.CornerTopRight": {
+    "assetId": "72728615837620",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "354093d1009dbc698e7525b1b093597940742348cf39ee3ae6f5808e7a95bbdd",
+    "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_top_right.png"
+  },
+  "Collection.PocketGrove.Emblem": {
+    "assetId": "131206322301209",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "75cf028bc5730aa24117a6aed2c729fa093129a1ea407de3513d5082118ad041",
+    "source": "assets/ui/collection/pocket-grove/pocket_grove_emblem.png"
+  },
+  "Collection.PocketGrove.ShopPattern": {
+    "assetId": "120725537475393",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ad137ddb825db915ddcd1cecde149d0390f6acee939a40f5013ce8fdf83d0d27",
+    "source": "assets/ui/shop/pocket-grove/pocket_grove_shop_pattern.png"
+  },
+  "Collection.TidepoolTales.CornerBottomLeft": {
+    "assetId": "136271632565492",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "2a974e44046151a466b98f2b0874189096ba8979f69bdef2c05c19862050ac62",
+    "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_bottom_left.png"
+  },
+  "Collection.TidepoolTales.CornerBottomRight": {
+    "assetId": "124458158705924",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8d683661ca7025306d36f5a2301d7e93915e1129ddd2722c6812e277d7afa916",
+    "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_bottom_right.png"
+  },
+  "Collection.TidepoolTales.CornerTopLeft": {
+    "assetId": "105846573736381",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8a36fecc1105ff2fa8d189f5d93d65dd624adeafadd403523ca4921a82cbf7b0",
+    "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_top_left.png"
+  },
+  "Collection.TidepoolTales.CornerTopRight": {
+    "assetId": "93882183382743",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "0d41a2bc0bb9bf03419cee3c5c60a191efe10669534b417f3ad326b0325db2cf",
+    "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_top_right.png"
+  },
+  "Collection.TidepoolTales.Emblem": {
+    "assetId": "118737797825057",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "71d68c2c93b77080e71da19529e4de23d1ab168bb5dfdddf946545102ffbe8de",
+    "source": "assets/ui/collection/tidepool-tales/tidepool_tales_emblem.png"
+  },
+  "Collection.TidepoolTales.ShopPattern": {
+    "assetId": "95708306454837",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fc48dda5fe90cbe6af3980ee0b02a38217558332ebd3338f6f6d828e813c345d",
+    "source": "assets/ui/shop/tidepool-tales/tidepool_tales_shop_pattern.png"
+  }
+}

@@ -68,7 +68,9 @@ function Skin.create(parent: Instance, scope: Scope.Scope)
 			if index > 2 then 1 else 0,
 			if index > 2 then 5 else Layout.cornerTop
 		)
-		corner.root.Rotation = if index > 2 then 180 else 0
+		-- Production PNGs already have their intended corner orientation.
+		-- Rotate only the legacy native fallback, never its artwork sibling.
+		corner.native.Rotation = if index > 2 then 180 else 0
 		cornerSlots[index] = corner
 	end
 	local collection = ""
@@ -102,8 +104,14 @@ function Skin.create(parent: Instance, scope: Scope.Scope)
 			ColorSequenceKeypoint.new(0.58, style.page:Lerp(style.cover, 0.15)),
 			ColorSequenceKeypoint.new(1, style.page),
 		})
-		for _, corner in cornerSlots do
-			corner.set(assets.corner)
+		local artwork = {
+			assets.cornerTopLeft or assets.corner,
+			assets.cornerTopRight or assets.corner,
+			assets.cornerBottomLeft or assets.corner,
+			assets.cornerBottomRight or assets.corner,
+		}
+		for index, corner in cornerSlots do
+			corner.set(artwork[index])
 		end
 	end
 	return {

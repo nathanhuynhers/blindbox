@@ -1,8 +1,9 @@
 --!strict
 -- Book-specific geometry. Values are in safe-area pixels; typography never scales below legibility.
 local Layout = {}
-Layout.gridGap = 10
-Layout.gridPadding = 8
+Layout.gridGap = 12
+Layout.gridPadding = 10
+Layout.gridRightPaddingExtra = 4
 Layout.cornerSize = 110
 Layout.cornerTop = -10
 Layout.contentGap = 12
@@ -12,6 +13,7 @@ Layout.heroInset = 20
 Layout.columnGap = 16
 Layout.thumbnailWidth = 44
 Layout.thumbnailGap = 6
+Layout.filterWidth = 92
 function Layout.header(width: number, inset: number, spread: boolean)
 	local cornerRight = Layout.cornerSize - inset + Layout.contentGap
 	local belowCorner = Layout.cornerSize + Layout.cornerTop - inset + Layout.contentGap
@@ -25,7 +27,7 @@ function Layout.header(width: number, inset: number, spread: boolean)
 		width = math.max(1, width - x - right),
 		progressY = y + 40,
 		filterY = y + 36,
-		filterX = width - right - 104,
+		filterX = width - right - Layout.filterWidth,
 		height = y + 92,
 	}
 end
@@ -48,7 +50,9 @@ function Layout.book(width: number, height: number)
 	}
 end
 function Layout.grid(width: number, height: number, spread: boolean): (number, number, number)
-	local available = math.max(1, width - 2 * Layout.gridPadding - 6)
+	local scrollGutter = if spread then 0 else 6
+	local available =
+		math.max(1, width - 2 * Layout.gridPadding - Layout.gridRightPaddingExtra - scrollGutter)
 	local columns = if spread then 3 else math.clamp(math.floor((available + 10) / 124), 1, 3)
 	local cellWidth = math.floor((available - (columns - 1) * Layout.gridGap) / columns)
 	local fitTwoRows = math.floor((height - 2 * Layout.gridPadding - Layout.gridGap) / 2)

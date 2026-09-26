@@ -11,11 +11,14 @@ root = Path(__file__).resolve().parents[1]
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "AssetIds": "shared", "AssetManifest": "shared",
+    "CollectionAssets": "client",
     "Types": "shared", "Catalog": "shared", "Economy": "server",
     "Rules": "server", "Protocol": "server", "Transactions": "server",
     "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
     "CollectionLayout": "client", "CollectionSelection": "client",
+    "ShopLayout": "client", "ShopState": "client", "ShopTheme": "client",
     "UIState": "client", "UIScope": "client", "UILayout": "client", "CollectionStyle": "client",
 }
 for name, folder in modules.items():
@@ -28,7 +31,10 @@ for name, folder in modules.items():
             source = source.replace(f"require({expression})", f'require("./{dependency}")')
     if name == "Scroll":
         source = source.replace("--!strict", "--!strict\nlocal Enum = {AutomaticSize={None=0},ScrollingDirection={Y=1},ScrollBarInset={ScrollBar=1}}\nlocal UDim2 = {fromOffset=function(x,y) return {X={Offset=x},Y={Offset=y}} end}")
-    if name in ("Catalog", "OpeningConfig", "CollectionStyle"):
+    if name == "CollectionAssets":
+        source = source.replace('local W = require(script.Parent.Widgets)', 'local W = Engine.Widgets')
+        source = source.replace('--!strict', '--!strict\nlocal Engine = require("./AssetMountEngine")\nlocal Instance, UDim2, Rect, Enum = Engine.Instance, Engine.UDim2, Engine.Rect, Engine.Enum')
+    if name in ("Catalog", "OpeningConfig", "CollectionStyle", "ShopTheme"):
         source = source.replace("--!strict", "--!strict\nlocal Color3 = { fromRGB = function(r: number, g: number, b: number) return {r, g, b} end }")
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
 (out / "Mvp.spec.luau").write_text((root / "tests" / "Mvp.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
@@ -53,6 +59,15 @@ if result.returncode:
     raise SystemExit(result.returncode)
 (out / "Collection.spec.luau").write_text((root / "tests" / "Collection.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
 result = subprocess.run([sys.argv[1], str(out / "Collection.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+(out / "AssetManifest.spec.luau").write_text((root / "tests" / "AssetManifest.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "AssetManifest.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+for name in ("AssetMountEngine", "CollectionAssets.spec"):
+    (out / f"{name}.luau").write_text((root / "tests" / f"{name}.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "CollectionAssets.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 fixtures = [

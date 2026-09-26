@@ -25,3 +25,6 @@
 !.env.example
 .DS_Store
 Thumbs.db
+
+# Local Python tooling cache
+__pycache__/

@@ -60,9 +60,13 @@ function Card.create(parent: Instance, id: string, ctx: Context.Context, thumbna
 		ornament.Position = UDim2.fromOffset(0, 0)
 	end
 	local highlight = W.frame(root, "SelectionGlow")
+	highlight.BackgroundColor3 = style.accent
+	highlight.BackgroundTransparency = 0.92
 	W.corner(highlight, 11)
-	local glow = W.outline(highlight, Color3.fromRGB(135, 169, 255), 0)
-	glow.Thickness = 3
+	local border = W.outline(highlight, style.accent, 0.08)
+	border.Thickness = 2
+	local glow = W.outline(highlight, style.trim, 0.55)
+	glow.Thickness = 4
 	highlight.Visible = false
 	return {
 		root = root,

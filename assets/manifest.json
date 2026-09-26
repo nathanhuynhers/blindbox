@@ -1,0 +1,85 @@
+{
+  "creator": {
+    "userId": "103346374"
+  },
+  "assets": {
+    "collection_book_open": {
+      "key": "Collection.BookOpen",
+      "source": "assets/ui/collection/shared/collection_book_open.png",
+      "displayName": "Collection Book Open",
+      "assetType": "Image"
+    },
+    "pocket_grove_corner_top_left": {
+      "key": "Collection.PocketGrove.CornerTopLeft",
+      "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_top_left.png",
+      "displayName": "Pocket Grove Corner Top Left",
+      "assetType": "Image"
+    },
+    "pocket_grove_corner_top_right": {
+      "key": "Collection.PocketGrove.CornerTopRight",
+      "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_top_right.png",
+      "displayName": "Pocket Grove Corner Top Right",
+      "assetType": "Image"
+    },
+    "pocket_grove_corner_bottom_left": {
+      "key": "Collection.PocketGrove.CornerBottomLeft",
+      "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_bottom_left.png",
+      "displayName": "Pocket Grove Corner Bottom Left",
+      "assetType": "Image"
+    },
+    "pocket_grove_corner_bottom_right": {
+      "key": "Collection.PocketGrove.CornerBottomRight",
+      "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_bottom_right.png",
+      "displayName": "Pocket Grove Corner Bottom Right",
+      "assetType": "Image"
+    },
+    "tidepool_tales_corner_top_left": {
+      "key": "Collection.TidepoolTales.CornerTopLeft",
+      "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_top_left.png",
+      "displayName": "Tidepool Tales Corner Top Left",
+      "assetType": "Image"
+    },
+    "tidepool_tales_corner_top_right": {
+      "key": "Collection.TidepoolTales.CornerTopRight",
+      "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_top_right.png",
+      "displayName": "Tidepool Tales Corner Top Right",
+      "assetType": "Image"
+    },
+    "tidepool_tales_corner_bottom_left": {
+      "key": "Collection.TidepoolTales.CornerBottomLeft",
+      "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_bottom_left.png",
+      "displayName": "Tidepool Tales Corner Bottom Left",
+      "assetType": "Image"
+    },
+    "tidepool_tales_corner_bottom_right": {
+      "key": "Collection.TidepoolTales.CornerBottomRight",
+      "source": "assets/ui/collection/tidepool-tales/tidepool_tales_corner_bottom_right.png",
+      "displayName": "Tidepool Tales Corner Bottom Right",
+      "assetType": "Image"
+    },
+    "pocket_grove_emblem": {
+      "key": "Collection.PocketGrove.Emblem",
+      "source": "assets/ui/collection/pocket-grove/pocket_grove_emblem.png",
+      "displayName": "Pocket Grove Emblem",
+      "assetType": "Image"
+    },
+    "pocket_grove_shop_pattern": {
+      "key": "Collection.PocketGrove.ShopPattern",
+      "source": "assets/ui/shop/pocket-grove/pocket_grove_shop_pattern.png",
+      "displayName": "Pocket Grove Shop Pattern",
+      "assetType": "Image"
+    },
+    "tidepool_tales_emblem": {
+      "key": "Collection.TidepoolTales.Emblem",
+      "source": "assets/ui/collection/tidepool-tales/tidepool_tales_emblem.png",
+      "displayName": "Tidepool Tales Emblem",
+      "assetType": "Image"
+    },
+    "tidepool_tales_shop_pattern": {
+      "key": "Collection.TidepoolTales.ShopPattern",
+      "source": "assets/ui/shop/tidepool-tales/tidepool_tales_shop_pattern.png",
+      "displayName": "Tidepool Tales Shop Pattern",
+      "assetType": "Image"
+    }
+  }
+}

@@ -5,6 +5,9 @@ local Rules = require("./Rules")
 local Economy = require("./Economy")
 local Catalog = require("./Catalog")
 local Types = require("./Types")
+local ShopLayout = require("./ShopLayout")
+local ShopState = require("./ShopState")
+local ShopTheme = require("./ShopTheme")
 local checks = 0
 local function check(condition: boolean, message: string)
 	checks += 1
@@ -71,6 +74,88 @@ check(UI.ownedCollection(snapshot, 1) == 1, "slot picker keeps current populated
 snapshot.ready = false
 check(not UI.recycle(snapshot, id), "paused storage disables mutation affordance")
 snapshot.ready = true
+
+local totalWeights: { [string]: number } = {}
+for _, entry in Economy.entries do
+	local collection = Catalog.byId[entry.id].collection
+	totalWeights[collection] = (totalWeights[collection] or 0) + entry.weight
+end
+for _, entry in Economy.entries do
+	local collection = Catalog.byId[entry.id].collection
+	local expected = entry.weight / totalWeights[collection] * 100
+	check(snapshot.odds[entry.id] == expected, "snapshot odds derive from configured roll weights")
+	check(
+		UI.percent(snapshot.odds[entry.id]) == UI.percent(expected),
+		"Collection odds format derived values"
+	)
+end
+check(UI.percent(20) == "20%", "whole pull chances omit decimal noise")
+check(UI.percent(12.345) == "12.35%", "fractional pull chances keep useful precision")
+check(UI.percent(0 / 0) == "0%", "invalid pull chances fail closed")
+for _, collection in Catalog.collections do
+	local figures = ShopState.figures(collection.id)
+	local shopFound, shopTotal = ShopState.progress(snapshot, collection.id)
+	local stateFound, stateTotal = UI.completion(snapshot, collection.id)
+	check(#figures == shopTotal and shopTotal > 0, "Shop cards derive from collection membership")
+	check(
+		shopFound == stateFound and shopTotal == stateTotal,
+		"Shop progress counts unique discoveries"
+	)
+	local oddsCount = 0
+	for _, row in ShopState.rarityOdds(snapshot, collection.id) do
+		oddsCount += row.count
+		check(
+			row.minimum > 0 and row.maximum >= row.minimum,
+			"Shop rarity odds derive from snapshot"
+		)
+	end
+	check(oddsCount == #figures, "Shop rarity rows cover arbitrary collection figures")
+	local shopTheme = ShopTheme.get(collection.id)
+	check(
+		shopTheme.collectionId == collection.id
+			and shopTheme.emblemKey ~= ""
+			and shopTheme.patternKey ~= "",
+		"every production collection has small Shop theme data"
+	)
+end
+check(ShopTheme.get("future").collectionId == "", "future collections get neutral Shop fallback")
+for _, viewport in { { 320, 480 }, { 568, 320 }, { 900, 600 }, { 1280, 720 } } do
+	local shopGeometry = ShopLayout.calculate(viewport[1], viewport[2])
+	check(
+		shopGeometry.contentX >= 0
+			and shopGeometry.contentY >= 0
+			and shopGeometry.contentWidth > 0
+			and shopGeometry.canvasHeight >= shopGeometry.contentHeight,
+		"Shop responsive geometry remains reachable"
+	)
+end
+
+-- Six current figures must fit one desktop row after gutters, without hidden slots.
+for width = 256, 1000, 13 do
+	local size = ShopLayout.figureSize(width, 6)
+	check(size * 6 + 8 * 5 <= width, "Shop six-figure row fits its actual available width")
+	check(size >= 36 and size <= 78, "Shop figure slots stay readable and bounded")
+end
+for _, viewport in { { 1124, 624 }, { 1360, 616 }, { 1360, 780 } } do
+	local geometry = ShopLayout.calculate(viewport[1], viewport[2])
+	check(geometry.infoX > geometry.heroWidth, "desktop Shop retains two lower columns")
+	check(geometry.carouselHeight >= 190, "desktop Shop reserves a prominent product shelf")
+	check(geometry.detailY >= geometry.carouselHeight + 12, "shelf clears lower content")
+	check(geometry.infoHeight >= 374, "desktop details and purchase controls remain reachable")
+	check(
+		geometry.canvasHeight <= geometry.contentHeight + 4,
+		"normal desktop avoids a tall dashboard canvas"
+	)
+end
+
+for width = 760, 1100, 20 do
+	local geometry = ShopLayout.calculate(width, 620)
+	check(
+		geometry.infoHeight >= (if geometry.infoWidth < 480 then 510 else 370),
+		"Shop stacked controls fit narrow detail columns"
+	)
+end
+check(ShopLayout.calculate(844, 390).compact, "short landscape uses compact navigation")
 
 -- Cross-check set progress against the actual unchanged domain, including mixed sets/repeats.
 local choices = { "grove.pebble", "grove.sprout", "grove.acorn", "tide.bubble", "" }

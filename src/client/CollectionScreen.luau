@@ -45,14 +45,14 @@ function Collection.create(parent: Instance, ctx: Context.Context)
 	count.Position = UDim2.fromOffset(0, 58)
 	count.Size = UDim2.new(1, -110, 0, 28)
 	local filter: Controls.Action? = nil
-	filter = Controls.action(header, "All figures", "paper", ctx, function()
+	filter = Controls.action(header, "All figures", "filter", ctx, function()
 		ownedOnly = not ownedOnly
 		resetGrid()
 		refresh()
 	end)
 	assert(filter, "Book filter missing")
-	filter.button.Size = UDim2.fromOffset(104, 44)
-	filter.button.Position = UDim2.new(1, -104, 0, 44)
+	filter.button.Size = UDim2.fromOffset(Layout.filterWidth, 44)
+	filter.button.Position = UDim2.new(1, -Layout.filterWidth, 0, 44)
 	local grid = Instance.new("ScrollingFrame")
 	grid.Name = "FigureGrid"
 	grid.BackgroundTransparency = 1
@@ -150,7 +150,7 @@ function Collection.create(parent: Instance, ctx: Context.Context)
 		title.Size = UDim2.fromOffset(heading.width, 36)
 		count.Position = UDim2.fromOffset(heading.x, heading.progressY)
 		count.Size = UDim2.fromOffset(
-			math.max(1, heading.width - 116),
+			math.max(1, heading.width - Layout.filterWidth - Layout.contentGap),
 			if geometry.pageWidth < 360 then 44 else 28
 		)
 		if filter then
@@ -158,8 +158,13 @@ function Collection.create(parent: Instance, ctx: Context.Context)
 		end
 		grid.Position = UDim2.fromOffset(-4, geometry.header)
 		grid.Size = UDim2.new(1, 8, 1, -geometry.header)
-		local columns, width, height =
-			Layout.grid(grid.AbsoluteSize.X, grid.AbsoluteSize.Y, geometry.spread)
+		grid.ScrollingEnabled = not geometry.spread
+		grid.ScrollBarThickness = if geometry.spread then 0 else 4
+		local columns, width, height = Layout.grid(
+			geometry.pageWidth + 8,
+			geometry.pageHeight - geometry.header,
+			geometry.spread
+		)
 		gridLayout.FillDirectionMaxCells = columns
 		gridLayout.CellSize = UDim2.fromOffset(width, height)
 		details.root.Position = if geometry.spread

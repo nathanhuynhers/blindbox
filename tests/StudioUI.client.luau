@@ -33,13 +33,23 @@ for _, object in gui:GetDescendants() do
 		if layout then
 			scrolls += 1
 			local padding = object:FindFirstChildOfClass("UIPadding")
-			local extra = if padding
-				then padding.PaddingTop.Offset + padding.PaddingBottom.Offset
-				else 0
-			assert(
-				object.CanvasSize.Y.Offset >= math.ceil(layout.AbsoluteContentSize.Y + extra),
-				"Truncated scroll: " .. object:GetFullName()
-			)
+			if object.ScrollingDirection == Enum.ScrollingDirection.X then
+				local extra = if padding
+					then padding.PaddingLeft.Offset + padding.PaddingRight.Offset
+					else 0
+				assert(
+					object.CanvasSize.X.Offset >= math.ceil(layout.AbsoluteContentSize.X + extra),
+					"Truncated horizontal scroll: " .. object:GetFullName()
+				)
+			else
+				local extra = if padding
+					then padding.PaddingTop.Offset + padding.PaddingBottom.Offset
+					else 0
+				assert(
+					object.CanvasSize.Y.Offset >= math.ceil(layout.AbsoluteContentSize.Y + extra),
+					"Truncated vertical scroll: " .. object:GetFullName()
+				)
+			end
 			assert(
 				object.AbsoluteWindowSize.X > 0 and object.AbsoluteWindowSize.Y > 0,
 				"Empty viewport: " .. object:GetFullName()
