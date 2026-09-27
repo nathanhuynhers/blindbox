@@ -2,7 +2,15 @@
 local Config = require(script.Parent.PlotConfig)
 local Shelf = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 -- Entrance looks along +Z, so its left is +X. Shelf fronts look inward along -X.
-local Geometry = { displayZ = Config.depth / 2 - 12, shelfX = Config.width / 2 - 10 }
+local Geometry = {
+	displayZ = Config.depth / 2 - 12,
+	shelfX = Config.width / 2 - 10,
+	shelfCenterZ = -4,
+	shelfUnitPitch = Shelf.slotsPerRow * 3.6 + 1.2,
+	shelfSlotSpacing = 3.6,
+	shelfRowSpacing = 4.2,
+	shelfBaseY = 1.6,
+}
 function Geometry.origin(index: number): Vector3
 	assert(index >= 1 and index <= Config.maxPlots and index % 1 == 0, "Unknown fixed plot slot")
 	local rows = math.ceil(Config.maxPlots / Config.columns)
@@ -15,10 +23,10 @@ end
 function Geometry.shelfOffset(unit: number, row: number, slot: number): Vector3
 	return Vector3.new(
 		Geometry.shelfX,
-		2 + (Shelf.rowsPerShelfUnit - row) * 5,
-		-4
-			+ (unit - (Shelf.visibleShelfUnits + 1) / 2) * 24
-			+ (slot - (Shelf.slotsPerRow + 1) / 2) * 5
+		Geometry.shelfBaseY + (Shelf.rowsPerShelfUnit - row) * Geometry.shelfRowSpacing,
+		Geometry.shelfCenterZ
+			+ (unit - (Shelf.visibleShelfUnits + 1) / 2) * Geometry.shelfUnitPitch
+			+ (slot - (Shelf.slotsPerRow + 1) / 2) * Geometry.shelfSlotSpacing
 	)
 end
 function Geometry.shelfAnchor(origin: Vector3, unit: number, row: number, slot: number): CFrame

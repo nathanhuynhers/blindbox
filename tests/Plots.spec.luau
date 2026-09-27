@@ -5,6 +5,7 @@ local Slots = require("./PlotSlots")
 local Config = require("./PlotConfig")
 local Geometry = require("./PlotGeometry")
 local Fixture = require("./DisplayFixture")
+local CollectionFixture = require("./CollectionFixture")
 local World = require("./World")
 local Plot = require("./PlayerPlot")
 local Rules = require("./Rules")
@@ -53,16 +54,16 @@ local firstAnchor = ShelfConfig.renderSlot(1, shelfSlots[1])
 local secondAnchor = ShelfConfig.renderSlot(1, shelfSlots[2])
 check(plot.model:GetAttribute("OwnerId") == 1 and other.model:GetAttribute("OwnerId") == 100, "world ownership independent of slot assignment")
 local unitCount = 0
-for _, child in plot.model:GetChildren() do
+for _, child in plot.collection.model:GetChildren() do
 	check(not string.find(child.Name, "Wall") and not string.find(child.Name, "Entrance"), "open plot without wall or access entrance")
 	if string.find(child.Name, "ShelfPosition_") then unitCount += 1 end
 end
 check(unitCount == 3, "three permanent physical shelf units")
 for unit = 1, 3 do
-	local shelf = plot.model:FindFirstChild("ShelfPosition_" .. unit); assert(shelf)
+	local shelf = plot.physicalShelves[unit]; assert(shelf)
 	for row = 1, 3 do
 		local board = shelf:FindFirstChild("Row_" .. row); assert(board)
-		check(board.Position.X == plot.origin.X + 40 and board.Size.Z == 18 and board.Size.X == 5, "shelf boards lie left of the entrance's +Z facing direction")
+		check(board.Position.X == plot.origin.X + 40 and close(board.Size.Z, Geometry.shelfUnitPitch - 2 * CollectionFixture.style.post) and board.Size.X == 5, "shelf boards lie left of the entrance's +Z facing direction")
 		for slot = 1, 3 do
 			local key = ShelfConfig.renderSlot(unit, ShelfConfig.slotId(row, slot))
 			local anchor = plot.shelves.anchors[key]; assert(anchor)
@@ -73,13 +74,64 @@ for unit = 1, 3 do
 end
 local anchorCount = 0; for _ in plot.shelves.anchors do anchorCount += 1 end
 check(anchorCount == 27, "27 configured cosmetic anchors")
+local collection = plot.collection
+local headerFace = collection.model:FindFirstChild("HeaderFace"); assert(headerFace)
+local collectionSign = headerFace:FindFirstChildOfClass("SurfaceGui"); assert(collectionSign)
+check(collectionSign.Face == "Left" and not collectionSign.AlwaysOnTop and collection.header.Text == "COLLECTION", "permanent physical COLLECTION sign faces the central plot")
+check(collection.header.Font == "GothamBlack" and collectionSign.LightInfluence == 0.35, "header shares the Display's readable understated sign treatment")
+check(collection.model:FindFirstChild("ContinuousCanopy").Size.Z > 3 * Geometry.shelfUnitPitch, "continuous canopy joins the three distinct bays")
+local function descendants(parent)
+	local found = {}
+	for _, child in parent:GetChildren() do
+		table.insert(found, child)
+		for _, nested in descendants(child) do table.insert(found, nested) end
+	end
+	return found
+end
+local fixtureNodes = descendants(collection.model)
+local worldText, lights, parts = 0, 0, 0
+for _, node in fixtureNodes do
+	if node.ClassName == "TextLabel" then
+		worldText += 1
+		check(node.Text == "COLLECTION", "no physical index, zero-Coin copy or Previous/Next text remains")
+	end
+	check(node.ClassName ~= "BillboardGui" and node.ClassName ~= "MeshPart" and node.ClassName ~= "ProximityPrompt", "Collection uses physical native geometry without floating labels or prompts")
+	if node.ClassName == "Part" then
+		parts += 1
+		local angle = math.rad(if node.Orientation then node.Orientation.X else 0)
+		local halfZ = (math.abs(math.sin(angle))*node.Size.Y + math.abs(math.cos(angle))*node.Size.Z)/2
+		check(math.abs(node.Position.X-plot.origin.X)+node.Size.X/2 < Config.width/2 and math.abs(node.Position.Z-plot.origin.Z)+halfZ < Config.depth/2, "every Collection part including rotated chevrons stays within plot bounds")
+		check(node.Material == "Wood" or node.Material == "SmoothPlastic", "warm native wood/plastic only, no neon")
+	elseif node.ClassName == "SurfaceLight" then
+		lights += 1
+		check(node.Face == "Bottom" and node.Range == 5 and node.Brightness == 0.35 and not node.Shadows, "short subtle downward row washes have no shadows")
+	end
+end
+check(worldText == 1 and lights == 9 and parts == 56, "one title, nine bounded row washes and fixed native-part budget")
+for position, unit in plot.physicalShelves do
+	local rows, anchors = 0, 0
+	for _, child in unit:GetChildren() do if string.match(child.Name, "^Row_%d+$") then rows += 1 end end
+	for row = 1, 3 do
+		local board = unit:FindFirstChild("Row_" .. row)
+		for slot = 1, 3 do
+			local anchor = plot.shelves.anchors[ShelfConfig.renderSlot(position, ShelfConfig.slotId(row,slot))]
+			anchors += 1
+			check(close(anchor.Position.Y, board.Position.Y + board.Size.Y/2), "each anchor lies on its own board's top surface")
+			check(math.abs(anchor.Position.Z-board.Position.Z)+1.6 < board.Size.Z/2, "even the widest current 3.2-stud figure fits between oak posts")
+		end
+	end
+	check(rows == 3 and anchors == 9, "each physical unit has exactly three rows and nine local anchors")
+end
+for _, button in collection.controls do
+	for _, accent in button.accents do check(accent.Color == CollectionFixture.palette.muted, "new three-unit fixture starts with muted controls") end
+end
 Plot.render(plot, state)
 local initialModel = plot.model
 local initialFixture = plot.fixture.model
 local initialCounter = plot.fixture.parts.Counter
 local initialBack = plot.fixture.parts.BackPanel
 local initialSign = plot.fixture.parts.SignFace
-local initialShelves = plot.model:FindFirstChild("ShelfPosition_1")
+local initialShelves = plot.physicalShelves[1]
 local initialShelfAnchor = plot.shelves.anchors[firstAnchor]
 local fixtureCount = #initialFixture:GetChildren()
 local sign = initialSign:FindFirstChildOfClass("SurfaceGui"); assert(sign)
@@ -106,7 +158,7 @@ for capacity = 3, 6 do
 	check(initialCounter.Position.X == plot.origin.X and initialCounter.Position.Z == plot.origin.Z + 36, "fixture stays centered at the back")
 	check(initialSign == plot.fixture.parts.SignFace and initialSign.Position.X == plot.origin.X and initialSign.Size.X == 12.65, "physical sign stays centered with fixed readable proportions")
 	check(#initialFixture:GetChildren() == fixtureCount, "capacity does not append pads, sections or extra lights")
-	check(plot.model:FindFirstChild("ShelfPosition_1") == initialShelves and plot.shelves.anchors[firstAnchor] == initialShelfAnchor, "Display resize leaves shelves and their anchors untouched")
+	check(plot.physicalShelves[1] == initialShelves and plot.shelves.anchors[firstAnchor] == initialShelfAnchor, "Display resize leaves shelves and their anchors untouched")
 	for _, piece in initialFixture:GetChildren() do
 		check(math.abs(piece.Position.X-plot.origin.X) + piece.Size.X/2 < Config.width/2 and math.abs(piece.Position.Z-plot.origin.Z) + piece.Size.Z/2 < Config.depth/2, "every fixture piece stays inside plot footprint")
 	end
@@ -152,6 +204,10 @@ Plot.render(plot, state)
 local before = Engine.figureCreates
 check(#plot.shelves.parent:GetChildren() == 27, "three visible units render 27 figures")
 check(plot.shelves.models[firstAnchor]:GetScale() == 1, "shelf figure scale remains unchanged")
+for key, model in plot.shelves.models do
+	local bounds, size = model:GetBoundingBox()
+	check(close(bounds.Position.Y-size.Y/2, plot.shelves.anchors[key].Position.Y) and model:GetScale() == 1, "all 27 figures stand on boards without changing shelf scale")
+end
 local unchangedModel = plot.shelves.models[secondAnchor]
 Plot.render(plot, state)
 check(Engine.figureCreates == before, "unchanged snapshot never clones figures")
@@ -163,6 +219,9 @@ for index = 4, 5 do
 end
 Plot.render(plot, state)
 check(#plot.shelves.parent:GetChildren() == 27, "hidden units create no figures")
+for _, button in collection.controls do
+	for _, accent in button.accents do check(accent.Color == CollectionFixture.palette.diffuser, "more than three owned units enables warm chevrons and trim") end
+end
 local children = #plot.model:GetChildren()
 local retainedShelfFigure = plot.shelves.models[secondAnchor]
 move(guest, plot, 32,4,0)
@@ -183,9 +242,9 @@ local previous = plot.hitboxes[1]:FindFirstChildOfClass("ClickDetector")
 local nextControl = plot.hitboxes[2]:FindFirstChildOfClass("ClickDetector")
 assert(previous and nextControl)
 for index, hitbox in plot.hitboxes do
-	local arrow = plot.arrows[index]
+	local arrow = plot.collection.controls[index].panel
 	check(hitbox.Transparency == 1 and not hitbox.CanCollide and not hitbox.CanTouch and hitbox.CanQuery, "transparent nonblocking target is queryable")
-	check(hitbox.Size.Y > arrow.Size.Y and hitbox.Size.Z > arrow.Size.Z and arrow.Size.Y == 6, "generous hitbox surrounds larger visible control")
+	check(hitbox.Size.Y > arrow.Size.Y and hitbox.Size.Z > arrow.Size.Z and arrow.Size.Y == 6.8, "generous hitbox surrounds larger visible control")
 	check(hitbox:FindFirstChildOfClass("ClickDetector").MaxActivationDistance == 160, "mouse/touch activation spans a whole plot")
 end
 for _, node in Engine.nodes do check(node.ClassName ~= "ProximityPrompt", "no proximity prompt exists") end
@@ -206,6 +265,7 @@ check(plot.view.startIndex == 3, "visitor long-range click advances one at coold
 Engine.clock = 2; previous.MouseClick:fire(guest)
 check(plot.view.startIndex == 2, "visitor click moves back one unit")
 check(same(Profile.encode(state), savedBeforeTurns), "clicking only changes runtime visibility, not shelf persistence or progression")
+check(collection.header.Text == "COLLECTION" and #descendants(collection.model) == #fixtureNodes, "turning retains static header, furniture, trim and lighting")
 local beforeRejected = plot.view.revision
 for _, coords in { {59,4,0}, {0,4,57}, {0,21,0}, {500,4,500} } do
 	move(guest, plot, coords[1],coords[2],coords[3]); Engine.clock += 1
@@ -266,7 +326,7 @@ end
 for index = 6, 250 do table.insert(restored.shelves.units, {id="shelf:" .. index,placements={},customization={}}) end
 local structureCount = #replacement.model:GetChildren()
 Plot.render(replacement, restored)
-check(#replacement.model:GetChildren() == structureCount and #replacement.shelves.parent:GetChildren() == 27, "250 owned units still render three structures and at most 27 figures")
+check(#replacement.model:GetChildren() == structureCount and #descendants(replacement.collection.model) == #fixtureNodes and #replacement.shelves.parent:GetChildren() == 27, "250 owned units still render three structures and at most 27 figures")
 check(#other.shelves.parent:GetChildren() == 0 and otherState.coins == 450, "other owner's state stays isolated")
 Plot.destroy(other); Plot.destroy(replacement); world:Destroy()
 check(Engine.connections == 0, "no owned connections remain")

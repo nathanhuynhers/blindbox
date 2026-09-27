@@ -1,9 +1,93 @@
-# Shelf Unit architecture correction and verification
+# Player Plot, Shelf Units and Collection implementation
 
 Implemented September 27, 2026. Current schema is **5**. This report covers the correction to
 individually persistent Shelf Units and a three-shelf viewport. It supersedes the earlier v4
 Shelf Page implementation report. Native Studio acceptance has **not** been run by the agent.
 See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.md).
+
+## Collection visual pass (current physical presentation)
+
+The subsequent visual pass implements the supplied Collection concept board with the dedicated
+`src/server/CollectionFixture.luau` builder. **Collection** is the physical presentation name;
+persistent Shelf Units and schema v5 remain unchanged. The builder creates three adjoining bays,
+each with oak uprights, a recessed warm back panel, three ivory shelf boards and a charcoal
+plinth. A continuous ivory canopy and pale oak crown join the installation. Construction uses
+56 native Parts plus two invisible hitbox Parts; no mesh, uploaded texture, per-frame loop or
+new dependency is involved. Native visual acceptance remains pending.
+
+The fixture stays at plot-relative X=40 and faces inward along -X. Bay centers are Z=-16/-4/8,
+12 studs apart, with 10.9-stud clear boards and 5-stud depth. The full installation, including
+side wings, spans 44.4 studs along Z and reaches Y=17.05. The center/right and rear Display
+remain undisturbed. Each bay contains nine anchors: three at 3.6-stud spacing on each board,
+with row 1/2/3 surfaces at Y=10/5.8/1.6 above plot origin. Figure scale remains 1; the existing
+renderer now applies its bottom-alignment option to shelves so all figures stand on the boards.
+Display scale, construction and rendering behavior are unchanged.
+
+| Use | Material / exact RGB |
+| --- | --- |
+| Uprights, control panels, crown and sign frame | Wood; oak (198,165,120) |
+| Boards, canopy, bases and control wings | SmoothPlastic; ivory (242,235,220) |
+| Recessed backs | SmoothPlastic; warm panel (235,225,204) |
+| Plinths / sign lettering | SmoothPlastic / text; charcoal (48,46,43) |
+| Header inset | SmoothPlastic; recess (171,143,106) |
+| Header face | SmoothPlastic; cream (255,246,222) |
+| Diffusers / enabled arrow accents | SmoothPlastic; warm ivory (255,237,199) |
+| Disabled arrow accents | SmoothPlastic; muted oak-gray (163,146,122) |
+| Light color | Warm (255,227,180) |
+
+The layered header has a Left-facing SurfaceGui on its physical cream face, dark GothamBlack
+lettering, `AlwaysOnTop=false` and `LightInfluence=0.35`. Its only text is **COLLECTION**. No
+visible shelf numbers, zero-Coin copy or Previous/Next labels remain in the world. Detailed
+indices still appear in the unchanged owner Shelf editor. Nine short downward SurfaceLights,
+one per row, use brightness 0.35, range 5, angle 110 and no shadows. No neon or arrow lights.
+
+Oak/ivory side wings carry two-bar solid chevrons and thin warm trim. Native Parts simplify
+the reference's curved side profiles. Each control retains a queryable, noncolliding, invisible
+5-by-10-by-7 hitbox under the plot root. Existing ClickDetector reach (160 studs), server plot
+area/living-actor validation, shared cooldown and independent editor proximity remain intact.
+Three owned units disable detection and mute the icon/trim colors; more than three enables both.
+Carousel turns retain the furniture, header and lights and use the existing targeted figure cache.
+
+### Visual-pass file manifest
+
+Added `src/server/CollectionFixture.luau`. No files removed. Modified:
+
+- `src/server/PlayerPlot.luau` — delegate construction; remove world status text; set visual availability.
+- `src/server/PlotGeometry.luau` — coordinated bay spacing and board-top anchor heights.
+- `src/server/FigureSlots.luau` — clarify the existing optional alignment comment; algorithm unchanged.
+- `tests/Plots.spec.luau` — retain architecture/Display checks; add physical fixture assertions.
+- `tests/PlotEngine.luau` — add the Left surface enum to the engine shim.
+- `tests/run.py` — load the new builder in the standalone harness.
+- `docs/PLAYER_PLOTS_AND_SHELVES.md`, `docs/ARCHITECTURE.md`, `docs/UI_UX.md` and this report.
+
+Compared with the pre-visual-pass baseline, `DisplayFixture`, Shelf configuration/types/domain,
+profile/schema/migration modules, economy/rules, plot allocation/dimensions, protocol, owner editor
+and every Shelf architecture test remain byte-for-byte unchanged. No purchasing, customization,
+completion rewards or new persistent fields were added.
+
+### Visual-pass verification and manual acceptance
+
+Rokit provisioning, Wally resolution, `stylua src`, `stylua --check src`, `selene src`, Rojo
+sourcemap/build, Luau Language Server analysis and `git diff --check` pass. Selene uses the
+cached Roblox API definitions because its network refresh is unavailable; no lint diagnostics.
+Luau analysis has no source diagnostics (only the standalone watcher-registration notice).
+All automated suites pass, including the unchanged **222 Shelf Unit checks** and expanded
+**1,369 plot checks**. Other suite counts remain listed below. New checks cover three bays,
+nine anchors per bay, board contact, scale, widest-figure clearance, all physical part bounds,
+single constant COLLECTION text, lighting/material budgets, icon availability and static reuse.
+Existing tests still cover long-range input, wraparound, visitors, stale edits and cleanup.
+
+**Manual Studio checks still required:** inspect front/side/three-quarter views against the
+concept; check wood grain, header readability, chevron direction and muted/enabled states.
+Populate all 27 positions with the twelve current figures and check contact/clearance. Test
+mouse/touch controls from across the plot with two clients and four/five owned shelves; confirm
+shared one-unit movement, both wraps, visitor edit denial and unchanged owner editor targets.
+Regress Display appearance/rates, save/rejoin, and measure nine row lights per plot at low/high
+graphics quality and a full 24-player server. No native Studio playtest or visual approval is
+claimed. Existing collectible art, ground/plot surfaces, owner signage and Shelf editor styling
+remain provisional; the Collection furniture/sign/control visual pass itself is implemented.
+
+## Earlier architecture correction (schema and migration unchanged by visual pass)
 
 ## Persistent model and runtime behavior
 
@@ -78,10 +162,10 @@ capacities 3/4/5/6 to counter widths 28/36/44/52 studs, centered at X=0/Z=36, to
 8-stud figure spacing. Display figures retain 2x scale and bounding-box bottom alignment;
 shelf figures remain at their existing scale. The sign still uses the actual server rate.
 
-`DisplayFixture`, `FigureSlots`, Display UI, economy, plot allocation/configuration and the
-engine shim match the pre-correction baseline. PlayerPlot changes are limited to shelf identity,
-projection, labels and control availability. Physical shelf geometry, the open 100-by-96 plot,
-left-side shelf locations, control geometry and Display rendering remain intact. Completion
+During the preceding architecture correction, `DisplayFixture`, `FigureSlots`, Display UI,
+economy, plot allocation/configuration and the engine shim matched its pre-correction baseline.
+The visual pass above now replaces shelf/control geometry while preserving the open 100-by-96
+plot, left-side installation, persistent identities and Display rendering. Completion
 rewards, shelf acquisition/customization, final art and carousel animation remain unresolved.
 
 ## Verification actually run

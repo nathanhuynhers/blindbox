@@ -1,7 +1,7 @@
 # Player Plots, Display and Shelves
 
 **Canonical current direction — September 27, 2026.** This replaces the abandoned Showroom/Gallery
-architecture. The functional placeholder is implemented; native Studio acceptance is pending.
+architecture. Display and Collection implement the supplied fixture concepts; native Studio acceptance is pending.
 See [implementation and checks](PLOT_SHELF_IMPLEMENTATION.md), [schema](DATA_MODEL.md),
 [architecture](ARCHITECTURE.md) and [economy](ECONOMY.md).
 
@@ -50,9 +50,16 @@ method or invented price; future methods remain independently configurable.
 
 Every plot has **three physical shelf units**, each with **three horizontal rows** and currently
 **three figure positions per row**: 27 visible cosmetic positions. `ShelfConfig` owns these
-provisional counts. Shelf visuals are simple generic boards/supports with no customization UI.
-They form one installation on the left **when looking in from the entrance**: X=40, unit centers
-at Z=-28/-4/20, with figure fronts facing inward along negative X. Center/right space stays open.
+provisional counts. **Collection** is the physical presentation name: three adjoining oak-framed
+bays, ivory boards, recessed warm back panels, charcoal plinths and a continuous ivory canopy.
+One integrated physical SurfaceGui header says only **COLLECTION**. Each row has a short, subtle
+downward warm light. No customization UI is implemented.
+
+The installation remains on the left **when looking in from the entrance**: X=40, bay centers
+at Z=-16/-4/8, with figure fronts facing inward along negative X. Local anchors use 3.6-stud
+horizontal spacing, board tops Y=10/5.8/1.6, and the existing figure scale of 1 with bottom
+alignment to the boards. Center/right space stays open. `CollectionFixture` owns construction;
+the plot, Display, persistent identities and carousel domain are unchanged.
 
 Every fresh profile owns exactly **three persistent Shelf Units**, each with nine cosmetic
 positions and its own placements/customization. The three physical structures are presentation
@@ -62,8 +69,9 @@ Acquisition policy is unassigned: no endpoint, purchase UI, product, price or cu
 There is no product-design maximum. Server decoder resource guards are documented in
 [the data model](DATA_MODEL.md); they are not a progression cap.
 
-Large Previous/Next controls above the shelf installation accept desktop clicks and mobile taps
-through ClickDetectors on generous transparent, non-colliding hitboxes. No ProximityPrompt or E
+Integrated oak/ivory side wings carry large solid left/right chevrons without text labels.
+These accept desktop clicks and mobile taps through ClickDetectors on generous transparent,
+non-colliding 5-by-10-by-7-stud hitboxes. No ProximityPrompt or E
 key is required. Owners and visitors can operate them from across the plot. Detector reach is
 160 studs, with an independent server check requiring a living actor inside the plot footprint
 plus an 8-stud perimeter margin and within 20 vertical studs of its origin. Other plots cannot
@@ -72,7 +80,8 @@ be controlled from across the map. The server binds each control to its active p
 The carousel is shared and runtime-only. It starts with units 1,2,3 each join. Next/Previous
 shift **exactly one unit** with wrapping and the existing per-plot 0.5-second cooldown; browsing
 changes no saved state. With at most three owned units, order remains 1,2,3 and navigation is
-disabled in the editor and world. The indicator lists the visible indexes and owned count.
+disabled in the editor and world; physical chevrons/trim become muted oak-gray. Detailed visible
+indexes and owned count remain in the owner editor/runtime view, never the physical header.
 
 | Owned units | Successive Next viewports |
 | --- | --- |
@@ -104,7 +113,8 @@ carousel away and back invalidates old edits. Existing request receipts and rate
 
 Visitors can walk, look and turn the shared carousel. They cannot edit Display/shelves, unlock
 slots, acquire shelves or change another player's progression. Rendered figures and owner/carousel
-signage are public. Owner snapshots go only to that owner and project only the three visible
+signage are public. The Collection header stays constant during browsing. Owner snapshots go
+only to that owner and project only the three visible
 units, owned count and navigation availability; inventories, balances, discoveries and other
 progression are never sent to visitors to render a plot.
 
@@ -129,17 +139,18 @@ Open plot — owner name at front; no enclosing walls
            Display [1] [2] [3]
        (only unlocked slots; stays centered)
 
-   [ Shelf C ]  Next >
-   [ Shelf B ]  Viewing 1,2,3 of N       open center/right
-   [ Shelf A ]  < Previous      walking / future space
-   3 x 3 each; faces inward
+   [ COLLECTION ]
+   > [ Shelf C ]
+     [ Shelf B ]              open center/right
+   < [ Shelf A ]             walking / future space
+   3 x 3 each; faces inward; arrows at installation ends
 
                     Owner's Plot
                   shared walkway
 ```
 
-The Display now follows the supplied collectible-store fixture concept, pending native visual
-acceptance. Plot, shelves, arrow signs, owner sign and Shelf UI remain placeholders awaiting final
-mockups. Pocket Grove remains a collection, not a core world API/theme dependency. No themed
+Display and Collection now follow the supplied collectible-store fixture concepts, pending
+native visual acceptance. Plot surfaces, shared ground, owner sign, existing figure art and
+Shelf editor remain provisional. Pocket Grove remains a collection, not a core world API/theme dependency. No themed
 forest environment, Game Pass kiosk, shelf pricing, final art, extra Display capacity, likes,
 ratings, trading, cross-server travel or free placement is part of this implementation.

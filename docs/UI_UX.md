@@ -48,6 +48,8 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   persistent Shelf Unit, then a local row/slot to place/replace/remove. Discovery is enough, even with zero copies. Edit near your own
   shelves. Physical arrows are also usable by nearby visitors and shift the shared viewport one unit for everyone.
   Navigation is disabled when exactly three units are owned.
+  The physical installation is named Collection: its permanent header says COLLECTION, with
+  integrated icon-only chevrons. Visible indexes remain in the owner editor, not world signage.
   A stale editor request is rejected if the shared carousel changed; the owner receives a fresh
   snapshot. No shelf customization or acquisition UI exists.
 - **Goals:** a neutral sheet retains daily display progress/rewards and daily-box choice.

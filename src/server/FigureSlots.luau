@@ -68,7 +68,7 @@ function FigureSlots.render(render: Render, placements: { [string]: string })
 			local ok, model = pcall(FigureModel.create, id, anchor)
 			local object: Instance
 			if ok then
-				-- Display presentation only; shelf figures retain their existing scale and placement.
+				-- Optional presentation scale and bottom alignment to the counter/shelf surface.
 				if render.standingScale then
 					model:ScaleTo(render.standingScale)
 					local bounds, size = model:GetBoundingBox()

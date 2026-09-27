@@ -16,6 +16,9 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `World`/`PlotGeometry`: neutral shared ground, fixed open pads, reusable layout/primitive helpers.
 - `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
   proximity checks, runtime carousel start index and connection/content teardown.
+- `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent COLLECTION
+  SurfaceGui header, row lighting, icon-only side controls and runtime anchors. Visual construction
+  is separate from shelf ownership, carousel decisions and migration; indices stay in owner UI.
 - `FigureSlots`: per-slot figure cache using existing FigureModel assets; replace only changed IDs.
 - `Shelves`: discovered-reference rules, visible owned-unit validation, stable slot IDs, runtime carousel
   revision/wraparound/cooldown and bounded three-unit projections. Zero economy/inventory reservations.
@@ -102,7 +105,7 @@ layout fork. Buy still uses the existing server-authoritative intent and opening
 
 ## Public/private boundary and rendering
 
-Only owner-labelled geometry, active Display figures/rates and visible shelf figures/carousel signage
+Only owner-labelled geometry, active Display figures/rates and visible shelf figures/Collection signage
 are public. Owner state events never go to guests. Each owner gets only three visible Shelf Units with IDs, indexes and local placements,
 owned count, carousel revision and navigation availability. The server sends no private balances, inventory, discovery or progression
 to visitors. Visitors may turn physical shelf arrows but cannot mutate the owner's saved state.
