@@ -16,7 +16,7 @@ local Notifications = require(script.Parent.Notifications)
 local BackgroundTreatment = require(script.Parent.BackgroundTreatment)
 local Collection = require(script.Parent.CollectionScreen)
 local Shop = require(script.Parent.ShopScreen)
-local Showroom = require(script.Parent.ShowroomScreen)
+local Display = require(script.Parent.DisplayScreen)
 local Goals = require(script.Parent.GoalsScreen)
 local Visits = require(script.Parent.VisitsScreen)
 local Interface = {}
@@ -111,10 +111,10 @@ function Interface.create(
 		end,
 	}
 	local collection = Collection.create(hosts.Collection, ctx)
-	local showroom = Showroom.create(hosts.Display, ctx)
+	local display = Display.create(hosts.Display, ctx)
 	local pages: { [string]: Context.Screen } = {
 		Collection = { root = collection.root, update = collection.update, back = collection.back },
-		Display = { root = showroom.root, update = showroom.update, back = showroom.back },
+		Display = { root = display.root, update = display.update },
 		Shop = Shop.create(hosts.Shop, ctx),
 		Goals = Goals.create(hosts.Goals, ctx),
 		Visits = Visits.create(hosts.Visits, ctx),
@@ -270,11 +270,11 @@ function Interface.create(
 			for _, page in pages do
 				page.update(state)
 			end
-			local rooms = workspace:FindFirstChild("Showrooms")
+			local rooms = workspace:FindFirstChild("PlayerPlots")
 			local room = if rooms then rooms:FindFirstChild(tostring(state.visiting)) else nil
 			local shelf = if room then room:FindFirstChild("Shelf") else nil
 			billboard.Adornee = if shelf and shelf:IsA("BasePart") then shelf else nil
-			billboard.Enabled = shelf ~= nil and not focused and not opened
+			billboard.Enabled = shelf ~= nil and not state.gallery and not focused and not opened
 			local income = state.rate
 			for _, public in state.rooms do
 				if public.userId == state.visiting then
@@ -304,9 +304,9 @@ function Interface.create(
 		if targetSlot then
 			ctx.send("Place", id, targetSlot, nil)
 			targetSlot = nil
-			showroom.select(nil)
+			display.select(nil)
 		else
-			showroom.select(id)
+			display.select(id)
 		end
 		navigate("Display")
 	end
@@ -422,7 +422,19 @@ function Interface.create(
 	refresh()
 	return {
 		update = function(state: Types.Snapshot)
+			local previous = if snapshot then snapshot.gallery else nil
 			snapshot = state
+			local gallery = state.gallery
+			if
+				gallery
+				and (
+					not previous
+					or previous.runtimeId ~= gallery.runtimeId
+					or previous.roomId ~= gallery.roomId
+				)
+			then
+				navigate("Visits")
+			end
 			refresh()
 		end,
 		message = notices.show,

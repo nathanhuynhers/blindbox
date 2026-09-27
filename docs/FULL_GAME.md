@@ -19,17 +19,18 @@ loads. Failed loads never create playable default profiles. Tune costs in server
 The user need only step in for Roblox account/Studio setup, runtime testing unavailable to the
 agent, or release authorization. Code completion is distinct from validated launch readiness.
 
-This file records the already implemented candidate scope. Newer product direction separates the
-earning **Display** from non-economic **Showrooms** and targets three-to-six Display slots; see
-[Display and Showrooms](DISPLAY_AND_SHOWROOMS.md). That direction does not retroactively make the
-six-slot Display, Showroom Gallery, or customizable rooms part of this implementation result.
+The original candidate scope above is historical. The subsequently authorized
+[Display and Showroom foundation](DISPLAY_SHOWROOM_IMPLEMENTATION.md) now adds schema-v3 migration,
+six-position Display architecture, collection Showrooms, lazy walkable Galleries, controlled
+cosmetic placement and same-server read-only visits. Advanced customization and monetization
+remain future scope.
 
-## Implementation result
+## Original candidate result
 
 The candidate implements the scope above: twelve figures, two boxes, persistent profiles,
 four-slot progression, three palettes, two completion plaques, UTC daily box/display rewards,
 automatic income, themed bonus, inspected same-server visits, original room/garden geometry,
-and tabbed UI with explicit scroll sizing. Its implemented "room" is the legacy economic
-Display/main plot, not the future Showroom system. No frameworks or Wally dependencies were added.
+and tabbed UI with explicit scroll sizing. That original implementation
+used "room" for the economic Display/main plot; the newer foundation separates these concepts. No frameworks or Wally dependencies were added.
 Automated tests pass; [operations](OPERATIONS.md) lists the unrun native storage, mobile,
 multiplayer, performance and recovery checks required before release. Nothing is published.

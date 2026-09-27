@@ -3,7 +3,7 @@ local Shared = game:GetService("ReplicatedStorage").Shared
 local FigureModel = require(Shared.FigureModel)
 local Types = require(Shared.Types)
 local Catalog = require(Shared.Catalog)
-export type Room = {
+export type Plot = {
 	model: Model,
 	shelf: Vector3,
 	spawn: CFrame,
@@ -11,11 +11,12 @@ export type Room = {
 	displays: Folder,
 	index: number,
 	signature: string,
+	galleryEntrance: Part,
 }
-local Rooms = {}
+local PlayerPlot = {}
 local occupied: { [number]: boolean } = {}
 local root = Instance.new("Folder")
-root.Name = "Showrooms"
+root.Name = "PlayerPlots"
 root.Parent = workspace
 local function part(
 	parent: Instance,
@@ -33,7 +34,7 @@ local function part(
 	result.Parent = parent
 	return result
 end
-function Rooms.create(player: Player): Room
+function PlayerPlot.create(player: Player): Plot
 	local index = 1
 	while occupied[index] do
 		index += 1
@@ -72,7 +73,13 @@ function Rooms.create(player: Player): Room
 		Color3.fromRGB(105, 144, 137)
 	)
 	local shelf = origin + Vector3.new(0, 3, 8)
-	part(model, "Shelf", Vector3.new(26, 1, 5), shelf, Color3.fromRGB(146, 102, 72))
+	part(
+		model,
+		"Shelf",
+		Vector3.new(26, 1, 11),
+		shelf + Vector3.new(0, 0, -2.5),
+		Color3.fromRGB(146, 102, 72)
+	)
 	local sign = part(
 		model,
 		"Sign",
@@ -94,7 +101,7 @@ function Rooms.create(player: Player): Room
 	label.TextColor3 = Color3.fromRGB(255, 235, 191)
 	label.TextScaled = true
 	label.Font = Enum.Font.GothamBold
-	label.Text = player.DisplayName .. "'s Pocket Grove"
+	label.Text = player.DisplayName .. "'s Display"
 	label.Parent = surface
 	part(
 		model,
@@ -136,8 +143,9 @@ function Rooms.create(player: Player): Room
 	).Transparency =
 		0.35
 	local anchors: { CFrame } = {}
-	for slot = 1, 4 do
-		local position = shelf + Vector3.new((slot - 2.5) * 6, 0.7, 0)
+	for slot = 1, 6 do
+		local position = shelf
+			+ Vector3.new(((slot - 1) % 3 - 1) * 8, 0.7, -math.floor((slot - 1) / 3) * 5)
 		part(
 			model,
 			"Slot" .. slot,
@@ -150,6 +158,15 @@ function Rooms.create(player: Player): Room
 	local displays = Instance.new("Folder")
 	displays.Name = "Displays"
 	displays.Parent = model
+	local galleryEntrance = part(
+		model,
+		"ShowroomGalleryEntrance",
+		Vector3.new(6, 6, 1),
+		origin + Vector3.new(9, 4, -11),
+		Color3.fromRGB(85, 120, 142)
+	)
+	local Template = require(script.Parent.SpaceTemplate)
+	Template.label(galleryEntrance, player.DisplayName .. "'s Showroom Gallery")
 	local spawn = CFrame.lookAt(origin + Vector3.new(0, 4, -3), shelf)
 	model:SetAttribute("VisitorOrigin", origin)
 	model.Parent = root
@@ -161,9 +178,10 @@ function Rooms.create(player: Player): Room
 		displays = displays,
 		index = index,
 		signature = "",
+		galleryEntrance = galleryEntrance,
 	}
 end
-function Rooms.render(room: Room, state: Types.State)
+function PlayerPlot.render(room: Plot, state: Types.State)
 	local completed: { string } = {}
 	for _, collection in Catalog.collections do
 		local complete = true
@@ -176,37 +194,20 @@ function Rooms.render(room: Room, state: Types.State)
 			table.insert(completed, collection.name)
 		end
 	end
-	local signature = table.concat(state.slots, "|")
-		.. state.theme
-		.. tostring(state.unlocked)
+	local signature = table.concat(state.display.slots, "|")
+		.. tostring(state.display.unlocked)
 		.. table.concat(completed, "|")
 	if signature == room.signature then
 		return
 	end
 	room.signature = signature
-	local palette = Catalog.themes[state.theme]
-	for _, child in room.model:GetChildren() do
-		if child:IsA("BasePart") then
-			if string.find(child.Name, "Wall") then
-				child.Color = palette.wall
-			elseif child.Name == "Floor" then
-				child.Color = palette.floor
-			elseif
-				child.Name == "Rug"
-				or child.Name == "Column"
-				or string.find(child.Name, "Slot")
-			then
-				child.Color = palette.accent
-			end
-		end
-	end
 	room.displays:ClearAllChildren()
-	if state.unlocked < 4 then
+	for slot = state.display.unlocked + 1, 6 do
 		local locked = part(
 			room.displays,
 			"LockedSlot",
 			Vector3.new(3, 1.3, 2),
-			room.anchors[4].Position + Vector3.new(0, 0.7, 0),
+			room.anchors[slot].Position + Vector3.new(0, 0.7, 0),
 			Color3.fromRGB(90, 94, 98)
 		)
 		local sign = Instance.new("BillboardGui")
@@ -218,7 +219,7 @@ function Rooms.render(room: Room, state: Types.State)
 		text.Size = UDim2.fromScale(1, 1)
 		text.BackgroundTransparency = 1
 		text.TextColor3 = Color3.new(1, 1, 1)
-		text.Text = "Expand in the Shop"
+		text.Text = if slot == 4 then "Unlock in Display" else "Locked - future unlock"
 		text.TextSize = 14
 		text.Parent = sign
 	end
@@ -240,7 +241,7 @@ function Rooms.render(room: Room, state: Types.State)
 		text.Font = Enum.Font.GothamBold
 		text.Parent = surface
 	end
-	for slot, id in state.slots do
+	for slot, id in state.display.slots do
 		if id ~= "" then
 			local ok, model = pcall(FigureModel.create, id, room.anchors[slot])
 			if ok then
@@ -265,7 +266,7 @@ function Rooms.render(room: Room, state: Types.State)
 		end
 	end
 end
-function Rooms.near(room: Room, player: Player): boolean
+function PlayerPlot.near(room: Plot, player: Player): boolean
 	local character = player.Character
 	local rootPart = if character then character:FindFirstChild("HumanoidRootPart") else nil
 	local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
@@ -275,8 +276,8 @@ function Rooms.near(room: Room, player: Player): boolean
 		and humanoid.Health > 0
 		and (rootPart.Position - room.shelf).Magnitude <= 20
 end
-function Rooms.destroy(room: Room)
+function PlayerPlot.destroy(room: Plot)
 	occupied[room.index] = nil
 	room.model:Destroy()
 end
-return Rooms
+return PlayerPlot

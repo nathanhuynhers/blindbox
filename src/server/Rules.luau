@@ -2,7 +2,9 @@
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Economy = require(script.Parent.Economy)
+local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Rules = {}
+local Showrooms = require(script.Parent.Showrooms)
 local rates: { [string]: number } = {}
 local odds: { [string]: number } = {}
 local totalWeights: { [string]: number } = {}
@@ -51,10 +53,9 @@ Rules.rates = rates
 Rules.odds = odds
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 2,
-		unlocked = 3,
-		theme = "grove",
-		themes = { grove = true },
+		schemaVersion = 3,
+		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
+		showrooms = { rooms = {}, palette = "grove", palettes = { grove = true } },
 		lastDailyDay = -1,
 		goalDay = -1,
 		goalProgress = 0,
@@ -63,7 +64,6 @@ function Rules.new(now: number): Types.State
 		scrap = 0,
 		owned = {},
 		discovered = {},
-		slots = { "", "", "" },
 		revision = 0,
 		fraction = 0,
 		time = now,
@@ -73,7 +73,7 @@ end
 function Rules.bonus(state: Types.State): number
 	local distinct: { [string]: boolean } = {}
 	local counts: { [string]: number } = {}
-	for _, id in state.slots do
+	for _, id in state.display.slots do
 		if id ~= "" and not distinct[id] then
 			distinct[id] = true
 			local collection = Catalog.byId[id].collection
@@ -95,7 +95,7 @@ function Rules.refreshDay(state: Types.State, day: number)
 	end
 	local unique: { [string]: boolean } = {}
 	local count = 0
-	for _, id in state.slots do
+	for _, id in state.display.slots do
 		if id ~= "" and not unique[id] then
 			unique[id] = true
 			count += 1
@@ -105,7 +105,7 @@ function Rules.refreshDay(state: Types.State, day: number)
 end
 function Rules.rate(state: Types.State): number
 	local rate = 0
-	for _, id in state.slots do
+	for _, id in state.display.slots do
 		rate += rates[id] or 0
 	end
 	return rate + Rules.bonus(state)
@@ -123,7 +123,7 @@ function Rules.settle(state: Types.State, now: number)
 end
 function Rules.available(state: Types.State, id: string): number
 	local count = state.owned[id] or 0
-	for _, placed in state.slots do
+	for _, placed in state.display.slots do
 		if placed == id then
 			count -= 1
 		end
@@ -192,6 +192,7 @@ function Rules.mutate(
 		local isNew = not state.discovered[id]
 		state.owned[id] = (state.owned[id] or 0) + 1
 		state.discovered[id] = true
+		Showrooms.sync(state)
 		if state.step == 1 then
 			state.step = 2
 		elseif state.step == 4 and action == "Buy" then
@@ -200,8 +201,11 @@ function Rules.mutate(
 		state.revision += 1
 		return true, if isNew then "New discovery!" else "Another copy for your collection!", id
 	elseif action == "Expand" then
-		if state.unlocked >= 4 then
-			return false, "Your showroom is fully expanded.", nil
+		if DisplayConfig.unlockMethods[4] ~= "LegacyCoins" then
+			return false, "That Display unlock is unavailable.", nil
+		end
+		if state.display.unlocked >= 4 then
+			return false, "The fourth Display slot is already unlocked.", nil
 		end
 		if state.coins < Economy.expansionCost then
 			return false,
@@ -209,26 +213,8 @@ function Rules.mutate(
 				nil
 		end
 		state.coins -= Economy.expansionCost
-		state.unlocked = 4
-		state.slots[4] = ""
-	elseif action == "Theme" then
-		local theme = intent.choice or ""
-		if not Catalog.themes[theme] then
-			return false, "Unknown room palette.", nil
-		end
-		if state.theme == theme then
-			return false, "That palette is already equipped.", nil
-		end
-		if not state.themes[theme] then
-			if state.coins < Economy.themeCost then
-				return false,
-					string.format("You need %d Coins for this palette.", Economy.themeCost),
-					nil
-			end
-			state.coins -= Economy.themeCost
-			state.themes[theme] = true
-		end
-		state.theme = theme
+		state.display.unlocked = 4
+		state.display.slots[4] = ""
 	elseif action == "Goal" then
 		if state.goalClaimed or state.goalProgress < 3 then
 			return false, "Display three distinct figures to earn today's reward.", nil
@@ -249,34 +235,40 @@ function Rules.mutate(
 		state.scrap += 1
 	elseif action == "Place" or action == "Remove" then
 		local slot = intent.slot
-		if not slot or slot % 1 ~= 0 or slot < 1 or slot > state.unlocked then
-			return false, "Unknown shelf slot.", nil
+		if
+			not slot
+			or slot % 1 ~= 0
+			or slot < 1
+			or slot > state.display.unlocked
+			or slot > DisplayConfig.maxSlots
+		then
+			return false, "Unknown or locked Display slot.", nil
 		end
 		if action == "Place" then
 			if not rates[id] then
 				return false, "Unknown figure.", nil
 			end
-			if state.slots[slot] == id then
+			if state.display.slots[slot] == id then
 				return false, "That figure is already in this slot.", nil
 			end
 			if Rules.available(state, id) < 1 then
 				return false, "No undisplayed copy available.", nil
 			end
-			state.slots[slot] = id
+			state.display.slots[slot] = id
 			if state.step == 2 then
 				state.step = 3
 			end
 		else
-			if state.slots[slot] == "" then
+			if state.display.slots[slot] == "" then
 				return false, "That slot is empty.", nil
 			end
-			state.slots[slot] = ""
+			state.display.slots[slot] = ""
 		end
 	else
 		return false, "Unknown action.", nil
 	end
 	Rules.refreshDay(state, today)
 	state.revision += 1
-	return true, "Showroom updated.", nil
+	return true, "Display updated.", nil
 end
 return Rules

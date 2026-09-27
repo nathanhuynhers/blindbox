@@ -19,14 +19,11 @@ check(Rules.roll(0,"tide") == "tide.bubble" and Rules.roll(0.9,"tide") == "tide.
 check(not Rules.mutate(state,request("Expand",0),0,10) and state.coins==450, "expansion affordability")
 state.coins=10000
 check(Rules.mutate(state,request("Expand",0),0,10), "expand")
-check(state.unlocked==4 and #state.slots==4 and state.coins==6000, "single bounded expansion")
+check(state.display.unlocked==4 and #state.display.slots==4 and state.coins==6000, "single bounded expansion")
 check(not Rules.mutate(state,request("Expand",1),0,10) and state.coins==6000, "expansion cannot charge twice")
-check(Rules.mutate(state,request("Theme",1,"ocean"),0,10), "buy palette")
-check(state.theme=="ocean" and state.themes.ocean and state.coins==4800, "palette conservation")
-check(Rules.mutate(state,request("Theme",2,"grove"),0,10), "equip free owned palette")
-check(Rules.mutate(state,request("Theme",3,"ocean"),0,10) and state.coins==4800, "owned palette free")
+state.showrooms.palette="ocean"; state.showrooms.palettes.ocean=true
 check(Rules.mutate(state,request("Daily",4,"tide"),0.99,10), "daily claim")
-check(state.owned["tide.pearl"]==1 and state.coins==4800 and state.lastDailyDay==10, "daily marker and grant together")
+check(state.owned["tide.pearl"]==1 and state.coins==6000 and state.lastDailyDay==10, "daily marker and grant together")
 check(not Rules.mutate(state,request("Daily",5,"grove"),0,10), "daily choice cannot bypass limit")
 local restored=Profile.decode(Profile.encode(state),200)
 assert(restored)
@@ -36,7 +33,7 @@ check(Rules.mutate(restored,request("Daily",0,"grove"),0,11), "next UTC day elig
 local full=Rules.new(0); full.owned["grove.pebble"]=200; full.discovered["grove.pebble"]=true
 check(not Rules.mutate(full,request("Daily",0,"grove"),0,20) and full.lastDailyDay==-1, "full inventory preserves claim")
 local distinct={"grove.pebble","grove.sprout","grove.acorn"}
-for slot,id in distinct do restored.owned[id]=1; restored.discovered[id]=true; restored.slots[slot]=id end
+for slot,id in distinct do restored.owned[id]=1; restored.discovered[id]=true; restored.display.slots[slot]=id end
 Rules.refreshDay(restored,11)
 check(restored.goalProgress==3 and Rules.bonus(restored)==1, "distinct themed shelf and goal")
 local before=restored.coins
@@ -44,12 +41,12 @@ check(Rules.mutate(restored,request("Goal",restored.revision),0,11) and restored
 check(not Rules.mutate(restored,request("Goal",restored.revision),0,11), "goal cannot repeat")
 Rules.refreshDay(restored,12)
 check(not restored.goalClaimed and restored.goalProgress==3, "new day resets goal claim")
-local duplicates=Rules.new(0); duplicates.owned["grove.star"]=3; duplicates.slots={"grove.star","grove.star","grove.star"}
+local duplicates=Rules.new(0); duplicates.owned["grove.star"]=3; duplicates.display.slots={"grove.star","grove.star","grove.star"}
 check(Rules.bonus(duplicates)==0 and Rules.rate(duplicates)==21, "duplicates have no themed bonus")
 local encoded=Profile.encode(restored)
 local loaded=Profile.decode(encoded,10000)
 assert(loaded)
-check(loaded.coins==restored.coins and loaded.theme=="ocean" and loaded.unlocked==4 and loaded.lastDailyDay==11, "profile round trip")
+check(loaded.coins==restored.coins and loaded.showrooms.palette=="ocean" and loaded.display.unlocked==4 and loaded.lastDailyDay==11, "profile round trip")
 check(loaded.time==10000 and loaded.fraction==0 and loaded.revision==0, "runtime data not persisted")
 encoded.owned["grove.pebble"]=99
 check(restored.owned["grove.pebble"]==1, "save snapshot owns copies")
@@ -64,15 +61,15 @@ local corrupt=Profile.encode(restored); corrupt.schemaVersion=999
 check(Profile.decode(corrupt,0)==nil,"future schema blocked")
 corrupt=Profile.encode(restored); corrupt.owned["unknown"]=1
 check(Profile.decode(corrupt,0)==nil,"unknown inventory ID blocked")
-corrupt=Profile.encode(restored); corrupt.slots[1]="tide.ray"
+corrupt=Profile.encode(restored); corrupt.display.slots[1]="tide.ray"
 check(Profile.decode(corrupt,0)==nil,"unowned reservation blocked")
-corrupt=Profile.encode(restored); corrupt.themes.ocean=nil
+corrupt=Profile.encode(restored); corrupt.showrooms.palettes.ocean=nil
 check(Profile.decode(corrupt,0)==nil,"unowned theme blocked")
 corrupt=Profile.encode(restored); corrupt.goalProgress=0; corrupt.goalClaimed=true
 check(Profile.decode(corrupt,0)==nil,"invalid goal claim blocked")
 local legacy: { [string]: unknown } = {schemaVersion=1,coins=123,scrap=2,step=3,owned={ ["grove.pebble"]=1 },discovered={ ["grove.pebble"]=true },slots={"grove.pebble","",""}}
 local migrated=Profile.decode(legacy,90)
-check(migrated~=nil and migrated.coins==123 and migrated.unlocked==3 and migrated.themes.grove and migrated.lastDailyDay==-1,"version-one migration preserves facts")
+check(migrated~=nil and migrated.coins==123 and migrated.display.unlocked==3 and migrated.showrooms.palettes.grove and migrated.lastDailyDay==-1,"version-one migration preserves facts")
 check(legacy.schemaVersion==1,"migration does not mutate input")
 local database: { [string]: unknown }={}
 local calls=0

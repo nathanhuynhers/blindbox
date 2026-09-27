@@ -4,7 +4,8 @@
 
 Terminology follows [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md): Display is the capped
 Coin-generating slot system; Showrooms are zero-income customization/social spaces. Ideas below
-must not blur those responsibilities or imply that either future system is already implemented.
+must not blur those responsibilities. The functional foundation is implemented; acquisition flows
+and paid products remain unimplemented. See [current scope](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
 
 ## Monetization Philosophy
 

@@ -10,8 +10,8 @@ Public deployment, paid mechanics and trading remain outside scope. The mileston
 below are review criteria, not claims that every runtime test has passed.
 
 Terminology has changed since milestones 1-6 were written. Their implemented "room/showroom"
-means the economic main-plot **Display**. The separately approved non-economic **Showrooms** and
-Showroom Gallery are future work described in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+means the economic main-plot **Display**. The separately authorized non-economic **Showrooms** and Showroom Gallery now have a functional
+foundation; see [implementation and checkpoint evidence](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
 
 ## Milestone 0 — Review the plan
 
@@ -122,7 +122,8 @@ one expansion last. Do not build every future backend service before another pla
 
 ## Post-candidate direction — Display and Showrooms
 
-This is approved planning direction, not an implemented milestone:
+The user subsequently authorized this full functional foundation. It is implemented as a candidate,
+with native Studio acceptance pending. The original task sequence was:
 
 1. Rename/refactor legacy Room/Showroom terminology to Display without changing income or saves.
 2. Migrate Display from the implemented 3-4 capacity to an architecture supporting 3-6 slots.
@@ -134,7 +135,8 @@ This is approved planning direction, not an implemented milestone:
 6. Add one scalable Gallery entrance, then a placeholder interior, safe visits, controlled placement
    anchors, and data-driven customization before final room art.
 
-Each step needs its own authorization and acceptance checks. Do not infer final prices, room sizes,
+The scoped foundation authorization covered these steps together; checkpoint tests were run.
+Future features still need their own authorization. Do not infer final prices, room sizes,
 placement counts, Secret rewards, or advanced free placement from this roadmap summary.
 
 Trading is not included. A separate go/no-go proposal must address per-item identity migration,

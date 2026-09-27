@@ -2,6 +2,7 @@
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Rules = require(script.Parent.Rules)
 local Protocol = require(script.Parent.Protocol)
+local Showrooms = require(script.Parent.Showrooms)
 type Receipt = { intent: Types.Intent, reply: Types.Reply, time: number }
 export type Session =
 	{ state: Types.State, receipts: { Receipt }, tokens: number, tokenTime: number }
@@ -16,7 +17,8 @@ function Transactions.process(
 	now: number,
 	nearShelf: boolean,
 	roll: number,
-	day: number?
+	day: number?,
+	access: Showrooms.Access?
 ): (Types.Reply?, boolean)
 	session.tokens = math.min(4, session.tokens + math.max(0, now - session.tokenTime) * 2)
 	session.tokenTime = now
@@ -51,7 +53,9 @@ function Transactions.process(
 	local message = "State changed. Try again."
 	local figure: string? = nil
 	if intent.revision == session.state.revision then
-		if (intent.action == "Place" or intent.action == "Remove") and not nearShelf then
+		if string.sub(intent.action, 1, 8) == "Showroom" then
+			ok, message, figure = Showrooms.edit(session.state, intent, access)
+		elseif (intent.action == "Place" or intent.action == "Remove") and not nearShelf then
 			message = "Walk closer to your own shelf."
 		else
 			ok, message, figure = Rules.mutate(session.state, intent, roll, day)

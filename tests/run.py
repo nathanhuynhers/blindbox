@@ -11,6 +11,7 @@ root = Path(__file__).resolve().parents[1]
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "DisplayConfig": "shared", "ShowroomConfig": "shared", "Showrooms": "server", "GallerySessions": "server", "GalleryRuntime": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "CollectionAssets": "client",
     "Types": "shared", "Catalog": "shared", "Economy": "server",
@@ -31,6 +32,10 @@ for name, folder in modules.items():
             source = source.replace(f"require({expression})", f'require("./{dependency}")')
     if name == "Scroll":
         source = source.replace("--!strict", "--!strict\nlocal Enum = {AutomaticSize={None=0},ScrollingDirection={Y=1},ScrollBarInset={ScrollBar=1}}\nlocal UDim2 = {fromOffset=function(x,y) return {X={Offset=x},Y={Offset=y}} end}")
+    if name == "GalleryRuntime":
+        source = source.replace('local Players = game:GetService("Players")', 'local Engine = require("./GalleryEngine")\nlocal Players = Engine.Players\nlocal Instance, Vector3, Color3, workspace = Engine.Instance, Engine.Vector3, Engine.Color3, Engine.workspace')
+        source = source.replace('local Template = require(script.Parent.SpaceTemplate)', 'local Template = Engine.Template')
+        source = source.replace('os.clock()', 'Engine.clock')
     if name == "CollectionAssets":
         source = source.replace('local W = require(script.Parent.Widgets)', 'local W = Engine.Widgets')
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./AssetMountEngine")\nlocal Instance, UDim2, Rect, Enum = Engine.Instance, Engine.UDim2, Engine.Rect, Engine.Enum')
@@ -65,12 +70,18 @@ if result.returncode:
 result = subprocess.run([sys.argv[1], str(out / "AssetManifest.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
-for name in ("AssetMountEngine", "CollectionAssets.spec", "BlindBox.spec"):
+for name in ("AssetMountEngine", "CollectionAssets.spec", "BlindBox.spec", "DisplayShowrooms.spec", "GalleryEngine", "GalleryRuntime.spec"):
     (out / f"{name}.luau").write_text((root / "tests" / f"{name}.luau").read_text(encoding="utf-8"), encoding="utf-8")
 result = subprocess.run([sys.argv[1], str(out / "CollectionAssets.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 result = subprocess.run([sys.argv[1], str(out / "BlindBox.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+result = subprocess.run([sys.argv[1], str(out / "DisplayShowrooms.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+result = subprocess.run([sys.argv[1], str(out / "GalleryRuntime.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 fixtures = [

@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local Types = require(ReplicatedStorage.Shared.Types)
+local ShowroomConfig = require(ReplicatedStorage.Shared.ShowroomConfig)
 local Interface = require(script.Interface)
 local Visitors = require(script.Visitors)
 local OpeningController = require(script.OpeningController)
@@ -33,6 +34,16 @@ ui = Interface.create(function(action: string, figure: string?, slot: number?, c
 		id = HttpService:GenerateGUID(false),
 		revision = state.revision,
 	}
+	if string.sub(action, 1, 8) == "Showroom" then
+		local gallery = state.gallery
+		if not gallery or not gallery.canEdit or not gallery.roomId then
+			return
+		end
+		intent.roomId = gallery.roomId
+		intent.runtimeId = gallery.runtimeId
+		intent.anchorId = if slot then ShowroomConfig.anchors[slot] else nil
+		intent.slot = nil
+	end
 	pending = intent
 	beforeRequest = state
 	ui.pending(true)
@@ -118,7 +129,7 @@ table.insert(
 			end
 			visitors.update(
 				now,
-				if ui.effects() then rate else 0,
+				if ui.effects() and state and not state.gallery then rate else 0,
 				if state then state.visiting else nil
 			)
 		end

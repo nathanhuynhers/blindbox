@@ -49,7 +49,7 @@ function Storage.open(userId: number): (Session?, string)
 			""
 	end
 	local token = HttpService:GenerateGUID(false)
-	local reason = "Could not load your showroom. Please rejoin."
+	local reason = "Could not load your progress. Please rejoin."
 	for attempt = 1, 4 do
 		started = os.clock()
 		local handle, state, message =

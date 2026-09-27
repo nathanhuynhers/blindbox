@@ -12,7 +12,7 @@ function Visitors.create()
 	end
 	return {
 		update = function(now: number, rate: number, target: number?)
-			local rooms = workspace:FindFirstChild("Showrooms")
+			local rooms = workspace:FindFirstChild("PlayerPlots")
 			local room = if rooms
 				then rooms:FindFirstChild(tostring(target or Players.LocalPlayer.UserId))
 				else nil

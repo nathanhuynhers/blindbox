@@ -2,7 +2,7 @@
 local World = {}
 function World.create(): Folder
 	local root = Instance.new("Folder")
-	root.Name = "ShowroomGardens"
+	root.Name = "MainWorld"
 	local function part(name: string, position: Vector3, size: Vector3, color: Color3): Part
 		local object = Instance.new("Part")
 		object.Name = name

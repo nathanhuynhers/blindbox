@@ -4,12 +4,13 @@ local Context = require(script.Parent.UIContext)
 local Theme = require(script.Parent.UITheme)
 local W = require(script.Parent.Widgets)
 local Preview = require(script.Parent.UIPreview)
+local Showroom = require(script.Parent.ShowroomScreen)
 local Visits = {}
 function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
 	local root = W.frame(parent, "Visits", Theme.paper)
 	W.corner(root, 16)
 	W.outline(root, Theme.card, 0.15)
-	local title = W.title(root, "The showroom circle", 38)
+	local title = W.title(root, "Plots & Showroom Galleries", 38)
 	W.inset(title, 10, 38)
 	title.TextSize = 23
 	local page = W.scroll(root, "ShowroomDirectory", ctx.scope)
@@ -20,7 +21,7 @@ function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
 	end, true)
 	home.button.LayoutOrder = 1
 	home.button:SetAttribute("Quiet", true)
-	local heading = W.label(page, "Showrooms in this server", 34, 18)
+	local heading = W.label(page, "Visit a plot, then use its Gallery entrance", 34, 18)
 	heading.LayoutOrder = 2
 	local tiles = W.tiles(page, ctx.scope, 218, 3, 226)
 	tiles.LayoutOrder = 3
@@ -51,10 +52,10 @@ function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
 		W.inset(status, 52, 24)
 		status.TextColor3 = Theme.muted
 		local previews: { Preview.Preview } = {}
-		for slot = 1, 4 do
+		for slot = 1, 6 do
 			local preview = Preview.create(card, ctx.scope)
-			preview.frame.Position = UDim2.new((slot - 1) * 0.25, 0, 0, 82)
-			preview.frame.Size = UDim2.new(0.25, 0, 0, 80)
+			preview.frame.Position = UDim2.new((slot - 1) / 6, 0, 0, 82)
+			preview.frame.Size = UDim2.new(1 / 6, 0, 0, 80)
 			previews[slot] = preview
 		end
 		local action = W.action(card, "Visit", ctx.scope, ctx.effects, function()
@@ -73,9 +74,13 @@ function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
 			target = nil,
 		}
 	end
+	local gallery = Showroom.create(root, ctx)
 	return {
 		root = root,
 		update = function(snapshot: Types.Snapshot)
+			gallery.update(snapshot)
+			page.Visible = snapshot.gallery == nil
+			title.Visible = snapshot.gallery == nil
 			for index, card in cards do
 				local room = snapshot.rooms[index]
 				card.root.Visible = room ~= nil
@@ -89,14 +94,14 @@ function Visits.create(parent: Instance, ctx: Context.Context): Context.Screen
 						end
 					end
 					card.status.Text = if count == 0
-						then "Open · A new showroom"
+						then "Open · Empty Display"
 						else string.format(
 							"Open · %d figures · %g Coins/sec",
 							count,
 							room.rate
 						)
 					card.action.set(
-						if room.userId == snapshot.visiting then "You're here" else "Visit showroom",
+						if room.userId == snapshot.visiting then "You're here" else "Visit plot",
 						room.userId ~= snapshot.visiting and snapshot.ready
 					)
 				end

@@ -6,7 +6,8 @@ local Types = require(ReplicatedStorage.Shared.Types)
 local Rules = require(script.Rules)
 local Economy = require(script.Economy)
 local Transactions = require(script.Transactions)
-local Rooms = require(script.Rooms)
+local PlayerPlot = require(script.PlayerPlot)
+local GalleryRuntime = require(script.GalleryRuntime)
 local Storage = require(script.Storage)
 local Settings = require(script.Settings)
 local World = require(script.World)
@@ -15,15 +16,17 @@ local gardens = World.create()
 local productionModels = ModelAssets.publish()
 type Session = {
 	transaction: Transactions.Session,
-	room: Rooms.Room,
+	room: PlayerPlot.Plot,
 	storage: Storage.Session,
 	sequence: number,
 	syncTime: number,
 	visitTime: number,
 	visiting: number,
 	characterConnection: RBXScriptConnection?,
+	removingConnection: RBXScriptConnection?,
 	spawnTask: thread?,
 }
+local gallery: GalleryRuntime.Controller
 local sessions: { [Player]: Session } = {}
 local loading: { [Player]: boolean } = {}
 local closing = 0
@@ -50,11 +53,12 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	local day = math.floor(os.time() / 86400)
 	Rules.refreshDay(state, day)
 	local snapshot: Types.Snapshot = {
+		gallery = gallery.view(player),
 		coins = state.coins,
 		scrap = state.scrap,
 		owned = table.clone(state.owned),
 		discovered = table.clone(state.discovered),
-		slots = table.clone(state.slots),
+		slots = table.clone(state.display.slots),
 		revision = state.revision,
 		sequence = session.sequence,
 		rate = Rules.rate(state),
@@ -63,9 +67,9 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		odds = Rules.odds,
 		price = Economy.price,
 		redeemCost = Economy.redeemCost,
-		unlocked = state.unlocked,
-		theme = state.theme,
-		themes = table.clone(state.themes),
+		unlocked = state.display.unlocked,
+		theme = state.showrooms.palette,
+		themes = table.clone(state.showrooms.palettes),
 		expansionCost = Economy.expansionCost,
 		themeCost = Economy.themeCost,
 		dailyReady = state.lastDailyDay < day,
@@ -82,16 +86,31 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	stateRemote:FireClient(player, snapshot, reply)
 end
 local function home(player: Player, session: Session)
+	gallery.leave(player)
 	session.visiting = player.UserId
 	if player.Character then
 		player.Character:PivotTo(session.room.spawn)
 	end
 end
+gallery = GalleryRuntime.create(function(userId)
+	local player = Players:GetPlayerByUserId(userId)
+	local session = if player then sessions[player] else nil
+	return if session
+			and session.storage.ready
+			and os.clock() < session.storage.safeUntil
+		then session.transaction.state
+		else nil
+end, function(player)
+	local session = sessions[player]
+	if session then
+		home(player, session)
+	end
+end)
 local function closeStorage(storage: Storage.Session)
 	closing += 1
 	local ok = Storage.close(storage)
 	if not ok then
-		warn("Showroom final save was not confirmed; retained data and lease for recovery.")
+		warn("Profile final save was not confirmed; retained data and lease for recovery.")
 	end
 	closing -= 1
 end
@@ -101,6 +120,10 @@ local function remove(player: Player)
 		return
 	end
 	sessions[player] = nil
+	gallery.remove(player)
+	if session.removingConnection then
+		session.removingConnection:Disconnect()
+	end
 	if session.characterConnection then
 		session.characterConnection:Disconnect()
 	end
@@ -108,11 +131,11 @@ local function remove(player: Player)
 		task.cancel(session.spawnTask)
 	end
 	for guest, other in sessions do
-		if other.visiting == player.UserId then
+		if other.visiting == player.UserId and not gallery.view(guest) then
 			home(guest, other)
 		end
 	end
-	Rooms.destroy(session.room)
+	PlayerPlot.destroy(session.room)
 	closeStorage(session.storage)
 end
 local function added(player: Player)
@@ -127,7 +150,7 @@ local function added(player: Player)
 		count += 1
 	end
 	if count >= Settings.maxRooms then
-		player:Kick("This showroom lane is full. Please join another server.")
+		player:Kick("This plot lane is full. Please join another server.")
 		return
 	end
 	loading[player] = true
@@ -147,18 +170,24 @@ local function added(player: Player)
 	transaction.state = storage.state
 	local session: Session = {
 		transaction = transaction,
-		room = Rooms.create(player),
+		room = PlayerPlot.create(player),
 		storage = storage,
 		sequence = 0,
 		syncTime = -math.huge,
 		visitTime = -math.huge,
 		visiting = player.UserId,
 		characterConnection = nil,
+		removingConnection = nil,
 		spawnTask = nil,
 	}
 	sessions[player] = session
-	Rooms.render(session.room, storage.state)
+	gallery.register(player, session.room.galleryEntrance)
+	session.removingConnection = player.CharacterRemoving:Connect(function()
+		gallery.leave(player)
+	end)
+	PlayerPlot.render(session.room, storage.state)
 	local function characterAdded(character: Model)
+		gallery.leave(player)
 		if session.spawnTask and coroutine.status(session.spawnTask) ~= "dead" then
 			task.cancel(session.spawnTask)
 		end
@@ -213,15 +242,17 @@ table.insert(
 			session.transaction,
 			raw,
 			os.clock(),
-			Rooms.near(session.room, player),
+			PlayerPlot.near(session.room, player),
 			math.min(random:NextNumber(), 0.9999999999999999),
-			math.floor(os.time() / 86400)
+			math.floor(os.time() / 86400),
+			gallery.access(player)
 		)
 		if not reply then
 			return
 		end
 		if changed then
-			Rooms.render(session.room, session.transaction.state)
+			gallery.refresh(player)
+			PlayerPlot.render(session.room, session.transaction.state)
 			if session.storage.handle and not session.storage.busy then
 				session.storage.status = "Autosave pending"
 			end
@@ -245,9 +276,10 @@ table.insert(
 		local character = player.Character
 		local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
 		if not other or not character or not humanoid or humanoid.Health <= 0 then
-			noticeRemote:FireClient(player, "That showroom is no longer available.")
+			noticeRemote:FireClient(player, "That plot is no longer available.")
 			return
 		end
+		gallery.leave(player)
 		session.visiting = (host :: Player).UserId
 		character:PivotTo(other.room.spawn)
 		send(player, session, nil)
@@ -274,8 +306,8 @@ table.insert(
 				userId = player.UserId,
 				name = player.DisplayName,
 				rate = Rules.rate(state),
-				slots = table.clone(state.slots),
-				theme = state.theme,
+				slots = table.clone(state.display.slots),
+				theme = state.showrooms.palette,
 			})
 		end
 		table.sort(directory, function(a, b)
@@ -298,6 +330,7 @@ game:BindToClose(function()
 	while (next(sessions) or next(loading) or closing > 0) and os.clock() < deadline do
 		task.wait(0.1)
 	end
+	gallery.destroy()
 	folder:Destroy()
 	productionModels:Destroy()
 	gardens:Destroy()

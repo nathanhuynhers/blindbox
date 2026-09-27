@@ -108,20 +108,25 @@ local collections = {
 	{
 		id = "grove",
 		name = "Pocket Grove",
+		showroomId = "collection:grove",
 		description = "Little woodland wonders",
 		color = Color3.fromRGB(134, 204, 165),
 	},
 	{
 		id = "tide",
 		name = "Tidepool Tales",
+		showroomId = "collection:tide",
 		description = "Treasures from a tiny ocean",
 		color = Color3.fromRGB(116, 195, 234),
 	},
 }
 local collectionIds: { [string]: boolean } = {}
+local showroomIds: { [string]: boolean } = {}
 for _, collection in collections do
 	assert(not collectionIds[collection.id], "Duplicate collection ID")
+	assert(not showroomIds[collection.showroomId], "Duplicate collection Showroom ID")
 	collectionIds[collection.id] = true
+	showroomIds[collection.showroomId] = true
 end
 for _, figure in figures do
 	assert(collectionIds[figure.collection], "Missing collection")

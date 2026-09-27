@@ -1,24 +1,32 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
+local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Rules = require(script.Parent.Rules)
 local Economy = require(script.Parent.Economy)
+local Showrooms = require(script.Parent.Showrooms)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
 end
+local function fields(value: { [string]: unknown }, allowed: { string }): boolean
+	for key in value do
+		if not table.find(allowed, key) then
+			return false
+		end
+	end
+	return true
+end
 function Profile.encode(state: Types.State): Types.Profile
 	return {
-		schemaVersion = 2,
+		schemaVersion = 3,
 		coins = state.coins,
 		scrap = state.scrap,
 		owned = table.clone(state.owned),
 		discovered = table.clone(state.discovered),
-		slots = table.clone(state.slots),
+		display = { unlocked = state.display.unlocked, slots = table.clone(state.display.slots) },
+		showrooms = Showrooms.copy(state.showrooms),
 		step = state.step,
-		unlocked = state.unlocked,
-		theme = state.theme,
-		themes = table.clone(state.themes),
 		lastDailyDay = state.lastDailyDay,
 		goalDay = state.goalDay,
 		goalProgress = state.goalProgress,
@@ -31,64 +39,44 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	end
 	local data = raw :: { [string]: unknown }
 	local version = data.schemaVersion
-	if version ~= 1 and version ~= 2 then
+	if version ~= 1 and version ~= 2 and version ~= 3 then
 		return nil
 	end
-	local fields: { [string]: boolean } = {
-		schemaVersion = true,
-		coins = true,
-		scrap = true,
-		owned = true,
-		discovered = true,
-		slots = true,
-		step = true,
-	}
-	if version == 2 then
-		for _, key in
-			{
-				"unlocked",
-				"theme",
-				"themes",
-				"lastDailyDay",
-				"goalDay",
-				"goalProgress",
-				"goalClaimed",
-			}
-		do
-			fields[key] = true
+	local allowed = { "schemaVersion", "coins", "scrap", "owned", "discovered", "step" }
+	if version == 3 then
+		table.insert(allowed, "display")
+		table.insert(allowed, "showrooms")
+	else
+		table.insert(allowed, "slots")
+		if version == 2 then
+			for _, key in { "unlocked", "theme", "themes" } do
+				table.insert(allowed, key)
+			end
 		end
 	end
-	local fieldCount = 0
-	for key in data do
-		fieldCount += 1
-		if fieldCount > 14 or not fields[key] then
-			return nil
+	if version ~= 1 then
+		for _, key in { "lastDailyDay", "goalDay", "goalProgress", "goalClaimed" } do
+			table.insert(allowed, key)
 		end
 	end
-	local state = Rules.new(now)
 	if
-		not integer(data.coins, 0, Economy.coinLimit)
+		not fields(data, allowed)
+		or not integer(data.coins, 0, Economy.coinLimit)
 		or not integer(data.scrap, 0, Economy.scrapLimit)
 		or not integer(data.step, 1, 5)
+		or typeof(data.owned) ~= "table"
+		or typeof(data.discovered) ~= "table"
 	then
 		return nil
 	end
+	local state = Rules.new(now)
 	state.coins = data.coins :: number
 	state.scrap = data.scrap :: number
 	state.step = data.step :: number
-	if
-		typeof(data.owned) ~= "table"
-		or typeof(data.discovered) ~= "table"
-		or typeof(data.slots) ~= "table"
-	then
-		return nil
-	end
-	local total, keys = 0, 0
+	local total = 0
 	for id, count in data.owned :: { [string]: unknown } do
-		keys += 1
 		if
-			keys > #Catalog.figures
-			or typeof(id) ~= "string"
+			typeof(id) ~= "string"
 			or not Catalog.byId[id]
 			or not integer(count, 1, Economy.capacity)
 		then
@@ -100,15 +88,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	if total > Economy.capacity then
 		return nil
 	end
-	keys = 0
 	for id, found in data.discovered :: { [string]: unknown } do
-		keys += 1
-		if
-			keys > #Catalog.figures
-			or typeof(id) ~= "string"
-			or not Catalog.byId[id]
-			or found ~= true
-		then
+		if typeof(id) ~= "string" or not Catalog.byId[id] or found ~= true then
 			return nil
 		end
 		state.discovered[id] = true
@@ -118,29 +99,66 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			return nil
 		end
 	end
-	if version == 2 then
+	local display: { [string]: unknown }
+	local showroomData: unknown
+	if version == 3 then
+		if typeof(data.display) ~= "table" then
+			return nil
+		end
+		display = data.display :: { [string]: unknown }
+		if not fields(display, { "unlocked", "slots" }) then
+			return nil
+		end
+		showroomData = data.showrooms
+	else
+		-- Explicit v1/v2 -> v3 migration. No input mutation or destructive recovery.
+		display = { unlocked = if version == 1 then 3 else data.unlocked, slots = data.slots }
+		showroomData = {
+			rooms = {},
+			palette = if version == 1 then "grove" else data.theme,
+			palettes = if version == 1 then { grove = true } else data.themes,
+		}
+	end
+	if
+		not integer(
+			display.unlocked,
+			DisplayConfig.defaultSlots,
+			if version == 3 then DisplayConfig.maxSlots else (if version == 1 then 3 else 4)
+		) or typeof(display.slots) ~= "table"
+	then
+		return nil
+	end
+	state.display = { unlocked = display.unlocked :: number, slots = {} }
+	local keys = 0
+	local reservations: { [string]: number } = {}
+	for key, id in display.slots :: { [number]: unknown } do
 		if
-			not integer(data.unlocked, 3, 4)
-			or typeof(data.theme) ~= "string"
-			or not Catalog.themes[data.theme]
-			or typeof(data.themes) ~= "table"
+			not integer(key, 1, state.display.unlocked)
+			or typeof(id) ~= "string"
+			or (id ~= "" and not Catalog.byId[id])
 		then
 			return nil
 		end
-		state.unlocked = data.unlocked :: number
-		state.theme = data.theme
-		state.themes = {}
-		keys = 0
-		for id, owned in data.themes :: { [string]: unknown } do
-			keys += 1
-			if keys > 3 or typeof(id) ~= "string" or not Catalog.themes[id] or owned ~= true then
-				return nil
-			end
-			state.themes[id] = true
+		keys += 1
+		state.display.slots[key] = id
+		if id ~= "" then
+			reservations[id] = (reservations[id] or 0) + 1
 		end
-		if not state.themes.grove or not state.themes[state.theme] then
+	end
+	if keys ~= state.display.unlocked then
+		return nil
+	end
+	for id, count in reservations do
+		if count > (state.owned[id] or 0) then
 			return nil
 		end
+	end
+	local showrooms = Showrooms.decode(showroomData, state.discovered)
+	if not showrooms then
+		return nil
+	end
+	state.showrooms = showrooms
+	if version ~= 1 then
 		if
 			not integer(data.lastDailyDay, -1, 100000000)
 			or not integer(data.goalDay, -1, 100000000)
@@ -157,31 +175,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			return nil
 		end
 	end
-	state.slots = {}
-	keys = 0
-	local reservations: { [string]: number } = {}
-	for key, id in data.slots :: { [number]: unknown } do
-		keys += 1
-		if
-			not integer(key, 1, state.unlocked)
-			or typeof(id) ~= "string"
-			or (id ~= "" and not Catalog.byId[id])
-		then
-			return nil
-		end
-		state.slots[key] = id
-		if id ~= "" then
-			reservations[id] = (reservations[id] or 0) + 1
-		end
-	end
-	if keys ~= state.unlocked then
-		return nil
-	end
-	for id, count in reservations do
-		if count > (state.owned[id] or 0) then
-			return nil
-		end
-	end
+	Showrooms.sync(state)
 	return state
 end
 return Profile

@@ -6,7 +6,7 @@ remain unchanged. The reference image guides composition, not its example names,
 Current figure and packaging models remain procedural placeholders, not the illustrated reference art.
 
 Terminology note: this document describes the implemented candidate. Its **Room** navigation item,
-`ShowroomScreen`, palettes, and Social visit cards operate on the economic main-plot **Display**.
+`DisplayScreen`, palettes, and Social visit cards operate on the economic main-plot **Display**.
 They are legacy names, not the future non-economic Showrooms or Showroom Gallery described in
 [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
 
@@ -40,7 +40,8 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   rarity odds, fixed one-box price/action, and a secondary daily claim. Collection themes change
   only card/product/emblem/accent presentation. See [Shop implementation](SHOP_UI.md).
 - **Room (legacy label for Display):** a smaller bottom overlay leaves the upper main plot visible and undimmed. It shows
-  income, matching-set progress, four figure slots and a separate Room style palette drawer.
+  income, matching-set progress and six potential figure slots. Palette controls now belong to
+  cosmetic Showrooms within Social; Display has no room-style drawer.
   Choose/Change opens the owned picker; Display places into a chosen slot or asks for a slot.
   Remove, the existing fourth-slot unlock, palette prices and Return home remain available.
 - **Goals:** a compact neutral sheet pairs daily display progress/reward with a daily-box choice
@@ -131,3 +132,13 @@ it scrolls to and verifies the last card. Neither script is mapped into the game
     for stuck selection, duplicated GUIs, timers or Output errors.
 
 All Studio/device/multiplayer checks above remain **unrun by the coding agent**.
+
+
+## Display + Showroom foundation update
+
+The earning controls are now `DisplayScreen`, labeled Display and showing six potential slots.
+Palette controls moved to the cosmetic `ShowroomScreen`, mounted inside Social while a Gallery
+visit is active. Rooms use physical entrances; the panel supports anchor selection, discovered
+figure placement/removal and owned palettes, with read-only visitor controls. See the
+[implementation and Studio checklist](DISPLAY_SHOWROOM_IMPLEMENTATION.md). Global layout,
+Shop, Collection Book and opening behavior remain unchanged.

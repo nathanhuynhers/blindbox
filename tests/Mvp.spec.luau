@@ -35,10 +35,10 @@ check(Rules.mutate(state, intent("Place", 2, rare, 1), 0), "replace")
 check(Rules.available(state, common) == 1 and Rules.available(state, rare) == 0, "replacement reservations")
 Rules.settle(state, 2.25)
 check(state.coins == 308 and state.fraction == 0.25, "new rate applies only after replacement")
-state.slots = {rare, rare, rare}
+state.display.slots = {rare, rare, rare}
 state.owned[rare] = 3
 check(Rules.rate(state) == 21, "rare sum")
-state.slots = { common, sprout, "grove.acorn" }
+state.display.slots = { common, sprout, "grove.acorn" }
 check(Rules.rate(state) == 5.5, "common sum including themed bonus")
 for _, lower in {common, sprout, "grove.acorn"} do
 	for _, higher in {"grove.mushroom", "grove.moth", rare} do check(Rules.rates[higher] > Rules.rates[lower], "rarity order") end
@@ -53,7 +53,7 @@ check(Rules.mutate(state, intent("Redeem", state.revision, rare), 0), "chosen ra
 check(state.scrap == 0 and state.owned[rare] == 1 and state.discovered[rare], "redemption discovery")
 check(not Rules.mutate(state, intent("Redeem", state.revision, rare), 0), "no negative scrap")
 state.owned[common] = 3
-state.slots = {common, common, common}
+state.display.slots = {common, common, common}
 check(not Rules.mutate(state, intent("Recycle", state.revision, common), 0), "all copies reserved")
 check(Rules.mutate(state, intent("Remove", state.revision, nil, 2), 0), "remove")
 check(Rules.mutate(state, intent("Recycle", state.revision, common), 0), "removed copy recyclable")
@@ -67,14 +67,14 @@ state.scrap = 6
 check(not Rules.mutate(state, intent("Buy", 0), 0) and state.coins == 450, "purchase capacity")
 check(not Rules.mutate(state, intent("Redeem", 0, rare), 0) and state.scrap == 6, "redemption capacity")
 state.owned[common] = 199
-state.slots = {common, "", ""}
+state.display.slots = {common, "", ""}
 state.coins = Economy.coinLimit - 1
 Rules.settle(state, 10.5)
 check(state.coins == Economy.coinLimit and state.fraction == 0, "currency safety ceiling")
 Rules.mutate(state, intent("Buy", 0), 0)
 Rules.settle(state, 11.5)
 check(state.coins == Economy.coinLimit - 149, "resume without hidden accrual")
-local malformed: { unknown } = { false, 1, "Buy", {}, {action = "Buy", id = "x", revision = 0/0}, {action = "Buy", id = "x", revision = math.huge}, {action = "Buy", id = "x", revision = -1}, {action = "Buy", id = "x", revision = 0, price = 0}, {action = "Buy", id = "x", revision = 0, owner = 123}, {action = "Place", id = "x", revision = 0, figure = common, slot = 0/0}, {action = "Place", id = "x", revision = 0, figure = common, slot = 5}, {action = "Redeem", id = "x", revision = 0, figure = "fake"}, {action = "Buy", id = string.rep("x",65), revision = 0} }
+local malformed: { unknown } = { false, 1, "Buy", {}, {action = "Buy", id = "x", revision = 0/0}, {action = "Buy", id = "x", revision = math.huge}, {action = "Buy", id = "x", revision = -1}, {action = "Buy", id = "x", revision = 0, price = 0}, {action = "Buy", id = "x", revision = 0, owner = 123}, {action = "Place", id = "x", revision = 0, figure = common, slot = 0/0}, {action = "Place", id = "x", revision = 0, figure = common, slot = 7}, {action = "Redeem", id = "x", revision = 0, figure = "fake"}, {action = "Buy", id = string.rep("x",65), revision = 0} }
 for _, raw in malformed do check(Protocol.parse(raw) == nil, "malformed request rejected") end
 local session = Transactions.new(0)
 local buy = intent("Buy", 0)

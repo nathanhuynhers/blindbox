@@ -4,10 +4,11 @@
 >
 > This replaces the older use of "showroom" for the passive-income shelf. The two systems are now intentionally separate.
 
-This document defines approved product direction, not implemented behavior. The current candidate
-still has a three-to-four-slot earning area named `Room`/`Showroom` in parts of the UI and source,
-room palettes attached to that area, and same-server visits to players' main plots. Those systems
-must be migrated without implying that the six-slot Display or Showroom Gallery already ships.
+This document defines canonical product direction. The functional foundation is now implemented
+as a candidate: schema-v3 migration, three-to-six Display architecture, cosmetic collection
+Showrooms, lazy owner-specific Galleries and same-server visits. Native Studio acceptance remains
+pending. See [implementation, migration and manual tests](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
+Detailed future art, customization content and acquisition/monetization ideas below remain TBD.
 
 Related documents distinguish those states explicitly:
 
@@ -19,7 +20,7 @@ Related documents distinguish those states explicitly:
 
 ## Core Separation
 
-Pocket Grove has two different player-facing systems:
+The game has separate player-facing systems:
 
 ### Display
 
@@ -47,7 +48,7 @@ Showrooms should become one of the strongest long-term expression and cosmetic s
 
 ## Location
 
-The Display stays physically visible in the player's main Pocket Grove plot / flat-world area.
+The Display stays physically visible in the player's generic main plot / flat-world area.
 
 It should remain close to the core gameplay because the player frequently interacts with it after opening new figures.
 
@@ -64,9 +65,8 @@ The player should be able to look at the plot and immediately understand which f
 
 The existing prototype's four-slot limit is no longer the intended final structure.
 
-The three-to-six capacity change requires a new profile schema migration, protocol validation,
-world geometry, UI, public projection, and economy review. It must not be implemented as a client-only
-visual expansion or by silently extending persisted slot arrays.
+The implemented foundation uses an explicit schema-v3 migration, server validation and six physical
+positions. Only the legacy fourth-slot Coin unlock is available; slots 5/6 remain unassigned.
 
 ## Figure Rules
 
@@ -156,7 +156,10 @@ The exact Secret reward is not finalized yet, but the system should be designed 
 
 ## Figure Placement
 
-Players can display any owned collectible in a Showroom, including figures from collections other than the room's original collection.
+Players can present any permanently discovered collectible in a Showroom, including figures from
+other collections. Showroom references reserve zero physical copies: the same figure may earn in
+Display and appear in multiple cosmetic anchors/rooms without duplicates. Discovery is the
+authoritative cosmetic eligibility source, independent of current inventory quantity.
 
 A Pocket Grove Showroom is not restricted to Pocket Grove figures after it has been unlocked.
 
@@ -203,7 +206,7 @@ Do **not** place every owned Showroom as its own building on the player's main p
 
 That does not scale when the game has many collections.
 
-Instead, each player's main Pocket Grove plot should contain **one Showroom Gallery entrance/building**.
+Instead, each player's main plot should contain **one Showroom Gallery entrance/building**.
 
 The entrance represents all of that player's Showrooms.
 
@@ -324,7 +327,7 @@ Implementation should preserve migration compatibility with existing saved profi
 
 # 7. Existing Prototype Migration
 
-The current code uses "Showroom" to mean the four-slot passive-income room.
+Before the foundation refactor, the code used "Showroom" to mean the four-slot passive-income room.
 
 That terminology should be refactored.
 
@@ -336,9 +339,9 @@ Target terminology:
 
 Current room palettes should eventually belong to the Showroom customization system rather than the Coin-generating Display.
 
-Until that migration is implemented, existing palette ownership and equipped state remain valid
-saved player data. A future migration must preserve them or deliberately map them to equivalent
-Showroom cosmetics; it must not discard them as obsolete fields.
+Schema v3 preserves palette ownership and the equipped preference under Showrooms. Earned rooms
+inherit that preference, and owned palettes can be equipped per room. Display no longer has palette
+customization. New palette purchases are retired pending the future customization catalog.
 
 The existing Display functionality should be preserved while it is renamed/refactored.
 

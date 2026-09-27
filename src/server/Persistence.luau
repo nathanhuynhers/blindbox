@@ -79,7 +79,7 @@ function Persistence.load(
 				return nil
 			end
 			if old.token ~= "" and old.token ~= token and old.expires > wall then
-				reason = "Your showroom is open in another server. Please rejoin shortly."
+				reason = "Your profile is open in another server. Please rejoin shortly."
 				return nil
 			end
 		end

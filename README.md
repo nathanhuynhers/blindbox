@@ -8,9 +8,11 @@ collections, automatic display income, a fourth-slot unlock, three room palettes
 plaques, daily boxes/goals, persistent profiles, and same-server visits. A tabbed interface
 replaces the MVP menu; scrolling follows measured content height so every figure is reachable.
 
-In current product terminology, the implemented earning shelf is the **Display**. Planned
-non-economic customizable **Showrooms** and the Showroom Gallery are documented separately and
-are not implemented yet; see [Display and Showrooms](docs/DISPLAY_AND_SHOWROOMS.md).
+The earning **Display** now starts with three slots and supports six. Cosmetic **Showrooms**
+unlock automatically with collection completion and generate zero Coins or inventory reservations.
+Each plot has one entrance to an owner-specific, lazily created walkable **Showroom Gallery**,
+with same-server read-only visitors. Schema v3 preserves earlier profiles and palettes; see
+[implementation, migration and Studio checklist](docs/DISPLAY_SHOWROOM_IMPLEMENTATION.md).
 
 Open `RobloxWorkspace.rbxlx` in Studio to try it. Studio defaults to **unsaved preview**;
 live servers require a successful persistent load. See [full-game scope](docs/FULL_GAME.md),

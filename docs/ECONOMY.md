@@ -13,21 +13,22 @@ offline income, trading or escalating multipliers are implemented.
 | Grove rates | 1, 1.5, 2, 3, 4, 7 Coins/sec |
 | Tide rates | 1.25, 1.75, 2, 3.25, 4, 7.5 Coins/sec |
 | Rate bands | Common 1-2, Uncommon 3-4, Rare 6-8; validated at startup |
-| Display capacity | Starts at 3; one fourth-slot unlock costs 4,000 Coins |
+| Display capacity | Starts at 3; supports 6; legacy fourth-slot unlock costs 4,000 Coins |
 | Themed display | +1 Coin/sec once when at least 3 distinct displayed IDs share a collection |
-| Palettes | Woodland free; Evening Lilac and Ocean Glass cost 1,200 Coins each, then equip freely |
+| Palettes | Existing ownership preserved for Showrooms; new palette purchases retired (legacy cost was 1,200 Coins) |
 | Duplicates | Recycle one extra undisplayed copy for 1 Scrap; keep at least one owned copy |
 | Targeted redemption | 6 Scrap for any chosen figure from either collection |
 | Daily box | One free choice of collection per UTC day, no streak |
 | Daily goal | Display 3 distinct figures simultaneously; claim 100 Coins once per UTC day |
-| Completion | Permanent index recognition and derived room plaque for each completed collection |
+| Completion | Permanent discovery recognition, legacy plaque and automatic cosmetic collection Showroom |
 | Bounds | 200 total copies; 1 billion Coins; 1 million Scrap |
 
-These are implemented candidate values. The approved future Display supports at most six slots,
-but slot 4/5/6 unlock paths and prices are not finalized. The current 4,000-Coin fourth slot must
-not be extrapolated into prices for slots 5 and 6. Showrooms and Showroom placements generate zero
-Coins. Current palettes and plaques are legacy prototype cosmetics awaiting a migration decision;
-their existing purchases remain valid data.
+These are implemented candidate values. Display supports six slots, but final slot 4/5/6 unlock
+paths and prices are not finalized. The retained 4,000-Coin fourth slot must not be extrapolated
+into prices for slots 5 and 6. Showroom placements are cosmetic discovered-figure references: they
+generate exactly zero Coins, reserve zero inventory copies and never count toward Display bonuses
+or daily Display goals. Legacy palette ownership/preference is preserved under Showrooms in
+schema v3; see [migration](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
 
 `rate = sum(baseCoinsPerSecond for each occupied slot) + eligibleThemedBonus`
 
@@ -48,8 +49,7 @@ existing display satisfies it immediately. A failed reward action changes neithe
 balance. Save markers and rewards live in the same profile aggregate.
 
 A new player can open three funded boxes plus the optional daily free box. Even three weakest
-Commons fund an earned box in 50 seconds once displayed. Fourth-slot and palette costs provide
-bounded sinks, not endlessly compounding expansion. Test 10/30-minute sessions and returning
+Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. New palette shopping is deferred. Test 10/30-minute sessions and returning
 sessions for content exhaustion, value of both collections, idle dominance and stockpiling.
 Current content is twelve figures; do not disguise that limit with artificial grind.
 

@@ -24,20 +24,20 @@ purchase. A combined collection index shows silhouettes, discoveries, quantities
 
 A **Display** is the small utility system on the player's main plot. Only copies assigned to its
 active slots generate Coins. The approved long-term structure starts with three slots and supports
-up to six; unlock methods for slots 4-6 remain TBD. The current candidate implements only one
-fixed-price fourth-slot unlock. Selecting and replacing figures reserves copies without consuming
+up to six; unlock methods for slots 4-6 remain TBD. The current candidate supports all six slots and retains the existing
+fixed-price fourth-slot unlock; slots 5/6 have no acquisition method yet. Selecting and replacing figures reserves copies without consuming
 them. The interface shows individual and total Coins/sec. Three distinct figures from the same
 collection currently add a modest +1/sec once. Set bonuses never compound as multipliers.
 
 **Showrooms** are separate non-economic spaces for collection completion, customization, social
-visiting, and flexing. They generate zero Coins. Completing a collection should unlock its themed
+visiting, and flexing. They generate zero Coins. Completing a collection automatically unlocks its themed
 Showroom; separately acquired blank/custom rooms remain possible. One scalable Showroom Gallery
 entrance represents all rooms on the main plot. See [the canonical direction](DISPLAY_AND_SHOWROOMS.md).
 
-The current candidate's three room palettes and completion plaques belong to the older combined
-room/Display prototype. Their saved ownership must survive migration and should eventually feed
-Showroom cosmetics. Current same-server visits show public main-plot Displays; future gallery and
-Showroom visiting is not implemented. Guests never receive private balances or editing authority.
+Schema-v3 migration preserves old Display progress and palette ownership. Palettes now apply to
+Showrooms. Same-server visitors can enter owner-specific Galleries and unlocked rooms, with no
+private balances or editing authority. Showroom placements use permanent discovery, reserve zero
+copies and never generate Coins. See [implementation](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
 
 ## Income, duplicates and returning
 

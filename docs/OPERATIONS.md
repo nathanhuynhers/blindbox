@@ -5,15 +5,16 @@ verified in live Roblox servers. The agent has no Studio control connector and h
 new engine, mobile, multiplayer or real DataStore tests. Existing MVP playtesting is not proof
 that newly added features pass those tests.
 
-This checklist covers the implemented legacy main-plot **Display** and its visits. It does not
-test the planned non-economic Showrooms or Showroom Gallery in
-[Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+This checklist covers the existing economy/storage candidate. The implemented Display + Showroom
+foundation adds schema v3 and new runtime/UI paths. Also run the
+[Gallery, migration and multi-client checklist](DISPLAY_SHOWROOM_IMPLEMENTATION.md#verification-and-remaining-studio-acceptance).
+Replace old server writers when deploying v3; a v2-only code rollback cannot read new saves.
 
 ## Run now
 
 Open `RobloxWorkspace.rbxlx` and Play, or sync the source through Rojo. Studio starts in an
 explicitly labeled **unsaved preview** by default. All content, UI, expansion, daily rewards,
-palettes and same-server visits work in preview; leaving resets it. There is no paid content.
+owned palette selection and same-server visits work in preview; leaving resets it. There is no paid content.
 
 To test real saving, use a separate, privately published test experience. Enable **Experience
 Settings > Security > Enable Studio Access to API Services**, as described in [Roblox's data
@@ -52,14 +53,17 @@ that check; formatting/lint are not substitutes for it. Selene used its cached R
 The regression suite runs actual domain, request, schema and storage-transform code:
 
 - 8,878 economy/inventory/request assertions, including 1,000 mixed requests.
-- 86 full-game/persistence fault checks: expansion, palettes, daily/goal claims, migration, corrupt
+- 82 full-game/persistence fault checks: expansion, preserved palettes, daily/goal claims, migration, corrupt
   payloads, competing leases, stale writers, uncertain committed replies, retries and release.
 - Four scroll-content/lifecycle assertions with engine property/signal shims; these verify the
   sizing logic, not actual Roblox layout rendering.
 - Four invalid economy/catalog startup fixtures.
-- 1,292 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
+- 1,839 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
 - 1,732 opening-state/result checks: timing, all-phase skip/cancel, rapid inputs, reduced motion,
   confirmed NEW/duplicate metadata, delayed snapshots and unsupported/failed replies.
+- Display/Showroom migration, ownership, zero-reservation semantics, bonus isolation, intent abuse
+  and Gallery controller lifecycle suites; see the current verification record in
+  [the implementation report](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
 
 `tests/StudioScroll.client.luau` is an additional engine regression script. During Play, open
 Book with All figures selected and the detail view closed and paste its contents into the **client** Command Bar.
@@ -85,9 +89,9 @@ Run that script from the client Command Bar on each screen. These engine checks 
 2. **Core loop:** buy both box types, skip reveals, reserve/replace/remove copies, recycle only
    extras, redeem missing discoveries, and verify individual plus themed total rates. At the
    inventory cap, a daily box must remain claimable after space is made.
-3. **Progression:** buy the fourth slot once; try again and confirm no charge. Buy and switch
-   palettes; re-equipping owned palettes is free. Complete each collection and check its plaque.
-4. **Persistence:** in the isolated test store, open/place, unlock, recolor and claim rewards.
+3. **Progression:** buy the fourth slot once; try again and confirm no charge. Switch migrated owned
+   palettes inside Showrooms. Complete each collection and check its automatic Showroom unlock.
+4. **Persistence:** in the isolated test store, open/place, unlock, edit Showroom anchors/palettes and claim rewards.
    Wait for a successful autosave, stop/rejoin and compare balances/counts/slots/palette/claims.
    Reset character without resetting the profile. Verify no repeated starter grant or offline
    earnings. Disable API access for a fresh persistent join: play must be blocked, not reset.

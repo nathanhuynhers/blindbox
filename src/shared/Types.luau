@@ -15,6 +15,32 @@ export type Intent = {
 	figure: string?,
 	slot: number?,
 	choice: string?,
+	roomId: string?,
+	anchorId: string?,
+	runtimeId: string?,
+}
+export type Display = { unlocked: number, slots: { string } }
+export type Showroom = {
+	roomId: string,
+	sourceType: string,
+	sourceCollectionId: string?,
+	theme: string,
+	placements: { [string]: string },
+	customization: { [string]: string },
+}
+export type Showrooms = {
+	rooms: { [string]: Showroom },
+	palette: string,
+	palettes: { [string]: boolean },
+}
+export type GalleryView = {
+	ownerId: number,
+	ownerName: string,
+	runtimeId: string, -- Current hall or room generation; changes on room recreation.
+	roomId: string?,
+	room: Showroom?,
+	canEdit: boolean,
+	rooms: { { roomId: string, name: string } },
 }
 export type Profile = {
 	schemaVersion: number,
@@ -22,11 +48,9 @@ export type Profile = {
 	scrap: number,
 	owned: { [string]: number },
 	discovered: { [string]: boolean },
-	slots: { string },
+	display: Display,
+	showrooms: Showrooms,
 	step: number,
-	unlocked: number,
-	theme: string,
-	themes: { [string]: boolean },
 	lastDailyDay: number,
 	goalDay: number,
 	goalProgress: number,
@@ -41,6 +65,7 @@ export type PublicRoom = {
 	theme: string,
 }
 export type Snapshot = {
+	gallery: GalleryView?,
 	coins: number,
 	scrap: number,
 	owned: { [string]: number },
