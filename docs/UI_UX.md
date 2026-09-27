@@ -42,10 +42,12 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   locked slots, individual/total rates, matching-set progress, and place/replace/remove controls.
   Three starting slots expand horizontally to a current maximum of six. The existing 4,000 Coin
   fourth-slot unlock remains; slots five and six have no acquisition flow.
-- **Shelves:** the former Social navigation position opens a minimal owner editor with page
-  index/count, Previous/Next, 27 logical slot buttons, and a discovered-figure picker. Select a
-  slot, then place/replace/remove. Discovery is enough, even with zero copies. Edit near your own
-  shelves. Physical arrows are also usable by nearby visitors and change the page for everyone.
+- **Shelves:** the former Social navigation position opens a minimal owner editor with
+  visible indexes/count (including wrapped sequences such as 4,5,1 of 5), Previous/Next, three
+  visible-unit selectors, nine local slot buttons and a discovered-figure picker. Select a
+  persistent Shelf Unit, then a local row/slot to place/replace/remove. Discovery is enough, even with zero copies. Edit near your own
+  shelves. Physical arrows are also usable by nearby visitors and shift the shared viewport one unit for everyone.
+  Navigation is disabled when exactly three units are owned.
   A stale editor request is rejected if the shared carousel changed; the owner receives a fresh
   snapshot. No shelf customization or acquisition UI exists.
 - **Goals:** a neutral sheet retains daily display progress/rewards and daily-box choice.
@@ -113,14 +115,14 @@ it scrolls to and verifies the last card. Neither script is mapped into the game
    active position and a wider, recentered stand at the back; locked world pads are absent. Use an isolated six-slot test profile to
    inspect the full horizontal row. Place, replace and remove discovered figures in the shelf
    editor, including repeated figures and discoveries with zero copies. Confirm no income,
-   inventory or recycle changes. Test a migrated profile with multiple pages and both wraps.
+   inventory or recycle changes. Test a migrated profile with four/five owned units and both wraps.
 6. **Shop:** inspect Odds for each box **before** buying; compare all six percentages. Test enough
    and insufficient Coins, claim the daily box from Shop, then confirm Goals and both Shop cards
    show it claimed. Spam Open with delayed networking: one pending request/one granted figure.
 7. **Goals:** check 0/3, partial and 3/3 progress, available/claimed reward, free-box choice and
    collection completion progress. Duplicate displayed IDs must not falsely fill distinct-set progress.
 8. **Walk-in viewing:** use two clients with different plots. Walk between them without a
-   prompt or teleport. Verify owner DisplayName signs, shared page turns, stale edit rejection,
+   prompt or teleport. Verify owner DisplayName signs, shared one-unit turns, stale edit rejection,
    visitor edit denial, and no private inventory/balance data. Have the host leave and a new
    player join; the old content disappears and the slot is reusable without moving visitors.
 9. **Notifications/saves:** trigger success, insufficient-resource/proximity errors, delayed

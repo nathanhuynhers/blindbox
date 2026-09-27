@@ -28,6 +28,12 @@ vectorMeta.__index = function(value, key)
 	return nil
 end
 Engine.Vector3 = { new = vector }
+Engine.Vector2 = { new = function(x,y) return {X=x,Y=y} end }
+Engine.Enum = {
+	Material = {Wood="Wood",SmoothPlastic="SmoothPlastic"}, SurfaceType = {Smooth="Smooth"},
+	NormalId = {Bottom="Bottom",Front="Front"}, SurfaceGuiSizingMode = {FixedSize="FixedSize"},
+	Font = {GothamBlack="GothamBlack",GothamMedium="GothamMedium"},
+}
 -- Planar CFrame operations are sufficient for these upright plot fixtures.
 local frameMeta = {}
 local function frame(position, yaw)
@@ -37,6 +43,7 @@ local function rotate(v, yaw)
 	return vector(math.cos(yaw)*v.X + math.sin(yaw)*v.Z, v.Y, -math.sin(yaw)*v.X + math.cos(yaw)*v.Z)
 end
 frameMeta.__mul = function(a, b) return frame(a.Position + rotate(b.Position, a.yaw), a.yaw + b.yaw) end
+frameMeta.__add = function(a, b) return frame(a.Position + b, a.yaw) end
 frameMeta.__index = function(a, key)
 	if key == "LookVector" then return rotate(vector(0,0,-1), a.yaw) end
 	if key == "Inverse" then return function(self) return frame(rotate(vector(-self.Position.X,-self.Position.Y,-self.Position.Z), -self.yaw), -self.yaw) end end
@@ -56,6 +63,9 @@ local function node(class)
 		return nil
 	end })
 	function object:GetPivot() return self.pivot or frame(self.Position) end
+	function object:GetScale() return self.scale or 1 end
+	function object:ScaleTo(scale) self.scale = scale end
+	function object:GetBoundingBox() return self:GetPivot(), vector(2*self:GetScale(), 2*self:GetScale(), 2*self:GetScale()) end
 	function object:PivotTo(cf) self.pivot = cf; self.Position = cf.Position end
 	function object:GetChildren()
 		local children = {}; for _, child in Engine.nodes do if child.Parent == self then table.insert(children, child) end end

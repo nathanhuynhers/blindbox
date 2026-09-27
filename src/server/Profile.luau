@@ -6,6 +6,7 @@ local Rules = require(script.Parent.Rules)
 local Economy = require(script.Parent.Economy)
 local Shelves = require(script.Parent.Shelves)
 local Legacy = require(script.Parent.LegacyCosmetics)
+local LegacyShelfPages = require(script.Parent.LegacyShelfPages)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -20,7 +21,7 @@ local function fields(value: { [string]: unknown }, allowed: { string }): boolea
 end
 function Profile.encode(state: Types.State): Types.Profile
 	return {
-		schemaVersion = 4,
+		schemaVersion = 5,
 		coins = state.coins,
 		scrap = state.scrap,
 		owned = table.clone(state.owned),
@@ -42,14 +43,14 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	local version = data.schemaVersion
 	if
 		typeof(version) ~= "number"
-		or (version ~= 1 and version ~= 2 and version ~= 3 and version ~= 4)
+		or (version ~= 1 and version ~= 2 and version ~= 3 and version ~= 4 and version ~= 5)
 	then
 		return nil
 	end
 	local allowed = { "schemaVersion", "coins", "scrap", "owned", "discovered", "step" }
 	if version >= 3 then
 		table.insert(allowed, "display")
-		table.insert(allowed, if version == 4 then "shelves" else "showrooms")
+		table.insert(allowed, if version >= 4 then "shelves" else "showrooms")
 	else
 		table.insert(allowed, "slots")
 		if version == 2 then
@@ -152,8 +153,9 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			return nil
 		end
 	end
-	local shelves = if version == 4
+	local shelves = if version == 5
 		then Shelves.decode(data.shelves, state.discovered)
+		elseif version == 4 then LegacyShelfPages.migrate(data.shelves, state.discovered)
 		elseif version == 3 then Legacy.migrate(data.showrooms, state.discovered)
 		else Shelves.new()
 	if not shelves then

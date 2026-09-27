@@ -5,7 +5,7 @@ verified in live Roblox servers. The agent has no Studio control connector and h
 new engine, mobile, multiplayer or real DataStore tests. Existing MVP playtesting is not proof
 that newly added features pass those tests.
 
-This checklist covers the economy/storage candidate and the schema-v4 open Plot/Shelf
+This checklist covers the economy/storage candidate and the schema-v5 open Plot/Shelf
 redirection. Also run the [plot, migration and multiplayer checklist](PLOT_SHELF_IMPLEMENTATION.md).
 Replace older server writers when deploying v4; code that supports only v3 cannot read new saves.
 
@@ -89,11 +89,12 @@ Run that script from the client Command Bar on each screen. These engine checks 
    extras, redeem missing discoveries, and verify individual plus themed total rates. At the
    inventory cap, a daily box must remain claimable after space is made.
 3. **Progression:** buy the fourth slot once; try again and confirm no charge. Finish each
-   collection and verify completion tracking without granting a room, page or new reward.
+   collection and verify completion tracking without granting a room, Shelf Unit or new reward.
 4. **Persistence:** in the isolated test store, open/place, unlock, edit shelves and claim rewards.
-   Wait for a successful autosave, stop/rejoin and compare balances/counts/Display/shelf pages/claims.
-   Verify v1/v2/v3 fixtures migrate to v4, including all v3 cosmetic references across page boundaries.
-   A different physical plot must show the same saved exhibit. Visible page resets to one. Reset
+   Wait for a successful autosave, stop/rejoin and compare balances/counts/Display/Shelf Units/claims.
+   Verify v1/v2/v3/v4 fixtures migrate to v5, including every v3 reference and exactly three
+   units per retired v4 page. Confirm dormant legacy overflow survives save/reload.
+   A different physical plot must show the same saved exhibit. The viewport resets to units 1,2,3. Reset
    character without resetting the profile. Verify no repeated starter grant or offline earnings.
    Disable API access for a fresh persistent join: play must be blocked, not reset.
 5. **Failures:** use the deterministic injected failures first, then test interruption/shutdown
@@ -108,12 +109,12 @@ Run that script from the client Command Bar on each screen. These engine checks 
    visitor and from a distance. Confirm rejection. Have the owner leave: content is cleaned up,
    visitors remain in the shared world, and a new owner can reuse the slot.
 8. **Abuse/recovery:** spam malformed payloads, stale revisions, request-ID reuse, fake prices,
-   unknown IDs and spoofed plot/page/slot identities. Confirm no handler crashes or balance changes.
+   unknown IDs and spoofed plot/Shelf Unit/local slot identities. Confirm no handler crashes or balance changes.
    Delay replies and retry the same ID; purchases and unlocks must not run twice.
 9. **Device/performance:** target 30 FPS on representative mobile hardware, 60 FPS on desktop,
    and a 24-player server cap. These are targets, not measured results. Check mouse/touch/gamepad,
    reading sizes, reduced motion, respawn, repeated join/leave and a 30-minute soak. Measure 24 populated plots with up to 27 visible shelf figures plus six Display figures each;
-   verify targeted updates and no growth across repeated joins, leaves and page turns.
+   verify targeted updates and no growth across repeated joins, leaves and carousel turns.
 10. **Pacing:** observe returning sessions, weak/common-only luck, duplicates and completion.
     Record time to next box, fourth slot; ensure twelve-figure content is enjoyable
     without adding artificial grind. Hand notes and server Output are sufficient for this build.

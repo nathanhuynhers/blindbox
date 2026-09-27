@@ -21,9 +21,9 @@ function Protocol.parse(raw: unknown): Types.Intent?
 				and key ~= "figure"
 				and key ~= "slot"
 				and key ~= "choice"
-				and key ~= "pageId"
+				and key ~= "shelfId"
 				and key ~= "shelfSlotId"
-				and key ~= "pageRevision"
+				and key ~= "carouselRevision"
 			)
 		then
 			return nil
@@ -61,27 +61,31 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		or action == "ShelfRemove"
 		or action == "ShelfNext"
 		or action == "ShelfPrevious"
-	local pageId, shelfSlotId, pageRevision = data.pageId, data.shelfSlotId, data.pageRevision
+	local shelfId, shelfSlotId, carouselRevision =
+		data.shelfId, data.shelfSlotId, data.carouselRevision
 	if isShelf then
 		if
-			typeof(pageId) ~= "string"
-			or #pageId > 64
-			or not string.match(pageId, "^page:[%w_-]+$")
-			or typeof(pageRevision) ~= "number"
-			or pageRevision < 0
-			or pageRevision > 9007199254740991
-			or pageRevision % 1 ~= 0
+			typeof(carouselRevision) ~= "number"
+			or carouselRevision < 0
+			or carouselRevision > 9007199254740991
+			or carouselRevision % 1 ~= 0
 		then
 			return nil
 		end
 		if action == "ShelfPlace" or action == "ShelfRemove" then
-			if typeof(shelfSlotId) ~= "string" or not ShelfConfig.visible(shelfSlotId) then
+			if
+				typeof(shelfId) ~= "string"
+				or #shelfId > 64
+				or not string.match(shelfId, "^shelf:[%w_-]+$")
+				or typeof(shelfSlotId) ~= "string"
+				or not ShelfConfig.visible(shelfSlotId)
+			then
 				return nil
 			end
-		elseif shelfSlotId ~= nil then
+		elseif shelfSlotId ~= nil or shelfId ~= nil then
 			return nil
 		end
-	elseif pageId ~= nil or shelfSlotId ~= nil or pageRevision ~= nil then
+	elseif shelfId ~= nil or shelfSlotId ~= nil or carouselRevision ~= nil then
 		return nil
 	end
 	local needsFigure = action == "Place"
@@ -118,9 +122,9 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		return nil
 	end
 	local intent: Types.Intent = {
-		pageId = if typeof(pageId) == "string" then pageId else nil,
+		shelfId = if typeof(shelfId) == "string" then shelfId else nil,
 		shelfSlotId = if typeof(shelfSlotId) == "string" then shelfSlotId else nil,
-		pageRevision = if typeof(pageRevision) == "number" then pageRevision else nil,
+		carouselRevision = if typeof(carouselRevision) == "number" then carouselRevision else nil,
 		action = action,
 		choice = if typeof(choice) == "string" then choice else nil,
 		id = id,
@@ -136,8 +140,8 @@ function Protocol.same(a: Types.Intent, b: Types.Intent): boolean
 		and a.figure == b.figure
 		and a.slot == b.slot
 		and a.choice == b.choice
-		and a.pageId == b.pageId
+		and a.shelfId == b.shelfId
 		and a.shelfSlotId == b.shelfSlotId
-		and a.pageRevision == b.pageRevision
+		and a.carouselRevision == b.carouselRevision
 end
 return Protocol

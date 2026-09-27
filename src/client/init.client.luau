@@ -32,8 +32,9 @@ ui = Interface.create(function(action: string, figure: string?, slot: number?, c
 		revision = state.revision,
 	}
 	if string.sub(action, 1, 5) == "Shelf" then
-		intent.pageId = state.shelves.pageId
-		intent.pageRevision = state.shelves.pageRevision
+		intent.shelfId = choice
+		intent.choice = nil
+		intent.carouselRevision = state.shelves.carouselRevision
 		intent.shelfSlotId = if slot then ShelfConfig.slots()[slot] else nil
 		intent.slot = nil
 	end

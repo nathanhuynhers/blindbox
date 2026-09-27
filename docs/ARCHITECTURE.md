@@ -4,8 +4,8 @@ The user accepted the MVP and authorized the full-game roadmap. The new candidat
 that feature set; real storage, device and multi-client acceptance are still pending. See
 [scope](FULL_GAME.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
 
-The active world uses fixed open Player Plots, earning Display and cosmetic Shelves/Shelf Pages.
-See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-v4 migration](DATA_MODEL.md).
+The active world uses fixed open Player Plots, earning Display and cosmetic Shelf Units.
+See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-v5 migration](DATA_MODEL.md).
 The former separate Gallery/room runtime has been removed, not retained as an alternate path.
 
 ## Server ownership
@@ -15,21 +15,21 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `PlotConfig`/`PlotSlots`: 24 finite locations; unique pending/active allocation and explicit release.
 - `World`/`PlotGeometry`: neutral shared ground, fixed open pads, reusable layout/primitive helpers.
 - `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
-  proximity checks, runtime visible-page state and connection/content teardown.
+  proximity checks, runtime carousel start index and connection/content teardown.
 - `FigureSlots`: per-slot figure cache using existing FigureModel assets; replace only changed IDs.
-- `Shelves`: discovered-reference rules, owned-page validation, stable slot IDs, runtime carousel
-  revision/wraparound/cooldown and bounded page projections. Zero economy/inventory reservations.
+- `Shelves`: discovered-reference rules, visible owned-unit validation, stable slot IDs, runtime carousel
+  revision/wraparound/cooldown and bounded three-unit projections. Zero economy/inventory reservations.
 - `Rules`/`Economy`: unchanged Display rate/bonus/reservations, purchases, inventory and daily logic.
 - `Protocol`/`Transactions`: allowlisted typed fields/actions, token bucket, profile revision and
-  exact retry receipts. Shelf edits additionally require current page ID/revision and owner access.
-- `Profile`/`LegacyCosmetics`: schema-v4 validation/deep copies and decode-only v1-v3 conversion.
-  LegacyCosmetics contains no runtime rooms or completion grants.
+  exact retry receipts. Shelf edits additionally require visible persistent Shelf Unit ID and carousel revision and owner access.
+- `Profile`/`LegacyCosmetics`/`LegacyShelfPages`: schema-v5 validation/deep copies and decode-only
+  v1-v4 conversion. Legacy modules contain no runtime rooms, browsing or completion grants.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
 
 Only `Intent`, `State` and `RequestState` remotes remain. No owner/plot identity comes from a
 mutation request. Requests resolve to the callback Player's session. Display placement checks
-that player's own plot/proximity. Shelf edits require owned page, configured visible slot,
+that player's own plot/proximity. Shelf edits require a visible owned unit ID, configured local slot,
 discovery, profile revision and carousel revision; A-B-A navigation invalidates stale edits.
 Physical arrows are server-bound to a plot, validate living character/distance/session, and use
 a shared per-plot cooldown. They change only runtime visibility, not saved progression.
@@ -53,7 +53,7 @@ Leaving/shutdown attempts a bounded final save/release, with lease expiry as cra
 `init.client.luau` queues one mutation at a time and retries the same ID after delayed replies.
 It reconciles ordered owner snapshots and exposes pending-request state to the UI. `Interface`
 composes dedicated HUD, navigation, book/details, shop, Display controls (`DisplayScreen`),
-goals and `ShelvesScreen`, a minimal owner editor with current-page controls and a discovered
+goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and carousel controls and a discovered
 figure picker. There is no visit directory or teleport callback.
 `UITheme`, `Widgets`, `UIIcons` and `UIPreview` provide common tokens, touch controls, progress,
 original icon shapes and static asset slots. `UIState` derives read-only presentation metadata;
@@ -82,7 +82,7 @@ No opening-specific remotes or server logic were introduced.
 There are no simulated visitor actors. Real players walk into open plots. Character respawn
 returns only that character to its assigned plot; it does not reset shelves or require visit
 sessions. Leaving destroys owner content and connections and releases the slot. Visitors remain
-on the shared ground safely. Plot allocation/coordinates and page visibility are not saved.
+on the shared ground safely. Plot allocation/coordinates and carousel visibility are not saved.
 
 Shared Catalog/Types/FigureModel contain only public definitions, contracts and original
 procedural art. Figure identity is a quantity stack; trading/unique variants are not implemented.
@@ -102,14 +102,14 @@ layout fork. Buy still uses the existing server-authoritative intent and opening
 
 ## Public/private boundary and rendering
 
-Only owner-labelled geometry, active Display figures/rates and visible shelf figures/page signage
-are public. Owner state events never go to guests. Each owner gets only their own visible page
-projection, not all pages. The server sends no private balances, inventory, discovery or progression
+Only owner-labelled geometry, active Display figures/rates and visible shelf figures/carousel signage
+are public. Owner state events never go to guests. Each owner gets only three visible Shelf Units with IDs, indexes and local placements,
+owned count, carousel revision and navigation availability. The server sends no private balances, inventory, discovery or progression
 to visitors. Visitors may turn physical shelf arrows but cannot mutate the owner's saved state.
 
 No per-frame plot work is added. Static geometry persists for the session. Rendering compares
-slot figure IDs on successful mutations/page changes; one changed figure creates one replacement,
-and unchanged IDs can be reused between pages. The visible load is bounded at 27 cosmetic figures
+slot figure IDs on successful mutations/carousel changes; one changed figure creates one replacement,
+and unchanged IDs can be reused between viewport positions. The visible load is bounded at 27 cosmetic figures
 plus at most six Display figures per player. Native 24-player/mobile performance is unmeasured.
 
 ## Preserved tooling and evidence

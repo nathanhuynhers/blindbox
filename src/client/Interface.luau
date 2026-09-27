@@ -162,18 +162,6 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 	local stepLimit = Instance.new("UISizeConstraint")
 	stepLimit.MaxSize = Vector2.new(320, 48)
 	stepLimit.Parent = nextStep.button
-	local billboard = Instance.new("BillboardGui")
-	billboard.Name = "DisplayRate"
-	billboard.Size = UDim2.fromOffset(190, 38)
-	billboard.StudsOffset = Vector3.new(0, 4, 0)
-	billboard.AlwaysOnTop = true
-	billboard.MaxDistance = 45
-	billboard.Parent = gui
-	local rate = W.label(billboard, "", 38, 16)
-	rate.BackgroundColor3 = Theme.paper
-	rate.BackgroundTransparency = 0.12
-	rate.TextXAlignment = Enum.TextXAlignment.Center
-	W.corner(rate, 14)
 	local function gamepad(): boolean
 		return string.find(Input:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
 	end
@@ -262,17 +250,6 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 			for _, page in pages do
 				page.update(state)
 			end
-			local plots = workspace:FindFirstChild("PlayerPlots")
-			local plot = if plots
-				then plots:FindFirstChild(tostring(Players.LocalPlayer.UserId))
-				else nil
-			local displayArea = if plot then plot:FindFirstChild("DisplayArea") else nil
-			billboard.Adornee = if displayArea and displayArea:IsA("BasePart")
-				then displayArea
-				else nil
-			billboard.Enabled = displayArea ~= nil and not focused and not opened
-			local income = state.rate
-			rate.Text = string.format("%g Coins/sec", income)
 		end
 	end
 	navigate = function(id: string)

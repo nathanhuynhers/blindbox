@@ -17,16 +17,19 @@ Display starts with three slots and extends horizontally up to six. Only reserve
 earn, with the existing +1/sec bonus for three distinct figures from one collection. Slot 4 keeps
 its legacy Coin unlock; slots 5/6 acquisition remains TBD. No offline income or visitor payouts.
 
-Shelves use discovered figures cosmetically and reserve zero copies. Three units with three rows
-of three figures show the selected shelf page (27 provisional positions). Additional owned pages
-reuse the units. Shared physical arrow navigation wraps; nearby visitors may turn pages but cannot
-edit. Page acquisition/pricing and shelf customization are future work. Completion grants no new
+Shelves use discovered figures cosmetically and reserve zero copies. Players start with three persistent
+Shelf Units, each with three rows of three positions (nine per unit, 27 starting positions).
+Exactly three physical structures show the viewport; each turn shifts one owned unit and wraps.
+Navigation is disabled with three owned units. Visitors may browse but cannot edit. Future
+acquisition adds individual units without growing the plot. No product-design maximum exists;
+acquisition/pricing and shelf customization are future work. Completion grants no new
 reward: rewards are unresolved.
 
 Duplicate recycling still consumes one free extra copy for one Scrap while retaining the last
 copy; six Scrap redeems a chosen figure. Shelf use never blocks this. Daily free boxes and the
 100-Coin daily Display goal retain existing UTC rules. Starter Coins are granted only to a new
-profile. Schema-v4 migration preserves valid prior progress and converts v3 cosmetic placements.
+profile. Schema-v5 migration preserves prior progress, splits each retired v4 page into three units
+and retains v3 cosmetic references.
 
 The current map is neutral placeholder geometry: fixed open plots, Display stands, shelves,
 owner signs and arrow controls. Collections and Shop retain their existing UI/art. There is no

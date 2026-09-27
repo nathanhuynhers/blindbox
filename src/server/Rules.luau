@@ -52,7 +52,7 @@ Rules.rates = rates
 Rules.odds = odds
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 4,
+		schemaVersion = 5,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		lastDailyDay = -1,

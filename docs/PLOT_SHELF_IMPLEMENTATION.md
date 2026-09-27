@@ -1,250 +1,170 @@
-# Player Plot and Shelf implementation report
+# Shelf Unit architecture correction and verification
 
-Implemented September 27, 2026 as a functional placeholder candidate. This replaces the
-Showroom/Gallery architecture completely. Native Studio playtests have **not** been run by the
-agent. [Canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [schema](DATA_MODEL.md) describe the
-current behavior; final visual design and release acceptance remain pending.
+Implemented September 27, 2026. Current schema is **5**. This report covers the correction to
+individually persistent Shelf Units and a three-shelf viewport. It supersedes the earlier v4
+Shelf Page implementation report. Native Studio acceptance has **not** been run by the agent.
+See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.md).
 
-## Focused layout and interaction correction
+## Persistent model and runtime behavior
 
-This follow-up preserves schema v4, migration, plot size/allocation, page data, income and owner
-editor behavior. Only runtime composition, physical carousel input, related tests and current
-layout guidance changed. No files were added or removed. Modified files:
+- `shelves.units[]` is an ordered array of `{id, placements, customization}`. Fresh players own
+  exactly three units with stable IDs `shelf:1` through `shelf:3`. Placements use local
+  `row:R/slot:S` keys; each unit currently has three rows of three positions. Customization is
+  validated as empty and belongs to the persistent unit.
+- `ShelfConfig` defines starting/visible unit counts, rows and slots. Future acquisition adds
+  individual units, currently nine positions at a time. Policy is `Unassigned`; no prices,
+  products, purchase flow or product-design maximum were introduced. Server decoder guards
+  (10,000 units, 20,000 placements, 10,000 dormant records) prevent excessive allocation and
+  are documented separately from progression design.
+- `Shelves.View = {startIndex, revision, lastTurn}` is runtime-only. It starts at 1 each join.
+  Next increments and Previous decrements by **one**, with wrapping and the shared 0.5-second
+  cooldown. At most three owned units fixes the initial order and disables world/editor arrows.
+- Three permanent physical structures (`ShelfPosition_1..3`) act as viewport positions. Position
+  P renders owned index `(startIndex + P - 2) % ownedCount + 1`. Their `ShelfId` attributes expose
+  the currently rendered persistent IDs. Local placements map to runtime-only FigureSlots keys
+  `viewport:P/row:R/slot:S`; these are never saved. No furniture is added when capacity grows.
+- The world and owner snapshots share the same visible trio. Owner snapshots contain only
+  `{ownedCount, visible = {{id, index, placements}, ...}, carouselRevision, canNavigate}`.
+  Hidden units and dormant migration data are excluded. Existing FigureSlots caching replaces
+  only changed figures at physical anchors; rendering remains at most 27 shelf figures per plot.
+- The minimal Shelf editor selects one of three visible units, then one of nine local slots and
+  a discovered figure. It labels wrapped indexes explicitly, e.g. “Viewing shelves 4, 5, 1 of 5”.
+  Requests target `shelfId` plus `shelfSlotId` and require current profile/carousel revisions,
+  visible ownership, discovery and proximity. A-B-A browsing invalidates stale edits.
+- Visitors can click/tap the same world controls and see the same trio; they cannot edit or
+  receive private profile state. Existing 160-stud detector reach, server plot-area/living-actor
+  checks, independent close-range editor validation and cleanup remain in place.
+- Shelves reserve/consume zero copies, generate zero Coins and do not affect Display bonuses,
+  recycling or daily goals. Repeated discoveries and simultaneous Display/shelf use still work.
 
-- `src/server/PlayerPlot.luau`
-- `src/server/PlotGeometry.luau`
-- `src/server/FigureSlots.luau`
-- `tests/PlotEngine.luau`
-- `tests/Plots.spec.luau`
-- `docs/PLAYER_PLOTS_AND_SHELVES.md`
-- `docs/PLOT_SHELF_IMPLEMENTATION.md`
-- `docs/UI_UX.md`
+| Owned count | Successive Next viewports |
+| --- | --- |
+| 3 | 1,2,3; navigation disabled |
+| 4 | 1,2,3 → 2,3,4 → 3,4,1 → 4,1,2 → 1,2,3 |
+| 5 | 1,2,3 → 2,3,4 → 3,4,5 → 4,5,1 → 5,1,2 → 1,2,3 |
 
-Display pads/labels/anchors now exist only for unlocked slots. At capacities 3/4/5/6, X offsets
-are respectively `-12,0,12`; `-18,-6,6,18`; `-24,-12,0,12,24`; and `-30,-18,-6,6,18,30` studs.
-Stand widths are 38/50/62/74 studs. All share center X=0, back Z=36 and figure-anchor Y=5 relative
-to plot origin; the support is 3 high and 12 deep. Existing pads and models are repositioned
-without changing logical slots, model pivot offsets or rates. No locked-pad placeholders exist.
+Previous traverses the same sequence in reverse. Contents follow the persistent unit ID through
+all three physical positions. Browsing changes no saved content, balance or profile revision.
 
-Shelves occupy entrance-relative left: X=40, unit centers Z=-28/-4/20, figure fronts along -X.
-The entrance faces +Z. Boards/supports and all 27 anchors share that orientation. Arrows above
-the end units are 1.5 x 6 x 10 studs with 4 x 10 x 16 transparent, non-colliding hitboxes; the page
-indicator is above the middle unit. Center and right remain open, with no plot-size change.
+## Migration and data preservation
 
-Native [ClickDetector input](https://create.roblox.com/docs/reference/engine/classes/ClickDetector)
-handles desktop left-clicks and mobile taps through the same server MouseClick callback. Reach
-is 160 studs; server validation independently enforces the active plot, attached hitbox/detector,
-living character, X/Z footprint plus 8 studs, and vertical offset at most 20 studs. The existing
-session-readiness guard and shared 0.5-second cooldown still apply. Target and direction are
-captured by the server, not submitted owner IDs. Client detector reach is not treated as a
-security boundary, following [Roblox's guidance](https://create.roblox.com/docs/scripting/security/client-server-boundary).
-Single-page controls are inactive. Page turns reuse unchanged shelf models and never persist.
+The decode-only `LegacyShelfPages` module validates the retired v4 representation and converts
+each source page into exactly three units in source array order. Old page P, logical unit U
+maps to index `(P-1)*3+U`, ID `shelf:<index>`; `unit:U/row:R/slot:S` becomes `row:R/slot:S`.
+One old page becomes three units; two become six, including empty units and empty positions.
+Duplicates, zero-copy discoveries, Display capacity/placements, currency, inventory, discovery,
+onboarding and daily state survive. The decoder does not mutate input; v5 round trips are stable.
 
-Owner editing still requires ownership, inside-plot position, distance within 16 studs of the
-relocated shelf plane, valid discovery/slot/page and profile/carousel revisions. It uses the
-unchanged Shelves mutation path; long-range navigation cannot grant editing access.
+Per the user's explicit choice, valid old logical units above 3 remain as dormant
+`legacyOverflow` records `{sourceId, logicalUnit, placements}`. They retain retired source IDs
+and all references without granting extra shelves. Records are sorted deterministically,
+validated, deep-copied through saves and excluded from rendering, editing and client projections.
+Valid hidden row/slot coordinates within units 1..3 remain attached to their new Shelf Unit.
 
-Follow-up Studio checks (not run by the agent): inspect all four Display capacities, verify
-figures stay attached while expanding, and check shelf fronts from the entrance/center. With
-two clients and a multiple-page test profile, click from opposite corners, tap on mobile, test
-both wraps and spam cooldown, and reject clicks from outside the plot margin. Test that owners
-can navigate from far away but can edit only near shelves, and visitors cannot edit at any range.
-Leave/rejoin and verify detector/hitbox cleanup and page reset. Review distance legibility/tap
-target comfort on real devices. Display, shelf and plot visuals remain generic placeholders.
+The v3 adapter retains its deterministic room-ID/numeric-anchor order and frozen packing into
+the retired v4 intermediate representation, then immediately converts to units. For example,
+42 references become six units, including trailing empty capacity. No old room runtime or
+completion grant returns. v1/v2 profiles receive three empty units and retain their existing
+progress/defaults. Unknown fields/customization, corrupt or future schemas and excessive data
+fail closed without resetting profiles. Storage leases, save generations and failure behavior
+are unchanged; v5 deployment requires compatible decoding across replacement servers.
 
-## Architecture and runtime
+## Preserved Display and physical design
 
-- **Fixed plots:** `PlotConfig` defines 24 locations in a six-column grid, each 100 by 96 studs
-  with 20-stud gaps. `PlotSlots` reserves the first available location before loading a profile;
-  duplicate reservations and full-server joins are rejected. Failed/aborted loads release their
-  reservations when loading returns. Departures disconnect character/plot callbacks, destroy
-  owned content and release the slot. Set the Roblox experience player cap to match this limit.
-  A DisplayName sign identifies each owner. Join/respawn places that character inside its own plot.
-  Plot index and coordinates are session-only. Visitors walk between open plots.
-- **Horizontal Display:** three starting slots, six current maximum, one row at constant Y/Z.
-  Unlocking capacity creates only the newly active position, recenters the row and widens its
-  existing stand at the back. The existing fourth-slot 4,000-Coin unlock and server rate,
-  themed bonus, copy reservation and recycle rules remain. Slots 5/6 acquisition is unassigned.
-- **Shelves:** three fixed physical units, three rows each, three positions per row. Counts
-  come from `ShelfConfig`. Every fresh profile owns one page; additional stored pages reuse
-  those same units. Pages have no permanent count cap, and no acquisition or pricing flow.
-- **Stable identity:** ordered pages have unique IDs such as `page:1`. Placements use keys
-  such as `unit:2/row:3/slot:1`, independent of geometry/world coordinates. Decoding preserves
-  structurally valid keys outside current geometry; only configured visible slots can be edited.
-  Each page has an empty, validated customization map for later versioned extension.
-- **Carousel:** Previous/Next use `(index - 1 + direction) % pageCount + 1`, so both ends wrap.
-  All viewers see the same server-rendered page. Page index/revision/cooldown are runtime-only,
-  starting at page 1 each join. Physical click/tap controls work across the plot for owners and visitors;
-  a shared half-second cooldown bounds turns. Owner UI also supports navigation near shelves.
-- **Editing:** the minimal Shelves screen replaces the old Social navigation position. It shows
-  page/count, logical slots, selected slot and discovered-figure picker, with place/replace/remove.
-  Discovery suffices with zero owned copies; repeated figures and simultaneous Display use work.
-  Shelves earn zero Coins, reserve zero copies and contribute no bonus or daily Display progress.
-- **Permissions:** remote callbacks select the caller's own session. No owner/plot ID is accepted.
-  Edits require owner identity, proximity, known discovered figure, valid owned current page and
-  visible slot, matching profile/page revisions, and existing rate/receipt validation. A page
-  changed away and back still invalidates a stale edit. Visitors can only view and turn the
-  exhibit; private inventories, balances, discoveries and progression never go to other clients.
-  Only the owner's current page is included in its private snapshot, not the entire page list.
-- **Performance/lifecycle:** static geometry is cached. Figure rendering compares IDs per slot,
-  replacing only changed models and reusing matching figures between pages. Visible models are
-  bounded by 27 shelf positions plus six Display positions per plot, regardless of page count.
-  No per-frame plot loop was added. Connections, owned models and pending spawn tasks are cleaned
-  up on departure. Actual 24-player/mobile rendering cost still requires measurement.
+The earlier concept-board Display is unchanged by this correction: one continuous off-white
+counter, oak base, recessed charcoal plinth, broad warm back panel, end supports, canopy,
+warm diffuser and integrated DISPLAY/rate sign. The existing 14 native Parts resize for
+capacities 3/4/5/6 to counter widths 28/36/44/52 studs, centered at X=0/Z=36, top Y=3 and
+8-stud figure spacing. Display figures retain 2x scale and bounding-box bottom alignment;
+shelf figures remain at their existing scale. The sign still uses the actual server rate.
 
-The only remotes are Intent, State and RequestState. No Gallery entrances, hallway, pagination,
-room instances, portals, visit tokens/sessions, Showroom editor, palette UI or completion room
-grants remain. Simulated visitor actors tied to the former plot presentation were retired.
-Shop, Collections, opening presentation, active balance values, Rojo mappings/pins, packages and
-storage namespace/lease implementation remain unchanged.
-
-## Schema v4 and legacy conversion
-
-Valid v1 and v2 profiles migrate directly to v4 with one empty shelf page. Valid v3 profiles
-retain Coins, Scrap, owned/discovered figures, Display capacity/placements, onboarding and daily
-state. Completion stays derivable from discoveries. No collection-completion reward is invented;
-future completion rewards are **TBD**.
-
-`LegacyCosmetics` is decode-only compatibility, not a retained runtime. It validates the old
-palette/room structure and figure eligibility, sorts room IDs lexicographically, then reads each
-room's `figure_1` through `figure_6`. Every reference, including repeated figures and discoveries
-with zero copies, is packed into a frozen 3-by-3-by-3 layout. Reference 28 starts page 2, and so on.
-Pages are created only as needed to preserve placements, with a minimum of one. Migration never
-deduplicates or overwrites those references. Empty rooms grant no additional pages.
-
-Old room identity/origin/ownership, palette preference/ownership, themes and empty customization
-have no new equivalent and are retired without refunds or speculative paid entitlements. Unknown
-nonempty customization was invalid under v3 and still blocks loading. All invalid/unsupported
-schemas fail closed; they never reset to defaults. Encoding writes v4, and decoding v4 preserves
-the existing page identities and placements, making subsequent round trips idempotent. Runtime
-plot assignment and visible-page state are excluded. Existing storage leases and deep snapshot
-copies protect the aggregate. Deploying v4 requires replacing older writers; rollback code must
-retain v4 support. No production store or published experience was changed during this work.
+`DisplayFixture`, `FigureSlots`, Display UI, economy, plot allocation/configuration and the
+engine shim match the pre-correction baseline. PlayerPlot changes are limited to shelf identity,
+projection, labels and control availability. Physical shelf geometry, the open 100-by-96 plot,
+left-side shelf locations, control geometry and Display rendering remain intact. Completion
+rewards, shelf acquisition/customization, final art and carousel animation remain unresolved.
 
 ## Verification actually run
 
-- Provisioned exact pinned tools with `rokit install --no-trust-check`; `wally install` succeeded
-  with zero dependencies. No tool version, project property or dependency was changed.
+- Provisioned exact pinned tools with Rokit and resolved the empty Wally dependency set.
 - `stylua src` and `stylua --check src`: pass.
-- `selene src`: 0 errors, 0 warnings, 0 parse errors. Network API refresh was unavailable;
-  Selene used the existing Roblox API cache.
-- Rojo 7.7.0 sourcemap generation and `rojo build default.project.json -o RobloxWorkspace.rbxlx`:
-  pass. Build and sourcemap remain ignored generated outputs.
-- Luau Language Server 1.70.0 CLI analysis with the generated sourcemap and local Roblox
-  PluginSecurity definitions: no source diagnostics. CLI reports its normal file-watcher
-  registration warning; that is not a source diagnostic.
-- `git diff --check` and local file-link checks for all changed/new Markdown: pass.
-- `python tests/run.py build/tools/luau/luau.exe`: all suites pass, 13,461 checks/fixtures total:
+- `selene src`: zero errors, warnings or parse errors. Roblox API refresh was unavailable;
+  Selene used the existing cached Roblox definitions successfully.
+- `rojo sourcemap default.project.json -o sourcemap.json`: pass.
+- `rojo build default.project.json -o RobloxWorkspace.rbxlx`: pass with pinned Rojo 7.7.0.
+- Luau Language Server analysis of all `src`, with the Rojo sourcemap and Roblox definitions:
+  zero source diagnostics. Its standalone watcher-registration warning is informational.
+- `git diff --check`: pass.
+- `python tests/run.py build/tools/luau/luau.exe`: all suites pass:
 
 | Suite | Checks |
 | --- | ---: |
-| MVP domain/request regression | 8,878 |
-| Full-game/persistence faults (19 storage calls) | 81 |
-| Scroll sizing/lifecycle | 4 |
-| Opening state/results | 1,732 |
+| MVP | 8,878 |
+| Full game / persistence faults | 81 (19 storage calls) |
+| Scrolling | 4 |
+| Opening | 1,732 |
 | UI projections/layout/lifecycle | 1,839 |
-| Collection book layout/selection | 72 |
-| Public asset manifest | 26 |
-| Artwork/fallback mounts | 25 |
-| Semantic model binding | 4 |
-| Shelf schema/migration/permissions/abuse | 121 |
-| Plot allocation/geometry/targeted render/cleanup | 675 |
-| Invalid configuration startup fixtures | 4 |
+| Collection layout/selection | 72 |
+| Asset manifest | 26 |
+| Asset mount/fallback | 25 |
+| Model binding | 4 |
+| Shelf Unit schema/migration/carousel/domain | 222 |
+| Plot allocation/geometry/render/lifecycle | 966 |
+| Invalid startup configuration | 4 |
 
-New tests cover multi-page migration/round trips, preserved unrelated progress, invalid/future
-schemas, valid collection rooms, unknown anchors/customization, discovery-only cosmetics,
-reservation/income/bonus isolation, unowned/stale pages, malformed identities/numbers, retry
-receipts, many pages, both wraps, visitor permissions, finite unique allocation, non-overlapping
-plots, centered unlocked-only Display growth, pivot-preserving model reuse, rotated left shelves,
-long-range click events, independent edit proximity, both wraps/cooldown and stale-detector cleanup.
-Runtime tests run actual plot modules against engine property/signal shims; they do not prove
-Roblox physics, rendering, native replication or input. Persistence tests use injected storage.
+Shelf coverage includes fresh capacity, exact four/five-unit sequences, both directions,
+disabled three-unit navigation, all visible owner targets, wrapped edits, visitor rejection,
+stale profile and A-B-A carousel revisions, local ID/payload validation, zero economy/copy
+effects, retry receipts, 250 owned units with bounded projection/rendering, every v4 placement,
+empty capacity, deterministic/idempotent migration, dormant overflow, all 42 v3 references,
+v1/v2 defaults, persistence acquisition, corrupt/future data and decoder resource guards.
 
-## Required Studio acceptance
+Plot tests exercise actual modules with engine property/signal shims: three fixed structures,
+every figure following its persistent unit across all viewport positions and wraps, targeted
+model reuse, long-range owner/visitor input, cooldown/proximity denial, rejoin and teardown.
+The earlier Display fixture/rate/resize checks remain. Shims and injected persistence do not
+prove native input, replication, physics, rendering or real DataStore behavior.
 
-1. **Join/leave/respawn:** run multiple clients; verify unique fixed locations, DisplayName signs
-   and safe spawns. Reset characters; rapidly join/leave while profiles load; inject failed loads.
-   Reuse released slots, reject overflow gracefully, and check no stale content/tasks/hitboxes.
-2. **Open social space:** walk between plots without prompts/teleports. Verify clear circulation,
-   no perimeter walls, readable signs and public Display rates. Host departure leaves guests on
-   shared ground. Confirm private data is never sent to a visitor client.
-3. **Display:** fresh capacity 3, one-time slot-4 charge, same-height horizontal growth. Use an
-   isolated six-slot fixture for 5/6 (there is deliberately no live acquisition UI). Place,
-   replace/remove, inspect locked UI slots (no corresponding world pads), rates and themed bonus;
-   verify centered expansion and attempt edits from other plots.
-4. **Shelves:** owner selects all 27 logical slots and places/replaces/removes figures, including
-   repeats and zero-copy discoveries. Verify inventory, recycling and income remain unchanged.
-   Attempt distant, visitor, stale revision, invalid page/slot and undiscovered-figure requests.
-5. **Shared carousel:** seed only isolated test profiles with multiple pages or legacy placements.
-   Test both wrap directions, rapid owner/visitor turns, cooldown, simultaneous editing and A-B-A
-   stale requests. All clients must see the same figures; other plots stay unchanged. Rejoin
-   resets the visible page to 1 while retaining every saved page.
-6. **Persistence:** in the private Studio test store, load v1/v2/v3 fixtures, including 42 legacy
-   references crossing a page boundary; compare every preserved field. Save/rejoin into a
-   different plot, repeat round trips, exercise save failures/leases and reject corrupt/future
-   fixtures without overwriting data. Follow [operations](OPERATIONS.md) for isolated setup.
-7. **Completion/UI:** complete both collections, confirm tracking and no new grant. Exercise
-   Display and Shelf editor with mouse, touch, narrow phone, tablet and gamepad. Check scroll,
-   selection, error toasts and safe-area bounds. Regress Shop, Collections and opening controls.
-8. **Performance/cleanup:** populate up to 24 plots with 27 shelf and six Display figures each;
-   measure target-device frame rate, memory and replication during repeated turns/edits. Soak
-   joins/leaves/respawns for 30 minutes and confirm stable instance/connection counts and Output.
+## Required manual Studio acceptance
 
-## Documentation and placeholder work
+1. Run two clients with fresh three-unit profiles; confirm fixed 1,2,3 order and disabled world
+   and editor navigation. Select/edit all three units with mouse/touch and zero-copy discoveries.
+2. Seed isolated four/five-unit test profiles. Verify every sequence above in both directions,
+   shared owner/visitor visibility, wrapped labels/selection, rapid-turn cooldown and stale edits.
+   Confirm each unit's contents follow its ID and hidden units create no instances.
+3. Attempt visitor, distant, malformed and stale edits; confirm privacy and owner-only changes.
+   Check physical click/tap controls retain across-plot reach without expanding edit proximity.
+4. In the private Studio test store, load v1/v2/v3/v4 fixtures, including empty capacity, 42 v3
+   references and v4 overflow. Save/rejoin into a different plot; compare all progress and dormant
+   records, with runtime visibility reset to 1,2,3. Exercise failures/leases without live data.
+5. Check phone/tablet/desktop editor sizing, scroll/selection, gamepad navigation, respawn and
+   owner departure/replacement. Regress Display capacities/rates, Collection, Shop and opening.
+6. Populate up to 24 plots with 27 shelf and six Display figures each. Measure replication,
+   frame rate/memory and repeated carousel/joins/leaves; confirm stable instance/connection counts.
 
-`DISPLAY_AND_SHOWROOMS.md` and `DISPLAY_SHOWROOM_IMPLEMENTATION.md` were replaced with explicit
-historical pointers. Current design, architecture, schema, economy, scope, UI, roadmap, operations,
-monetization ideas, backlog, asset guidance and root README now describe open plots and shelves.
-Earlier MVP milestones remain clearly historical. The old artwork folder is marked retired;
-no source art was deleted. This report and `PLAYER_PLOTS_AND_SHELVES.md` are the current references.
+See [operations](OPERATIONS.md) for isolated storage and release procedures. These Studio tests
+remain pending and are not implied by passing automated checks.
 
-Final map theming, plot surfaces, Display stand, shelf boards/supports, arrows, signage, circulation
-layout and Shelf editor still need visual design. Existing collectible models/assets are reused.
-No new final art, skin/customization UI, furniture, page pricing, monetization products, Game Pass
-kiosk, new completion reward or additional Display capacity was implemented.
+## Files changed by this correction
 
-## Original architecture replacement file manifest
-
-The lists below are relative to the repository root and cover this architecture replacement.
-Generated ignored build/cache files are excluded.
+The manifest below is relative to the snapshot taken immediately before this task. It excludes
+prior uncommitted Display implementation work and ignored generated tools/build/cache files.
+The documentation list also covers the two historical Showroom pointers, whose current links
+now describe Shelf Units. Shelf Page terminology appears only in explicitly retired
+schema migration code/fixtures/notes; unrelated Collection Book page terminology is unchanged.
 
 ### Added
 
-- `docs/PLAYER_PLOTS_AND_SHELVES.md`
-- `docs/PLOT_SHELF_IMPLEMENTATION.md`
-- `src/client/ShelvesScreen.luau`
-- `src/server/FigureSlots.luau`
-- `src/server/LegacyCosmetics.luau`
-- `src/server/PlotConfig.luau`
-- `src/server/PlotGeometry.luau`
-- `src/server/PlotSlots.luau`
-- `src/server/Shelves.luau`
-- `src/shared/ShelfConfig.luau`
-- `tests/PlotEngine.luau`
-- `tests/Plots.spec.luau`
-- `tests/Shelves.spec.luau`
+- `src/server/LegacyShelfPages.luau`
 
 ### Removed
 
-- `src/client/ShowroomScreen.luau`
-- `src/client/Visitors.luau`
-- `src/client/VisitsScreen.luau`
-- `src/server/GalleryRuntime.luau`
-- `src/server/GallerySessions.luau`
-- `src/server/Showrooms.luau`
-- `src/server/SpaceTemplate.luau`
-- `src/shared/ShowroomConfig.luau`
-- `tests/DisplayShowrooms.spec.luau`
-- `tests/GalleryEngine.luau`
-- `tests/GalleryRuntime.spec.luau`
+None.
 
 ### Modified
 
 - `README.md`
-- `assets/README.md`
-- `assets/showroom/README.md`
 - `docs/ARCHITECTURE.md`
-- `docs/ASSET_PIPELINE.md`
 - `docs/DATA_MODEL.md`
 - `docs/DISPLAY_AND_SHOWROOMS.md`
 - `docs/DISPLAY_SHOWROOM_IMPLEMENTATION.md`
@@ -252,30 +172,24 @@ Generated ignored build/cache files are excluded.
 - `docs/FULL_GAME.md`
 - `docs/GAME_DESIGN.md`
 - `docs/MONETIZATION.md`
-- `docs/MVP.md`
 - `docs/OPERATIONS.md`
+- `docs/PLAYER_PLOTS_AND_SHELVES.md`
+- `docs/PLOT_SHELF_IMPLEMENTATION.md`
 - `docs/PRODUCT_BACKLOG.md`
 - `docs/ROADMAP.md`
 - `docs/UI_UX.md`
-- `src/client/DisplayScreen.luau`
-- `src/client/GoalsScreen.luau`
-- `src/client/Interface.luau`
-- `src/client/Navigation.luau`
-- `src/client/UIContext.luau`
-- `src/client/UIIcons.luau`
-- `src/client/UILayout.luau`
+- `src/client/ShelvesScreen.luau`
 - `src/client/init.client.luau`
-- `src/server/Economy.luau`
+- `src/server/LegacyCosmetics.luau`
 - `src/server/PlayerPlot.luau`
+- `src/server/PlotGeometry.luau`
 - `src/server/Profile.luau`
 - `src/server/Protocol.luau`
 - `src/server/Rules.luau`
-- `src/server/Settings.luau`
-- `src/server/Transactions.luau`
-- `src/server/World.luau`
-- `src/server/init.server.luau`
-- `src/shared/Catalog.luau`
+- `src/server/Shelves.luau`
+- `src/shared/ShelfConfig.luau`
 - `src/shared/Types.luau`
-- `tests/FullGame.spec.luau`
+- `tests/Plots.spec.luau`
+- `tests/Shelves.spec.luau`
 - `tests/UI.spec.luau`
 - `tests/run.py`

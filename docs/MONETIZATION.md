@@ -4,9 +4,10 @@
 
 Terminology follows [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md): Display is the
 only Coin-generating placement system; Shelves are cosmetic exhibits on open Player Plots.
-Visitors walk between plots. The current three physical shelf units show one 27-position page;
-more pages reuse those units. Page acquisition and its expected scaling price curve are TBD,
-with no permanent page cap, product, price or purchase UI implemented. Collection-completion
+Visitors walk between plots. Players start with three persistent Shelf Units, nine positions each.
+Exactly three structures render the viewport, shifting one owned unit per turn with wrapping.
+Future acquisition adds individual units. Acquisition and pricing remain unassigned,
+with no product-design maximum, product, price, curve or purchase UI implemented. Collection-completion
 rewards are also TBD. The existing slot-4 Coin unlock is retained; slot 5/6 acquisition is open.
 Every paid mechanic below is an unapproved idea, not current behavior or permission to build it.
 
@@ -135,9 +136,10 @@ Future shelf customization could support skins, materials, colors, backgrounds, 
 trim, decorations, effects and collection styling. Only empty data hooks exist today. No
 cosmetic catalog, furniture system, purchase flow or customization UI is in the current scope.
 
-Additional shelf pages could offer more saved exhibit configurations without expanding the
-three physical shelf units or generating income. Acquisition method and pricing remain
-unresolved; this idea bank defines no curve, price, product ID or maximum page count.
+Additional individual Shelf Units would add nine cosmetic positions each without expanding
+the three physical viewport structures or generating income. Customization would belong to
+each persistent unit. Acquisition method and pricing remain unresolved; this idea bank defines
+no curve, price, product ID or product-design maximum.
 
 Potential Display cosmetics include pedestal/trim skins and subtle effects. The current cap
 is six economic slots, starting with three; retain the existing fourth-slot Coin purchase.
@@ -298,7 +300,7 @@ Potential premium purchases for highly invested players:
 - Elaborate animated shelf themes
 - Premium animated shelf stands and cosmetic Display skins
 - Premium opening animations
-- Additional shelf pages (acquisition and pricing TBD)
+- Additional individual Shelf Units (acquisition and pricing TBD)
 - Exclusive cosmetic effects
 - Prestige nameplates/titles
 

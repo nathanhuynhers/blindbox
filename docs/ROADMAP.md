@@ -13,13 +13,15 @@ below are review criteria, not claims that every runtime test has passed.
 
 The implemented candidate now uses fixed open Player Plots, a horizontal three-to-six-slot
 Display and cosmetic Shelves: three physical units, three rows, three positions per row.
-Additional data pages reuse those same 27 visible positions with shared wraparound arrows.
-Visitors walk directly between plots. Schema v4 migrates legacy placements; completion tracking
+Players start with three persistent Shelf Units of nine positions. Each carousel turn shifts
+one owned unit through three fixed physical positions and wraps; navigation is disabled with
+three owned units. Future acquisition adds individual units, with no product-design maximum.
+Visitors walk directly between plots. Schema v5 migrates legacy placements; completion tracking
 remains but completion rewards are TBD. See [canonical design](PLAYER_PLOTS_AND_SHELVES.md)
 and [implementation and verification](PLOT_SHELF_IMPLEMENTATION.md).
 
 Remaining gate: native Studio multi-client, input, rendering, persistence and performance
-acceptance. Final art, shelf customization, page acquisition/pricing and Display slots 5/6
+acceptance. Final art, shelf customization, individual Shelf Unit acquisition/pricing and Display slots 5/6
 acquisition need later authorization. The existing slot-4 Coin unlock remains.
 
 ## Historical milestones

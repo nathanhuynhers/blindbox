@@ -3,80 +3,104 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Config = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local Shelves = {}
-export type View = { index: number, revision: number, lastTurn: number }
+-- Decoder resource guards, NOT product progression limits. Review storage before raising.
+Shelves.decodeLimits = table.freeze({ units = 10000, placements = 20000 })
+export type View = { startIndex: number, revision: number, lastTurn: number }
 export type Access = { actorId: number, ownerId: number, near: boolean, view: View }
 function Shelves.new(): Types.Shelves
-	return { pages = { { id = "page:1", placements = {}, customization = {} } } }
+	local units: { Types.ShelfUnit } = {}
+	for index = 1, Config.startingShelfUnits do
+		table.insert(units, { id = "shelf:" .. index, placements = {}, customization = {} })
+	end
+	return { units = units }
 end
 function Shelves.newView(): View
-	return { index = 1, revision = 0, lastTurn = -math.huge }
+	return { startIndex = 1, revision = 0, lastTurn = -math.huge }
 end
 function Shelves.copy(shelves: Types.Shelves): Types.Shelves
-	local pages: { Types.ShelfPage } = {}
-	for _, page in shelves.pages do
-		table.insert(pages, {
-			id = page.id,
-			placements = table.clone(page.placements),
-			customization = table.clone(page.customization),
+	local result: Types.Shelves = { units = {} }
+	for _, unit in shelves.units do
+		table.insert(result.units, {
+			id = unit.id,
+			placements = table.clone(unit.placements),
+			customization = table.clone(unit.customization),
 		})
 	end
-	return { pages = pages }
+	if shelves.legacyOverflow then
+		local overflow: { Types.LegacyShelfOverflow } = {}
+		for _, entry in shelves.legacyOverflow do
+			table.insert(overflow, {
+				sourceId = entry.sourceId,
+				logicalUnit = entry.logicalUnit,
+				placements = table.clone(entry.placements),
+			})
+		end
+		result.legacyOverflow = overflow
+	end
+	return result
 end
-local function fields(value: unknown, allowed: { string }): boolean
-	if typeof(value) ~= "table" then
+function Shelves.fields(raw: unknown, allowed: { string }): boolean
+	if typeof(raw) ~= "table" then
 		return false
 	end
-	for key in value :: { [string]: unknown } do
+	for key in raw :: { [string]: unknown } do
 		if not table.find(allowed, key) then
 			return false
 		end
 	end
 	return true
 end
-function Shelves.decode(raw: unknown, discovered: { [string]: boolean }): Types.Shelves?
-	if not fields(raw, { "pages" }) then
+function Shelves.arrayCount(raw: unknown, minimum: number, maximum: number): number?
+	if typeof(raw) ~= "table" then
 		return nil
 	end
-	local data = raw :: { [string]: unknown }
-	if typeof(data.pages) ~= "table" then
-		return nil
-	end
-	local pages = data.pages :: { [number]: unknown }
+	local values = raw :: { [number]: unknown }
 	local count = 0
-	for key in pages do
-		if typeof(key) ~= "number" or key < 1 or key % 1 ~= 0 then
-			return nil
-		end
+	for key in values do
 		count += 1
-	end
-	if count == 0 then
-		return nil
-	end
-	local result: Types.Shelves = { pages = {} }
-	local ids: { [string]: boolean } = {}
-	for index = 1, count do
-		local rawPage = pages[index]
-		if not fields(rawPage, { "id", "placements", "customization" }) then
-			return nil
-		end
-		local page = rawPage :: { [string]: unknown }
 		if
-			typeof(page.id) ~= "string"
-			or #page.id > 64
-			or not string.match(page.id, "^page:[%w_-]+$")
-			or ids[page.id]
-			or typeof(page.placements) ~= "table"
-			or typeof(page.customization) ~= "table"
-			or next(page.customization :: {}) ~= nil
+			count > maximum
+			or typeof(key) ~= "number"
+			or key < 1
+			or key > maximum
+			or key % 1 ~= 0
 		then
 			return nil
 		end
-		ids[page.id] = true
-		local placements: { [string]: string } = {}
-		for slot, figure in page.placements :: { [string]: unknown } do
-			-- Validate structural IDs, not current geometry capacity. Shrinking a layout never erases saved placements.
+	end
+	if count < minimum then
+		return nil
+	end
+	for index = 1, count do
+		if values[index] == nil then
+			return nil
+		end
+	end
+	return count
+end
+function Shelves.decode(raw: unknown, discovered: { [string]: boolean }): Types.Shelves?
+	if not Shelves.fields(raw, { "units", "legacyOverflow" }) then
+		return nil
+	end
+	local data = raw :: { [string]: unknown }
+	local count =
+		Shelves.arrayCount(data.units, Config.startingShelfUnits, Shelves.decodeLimits.units)
+	if not count then
+		return nil
+	end
+	local result: Types.Shelves = { units = {} }
+	local ids: { [string]: boolean } = {}
+	local placementsRead = 0
+	local function placements(rawPlacements: unknown): { [string]: string }?
+		if typeof(rawPlacements) ~= "table" then
+			return nil
+		end
+		local values: { [string]: string } = {}
+		for slot, figure in rawPlacements :: { [string]: unknown } do
+			placementsRead += 1
 			if
-				typeof(slot) ~= "string"
+				placementsRead > Shelves.decodeLimits.placements
+				or typeof(slot) ~= "string"
 				or not Config.parseSlot(slot)
 				or typeof(figure) ~= "string"
 				or not Catalog.byId[figure]
@@ -84,33 +108,113 @@ function Shelves.decode(raw: unknown, discovered: { [string]: boolean }): Types.
 			then
 				return nil
 			end
-			placements[slot] = figure
+			values[slot] = figure
 		end
-		table.insert(result.pages, { id = page.id, placements = placements, customization = {} })
+		return values
+	end
+	for index = 1, count do
+		local rawUnit = (data.units :: { unknown })[index]
+		if not Shelves.fields(rawUnit, { "id", "placements", "customization" }) then
+			return nil
+		end
+		local unit = rawUnit :: { [string]: unknown }
+		if
+			typeof(unit.id) ~= "string"
+			or #unit.id > 64
+			or not string.match(unit.id, "^shelf:[%w_-]+$")
+			or ids[unit.id]
+			or typeof(unit.customization) ~= "table"
+			or next(unit.customization :: {}) ~= nil
+		then
+			return nil
+		end
+		ids[unit.id] = true
+		local decoded = placements(unit.placements)
+		if not decoded then
+			return nil
+		end
+		table.insert(result.units, { id = unit.id, placements = decoded, customization = {} })
+	end
+	if data.legacyOverflow ~= nil then
+		local overflowCount = Shelves.arrayCount(data.legacyOverflow, 1, Shelves.decodeLimits.units)
+		if not overflowCount then
+			return nil
+		end
+		local overflow: { Types.LegacyShelfOverflow } = {}
+		local keys: { [string]: boolean } = {}
+		for index = 1, overflowCount do
+			local rawEntry = (data.legacyOverflow :: { unknown })[index]
+			if not Shelves.fields(rawEntry, { "sourceId", "logicalUnit", "placements" }) then
+				return nil
+			end
+			local entry = rawEntry :: { [string]: unknown }
+			-- sourceId is the retired v4 identifier, retained solely for lossless recovery.
+			if
+				typeof(entry.sourceId) ~= "string"
+				or #entry.sourceId > 64
+				or not string.match(entry.sourceId, "^page:[%w_-]+$")
+				or typeof(entry.logicalUnit) ~= "number"
+				or entry.logicalUnit <= 3
+				or entry.logicalUnit > 1000000
+				or entry.logicalUnit % 1 ~= 0
+			then
+				return nil
+			end
+			local key = entry.sourceId .. "/" .. entry.logicalUnit
+			if keys[key] then
+				return nil
+			end
+			keys[key] = true
+			local decoded = placements(entry.placements)
+			if not decoded or next(decoded) == nil then
+				return nil
+			end
+			table.insert(
+				overflow,
+				{ sourceId = entry.sourceId, logicalUnit = entry.logicalUnit, placements = decoded }
+			)
+		end
+		result.legacyOverflow = overflow
 	end
 	return result
 end
+function Shelves.visibleIndices(shelves: Types.Shelves, view: View): { number }
+	local count = #shelves.units
+	local start = if count <= Config.visibleShelfUnits then 1 else view.startIndex
+	local indices: { number } = {}
+	for position = 1, math.min(count, Config.visibleShelfUnits) do
+		table.insert(indices, (start + position - 2) % count + 1)
+	end
+	return indices
+end
 function Shelves.publicView(shelves: Types.Shelves, view: View): Types.ShelfView
-	local page = shelves.pages[view.index]
-	local placements: { [string]: string } = {}
-	for _, slot in Config.slots() do
-		placements[slot] = page.placements[slot]
+	local visible: { Types.VisibleShelf } = {}
+	for _, index in Shelves.visibleIndices(shelves, view) do
+		local unit = shelves.units[index]
+		local placements: { [string]: string } = {}
+		for _, slot in Config.slots() do
+			placements[slot] = unit.placements[slot]
+		end
+		table.insert(visible, { id = unit.id, index = index, placements = placements })
 	end
 	return {
-		pageId = page.id,
-		pageIndex = view.index,
-		pageCount = #shelves.pages,
-		pageRevision = view.revision,
-		placements = placements,
+		ownedCount = #shelves.units,
+		visible = visible,
+		carouselRevision = view.revision,
+		canNavigate = #shelves.units > Config.visibleShelfUnits,
 	}
 end
 function Shelves.turn(shelves: Types.Shelves, view: View, direction: number, now: number): boolean
+	if #shelves.units <= Config.visibleShelfUnits then
+		view.startIndex = 1
+		return false
+	end
 	if (direction ~= -1 and direction ~= 1) or now - view.lastTurn < 0.5 then
 		return false
 	end
-	view.lastTurn = now
-	view.index = (view.index - 1 + direction) % #shelves.pages + 1
+	view.startIndex = (view.startIndex - 1 + direction) % #shelves.units + 1
 	view.revision += 1
+	view.lastTurn = now
 	return true
 end
 function Shelves.mutate(
@@ -122,13 +226,8 @@ function Shelves.mutate(
 	if not access or access.actorId ~= access.ownerId or not access.near then
 		return false, "Walk to your own shelves to edit.", nil
 	end
-	local page = state.shelves.pages[access.view.index]
-	if
-		intent.pageId ~= page.id
-		or intent.pageRevision ~= access.view.revision
-		or intent.revision ~= state.revision
-	then
-		return false, "The shelf page changed. Try again.", nil
+	if intent.carouselRevision ~= access.view.revision or intent.revision ~= state.revision then
+		return false, "The visible shelves changed. Try again.", nil
 	end
 	if intent.action == "ShelfNext" or intent.action == "ShelfPrevious" then
 		local ok = Shelves.turn(
@@ -137,7 +236,18 @@ function Shelves.mutate(
 			if intent.action == "ShelfNext" then 1 else -1,
 			now
 		)
-		return ok, if ok then "Shelf page changed." else "Please wait before turning again.", nil
+		return ok, if ok then "Viewing next shelves." else "No turn available yet.", nil
+	end
+	local target: Types.ShelfUnit? = nil
+	for _, index in Shelves.visibleIndices(state.shelves, access.view) do
+		local unit = state.shelves.units[index]
+		if unit.id == intent.shelfId then
+			target = unit
+			break
+		end
+	end
+	if not target then
+		return false, "Select one of your visible shelves.", nil
 	end
 	local slot = intent.shelfSlotId or ""
 	if not Config.visible(slot) then
@@ -148,13 +258,13 @@ function Shelves.mutate(
 		if not Catalog.byId[figure] or not state.discovered[figure] then
 			return false, "Discover that figure first.", nil
 		end
-		page.placements[slot] = figure
+		target.placements[slot] = figure
 	elseif intent.action == "ShelfRemove" then
-		page.placements[slot] = nil
+		target.placements[slot] = nil
 	else
 		return false, "Unknown shelf action.", nil
 	end
 	state.revision += 1
-	return true, "Shelves updated.", nil
+	return true, "Shelf updated.", nil
 end
 return Shelves

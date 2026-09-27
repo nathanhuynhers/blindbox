@@ -28,9 +28,10 @@ This is the current product-direction backlog after the first full-game candidat
 
 5. **Player Plot, Display and Shelves (functional candidate implemented)**
    - Fixed open plots contain a horizontal three-to-six-slot earning Display and cosmetic Shelves.
-   - Three shelf units show 27 configured positions per runtime-selected page; pages reuse geometry.
-   - Schema v4 preserves legacy cosmetic references. Walking replaces visit/teleport navigation.
-   - Final art, shelf customization and page acquisition/pricing are future work, not implemented.
+   - Three persistent Shelf Units start with nine positions each; a fixed three-structure viewport
+     shifts one owned unit per turn. Future expansion adds individual units; no product-design maximum.
+   - Schema v5 preserves legacy cosmetic references and converts each retired v4 page into three units. Walking replaces visit/teleport navigation.
+   - Final art, shelf customization and individual Shelf Unit acquisition/pricing are future work, not implemented.
    - Collection-completion rewards are TBD; tracking remains.
    - Follow [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 

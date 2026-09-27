@@ -1,74 +1,102 @@
 # Persistent data model
 
-Current schema: **4**. Stable `grove.*` and `tide.*` figure IDs and collection discovery are
-unchanged. See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
+Current schema: **5**. Stable `grove.*` and `tide.*` figure IDs and discovery are unchanged.
+See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 4; unsupported versions block loading/writing |
+| schemaVersion | 5; unsupported versions block loading/writing |
 | coins / scrap | Integers in 0..1,000,000,000 / 0..1,000,000 |
 | owned | Known figure IDs to positive copy counts; total at most 200 |
 | discovered | Known figure IDs to true; permanent; includes every owned ID |
 | display | `{unlocked, slots}`: capacity 3..6, dense slot array of that length, empty string or known figure ID |
-| shelves | `{pages}`: nonempty ordered page array; no permanent maximum count |
+| shelves | `{units, legacyOverflow?}`: ordered persistent Shelf Units; optional dormant migration records |
 | step | Onboarding stage 1..5 |
 | lastDailyDay | Last claimed free-box UTC day or -1 |
 | goalDay / goalProgress / goalClaimed | Daily Display goal day, highest distinct count 0..3, claim marker |
 
-Each page is `{id, placements, customization}`. IDs such as `page:1` are stable and unique across
-the array. `placements` maps `unit:U/row:R/slot:S` to known permanently discovered figure IDs.
-Positive logical coordinates are bounded for safe identifier parsing, independently of the
-current geometry counts. Increasing row capacity needs no migration; temporarily hidden saved
-slots survive smaller layouts. `customization` must currently be empty; unknown future state is
-rejected rather than erased. Real customization requires approved definitions and validation.
+Each unit is `{id, placements, customization}`. IDs such as `shelf:1` are stable and unique
+within the ordered array. `placements` maps local `row:R/slot:S` keys to known permanently
+discovered figure IDs. No physical position or world coordinate is saved. Fresh players own
+exactly three units, currently nine positions each. Future acquisition adds individual units;
+no acquisition policy, pricing or product-design maximum is defined.
+
+Rows/slots are configured independently of identity. Positive logical coordinates up to
+1,000,000 and identifiers up to 64 characters bound parsing. Valid saved local keys outside the
+current geometry survive and remain hidden. `customization` belongs to each persistent unit
+and must currently be empty; unknown future state fails closed rather than being erased.
 
 Only Display reserves owned copies and earns Coins. Shelf references reserve zero copies and
-can repeat across slots/pages, even while the same figure earns in Display. They do not affect
-recycling, inventory, bonuses or daily goal checks. Unknown fields, invalid IDs, ineligible
-figures, invalid reservations and inconsistent daily state fail closed.
+may repeat across units, even while the same figure earns in Display or has zero owned copies.
+They do not affect recycling, inventory, bonuses or daily goals. Unknown fields, duplicate unit
+IDs, invalid reservations, undiscovered/unknown figures and inconsistent daily state fail closed.
+
+## Decoder resource guards
+
+`Shelves.decodeLimits` bounds one profile to 10,000 owned units, 20,000 stored placements total
+(including hidden local keys and dormant records), and 10,000 dormant overflow records. Arrays
+must be dense; at least three owned units are required. These are server decoding/allocation
+safety guards, **not product-design progression maximums**. Raising them requires storage and
+performance review before introducing acquisition. Oversized data blocks loading without a
+default reset or truncated save. Legacy inputs are also bounded before allocation.
 
 ## Deterministic migrations
 
-`Profile.decode` validates v1/v2/v3 directly into a fresh v4 state. It does not mutate its input.
-There is no intermediate room unlock/reward pass. Encoding always writes schema 4.
+`Profile.decode` validates v1-v5 into canonical Shelf Units without mutating the input. Encoding
+always writes v5. All valid unrelated fields retain their existing validation and values.
 
-- **v1:** preserve Coins, Scrap, owned/discovered maps, three Display placements and onboarding.
-  Add the existing unclaimed daily defaults and one empty shelf page.
-- **v2:** preserve all economy, inventory, discovery, Display capacity/placements, onboarding and
-  daily fields. Validate then retire legacy `theme`/`themes`; create one empty shelf page.
-- **v3:** preserve the existing Display aggregate and all unrelated fields exactly. Validate old
-  room IDs/origins, palette ownership, empty customization maps and eligible figure anchors.
-  Sort room IDs lexicographically, then read `figure_1` through `figure_6` in numeric order,
-  skipping empty anchors. Pack every reference into fresh pages without deduplication or
-  overwrite: unit 1 row 1 slots 1..3, then subsequent rows/units, then the next page at reference 28.
-  Minimum one page; page IDs are `page:1`, `page:2`, etc. A frozen 3x3x3 migration layout keeps
-  conversion deterministic even if future visual configuration changes.
-- **v4:** validate/deep-copy existing pages and placements as stored. Do not repack them, grant
-  rooms or derive shelf progression from collection completion. Repeated decode/encode is idempotent.
+- **v1:** preserve Coins, Scrap, ownership/discovery, three Display placements and onboarding;
+  add the existing unclaimed daily defaults and three empty Shelf Units.
+- **v2:** preserve economy, inventory, discovery, Display capacity/placements, onboarding and
+  daily state. Validate then retire old `theme`/`themes`; create three empty Shelf Units.
+- **v3:** validate old room IDs/origins, palette ownership, empty customization and eligible
+  anchors. Sort room IDs lexicographically, then read `figure_1` through `figure_6` numerically,
+  skipping empty anchors. Preserve duplicates and zero-copy discoveries. The decode-only
+  `LegacyCosmetics` adapter retains the proven frozen packing order into the **retired v4
+  representation** (27 references per legacy page, at least one); `LegacyShelfPages` immediately
+  converts that representation to units. Thus 42 references become six units with the same order
+  and trailing empty capacity. No room runtime, unlock pass or completion grant is restored.
+- **v4 (retired Shelf Page model):** each old `shelves.pages[]` entry becomes **exactly three**
+  Shelf Units, including empty ones. In source array order, page index P and logical unit U in
+  1..3 map to new unit index `(P-1)*3+U`, ID `shelf:<index>`. Old
+  `unit:U/row:R/slot:S` becomes local `row:R/slot:S`. One page becomes three units; two become six.
+  No repacking, deduplication, new purchase entitlement or loss of empty capacity occurs.
+- **v5:** validate and deep-copy the ordered units and optional dormant records. Repeated
+  decode/encode round trips preserve IDs, contents, customization hooks and unrelated progress.
 
-All valid discovered legacy references survive, including duplicates and figures with zero owned
-copies. Empty legacy room ownership does not grant pages. Migration pages exist only to retain
-placements and imply no price or paid entitlement. Legacy room names/origins/ownership, palette
-preference/ownership, per-room themes and empty customization maps are retired: there is no new
-equivalent and no refund, paid-page assumption or speculative cosmetic conversion. Unknown
-nonempty customization is invalid under the original v3 schema and blocks loading instead of
-silently discarding it. Collection completion remains derivable from preserved discovery;
-new completion rewards are TBD.
+The retired v4 decoder allowed logical unit numbers above 3, which had no visible furniture.
+Per the user's migration choice, these references survive as optional dormant records:
+`legacyOverflow = {{sourceId = "page:old", logicalUnit = 4, placements = {...}}}`. Entries use
+local row/slot keys, preserve the retired source ID, and are ordered by source array position
+then logical unit number. Source/unit pairs must be unique and placements nonempty/eligible.
+They grant no additional units and are never rendered, edited, counted as capacity or projected
+to clients. They remain deep-copied through saves for future explicit recovery.
+
+Legacy room names/origins/ownership, palette preference/ownership and empty old customization
+have no new equivalent and are retired without refunds or speculative cosmetic conversion.
+Unknown nonempty customization was invalid under the old schemas and still blocks loading.
+Empty v3 rooms grant no extra capacity. Completion remains derivable from discoveries; new
+completion rewards remain TBD.
 
 ## Storage and runtime boundaries
 
-The existing envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
+The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names, native UpdateAsync leases, generations, retries and pause-on-failure behavior are
-unchanged. A failed load never becomes a new profile. Migration is applied within the validated
-acquisition/save path. Acknowledgements mean in-memory success; crash rollback affects the entire
-last saved aggregate. No offline income. See [operations](OPERATIONS.md).
+unchanged. A failed load never becomes a new profile. Migration runs within the validated
+acquisition/save path. Acknowledgements mean in-memory success; crash rollback affects the
+entire last saved aggregate. No offline income. See [operations](OPERATIONS.md).
 
-Mutation revision, accrued fractions/timestamps, request receipts, assigned plot index, world
-coordinates, visible shelf page, carousel revision and instances are **not persisted**. A player
-may receive any available plot next join; pages always begin visibly at index 1. Owner snapshots
-retain the existing flat Display `slots`/`unlocked` UI projection and add one `shelves` view with
-page ID/index/count, carousel revision and visible placements. No full shelf-page inventory or
-other owner's private profile is broadcast. Old Gallery projections and runtime tokens are gone.
+Runtime `View = {startIndex, revision, lastTurn}` starts at index 1 each join. Position P renders
+owned index `(startIndex + P - 2) % ownedCount + 1` for P=1..3. Next/Previous changes start by
+one with wrapping and a shared 0.5-second cooldown. At most three owned units fixes start/order
+at 1 and disables navigation. Mutation revision, timing, receipts, plot assignment, coordinates,
+carousel state and instances are **not persisted**.
 
-Deploy v4 with a coordinated server replacement. Old v3-only code cannot read new saves; a code
-rollback must keep schema-v4 decoding or use an explicitly reviewed recovery process.
+Owner snapshots retain the existing flat Display projection and include only
+`shelves = {ownedCount, visible = {{id, index, placements}, ...}, carouselRevision, canNavigate}`.
+Only three units and their configured local slots are projected. Edits require the visible
+persistent `shelfId`, local `shelfSlotId`, profile revision, carousel revision and owner/proximity
+validation. Visitors receive replicated geometry, never private inventory/discoveries/balances.
+
+Deploy v5 with coordinated server replacement. Older code cannot read v5 saves; rollback must
+retain v5 decoding or use an explicitly reviewed recovery process.

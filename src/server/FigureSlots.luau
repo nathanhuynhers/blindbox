@@ -7,13 +7,25 @@ export type Render = {
 	anchors: { [string]: CFrame },
 	ids: { [string]: string? },
 	models: { [string]: Instance },
+	standingScale: number?,
 }
 local FigureSlots = {}
-function FigureSlots.new(parent: Instance, name: string, anchors: { [string]: CFrame }): Render
+function FigureSlots.new(
+	parent: Instance,
+	name: string,
+	anchors: { [string]: CFrame },
+	standingScale: number?
+): Render
 	local folder = Instance.new("Folder")
 	folder.Name = name
 	folder.Parent = parent
-	return { parent = folder, anchors = anchors, ids = {}, models = {} }
+	return {
+		parent = folder,
+		anchors = anchors,
+		ids = {},
+		models = {},
+		standingScale = standingScale,
+	}
 end
 -- Move retained figures with their logical anchors, preserving each model's pivot offset.
 function FigureSlots.setAnchors(render: Render, anchors: { [string]: CFrame })
@@ -56,6 +68,13 @@ function FigureSlots.render(render: Render, placements: { [string]: string })
 			local ok, model = pcall(FigureModel.create, id, anchor)
 			local object: Instance
 			if ok then
+				-- Display presentation only; shelf figures retain their existing scale and placement.
+				if render.standingScale then
+					model:ScaleTo(render.standingScale)
+					local bounds, size = model:GetBoundingBox()
+					local lift = anchor.Position.Y - (bounds.Position.Y - size.Y / 2)
+					model:PivotTo(model:GetPivot() + Vector3.new(0, lift, 0))
+				end
 				object = model
 			else
 				local placeholder = Geometry.part(

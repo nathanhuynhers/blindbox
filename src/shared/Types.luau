@@ -15,23 +15,29 @@ export type Intent = {
 	figure: string?,
 	slot: number?,
 	choice: string?,
-	pageId: string?,
+	shelfId: string?,
 	shelfSlotId: string?,
-	pageRevision: number?,
+	carouselRevision: number?,
 }
 export type Display = { unlocked: number, slots: { string } }
-export type ShelfPage = {
+export type ShelfUnit = {
 	id: string,
 	placements: { [string]: string },
 	customization: { [string]: string },
 }
-export type Shelves = { pages: { ShelfPage } }
-export type ShelfView = {
-	pageId: string,
-	pageIndex: number,
-	pageCount: number,
-	pageRevision: number,
+-- Dormant preservation of formerly valid v4 logical units above 3; never rendered/acquired.
+export type LegacyShelfOverflow = {
+	sourceId: string,
+	logicalUnit: number,
 	placements: { [string]: string },
+}
+export type Shelves = { units: { ShelfUnit }, legacyOverflow: { LegacyShelfOverflow }? }
+export type VisibleShelf = { id: string, index: number, placements: { [string]: string } }
+export type ShelfView = {
+	ownedCount: number,
+	visible: { VisibleShelf },
+	carouselRevision: number,
+	canNavigate: boolean,
 }
 export type Profile = {
 	schemaVersion: number,

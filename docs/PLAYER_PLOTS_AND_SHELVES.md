@@ -21,14 +21,23 @@ circulation space and unused corners/edges for future systems.
 ## Display
 
 Display is the **only** Coin-generating collectible placement system. It starts with 3 unlocked
-slots and currently supports at most 6. Only unlocked positions have physical pads, labels or
-figure anchors; locked positions have no world geometry. The visible row stays centered along
-the back of the plot as capacity grows. Its existing stand widens and retained figures move
-with their logical slots without rebuilding the plot. Locked slots remain visible in the UI.
+slots and currently supports at most 6. The concept-board fixture uses one continuous off-white
+counter, pale oak base band, recessed charcoal plinth, broad warm back panel, simple end supports
+and an integrated framed sign. All geometry is native Roblox Parts. A recessed, non-neon diffuser
+provides one subtle downward warm light. There are no individual pads, cubbies, floating slot
+labels or physical representations of locked slots. Locked slots remain visible in the UI.
 
-Relative to plot origin, the Display is centered at X=0, Z=36, with figure anchors at Y=5 and
-12-stud spacing. Capacities 3/4/5/6 have stand widths 38/50/62/74 studs; the stand is 3 studs
-high and 12 deep. The entrance remains at negative Z, facing toward the back along positive Z.
+`DisplayFixture` builds and resizes the same pieces for capacities 3/4/5/6, with counter widths
+28/36/44/52 studs. Counter depth is 8.5 studs; its top and figure anchors are Y=3 above plot origin,
+at 8-stud spacing. The structure stays centered at X=0, Z=36. Base, counter, back and canopy widen;
+end supports move out and the sign stays centered. Logical figure slots and existing models are
+retained. Display-only figures use 2x presentation scale and bounding-box bottom alignment so
+they stand on the counter. Shelf figures are unaffected.
+
+The physical SurfaceGui sign reads **DISPLAY** and the server-computed total rate, e.g.
+**2 Coins/sec** when the Display earns 2. The reference number is not a hard-coded income promise.
+The separate client floating Display-rate badge has been removed; Display controls still show
+individual/total rates. The entrance remains at negative Z, facing toward the back along positive Z.
 
 Each Display position reserves one owned inventory copy. Placement, replacement and removal stay
 server-authoritative. Income remains the sum of base figure rates plus the existing single
@@ -37,7 +46,7 @@ and shelf figures contribute zero. Rarity rates, odds, acquisition costs and dai
 unchanged. The legacy fourth-slot unlock still costs 4,000 Coins. Slots 5/6 have no acquisition
 method or invented price; future methods remain independently configurable.
 
-## Shelves and shelf pages
+## Shelf Units and the three-shelf viewport
 
 Every plot has **three physical shelf units**, each with **three horizontal rows** and currently
 **three figure positions per row**: 27 visible cosmetic positions. `ShelfConfig` owns these
@@ -45,11 +54,13 @@ provisional counts. Shelf visuals are simple generic boards/supports with no cus
 They form one installation on the left **when looking in from the entrance**: X=40, unit centers
 at Z=-28/-4/20, with figure fronts facing inward along negative X. Center/right space stays open.
 
-Every fresh profile owns one shelf page. A page stores a complete placement configuration for
-the same three physical units. More pages are supported with no permanent page-count cap. There
-is no acquisition endpoint, purchase UI, product or pricing curve yet. Configuration and the
-ordered page data model are the extension points for a later acquisition system. Legacy migration
-may create additional pages solely to retain saved figure references.
+Every fresh profile owns exactly **three persistent Shelf Units**, each with nine cosmetic
+positions and its own placements/customization. The three physical structures are presentation
+positions; they render a sliding viewport over the ordered owned units. Future acquisition adds
+one Shelf Unit, currently nine positions, without widening the plot or adding furniture.
+Acquisition policy is unassigned: no endpoint, purchase UI, product, price or curve exists.
+There is no product-design maximum. Server decoder resource guards are documented in
+[the data model](DATA_MODEL.md); they are not a progression cap.
 
 Large Previous/Next controls above the shelf installation accept desktop clicks and mobile taps
 through ClickDetectors on generous transparent, non-colliding hitboxes. No ProximityPrompt or E
@@ -58,14 +69,23 @@ key is required. Owners and visitors can operate them from across the plot. Dete
 plus an 8-stud perimeter margin and within 20 vertical studs of its origin. Other plots cannot
 be controlled from across the map. The server binds each control to its active plot and direction.
 
-Page changes remain shared, runtime-only, start on page 1 each join and wrap at both ends. They
-use the existing per-plot 0.5-second cooldown and change no saved state. Single-page controls
-remain visible but do nothing. The page indicator belongs to the shelf installation. Owner UI
+The carousel is shared and runtime-only. It starts with units 1,2,3 each join. Next/Previous
+shift **exactly one unit** with wrapping and the existing per-plot 0.5-second cooldown; browsing
+changes no saved state. With at most three owned units, order remains 1,2,3 and navigation is
+disabled in the editor and world. The indicator lists the visible indexes and owned count.
+
+| Owned units | Successive Next viewports |
+| --- | --- |
+| 4 | 1,2,3 → 2,3,4 → 3,4,1 → 4,1,2 → 1,2,3 |
+| 5 | 1,2,3 → 2,3,4 → 3,4,5 → 4,5,1 → 5,1,2 → 1,2,3 |
+
+Previous reverses these sequences. Owner UI
 navigation/editing remains close-range: inside the own plot and within 16 studs of the shelf
 plane. Expanding physical navigation range does not expand editing range.
 
-Pages use stable IDs such as `page:1`; placements use logical keys such as
-`unit:2/row:3/slot:1`. Moving or reskinning geometry never changes these keys. Increasing geometry
+Shelf Units use stable IDs such as `shelf:1`; placements use local keys such as
+`row:3/slot:1`. The unit ID owns the contents regardless of physical viewport position.
+Moving or reskinning geometry never changes these keys. Increasing geometry
 capacity exposes additional keys without migration. If a future layout is smaller, saved keys
 outside the current visible layout remain stored and are not silently deleted or remapped.
 
@@ -78,23 +98,24 @@ physical inventory copy remains. Recycling rules are unchanged.
 
 Only owners can place, replace or remove their shelf figures. Server callback identity resolves
 the profile and plot; no submitted owner ID or plot index is accepted. Requests require an owned
-page, configured visible slot, known discovered figure, profile revision, current visible-page ID
-and carousel revision, plus a living character near their own shelves. Changing pages away and
-back invalidates old edits. Existing request receipts and rate limits protect retries.
+Shelf Unit ID that is currently visible, configured local slot, known discovered figure, profile
+revision and carousel revision, plus a living character near their own shelves. Turning the
+carousel away and back invalidates old edits. Existing request receipts and rate limits protect retries.
 
 Visitors can walk, look and turn the shared carousel. They cannot edit Display/shelves, unlock
-slots, buy pages or change another player's progression. Rendered figures and owner/page signage
-are public. Owner snapshots go only to that owner and project one shelf page; inventories, balances,
-discoveries and other progression are never sent to visitors to render a plot.
+slots, acquire shelves or change another player's progression. Rendered figures and owner/carousel
+signage are public. Owner snapshots go only to that owner and project only the three visible
+units, owned count and navigation availability; inventories, balances, discoveries and other
+progression are never sent to visitors to render a plot.
 
 ## Completion and customization
 
 Collection completion remains derived from permanent discoveries and visible in the Collection
 Book/Goals. **Collection-completion rewards are TBD.** Completing a collection does not unlock a
-room, shelf page, skin, currency, trophy, plaque or title. Legacy world completion plaques were
+room, Shelf Unit, skin, currency, trophy, plaque or title. Legacy world completion plaques were
 derived presentation, not stored grants; they are retired with the old plot geometry.
 
-Each page has an empty `customization` map for a future versioned extension. No customization
+Each persistent Shelf Unit has an empty `customization` map for a future versioned extension. No customization
 catalog, ownership, purchase, skin editor, furniture or arbitrary property API exists. Potential
 future shelf skins, materials, colors, backgrounds, lighting, trim, decorations, effects and
 collection styling need separate definitions and authorization.
@@ -109,7 +130,7 @@ Open plot — owner name at front; no enclosing walls
        (only unlocked slots; stays centered)
 
    [ Shelf C ]  Next >
-   [ Shelf B ]  Page 1 / N       open center/right
+   [ Shelf B ]  Viewing 1,2,3 of N       open center/right
    [ Shelf A ]  < Previous      walking / future space
    3 x 3 each; faces inward
 
@@ -117,7 +138,8 @@ Open plot — owner name at front; no enclosing walls
                   shared walkway
 ```
 
-The plot, stand, shelves, arrow signs, owner sign and Shelf UI are placeholders awaiting final
+The Display now follows the supplied collectible-store fixture concept, pending native visual
+acceptance. Plot, shelves, arrow signs, owner sign and Shelf UI remain placeholders awaiting final
 mockups. Pocket Grove remains a collection, not a core world API/theme dependency. No themed
 forest environment, Game Pass kiosk, shelf pricing, final art, extra Display capacity, likes,
 ratings, trading, cross-server travel or free placement is part of this implementation.

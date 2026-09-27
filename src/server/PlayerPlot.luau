@@ -1,6 +1,6 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
-local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
+local DisplayFixture = require(script.Parent.DisplayFixture)
 local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local Geometry = require(script.Parent.PlotGeometry)
 local Config = require(script.Parent.PlotConfig)
@@ -17,11 +17,9 @@ export type Plot = {
 	view: Shelves.View,
 	display: FigureSlots.Render,
 	shelves: FigureSlots.Render,
-	pads: { Part },
-	slotLabels: { TextLabel },
-	pageLabel: TextLabel,
-	displayLabel: TextLabel,
-	displayStand: Part,
+	physicalShelves: { Model },
+	carouselLabel: TextLabel,
+	fixture: DisplayFixture.Render,
 	displayCapacity: number,
 	connections: { RBXScriptConnection },
 	arrows: { Part },
@@ -54,25 +52,13 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		Color3.fromRGB(68, 83, 100)
 	)
 	Geometry.label(sign, player.DisplayName .. "'s Plot", 140)
-	local displaySign = Geometry.part(
-		model,
-		"DisplayArea",
-		Vector3.new(14, 1, 1),
-		origin + Vector3.new(0, 3, Geometry.displayZ - 8),
-		Color3.fromRGB(68, 83, 100)
-	)
-	local displayLabel = Geometry.label(displaySign, "Display", 140)
-	local displayStand = Geometry.part(
-		model,
-		"DisplayStand",
-		Vector3.new(Geometry.displayWidth(DisplayConfig.defaultSlots), 3, 12),
-		origin + Vector3.new(0, 1.5, Geometry.displayZ),
-		Color3.fromRGB(116, 135, 151)
-	)
+	local fixture = DisplayFixture.create(model, origin)
 	local shelfAnchors: { [string]: CFrame } = {}
-	for unit = 1, ShelfConfig.shelfUnitsPerPage do
+	local physicalShelves: { Model } = {}
+	for unit = 1, ShelfConfig.visibleShelfUnits do
 		local shelf = Instance.new("Model")
-		shelf.Name = "ShelfUnit_" .. unit
+		shelf.Name = "ShelfPosition_" .. unit
+		physicalShelves[unit] = shelf
 		shelf.Parent = model
 		local center = Geometry.shelfOffset(
 			unit,
@@ -99,14 +85,14 @@ function PlayerPlot.create(player: Player, index: number): Plot
 				Color3.fromRGB(179, 188, 198)
 			)
 			for slot = 1, ShelfConfig.slotsPerRow do
-				local id = ShelfConfig.slotId(unit, row, slot)
+				local id = ShelfConfig.renderSlot(unit, ShelfConfig.slotId(row, slot))
 				shelfAnchors[id] = Geometry.shelfAnchor(origin, unit, row, slot)
 			end
 		end
 	end
 	local labelPart = Geometry.part(
 		model,
-		"ShelfPageSign",
+		"ShelfCarouselSign",
 		Vector3.new(1.5, 3, 14),
 		origin + Vector3.new(Geometry.shelfX, 18, -4),
 		Color3.fromRGB(68, 83, 100)
@@ -116,13 +102,17 @@ function PlayerPlot.create(player: Player, index: number): Plot
 	for _, direction in { -1, 1 } do
 		local arrow = Geometry.part(
 			model,
-			if direction == -1 then "PreviousPage" else "NextPage",
+			if direction == -1 then "PreviousShelves" else "NextShelves",
 			Vector3.new(1.5, 6, 10),
 			origin + Vector3.new(Geometry.shelfX, 18, -4 + direction * 24),
 			Color3.fromRGB(68, 83, 100)
 		)
 		arrow.CanCollide = false
-		Geometry.label(arrow, if direction == -1 then "< Previous page" else "Next page >", 160)
+		Geometry.label(
+			arrow,
+			if direction == -1 then "< Previous shelves" else "Next shelves >",
+			160
+		)
 		table.insert(arrows, arrow)
 		local hitbox = Geometry.part(
 			model,
@@ -145,14 +135,12 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		spawn = CFrame.lookAt(origin + Vector3.new(0, 4, -33), origin + Vector3.new(0, 4, 0)),
 		active = true,
 		view = Shelves.newView(),
-		display = FigureSlots.new(model, "DisplayFigures", {}),
+		display = FigureSlots.new(model, "DisplayFigures", {}, DisplayFixture.style.figureScale),
 		shelves = FigureSlots.new(model, "ShelfFigures", shelfAnchors),
-		pads = {},
-		slotLabels = {},
-		displayLabel = displayLabel,
-		displayStand = displayStand,
+		physicalShelves = physicalShelves,
+		fixture = fixture,
 		displayCapacity = 0,
-		pageLabel = Geometry.label(labelPart, "", 160),
+		carouselLabel = Geometry.label(labelPart, "", 160),
 		connections = {},
 		arrows = arrows,
 		hitboxes = hitboxes,
@@ -220,32 +208,8 @@ local function layoutDisplay(plot: Plot, capacity: number)
 	if plot.displayCapacity == capacity then
 		return
 	end
-	for slot = #plot.pads, capacity + 1, -1 do
-		plot.pads[slot]:Destroy()
-		plot.pads[slot] = nil
-		plot.slotLabels[slot] = nil
-	end
-	local anchors: { [string]: CFrame } = {}
-	for slot = 1, capacity do
-		local offset = Geometry.displayOffset(slot, capacity)
-		local pad: Part? = plot.pads[slot]
-		if not pad then
-			local newPad = Geometry.part(
-				plot.model,
-				"DisplaySlot_" .. slot,
-				Vector3.new(10, 2, 10),
-				plot.origin + offset - Vector3.new(0, 1, 0),
-				Color3.fromRGB(149, 167, 182)
-			)
-			plot.pads[slot] = newPad
-			plot.slotLabels[slot] = Geometry.label(newPad, "", 70)
-		else
-			pad.Position = plot.origin + offset - Vector3.new(0, 1, 0)
-		end
-		anchors[tostring(slot)] = CFrame.new(plot.origin + offset)
-	end
-	FigureSlots.setAnchors(plot.display, anchors)
-	plot.displayStand.Size = Vector3.new(Geometry.displayWidth(capacity), 3, 12)
+	DisplayFixture.resize(plot.fixture, capacity)
+	FigureSlots.setAnchors(plot.display, DisplayFixture.anchors(plot.origin, capacity))
 	plot.displayCapacity = capacity
 end
 function PlayerPlot.render(plot: Plot, state: Types.State)
@@ -257,19 +221,33 @@ function PlayerPlot.render(plot: Plot, state: Types.State)
 	for slot = 1, state.display.unlocked do
 		local id = state.display.slots[slot] or ""
 		placements[tostring(slot)] = id
-		plot.slotLabels[slot].Text = "Display "
-			.. slot
-			.. (if id ~= "" then " - " .. (Rules.rates[id] or 0) .. " Coins/sec" else " - Empty")
 	end
 	FigureSlots.render(plot.display, placements)
-	FigureSlots.render(plot.shelves, state.shelves.pages[plot.view.index].placements)
-	plot.displayLabel.Text = "Display - " .. Rules.rate(state) .. " Coins/sec"
-	plot.pageLabel.Text = string.format(
-		"Shelves - Page %d / %d\nCosmetic figures - 0 Coins",
-		plot.view.index,
-		#state.shelves.pages
+	local visible = Shelves.publicView(state.shelves, plot.view)
+	local shelfPlacements: { [string]: string } = {}
+	local indices: { string } = {}
+	for viewportPosition, unit in visible.visible do
+		plot.physicalShelves[viewportPosition]:SetAttribute("ShelfId", unit.id)
+		table.insert(indices, tostring(unit.index))
+		for slot, figure in unit.placements do
+			shelfPlacements[ShelfConfig.renderSlot(viewportPosition, slot)] = figure
+		end
+	end
+	FigureSlots.render(plot.shelves, shelfPlacements)
+	for index, hitbox in plot.hitboxes do
+		local detector = hitbox:FindFirstChildOfClass("ClickDetector")
+		if detector then
+			detector.MaxActivationDistance = if visible.canNavigate then navigationDistance else 0
+		end
+		plot.arrows[index].Transparency = if visible.canNavigate then 0 else 0.55
+	end
+	DisplayFixture.setRate(plot.fixture, Rules.rate(state))
+	plot.carouselLabel.Text = string.format(
+		"Viewing shelves %s of %d\nCosmetic figures - 0 Coins",
+		table.concat(indices, ", "),
+		visible.ownedCount
 	)
-	plot.model:SetAttribute("VisibleShelfPage", state.shelves.pages[plot.view.index].id)
+	plot.model:SetAttribute("ShelfCarouselRevision", visible.carouselRevision)
 end
 function PlayerPlot.turn(
 	plot: Plot,
@@ -278,7 +256,7 @@ function PlayerPlot.turn(
 	direction: number,
 	now: number
 ): boolean
-	if not PlayerPlot.canNavigate(plot, actor) or #state.shelves.pages <= 1 then
+	if not PlayerPlot.canNavigate(plot, actor) then
 		return false
 	end
 	if not Shelves.turn(state.shelves, plot.view, direction, now) then
@@ -290,7 +268,7 @@ end
 function PlayerPlot.bind(plot: Plot, onTurn: (Player, number) -> ())
 	for index, hitbox in plot.hitboxes do
 		local detector = Instance.new("ClickDetector")
-		detector.MaxActivationDistance = navigationDistance
+		detector.MaxActivationDistance = 0 -- Enabled by the next render only when more than three shelves are owned.
 		detector.Parent = hitbox
 		table.insert(
 			plot.connections,

@@ -4,6 +4,7 @@ local Engine = require("./PlotEngine")
 local Slots = require("./PlotSlots")
 local Config = require("./PlotConfig")
 local Geometry = require("./PlotGeometry")
+local Fixture = require("./DisplayFixture")
 local World = require("./World")
 local Plot = require("./PlayerPlot")
 local Rules = require("./Rules")
@@ -48,20 +49,22 @@ state.owned["grove.star"] = 1; state.display.slots[1] = "grove.star"
 state.discovered["tide.pearl"] = true; state.owned["tide.pearl"] = 1; state.display.slots[3] = "tide.pearl"
 local otherState = Rules.new(0)
 local shelfSlots = ShelfConfig.slots()
+local firstAnchor = ShelfConfig.renderSlot(1, shelfSlots[1])
+local secondAnchor = ShelfConfig.renderSlot(1, shelfSlots[2])
 check(plot.model:GetAttribute("OwnerId") == 1 and other.model:GetAttribute("OwnerId") == 100, "world ownership independent of slot assignment")
 local unitCount = 0
 for _, child in plot.model:GetChildren() do
 	check(not string.find(child.Name, "Wall") and not string.find(child.Name, "Entrance"), "open plot without wall or access entrance")
-	if string.find(child.Name, "ShelfUnit_") then unitCount += 1 end
+	if string.find(child.Name, "ShelfPosition_") then unitCount += 1 end
 end
 check(unitCount == 3, "three permanent physical shelf units")
 for unit = 1, 3 do
-	local shelf = plot.model:FindFirstChild("ShelfUnit_" .. unit); assert(shelf)
+	local shelf = plot.model:FindFirstChild("ShelfPosition_" .. unit); assert(shelf)
 	for row = 1, 3 do
 		local board = shelf:FindFirstChild("Row_" .. row); assert(board)
 		check(board.Position.X == plot.origin.X + 40 and board.Size.Z == 18 and board.Size.X == 5, "shelf boards lie left of the entrance's +Z facing direction")
 		for slot = 1, 3 do
-			local key = string.format("unit:%d/row:%d/slot:%d", unit, row, slot)
+			local key = ShelfConfig.renderSlot(unit, ShelfConfig.slotId(row, slot))
 			local anchor = plot.shelves.anchors[key]; assert(anchor)
 			check(close(anchor.LookVector.X, -1) and close(anchor.LookVector.Z, 0), "stable shelf anchors face -X into plot")
 			check(anchor.Position.X == plot.origin.X + 40, "every shelf figure stays on left collection installation")
@@ -72,8 +75,20 @@ local anchorCount = 0; for _ in plot.shelves.anchors do anchorCount += 1 end
 check(anchorCount == 27, "27 configured cosmetic anchors")
 Plot.render(plot, state)
 local initialModel = plot.model
-local initialStand = plot.displayStand
-local initialPad = plot.pads[1]
+local initialFixture = plot.fixture.model
+local initialCounter = plot.fixture.parts.Counter
+local initialBack = plot.fixture.parts.BackPanel
+local initialSign = plot.fixture.parts.SignFace
+local initialShelves = plot.model:FindFirstChild("ShelfPosition_1")
+local initialShelfAnchor = plot.shelves.anchors[firstAnchor]
+local fixtureCount = #initialFixture:GetChildren()
+local sign = initialSign:FindFirstChildOfClass("SurfaceGui"); assert(sign)
+check(sign.Face == "Front" and not sign.AlwaysOnTop and sign:FindFirstChild("Title").Text == "DISPLAY", "sign is an integrated front SurfaceGui with dark DISPLAY title")
+local light = plot.fixture.parts.WarmDiffuser:FindFirstChildOfClass("SurfaceLight"); assert(light)
+check(light.Face == "Bottom" and light.Brightness == 0.65 and light.Color[1] > light.Color[3] and not light.Shadows, "one subtle downward warm wash, no shadow-heavy effect")
+check(plot.fixture.parts.OakBase.Material == "Wood" and initialCounter.Material == "SmoothPlastic", "light wood base and smooth ivory counter")
+check(plot.fixture.parts.RecessedPlinth.Size.Z < initialCounter.Size.Z, "charcoal plinth is recessed under shelf")
+check(close(plot.fixture.parts.OakBase.Position.Y + plot.fixture.parts.OakBase.Size.Y/2, initialCounter.Position.Y - initialCounter.Size.Y/2), "wood and counter layers meet without floating gap")
 local firstFigure, thirdFigure = plot.display.models["1"], plot.display.models["3"]
 local created = Engine.figureCreates
 for capacity = 3, 6 do
@@ -83,62 +98,90 @@ for capacity = 3, 6 do
 	Plot.render(plot, state)
 	check(same(Profile.encode(state), profileBefore), "layout never mutates persisted state")
 	check(Rules.rate(state) == 14.5, "unchanged Display income across capacity layout")
-	check(#plot.pads == capacity and count(plot.display.anchors) == capacity and #plot.slotLabels == capacity, "exact unlocked pad/label/anchor count at capacity " .. capacity)
-	check(plot.model == initialModel and plot.displayStand == initialStand and plot.pads[1] == initialPad, "growth reuses plot, stand and existing pads")
-	check(plot.displayStand.Size.X == 14 + (capacity - 1)*12 and plot.displayStand.Size.Y == 3 and plot.displayStand.Size.Z == 12, "cohesive stand width and substantial supporting volume")
-	check(plot.displayStand.Position.X == plot.origin.X and plot.displayStand.Position.Z == plot.origin.Z + 36, "stand centered at back")
+	check(count(plot.display.anchors) == capacity, "exact unlocked figure positions at capacity " .. capacity)
+	check(plot.model == initialModel and plot.fixture.model == initialFixture and plot.fixture.parts.Counter == initialCounter and plot.fixture.parts.BackPanel == initialBack, "growth reuses plot and continuous fixture pieces")
+	local width = 12 + (capacity - 1)*8
+	check(initialCounter.Size.X == width and initialCounter.Size.Z == 8.5 and initialBack.Size.X == width-2, "counter and broad continuous back widen coherently")
+	check(plot.fixture.parts.OakBase.Size.X == width-0.4 and plot.fixture.parts.RecessedPlinth.Size.X == width-1 and plot.fixture.parts.TopFascia.Size.X == width+0.5, "base, plinth and canopy widen together")
+	check(initialCounter.Position.X == plot.origin.X and initialCounter.Position.Z == plot.origin.Z + 36, "fixture stays centered at the back")
+	check(initialSign == plot.fixture.parts.SignFace and initialSign.Position.X == plot.origin.X and initialSign.Size.X == 12.65, "physical sign stays centered with fixed readable proportions")
+	check(#initialFixture:GetChildren() == fixtureCount, "capacity does not append pads, sections or extra lights")
+	check(plot.model:FindFirstChild("ShelfPosition_1") == initialShelves and plot.shelves.anchors[firstAnchor] == initialShelfAnchor, "Display resize leaves shelves and their anchors untouched")
+	for _, piece in initialFixture:GetChildren() do
+		check(math.abs(piece.Position.X-plot.origin.X) + piece.Size.X/2 < Config.width/2 and math.abs(piece.Position.Z-plot.origin.Z) + piece.Size.Z/2 < Config.depth/2, "every fixture piece stays inside plot footprint")
+	end
+	check(plot.fixture.rate.Text == "14.5 Coins/sec", "sign reads server-computed Display rate including fractions")
 	local sum = 0
 	for slot = 1, capacity do
 		local anchor = plot.display.anchors[tostring(slot)].Position
-		local pad = plot.pads[slot]
 		sum += anchor.X - plot.origin.X
-		check(anchor.X - plot.origin.X == (slot - (capacity+1)/2)*12 and anchor.Z == plot.origin.Z + 36 and anchor.Y == plot.origin.Y + 5, "centered one-row anchor spacing")
-		check(pad.Position.X == anchor.X and pad.Position.Y == anchor.Y-1 and pad.Position.Z == anchor.Z and pad.Transparency == 0, "unlocked geometry aligns with figure anchor")
+		check(anchor.X - plot.origin.X == (slot - (capacity+1)/2)*8 and anchor.Z == plot.origin.Z + 36, "centered one-row spacing at every capacity")
+		check(anchor.Y == initialCounter.Position.Y + initialCounter.Size.Y/2, "every anchor sits on continuous counter top")
+		check(plot.model:FindFirstChild("DisplaySlot_" .. slot) == nil, "even active slots have no separate pedestal geometry")
 	end
 	check(close(sum, 0), "visible row centered at capacity " .. capacity)
 	for slot = capacity + 1, 6 do
-		check(plot.model:FindFirstChild("DisplaySlot_" .. slot) == nil and plot.display.anchors[tostring(slot)] == nil and plot.slotLabels[slot] == nil, "locked slots have no physical geometry/labels/anchors")
+		check(plot.model:FindFirstChild("DisplaySlot_" .. slot) == nil and plot.display.anchors[tostring(slot)] == nil, "locked slots have no physical geometry/labels/anchors")
 	end
 	check(plot.display.models["1"] == firstFigure and plot.display.models["3"] == thirdFigure and Engine.figureCreates == created, "unchanged Display models reused while recentering")
 	for _, slot in {1,3} do
 		local figure = plot.display.models[tostring(slot)]
 		local anchor = plot.display.anchors[tostring(slot)].Position
-		check(figure:GetAttribute("SlotId") == tostring(slot) and close(figure.Position.X, anchor.X) and close(figure.Position.Y, anchor.Y+1) and close(figure.Position.Z, anchor.Z), "logical slot identity and relative pivot remain correct")
+		local bounds, size = figure:GetBoundingBox()
+		check(figure:GetAttribute("SlotId") == tostring(slot) and close(figure.Position.X, anchor.X) and close(bounds.Position.Y-size.Y/2, anchor.Y) and close(figure.Position.Z, anchor.Z), "logical slot identity preserved and feet remain on counter")
+		check(figure:GetScale() == 2, "Display-only figure presentation is scaled once, without compounding")
+	end
+end
+Fixture.setRate(plot.fixture, 2)
+check(plot.fixture.rate.Text == "2 Coins/sec", "reference sign wording at matching actual income")
+Plot.render(plot, state)
+check(plot.fixture.rate.Text == "14.5 Coins/sec", "live render restores authoritative income, not a hard-coded concept price")
+for _, node in Engine.nodes do
+	if node.Parent == initialFixture or node.Parent == initialCounter then
+		check(node.ClassName ~= "BillboardGui" and node.ClassName ~= "MeshPart", "fixture has no floating HUD or custom mesh")
 	end
 end
 move(owner, plot, 0,4,28)
 check(Plot.nearDisplay(plot, owner), "Display edit proximity follows back focal structure")
 move(owner, plot, 0,4,-14)
 check(not Plot.nearDisplay(plot, owner), "old front Display location no longer grants editing proximity")
-for _, slot in shelfSlots do state.shelves.pages[1].placements[slot] = "grove.star" end
+for _, unit in state.shelves.units do
+	for _, slot in shelfSlots do unit.placements[slot] = "grove.star" end
+end
 Plot.render(plot, state)
 local before = Engine.figureCreates
-check(#plot.shelves.parent:GetChildren() == 27, "visible page renders 27 figures")
-local unchangedModel = plot.shelves.models[shelfSlots[2]]
+check(#plot.shelves.parent:GetChildren() == 27, "three visible units render 27 figures")
+check(plot.shelves.models[firstAnchor]:GetScale() == 1, "shelf figure scale remains unchanged")
+local unchangedModel = plot.shelves.models[secondAnchor]
 Plot.render(plot, state)
 check(Engine.figureCreates == before, "unchanged snapshot never clones figures")
-state.discovered["tide.pearl"] = true; state.shelves.pages[1].placements[shelfSlots[1]] = "tide.pearl"
+state.discovered["tide.pearl"] = true; state.shelves.units[1].placements[shelfSlots[1]] = "tide.pearl"
 Plot.render(plot, state)
-check(Engine.figureCreates == before + 1 and plot.shelves.models[shelfSlots[2]] == unchangedModel, "single edit touches one figure only")
-table.insert(state.shelves.pages, { id = "page:2", placements = { [shelfSlots[1]] = "tide.pearl" }, customization = {} })
+check(Engine.figureCreates == before + 1 and plot.shelves.models[secondAnchor] == unchangedModel, "single edit touches one figure only")
+for index = 4, 5 do
+	table.insert(state.shelves.units, { id = "shelf:" .. index, placements = { [shelfSlots[1]] = "tide.pearl" }, customization = {} })
+end
+Plot.render(plot, state)
+check(#plot.shelves.parent:GetChildren() == 27, "hidden units create no figures")
 local children = #plot.model:GetChildren()
-local retainedShelfFigure = plot.shelves.models[shelfSlots[1]]
+local retainedShelfFigure = plot.shelves.models[secondAnchor]
 move(guest, plot, 32,4,0)
 check(Plot.contains(plot, guest), "guest may walk into open plot without membership")
 local guestAccess = Plot.access(plot, guest)
-check(not Shelves.mutate(state, { action = "ShelfRemove", id = "x", revision = state.revision, pageId = "page:1", pageRevision = 0, shelfSlotId = shelfSlots[1] }, guestAccess, 0), "visitor cannot edit owner shelves")
+check(not Shelves.mutate(state, { action = "ShelfRemove", id = "x", revision = state.revision, shelfId = "shelf:1", carouselRevision = 0, shelfSlotId = shelfSlots[1] }, guestAccess, 0), "visitor cannot edit owner shelves")
 check(not Plot.nearDisplay(plot, guest), "visitor cannot edit host Display")
 move(guest, plot, 0,4,36)
 check(not Plot.nearDisplay(plot, guest), "visitor remains denied even beside host Display")
 move(owner, plot, -45,4,-40)
 check(not Plot.access(plot, owner).near and Plot.canNavigate(plot, owner), "across-plot viewing range does not grant edit access")
-check(not Shelves.mutate(state, {action="ShelfRemove", id="far", revision=state.revision, pageId="page:1", pageRevision=0, shelfSlotId=shelfSlots[1]}, Plot.access(plot, owner), 0), "owner cannot edit shelves from long viewing distance")
+check(not Shelves.mutate(state, {action="ShelfRemove", id="far", revision=state.revision, shelfId="shelf:1", carouselRevision=0, shelfSlotId=shelfSlots[1]}, Plot.access(plot, owner), 0), "owner cannot edit shelves from long viewing distance")
 move(owner, plot, 30,4,-4)
 check(Plot.access(plot, owner).near, "owner can still edit close to relocated shelves")
 Plot.bind(plot, function(actor, direction) Plot.turn(plot, actor, state, direction, Engine.clock) end)
+Plot.render(plot, state)
 local previous = plot.hitboxes[1]:FindFirstChildOfClass("ClickDetector")
-local nextPage = plot.hitboxes[2]:FindFirstChildOfClass("ClickDetector")
-assert(previous and nextPage)
+local nextControl = plot.hitboxes[2]:FindFirstChildOfClass("ClickDetector")
+assert(previous and nextControl)
 for index, hitbox in plot.hitboxes do
 	local arrow = plot.arrows[index]
 	check(hitbox.Transparency == 1 and not hitbox.CanCollide and not hitbox.CanTouch and hitbox.CanQuery, "transparent nonblocking target is queryable")
@@ -149,43 +192,56 @@ for _, node in Engine.nodes do check(node.ClassName ~= "ProximityPrompt", "no pr
 local coins, revision = state.coins, state.revision
 local savedBeforeTurns = Profile.encode(state)
 move(owner, plot, -45,4,-40)
-Engine.clock = 1; nextPage.MouseClick:fire(owner)
-check(plot.view.index == 2, "owner click from normal long viewing distance turns shared page")
-check(plot.view.index == 2 and plot.model:GetAttribute("VisibleShelfPage") == "page:2", "all viewers share one runtime page")
-check(state.coins == coins and state.revision == revision and other.view.index == 1, "carousel changes no progression or other plot")
-check(#plot.model:GetChildren() == children and #plot.shelves.parent:GetChildren() == 1, "page switch reuses physical shelf units")
-check(plot.shelves.models[shelfSlots[1]] == retainedShelfFigure, "unchanged shelf figure is reused across page turn")
+Engine.clock = 1; nextControl.MouseClick:fire(owner)
+check(plot.view.startIndex == 2, "owner click from normal long viewing distance advances shared viewport one unit")
+check(plot.view.startIndex == 2 and plot.physicalShelves[1]:GetAttribute("ShelfId") == "shelf:2" and plot.physicalShelves[3]:GetAttribute("ShelfId") == "shelf:4", "all viewers share the 2,3,4 viewport")
+check(state.coins == coins and state.revision == revision and other.view.startIndex == 1, "carousel changes no progression or other plot")
+check(#plot.model:GetChildren() == children and #plot.shelves.parent:GetChildren() == 19, "one-unit slide reuses three physical structures")
+check(plot.shelves.models[secondAnchor] == retainedShelfFigure, "matching figure is reused at its physical position across viewport turn")
 move(guest, plot, -48,4,40)
-Engine.clock = 1.49; nextPage.MouseClick:fire(guest)
-check(plot.view.index == 2, "visitor click shares existing half-second cooldown")
-Engine.clock = 1.5; nextPage.MouseClick:fire(guest)
-check(plot.view.index == 1, "visitor long-range click wraps forward at cooldown boundary")
+Engine.clock = 1.49; nextControl.MouseClick:fire(guest)
+check(plot.view.startIndex == 2, "visitor click shares existing half-second cooldown")
+Engine.clock = 1.5; nextControl.MouseClick:fire(guest)
+check(plot.view.startIndex == 3, "visitor long-range click advances one at cooldown boundary")
 Engine.clock = 2; previous.MouseClick:fire(guest)
-check(plot.view.index == 2, "visitor click wraps backward")
+check(plot.view.startIndex == 2, "visitor click moves back one unit")
 check(same(Profile.encode(state), savedBeforeTurns), "clicking only changes runtime visibility, not shelf persistence or progression")
 local beforeRejected = plot.view.revision
 for _, coords in { {59,4,0}, {0,4,57}, {0,21,0}, {500,4,500} } do
 	move(guest, plot, coords[1],coords[2],coords[3]); Engine.clock += 1
-	nextPage.MouseClick:fire(guest)
+	nextControl.MouseClick:fire(guest)
 	check(plot.view.revision == beforeRejected, "out-of-area or elevated forged click denied on server")
 end
 move(guest, plot, 58,4,0); Engine.clock += 1
-nextPage.MouseClick:fire(guest)
-check(plot.view.index == 1, "small eight-stud perimeter margin allows nearby viewing")
+nextControl.MouseClick:fire(guest)
+check(plot.view.startIndex == 3, "small eight-stud perimeter margin allows nearby viewing")
+for step = 1, 5 do
+	Engine.clock += 1
+	nextControl.MouseClick:fire(guest)
+	local visibleUnits = Shelves.publicView(state.shelves, plot.view).visible
+	for position, unit in visibleUnits do
+		check(plot.physicalShelves[position]:GetAttribute("ShelfId") == unit.id, "each physical position tracks the current persistent unit ID")
+		for _, localSlot in shelfSlots do
+			local expected = state.shelves.units[unit.index].placements[localSlot]
+			local rendered = plot.shelves.ids[ShelfConfig.renderSlot(position, localSlot)]
+			check(rendered == expected, "all placements follow their persistent shelf through every physical position and wrap")
+		end
+	end
+end
 for _, direction in {0,2,math.huge,0/0} do check(not Plot.turn(plot, guest, state, direction, 100), "invalid carousel direction rejected") end
 local humanoid = guest.Character:FindFirstChildOfClass("Humanoid")
 humanoid.Health = 0
-check(not Plot.turn(plot, guest, state, 1, 100), "dead actor cannot turn pages")
+check(not Plot.turn(plot, guest, state, 1, 100), "dead actor cannot rotate shelves")
 humanoid.Health = 100
 local character = guest.Character; guest.Character = nil
-check(not Plot.turn(plot, guest, state, 1, 100), "missing character cannot turn pages")
+check(not Plot.turn(plot, guest, state, 1, 100), "missing character cannot rotate shelves")
 guest.Character = character
 guest.Character:PivotTo(other.spawn)
-check(not Plot.turn(plot, guest, state, 1, 4), "distant page turn rejected")
+check(not Plot.turn(plot, guest, state, 1, 4), "distant shelf rotation rejected")
 local snapshot = Shelves.publicView(state.shelves, plot.view)
 check(snapshot.coins == nil and snapshot.owned == nil and snapshot.discovered == nil, "shelf projection excludes private data")
 local encoded = Profile.encode(state)
-check(encoded.plotIndex == nil and encoded.visiblePage == nil and encoded.shelves.visiblePage == nil, "plot allocation and carousel state never persisted")
+check(encoded.plotIndex == nil and encoded.startIndex == nil and encoded.shelves.startIndex == nil, "plot allocation and carousel state never persisted")
 local restored = Profile.decode(encoded, 100); assert(restored)
 local staleDetector, staleHitbox = previous, plot.hitboxes[1]
 Plot.destroy(plot); Slots.release(allocator, owner.UserId)
@@ -193,16 +249,24 @@ check(not plot.active and plot.model.Parent == nil and #plot.connections == 0, "
 local newIndex = Slots.claim(allocator, 200); check(newIndex == 1, "new join reclaims same physical slot")
 local newOwner = Engine.player(200); local replacement = Plot.create(newOwner, newIndex)
 Plot.render(replacement, restored)
-check(replacement.view.index == 1 and replacement.shelves.ids[shelfSlots[1]] == "tide.pearl", "saved shelf placements render independently of runtime allocation")
+check(replacement.view.startIndex == 1 and replacement.shelves.ids[firstAnchor] == "tide.pearl", "saved shelf placements render independently of runtime allocation")
 staleDetector.MouseClick:fire(newOwner)
-check(replacement.view.index == 1 and staleDetector.dead and staleHitbox.dead and staleHitbox.Parent == nil, "stale detector and hitbox destroyed, cannot mutate replacement plot")
+check(replacement.view.startIndex == 1 and staleDetector.dead and staleHitbox.dead and staleHitbox.Parent == nil, "stale detector and hitbox destroyed, cannot mutate replacement plot")
 move(newOwner, replacement, 0,4,0)
 local parent = replacement.model.Parent; replacement.model.Parent = nil
 check(not Plot.turn(replacement, newOwner, restored, 1, 100), "detached runtime plot cannot be navigated")
 replacement.model.Parent = parent
 move(guest, other, 0,4,0)
-check(not Plot.turn(other, guest, otherState, 1, 100) and other.view.revision == 0, "single-page arrows are inactive")
+check(not Plot.turn(other, guest, otherState, 1, 100) and other.view.revision == 0, "three-unit arrows are inactive")
+Plot.bind(other, function(actor, direction) Plot.turn(other, actor, otherState, direction, Engine.clock) end)
 Plot.render(other, otherState)
+for _, target in other.hitboxes do
+	check(target:FindFirstChildOfClass("ClickDetector").MaxActivationDistance == 0, "three owned units disable physical navigation")
+end
+for index = 6, 250 do table.insert(restored.shelves.units, {id="shelf:" .. index,placements={},customization={}}) end
+local structureCount = #replacement.model:GetChildren()
+Plot.render(replacement, restored)
+check(#replacement.model:GetChildren() == structureCount and #replacement.shelves.parent:GetChildren() == 27, "250 owned units still render three structures and at most 27 figures")
 check(#other.shelves.parent:GetChildren() == 0 and otherState.coins == 450, "other owner's state stays isolated")
 Plot.destroy(other); Plot.destroy(replacement); world:Destroy()
 check(Engine.connections == 0, "no owned connections remain")

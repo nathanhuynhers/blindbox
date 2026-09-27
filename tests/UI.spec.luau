@@ -16,7 +16,9 @@ local function check(condition: boolean, message: string)
 end
 local state = Rules.new(0)
 local snapshot: Types.Snapshot = {
-	shelves = { pageId = "page:1", pageIndex = 1, pageCount = 1, pageRevision = 0, placements = {} },
+	shelves = { ownedCount = 3, visible = {
+		{id="shelf:1",index=1,placements={}}, {id="shelf:2",index=2,placements={}}, {id="shelf:3",index=3,placements={}},
+	}, carouselRevision = 0, canNavigate = false },
 	coins = state.coins,
 	scrap = state.scrap,
 	owned = state.owned,

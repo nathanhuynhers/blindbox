@@ -15,20 +15,20 @@ offline income, trading or escalating multipliers are implemented.
 | Rate bands | Common 1-2, Uncommon 3-4, Rare 6-8; validated at startup |
 | Display capacity | Starts at 3; supports 6; legacy fourth-slot unlock costs 4,000 Coins |
 | Themed display | +1 Coin/sec once when at least 3 distinct displayed IDs share a collection |
-| Shelf pages | One default page; no acquisition price or curve implemented |
+| Shelf Units | Three starting units, nine cosmetic positions each; future expansion adds one unit; no price/curve or product-design maximum |
 | Duplicates | Recycle one extra undisplayed copy for 1 Scrap; keep at least one owned copy |
 | Targeted redemption | 6 Scrap for any chosen figure from either collection |
 | Daily box | One free choice of collection per UTC day, no streak |
 | Daily goal | Display 3 distinct figures simultaneously; claim 100 Coins once per UTC day |
-| Completion | Permanent discovery/index tracking; rewards TBD, no room or page grant |
+| Completion | Permanent discovery/index tracking; rewards TBD, no room or Shelf Unit grant |
 | Bounds | 200 total copies; 1 billion Coins; 1 million Scrap |
 
 Display currently supports six positions in one horizontal row. Slot 5/6 acquisition methods
 remain unresolved; the retained 4,000-Coin fourth slot is not a price for slots 5/6.
 Shelves are cosmetic permanent-discovery references. They earn zero Coins, reserve zero copies
-and never count toward themed Display bonuses or daily Display goals. Shelf page pricing and
+and never count toward themed Display bonuses or daily Display goals. Individual Shelf Unit pricing and
 customization are unimplemented. The retired room palettes have no equivalent in the new system;
-schema 4 validates old palette state before discarding it, while retaining all unrelated economic
+schema 5 validates old palette state before discarding it, while retaining all unrelated economic
 progress and converting saved cosmetic figures. See [migration](DATA_MODEL.md).
 
 `rate = sum(baseCoinsPerSecond for each occupied slot) + eligibleThemedBonus`
@@ -50,7 +50,7 @@ existing display satisfies it immediately. A failed reward action changes neithe
 balance. Save markers and rewards live in the same profile aggregate.
 
 A new player can open three funded boxes plus the optional daily free box. Even three weakest
-Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. Shelf page acquisition is deferred. Test 10/30-minute sessions and returning
+Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. Individual Shelf Unit acquisition is deferred. Test 10/30-minute sessions and returning
 sessions for content exhaustion, value of both collections, idle dominance and stockpiling.
 Current content is twelve figures; do not disguise that limit with artificial grind.
 

@@ -3,6 +3,7 @@
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Shelves = require(script.Parent.Shelves)
+local LegacyShelfPages = require(script.Parent.LegacyShelfPages)
 local Legacy = {}
 local palettes: { [string]: boolean } = { grove = true, dusk = true, ocean = true }
 local roomCollections: { [string]: string } =
@@ -42,6 +43,9 @@ function Legacy.migrate(raw: unknown, discovered: { [string]: boolean }): Types.
 	local rooms = data.rooms :: { [string]: unknown }
 	local ids: { string } = {}
 	for id in rooms do
+		if #ids >= Shelves.decodeLimits.units then
+			return nil
+		end
 		if typeof(id) ~= "string" or #id > 96 then
 			return nil
 		end
@@ -105,11 +109,15 @@ function Legacy.migrate(raw: unknown, discovered: { [string]: boolean }): Types.
 		for anchor = 1, 6 do
 			local figure = placements["figure_" .. anchor]
 			if typeof(figure) == "string" then
+				if #references >= Shelves.decodeLimits.placements then
+					return nil
+				end
 				table.insert(references, figure)
 			end
 		end
 	end
-	local result = Shelves.new()
+	local result: LegacyShelfPages.Data =
+		{ pages = { { id = "page:1", placements = {}, customization = {} } } }
 	for index, figure in references do
 		-- Frozen migration layout: later visual/config changes cannot change conversion results.
 		local pageIndex = math.floor((index - 1) / 27) + 1
@@ -127,6 +135,6 @@ function Legacy.migrate(raw: unknown, discovered: { [string]: boolean }): Types.
 		result.pages[pageIndex].placements[slotId] = figure
 	end
 	-- Themes/ownership have no shelf equivalent. Only validated figure references are converted.
-	return result
+	return LegacyShelfPages.migrate(result, discovered)
 end
 return Legacy
