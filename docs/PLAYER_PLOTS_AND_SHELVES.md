@@ -13,10 +13,20 @@ large open 100-by-96-stud plot, identified by `Player.DisplayName`. On departure
 content/connections are destroyed and the slot becomes available for another player. Assignment
 and world coordinates are never saved. The experience player cap must match the configured limit.
 
-The shared world has flat neutral ground and 20-stud gaps between plots. Players walk directly
-onto other players' plots: no permission prompt, browser, visit session or teleport is needed.
-There are no plot perimeter walls or separate interior spaces. Initial layout leaves open
-circulation space and unused corners/edges for future systems.
+The shared world has neutral ground and 20-stud gaps between plots. Each logical 100-by-96 plot
+is a gently raised showroom platform: a rounded warm-white base, inset pale-oak perimeter trim,
+quiet pale WoodPlanks walking surface and four thin warm-colored inner-edge accents. The accent
+uses noncolliding SmoothPlastic rather than Neon or per-plot lights. The walking surface top stays
+at the established plot-origin Y=1 plane, so Display/Shelf anchors and gameplay distances do not
+move. Players walk directly onto other players' plots: no permission prompt, browser, visit
+session or teleport is needed. There are no perimeter walls, rails or separate interior spaces.
+
+The front-center entrance uses a shallow 22-by-4.2-stud oak deck and understated framed physical
+plaque reading `<DisplayName>'s Showroom`. The cream SurfaceGui face uses charcoal text and small
+warm-colored cap pieces; it is not a floating billboard and uses no actual light. Entrance pieces
+remain inside the front edge. No props sit beside the left Collection or rear Display, preserving
+their horizontal expansion zones and the large open center/right area for circulation and future
+systems. `PlotFixture` centralizes all platform/entrance dimensions, colors and materials.
 
 ## Display
 
@@ -150,7 +160,8 @@ Open plot — owner name at front; no enclosing walls
 ```
 
 Display and Collection now follow the supplied collectible-store fixture concepts, pending
-native visual acceptance. Plot surfaces, shared ground, owner sign, existing figure art and
-Shelf editor remain provisional. Pocket Grove remains a collection, not a core world API/theme dependency. No themed
+native visual acceptance. Shared ground, existing figure art and Shelf editor remain provisional;
+the layered plot platform and Showroom entrance now follow the supplied floor concept. Pocket Grove
+remains a collection, not a core world API/theme dependency. No themed
 forest environment, Game Pass kiosk, shelf pricing, final art, extra Display capacity, likes,
 ratings, trading, cross-server travel or free placement is part of this implementation.

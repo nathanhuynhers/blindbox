@@ -2,6 +2,7 @@
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local DisplayFixture = require(script.Parent.DisplayFixture)
 local CollectionFixture = require(script.Parent.CollectionFixture)
+local PlotFixture = require(script.Parent.PlotFixture)
 local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local Geometry = require(script.Parent.PlotGeometry)
 local Config = require(script.Parent.PlotConfig)
@@ -20,6 +21,7 @@ export type Plot = {
 	shelves: FigureSlots.Render,
 	physicalShelves: { Model },
 	collection: CollectionFixture.Render,
+	entrance: PlotFixture.Entrance,
 	fixture: DisplayFixture.Render,
 	displayCapacity: number,
 	connections: { RBXScriptConnection },
@@ -44,14 +46,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 	model.Name = tostring(player.UserId)
 	model:SetAttribute("OwnerId", player.UserId)
 	model:SetAttribute("PlotSlot", index)
-	local sign = Geometry.part(
-		model,
-		"OwnerSign",
-		Vector3.new(16, 3, 1),
-		origin + Vector3.new(0, 3, -43),
-		Color3.fromRGB(68, 83, 100)
-	)
-	Geometry.label(sign, player.DisplayName .. "'s Plot", 140)
+	local entrance = PlotFixture.createEntrance(model, origin, player.DisplayName)
 	local fixture = DisplayFixture.create(model, origin)
 	local collection = CollectionFixture.create(model, origin)
 	local plot: Plot = {
@@ -73,6 +68,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		fixture = fixture,
 		displayCapacity = 0,
 		collection = collection,
+		entrance = entrance,
 		connections = {},
 		hitboxes = collection.hitboxes,
 	}

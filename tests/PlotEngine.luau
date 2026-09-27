@@ -30,7 +30,7 @@ end
 Engine.Vector3 = { new = vector }
 Engine.Vector2 = { new = function(x,y) return {X=x,Y=y} end }
 Engine.Enum = {
-	Material = {Wood="Wood",SmoothPlastic="SmoothPlastic"}, SurfaceType = {Smooth="Smooth"},
+	Material = {Wood="Wood",WoodPlanks="WoodPlanks",SmoothPlastic="SmoothPlastic"}, PartType = {Cylinder="Cylinder"}, SurfaceType = {Smooth="Smooth"},
 	NormalId = {Bottom="Bottom",Front="Front",Left="Left"}, SurfaceGuiSizingMode = {FixedSize="FixedSize"},
 	Font = {GothamBlack="GothamBlack",GothamMedium="GothamMedium"},
 }

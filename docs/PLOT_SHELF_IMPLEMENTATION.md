@@ -5,6 +5,56 @@ individually persistent Shelf Units and a three-shelf viewport. It supersedes th
 Shelf Page implementation report. Native Studio acceptance has **not** been run by the agent.
 See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.md).
 
+## Showroom plot platform visual pass
+
+The current floor pass implements the supplied 100-by-96 showroom concept through the dedicated
+`src/server/PlotFixture.luau` builder. It does not alter plot allocation, dimensions, coordinates,
+Display/Collection architecture, progression or persistence. `World` builds one static platform
+for each of 24 configured locations. An active `PlayerPlot` creates only its session-owned entrance
+and `<DisplayName>'s Showroom` plaque, which is cleaned up with the player's other runtime content.
+
+The platform keeps its walking surface top exactly at plot-origin Y=1, preserving every existing
+fixture base, figure anchor, character spawn and distance check. From bottom to top it uses a
+0.22-stud warm-white SmoothPlastic base (bottom aligned with shared-ground top Y=0.5), 0.18-stud
+pale Wood trim and 0.10-stud pale WoodPlanks surface. The outer 100-by-96 silhouette uses two
+overlapping rectangles and four native vertical Cylinder corners with 6-stud radius. The oak
+layer is 96-by-92 and the walking surface 94-by-90, producing quiet off-white and oak borders.
+Four noncolliding 0.07-stud SmoothPlastic strips create the inset warm line without Neon, Bloom or
+actual lights. Each fixed platform uses 12 native Parts: 288 total for all 24 plot locations.
+
+The entrance has a 22-by-4.2-by-0.15 oak deck, oak frame/posts, cream SmoothPlastic plaque face and
+two warm-colored noncolliding caps. Its seven physical parts remain entirely inside the front edge
+and below Z=-40 relative to plot center, far from the rear Display and left Collection expansion
+areas. The Front-facing fixed-size SurfaceGui is not always-on-top and uses medium charcoal type.
+The old floating `<DisplayName>'s Plot` billboard was removed rather than duplicated. Colored caps
+and perimeter accents intentionally simulate warm architectural highlights without adding 48
+per-plot lights or a simulator-style emissive boundary.
+
+Exact palette: structural ivory RGB (239,236,228), pale oak (198,165,120), floor (226,203,169),
+warm accent (255,226,174), plaque cream (255,246,222) and charcoal text (48,46,43). The large
+center/right remains empty. No plants, benches, walls, railings, props, external assets, meshes,
+unions, decoration system or per-frame work were added.
+
+Files for this pass: added `src/server/PlotFixture.luau`; modified `src/server/World.luau`,
+`src/server/PlayerPlot.luau`, `tests/PlotEngine.luau`, `tests/Plots.spec.luau`, `tests/run.py`,
+`docs/PLAYER_PLOTS_AND_SHELVES.md`, `docs/ARCHITECTURE.md`, `docs/GAME_DESIGN.md` and this report.
+No files were removed. Schema v5/types/profile/migrations, Shelf domain/configuration/editor,
+Display/Collection fixture construction, economy and plot allocation constants are unchanged.
+
+Automated checks assert all 24 indexed platform models, exact layer contact and top plane, bounded
+12-part platform construction, 288-part server floor budget, materials/colors, noncolliding
+non-Neon accents, plot bounds, seven-piece entrance budget, dynamic Showroom copy, physical
+SurfaceGui settings and clear Display/Collection expansion zones. The complete existing domain,
+migration, carousel, Display and Collection regression suites remain active.
+
+Native Studio checks remain required for wood-grain direction/scale, apparent corner seams,
+comfortable 0.5-stud approach and 0.15-stud entrance step, plaque readability with long or filtered
+DisplayNames, camera views, mobile/desktop graphics quality and 24-plot rendering cost. Walk the
+full perimeter and enter from front/sides with multiple clients; verify no snagging at overlapping
+base parts or the plaque posts. Inspect Display capacities 3-6 and all Collection controls/figures
+to confirm they meet the unchanged Y=1 surface and retain unobstructed growth. No native Studio
+playtest is claimed by this report.
+
 ## Collection visual pass (current physical presentation)
 
 The subsequent visual pass implements the supplied Collection concept board with the dedicated

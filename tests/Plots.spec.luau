@@ -6,6 +6,7 @@ local Config = require("./PlotConfig")
 local Geometry = require("./PlotGeometry")
 local Fixture = require("./DisplayFixture")
 local CollectionFixture = require("./CollectionFixture")
+local PlotFixture = require("./PlotFixture")
 local World = require("./World")
 local Plot = require("./PlayerPlot")
 local Rules = require("./Rules")
@@ -29,6 +30,34 @@ local function check(value: boolean, message: string) assert(value, message); ch
 local allocator = Slots.new(Config.maxPlots)
 local world = World.create()
 check(#world:GetChildren() == Config.maxPlots + 1, "exact configured set of plot pads and shared ground")
+local platformParts = 0
+for index = 1, Config.maxPlots do
+	local platform = world:FindFirstChild("PlotSlot_" .. index); assert(platform)
+	check(platform.ClassName == "Model" and platform:GetAttribute("PlotSlot") == index, "every fixed slot owns one indexed platform model")
+	local floor = platform:FindFirstChild("WalkingSurface"); assert(floor)
+	local trim = platform:FindFirstChild("OakTrim"); assert(trim)
+	local base = platform:FindFirstChild("BaseCenter"); assert(base)
+	check(floor.Material == "WoodPlanks" and floor.Color == PlotFixture.palette.floor, "quiet pale wood walking surface")
+	check(trim.Material == "Wood" and trim.Color == PlotFixture.palette.oak, "thin pale-oak perimeter layer")
+	check(base.Material == "SmoothPlastic" and base.Color == PlotFixture.palette.ivory, "warm off-white structural base")
+	check(close(floor.Position.Y + floor.Size.Y/2, Geometry.origin(index).Y), "new floor preserves the established fixture and anchor plane")
+	check(close(trim.Position.Y + trim.Size.Y/2, floor.Position.Y-floor.Size.Y/2), "oak trim meets the walking surface without a gap")
+	check(close(base.Position.Y + base.Size.Y/2, trim.Position.Y-trim.Size.Y/2), "off-white base meets the oak trim without a gap")
+	check(floor.Size.X == 94 and floor.Size.Z == 90 and trim.Size.X == 96 and trim.Size.Z == 92, "layered insets leave restrained visible borders")
+	local pieces = platform:GetChildren()
+	check(#pieces == 12, "bounded twelve-part platform construction")
+	platformParts += #pieces
+	for _, piece in pieces do
+		check(math.abs(piece.Position.X-Geometry.origin(index).X)+piece.Size.X/2 <= Config.width/2 or piece.Shape == "Cylinder", "platform piece remains in logical width")
+		check(math.abs(piece.Position.Z-Geometry.origin(index).Z)+piece.Size.Z/2 <= Config.depth/2, "platform piece remains in logical depth")
+		check(piece.Material ~= "Neon", "plot accent uses color rather than Neon")
+	end
+	for _, name in {"InnerAccentLeft","InnerAccentRight","InnerAccentFront","InnerAccentBack"} do
+		local accent = platform:FindFirstChild(name); assert(accent)
+		check(not accent.CanCollide and accent.Material == "SmoothPlastic" and accent.Color == PlotFixture.palette.accent, "subtle noncolliding warm inner accent")
+	end
+end
+check(platformParts == 288, "24 fixed platforms use a bounded 288 native parts")
 local used = {}
 for id = 1, Config.maxPlots do
 	local index = Slots.claim(allocator, id); assert(index)
@@ -53,6 +82,20 @@ local shelfSlots = ShelfConfig.slots()
 local firstAnchor = ShelfConfig.renderSlot(1, shelfSlots[1])
 local secondAnchor = ShelfConfig.renderSlot(1, shelfSlots[2])
 check(plot.model:GetAttribute("OwnerId") == 1 and other.model:GetAttribute("OwnerId") == 100, "world ownership independent of slot assignment")
+local entrance = plot.entrance
+local plaqueGui = entrance.parts.Face:FindFirstChildOfClass("SurfaceGui"); assert(plaqueGui)
+check(entrance.label.Text == "Player 1's Showroom", "entrance plaque uses DisplayName and Showroom terminology")
+check(not string.find(entrance.label.Text, "Collection") and not string.find(entrance.label.Text, "Plot"), "entrance avoids conflicting Collection and placeholder Plot labels")
+check(plaqueGui.Face == "Front" and not plaqueGui.AlwaysOnTop and plaqueGui.LightInfluence == 0.35, "integrated physical plaque faces the entrance")
+check(entrance.parts.Face.Material == "SmoothPlastic" and entrance.parts.Frame.Material == "Wood", "warm white plaque and pale-oak frame")
+check(entrance.parts.Deck.Position.Y-entrance.parts.Deck.Size.Y/2 == plot.origin.Y, "entrance deck meets the walking plane with only a shallow step")
+check(#entrance.model:GetChildren() == 7, "entrance uses seven physical pieces and no duplicate billboard")
+for _, piece in entrance.model:GetChildren() do
+	if piece.ClassName == "Part" then
+		check(math.abs(piece.Position.X-plot.origin.X)+piece.Size.X/2 <= Config.width/2 and math.abs(piece.Position.Z-plot.origin.Z)+piece.Size.Z/2 <= Config.depth/2, "entrance treatment remains inside its plot")
+		check(piece.Position.Z+piece.Size.Z/2 < plot.origin.Z-40, "entrance pieces stay clear of all Display and Collection expansion areas")
+	end
+end
 local unitCount = 0
 for _, child in plot.collection.model:GetChildren() do
 	check(not string.find(child.Name, "Wall") and not string.find(child.Name, "Entrance"), "open plot without wall or access entrance")

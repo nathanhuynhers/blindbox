@@ -31,7 +31,9 @@ copy; six Scrap redeems a chosen figure. Shelf use never blocks this. Daily free
 profile. Schema-v5 migration preserves prior progress, splits each retired v4 page into three units
 and retains v3 cosmetic references.
 
-The current map is neutral placeholder geometry: fixed open plots, Display stands, shelves,
-owner signs and arrow controls. Collections and Shop retain their existing UI/art. There is no
+The current map uses fixed open plots with a pale-wood layered showroom platform, integrated
+`<DisplayName>'s Showroom` entrance plaque, Display fixture, Collection shelves and arrow controls.
+The center/right stay intentionally open; no plot props or perimeter walls obstruct future fixture
+expansion. Collections and Shop retain their existing UI/art. There is no
 active Showroom, Gallery, interior visit flow, teleport browser, paid product, trading system,
 free placement or new completion reward. See [scope](FULL_GAME.md) and [operations](OPERATIONS.md).

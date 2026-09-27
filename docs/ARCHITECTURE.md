@@ -13,7 +13,9 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `init.server.luau`: reserves fixed plot slots before profile load, owns player lifecycle and
   remotes, validates ready sessions, sends private owner snapshots and runs the existing income clock.
 - `PlotConfig`/`PlotSlots`: 24 finite locations; unique pending/active allocation and explicit release.
-- `World`/`PlotGeometry`: neutral shared ground, fixed open pads, reusable layout/primitive helpers.
+- `World`/`PlotGeometry`/`PlotFixture`: neutral shared ground, 24 fixed layered open platforms,
+  reusable coordinates/primitives and active-owner entrance plaques. Platform geometry is static
+  world presentation; owner identity remains session-owned and is destroyed with `PlayerPlot`.
 - `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
   proximity checks, runtime carousel start index and connection/content teardown.
 - `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent COLLECTION
