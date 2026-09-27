@@ -5,6 +5,53 @@ Showroom/Gallery architecture completely. Native Studio playtests have **not** b
 agent. [Canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [schema](DATA_MODEL.md) describe the
 current behavior; final visual design and release acceptance remain pending.
 
+## Focused layout and interaction correction
+
+This follow-up preserves schema v4, migration, plot size/allocation, page data, income and owner
+editor behavior. Only runtime composition, physical carousel input, related tests and current
+layout guidance changed. No files were added or removed. Modified files:
+
+- `src/server/PlayerPlot.luau`
+- `src/server/PlotGeometry.luau`
+- `src/server/FigureSlots.luau`
+- `tests/PlotEngine.luau`
+- `tests/Plots.spec.luau`
+- `docs/PLAYER_PLOTS_AND_SHELVES.md`
+- `docs/PLOT_SHELF_IMPLEMENTATION.md`
+- `docs/UI_UX.md`
+
+Display pads/labels/anchors now exist only for unlocked slots. At capacities 3/4/5/6, X offsets
+are respectively `-12,0,12`; `-18,-6,6,18`; `-24,-12,0,12,24`; and `-30,-18,-6,6,18,30` studs.
+Stand widths are 38/50/62/74 studs. All share center X=0, back Z=36 and figure-anchor Y=5 relative
+to plot origin; the support is 3 high and 12 deep. Existing pads and models are repositioned
+without changing logical slots, model pivot offsets or rates. No locked-pad placeholders exist.
+
+Shelves occupy entrance-relative left: X=40, unit centers Z=-28/-4/20, figure fronts along -X.
+The entrance faces +Z. Boards/supports and all 27 anchors share that orientation. Arrows above
+the end units are 1.5 x 6 x 10 studs with 4 x 10 x 16 transparent, non-colliding hitboxes; the page
+indicator is above the middle unit. Center and right remain open, with no plot-size change.
+
+Native [ClickDetector input](https://create.roblox.com/docs/reference/engine/classes/ClickDetector)
+handles desktop left-clicks and mobile taps through the same server MouseClick callback. Reach
+is 160 studs; server validation independently enforces the active plot, attached hitbox/detector,
+living character, X/Z footprint plus 8 studs, and vertical offset at most 20 studs. The existing
+session-readiness guard and shared 0.5-second cooldown still apply. Target and direction are
+captured by the server, not submitted owner IDs. Client detector reach is not treated as a
+security boundary, following [Roblox's guidance](https://create.roblox.com/docs/scripting/security/client-server-boundary).
+Single-page controls are inactive. Page turns reuse unchanged shelf models and never persist.
+
+Owner editing still requires ownership, inside-plot position, distance within 16 studs of the
+relocated shelf plane, valid discovery/slot/page and profile/carousel revisions. It uses the
+unchanged Shelves mutation path; long-range navigation cannot grant editing access.
+
+Follow-up Studio checks (not run by the agent): inspect all four Display capacities, verify
+figures stay attached while expanding, and check shelf fronts from the entrance/center. With
+two clients and a multiple-page test profile, click from opposite corners, tap on mobile, test
+both wraps and spam cooldown, and reject clicks from outside the plot margin. Test that owners
+can navigate from far away but can edit only near shelves, and visitors cannot edit at any range.
+Leave/rejoin and verify detector/hitbox cleanup and page reset. Review distance legibility/tap
+target comfort on real devices. Display, shelf and plot visuals remain generic placeholders.
+
 ## Architecture and runtime
 
 - **Fixed plots:** `PlotConfig` defines 24 locations in a six-column grid, each 100 by 96 studs
@@ -15,8 +62,8 @@ current behavior; final visual design and release acceptance remain pending.
   A DisplayName sign identifies each owner. Join/respawn places that character inside its own plot.
   Plot index and coordinates are session-only. Visitors walk between open plots.
 - **Horizontal Display:** three starting slots, six current maximum, one row at constant Y/Z.
-  Unlocking capacity reveals the next position to the right and resizes the existing stand;
-  it does not rebuild the plot. The existing fourth-slot 4,000-Coin unlock and server rate,
+  Unlocking capacity creates only the newly active position, recenters the row and widens its
+  existing stand at the back. The existing fourth-slot 4,000-Coin unlock and server rate,
   themed bonus, copy reservation and recycle rules remain. Slots 5/6 acquisition is unassigned.
 - **Shelves:** three fixed physical units, three rows each, three positions per row. Counts
   come from `ShelfConfig`. Every fresh profile owns one page; additional stored pages reuse
@@ -27,7 +74,7 @@ current behavior; final visual design and release acceptance remain pending.
   Each page has an empty, validated customization map for later versioned extension.
 - **Carousel:** Previous/Next use `(index - 1 + direction) % pageCount + 1`, so both ends wrap.
   All viewers see the same server-rendered page. Page index/revision/cooldown are runtime-only,
-  starting at page 1 each join. Physical prompts work for nearby living owners and visitors;
+  starting at page 1 each join. Physical click/tap controls work across the plot for owners and visitors;
   a shared half-second cooldown bounds turns. Owner UI also supports navigation near shelves.
 - **Editing:** the minimal Shelves screen replaces the old Social navigation position. It shows
   page/count, logical slots, selected slot and discovered-figure picker, with place/replace/remove.
@@ -87,7 +134,7 @@ retain v4 support. No production store or published experience was changed durin
   PluginSecurity definitions: no source diagnostics. CLI reports its normal file-watcher
   registration warning; that is not a source diagnostic.
 - `git diff --check` and local file-link checks for all changed/new Markdown: pass.
-- `python tests/run.py build/tools/luau/luau.exe`: all suites pass, 13,138 checks/fixtures total:
+- `python tests/run.py build/tools/luau/luau.exe`: all suites pass, 13,461 checks/fixtures total:
 
 | Suite | Checks |
 | --- | ---: |
@@ -101,14 +148,15 @@ retain v4 support. No production store or published experience was changed durin
 | Artwork/fallback mounts | 25 |
 | Semantic model binding | 4 |
 | Shelf schema/migration/permissions/abuse | 121 |
-| Plot allocation/geometry/targeted render/cleanup | 352 |
+| Plot allocation/geometry/targeted render/cleanup | 675 |
 | Invalid configuration startup fixtures | 4 |
 
 New tests cover multi-page migration/round trips, preserved unrelated progress, invalid/future
 schemas, valid collection rooms, unknown anchors/customization, discovery-only cosmetics,
 reservation/income/bonus isolation, unowned/stale pages, malformed identities/numbers, retry
 receipts, many pages, both wraps, visitor permissions, finite unique allocation, non-overlapping
-plots, one-row Display growth, targeted rendering, rejoin/reassignment and stale-prompt cleanup.
+plots, centered unlocked-only Display growth, pivot-preserving model reuse, rotated left shelves,
+long-range click events, independent edit proximity, both wraps/cooldown and stale-detector cleanup.
 Runtime tests run actual plot modules against engine property/signal shims; they do not prove
 Roblox physics, rendering, native replication or input. Persistence tests use injected storage.
 
@@ -116,13 +164,14 @@ Roblox physics, rendering, native replication or input. Persistence tests use in
 
 1. **Join/leave/respawn:** run multiple clients; verify unique fixed locations, DisplayName signs
    and safe spawns. Reset characters; rapidly join/leave while profiles load; inject failed loads.
-   Reuse released slots, reject overflow gracefully, and check no stale content/tasks/prompts.
+   Reuse released slots, reject overflow gracefully, and check no stale content/tasks/hitboxes.
 2. **Open social space:** walk between plots without prompts/teleports. Verify clear circulation,
    no perimeter walls, readable signs and public Display rates. Host departure leaves guests on
    shared ground. Confirm private data is never sent to a visitor client.
 3. **Display:** fresh capacity 3, one-time slot-4 charge, same-height horizontal growth. Use an
    isolated six-slot fixture for 5/6 (there is deliberately no live acquisition UI). Place,
-   replace/remove, inspect locked slots, rates and themed bonus; attempt edits from other plots.
+   replace/remove, inspect locked UI slots (no corresponding world pads), rates and themed bonus;
+   verify centered expansion and attempt edits from other plots.
 4. **Shelves:** owner selects all 27 logical slots and places/replaces/removes figures, including
    repeats and zero-copy discoveries. Verify inventory, recycling and income remain unchanged.
    Attempt distant, visitor, stale revision, invalid page/slot and undiscovered-figure requests.
@@ -154,7 +203,7 @@ layout and Shelf editor still need visual design. Existing collectible models/as
 No new final art, skin/customization UI, furniture, page pricing, monetization products, Game Pass
 kiosk, new completion reward or additional Display capacity was implemented.
 
-## Exact file manifest
+## Original architecture replacement file manifest
 
 The lists below are relative to the repository root and cover this architecture replacement.
 Generated ignored build/cache files are excluded.

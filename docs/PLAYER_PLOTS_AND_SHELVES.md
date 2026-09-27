@@ -21,9 +21,14 @@ circulation space and unused corners/edges for future systems.
 ## Display
 
 Display is the **only** Coin-generating collectible placement system. It starts with 3 unlocked
-slots and currently supports at most 6. Slots form one horizontal row; unlocking capacity extends
-the same stand to the right without rebuilding the plot. Locked future positions have subdued
-markers and cannot accept figures. This replaces the former two-row layout.
+slots and currently supports at most 6. Only unlocked positions have physical pads, labels or
+figure anchors; locked positions have no world geometry. The visible row stays centered along
+the back of the plot as capacity grows. Its existing stand widens and retained figures move
+with their logical slots without rebuilding the plot. Locked slots remain visible in the UI.
+
+Relative to plot origin, the Display is centered at X=0, Z=36, with figure anchors at Y=5 and
+12-stud spacing. Capacities 3/4/5/6 have stand widths 38/50/62/74 studs; the stand is 3 studs
+high and 12 deep. The entrance remains at negative Z, facing toward the back along positive Z.
 
 Each Display position reserves one owned inventory copy. Placement, replacement and removal stay
 server-authoritative. Income remains the sum of base figure rates plus the existing single
@@ -37,6 +42,8 @@ method or invented price; future methods remain independently configurable.
 Every plot has **three physical shelf units**, each with **three horizontal rows** and currently
 **three figure positions per row**: 27 visible cosmetic positions. `ShelfConfig` owns these
 provisional counts. Shelf visuals are simple generic boards/supports with no customization UI.
+They form one installation on the left **when looking in from the entrance**: X=40, unit centers
+at Z=-28/-4/20, with figure fronts facing inward along negative X. Center/right space stays open.
 
 Every fresh profile owns one shelf page. A page stores a complete placement configuration for
 the same three physical units. More pages are supported with no permanent page-count cap. There
@@ -44,10 +51,18 @@ is no acquisition endpoint, purchase UI, product or pricing curve yet. Configura
 ordered page data model are the extension points for a later acquisition system. Legacy migration
 may create additional pages solely to retain saved figure references.
 
-Physical Previous/Next arrow prompts switch the page visible to everyone at that plot, wrapping
-at either end. Nearby owners and visitors may turn the shared exhibit. Navigation is runtime-only
-and starts on page 1 each join. It grants no ownership, mutates no saved profile, and is rate-limited
-per plot. An owner can also use page controls in their Shelf UI while near their shelves.
+Large Previous/Next controls above the shelf installation accept desktop clicks and mobile taps
+through ClickDetectors on generous transparent, non-colliding hitboxes. No ProximityPrompt or E
+key is required. Owners and visitors can operate them from across the plot. Detector reach is
+160 studs, with an independent server check requiring a living actor inside the plot footprint
+plus an 8-stud perimeter margin and within 20 vertical studs of its origin. Other plots cannot
+be controlled from across the map. The server binds each control to its active plot and direction.
+
+Page changes remain shared, runtime-only, start on page 1 each join and wrap at both ends. They
+use the existing per-plot 0.5-second cooldown and change no saved state. Single-page controls
+remain visible but do nothing. The page indicator belongs to the shelf installation. Owner UI
+navigation/editing remains close-range: inside the own plot and within 16 studs of the shelf
+plane. Expanding physical navigation range does not expand editing range.
 
 Pages use stable IDs such as `page:1`; placements use logical keys such as
 `unit:2/row:3/slot:1`. Moving or reskinning geometry never changes these keys. Increasing geometry
@@ -89,13 +104,14 @@ collection styling need separate definitions and authorization.
 ```text
 Open plot — owner name at front; no enclosing walls
 
-       [ Shelf A ] [ Shelf B ] [ Shelf C ]
-       3 x 3       3 x 3       3 x 3
-   < Previous       Page 1 / N          Next >
+                    BACK
+           Display [1] [2] [3]
+       (only unlocked slots; stays centered)
 
-             open walking / future space
-
-       Display [1][2][3] -> [4] -> [5] -> [6]
+   [ Shelf C ]  Next >
+   [ Shelf B ]  Page 1 / N       open center/right
+   [ Shelf A ]  < Previous      walking / future space
+   3 x 3 each; faces inward
 
                     Owner's Plot
                   shared walkway

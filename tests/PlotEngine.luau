@@ -1,6 +1,6 @@
 --!strict
 -- Minimal engine boundary shim. Tests execute the actual PlayerPlot geometry and renderer.
--- This does not simulate Roblox physics, rendering, replication, or prompt input.
+-- This does not simulate Roblox physics, rendering, replication, or mouse/touch input.
 local Engine = { nodes = {}, players = {}, clock = 0, connections = 0 }
 local function signal()
 	local callbacks = {}
@@ -28,8 +28,35 @@ vectorMeta.__index = function(value, key)
 	return nil
 end
 Engine.Vector3 = { new = vector }
+-- Planar CFrame operations are sufficient for these upright plot fixtures.
+local frameMeta = {}
+local function frame(position, yaw)
+	return setmetatable({ Position = position, yaw = yaw or 0 }, frameMeta)
+end
+local function rotate(v, yaw)
+	return vector(math.cos(yaw)*v.X + math.sin(yaw)*v.Z, v.Y, -math.sin(yaw)*v.X + math.cos(yaw)*v.Z)
+end
+frameMeta.__mul = function(a, b) return frame(a.Position + rotate(b.Position, a.yaw), a.yaw + b.yaw) end
+frameMeta.__index = function(a, key)
+	if key == "LookVector" then return rotate(vector(0,0,-1), a.yaw) end
+	if key == "Inverse" then return function(self) return frame(rotate(vector(-self.Position.X,-self.Position.Y,-self.Position.Z), -self.yaw), -self.yaw) end end
+	return nil
+end
+Engine.CFrame = {
+	new = function(position) return frame(position) end,
+	lookAt = function(position, target)
+		local direction = target - position
+		return frame(position, math.atan2(-direction.X, -direction.Z))
+	end,
+}
 local function node(class)
-	local object = { Name = class, ClassName = class, Parent = nil, attrs = {}, Destroying = signal(), Triggered = signal(), dead = false }
+	local object = { Name = class, ClassName = class, Parent = nil, attrs = {}, Destroying = signal(), MouseClick = signal(), dead = false, CanCollide = true, Transparency = 0 }
+	setmetatable(object, { __index = function(self, key)
+		if key == "CFrame" then return frame(self.Position) end
+		return nil
+	end })
+	function object:GetPivot() return self.pivot or frame(self.Position) end
+	function object:PivotTo(cf) self.pivot = cf; self.Position = cf.Position end
 	function object:GetChildren()
 		local children = {}; for _, child in Engine.nodes do if child.Parent == self then table.insert(children, child) end end
 		return children
@@ -55,16 +82,8 @@ local function node(class)
 end
 Engine.Instance = { new = node }
 Engine.workspace = node("Workspace")
-Engine.Players = { GetPlayerByUserId = function(_self, id) Engine.figureCreates = 0
-Engine.FigureModel = { create = function(id, cf)
- Engine.figureCreates += 1
- local model = node("Model"); model.Name = id; model.Position = cf.Position
- return model
-end }
-return Engine.players[id] end }
 Engine.Color3 = { fromRGB = function(r,g,b) return {r,g,b} end, new = function(r,g,b) return {r,g,b} end }
 Engine.UDim2 = { fromOffset = function(x,y) return {x,y} end, fromScale = function(x,y) return {x,y} end }
-Engine.CFrame = { new = function(position) return {Position=position} end, lookAt = function(position, _target) return {Position=position} end }
 local Template = {}
 function Template.part(parent, name, position)
 	local part = node("Part"); part.Parent = parent; part.Name = name; part.Position = position
@@ -80,16 +99,12 @@ function Engine.player(id)
 	Engine.players[id] = player
 	return player
 end
-function Engine.trigger(part, player)
-	Engine.clock += 1
-	player.Character:PivotTo({ Position = part.Position })
-	local prompt = part:FindFirstChildOfClass("ProximityPrompt")
-	assert(prompt); prompt.Triggered:fire(player)
-end
 Engine.figureCreates = 0
 Engine.FigureModel = { create = function(id, cf)
  Engine.figureCreates += 1
- local model = node("Model"); model.Name = id; model.Position = cf.Position
+ local model = node("Model"); model.Name = id
+ -- Deliberately nonzero pivot offset: resizing must preserve anchor-relative model pivots.
+ model:PivotTo(cf * frame(vector(0,1,0)))
  return model
 end }
 return Engine

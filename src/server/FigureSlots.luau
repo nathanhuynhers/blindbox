@@ -15,6 +15,28 @@ function FigureSlots.new(parent: Instance, name: string, anchors: { [string]: CF
 	folder.Parent = parent
 	return { parent = folder, anchors = anchors, ids = {}, models = {} }
 end
+-- Move retained figures with their logical anchors, preserving each model's pivot offset.
+function FigureSlots.setAnchors(render: Render, anchors: { [string]: CFrame })
+	for slot, previous in render.anchors do
+		local anchor = anchors[slot]
+		local object = render.models[slot]
+		if not anchor then
+			if object then
+				object:Destroy()
+			end
+			render.models[slot] = nil
+			render.ids[slot] = nil
+		elseif object and anchor ~= previous then
+			local delta = anchor * previous:Inverse()
+			if object:IsA("Model") then
+				object:PivotTo(delta * object:GetPivot())
+			elseif object:IsA("BasePart") then
+				object.CFrame = delta * object.CFrame
+			end
+		end
+	end
+	render.anchors = anchors
+end
 function FigureSlots.render(render: Render, placements: { [string]: string })
 	for slot, anchor in render.anchors do
 		local id: string? = placements[slot]

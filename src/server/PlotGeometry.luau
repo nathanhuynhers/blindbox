@@ -2,7 +2,8 @@
 local Config = require(script.Parent.PlotConfig)
 local Display = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Shelf = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
-local Geometry = {}
+-- Entrance looks along +Z, so its left is +X. Shelf fronts look inward along -X.
+local Geometry = { displayZ = Config.depth / 2 - 12, shelfX = Config.width / 2 - 10 }
 function Geometry.origin(index: number): Vector3
 	assert(index >= 1 and index <= Config.maxPlots and index % 1 == 0, "Unknown fixed plot slot")
 	local rows = math.ceil(Config.maxPlots / Config.columns)
@@ -12,16 +13,29 @@ function Geometry.origin(index: number): Vector3
 		(math.floor((index - 1) / Config.columns) - (rows - 1) / 2) * (Config.depth + Config.gap)
 	)
 end
-function Geometry.displayOffset(slot: number): Vector3
-	assert(slot >= 1 and slot <= Display.maxSlots and slot % 1 == 0, "Unknown Display slot")
-	return Vector3.new((slot - (Display.maxSlots + 1) / 2) * 10, 3, -14)
+function Geometry.displayOffset(slot: number, capacity: number): Vector3
+	assert(
+		capacity >= Display.defaultSlots and capacity <= Display.maxSlots and capacity % 1 == 0,
+		"Invalid Display capacity"
+	)
+	assert(slot >= 1 and slot <= capacity and slot % 1 == 0, "Unknown active Display slot")
+	return Vector3.new((slot - (capacity + 1) / 2) * 12, 5, Geometry.displayZ)
+end
+function Geometry.displayWidth(capacity: number): number
+	return (capacity - 1) * 12 + 14
 end
 function Geometry.shelfOffset(unit: number, row: number, slot: number): Vector3
 	return Vector3.new(
-		(unit - (Shelf.shelfUnitsPerPage + 1) / 2) * 24 + (slot - (Shelf.slotsPerRow + 1) / 2) * 5,
+		Geometry.shelfX,
 		2 + (Shelf.rowsPerShelfUnit - row) * 5,
-		26
+		-4
+			+ (unit - (Shelf.shelfUnitsPerPage + 1) / 2) * 24
+			+ (slot - (Shelf.slotsPerRow + 1) / 2) * 5
 	)
+end
+function Geometry.shelfAnchor(origin: Vector3, unit: number, row: number, slot: number): CFrame
+	local position = origin + Geometry.shelfOffset(unit, row, slot)
+	return CFrame.lookAt(position, position + Vector3.new(-1, 0, 0))
 end
 function Geometry.part(
 	parent: Instance,

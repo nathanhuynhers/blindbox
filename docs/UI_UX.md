@@ -110,7 +110,7 @@ it scrolls to and verifies the last card. Neither script is mapped into the game
    reservations/counts and income update only on replies. Last copies and fully displayed copies
    cannot recycle. Edit away from your Display to check the server's failure toast.
 5. **Display expansion/Shelves:** unlock slot four and confirm exactly one charge, one new
-   active position to the right and a longer stand. Use an isolated six-slot test profile to
+   active position and a wider, recentered stand at the back; locked world pads are absent. Use an isolated six-slot test profile to
    inspect the full horizontal row. Place, replace and remove discovered figures in the shelf
    editor, including repeated figures and discoveries with zero copies. Confirm no income,
    inventory or recycle changes. Test a migrated profile with multiple pages and both wraps.
