@@ -1,36 +1,28 @@
-# Full-game implementation scope
+# Current implementation scope
 
-The user playtested and accepted the MVP on 2026-09-23, reported truncated collection scrolling,
-and authorized autonomous development of the full game. This supersedes separate coding
-approvals between roadmap milestones. It does not claim prior detailed tests were performed.
+The user accepted the original MVP on September 23, 2026 and subsequently authorized the expanded
+candidate. On September 27 the user explicitly replaced the Showroom/Gallery experiment with
+[open Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 
-Build the roadmap's complete non-monetized feature set: reliable saving, one fourth-slot
-expansion, two original six-figure collections, a modest themed-display bonus, collection
-plaques, room palettes, one daily free box, one daily display goal, same-server visits and
-public display inspection, and an accessible tabbed UI with reliable collection scrolling.
-Keep quantity stacks, automatic online income, chosen-figure Scrap redemption, and original
-procedural assets. Do not add frameworks, trading, paid items, offline income or public deployment.
+Implemented: twelve figures/two collections, server box rolls, owned/discovered state, automatic
+Display income and themed bonus, three-to-six horizontal Display capacity with the existing
+fourth-slot Coin unlock, Scrap recycling/redemption, daily box/Display goal, native persistent
+profiles, fixed open plot assignment, three physical shelf units, cosmetic discovered-figure
+placement, shared runtime shelf-page navigation and schema-v4 migration.
 
-Implementation decisions: native DataStoreService with UpdateAsync session leases; separate
-Studio/live store names. Studio is explicitly labeled unsaved preview unless a server-only
-configuration enables isolated persistence testing. Live servers require successful persistent
-loads. Failed loads never create playable default profiles. Tune costs in server config.
+The existing Shop, Collection Book, opening experience, responsive UI helpers and asset pipeline
+remain. The Social teleport directory was replaced with a minimal owner Shelf editor in the same
+navigation position. Visitors walk into plots and see the replicated exhibit. Private profiles
+are not exposed. Decorative visitor actors and old themed room geometry were retired.
 
-The user need only step in for Roblox account/Studio setup, runtime testing unavailable to the
-agent, or release authorization. Code completion is distinct from validated launch readiness.
+Shelves reserve zero copies and earn zero Coins. New profiles have one page; migration can create
+more only to preserve legacy references. Page purchases, pricing curves, slot 5/6 acquisition,
+customization catalogs/UI, monetization, kiosks, free placement, likes, trading and final visual
+design are excluded. **Collection-completion rewards are TBD**; discovery/completion tracking
+remains intact without room unlocks or replacement grants.
 
-The original candidate scope above is historical. The subsequently authorized
-[Display and Showroom foundation](DISPLAY_SHOWROOM_IMPLEMENTATION.md) now adds schema-v3 migration,
-six-position Display architecture, collection Showrooms, lazy walkable Galleries, controlled
-cosmetic placement and same-server read-only visits. Advanced customization and monetization
-remain future scope.
-
-## Original candidate result
-
-The candidate implements the scope above: twelve figures, two boxes, persistent profiles,
-four-slot progression, three palettes, two completion plaques, UTC daily box/display rewards,
-automatic income, themed bonus, inspected same-server visits, original room/garden geometry,
-and tabbed UI with explicit scroll sizing. That original implementation
-used "room" for the economic Display/main plot; the newer foundation separates these concepts. No frameworks or Wally dependencies were added.
-Automated tests pass; [operations](OPERATIONS.md) lists the unrun native storage, mobile,
-multiplayer, performance and recovery checks required before release. Nothing is published.
+Schema 4 reads valid v1-v3 profiles. All unrelated progression survives; legacy room themes have
+no equivalent and are explicitly retired. See [data model](DATA_MODEL.md) and
+[implementation report](PLOT_SHELF_IMPLEMENTATION.md). No packages were added, no tool versions
+were upgraded, and nothing was published. Automatic checks do not replace pending Studio/device,
+real DataStore migration, multiplayer security or performance acceptance.

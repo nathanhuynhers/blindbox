@@ -8,9 +8,10 @@ are required; there are no added packages. Run commands from the repository root
 
 Place reviewed artwork under [assets](../assets/README.md): `ui/global`,
 `ui/collection/shared`, `ui/collection/pocket-grove`, `ui/collection/tidepool-tales`,
-`figures/pocket-grove`, `figures/tidepool-tales`, `boxes`, `display`, or `showroom`.
-Display assets belong to the economic main-plot fixture; Showroom assets belong to the separate
-zero-income gallery/room system described in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+`figures/pocket-grove`, `figures/tidepool-tales`, `boxes`, or `display`.
+Display assets belong to the economic plot fixture. The legacy `showroom` source folder is
+retired and has no active runtime consumer. Current plots and shelves use generic Roblox
+geometry; final shelf art is future work. See [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 If an export needs processing elsewhere, keep the reviewed output in `assets/processed`
 and point the manifest at that file. The uploader never resizes, re-encodes or transforms source
 content; transparent PNG and GLB bytes are sent unchanged.

@@ -108,53 +108,27 @@ local collections = {
 	{
 		id = "grove",
 		name = "Pocket Grove",
-		showroomId = "collection:grove",
 		description = "Little woodland wonders",
 		color = Color3.fromRGB(134, 204, 165),
 	},
 	{
 		id = "tide",
 		name = "Tidepool Tales",
-		showroomId = "collection:tide",
 		description = "Treasures from a tiny ocean",
 		color = Color3.fromRGB(116, 195, 234),
 	},
 }
 local collectionIds: { [string]: boolean } = {}
-local showroomIds: { [string]: boolean } = {}
 for _, collection in collections do
 	assert(not collectionIds[collection.id], "Duplicate collection ID")
-	assert(not showroomIds[collection.showroomId], "Duplicate collection Showroom ID")
 	collectionIds[collection.id] = true
-	showroomIds[collection.showroomId] = true
 end
 for _, figure in figures do
 	assert(collectionIds[figure.collection], "Missing collection")
 end
-local themes: { [string]: { name: string, wall: Color3, floor: Color3, accent: Color3 } } = {
-	grove = {
-		name = "Woodland",
-		wall = Color3.fromRGB(79, 124, 112),
-		floor = Color3.fromRGB(226, 220, 201),
-		accent = Color3.fromRGB(237, 199, 128),
-	},
-	dusk = {
-		name = "Evening Lilac",
-		wall = Color3.fromRGB(100, 92, 139),
-		floor = Color3.fromRGB(218, 211, 228),
-		accent = Color3.fromRGB(242, 171, 194),
-	},
-	ocean = {
-		name = "Ocean Glass",
-		wall = Color3.fromRGB(64, 127, 160),
-		floor = Color3.fromRGB(213, 231, 232),
-		accent = Color3.fromRGB(132, 230, 214),
-	},
-}
 return table.freeze({
 	figures = table.freeze(figures),
 	byId = table.freeze(byId),
 	collections = collections,
 	collectionIds = collectionIds,
-	themes = themes,
 })

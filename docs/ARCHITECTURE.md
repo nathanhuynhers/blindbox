@@ -4,45 +4,35 @@ The user accepted the MVP and authorized the full-game roadmap. The new candidat
 that feature set; real storage, device and multi-client acceptance are still pending. See
 [scope](FULL_GAME.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
 
-The candidate now separates economic Display, cosmetic Showrooms and owner-specific spatial
-Galleries. See [foundation implementation](DISPLAY_SHOWROOM_IMPLEMENTATION.md) and
-[schema-v3 migration](DATA_MODEL.md). Native runtime acceptance remains pending.
+The active world uses fixed open Player Plots, earning Display and cosmetic Shelves/Shelf Pages.
+See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-v4 migration](DATA_MODEL.md).
+The former separate Gallery/room runtime has been removed, not retained as an alternate path.
 
 ## Server ownership
 
-- `init.server.luau`: player lifecycle, server-created remotes, the single elapsed-income
-  scheduler, sanitized owner snapshots, public Display directory, and main-plot visit navigation.
-- `Transactions.luau`: exact parsed intents, token-bucket limits, mutation revisions and bounded
-  receipts (64 / 120 seconds). Mutations never yield. The callback Player determines ownership.
-- `Protocol.luau`: bounded payloads and allowlisted figure/collection/palette/slot IDs. Actions
-  are Buy, Place, Remove, Recycle, Redeem, Expand, Daily, Goal, ShowroomPlace, ShowroomRemove and
-  ShowroomTheme. Cosmetic edits carry stable room/anchor IDs and a current room runtime token.
-  Callers never establish price, rewards, ownership or edit permission.
-- `Rules.luau` and `Economy.luau`: atomic in-memory domain mutations, per-figure rates, small
-  themed-display bonus, fraction accounting, inventory reservations, daily eligibility and costs.
-- `Profile.luau`: explicit serialized projection, bounded schema validation and v1/v2-to-v3
-  migration. Unknown/corrupt/incompatible data blocks loading and saving.
-- `Persistence.luau`: non-yielding UpdateAsync transforms, exclusive leases, monotonically
-  increasing save generations, writer identity and uncertain-commit reconciliation. Storage
-  update is injected for fault tests; production only uses DataStoreService.
-- `Storage.luau`: native service adapter, retries, autosaves, ready/paused state, final release,
-  and explicitly configured Studio preview. A failed persistent load never becomes preview.
-- `PlayerPlot.luau` (formerly Rooms): generic personal plot, six Display positions, lock markers,
-  legacy plaques and one Gallery entrance. Signature checks avoid unchanged figure rebuilds.
-- `Showrooms.luau`: collection completion reconciliation, cosmetic eligibility/edit rules,
-  stable identity validation and deep public/save projections. No economy reads its placements.
-- `GallerySessions.luau`: pure owner/participant membership, allocation and generation lifecycle.
-- `GalleryRuntime.luau`: validated physical entrance/exit prompts, shared owner halls, paged
-  doors, lazy room instances, separate room-generation tokens, proximity and cleanup.
-- `SpaceTemplate.luau`: replaceable primitive hall/room/portal presentation and customization hooks.
-- Shared `DisplayConfig`/`ShowroomConfig`: public capacity, anchor and extension definitions.
-- `World.luau`: static garden paths, trees and welcome plaza. `Settings.luau`: store names,
-  Studio test setting and 24-room capacity.
+- `init.server.luau`: reserves fixed plot slots before profile load, owns player lifecycle and
+  remotes, validates ready sessions, sends private owner snapshots and runs the existing income clock.
+- `PlotConfig`/`PlotSlots`: 24 finite locations; unique pending/active allocation and explicit release.
+- `World`/`PlotGeometry`: neutral shared ground, fixed open pads, reusable layout/primitive helpers.
+- `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
+  proximity checks, runtime visible-page state and connection/content teardown.
+- `FigureSlots`: per-slot figure cache using existing FigureModel assets; replace only changed IDs.
+- `Shelves`: discovered-reference rules, owned-page validation, stable slot IDs, runtime carousel
+  revision/wraparound/cooldown and bounded page projections. Zero economy/inventory reservations.
+- `Rules`/`Economy`: unchanged Display rate/bonus/reservations, purchases, inventory and daily logic.
+- `Protocol`/`Transactions`: allowlisted typed fields/actions, token bucket, profile revision and
+  exact retry receipts. Shelf edits additionally require current page ID/revision and owner access.
+- `Profile`/`LegacyCosmetics`: schema-v4 validation/deep copies and decode-only v1-v3 conversion.
+  LegacyCosmetics contains no runtime rooms or completion grants.
+- `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
+  isolated Studio/live stores. Failed loads never overwrite progress with defaults.
 
-Each player has one mutable State aggregate shared by Transactions and Storage. Before changing
-slots, income settles at the old rate. Snapshots never expose accrual timestamps, fractions,
-lease tokens, receipts or other players' balances. Passive income advances snapshot sequence,
-not mutation revision. Server proximity checks apply to the caller's own shelf.
+Only `Intent`, `State` and `RequestState` remotes remain. No owner/plot identity comes from a
+mutation request. Requests resolve to the callback Player's session. Display placement checks
+that player's own plot/proximity. Shelf edits require owned page, configured visible slot,
+discovery, profile revision and carousel revision; A-B-A navigation invalidates stale edits.
+Physical arrows are server-bound to a plot, validate living character/distance/session, and use
+a shared per-plot cooldown. They change only runtime visibility, not saved progression.
 
 ## Persistence and acknowledgement
 
@@ -63,8 +53,8 @@ Leaving/shutdown attempts a bounded final save/release, with lease expiry as cra
 `init.client.luau` queues one mutation at a time and retries the same ID after delayed replies.
 It reconciles ordered owner snapshots and exposes pending-request state to the UI. `Interface`
 composes dedicated HUD, navigation, book/details, shop, Display controls (`DisplayScreen`),
-goals and Social modules. `ShowroomScreen` supplies the minimal cosmetic editor/read-only view
-inside Social during a Gallery visit.
+goals and `ShelvesScreen`, a minimal owner editor with current-page controls and a discovered
+figure picker. There is no visit directory or teleport callback.
 `UITheme`, `Widgets`, `UIIcons` and `UIPreview` provide common tokens, touch controls, progress,
 original icon shapes and static asset slots. `UIState` derives read-only presentation metadata;
 `UIScope` owns connections/tweens/timers. A bounded `Notifications` component handles feedback.
@@ -72,7 +62,7 @@ original icon shapes and static asset slots. `UIState` derives read-only present
 `Scroll.bind` accepts both list and grid layouts and measures content plus padding explicitly.
 Nested tile groups report their measured height to the outer list. Filtering and safe-area
 resize preserve access to every figure. Independent presentation hosts replace the common menu shell: desktop rail, themed book spread,
-package-led shop, compact daily/social sheets and bottom Display controls. Narrow/touch windows use
+package-led shop, compact Goals/Shelves sheets and bottom Display controls. Narrow/touch windows use
 bottom navigation; short landscape gives its space to the active screen until close. `UILayout`
 owns bounds, while `CollectionStyle`/`CollectionArt` isolate collection identity from neutral
 `UITheme` controls. Details replace the book grid on narrow screens. `CollectionSelection`, `CollectionLayout`,
@@ -89,9 +79,10 @@ show a box, Redeem goes directly to the figure spotlight. Skipping or interrupti
 cannot affect the already-granted item. See [opening behavior and Studio checks](OPENING.md).
 No opening-specific remotes or server logic were introduced.
 
-`Visitors.luau` animates at most two local decorative visitors in the currently visited main plot
-at 20 updates/second. Motion reduction hides them. Visitors never report or change payouts.
-UI connections, models, spawn tasks and room instances have explicit owners and teardown.
+There are no simulated visitor actors. Real players walk into open plots. Character respawn
+returns only that character to its assigned plot; it does not reset shelves or require visit
+sessions. Leaving destroys owner content and connections and releases the slot. Visitors remain
+on the shared ground safely. Plot allocation/coordinates and page visibility are not saved.
 
 Shared Catalog/Types/FigureModel contain only public definitions, contracts and original
 procedural art. Figure identity is a quantity stack; trading/unique variants are not implemented.
@@ -109,29 +100,17 @@ rarity odds from Catalog/snapshots; `ShopLayout` owns responsive geometry; `Blin
 creates the carousel and possible-figure entries, so another collection does not require a Shop
 layout fork. Buy still uses the existing server-authoritative intent and opening-result path.
 
-## Social and Gallery boundary
+## Public/private boundary and rendering
 
-Existing plot visits resolve online hosts and living characters with a two-second cooldown. Each
-plot has one Gallery entrance: a server-owned prompt resolves its host, validates physical
-proximity and session availability, and joins an owner-specific runtime. Room portals expose only
-that owner's unlocked rooms. A hall renders at most six doors and physical paging portals; the
-persistent room map has no four-room cap. Rooms instantiate only while occupied.
+Only owner-labelled geometry, active Display figures/rates and visible shelf figures/page signage
+are public. Owner state events never go to guests. Each owner gets only their own visible page
+projection, not all pages. The server sends no private balances, inventory, discovery or progression
+to visitors. Visitors may turn physical shelf arrows but cannot mutate the owner's saved state.
 
-Gallery and room generations are separate. Edits require the current room token, revision,
-membership, room ownership, valid anchor, permanent figure discovery and live-room proximity.
-All use the existing Intent/Transactions path and bounded receipts/token bucket. A visitor can
-walk through and observe, but cannot edit. Public views omit private inventory, discovery,
-balances, palette ownership, progression and storage data. Physical room models are public art.
-
-Last-room-occupant departure destroys that room; last-Gallery-participant departure destroys the
-hall. Owner leave returns guests home. Character reset, visitor leave, plot navigation and
-externally destroyed instances clear membership and disconnect owned connections. Multiple owners
-have isolated interior lanes. Runtime coordinates and membership are not persisted.
-
-Display uses only its own slots for income, bonuses, reservations and daily goals. Cosmetic
-Showroom references reserve zero copies and can repeat across rooms, even while the same figure
-earns in Display. Collection acquisition and profile load reconcile earned rooms idempotently.
-Legacy palette ownership/preference migrates to Showrooms; new palette purchasing is deferred.
+No per-frame plot work is added. Static geometry persists for the session. Rendering compares
+slot figure IDs on successful mutations/page changes; one changed figure creates one replacement,
+and unchanged IDs can be reused between pages. The visible load is bounded at 27 cosmetic figures
+plus at most six Display figures per player. Native 24-player/mobile performance is unmeasured.
 
 ## Preserved tooling and evidence
 

@@ -4,7 +4,8 @@ local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Rules = require(script.Parent.Rules)
 local Economy = require(script.Parent.Economy)
-local Showrooms = require(script.Parent.Showrooms)
+local Shelves = require(script.Parent.Shelves)
+local Legacy = require(script.Parent.LegacyCosmetics)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -19,13 +20,13 @@ local function fields(value: { [string]: unknown }, allowed: { string }): boolea
 end
 function Profile.encode(state: Types.State): Types.Profile
 	return {
-		schemaVersion = 3,
+		schemaVersion = 4,
 		coins = state.coins,
 		scrap = state.scrap,
 		owned = table.clone(state.owned),
 		discovered = table.clone(state.discovered),
 		display = { unlocked = state.display.unlocked, slots = table.clone(state.display.slots) },
-		showrooms = Showrooms.copy(state.showrooms),
+		shelves = Shelves.copy(state.shelves),
 		step = state.step,
 		lastDailyDay = state.lastDailyDay,
 		goalDay = state.goalDay,
@@ -39,13 +40,16 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	end
 	local data = raw :: { [string]: unknown }
 	local version = data.schemaVersion
-	if version ~= 1 and version ~= 2 and version ~= 3 then
+	if
+		typeof(version) ~= "number"
+		or (version ~= 1 and version ~= 2 and version ~= 3 and version ~= 4)
+	then
 		return nil
 	end
 	local allowed = { "schemaVersion", "coins", "scrap", "owned", "discovered", "step" }
-	if version == 3 then
+	if version >= 3 then
 		table.insert(allowed, "display")
-		table.insert(allowed, "showrooms")
+		table.insert(allowed, if version == 4 then "shelves" else "showrooms")
 	else
 		table.insert(allowed, "slots")
 		if version == 2 then
@@ -100,8 +104,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		end
 	end
 	local display: { [string]: unknown }
-	local showroomData: unknown
-	if version == 3 then
+	if version >= 3 then
 		if typeof(data.display) ~= "table" then
 			return nil
 		end
@@ -109,21 +112,17 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		if not fields(display, { "unlocked", "slots" }) then
 			return nil
 		end
-		showroomData = data.showrooms
 	else
-		-- Explicit v1/v2 -> v3 migration. No input mutation or destructive recovery.
 		display = { unlocked = if version == 1 then 3 else data.unlocked, slots = data.slots }
-		showroomData = {
-			rooms = {},
-			palette = if version == 1 then "grove" else data.theme,
-			palettes = if version == 1 then { grove = true } else data.themes,
-		}
+		if version == 2 and not Legacy.validPalettes(data.theme, data.themes) then
+			return nil
+		end
 	end
 	if
 		not integer(
 			display.unlocked,
 			DisplayConfig.defaultSlots,
-			if version == 3 then DisplayConfig.maxSlots else (if version == 1 then 3 else 4)
+			if version >= 3 then DisplayConfig.maxSlots else (if version == 1 then 3 else 4)
 		) or typeof(display.slots) ~= "table"
 	then
 		return nil
@@ -153,11 +152,14 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			return nil
 		end
 	end
-	local showrooms = Showrooms.decode(showroomData, state.discovered)
-	if not showrooms then
+	local shelves = if version == 4
+		then Shelves.decode(data.shelves, state.discovered)
+		elseif version == 3 then Legacy.migrate(data.showrooms, state.discovered)
+		else Shelves.new()
+	if not shelves then
 		return nil
 	end
-	state.showrooms = showrooms
+	state.shelves = shelves
 	if version ~= 1 then
 		if
 			not integer(data.lastDailyDay, -1, 100000000)
@@ -175,7 +177,6 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			return nil
 		end
 	end
-	Showrooms.sync(state)
 	return state
 end
 return Profile

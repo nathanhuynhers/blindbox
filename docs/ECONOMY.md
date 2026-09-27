@@ -1,7 +1,7 @@
 # Full-game candidate economy
 
 These are tuning values for the user-authorized full-game candidate, not validated long-term
-balance. Income remains automatic and server-owned; visitors are decorative. No paid currency,
+balance. Income remains automatic and server-owned; visitors cannot affect payouts. No paid currency,
 offline income, trading or escalating multipliers are implemented.
 
 | Parameter | Value |
@@ -15,27 +15,28 @@ offline income, trading or escalating multipliers are implemented.
 | Rate bands | Common 1-2, Uncommon 3-4, Rare 6-8; validated at startup |
 | Display capacity | Starts at 3; supports 6; legacy fourth-slot unlock costs 4,000 Coins |
 | Themed display | +1 Coin/sec once when at least 3 distinct displayed IDs share a collection |
-| Palettes | Existing ownership preserved for Showrooms; new palette purchases retired (legacy cost was 1,200 Coins) |
+| Shelf pages | One default page; no acquisition price or curve implemented |
 | Duplicates | Recycle one extra undisplayed copy for 1 Scrap; keep at least one owned copy |
 | Targeted redemption | 6 Scrap for any chosen figure from either collection |
 | Daily box | One free choice of collection per UTC day, no streak |
 | Daily goal | Display 3 distinct figures simultaneously; claim 100 Coins once per UTC day |
-| Completion | Permanent discovery recognition, legacy plaque and automatic cosmetic collection Showroom |
+| Completion | Permanent discovery/index tracking; rewards TBD, no room or page grant |
 | Bounds | 200 total copies; 1 billion Coins; 1 million Scrap |
 
-These are implemented candidate values. Display supports six slots, but final slot 4/5/6 unlock
-paths and prices are not finalized. The retained 4,000-Coin fourth slot must not be extrapolated
-into prices for slots 5 and 6. Showroom placements are cosmetic discovered-figure references: they
-generate exactly zero Coins, reserve zero inventory copies and never count toward Display bonuses
-or daily Display goals. Legacy palette ownership/preference is preserved under Showrooms in
-schema v3; see [migration](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
+Display currently supports six positions in one horizontal row. Slot 5/6 acquisition methods
+remain unresolved; the retained 4,000-Coin fourth slot is not a price for slots 5/6.
+Shelves are cosmetic permanent-discovery references. They earn zero Coins, reserve zero copies
+and never count toward themed Display bonuses or daily Display goals. Shelf page pricing and
+customization are unimplemented. The retired room palettes have no equivalent in the new system;
+schema 4 validates old palette state before discarding it, while retaining all unrelated economic
+progress and converting saved cosmetic figures. See [migration](DATA_MODEL.md).
 
 `rate = sum(baseCoinsPerSecond for each occupied slot) + eligibleThemedBonus`
 
 Only displayed copies earn, including repeats. Inventory-only figures do not. Three weakest
 Common copies earn 3/sec, three distinct Grove Commons earn 5.5/sec including the bonus,
 three Grove Rares earn 21/sec, and four Tide Rares earn 30/sec. The small set bonus does not
-make a Common-only shelf outperform a Rare-heavy shelf. No multiplicative bonuses or rate cap.
+make a Common-only Display outperform a Rare-heavy Display. No multiplicative bonuses or rate cap.
 
 Each server settlement uses elapsed time and retains fractions. Settle at the previous rate
 before editing a display. Credit whole Coins directly. At the numeric safety ceiling, stop and
@@ -49,7 +50,7 @@ existing display satisfies it immediately. A failed reward action changes neithe
 balance. Save markers and rewards live in the same profile aggregate.
 
 A new player can open three funded boxes plus the optional daily free box. Even three weakest
-Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. New palette shopping is deferred. Test 10/30-minute sessions and returning
+Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. Shelf page acquisition is deferred. Test 10/30-minute sessions and returning
 sessions for content exhaustion, value of both collections, idle dominance and stockpiling.
 Current content is twelve figures; do not disguise that limit with artificial grind.
 

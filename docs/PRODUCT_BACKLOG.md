@@ -26,18 +26,18 @@ This is the current product-direction backlog after the first full-game candidat
    - Visual grid/book with silhouettes for undiscovered figures, discovery state, quantities, rarity, collection completion, and a focused detail view.
    - Make completing a collection feel celebratory.
 
-5. **Separate Display from Showrooms**
-   - Migrate the current earning shelf/Room into the focused three-to-six-slot Display system.
-   - Build non-economic Showrooms separately; do not turn economic Display optimization into decorating.
-   - Explore shelves, wallpaper, floors, rugs, plants, lighting, display cases, furniture, plaques, and collection-themed rewards.
-   - Collection completion unlocks its associated Showroom; additional blank/custom rooms can be acquired separately.
-   - Preserve schema-v2 slots and palette ownership through an explicit migration.
-   - Follow the implementation order and unresolved decisions in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+5. **Player Plot, Display and Shelves (functional candidate implemented)**
+   - Fixed open plots contain a horizontal three-to-six-slot earning Display and cosmetic Shelves.
+   - Three shelf units show 27 configured positions per runtime-selected page; pages reuse geometry.
+   - Schema v4 preserves legacy cosmetic references. Walking replaces visit/teleport navigation.
+   - Final art, shelf customization and page acquisition/pricing are future work, not implemented.
+   - Collection-completion rewards are TBD; tracking remains.
+   - Follow [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 
 ## Phase 2: Build depth
 
 6. **Physical blind-box shop and polished world**
-   - Move beyond menu-only purchasing toward a cozy physical shop/hub with visible collection boxes and showroom access.
+   - Move beyond menu-only purchasing toward a physical shop/hub with visible collection boxes and open player plots.
 
 7. **Secret figures**
    - Consider one optional chase Secret per collection.
@@ -46,15 +46,15 @@ This is the current product-direction backlog after the first full-game candidat
 
 8. **Collector progression**
    - Add long-term account progression based on collecting/discovery/completion rather than exponential power multipliers.
-   - Potential rewards: showroom space, cosmetics, shelves, titles, and other expression.
+   - Progression rewards need a separate decision; collection-completion rewards remain TBD.
 
-9. **Social showroom features**
-   - Replace/extend current main-plot Display visits with one scalable Gallery entrance and safe visits to unlocked Showrooms.
+9. **Social plot features**
+   - Walk-in viewing and shared shelf navigation are implemented; evaluate these with multiple clients.
    - Later consider likes, favorite/rarest figure showcases, collection inspection, completion badges, and recent-pull presentation.
 
 10. **More collections and content pipeline**
     - Make adding an original collection a repeatable content update rather than an architecture rewrite.
-    - New collections should combine figures, packaging, completion rewards, and optional matching decor.
+    - New collections should combine figures and packaging; completion rewards and matching decor require separate decisions.
 
 11. **Daily/weekly quests**
     - Expand the lightweight daily system only after the core loop is fun.
@@ -71,8 +71,8 @@ This is the current product-direction backlog after the first full-game candidat
 
 ## Product principles
 
-- The core fantasy is: **open cute blind boxes, build a collection, create a beautiful showroom, and show it to other players.**
-- Display earning, collecting, and Showroom decorating should reinforce each other without making Showrooms economic.
+- The core fantasy is: **open cute blind boxes, build a collection, build a personal collection exhibit, and show it to other players.**
+- Display earning, collecting, and cosmetic Shelves should reinforce each other while Shelves stay non-economic.
 - Prefer visual communication over walls of text.
 - Avoid turning the game into a generic exponential-upgrade simulator.
 - New systems should strengthen collecting, expression, anticipation, or social pride.

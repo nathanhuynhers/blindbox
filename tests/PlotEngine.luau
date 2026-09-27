@@ -1,5 +1,5 @@
 --!strict
--- Minimal engine boundary shim. Tests execute the actual GalleryRuntime controller.
+-- Minimal engine boundary shim. Tests execute the actual PlayerPlot geometry and renderer.
 -- This does not simulate Roblox physics, rendering, replication, or prompt input.
 local Engine = { nodes = {}, players = {}, clock = 0, connections = 0 }
 local function signal()
@@ -55,25 +55,21 @@ local function node(class)
 end
 Engine.Instance = { new = node }
 Engine.workspace = node("Workspace")
-Engine.Players = { GetPlayerByUserId = function(_self, id) return Engine.players[id] end }
-Engine.Color3 = { fromRGB = function(r,g,b) return {r,g,b} end }
+Engine.Players = { GetPlayerByUserId = function(_self, id) Engine.figureCreates = 0
+Engine.FigureModel = { create = function(id, cf)
+ Engine.figureCreates += 1
+ local model = node("Model"); model.Name = id; model.Position = cf.Position
+ return model
+end }
+return Engine.players[id] end }
+Engine.Color3 = { fromRGB = function(r,g,b) return {r,g,b} end, new = function(r,g,b) return {r,g,b} end }
+Engine.UDim2 = { fromOffset = function(x,y) return {x,y} end, fromScale = function(x,y) return {x,y} end }
+Engine.CFrame = { new = function(position) return {Position=position} end, lookAt = function(position, _target) return {Position=position} end }
 local Template = {}
 function Template.part(parent, name, position)
 	local part = node("Part"); part.Parent = parent; part.Name = name; part.Position = position
 	return part
 end
-function Template.label(_part, _text) end
-function Template.portal(parent, name, position, _text)
-	local part = Template.part(parent, name, position)
-	local prompt = node("ProximityPrompt"); prompt.Parent = part
-	return part, prompt
-end
-function Template.create(parent, name, origin, ownerId, room)
-	local model = node("Model"); model.Parent = parent; model.Name = name; model:SetAttribute("OwnerId", ownerId)
-	if room then model:SetAttribute("RoomId", room.roomId) end
-	return { model = model, spawn = { Position = origin }, origin = origin, anchors = {}, signature = "", figures = node("Folder") }
-end
-function Template.render(space, room) space.signature = room.theme end
 Engine.Template = Template
 function Engine.player(id)
 	local character = node("Model")
@@ -90,4 +86,10 @@ function Engine.trigger(part, player)
 	local prompt = part:FindFirstChildOfClass("ProximityPrompt")
 	assert(prompt); prompt.Triggered:fire(player)
 end
+Engine.figureCreates = 0
+Engine.FigureModel = { create = function(id, cf)
+ Engine.figureCreates += 1
+ local model = node("Model"); model.Name = id; model.Position = cf.Position
+ return model
+end }
 return Engine

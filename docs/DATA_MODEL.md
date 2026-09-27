@@ -1,91 +1,74 @@
 # Persistent data model
 
-The candidate uses schema **3**, with explicit v1/v2 migration. Stable figure and collection IDs
-are unchanged. See [migration details and examples](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
+Current schema: **4**. Stable `grove.*` and `tide.*` figure IDs and collection discovery are
+unchanged. See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
-## Stored profile
-
-| Field | Meaning and constraints |
+| Field | Meaning |
 | --- | --- |
-| schemaVersion | 3; unknown versions fail closed |
-| coins, scrap | Integers in 0..1,000,000,000 and 0..1,000,000 |
-| owned | Known figure IDs to positive quantities; at most 200 physical copies |
-| discovered | Known figure IDs to true; all owned IDs must be discovered; permanent |
-| display | `{unlocked, slots}`; capacity 3..6; dense slot list of that length |
-| showrooms | `{rooms, palette, palettes}`; separate cosmetic state |
-| step | Onboarding step 1..5 |
-| lastDailyDay | Last free-box UTC day, or -1 |
-| goalDay | Daily Display goal UTC day, or -1 |
-| goalProgress | Highest simultaneous distinct Display count today, capped at 3 |
-| goalClaimed | Boolean; true requires progress 3 |
+| schemaVersion | 4; unsupported versions block loading/writing |
+| coins / scrap | Integers in 0..1,000,000,000 / 0..1,000,000 |
+| owned | Known figure IDs to positive copy counts; total at most 200 |
+| discovered | Known figure IDs to true; permanent; includes every owned ID |
+| display | `{unlocked, slots}`: capacity 3..6, dense slot array of that length, empty string or known figure ID |
+| shelves | `{pages}`: nonempty ordered page array; no permanent maximum count |
+| step | Onboarding stage 1..5 |
+| lastDailyDay | Last claimed free-box UTC day or -1 |
+| goalDay / goalProgress / goalClaimed | Daily Display goal day, highest distinct count 0..3, claim marker |
 
-Display slots contain a known figure ID or empty string. Each occupied slot reserves one owned
-copy. Reservations cannot exceed quantities. Recycling requires two owned copies and a free copy.
-Capacity is sequential; extra-slot method configuration is separate, with only legacy slot 4
-currently purchasable. Slots 5/6 have no acquisition flow or price.
+Each page is `{id, placements, customization}`. IDs such as `page:1` are stable and unique across
+the array. `placements` maps `unit:U/row:R/slot:S` to known permanently discovered figure IDs.
+Positive logical coordinates are bounded for safe identifier parsing, independently of the
+current geometry counts. Increasing row capacity needs no migration; temporarily hidden saved
+slots survive smaller layouts. `customization` must currently be empty; unknown future state is
+rejected rather than erased. Real customization requires approved definitions and validation.
 
-`showrooms.rooms` is a map of stable room IDs to these records:
+Only Display reserves owned copies and earns Coins. Shelf references reserve zero copies and
+can repeat across slots/pages, even while the same figure earns in Display. They do not affect
+recycling, inventory, bonuses or daily goal checks. Unknown fields, invalid IDs, ineligible
+figures, invalid reservations and inconsistent daily state fail closed.
 
-| Room field | Meaning |
-| --- | --- |
-| roomId | Same stable ID as map key; independent of visible name/position |
-| sourceType | Collection or Custom |
-| sourceCollectionId | Catalog collection ID for Collection; absent for Custom |
-| theme | Owned palette ID; applied only to this room |
-| placements | Stable configured anchor ID -> permanently discovered figure ID |
-| customization | Empty extension map until approved decor definitions/validation exist |
+## Deterministic migrations
 
-Catalog explicitly maps `grove` to `collection:grove` and `tide` to `collection:tide`. Collection
-rooms require complete discovery. Custom identities use `custom:<opaque-id>`; the model supports
-them but no acquisition endpoint exists. There is no four-room ownership cap. Current runtime
-halls page six entrances at a time. Room coordinates/generations/instances are never saved.
+`Profile.decode` validates v1/v2/v3 directly into a fresh v4 state. It does not mutate its input.
+There is no intermediate room unlock/reward pass. Encoding always writes schema 4.
 
-**Showroom placements reserve zero copies and produce zero income.** The same discovered figure
-may appear in multiple anchors/rooms and Display, including cross-collection cosmetic placement.
-Inventory-only and Showroom figures never enter rate, bonus, reservation or daily Display checks.
+- **v1:** preserve Coins, Scrap, owned/discovered maps, three Display placements and onboarding.
+  Add the existing unclaimed daily defaults and one empty shelf page.
+- **v2:** preserve all economy, inventory, discovery, Display capacity/placements, onboarding and
+  daily fields. Validate then retire legacy `theme`/`themes`; create one empty shelf page.
+- **v3:** preserve the existing Display aggregate and all unrelated fields exactly. Validate old
+  room IDs/origins, palette ownership, empty customization maps and eligible figure anchors.
+  Sort room IDs lexicographically, then read `figure_1` through `figure_6` in numeric order,
+  skipping empty anchors. Pack every reference into fresh pages without deduplication or
+  overwrite: unit 1 row 1 slots 1..3, then subsequent rows/units, then the next page at reference 28.
+  Minimum one page; page IDs are `page:1`, `page:2`, etc. A frozen 3x3x3 migration layout keeps
+  conversion deterministic even if future visual configuration changes.
+- **v4:** validate/deep-copy existing pages and placements as stored. Do not repack them, grant
+  rooms or derive shelf progression from collection completion. Repeated decode/encode is idempotent.
 
-`showrooms.palette` preserves the legacy equipped palette as a default for future earned rooms.
-`showrooms.palettes` preserves all legacy owned palettes, including the required free `grove`.
-Per-room palette changes use existing owned IDs; new palette purchases are retired. Unknown
-fields/definitions, invalid reservations, unowned themes and ineligible placements block loading
-and saving instead of silently deleting data. Nested snapshots are explicitly copied.
+All valid discovered legacy references survive, including duplicates and figures with zero owned
+copies. Empty legacy room ownership does not grant pages. Migration pages exist only to retain
+placements and imply no price or paid entitlement. Legacy room names/origins/ownership, palette
+preference/ownership, per-room themes and empty customization maps are retired: there is no new
+equivalent and no refund, paid-page assumption or speculative cosmetic conversion. Unknown
+nonempty customization is invalid under the original v3 schema and blocks loading instead of
+silently discarding it. Collection completion remains derivable from preserved discovery;
+new completion rewards are TBD.
 
-## Historical schemas and migration
+## Storage and runtime boundaries
 
-Version 1 contained schemaVersion, coins, scrap, owned, discovered, slots and step, with three
-slots. Decode preserves these facts and adds the free palette/capacity/daily defaults.
+The existing envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
+Store names, native UpdateAsync leases, generations, retries and pause-on-failure behavior are
+unchanged. A failed load never becomes a new profile. Migration is applied within the validated
+acquisition/save path. Acknowledgements mean in-memory success; crash rollback affects the entire
+last saved aggregate. No offline income. See [operations](OPERATIONS.md).
 
-Version 2 added unlocked (3..4), theme, themes, lastDailyDay, goalDay, goalProgress and goalClaimed.
-Decode moves slots/unlocked under Display and theme/themes under Showrooms. All economy,
-inventory, discovery, onboarding and daily facts survive unchanged. Both migrations reconcile
-completed collections into stable room IDs, using the saved palette preference. No manual claim,
-extra currency, inventory reservation or duplicate room grant occurs.
+Mutation revision, accrued fractions/timestamps, request receipts, assigned plot index, world
+coordinates, visible shelf page, carousel revision and instances are **not persisted**. A player
+may receive any available plot next join; pages always begin visibly at index 1. Owner snapshots
+retain the existing flat Display `slots`/`unlocked` UI projection and add one `shelves` view with
+page ID/index/count, carousel revision and visible placements. No full shelf-page inventory or
+other owner's private profile is broadcast. Old Gallery projections and runtime tokens are gone.
 
-Version 3 validates both aggregates and reconciles missing earned rooms on load. Reconciliation
-never replaces an existing room. Migration works on fresh tables, is deterministic/idempotent,
-and preserves the original input. The original session-only MVP had no real saved profiles.
-
-## Stored envelope and runtime
-
-The unchanged `Player_<UserId>` envelope is `{data, token, expires, generation, writer}`. Native
-UpdateAsync validates the entire envelope/profile before every acquisition/write. Token and
-generation protect exclusive session ownership and reconcile uncertain commits. Failed loads
-never create fallback data. Store names and Studio/live isolation are unchanged; see
-[operations](OPERATIONS.md). Replace old server writers when deploying schema 3.
-
-State adds mutation revision, monotonic accrual time and fractional Coins; these are not saved.
-No offline income is granted. Transactions own token-bucket state and bounded replay receipts.
-Gallery membership, actor/owner identity, room lifetime tokens, allocation cells, connections and
-Workspace models are temporary server state, independent of persistent room identity.
-
-Owner snapshots retain flat `slots`/`unlocked` presentation fields for the existing Collection/
-Shop/opening clients; those values project only Display. Snapshot `theme`/`themes` project the
-owner's Showroom palette preference/ownership for compatibility, not Display cosmetics.
-`rooms` remains the same-server public main-plot directory. Optional `gallery` contains only the
-visited owner's public identity, current cosmetic room, visible room labels, runtime token and
-server-derived edit permission. Guests never receive the host's balance, inventory, discoveries,
-palette ownership, progression or storage/session secrets. Their own private snapshot is separate.
-
-Acknowledgements confirm in-memory results, not durable saving. Whole-profile snapshots include
-both aggregates; crash rollback affects them together. Existing lease, pause/retry and final-save
-guarantees remain as documented in operations. No new external persistence system was added.
+Deploy v4 with a coordinated server replacement. Old v3-only code cannot read new saves; a code
+rollback must keep schema-v4 decoding or use an explicitly reviewed recovery process.

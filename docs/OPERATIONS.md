@@ -5,16 +5,15 @@ verified in live Roblox servers. The agent has no Studio control connector and h
 new engine, mobile, multiplayer or real DataStore tests. Existing MVP playtesting is not proof
 that newly added features pass those tests.
 
-This checklist covers the existing economy/storage candidate. The implemented Display + Showroom
-foundation adds schema v3 and new runtime/UI paths. Also run the
-[Gallery, migration and multi-client checklist](DISPLAY_SHOWROOM_IMPLEMENTATION.md#verification-and-remaining-studio-acceptance).
-Replace old server writers when deploying v3; a v2-only code rollback cannot read new saves.
+This checklist covers the economy/storage candidate and the schema-v4 open Plot/Shelf
+redirection. Also run the [plot, migration and multiplayer checklist](PLOT_SHELF_IMPLEMENTATION.md).
+Replace older server writers when deploying v4; code that supports only v3 cannot read new saves.
 
 ## Run now
 
 Open `RobloxWorkspace.rbxlx` and Play, or sync the source through Rojo. Studio starts in an
 explicitly labeled **unsaved preview** by default. All content, UI, expansion, daily rewards,
-owned palette selection and same-server visits work in preview; leaving resets it. There is no paid content.
+shelf editing and walk-in social viewing work in preview; leaving resets it. There is no paid content.
 
 To test real saving, use a separate, privately published test experience. Enable **Experience
 Settings > Security > Enable Studio Access to API Services**, as described in [Roblox's data
@@ -53,7 +52,7 @@ that check; formatting/lint are not substitutes for it. Selene used its cached R
 The regression suite runs actual domain, request, schema and storage-transform code:
 
 - 8,878 economy/inventory/request assertions, including 1,000 mixed requests.
-- 82 full-game/persistence fault checks: expansion, preserved palettes, daily/goal claims, migration, corrupt
+- 81 full-game/persistence fault checks: expansion, legacy cosmetic migration, daily/goal claims, migration, corrupt
   payloads, competing leases, stale writers, uncertain committed replies, retries and release.
 - Four scroll-content/lifecycle assertions with engine property/signal shims; these verify the
   sizing logic, not actual Roblox layout rendering.
@@ -61,9 +60,9 @@ The regression suite runs actual domain, request, schema and storage-transform c
 - 1,839 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
 - 1,732 opening-state/result checks: timing, all-phase skip/cancel, rapid inputs, reduced motion,
   confirmed NEW/duplicate metadata, delayed snapshots and unsupported/failed replies.
-- Display/Showroom migration, ownership, zero-reservation semantics, bonus isolation, intent abuse
-  and Gallery controller lifecycle suites; see the current verification record in
-  [the implementation report](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
+- Shelf schema/migration, discovery-only placement, intent abuse, shared carousel and fixed
+  plot lifecycle/rendering suites; see the exact current counts and limits in
+  [the implementation report](PLOT_SHELF_IMPLEMENTATION.md).
 
 `tests/StudioScroll.client.luau` is an additional engine regression script. During Play, open
 Book with All figures selected and the detail view closed and paste its contents into the **client** Command Bar.
@@ -89,12 +88,14 @@ Run that script from the client Command Bar on each screen. These engine checks 
 2. **Core loop:** buy both box types, skip reveals, reserve/replace/remove copies, recycle only
    extras, redeem missing discoveries, and verify individual plus themed total rates. At the
    inventory cap, a daily box must remain claimable after space is made.
-3. **Progression:** buy the fourth slot once; try again and confirm no charge. Switch migrated owned
-   palettes inside Showrooms. Complete each collection and check its automatic Showroom unlock.
-4. **Persistence:** in the isolated test store, open/place, unlock, edit Showroom anchors/palettes and claim rewards.
-   Wait for a successful autosave, stop/rejoin and compare balances/counts/slots/palette/claims.
-   Reset character without resetting the profile. Verify no repeated starter grant or offline
-   earnings. Disable API access for a fresh persistent join: play must be blocked, not reset.
+3. **Progression:** buy the fourth slot once; try again and confirm no charge. Finish each
+   collection and verify completion tracking without granting a room, page or new reward.
+4. **Persistence:** in the isolated test store, open/place, unlock, edit shelves and claim rewards.
+   Wait for a successful autosave, stop/rejoin and compare balances/counts/Display/shelf pages/claims.
+   Verify v1/v2/v3 fixtures migrate to v4, including all v3 cosmetic references across page boundaries.
+   A different physical plot must show the same saved exhibit. Visible page resets to one. Reset
+   character without resetting the profile. Verify no repeated starter grant or offline earnings.
+   Disable API access for a fresh persistent join: play must be blocked, not reset.
 5. **Failures:** use the deterministic injected failures first, then test interruption/shutdown
    with expendable private test profiles. Confirm failures pause economic actions and a later
    successful save resumes. An unconfirmed final save may leave the key locked until its lease
@@ -102,18 +103,19 @@ Run that script from the client Command Bar on each screen. These engine checks 
 6. **Daily rules:** one free chosen box and one display-goal claim per UTC day, including rejoin.
    Both markers survive saves. Use the injected-day tests for boundaries rather than changing
    production server time. Inspect invalid-state fixtures before any schema change.
-7. **Visits:** two or more clients, distinct private inventories. Visit a host, inspect public
-   figures, try editing from their room, then have the host leave. Guests return home. Dead or
-   missing-character navigation is rejected. Nobody spends or grants on another player's behalf.
+7. **Walk-in visitors:** two or more clients, distinct private inventories. Walk onto another
+   plot, inspect public figures and turn shared shelf arrows. Attempt shelf/Display edits as a
+   visitor and from a distance. Confirm rejection. Have the owner leave: content is cleaned up,
+   visitors remain in the shared world, and a new owner can reuse the slot.
 8. **Abuse/recovery:** spam malformed payloads, stale revisions, request-ID reuse, fake prices,
-   unknown IDs and arbitrary visit destinations. Confirm no handler crashes or balance changes.
+   unknown IDs and spoofed plot/page/slot identities. Confirm no handler crashes or balance changes.
    Delay replies and retry the same ID; purchases and unlocks must not run twice.
 9. **Device/performance:** target 30 FPS on representative mobile hardware, 60 FPS on desktop,
    and a 24-player server cap. These are targets, not measured results. Check mouse/touch/gamepad,
-   reading sizes, reduced motion, respawn, repeated join/leave and a 30-minute soak. There are
-   at most two local decorative visitors and bounded public directory/receipt/inventory sizes.
+   reading sizes, reduced motion, respawn, repeated join/leave and a 30-minute soak. Measure 24 populated plots with up to 27 visible shelf figures plus six Display figures each;
+   verify targeted updates and no growth across repeated joins, leaves and page turns.
 10. **Pacing:** observe returning sessions, weak/common-only luck, duplicates and completion.
-    Record time to next box, fourth slot and palette; ensure twelve-figure content is enjoyable
+    Record time to next box, fourth slot; ensure twelve-figure content is enjoyable
     without adding artificial grind. Hand notes and server Output are sufficient for this build.
 
 ## Persistence guarantees and limits
@@ -127,7 +129,7 @@ closed; they are never replaced with defaults. No paid receipts or cross-player 
 Leases last 120 seconds. Autosaves run about every 30 seconds; gameplay stops after 85 seconds
 without a confirmed renewal or immediately on a save failure. Bounded retries use the same
 snapshot and save generation. A response lost after commit is reconciled using the writer token
-and generation; an expired or replaced owner cannot write. Legacy Display/main-plot mutations never yield.
+and generation; an expired or replaced owner cannot write. Display and shelf mutations never yield.
 
 Action replies acknowledge **in-memory progress**. A hard crash may roll progress back to the
 last successful save, normally up to an autosave interval plus request latency, and potentially

@@ -1,7 +1,6 @@
 --!strict
 return table.freeze({
 	expansionCost = 4000,
-	themeCost = 1200,
 	goalReward = 100,
 	setBonus = 1,
 	startingCoins = 450,

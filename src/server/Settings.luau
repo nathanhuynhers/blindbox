@@ -4,5 +4,4 @@ return table.freeze({
 	studioPersistence = false,
 	studioStore = "PocketGrove_Studio_v1",
 	liveStore = "PocketGrove_Live_v1",
-	maxRooms = 24,
 })

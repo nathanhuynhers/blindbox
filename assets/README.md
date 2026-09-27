@@ -18,7 +18,7 @@ assets/
   models/
     blind-box/    # reviewed reusable GLB source models
   boxes/
-  showroom/
+  showroom/  # retired legacy source folder; no active runtime
   processed/      # optional reviewed exports; no automatic conversion
   manifest.json  # authored aliases, semantic keys, sources, creator
   uploads.json   # generated public IDs/provenance; commit with AssetIds.luau

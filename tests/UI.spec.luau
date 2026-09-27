@@ -16,6 +16,7 @@ local function check(condition: boolean, message: string)
 end
 local state = Rules.new(0)
 local snapshot: Types.Snapshot = {
+	shelves = { pageId = "page:1", pageIndex = 1, pageCount = 1, pageRevision = 0, placements = {} },
 	coins = state.coins,
 	scrap = state.scrap,
 	owned = state.owned,
@@ -30,10 +31,7 @@ local snapshot: Types.Snapshot = {
 	price = Economy.price,
 	redeemCost = Economy.redeemCost,
 	unlocked = 3,
-	theme = state.showrooms.palette,
-	themes = state.showrooms.palettes,
 	expansionCost = Economy.expansionCost,
-	themeCost = Economy.themeCost,
 	dailyReady = true,
 	goalProgress = 0,
 	goalClaimed = false,
@@ -41,8 +39,6 @@ local snapshot: Types.Snapshot = {
 	nextDay = 86400,
 	saveStatus = "Preview",
 	ready = true,
-	rooms = {},
-	visiting = 1,
 	bonus = 0,
 }
 local id = "grove.pebble"
@@ -299,7 +295,7 @@ for _, viewport in
 do
 	for _, touch in { true, false } do
 		local desktop = Layout.desktop(viewport[1], viewport[2], touch)
-		for _, screenId in { "Collection", "Display", "Shop", "Goals", "Visits" } do
+		for _, screenId in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
 			local rect = Layout.screen(screenId, viewport[1], viewport[2], desktop)
 			check(
 				rect.x >= 0

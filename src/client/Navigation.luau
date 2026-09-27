@@ -4,13 +4,13 @@ local Theme = require(script.Parent.UITheme)
 local W = require(script.Parent.Widgets)
 local Icons = require(script.Parent.UIIcons)
 local Navigation = {}
-Navigation.pages = { "Collection", "Display", "Shop", "Goals", "Visits" }
+Navigation.pages = { "Collection", "Display", "Shop", "Goals", "Shelves" }
 local labels = {
 	Collection = "Collection",
 	Display = "Display",
 	Shop = "Shop",
 	Goals = "Goals",
-	Visits = "Social",
+	Shelves = "Shelves",
 }
 function Navigation.create(parent: Instance, ctx: Context.Context, choose: (string) -> ())
 	local root = W.frame(parent, "Navigation")

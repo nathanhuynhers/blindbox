@@ -9,9 +9,24 @@ Implementation approvals between these milestones are superseded by the user's b
 Public deployment, paid mechanics and trading remain outside scope. The milestone definitions
 below are review criteria, not claims that every runtime test has passed.
 
-Terminology has changed since milestones 1-6 were written. Their implemented "room/showroom"
-means the economic main-plot **Display**. The separately authorized non-economic **Showrooms** and Showroom Gallery now have a functional
-foundation; see [implementation and checkpoint evidence](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
+## Current architecture redirection
+
+The implemented candidate now uses fixed open Player Plots, a horizontal three-to-six-slot
+Display and cosmetic Shelves: three physical units, three rows, three positions per row.
+Additional data pages reuse those same 27 visible positions with shared wraparound arrows.
+Visitors walk directly between plots. Schema v4 migrates legacy placements; completion tracking
+remains but completion rewards are TBD. See [canonical design](PLAYER_PLOTS_AND_SHELVES.md)
+and [implementation and verification](PLOT_SHELF_IMPLEMENTATION.md).
+
+Remaining gate: native Studio multi-client, input, rendering, persistence and performance
+acceptance. Final art, shelf customization, page acquisition/pricing and Display slots 5/6
+acquisition need later authorization. The existing slot-4 Coin unlock remains.
+
+## Historical milestones
+
+Milestones 0-6 below record previous planning and review criteria. Room themes, completion
+rewards, simulated visitors and visit navigation mentioned there are historical, superseded
+features, not current requirements. Follow the current architecture above for new work.
 
 ## Milestone 0 — Review the plan
 
@@ -120,28 +135,14 @@ one expansion last. Do not build every future backend service before another pla
 - **Automatic checks:** public-state allowlist, access rules, cleanup, bounded replication and
   unchanged inventory/balances after guest interactions.
 
-## Post-candidate direction — Display and Showrooms
+## Retired intermediate architecture
 
-The user subsequently authorized this full functional foundation. It is implemented as a candidate,
-with native Studio acceptance pending. The original task sequence was:
+The separate Showroom/Gallery implementation has been replaced, including its completion
+unlocks, room sessions and teleport navigation. Its two former design/report documents are
+historical pointers only. There is no parallel runtime to maintain.
 
-1. Rename/refactor legacy Room/Showroom terminology to Display without changing income or saves.
-2. Migrate Display from the implemented 3-4 capacity to an architecture supporting 3-6 slots.
-   Slot 4/5/6 prices and unlock types remain TBD.
-3. Preserve existing slot reservations, palette ownership, income settlement, and public projection
-   through an explicit profile/protocol/world/UI migration.
-4. Introduce Showroom ownership and placement as a separate, zero-income system.
-5. Derive collection-themed Showroom unlocks from completion and support optional blank rooms.
-6. Add one scalable Gallery entrance, then a placeholder interior, safe visits, controlled placement
-   anchors, and data-driven customization before final room art.
-
-The scoped foundation authorization covered these steps together; checkpoint tests were run.
-Future features still need their own authorization. Do not infer final prices, room sizes,
-placement counts, Secret rewards, or advanced free placement from this roadmap summary.
-
-Trading is not included. A separate go/no-go proposal must address per-item identity migration,
-two-profile transfers, duplication/replay attacks, recovery, audit, and economy effects before
-trading work is authorized. Variants/crafting are likewise separate optional branches.
+Trading remains excluded. A separate proposal must address per-item identity, two-profile
+transfers, duplication/replay protection, recovery and economy effects before implementation.
 
 ## Milestone 6 — Launch readiness for the approved feature set
 

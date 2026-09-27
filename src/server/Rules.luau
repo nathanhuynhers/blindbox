@@ -4,7 +4,7 @@ local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Economy = require(script.Parent.Economy)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Rules = {}
-local Showrooms = require(script.Parent.Showrooms)
+local Shelves = require(script.Parent.Shelves)
 local rates: { [string]: number } = {}
 local odds: { [string]: number } = {}
 local totalWeights: { [string]: number } = {}
@@ -20,7 +20,6 @@ for _, value in
 		Economy.coinLimit,
 		Economy.scrapLimit,
 		Economy.expansionCost,
-		Economy.themeCost,
 		Economy.goalReward,
 		Economy.setBonus,
 	}
@@ -53,9 +52,9 @@ Rules.rates = rates
 Rules.odds = odds
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 3,
+		schemaVersion = 4,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
-		showrooms = { rooms = {}, palette = "grove", palettes = { grove = true } },
+		shelves = Shelves.new(),
 		lastDailyDay = -1,
 		goalDay = -1,
 		goalProgress = 0,
@@ -192,7 +191,6 @@ function Rules.mutate(
 		local isNew = not state.discovered[id]
 		state.owned[id] = (state.owned[id] or 0) + 1
 		state.discovered[id] = true
-		Showrooms.sync(state)
 		if state.step == 1 then
 			state.step = 2
 		elseif state.step == 4 and action == "Buy" then

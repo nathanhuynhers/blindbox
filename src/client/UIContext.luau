@@ -7,7 +7,6 @@ export type Context = {
 	snapshot: () -> Types.Snapshot?,
 	canAct: () -> boolean,
 	send: (string, string?, number?, string?) -> (),
-	visit: (number) -> (),
 	navigate: (string) -> (),
 	inspect: (string) -> (),
 	place: (string) -> (),

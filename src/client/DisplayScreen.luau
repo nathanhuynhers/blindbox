@@ -1,6 +1,7 @@
 --!strict
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
+local Config = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Context = require(script.Parent.UIContext)
 local Theme = require(script.Parent.UITheme)
 local State = require(script.Parent.UIState)
@@ -13,7 +14,7 @@ function Display.create(parent: Instance, ctx: Context.Context)
 	root.BackgroundTransparency = 0.08
 	W.corner(root, 16)
 	W.outline(root, Theme.card, 0.2)
-	local page = W.scroll(root, "ShelfControls", ctx.scope)
+	local page = W.scroll(root, "DisplayControls", ctx.scope)
 	page.Position = UDim2.fromOffset(0, 80)
 	page.Size = UDim2.new(1, 0, 1, -80)
 	local selected: string? = nil
@@ -46,7 +47,7 @@ function Display.create(parent: Instance, ctx: Context.Context)
 		}
 	} =
 		{}
-	for slot = 1, 6 do
+	for slot = 1, Config.maxSlots do
 		local card = W.card(tiles, "Slot" .. slot, 210)
 		card.LayoutOrder = slot
 		local label = W.label(card, "Slot " .. slot, 26, 14)
@@ -94,12 +95,9 @@ function Display.create(parent: Instance, ctx: Context.Context)
 			remove = remove,
 		}
 	end
-	local home = W.action(page, "Return to my plot", ctx.scope, ctx.effects, function()
-		ctx.visit(0)
-	end, true)
-	home.button.LayoutOrder = 4
 	local function update(snapshot: Types.Snapshot)
-		income.Text = "My Display"
+		income.Text =
+			string.format("My Display - %d / %d slots", snapshot.unlocked, Config.maxSlots)
 		bonus.Text = string.format(
 			"%g Coins/sec\n%s",
 			snapshot.rate,

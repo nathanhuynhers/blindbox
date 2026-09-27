@@ -3,17 +3,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local Types = require(ReplicatedStorage.Shared.Types)
-local ShowroomConfig = require(ReplicatedStorage.Shared.ShowroomConfig)
+local ShelfConfig = require(ReplicatedStorage.Shared.ShelfConfig)
 local Interface = require(script.Interface)
-local Visitors = require(script.Visitors)
 local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
 local syncRemote = remotes:WaitForChild("RequestState") :: RemoteEvent
-local visitRemote = remotes:WaitForChild("Visit") :: RemoteEvent
-local noticeRemote = remotes:WaitForChild("Notice") :: RemoteEvent
 local current: Types.Snapshot? = nil
 local pending: Types.Intent? = nil
 local beforeRequest: Types.Snapshot? = nil
@@ -34,14 +31,10 @@ ui = Interface.create(function(action: string, figure: string?, slot: number?, c
 		id = HttpService:GenerateGUID(false),
 		revision = state.revision,
 	}
-	if string.sub(action, 1, 8) == "Showroom" then
-		local gallery = state.gallery
-		if not gallery or not gallery.canEdit or not gallery.roomId then
-			return
-		end
-		intent.roomId = gallery.roomId
-		intent.runtimeId = gallery.runtimeId
-		intent.anchorId = if slot then ShowroomConfig.anchors[slot] else nil
+	if string.sub(action, 1, 5) == "Shelf" then
+		intent.pageId = state.shelves.pageId
+		intent.pageRevision = state.shelves.pageRevision
+		intent.shelfSlotId = if slot then ShelfConfig.slots()[slot] else nil
 		intent.slot = nil
 	end
 	pending = intent
@@ -49,21 +42,9 @@ ui = Interface.create(function(action: string, figure: string?, slot: number?, c
 	ui.pending(true)
 	sentAt = os.clock()
 	intentRemote:FireServer(intent)
-end, function(target: number)
-	if opening and opening.isActive() then
-		return
-	end
-	visitRemote:FireServer(target)
 end)
 opening = OpeningController.create(ui.openingFocus, ui.message)
-local visitors = Visitors.create()
 local connections: { RBXScriptConnection } = {}
-table.insert(
-	connections,
-	noticeRemote.OnClientEvent:Connect(function(message: string)
-		ui.message(message)
-	end)
-)
 table.insert(
 	connections,
 	stateRemote.OnClientEvent:Connect(function(state: Types.Snapshot, reply: Types.Reply?)
@@ -83,7 +64,6 @@ table.insert(
 				Remove = "Figure removed",
 				Recycle = "+1 Scrap",
 				Expand = "Display slot unlocked",
-				Theme = "Palette updated",
 				Goal = "Daily reward claimed",
 			}
 			ui.message(
@@ -100,11 +80,10 @@ table.insert(
 		end
 	end)
 )
-local animationElapsed = 0
 local syncAt = 0
 table.insert(
 	connections,
-	RunService.Heartbeat:Connect(function(delta: number)
+	RunService.Heartbeat:Connect(function()
 		local now = os.clock()
 		if pending and now - sentAt > 3 then
 			sentAt = now
@@ -115,24 +94,6 @@ table.insert(
 			syncAt = now
 			syncRemote:FireServer()
 		end
-		animationElapsed += delta
-		if animationElapsed >= 0.05 then
-			animationElapsed = 0
-			local state = current
-			local rate = if state then state.rate else 0
-			if state then
-				for _, room in state.rooms do
-					if room.userId == state.visiting then
-						rate = room.rate
-					end
-				end
-			end
-			visitors.update(
-				now,
-				if ui.effects() and state and not state.gallery then rate else 0,
-				if state then state.visiting else nil
-			)
-		end
 	end)
 )
 syncRemote:FireServer()
@@ -140,7 +101,6 @@ script.Destroying:Connect(function()
 	for _, connection in connections do
 		connection:Disconnect()
 	end
-	visitors.destroy()
 	if opening then
 		opening.destroy()
 	end

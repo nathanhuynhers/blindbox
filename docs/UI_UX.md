@@ -5,16 +5,15 @@ pending.** The server, catalog, economy, networking, persistence and blind-box o
 remain unchanged. The reference image guides composition, not its example names, prices or rates.
 Current figure and packaging models remain procedural placeholders, not the illustrated reference art.
 
-Terminology note: this document describes the implemented candidate. Its **Room** navigation item,
-`DisplayScreen`, palettes, and Social visit cards operate on the economic main-plot **Display**.
-They are legacy names, not the future non-economic Showrooms or Showroom Gallery described in
-[Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+The current world uses open Player Plots, an earning Display and cosmetic Shelves.
+See [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md). Shelf editing is functional
+placeholder UI; Shop and Collection retain their existing presentations.
 
 ## Two visual layers
 
 The global identity is ivory, dark neutral text and restrained lilac accents, with small floating
-controls, fine borders and translucent surfaces. HUD, navigation, Goals, Social, notifications,
-settings and generic room controls have no collection motifs. Currency uses gold accents.
+controls, fine borders and translucent surfaces. HUD, navigation, Goals, Shelves, notifications,
+settings and generic Display controls have no collection motifs. Currency uses gold accents.
 
 `CollectionStyle` supplies page, wash, cover, ink, accent, trim and motif per collection.
 `CollectionArt` renders original native gradient and corner ornaments without uploaded assets.
@@ -30,7 +29,7 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   is announced once; changed failure/paused states get an error toast. Tapping Coins can recall
   preview/unsafe status. Ordinary saving/saved transitions are silent. Desktop uses individual
   left-side icon controls that expand on hover, focus or selection. Narrow/touch layouts use
-  compact bottom navigation. Labels are Collection, Room, Shop, Goals and Social.
+  compact bottom navigation. Labels are Collection, Display, Shop, Goals and Shelves.
 - **Book:** the approved physical-book implementation now owns its cover/page stacks, deep fold,
   side index tabs, six mounted portraits, right-page product showcase and optional artwork slots.
   Grove/Tide themes transform the book; global controls remain neutral. See the dedicated
@@ -39,15 +38,18 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   reusable themed 3D product, an editorial detail panel, six possible figures, catalog-derived
   rarity odds, fixed one-box price/action, and a secondary daily claim. Collection themes change
   only card/product/emblem/accent presentation. See [Shop implementation](SHOP_UI.md).
-- **Room (legacy label for Display):** a smaller bottom overlay leaves the upper main plot visible and undimmed. It shows
-  income, matching-set progress and six potential figure slots. Palette controls now belong to
-  cosmetic Showrooms within Social; Display has no room-style drawer.
-  Choose/Change opens the owned picker; Display places into a chosen slot or asks for a slot.
-  Remove, the existing fourth-slot unlock, palette prices and Return home remain available.
-- **Goals:** a compact neutral sheet pairs daily display progress/reward with a daily-box choice
-  on wider layouts; narrow layouts stack them. Collection plaque progress follows below.
-- **Social:** a separate Display/main-plot directory presents names, staged Display previews, public
-  figure count/rate, Visit and Return home. It uses only the existing public snapshots.
+- **Display:** a smaller bottom overlay leaves the plot visible. It shows current capacity,
+  locked slots, individual/total rates, matching-set progress, and place/replace/remove controls.
+  Three starting slots expand horizontally to a current maximum of six. The existing 4,000 Coin
+  fourth-slot unlock remains; slots five and six have no acquisition flow.
+- **Shelves:** the former Social navigation position opens a minimal owner editor with page
+  index/count, Previous/Next, 27 logical slot buttons, and a discovered-figure picker. Select a
+  slot, then place/replace/remove. Discovery is enough, even with zero copies. Edit near your own
+  shelves. Physical arrows are also usable by nearby visitors and change the page for everyone.
+  A stale editor request is rejected if the shared carousel changed; the owner receives a fresh
+  snapshot. No shelf customization or acquisition UI exists.
+- **Goals:** a neutral sheet retains daily display progress/rewards and daily-box choice.
+  Collection completion is tracked and shown; its future reward is TBD.
 - **Feedback:** a bounded measured toast wraps messages, deduplicates repeats and expires.
   Errors last longer. Buttons retain disabled, pressed, focus and selected states, with subtle
   press animation respecting the session motion preference.
@@ -79,11 +81,11 @@ Pending requests disable mutations; the client never optimistically changes inve
 Gamepad Y opens/closes, B backs out, shoulders switch screens, and A activates selected controls.
 Selection inside scrolling containers is brought into view. The existing opening owns its higher
 priority bindings, hides this UI and restores focus afterward. Opening files are unchanged.
-Motion preference remains session-only and still controls the existing reveal/visitor behavior.
+Motion preference remains session-only and still controls the existing reveal behavior.
 
 ## Verification and Studio checklist
 
-Automated: the existing domain, persistence, opening and four scrolling checks remain; 1,292
+Automated: the existing domain, persistence, opening and four scrolling checks remain; 1,839
 checks cover read-only inventory/discovery projections, reservations, collection selection,
 bonus preview vs the real domain, responsive grid/presentation bounds, collection theme fallbacks, numeric presentation and scope teardown.
 These checks do **not** prove Roblox layout, rendering or input behavior.
@@ -106,17 +108,21 @@ it scrolls to and verifies the last card. Neither script is mapped into the game
    larger preview, free count, rarity, rate and odds agree with the collection and server.
 4. **Display/recycle:** place from both the book and a chosen slot; replace and remove; verify
    reservations/counts and income update only on replies. Last copies and fully displayed copies
-   cannot recycle. Edit away from your shelf to check the server's failure toast. Return home.
-5. **Expansion/palettes:** inspect locked slot four while unaffordable, then unlock when funded;
-   confirm price is charged once and its lock disappears. Buy a palette, switch to another owned
-   palette free, and compare its miniature and Equipped state with the real room.
+   cannot recycle. Edit away from your Display to check the server's failure toast.
+5. **Display expansion/Shelves:** unlock slot four and confirm exactly one charge, one new
+   active position to the right and a longer stand. Use an isolated six-slot test profile to
+   inspect the full horizontal row. Place, replace and remove discovered figures in the shelf
+   editor, including repeated figures and discoveries with zero copies. Confirm no income,
+   inventory or recycle changes. Test a migrated profile with multiple pages and both wraps.
 6. **Shop:** inspect Odds for each box **before** buying; compare all six percentages. Test enough
    and insufficient Coins, claim the daily box from Shop, then confirm Goals and both Shop cards
    show it claimed. Spam Open with delayed networking: one pending request/one granted figure.
 7. **Goals:** check 0/3, partial and 3/3 progress, available/claimed reward, free-box choice and
-   completion plaque progress. Duplicate displayed IDs must not falsely fill distinct-set progress.
-8. **Visits:** use two clients with different displays. Verify names, public portraits/rate,
-   Visit, You're here and Return home. Have a host leave. No private Coins/Scrap/ownership appears.
+   collection completion progress. Duplicate displayed IDs must not falsely fill distinct-set progress.
+8. **Walk-in viewing:** use two clients with different plots. Walk between them without a
+   prompt or teleport. Verify owner DisplayName signs, shared page turns, stale edit rejection,
+   visitor edit denial, and no private inventory/balance data. Have the host leave and a new
+   player join; the old content disappears and the slot is reusable without moving visitors.
 9. **Notifications/saves:** trigger success, insufficient-resource/proximity errors, delayed
    replies and preview/saving/paused states. Toasts should wrap without clipping or stacking;
    paused storage disables actions and retains its status. They must expire cleanly.
@@ -124,7 +130,7 @@ it scrolls to and verifies the last card. Neither script is mapped into the game
     the existing opening owns input, hides normal UI, retains NEW/duplicate behavior and restores
     the prior screen after Continue, Skip or reset. Use its existing fixture/checklist separately.
 11. **Reduced motion/gamepad:** toggle Motion: low in the floating screen controls, then navigate and open a
-    box. Check no new press-scale animation, simplified existing reveal and hidden visitors.
+    box. Check no new press-scale animation, simplified existing reveal.
     With gamepad, test Y/B/shoulders/A, book detail/back, Odds/back and reaching offscreen controls.
 12. **Respawn/lifecycle:** reset while browsing, in a detail screen and during opening. Switch
     screens 20 times without gameplay changes, then rerun the read-only UI check; descendant
@@ -132,13 +138,3 @@ it scrolls to and verifies the last card. Neither script is mapped into the game
     for stuck selection, duplicated GUIs, timers or Output errors.
 
 All Studio/device/multiplayer checks above remain **unrun by the coding agent**.
-
-
-## Display + Showroom foundation update
-
-The earning controls are now `DisplayScreen`, labeled Display and showing six potential slots.
-Palette controls moved to the cosmetic `ShowroomScreen`, mounted inside Social while a Gallery
-visit is active. Rooms use physical entrances; the panel supports anchor selection, discovered
-figure placement/removal and owned palettes, with read-only visitor controls. See the
-[implementation and Studio checklist](DISPLAY_SHOWROOM_IMPLEMENTATION.md). Global layout,
-Shop, Collection Book and opening behavior remain unchanged.

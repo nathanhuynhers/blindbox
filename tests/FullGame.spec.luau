@@ -21,7 +21,6 @@ state.coins=10000
 check(Rules.mutate(state,request("Expand",0),0,10), "expand")
 check(state.display.unlocked==4 and #state.display.slots==4 and state.coins==6000, "single bounded expansion")
 check(not Rules.mutate(state,request("Expand",1),0,10) and state.coins==6000, "expansion cannot charge twice")
-state.showrooms.palette="ocean"; state.showrooms.palettes.ocean=true
 check(Rules.mutate(state,request("Daily",4,"tide"),0.99,10), "daily claim")
 check(state.owned["tide.pearl"]==1 and state.coins==6000 and state.lastDailyDay==10, "daily marker and grant together")
 check(not Rules.mutate(state,request("Daily",5,"grove"),0,10), "daily choice cannot bypass limit")
@@ -46,7 +45,7 @@ check(Rules.bonus(duplicates)==0 and Rules.rate(duplicates)==21, "duplicates hav
 local encoded=Profile.encode(restored)
 local loaded=Profile.decode(encoded,10000)
 assert(loaded)
-check(loaded.coins==restored.coins and loaded.showrooms.palette=="ocean" and loaded.display.unlocked==4 and loaded.lastDailyDay==11, "profile round trip")
+check(loaded.coins==restored.coins and loaded.display.unlocked==4 and loaded.lastDailyDay==11, "profile round trip")
 check(loaded.time==10000 and loaded.fraction==0 and loaded.revision==0, "runtime data not persisted")
 encoded.owned["grove.pebble"]=99
 check(restored.owned["grove.pebble"]==1, "save snapshot owns copies")
@@ -63,13 +62,11 @@ corrupt=Profile.encode(restored); corrupt.owned["unknown"]=1
 check(Profile.decode(corrupt,0)==nil,"unknown inventory ID blocked")
 corrupt=Profile.encode(restored); corrupt.display.slots[1]="tide.ray"
 check(Profile.decode(corrupt,0)==nil,"unowned reservation blocked")
-corrupt=Profile.encode(restored); corrupt.showrooms.palettes.ocean=nil
-check(Profile.decode(corrupt,0)==nil,"unowned theme blocked")
 corrupt=Profile.encode(restored); corrupt.goalProgress=0; corrupt.goalClaimed=true
 check(Profile.decode(corrupt,0)==nil,"invalid goal claim blocked")
 local legacy: { [string]: unknown } = {schemaVersion=1,coins=123,scrap=2,step=3,owned={ ["grove.pebble"]=1 },discovered={ ["grove.pebble"]=true },slots={"grove.pebble","",""}}
 local migrated=Profile.decode(legacy,90)
-check(migrated~=nil and migrated.coins==123 and migrated.display.unlocked==3 and migrated.showrooms.palettes.grove and migrated.lastDailyDay==-1,"version-one migration preserves facts")
+check(migrated~=nil and migrated.coins==123 and migrated.display.unlocked==3 and migrated.lastDailyDay==-1,"version-one migration preserves facts")
 check(legacy.schemaVersion==1,"migration does not mutate input")
 local database: { [string]: unknown }={}
 local calls=0

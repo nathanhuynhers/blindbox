@@ -2,10 +2,13 @@
 
 > **Status:** Idea bank / planning document. Nothing in this document should be treated as finalized pricing, balance, or launch scope.
 
-Terminology follows [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md): Display is the capped
-Coin-generating slot system; Showrooms are zero-income customization/social spaces. Ideas below
-must not blur those responsibilities. The functional foundation is implemented; acquisition flows
-and paid products remain unimplemented. See [current scope](DISPLAY_SHOWROOM_IMPLEMENTATION.md).
+Terminology follows [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md): Display is the
+only Coin-generating placement system; Shelves are cosmetic exhibits on open Player Plots.
+Visitors walk between plots. The current three physical shelf units show one 27-position page;
+more pages reuse those units. Page acquisition and its expected scaling price curve are TBD,
+with no permanent page cap, product, price or purchase UI implemented. Collection-completion
+rewards are also TBD. The existing slot-4 Coin unlock is retained; slot 5/6 acquisition is open.
+Every paid mechanic below is an unapproved idea, not current behavior or permission to build it.
 
 ## Monetization Philosophy
 
@@ -85,7 +88,7 @@ Whether inventory should actually be limited is still TBD. Storage monetization 
 Potential permanent VIP pass containing a combination of:
 
 - VIP name or chat tag
-- Exclusive room cosmetics
+- Exclusive shelf cosmetics
 - Exclusive opening animation
 - Small coin bonus
 - Small luck bonus
@@ -126,44 +129,23 @@ These are especially interesting because the purchase creates a reason to remain
 
 ---
 
-## Display and Showroom Cosmetics
+## Plot and Shelf Cosmetics
 
-Showrooms can become one of the game's strongest cosmetic monetization opportunities because they
-support expression and social visibility without changing passive income.
+Future shelf customization could support skins, materials, colors, backgrounds, lighting,
+trim, decorations, effects and collection styling. Only empty data hooks exist today. No
+cosmetic catalog, furniture system, purchase flow or customization UI is in the current scope.
 
-Potential Showroom purchases:
+Additional shelf pages could offer more saved exhibit configurations without expanding the
+three physical shelf units or generating income. Acquisition method and pricing remain
+unresolved; this idea bank defines no curve, price, product ID or maximum page count.
 
-- Larger collection room
-- Additional blank/custom Showrooms
-- Premium shelves
-- Premium furniture packs
-- Animated display pedestals
-- Special lighting
-- Room effects
-- Character/figure auras
+Potential Display cosmetics include pedestal/trim skins and subtle effects. The current cap
+is six economic slots, starting with three; retain the existing fourth-slot Coin purchase.
+Slots five and six need a later acquisition decision. Extra earning capacity requires a
+separate economy/fairness review.
 
-Potential Display purchases must remain separate and require an economy/fairness decision:
-
-- Cosmetic pedestal/trim skins
-- Subtle Display effects
-- Possibly one or more slots within the locked six-slot maximum
-
-The exact unlock method for Display slots 4-6 is TBD. This idea bank does not approve a Game Pass,
-Coin price, or paid-only path, and no purchase may exceed the six-slot cap without an economy redesign.
-
-### Room Themes
-
-Examples:
-
-- Sakura
-- Celestial
-- Ocean
-- Mushroom / Forest
-- Candy / Pastel
-- Space
-- Seasonal themes
-
-High-end Showroom themes can become premium prestige purchases because other players can visit and see them.
+Plot and shelf visual themes may become future expression options visible to walking visitors.
+Theme selection, paid themes and final environment styling are not implemented.
 
 ---
 
@@ -191,7 +173,7 @@ Eventually add a rotating shop containing a mixture of:
 
 - Coin-purchasable items
 - Premium furniture
-- Room themes
+- Shelf themes
 - Opening effects
 - Display effects
 - Limited cosmetics
@@ -208,7 +190,7 @@ Potential bundles:
 
 - Collection Launch Bundle
 - Coin + Boost Bundle
-- Room Decoration Bundle
+- Shelf Decoration Bundle
 - New Player Bundle
 - Event Bundle
 - Seasonal Bundle
@@ -239,7 +221,7 @@ Possible rewards:
 
 - Additional boxes
 - Premium furniture
-- Exclusive room cosmetics
+- Exclusive shelf cosmetics
 - Exclusive opening animation
 - Premium boosts
 - Seasonal cosmetic collectibles
@@ -258,7 +240,7 @@ Possible benefits:
 - Daily reward improvement
 - Monthly coin allowance
 - Small convenience bonuses
-- Exclusive room/display cosmetics
+- Exclusive shelf/Display cosmetics
 - Subscriber title
 
 This should only be considered after retention data shows that players already return consistently.
@@ -275,7 +257,7 @@ Potential future systems:
 - Send cosmetic gifts
 - Purchase a gift bundle for a friend
 
-Social gifting could fit especially well if Showrooms and multiplayer visiting become important.
+Social gifting could fit especially well with open plots and walk-in social viewing.
 
 ---
 
@@ -291,7 +273,7 @@ Potential visible status:
 - Collections completed
 - Collections mastered
 - Rare titles
-- Premium room themes
+- Premium shelf themes
 - Animated pedestals
 - Player aura
 - Collector nameplate
@@ -313,10 +295,10 @@ Social visibility increases the value of cosmetic purchases while keeping collec
 
 Potential premium purchases for highly invested players:
 
-- Elaborate animated room themes
-- Premium animated Showroom pedestals and cosmetic Display skins
+- Elaborate animated shelf themes
+- Premium animated shelf stands and cosmetic Display skins
 - Premium opening animations
-- Large room expansions
+- Additional shelf pages (acquisition and pricing TBD)
 - Exclusive cosmetic effects
 - Prestige nameplates/titles
 
@@ -379,7 +361,7 @@ Storage should only be added if inventory limits make sense for gameplay.
 
 Luck monetization should wait until rarity odds, Secrets, pity behavior, and paid-random-item compliance are fully designed.
 
-Showroom cosmetics should become a major monetization pillar once Showrooms are developed enough to make cosmetics desirable.
+Shelf cosmetics may become a monetization pillar after the physical exhibit and final art make them desirable.
 
 ---
 
@@ -413,7 +395,7 @@ The economy must remain enjoyable for free players while giving paying players m
 - Do not make paid progression eliminate the core gameplay loop.
 - Do not make normal free progression intentionally miserable just to force purchases.
 - Do not lock the game's most important gameplay systems exclusively behind Robux.
-- Cosmetic purchases should remain valuable through social visibility and Showroom visiting.
+- Cosmetic purchases should remain valuable through social visibility and walk-in plot viewing.
 - Randomized purchases involving Robux or Robux-purchasable currency must follow Roblox's applicable paid-random-item requirements.
 - Luck boosts must be considered part of the randomized-item design and compliance work.
 - Advertised limited offers and timers must reflect the real availability of the offer.
@@ -432,7 +414,7 @@ The economy must remain enjoyable for free players while giving paying players m
 - Whether Shiny odds can be modified by Luck
 - How duplicates are consumed or converted
 - Whether VIP includes economic bonuses
-- What the first premium room/theme should be
+- What the first premium shelf theme should be
 - When Pocket Pass becomes viable
 - Whether a subscription makes sense after launch
 

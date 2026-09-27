@@ -1,7 +1,7 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
-local ShowroomConfig = require(game:GetService("ReplicatedStorage").Shared.ShowroomConfig)
+local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Protocol = {}
 function Protocol.parse(raw: unknown): Types.Intent?
@@ -21,9 +21,9 @@ function Protocol.parse(raw: unknown): Types.Intent?
 				and key ~= "figure"
 				and key ~= "slot"
 				and key ~= "choice"
-				and key ~= "roomId"
-				and key ~= "anchorId"
-				and key ~= "runtimeId"
+				and key ~= "pageId"
+				and key ~= "shelfSlotId"
+				and key ~= "pageRevision"
 			)
 		then
 			return nil
@@ -50,41 +50,44 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		and action ~= "Daily"
 		and action ~= "Goal"
 		and action ~= "Expand"
-		and action ~= "ShowroomPlace"
-		and action ~= "ShowroomRemove"
-		and action ~= "ShowroomTheme"
+		and action ~= "ShelfPlace"
+		and action ~= "ShelfRemove"
+		and action ~= "ShelfNext"
+		and action ~= "ShelfPrevious"
 	then
 		return nil
 	end
-	local isShowroom = action == "ShowroomPlace"
-		or action == "ShowroomRemove"
-		or action == "ShowroomTheme"
-	local roomId, anchorId, runtimeId = data.roomId, data.anchorId, data.runtimeId
-	if isShowroom then
+	local isShelf = action == "ShelfPlace"
+		or action == "ShelfRemove"
+		or action == "ShelfNext"
+		or action == "ShelfPrevious"
+	local pageId, shelfSlotId, pageRevision = data.pageId, data.shelfSlotId, data.pageRevision
+	if isShelf then
 		if
-			typeof(roomId) ~= "string"
-			or #roomId < 1
-			or #roomId > 96
-			or typeof(runtimeId) ~= "string"
-			or #runtimeId < 1
-			or #runtimeId > 64
+			typeof(pageId) ~= "string"
+			or #pageId > 64
+			or not string.match(pageId, "^page:[%w_-]+$")
+			or typeof(pageRevision) ~= "number"
+			or pageRevision < 0
+			or pageRevision > 9007199254740991
+			or pageRevision % 1 ~= 0
 		then
 			return nil
 		end
-		if action ~= "ShowroomTheme" then
-			if typeof(anchorId) ~= "string" or not table.find(ShowroomConfig.anchors, anchorId) then
+		if action == "ShelfPlace" or action == "ShelfRemove" then
+			if typeof(shelfSlotId) ~= "string" or not ShelfConfig.visible(shelfSlotId) then
 				return nil
 			end
-		elseif anchorId ~= nil then
+		elseif shelfSlotId ~= nil then
 			return nil
 		end
-	elseif roomId ~= nil or anchorId ~= nil or runtimeId ~= nil then
+	elseif pageId ~= nil or shelfSlotId ~= nil or pageRevision ~= nil then
 		return nil
 	end
 	local needsFigure = action == "Place"
 		or action == "Recycle"
 		or action == "Redeem"
-		or action == "ShowroomPlace"
+		or action == "ShelfPlace"
 	local needsSlot = action == "Place" or action == "Remove"
 	local figure, slot = data.figure, data.slot
 	if needsFigure then
@@ -111,17 +114,13 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		if choice ~= nil and (typeof(choice) ~= "string" or not Catalog.collectionIds[choice]) then
 			return nil
 		end
-	elseif action == "ShowroomTheme" then
-		if typeof(choice) ~= "string" or not Catalog.themes[choice] then
-			return nil
-		end
 	elseif choice ~= nil then
 		return nil
 	end
 	local intent: Types.Intent = {
-		roomId = if typeof(roomId) == "string" then roomId else nil,
-		anchorId = if typeof(anchorId) == "string" then anchorId else nil,
-		runtimeId = if typeof(runtimeId) == "string" then runtimeId else nil,
+		pageId = if typeof(pageId) == "string" then pageId else nil,
+		shelfSlotId = if typeof(shelfSlotId) == "string" then shelfSlotId else nil,
+		pageRevision = if typeof(pageRevision) == "number" then pageRevision else nil,
 		action = action,
 		choice = if typeof(choice) == "string" then choice else nil,
 		id = id,
@@ -137,8 +136,8 @@ function Protocol.same(a: Types.Intent, b: Types.Intent): boolean
 		and a.figure == b.figure
 		and a.slot == b.slot
 		and a.choice == b.choice
-		and a.roomId == b.roomId
-		and a.anchorId == b.anchorId
-		and a.runtimeId == b.runtimeId
+		and a.pageId == b.pageId
+		and a.shelfSlotId == b.shelfSlotId
+		and a.pageRevision == b.pageRevision
 end
 return Protocol

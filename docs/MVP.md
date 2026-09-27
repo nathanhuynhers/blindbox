@@ -3,8 +3,8 @@
 Status: user playtested and accepted the MVP, reporting collection scroll truncation.
 The new candidate fixes scrolling and expands beyond this historical scope; see [full-game scope](FULL_GAME.md).
 The acceptance criteria below document the original MVP, not the current larger feature set.
-Its use of "showroom" means the passive-income **Display** in current terminology, not the later
-non-economic Showrooms defined in [Display and Showrooms](DISPLAY_AND_SHOWROOMS.md).
+Its use of "showroom" means the passive-income **Display** in current terminology. The current
+architecture is [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 See [the verification and playtest checklist](STUDIO_TESTS.md).
 [Game design](GAME_DESIGN.md) describes the vision; this document limits scope.
 Milestone 1 in [the roadmap](ROADMAP.md) is the entire MVP, delivered in small playable steps.

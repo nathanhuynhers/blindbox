@@ -48,7 +48,7 @@ function Icons.create(parent: Instance, name: string, color: Color3): Frame
 	elseif name == "Scrap" then
 		shape(0.12, 0.1, 0.65, 0.29, false, -8)
 		shape(0.28, 0.49, 0.58, 0.33, false, 12)
-	elseif name == "Visits" then
+	elseif name == "Shelves" then
 		shape(0.12, 0.1, 0.32, 0.32, true)
 		shape(0.57, 0.1, 0.32, 0.32, true)
 		shape(0.07, 0.51, 0.41, 0.36, true)

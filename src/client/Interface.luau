@@ -18,7 +18,7 @@ local Collection = require(script.Parent.CollectionScreen)
 local Shop = require(script.Parent.ShopScreen)
 local Display = require(script.Parent.DisplayScreen)
 local Goals = require(script.Parent.GoalsScreen)
-local Visits = require(script.Parent.VisitsScreen)
+local Shelves = require(script.Parent.ShelvesScreen)
 local Interface = {}
 export type Interface = {
 	update: (Types.Snapshot) -> (),
@@ -29,10 +29,7 @@ export type Interface = {
 	pending: (boolean) -> (),
 	destroy: () -> (),
 }
-function Interface.create(
-	send: (string, string?, number?, string?) -> (),
-	visit: (number) -> ()
-): Interface
+function Interface.create(send: (string, string?, number?, string?) -> ()): Interface
 	local scope = Scope.create()
 	local snapshot: Types.Snapshot? = nil
 	local effects, focused, pending, opened, destroyed = true, false, false, false, false
@@ -54,7 +51,7 @@ function Interface.create(
 	controls.ZIndex = 5
 	controls.Size = UDim2.fromOffset(154, 44)
 	local hosts: { [string]: Frame } = {}
-	for _, id in { "Collection", "Display", "Shop", "Goals", "Visits" } do
+	for _, id in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
 		local host = W.frame(pagesRoot, id .. "Presentation")
 		host.SelectionGroup = true
 		host.Active = true
@@ -89,11 +86,6 @@ function Interface.create(
 				send(action, figure, slot, choice)
 			end
 		end,
-		visit = function(target)
-			if not focused and snapshot and snapshot.ready then
-				visit(target)
-			end
-		end,
 		navigate = function(page)
 			navigate(page)
 		end,
@@ -117,7 +109,7 @@ function Interface.create(
 		Display = { root = display.root, update = display.update },
 		Shop = Shop.create(hosts.Shop, ctx),
 		Goals = Goals.create(hosts.Goals, ctx),
-		Visits = Visits.create(hosts.Visits, ctx),
+		Shelves = Shelves.create(hosts.Shelves, ctx),
 	}
 	local hud = Hud.create(bounds, ctx)
 	local refresh: () -> () = function() end
@@ -270,17 +262,16 @@ function Interface.create(
 			for _, page in pages do
 				page.update(state)
 			end
-			local rooms = workspace:FindFirstChild("PlayerPlots")
-			local room = if rooms then rooms:FindFirstChild(tostring(state.visiting)) else nil
-			local shelf = if room then room:FindFirstChild("Shelf") else nil
-			billboard.Adornee = if shelf and shelf:IsA("BasePart") then shelf else nil
-			billboard.Enabled = shelf ~= nil and not state.gallery and not focused and not opened
+			local plots = workspace:FindFirstChild("PlayerPlots")
+			local plot = if plots
+				then plots:FindFirstChild(tostring(Players.LocalPlayer.UserId))
+				else nil
+			local displayArea = if plot then plot:FindFirstChild("DisplayArea") else nil
+			billboard.Adornee = if displayArea and displayArea:IsA("BasePart")
+				then displayArea
+				else nil
+			billboard.Enabled = displayArea ~= nil and not focused and not opened
 			local income = state.rate
-			for _, public in state.rooms do
-				if public.userId == state.visiting then
-					income = public.rate
-				end
-			end
 			rate.Text = string.format("%g Coins/sec", income)
 		end
 	end
@@ -422,19 +413,7 @@ function Interface.create(
 	refresh()
 	return {
 		update = function(state: Types.Snapshot)
-			local previous = if snapshot then snapshot.gallery else nil
 			snapshot = state
-			local gallery = state.gallery
-			if
-				gallery
-				and (
-					not previous
-					or previous.runtimeId ~= gallery.runtimeId
-					or previous.roomId ~= gallery.roomId
-				)
-			then
-				navigate("Visits")
-			end
 			refresh()
 		end,
 		message = notices.show,

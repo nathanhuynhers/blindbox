@@ -105,8 +105,8 @@ function Goals.create(parent: Instance, ctx: Context.Context): Context.Screen
 					.. "\n"
 					.. (
 						if found == total
-							then "Complete! Showroom unlocked"
-							else found .. " / " .. total .. " · Collect the set for its plaque"
+							then "Collection complete!"
+							else found .. " / " .. total .. " · Discover the complete set"
 					)
 				plaque.progress(found, total)
 			end
