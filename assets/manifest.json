@@ -29,6 +29,36 @@
       "displayName": "Collection Book Open",
       "assetType": "Image"
     },
+    "navigation_collection": {
+      "key": "Navigation.Collection",
+      "source": "assets/ui/navigation/collection_navigation_icon.png",
+      "displayName": "Navigation Collection Icon",
+      "assetType": "Image"
+    },
+    "navigation_display": {
+      "key": "Navigation.Display",
+      "source": "assets/ui/navigation/display_navigation_icon.png",
+      "displayName": "Navigation Display Icon",
+      "assetType": "Image"
+    },
+    "navigation_shop": {
+      "key": "Navigation.Shop",
+      "source": "assets/ui/navigation/shop_navigation_icon.png",
+      "displayName": "Navigation Shop Icon",
+      "assetType": "Image"
+    },
+    "navigation_goals": {
+      "key": "Navigation.Goals",
+      "source": "assets/ui/navigation/goals_navigation_icon.png",
+      "displayName": "Navigation Goals Icon",
+      "assetType": "Image"
+    },
+    "navigation_shelves": {
+      "key": "Navigation.Shelves",
+      "source": "assets/ui/navigation/shelves_navigation_icon.png",
+      "displayName": "Navigation Shelves Icon",
+      "assetType": "Image"
+    },
     "pocket_grove_corner_top_left": {
       "key": "Collection.PocketGrove.CornerTopLeft",
       "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_top_left.png",

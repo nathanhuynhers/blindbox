@@ -1,99 +1,99 @@
 --!strict
+local Assets = require(game:GetService("ReplicatedStorage").Shared.AssetManifest)
+local NavigationAssetIds = require(game:GetService("ReplicatedStorage").Shared.NavigationAssetIds)
+local Button = require(script.Parent.NavigationButton)
+local Config = require(script.Parent.NavigationConfig)
 local Context = require(script.Parent.UIContext)
 local Theme = require(script.Parent.UITheme)
 local W = require(script.Parent.Widgets)
-local Icons = require(script.Parent.UIIcons)
+
 local Navigation = {}
-Navigation.pages = { "Collection", "Display", "Shop", "Goals", "Shelves" }
-local labels = {
-	Collection = "Collection",
-	Display = "Display",
-	Shop = "Shop",
-	Goals = "Goals",
-	Shelves = "Shelves",
-}
+Navigation.pages = Config.pages
+
+local function railSurface(parent: Instance, name: string, shadow: boolean): Frame
+	local frame = W.frame(parent, name, if shadow then Theme.shadow else Theme.card)
+	frame.BackgroundTransparency = if shadow then 0.82 else 0.16
+	frame.Position = if shadow then UDim2.fromOffset(0, 5) else UDim2.fromOffset(0, 0)
+	frame.ZIndex = if shadow then 5 else 6
+	W.corner(frame, 24)
+	if not shadow then
+		local stroke = W.outline(frame, Color3.fromRGB(205, 193, 220), 0.48)
+		stroke.Thickness = 1.25
+		W.gradient(frame, Color3.fromRGB(250, 247, 252), Color3.fromRGB(255, 250, 239), 90)
+	end
+	return frame
+end
+
 function Navigation.create(parent: Instance, ctx: Context.Context, choose: (string) -> ())
 	local root = W.frame(parent, "Navigation")
+	root.ClipsDescendants = false
+	root.SelectionGroup = true
 	root.ZIndex = 6
-	local desktop = true
+
+	local shadow = railSurface(root, "RailShadow", true)
+	local surface = railSurface(root, "RailSurface", false)
+	local itemsRoot = W.frame(surface, "Items")
+	itemsRoot.Position = UDim2.fromOffset(6, 5)
+	itemsRoot.Size = UDim2.new(1, -12, 1, -10)
+	itemsRoot.ZIndex = 7
+	local list = W.list(itemsRoot, 0)
+	list.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	list.VerticalAlignment = Enum.VerticalAlignment.Center
+
 	local active: string? = nil
-	local actions: { [string]: W.Action } = {}
-	local icons: { [string]: Frame } = {}
-	local captions: { [string]: TextLabel } = {}
-	local hovered: { [string]: boolean } = {}
+	local actions: { [string]: Button.Button } = {}
+	for index, item in Config.items do
+		local image = NavigationAssetIds.resolve(item.id, Assets.resolve(item.assetKey))
+		if image == "" then
+			warn(
+				string.format(
+					"Navigation artwork is not registered: %s. Add its Roblox Image ID to ReplicatedStorage.Shared.NavigationAssetIds.",
+					item.id
+				)
+			)
+		end
+		local action = Button.create(itemsRoot, item, image, ctx.scope, ctx.effects, choose)
+		action.button.LayoutOrder = index
+		actions[item.id] = action
+	end
+
 	local function paint()
 		for id, action in actions do
-			local selected = id == active
-			local expanded = selected or hovered[id] == true
-			action.set("", true, selected)
-			action.button.Size = if desktop
-				then UDim2.fromOffset(if expanded then 126 else 52, 52)
-				else UDim2.new(0.2, -6, 1, 0)
-			local icon = icons[id]
-			icon.Position = if desktop then UDim2.fromOffset(14, 14) else UDim2.new(0.5, -12, 0, 5)
-			local caption = captions[id]
-			caption.Visible = not desktop or expanded
-			caption.Position = if desktop then UDim2.fromOffset(46, 0) else UDim2.new(0, 0, 1, -20)
-			caption.Size = if desktop then UDim2.new(1, -48, 1, 0) else UDim2.new(1, 0, 0, 18)
-			caption.TextSize = if desktop then 12 else 10
-			caption.TextXAlignment = if desktop
-				then Enum.TextXAlignment.Left
-				else Enum.TextXAlignment.Center
-			caption.TextColor3 = if selected then Theme.card else Theme.ink
-			for _, object in icon:GetChildren() do
-				if object:IsA("Frame") then
-					object.BackgroundColor3 = if selected then Theme.card else Theme.ink
-				end
-			end
+			action.setSelected(id == active)
 		end
 	end
-	for _, id in Navigation.pages do
-		local action = W.action(root, "", ctx.scope, ctx.effects, function()
-			choose(id)
-		end, true)
-		action.button.Name = "Nav" .. id
-		actions[id] = action
-		icons[id] = Icons.create(action.button, id, Theme.ink)
-		captions[id] = W.label(action.button, labels[id], 20, 12)
-		local function enter()
-			hovered[id] = true
-			paint()
-		end
-		local function leave()
-			hovered[id] = false
-			paint()
-		end
-		ctx.scope.connect(action.button.MouseEnter, enter)
-		ctx.scope.connect(action.button.MouseLeave, leave)
-		ctx.scope.connect(action.button.SelectionGained, enter)
-		ctx.scope.connect(action.button.SelectionLost, leave)
-	end
-	local dot = W.frame(actions.Goals.button, "DailyReady", Theme.gold)
-	dot.Size = UDim2.fromOffset(8, 8)
-	dot.Position = UDim2.fromOffset(36, 7)
-	W.corner(dot, 5)
+
 	return {
 		root = root,
 		actions = actions,
-		layout = function(size: Vector2, rail: boolean)
-			desktop = rail
-			root.AnchorPoint = if desktop then Vector2.new(0, 0.5) else Vector2.new(0.5, 1)
-			root.Position = if desktop then UDim2.new(0, 12, 0.5, 12) else UDim2.new(0.5, 0, 1, -10)
-			root.Size = if desktop
-				then UDim2.fromOffset(128, 308)
-				else UDim2.fromOffset(math.min(390, size.X - 20), 54)
-			for index, id in Navigation.pages do
-				actions[id].button.Position = if desktop
-					then UDim2.fromOffset(0, (index - 1) * 62)
-					else UDim2.new((index - 1) / 5, 3, 0, 0)
+		layout = function(size: Vector2, desktop: boolean)
+			local geometry = Config.layout(size.X, size.Y, desktop)
+			root.AnchorPoint = Vector2.new(0, 0)
+			root.Position = UDim2.fromOffset(geometry.x, geometry.y)
+			root.Size = UDim2.fromOffset(geometry.width, geometry.height)
+			shadow.Size = UDim2.fromScale(1, 1)
+			surface.Size = UDim2.fromScale(1, 1)
+			list.FillDirection = if desktop
+				then Enum.FillDirection.Vertical
+				else Enum.FillDirection.Horizontal
+			list.Padding = UDim.new(0, geometry.gap)
+			for _, item in Config.items do
+				actions[item.id].layout(desktop, geometry.itemWidth, geometry.itemHeight)
 			end
 			paint()
 		end,
 		set = function(page: string?, daily: boolean)
 			active = page
-			dot.Visible = daily
+			actions.Goals.setBadge(if daily then "" else nil)
 			paint()
+		end,
+		badge = function(id: string, value: string?)
+			local action = actions[id]
+			if action then
+				action.setBadge(value)
+			end
 		end,
 	}
 end
+
 return Navigation

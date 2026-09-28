@@ -123,7 +123,7 @@ local pieces: { Piece } = {
 }
 export type Render = {
 	model: Model,
-	origin: Vector3,
+	transform: CFrame,
 	parts: { [string]: Part },
 	rate: TextLabel,
 	capacity: number,
@@ -135,18 +135,16 @@ function Fixture.width(capacity: number): number
 	)
 	return (capacity - 1) * Fixture.style.spacing + 2 * Fixture.style.sideMargin
 end
-function Fixture.anchors(origin: Vector3, capacity: number): { [string]: CFrame }
+function Fixture.anchors(transform: CFrame, capacity: number): { [string]: CFrame }
 	Fixture.width(capacity)
 	local anchors: { [string]: CFrame } = {}
 	for slot = 1, capacity do
-		anchors[tostring(slot)] = CFrame.new(
-			origin
-				+ Vector3.new(
-					(slot - (capacity + 1) / 2) * Fixture.style.spacing,
-					Fixture.style.counterY,
-					Geometry.displayZ
-				)
-		)
+		anchors[tostring(slot)] = transform
+			* CFrame.new(
+				(slot - (capacity + 1) / 2) * Fixture.style.spacing,
+				Fixture.style.counterY,
+				Geometry.displayZ
+			)
 	end
 	return anchors
 end
@@ -162,8 +160,8 @@ function Fixture.resize(render: Render, capacity: number)
 			piece.size.Y,
 			piece.size.Z
 		)
-		part.Position = render.origin
-			+ Vector3.new(
+		part.CFrame = render.transform
+			* CFrame.new(
 				if piece.edge
 					then piece.edge * (width / 2 - 1.1) + piece.offset.X
 					else piece.offset.X,
@@ -173,12 +171,12 @@ function Fixture.resize(render: Render, capacity: number)
 	end
 	render.capacity = capacity
 end
-function Fixture.create(parent: Instance, origin: Vector3): Render
+function Fixture.create(parent: Instance, transform: CFrame): Render
 	local model = Instance.new("Model")
 	model.Name = "DisplayFixture"
 	local parts: { [string]: Part } = {}
 	for _, piece in pieces do
-		local part = Geometry.part(model, piece.name, piece.size, origin, piece.color)
+		local part = Geometry.partAt(model, piece.name, piece.size, transform, piece.color)
 		part.Material = if piece.wood then Enum.Material.Wood else Enum.Material.SmoothPlastic
 		part.TopSurface = Enum.SurfaceType.Smooth
 		part.BottomSurface = Enum.SurfaceType.Smooth
@@ -232,7 +230,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 	coin.TextColor3 = Color3.fromRGB(220, 162, 44)
 	coin.Parent = gui
 	local render: Render =
-		{ model = model, origin = origin, parts = parts, rate = rate, capacity = 0 }
+		{ model = model, transform = transform, parts = parts, rate = rate, capacity = 0 }
 	Fixture.resize(render, Display.defaultSlots)
 	model.Parent = parent
 	return render

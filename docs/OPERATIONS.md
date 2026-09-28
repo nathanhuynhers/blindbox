@@ -112,8 +112,8 @@ Run that script from the client Command Bar on each screen. These engine checks 
    unknown IDs and spoofed plot/Shelf Unit/local slot identities. Confirm no handler crashes or balance changes.
    Delay replies and retry the same ID; purchases and unlocks must not run twice.
 9. **Device/performance:** target 30 FPS on representative mobile hardware, 60 FPS on desktop,
-   and a 24-player server cap. These are targets, not measured results. Check mouse/touch/gamepad,
-   reading sizes, reduced motion, respawn, repeated join/leave and a 30-minute soak. Measure 24 populated plots with up to 27 visible shelf figures plus six Display figures each;
+   and an eight-player server cap. These are targets, not measured results. Check mouse/touch/gamepad,
+   reading sizes, reduced motion, respawn, repeated join/leave and a 30-minute soak. Measure eight populated plots with up to 27 visible shelf figures plus six Display figures each;
    verify targeted updates and no growth across repeated joins, leaves and carousel turns.
 10. **Pacing:** observe returning sessions, weak/common-only luck, duplicates and completion.
     Record time to next box, fourth slot; ensure twelve-figure content is enjoyable
@@ -150,7 +150,7 @@ just-clicked action was durably saved. No offline catch-up is computed on load.
 - Rehearse recovery in the private test experience: snapshot an expendable profile, inject a
   bad version, confirm load is blocked, restore the inspected test record only while no session
   owns it, then verify inventory/claim conservation. This rehearsal is still pending.
-- Before public release, pass the above tests, choose a 24-player cap, retain a known-good place
+- Before public release, pass the above tests, choose an eight-player cap, retain a known-good place
   version, confirm live/Studio store isolation, and review progression-loss behavior. Restart
   servers on incompatible schema changes; never run an older writer against a newer schema.
 - Public publishing requires the user's separate release instruction. Nothing was published

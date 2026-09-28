@@ -5,22 +5,55 @@ individually persistent Shelf Units and a three-shelf viewport. It supersedes th
 Shelf Page implementation report. Native Studio acceptance has **not** been run by the agent.
 See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.md).
 
+## Eight-plot radial world pass
+
+The current world replaces the rectangular 24-plot grid with eight 100-by-96 plots at 45-degree
+intervals on a 170-stud-radius ring. A 100-stud-diameter circular plaza sits at the origin and one
+16-stud-wide, 73.5-stud-long radial path joins its edge to each centered entrance. Paths and plot
+surfaces meet at Y=1; the plaza top is 0.03 studs higher for clean rendering. The former visible
+rectangular ground/baseplate is absent; a circular warm-neutral foundation sits 1.75 studs below.
+
+`PlotGeometry.transform` is the canonical local-to-world `CFrame`. Local `-Z` faces the origin,
+so the entrance is inward and the rear Display is outward. Platform layers, entrance, Display,
+Collection, figure anchors, carousel controls, hitboxes, interaction bounds and spawn all use the
+same transform. Automated coverage verifies all eight orientations and fixture initializations,
+path endpoints and separation, rotated footprint separation, eighth-slot allocation and ninth-slot
+rejection. Native Studio visual, physics and multi-client acceptance remains pending.
+
+### World finishing pass
+
+The visible foundation is a 527.3-stud-diameter SmoothPlastic cylinder with RGB (190,183,170).
+Its radius is the true rotated outer plot-corner distance plus a 40-stud margin. A legacy
+workspace part named `Baseplate`, when present in an existing Studio place, is made invisible and
+lowered four studs beneath the foundation while retaining failsafe collision.
+The plaza now has only two full disks: a 52.5-stud-radius oak trim with top Y=1.01 and a
+50-stud-radius ivory surface with top Y=1.03. The earlier three disks shared top Y=1, causing
+their overlapping full top faces to z-fight into apparent radial wedges. Paths now pass beneath
+both plaza layers and the entrance decks rather than sharing a visible plane.
+
+Each path has a 16-by-73.5-stud ivory surface at top Y=1 and separate 0.55-stud oak side strips at
+top Y=0.98. Four bollards are derived from each path transform at one-third and two-thirds length,
+9.625 studs to either side of center. Each is 3.8 studs high from the recessed foundation and uses
+four native parts. Its SmoothPlastic lens owns one shadowless RGB (255,225,180) PointLight at
+brightness 0.65 and range 11. No SpawnLocation or center fixture exists in the source/build; the
+former center mark came from the competing plaza/path surfaces.
+
 ## Showroom plot platform visual pass
 
 The current floor pass implements the supplied 100-by-96 showroom concept through the dedicated
-`src/server/PlotFixture.luau` builder. It does not alter plot allocation, dimensions, coordinates,
-Display/Collection architecture, progression or persistence. `World` builds one static platform
-for each of 24 configured locations. An active `PlayerPlot` creates only its session-owned entrance
+`src/server/PlotFixture.luau` builder. It does not alter plot dimensions,
+Display/Collection architecture, progression or persistence. `World` builds one rotated static platform
+for each of eight configured locations. An active `PlayerPlot` creates only its session-owned entrance
 and `<DisplayName>'s Showroom` plaque, which is cleaned up with the player's other runtime content.
 
 The platform keeps its walking surface top exactly at plot-origin Y=1, preserving every existing
 fixture base, figure anchor, character spawn and distance check. From bottom to top it uses a
-0.22-stud warm-white SmoothPlastic base (bottom aligned with shared-ground top Y=0.5), 0.18-stud
+0.22-stud warm-white SmoothPlastic base (underside Y=0.5), 0.18-stud
 pale Wood trim and 0.10-stud pale WoodPlanks surface. The outer 100-by-96 silhouette uses two
 overlapping rectangles and four native vertical Cylinder corners with 6-stud radius. The oak
 layer is 96-by-92 and the walking surface 94-by-90, producing quiet off-white and oak borders.
 Four noncolliding 0.07-stud SmoothPlastic strips create the inset warm line without Neon, Bloom or
-actual lights. Each fixed platform uses 12 native Parts: 288 total for all 24 plot locations.
+actual lights. Each fixed platform uses 12 native Parts: 96 total for all eight plot locations.
 
 The entrance has a 22-by-4.2-by-0.15 oak deck, oak frame/posts, cream SmoothPlastic plaque face and
 two warm-colored noncolliding caps. Its seven physical parts remain entirely inside the front edge
@@ -41,15 +74,15 @@ Files for this pass: added `src/server/PlotFixture.luau`; modified `src/server/W
 No files were removed. Schema v5/types/profile/migrations, Shelf domain/configuration/editor,
 Display/Collection fixture construction, economy and plot allocation constants are unchanged.
 
-Automated checks assert all 24 indexed platform models, exact layer contact and top plane, bounded
-12-part platform construction, 288-part server floor budget, materials/colors, noncolliding
+Automated checks assert all eight indexed platform models, exact layer contact and top plane, bounded
+12-part platform construction, 96-part server floor budget, materials/colors, noncolliding
 non-Neon accents, plot bounds, seven-piece entrance budget, dynamic Showroom copy, physical
 SurfaceGui settings and clear Display/Collection expansion zones. The complete existing domain,
 migration, carousel, Display and Collection regression suites remain active.
 
 Native Studio checks remain required for wood-grain direction/scale, apparent corner seams,
 comfortable 0.5-stud approach and 0.15-stud entrance step, plaque readability with long or filtered
-DisplayNames, camera views, mobile/desktop graphics quality and 24-plot rendering cost. Walk the
+DisplayNames, camera views, mobile/desktop graphics quality and eight-plot rendering cost. Walk the
 full perimeter and enter from front/sides with multiple clients; verify no snagging at overlapping
 base parts or the plaque posts. Inspect Display capacities 3-6 and all Collection controls/figures
 to confirm they meet the unchanged Y=1 surface and retain unobstructed growth. No native Studio
@@ -133,7 +166,7 @@ Populate all 27 positions with the twelve current figures and check contact/clea
 mouse/touch controls from across the plot with two clients and four/five owned shelves; confirm
 shared one-unit movement, both wraps, visitor edit denial and unchanged owner editor targets.
 Regress Display appearance/rates, save/rejoin, and measure nine row lights per plot at low/high
-graphics quality and a full 24-player server. No native Studio playtest or visual approval is
+graphics quality and a full eight-player server. No native Studio playtest or visual approval is
 claimed. Existing collectible art, ground/plot surfaces, owner signage and Shelf editor styling
 remain provisional; the Collection furniture/sign/control visual pass itself is implemented.
 
@@ -243,7 +276,7 @@ rewards, shelf acquisition/customization, final art and carousel animation remai
 | Asset mount/fallback | 25 |
 | Model binding | 4 |
 | Shelf Unit schema/migration/carousel/domain | 222 |
-| Plot allocation/geometry/render/lifecycle | 966 |
+| Plot allocation/geometry/render/lifecycle | 3,093 |
 | Invalid startup configuration | 4 |
 
 Shelf coverage includes fresh capacity, exact four/five-unit sequences, both directions,
@@ -273,7 +306,7 @@ prove native input, replication, physics, rendering or real DataStore behavior.
    records, with runtime visibility reset to 1,2,3. Exercise failures/leases without live data.
 5. Check phone/tablet/desktop editor sizing, scroll/selection, gamepad navigation, respawn and
    owner departure/replacement. Regress Display capacities/rates, Collection, Shop and opening.
-6. Populate up to 24 plots with 27 shelf and six Display figures each. Measure replication,
+6. Populate all eight plots with 27 shelf and six Display figures each. Measure replication,
    frame rate/memory and repeated carousel/joins/leaves; confirm stable instance/connection counts.
 
 See [operations](OPERATIONS.md) for isolated storage and release procedures. These Studio tests

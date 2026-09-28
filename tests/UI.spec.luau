@@ -278,6 +278,7 @@ scope.connect(signal, function() end)
 check(alive == 0 and destroyed[3] == 3, "late registration after teardown cannot leak")
 local Layout = require("./UILayout")
 local Style = require("./CollectionStyle")
+local NavigationConfig = require("./NavigationConfig")
 check(Layout.desktop(1280, 720, false), "desktop gets the floating rail")
 check(not Layout.desktop(568, 284, true), "short touch screens do not get a forced desktop rail")
 check(not Layout.desktop(1024, 768, true), "touch tablet keeps compact bottom navigation")
@@ -329,6 +330,39 @@ check(
 	"collection art identities are independent"
 )
 check(Style.get("future").motif == "spark", "unknown collection gets neutral fallback art")
+check(#NavigationConfig.items == 5, "navigation keeps the five authorized destinations")
+local navigationIds = {}
+for _, item in NavigationConfig.items do
+	navigationIds[item.id] = true
+	check(
+		item.label ~= "" and item.assetKey == "Navigation." .. item.id,
+		"navigation item owns its label and artwork key"
+	)
+	check(
+		item.iconScale >= 0.85 and item.iconScale <= 1,
+		"navigation artwork normalization remains restrained"
+	)
+end
+for _, navigationId in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
+	check(navigationIds[navigationId] == true, "navigation includes every existing destination")
+end
+for _, viewport in { { 320, 480 }, { 568, 284 }, { 900, 500 }, { 1280, 720 } } do
+	local modes = if viewport[1] >= 900 and viewport[2] >= 500 then { false, true } else { false }
+	for _, desktop in modes do
+		local geometry = NavigationConfig.layout(viewport[1], viewport[2], desktop)
+		check(
+			geometry.x >= 0
+				and geometry.y >= 0
+				and geometry.x + geometry.width <= viewport[1]
+				and geometry.y + geometry.height <= viewport[2],
+			"navigation rail remains inside supported viewports"
+		)
+		check(
+			geometry.itemWidth >= 57 and geometry.itemHeight >= 68,
+			"navigation targets stay readable"
+		)
+	end
+end
 for _, collection in Catalog.collections do
 	check(
 		Style.collections[collection.id] ~= nil,

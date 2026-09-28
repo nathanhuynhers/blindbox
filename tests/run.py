@@ -21,6 +21,8 @@ modules = {
     "CollectionLayout": "client", "CollectionSelection": "client",
     "ShopLayout": "client", "ShopState": "client", "ShopTheme": "client",
     "UIState": "client", "UIScope": "client", "UILayout": "client", "CollectionStyle": "client",
+    "NavigationConfig": "client",
+    "NavigationAssetIds": "shared",
 }
 for name, folder in modules.items():
     source = (root / "src" / folder / f"{name}.luau").read_text(encoding="utf-8-sig")

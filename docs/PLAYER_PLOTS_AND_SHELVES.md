@@ -7,19 +7,28 @@ See [implementation and checks](PLOT_SHELF_IMPLEMENTATION.md), [schema](DATA_MOD
 
 ## Player Plot
 
-Each server has a fixed configured set of 24 plot locations. Joining players reserve an available
-slot before profile loading; failed/disconnected joins release it. Loaded players receive one
-large open 100-by-96-stud plot, identified by `Player.DisplayName`. On departure, owned runtime
-content/connections are destroyed and the slot becomes available for another player. Assignment
-and world coordinates are never saved. The experience player cap must match the configured limit.
+Each server has eight fixed plot locations at 45-degree intervals on a 170-stud-radius ring.
+Joining players reserve an available slot before profile loading; failed/disconnected joins
+release it. Loaded players receive one large open 100-by-96-stud plot, identified by
+`Player.DisplayName`. On departure, owned runtime content/connections are destroyed and the slot
+becomes available for another player. Assignment, world transforms and carousel position are
+never saved. The experience player cap must match the configured eight-plot limit.
 
-The shared world has neutral ground and 20-stud gaps between plots. Each logical 100-by-96 plot
-is a gently raised showroom platform: a rounded warm-white base, inset pale-oak perimeter trim,
-quiet pale WoodPlanks walking surface and four thin warm-colored inner-edge accents. The accent
-uses noncolliding SmoothPlastic rather than Neon or per-plot lights. The walking surface top stays
-at the established plot-origin Y=1 plane, so Display/Shelf anchors and gameplay distances do not
-move. Players walk directly onto other players' plots: no permission prompt, browser, visit
-session or teleport is needed. There are no perimeter walls, rails or separate interior spaces.
+The shared world is one 100-stud-diameter circular ivory plaza and eight direct 16-stud-wide
+paths. Each path has two narrow pale-oak edge strips and two pairs of small warm-light bollards,
+and runs from beneath the plaza perimeter to beneath one centered plot entrance. Paths and plot
+walking surfaces meet at Y=1; the plaza trim/surface sit only 0.01/0.03 studs above that plane to
+prevent coplanar rendering artifacts without creating a traversal obstacle. A visible circular
+warm-neutral foundation is recessed 1.75 studs beneath the walking plane; there is no rectangular
+baseplate. Each plot's local `-Z` entrance faces the plaza and local `+Z` rear Display faces
+outward. A single `CFrame` placement rotates the platform, floor details, entrance, Display,
+Collection, figure anchors and interaction hitboxes together.
+
+Each logical plot is a gently raised showroom platform: a rounded warm-white base, inset pale-oak
+perimeter trim, quiet pale WoodPlanks walking surface and four thin warm-colored inner-edge
+accents. The accent uses noncolliding SmoothPlastic rather than Neon or per-plot lights. Players
+walk directly onto other players' plots: no permission prompt, browser, visit session or teleport
+is needed. There are no perimeter walls, rails or separate interior spaces.
 
 The front-center entrance uses a shallow 22-by-4.2-stud oak deck and understated framed physical
 plaque reading `<DisplayName>'s Showroom`. The cream SurfaceGui face uses charcoal text and small

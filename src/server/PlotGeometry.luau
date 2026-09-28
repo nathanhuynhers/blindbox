@@ -1,7 +1,7 @@
 --!strict
 local Config = require(script.Parent.PlotConfig)
 local Shelf = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
--- Entrance looks along +Z, so its left is +X. Shelf fronts look inward along -X.
+-- Entrance is local -Z; Display is local +Z; Collection is local +X.
 local Geometry = {
 	displayZ = Config.depth / 2 - 12,
 	shelfX = Config.width / 2 - 10,
@@ -11,14 +11,21 @@ local Geometry = {
 	shelfRowSpacing = 4.2,
 	shelfBaseY = 1.6,
 }
-function Geometry.origin(index: number): Vector3
+function Geometry.angle(index: number): number
 	assert(index >= 1 and index <= Config.maxPlots and index % 1 == 0, "Unknown fixed plot slot")
-	local rows = math.ceil(Config.maxPlots / Config.columns)
-	return Vector3.new(
-		((index - 1) % Config.columns - (Config.columns - 1) / 2) * (Config.width + Config.gap),
-		1,
-		(math.floor((index - 1) / Config.columns) - (rows - 1) / 2) * (Config.depth + Config.gap)
-	)
+	return math.rad((index - 1) * 360 / Config.maxPlots)
+end
+function Geometry.radialPosition(index: number, radius: number, y: number?): Vector3
+	local angle = Geometry.angle(index)
+	return Vector3.new(math.sin(angle) * radius, y or Config.walkingY, -math.cos(angle) * radius)
+end
+function Geometry.transform(index: number): CFrame
+	local position = Geometry.radialPosition(index, Config.plotRadius)
+	return CFrame.lookAt(position, Vector3.new(0, position.Y, 0))
+end
+function Geometry.radialTransform(index: number, radius: number, y: number?): CFrame
+	local position = Geometry.radialPosition(index, radius, y)
+	return CFrame.lookAt(position, Vector3.new(0, position.Y, 0))
 end
 function Geometry.shelfOffset(unit: number, row: number, slot: number): Vector3
 	return Vector3.new(
@@ -29,9 +36,25 @@ function Geometry.shelfOffset(unit: number, row: number, slot: number): Vector3
 			+ (slot - (Shelf.slotsPerRow + 1) / 2) * Geometry.shelfSlotSpacing
 	)
 end
-function Geometry.shelfAnchor(origin: Vector3, unit: number, row: number, slot: number): CFrame
-	local position = origin + Geometry.shelfOffset(unit, row, slot)
-	return CFrame.lookAt(position, position + Vector3.new(-1, 0, 0))
+function Geometry.shelfAnchor(transform: CFrame, unit: number, row: number, slot: number): CFrame
+	local offset = Geometry.shelfOffset(unit, row, slot)
+	return transform * CFrame.lookAt(offset, offset + Vector3.new(-1, 0, 0))
+end
+function Geometry.partAt(
+	parent: Instance,
+	name: string,
+	size: Vector3,
+	at: CFrame,
+	color: Color3
+): Part
+	local part = Instance.new("Part")
+	part.Name = name
+	part.Anchored = true
+	part.Size = size
+	part.CFrame = at
+	part.Color = color
+	part.Parent = parent
+	return part
 end
 function Geometry.part(
 	parent: Instance,
@@ -40,14 +63,7 @@ function Geometry.part(
 	position: Vector3,
 	color: Color3
 ): Part
-	local part = Instance.new("Part")
-	part.Name = name
-	part.Anchored = true
-	part.Size = size
-	part.Position = position
-	part.Color = color
-	part.Parent = parent
-	return part
+	return Geometry.partAt(parent, name, size, CFrame.new(position), color)
 end
 function Geometry.label(part: BasePart, text: string, distance: number?): TextLabel
 	local gui = Instance.new("BillboardGui")

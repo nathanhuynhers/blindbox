@@ -36,6 +36,13 @@ Manifest.Collection = {
 	},
 }
 Manifest.Global = { IconCollection = "Global.IconCollection" }
+Manifest.Navigation = {
+	Collection = "Navigation.Collection",
+	Display = "Navigation.Display",
+	Shop = "Navigation.Shop",
+	Goals = "Navigation.Goals",
+	Shelves = "Navigation.Shelves",
+}
 Manifest.Models = { BlindBoxBase = "Models.BlindBoxBase" }
 
 return Manifest
