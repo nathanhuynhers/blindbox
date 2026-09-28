@@ -13,7 +13,7 @@ export type Plot = {
 	model: Model,
 	ownerId: number,
 	index: number,
-	origin: Vector3,
+	transform: CFrame,
 	spawn: CFrame,
 	active: boolean,
 	view: Shelves.View,
@@ -41,20 +41,20 @@ local function cleanup(plot: Plot)
 	table.clear(plot.connections)
 end
 function PlayerPlot.create(player: Player, index: number): Plot
-	local origin = Geometry.origin(index)
+	local transform = Geometry.transform(index)
 	local model = Instance.new("Model")
 	model.Name = tostring(player.UserId)
 	model:SetAttribute("OwnerId", player.UserId)
 	model:SetAttribute("PlotSlot", index)
-	local entrance = PlotFixture.createEntrance(model, origin, player.DisplayName)
-	local fixture = DisplayFixture.create(model, origin)
-	local collection = CollectionFixture.create(model, origin)
+	local entrance = PlotFixture.createEntrance(model, transform, player.DisplayName)
+	local fixture = DisplayFixture.create(model, transform)
+	local collection = CollectionFixture.create(model, transform)
 	local plot: Plot = {
 		model = model,
 		ownerId = player.UserId,
 		index = index,
-		origin = origin,
-		spawn = CFrame.lookAt(origin + Vector3.new(0, 4, -33), origin + Vector3.new(0, 4, 0)),
+		transform = transform,
+		spawn = transform * CFrame.lookAt(Vector3.new(0, 4, -33), Vector3.new(0, 4, 0)),
 		active = true,
 		view = Shelves.newView(),
 		display = FigureSlots.new(model, "DisplayFigures", {}, DisplayFixture.style.figureScale),
@@ -97,26 +97,29 @@ function PlayerPlot.contains(plot: Plot, player: Player): boolean
 	if not plot.active or not plot.model.Parent or not pos then
 		return false
 	end
-	local delta = pos - plot.origin
+	local delta = plot.transform:PointToObjectSpace(pos)
 	return math.abs(delta.X) <= Config.width / 2
 		and math.abs(delta.Z) <= Config.depth / 2
 		and math.abs(delta.Y) <= 20
 end
 function PlayerPlot.nearDisplay(plot: Plot, player: Player): boolean
 	local pos = position(player)
+	local localPosition = if pos then plot.transform:PointToObjectSpace(pos) else nil
 	return plot.ownerId == player.UserId
 		and pos ~= nil
 		and PlayerPlot.contains(plot, player)
-		and math.abs(pos.Z - (plot.origin.Z + Geometry.displayZ)) <= 15
+		and localPosition ~= nil
+		and math.abs(localPosition.Z - Geometry.displayZ) <= 15
 end
 function PlayerPlot.access(plot: Plot, player: Player): Shelves.Access
 	local pos = position(player)
+	local localPosition = if pos then plot.transform:PointToObjectSpace(pos) else nil
 	return {
 		actorId = player.UserId,
 		ownerId = plot.ownerId,
 		view = plot.view,
-		near = pos ~= nil and PlayerPlot.contains(plot, player) and math.abs(
-			pos.X - (plot.origin.X + Geometry.shelfX)
+		near = localPosition ~= nil and PlayerPlot.contains(plot, player) and math.abs(
+			localPosition.X - Geometry.shelfX
 		) <= 16,
 	}
 end
@@ -126,7 +129,7 @@ function PlayerPlot.canNavigate(plot: Plot, actor: Player): boolean
 	if not plot.active or plot.model.Parent ~= root or not pos then
 		return false
 	end
-	local delta = pos - plot.origin
+	local delta = plot.transform:PointToObjectSpace(pos)
 	return math.abs(delta.X) <= Config.width / 2 + navigationMargin
 		and math.abs(delta.Z) <= Config.depth / 2 + navigationMargin
 		and math.abs(delta.Y) <= 20
@@ -136,7 +139,7 @@ local function layoutDisplay(plot: Plot, capacity: number)
 		return
 	end
 	DisplayFixture.resize(plot.fixture, capacity)
-	FigureSlots.setAnchors(plot.display, DisplayFixture.anchors(plot.origin, capacity))
+	FigureSlots.setAnchors(plot.display, DisplayFixture.anchors(plot.transform, capacity))
 	plot.displayCapacity = capacity
 end
 function PlayerPlot.render(plot: Plot, state: Types.State)

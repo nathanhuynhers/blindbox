@@ -12,10 +12,12 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 
 - `init.server.luau`: reserves fixed plot slots before profile load, owns player lifecycle and
   remotes, validates ready sessions, sends private owner snapshots and runs the existing income clock.
-- `PlotConfig`/`PlotSlots`: 24 finite locations; unique pending/active allocation and explicit release.
-- `World`/`PlotGeometry`/`PlotFixture`: neutral shared ground, 24 fixed layered open platforms,
-  reusable coordinates/primitives and active-owner entrance plaques. Platform geometry is static
-  world presentation; owner identity remains session-owned and is destroyed with `PlayerPlot`.
+- `PlotConfig`/`PlotSlots`: eight finite locations; unique pending/active allocation and explicit release.
+- `World`/`PlotGeometry`/`PlotFixture`: a recessed circular warm-neutral foundation, two-layer
+  100-stud ivory/oak plaza, eight trimmed radial paths with 32 bounded bollard lights and eight
+  layered open platforms on a 170-stud-radius ring. Deliberately separated top planes prevent
+  path/plaza z-fighting. One plot-local `CFrame` rotates each complete fixture inward. Static
+  world geometry persists; owner identity remains session-owned and is destroyed with `PlayerPlot`.
 - `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
   proximity checks, runtime carousel start index and connection/content teardown.
 - `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent COLLECTION
@@ -115,7 +117,7 @@ to visitors. Visitors may turn physical shelf arrows but cannot mutate the owner
 No per-frame plot work is added. Static geometry persists for the session. Rendering compares
 slot figure IDs on successful mutations/carousel changes; one changed figure creates one replacement,
 and unchanged IDs can be reused between viewport positions. The visible load is bounded at 27 cosmetic figures
-plus at most six Display figures per player. Native 24-player/mobile performance is unmeasured.
+plus at most six Display figures per player. Native eight-player/mobile performance is unmeasured.
 
 ## Preserved tooling and evidence
 

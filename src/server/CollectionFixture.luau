@@ -28,14 +28,14 @@ export type Render = {
 }
 local function piece(
 	parent: Instance,
-	origin: Vector3,
+	transform: CFrame,
 	name: string,
 	size: Vector3,
 	offset: Vector3,
 	color: Color3,
 	wood: boolean?
 ): Part
-	local part = Geometry.part(parent, name, size, origin + offset, color)
+	local part = Geometry.partAt(parent, name, size, transform * CFrame.new(offset), color)
 	part.Material = if wood then Enum.Material.Wood else Enum.Material.SmoothPlastic
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
@@ -47,7 +47,7 @@ end
 local function control(
 	model: Model,
 	parent: Instance,
-	origin: Vector3,
+	transform: CFrame,
 	direction: number,
 	span: number
 ): (Control, Part)
@@ -56,7 +56,7 @@ local function control(
 	local name = if direction == -1 then "Previous" else "Next"
 	piece(
 		model,
-		origin,
+		transform,
 		name .. "Plinth",
 		Vector3.new(4.5, 0.65, 4.2),
 		Vector3.new(x, 0.325, z),
@@ -64,7 +64,7 @@ local function control(
 	)
 	piece(
 		model,
-		origin,
+		transform,
 		name .. "Wing",
 		Vector3.new(4.7, 10.7, 4.2),
 		Vector3.new(x, 6, z),
@@ -72,7 +72,7 @@ local function control(
 	)
 	piece(
 		model,
-		origin,
+		transform,
 		name .. "Cap",
 		Vector3.new(5, 0.45, 4.3),
 		Vector3.new(x, 11.575, z),
@@ -80,7 +80,7 @@ local function control(
 	)
 	local panel = piece(
 		model,
-		origin,
+		transform,
 		name .. "OakPanel",
 		Vector3.new(0.25, 6.8, 3.8),
 		Vector3.new(x - 2.48, 7.1, z),
@@ -91,7 +91,7 @@ local function control(
 	for _, edge in { -1, 1 } do
 		local trim = piece(
 			model,
-			origin,
+			transform,
 			name .. "WarmTrim",
 			Vector3.new(0.1, 0.1, 3.8),
 			Vector3.new(x - 2.63, 7.1 + edge * 3.45, z),
@@ -102,7 +102,7 @@ local function control(
 	end
 	local edge = piece(
 		model,
-		origin,
+		transform,
 		name .. "OuterTrim",
 		Vector3.new(0.1, 6.8, 0.1),
 		Vector3.new(x - 2.63, 7.1, z + direction * 1.85),
@@ -114,22 +114,22 @@ local function control(
 	for _, half in { -1, 1 } do
 		local bar = piece(
 			model,
-			origin,
+			transform,
 			name .. "Chevron",
 			Vector3.new(0.18, 2.7, 0.65),
 			Vector3.new(x - 2.72, 7.1 + half * 0.85, z),
 			palette.diffuser
 		)
-		bar.Orientation = Vector3.new(-direction * half * 45, 0, 0)
+		bar.CFrame *= CFrame.Angles(math.rad(-direction * half * 45), 0, 0)
 		bar.CanCollide = false
 		table.insert(accents, bar)
 	end
 	-- Kept under the plot root so the existing server-bound ancestry guard stays unchanged.
-	local hitbox = Geometry.part(
+	local hitbox = Geometry.partAt(
 		parent,
 		name .. "ShelvesHitbox",
 		Vector3.new(5, 10, 7),
-		origin + Vector3.new(x - 2.7, 7.1, z),
+		transform * CFrame.new(x - 2.7, 7.1, z),
 		palette.ivory
 	)
 	hitbox.Transparency = 1
@@ -149,7 +149,7 @@ function Fixture.setNavigation(render: Render, enabled: boolean)
 		end
 	end
 end
-function Fixture.create(parent: Instance, origin: Vector3): Render
+function Fixture.create(parent: Instance, transform: CFrame): Render
 	local model = Instance.new("Model")
 	model.Name = "CollectionFixture"
 	local units: { Model } = {}
@@ -166,7 +166,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 		local center = Geometry.shelfOffset(position, 1, (Config.slotsPerRow + 1) / 2).Z
 		piece(
 			unit,
-			origin,
+			transform,
 			"Plinth",
 			Vector3.new(4.7, 0.65, pitch - 0.06),
 			Vector3.new(x + 0.1, 0.325, center),
@@ -174,7 +174,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 		)
 		piece(
 			unit,
-			origin,
+			transform,
 			"Base",
 			Vector3.new(style.depth, Geometry.shelfBaseY - style.board - 0.65, pitch - 0.06),
 			Vector3.new(x, (Geometry.shelfBaseY - style.board + 0.65) / 2, center),
@@ -182,7 +182,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 		)
 		piece(
 			unit,
-			origin,
+			transform,
 			"RecessedBack",
 			Vector3.new(0.3, top - 0.65, pitch - 2 * style.post),
 			Vector3.new(x + 2.25, (top + 0.65) / 2, center),
@@ -191,7 +191,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 		for _, side in { -1, 1 } do
 			piece(
 				unit,
-				origin,
+				transform,
 				"OakUpright",
 				Vector3.new(4.9, top - 0.65, style.post),
 				Vector3.new(x, (top + 0.65) / 2, center + side * (pitch - style.post) / 2),
@@ -203,7 +203,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 			local height = Geometry.shelfOffset(position, row, 1).Y
 			piece(
 				unit,
-				origin,
+				transform,
 				"Row_" .. row,
 				Vector3.new(style.depth, style.board, pitch - 2 * style.post),
 				Vector3.new(x, height - style.board / 2, center),
@@ -211,7 +211,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 			)
 			local diffuser = piece(
 				unit,
-				origin,
+				transform,
 				"RowLight_" .. row,
 				Vector3.new(0.45, 0.1, pitch - 2 * style.post - 0.4),
 				Vector3.new(
@@ -233,13 +233,13 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 			light.Parent = diffuser
 			for slot = 1, Config.slotsPerRow do
 				anchors[Config.renderSlot(position, Config.slotId(row, slot))] =
-					Geometry.shelfAnchor(origin, position, row, slot)
+					Geometry.shelfAnchor(transform, position, row, slot)
 			end
 		end
 	end
 	piece(
 		model,
-		origin,
+		transform,
 		"ContinuousCanopy",
 		Vector3.new(5.2, 0.7, span + 0.4),
 		Vector3.new(x, top + 0.05, z),
@@ -247,7 +247,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 	)
 	piece(
 		model,
-		origin,
+		transform,
 		"OakCrown",
 		Vector3.new(4.8, 0.2, span),
 		Vector3.new(x + 0.1, top + 0.5, z),
@@ -256,7 +256,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 	)
 	piece(
 		model,
-		origin,
+		transform,
 		"HeaderFrame",
 		Vector3.new(0.65, 2.6, 15.8),
 		Vector3.new(x - 2, top + 1.55, z),
@@ -265,7 +265,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 	)
 	piece(
 		model,
-		origin,
+		transform,
 		"HeaderRecess",
 		Vector3.new(0.12, 2.13, 15.33),
 		Vector3.new(x - 2.36, top + 1.55, z),
@@ -273,7 +273,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 	)
 	local face = piece(
 		model,
-		origin,
+		transform,
 		"HeaderFace",
 		Vector3.new(0.1, 1.95, 15.15),
 		Vector3.new(x - 2.48, top + 1.55, z),
@@ -300,7 +300,7 @@ function Fixture.create(parent: Instance, origin: Vector3): Render
 	local controls: { Control } = {}
 	local hitboxes: { Part } = {}
 	for _, direction in { -1, 1 } do
-		local button, hitbox = control(model, parent, origin, direction, span)
+		local button, hitbox = control(model, parent, transform, direction, span)
 		table.insert(controls, button)
 		table.insert(hitboxes, hitbox)
 	end
