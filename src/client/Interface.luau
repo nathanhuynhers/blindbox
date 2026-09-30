@@ -207,6 +207,8 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 			})
 		elseif opened and current == "Collection" then
 			background.set({ color = Theme.shadow, transparency = 0.72, blur = 0 })
+		elseif opened then
+			background.set({ color = Color3.fromRGB(53, 49, 57), transparency = 0.76, blur = 3 })
 		else
 			background.set(nil)
 		end

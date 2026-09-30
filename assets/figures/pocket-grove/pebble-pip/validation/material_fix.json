@@ -1,0 +1,136 @@
+{
+  "cause": "The original GLB contained baseColorFactor values but no images or textures. Roblox Studio imported the meshes without dependable albedo, producing white/gray materials.",
+  "fix": "Each flat-color material now uses a 16x16 sRGB albedo swatch connected directly to Principled Base Color. Blush also uses the swatch alpha. The GLB embeds all seven textures and exports UV0.",
+  "geometry_digest_before_and_after": "c55c19383749d504ac2c6ebd680c29a47e167bc727109363d58f194cc96e2fdd",
+  "palette": {
+    "PP_Blush_Export": {
+      "approved_linear_rgba": [
+        0.9411764740943909,
+        0.686274528503418,
+        0.6823529601097107,
+        0.6800000071525574
+      ],
+      "encoded_srgb_rgba8": [
+        248,
+        216,
+        215,
+        173
+      ],
+      "texture": "model/textures/pebble_pip_blush_albedo.png"
+    },
+    "PP_Body_Export": {
+      "approved_linear_rgba": [
+        0.7411764860153198,
+        0.7176470756530762,
+        0.658823549747467,
+        1.0
+      ],
+      "encoded_srgb_rgba8": [
+        223,
+        220,
+        212,
+        255
+      ],
+      "texture": "model/textures/pebble_pip_body_albedo.png"
+    },
+    "PP_CloverLeafSoftVein_Export": {
+      "approved_linear_rgba": [
+        0.43921568989753723,
+        0.6196078658103943,
+        0.32156863808631897,
+        1.0
+      ],
+      "encoded_srgb_rgba8": [
+        177,
+        206,
+        154,
+        255
+      ],
+      "texture": "model/textures/pebble_pip_cloverleafsoftvein_albedo.png"
+    },
+    "PP_CloverLeaves_Export": {
+      "approved_linear_rgba": [
+        0.47999998927116394,
+        0.6700000166893005,
+        0.33000001311302185,
+        1.0
+      ],
+      "encoded_srgb_rgba8": [
+        184,
+        214,
+        155,
+        255
+      ],
+      "texture": "model/textures/pebble_pip_cloverleaves_albedo.png"
+    },
+    "PP_CloverStem_Export": {
+      "approved_linear_rgba": [
+        0.3400000035762787,
+        0.5400000214576721,
+        0.23999999463558197,
+        1.0
+      ],
+      "encoded_srgb_rgba8": [
+        158,
+        194,
+        134,
+        255
+      ],
+      "texture": "model/textures/pebble_pip_cloverstem_albedo.png"
+    },
+    "PP_Eyes_Export": {
+      "approved_linear_rgba": [
+        0.054999999701976776,
+        0.04600000008940697,
+        0.03799999877810478,
+        1.0
+      ],
+      "encoded_srgb_rgba8": [
+        66,
+        61,
+        55,
+        255
+      ],
+      "texture": "model/textures/pebble_pip_eyes_albedo.png"
+    },
+    "PP_Mouth_Export": {
+      "approved_linear_rgba": [
+        0.07000000029802322,
+        0.054999999701976776,
+        0.04500000178813934,
+        1.0
+      ],
+      "encoded_srgb_rgba8": [
+        75,
+        66,
+        60,
+        255
+      ],
+      "texture": "model/textures/pebble_pip_mouth_albedo.png"
+    }
+  },
+  "glb_sha256": "524462ed3733fcc8d4cc60daf3a69ab78a6081e8ee458bd2252ba2294ad97030",
+  "glb_bytes": 1205604,
+  "images": 7,
+  "textures": 7,
+  "materials": [
+    "PP_Body_Export",
+    "PP_Blush_Export",
+    "PP_CloverLeaves_Export",
+    "PP_CloverStem_Export",
+    "PP_CloverLeafSoftVein_Export",
+    "PP_Eyes_Export",
+    "PP_Mouth_Export"
+  ],
+  "reimport_objects": 21,
+  "validation": {
+    "geometry_digest_unchanged": true,
+    "glb_position_maximum_error": 0.0,
+    "triangles": 52772,
+    "mesh_objects": 21,
+    "required_nodes_present": true,
+    "embedded_images": 7,
+    "base_color_texture_bindings": 7,
+    "visual_result": "Passed: front, three-quarter, side and back renders of the clean GLB re-import visibly preserve the approved palette and silhouette."
+  }
+}

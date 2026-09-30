@@ -2,8 +2,12 @@
 -- Structural importer fixtures; these do not simulate rendering or asset delivery.
 local Box = require("./BlindBoxModel")
 local Spec = require("./BlindBoxSpec")
+local Source = require("./OpeningBoxSource")
 local function node(name, class, children)
 	local object = { Name = name, ClassName = class, children = children or {} }
+	function object:GetAttribute(key)
+		return self[key]
+	end
 	function object:IsA(kind)
 		return self.ClassName == kind or (kind == "BasePart" and self.ClassName == "MeshPart")
 	end
@@ -58,3 +62,25 @@ assert(
 	"Missing semantics must fail rather than show unbranded geometry"
 )
 print("PASS: 4 semantic model binding fixtures (no Roblox rendering simulated)")
+
+-- The actual cinematic source resolver refuses missing/partial/invalid templates.
+local productionParts = {}
+for _, name in Spec.required do
+	table.insert(productionParts, node(name, "MeshPart"))
+end
+local template = node("BlindBoxBase", "Model", { node("BlindBox_Root", "Model", productionParts) })
+local folder = node("ProductionModels", "Folder", { template })
+local absent, absentReason = Source.resolve(nil)
+assert(not absent and absentReason ~= "", "missing folder chooses fallback")
+assert(Source.resolve(folder) == nil, "unreplicated part-count attribute chooses fallback")
+template.ExpectedPartCount = #productionParts + 1
+assert(Source.resolve(folder) == nil, "partial replication chooses fallback")
+template.ExpectedPartCount = #productionParts
+assert(Source.resolve(folder) == template, "complete production template wins over fallback")
+productionParts[1].Name = "UnexpectedBody"
+local bad, issue = Source.resolve(folder)
+assert(
+	not bad and issue == "No geometry for BoxBody",
+	"malformed production reports exact missing node"
+)
+print("PASS: 5 production box source/fallback checks")

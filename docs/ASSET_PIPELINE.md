@@ -26,6 +26,26 @@ Reviewed reusable models live under `assets/models/<model-slug>/`. Model entries
 `assetType: Model`, a lowercase snake_case `.glb` source, and may declare `requiredNodes`.
 Dry-run validation checks the GLB 2.0 container and every declared semantic node before upload.
 
+The first production figure, Pebble Pip, is prepared under
+`assets/figures/pocket-grove/pebble-pip/model/pebble_pip_roblox.glb` with alias
+`pebble_pip` and semantic key `Models.PocketGrove.PebblePip`. It is registered locally
+but **not uploaded or adopted by gameplay**. See its
+[production receipt and manual Studio import/integration plan](../assets/figures/pocket-grove/pebble-pip/PRODUCTION.md).
+Run only `python scripts/upload_assets.py pebble_pip --dry-run` until Studio acceptance.
+
+### Flat-color collectible materials
+
+Roblox figure GLBs must not rely on glTF `baseColorFactor` alone. Pebble Pip's first Studio import
+showed that the geometry can import correctly while factor-only materials arrive nearly white.
+Use one small uniform sRGB albedo swatch per logical flat-color material, connect it directly to
+Principled Base Color, provide UV0, and embed it in the GLB. Alpha belongs in the albedo PNG only
+when the approved material needs it. Keep base-color multipliers white to avoid double tinting.
+
+Validation must confirm that every colored material has a `baseColorTexture`, every referenced
+image is embedded, and a clean Blender re-import visibly matches the approved source. Numeric
+roughness and metallic factors may remain simple when they round-trip correctly. Do not bake
+lighting, shadows or procedural detail into a flat-color collectible merely to satisfy this rule.
+
 ## One-time configuration and secrets
 
 The root `.env` is ignored, as are `.env.*`; only `.env.example` is eligible for Git.
@@ -178,8 +198,9 @@ PNG chunk boundaries/checksums/end markers and JPEG frame dimensions/end markers
 checked. This is lightweight structural validation, not a full pixel decoder; Roblox
 still validates content and performs moderation. The byte/dimension caps are based on
 the [official upload limits](https://create.roblox.com/docs/cloud/guides/usage-assets#supported-asset-types-and-limits).
-Model uploads are intentionally disabled; a future file validator/type adapter can reuse
-the multipart transport, operation polling and recording logic.
+GLB Model uploads are supported by the same transport, polling and recording logic.
+Their validator checks the GLB container and declared semantic nodes; it does not prove
+visual fidelity, topology quality or Studio runtime compatibility.
 
 `build/assets/pending.json` is an ignored local journal containing only source hashes,
 creator IDs and allowlisted operation fields. Preserve it until all pending uploads finish.

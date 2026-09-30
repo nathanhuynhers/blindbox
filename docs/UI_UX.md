@@ -6,8 +6,9 @@ remain unchanged. The reference image guides composition, not its example names,
 Current figure and packaging models remain procedural placeholders, not the illustrated reference art.
 
 The current world uses open Player Plots, an earning Display and cosmetic Shelves.
-See [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md). Shelf editing is functional
-placeholder UI; Shop and Collection retain their existing presentations.
+See [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md). Display, Shelves and Goals now
+use the neutral showcase/editor/activity-board presentation described in
+[Global system screens](SYSTEM_SCREENS_UI.md). Shop and Collection retain their presentations.
 
 ## Two visual layers
 
@@ -38,22 +39,29 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
   reusable themed 3D product, an editorial detail panel, six possible figures, catalog-derived
   rarity odds, fixed one-box price/action, and a secondary daily claim. Collection themes change
   only card/product/emblem/accent presentation. See [Shop implementation](SHOP_UI.md).
-- **Display:** a smaller bottom overlay leaves the plot visible. It shows current capacity,
-  locked slots, individual/total rates, matching-set progress, and place/replace/remove controls.
-  Three starting slots expand horizontally to a current maximum of six. The existing 4,000 Coin
-  fourth-slot unlock remains; slots five and six have no acquisition flow.
-- **Shelves:** the former Social navigation position opens a minimal owner editor with
-  visible indexes/count (including wrapped sequences such as 4,5,1 of 5), Previous/Next, three
-  visible-unit selectors, nine local slot buttons and a discovered-figure picker. Select a
+- **Display:** a neutral showcase with ivory portrait wells, oak plinths, large figure previews,
+  a prominent snapshot-derived income plaque, and three-segment set progress. A separate placement
+  banner includes the selected figure and Cancel; valid targets combine text and outlines.
+  Three starting slots expand to six. The existing fourth-slot Coin unlock remains; slots five
+  and six truthfully say "Coming later" without an invented action. Cards retain readable sizes
+  in six-, three-, two- or one-column arrangements, scrolling vertically when necessary.
+- **Shelves:** an owner editor with a visual 3-by-3 arrangement, warm boards, actual figure previews,
+  selected-position check marks, three visible-unit selectors and compact Previous/Next arrows.
+  The displayed indexes/count preserve wrapped sequences such as 4,5,1 of 5. Select a
   persistent Shelf Unit, then a local row/slot to place/replace/remove. Discovery is enough, even with zero copies. Edit near your own
   shelves. Physical arrows are also usable by nearby visitors and shift the shared viewport one unit for everyone.
   Navigation is disabled when exactly three units are owned.
   The physical installation is named Collection: its permanent header says COLLECTION, with
   integrated icon-only chevrons. Visible indexes remain in the owner editor, not world signage.
   A stale editor request is rejected if the shared carousel changed; the owner receives a fresh
-  snapshot. No shelf customization or acquisition UI exists.
-- **Goals:** a neutral sheet retains daily display progress/rewards and daily-box choice.
-  Collection completion is tracked and shown; its future reward is TBD.
+  snapshot. The discovered-only picker reuses six preview cards per page, including zero-copy
+  discoveries. On mobile it moves below the complete shelf grid. Empty discovery links to Shop.
+  No shelf acquisition UI exists.
+- **Goals:** a neutral activity board presents the daily Display goal, segmented progress and a
+  snapshot-derived Coin reward. Only completed, unclaimed goals show a Claim action. A separate
+  daily-box card offers Catalog-derived collection choices and the existing UTC reset wording.
+  Individual collection-progress cards may use collection accents; the surrounding board never
+  does. Completed collections show completion without promising an unimplemented reward.
 - **Feedback:** a bounded measured toast wraps messages, deduplicates repeats and expires.
   Errors last longer. Buttons retain disabled, pressed, focus and selected states, with subtle
   press animation respecting the session motion preference.
@@ -61,7 +69,8 @@ additional motif renderer. Economy/catalog definitions do not contain UI styling
 There is no shared enclosing menu panel, global page title or permanent balance/status header.
 `Interface` coordinates independent presentation hosts and floating close/motion controls.
 Book and Shop use presentation treatments; Shop applies the reusable mild world blur and warm dim
-overlay. Generic sheets and Display controls leave the world clear. The Shop UI remains crisp.
+overlay. Display, Shelves and Goals use a lighter neutral dim and 3px world blur; leaving treated
+screens, entering box opening or destroying the UI clears it. All UI content stays crisp.
 
 ## Layout, authority and lifecycle
 
@@ -81,6 +90,9 @@ read-only projections, `UIScope` owns connections/timers/tweens, and `UIPreview`
 slots. Screen instances are reused. No idle animation loop or external dependency was added.
 The server still validates every action, price, reservation, proximity, reward and balance.
 Pending requests disable mutations; the client never optimistically changes inventory or Coins.
+`SystemStyle`, `SystemLayout` and `SystemState` add narrowly scoped neutral primitives, measured
+scroll canvases and read-only state projections. The other screens' Widgets/theme are untouched.
+`DisplaySlotCard`, `ShelfFigureCard` and `DailyGoalCard` keep rendering responsibilities separate.
 
 Gamepad Y opens/closes, B backs out, shoulders switch screens, and A activates selected controls.
 Selection inside scrolling containers is brought into view. The existing opening owns its higher
@@ -93,6 +105,9 @@ Automated: the existing domain, persistence, opening and four scrolling checks r
 checks cover read-only inventory/discovery projections, reservations, collection selection,
 bonus preview vs the real domain, responsive grid/presentation bounds, collection theme fallbacks, numeric presentation and scope teardown.
 These checks do **not** prove Roblox layout, rendering or input behavior.
+The system-screen suite additionally runs actual screen composition/update/callback code against
+stubbed engine primitives, plus responsive geometry sweeps and a 1,000-entry picker fixture.
+See the [new screen verification and acceptance checklist](SYSTEM_SCREENS_UI.md).
 
 Use current Rojo sync or the rebuilt `RobloxWorkspace.rbxlx`, then Play in unsaved preview.
 Watch client/server Output. Paste `tests/StudioUI.client.luau` into the **client Command Bar**

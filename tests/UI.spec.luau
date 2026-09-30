@@ -320,10 +320,10 @@ end
 local book = Layout.screen("Collection", 1280, 720, true)
 local room = Layout.screen("Display", 1280, 720, true)
 local goals = Layout.screen("Goals", 1280, 720, true)
-check(room.height < book.height and room.y > book.y, "room controls preserve the upper world view")
+check(room.height >= 500 and room.width >= 900, "Display has room for readable showcase cards")
 check(
-	goals.width < book.width and goals.height < book.height,
-	"daily sheet has its own compact composition"
+	goals.width < book.width and goals.height >= 500,
+	"activity board has its own bounded composition"
 )
 check(
 	Style.get("grove").motif == "leaf" and Style.get("tide").motif == "shell",

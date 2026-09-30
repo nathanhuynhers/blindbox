@@ -3,6 +3,35 @@
     "userId": "103346374"
   },
   "assets": {
+    "pebble_pip": {
+      "key": "Models.PocketGrove.PebblePip",
+      "source": "assets/figures/pocket-grove/pebble-pip/model/pebble_pip_roblox.glb",
+      "displayName": "Pocket Grove - Pebble Pip",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PP_Head_Export",
+        "PP_Body_Export",
+        "PP_Leg_L_Export",
+        "PP_Leg_R_Export",
+        "PP_Foot_L_Export",
+        "PP_Foot_R_Export",
+        "PP_Arm_L_Export",
+        "PP_Arm_R_Export",
+        "PP_Back_Bump_Export",
+        "PP_Eye_L_Export",
+        "PP_Eye_R_Export",
+        "PP_Cheek_L_Export",
+        "PP_Cheek_R_Export",
+        "PP_Mouth_Export",
+        "PP_Clover_Stem_Export",
+        "PP_Clover_Leaf_A_Export",
+        "PP_Clover_Leaf_B_Export",
+        "PP_Clover_Leaf_C_Export",
+        "PP_Clover_Vein_A_Export",
+        "PP_Clover_Vein_B_Export",
+        "PP_Clover_Vein_C_Export"
+      ]
+    },
     "blind_box_base": {
       "key": "Models.BlindBoxBase",
       "source": "assets/models/blind-box/blind_box_base.glb",

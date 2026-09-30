@@ -80,8 +80,12 @@ physical presentation and uploaded/native artwork; see [Collection](COLLECTION_U
 Opening presentation is separate: `OpeningResult` derives immutable presentation metadata from
 the pre-request and confirmed reply snapshots; `OpeningController` owns one opening session,
 input focus, sound timing and teardown. `OpeningState` is a deterministic clock/interaction
-state machine. `OpeningView`, `OpeningBox`, `OpeningConfig` and `OpeningAudio` own procedural
-viewport packaging, rarity visuals, responsive UI and optional licensed sound cues. Buy/Daily
+state machine. `OpeningCinematic` owns an isolated client-only 3D stage; `OpeningCamera` and
+`OpeningScope` restore camera/input/UI on every exit. `OpeningBox` animates the existing production
+package with an independent lid pivot and emergency procedural fallback. `OpeningEffects` provides
+real particles, comet flight, rarity tease and impact; `OpeningFigure` reuses the awarded figure
+factory for silhouette/reveal. `OpeningView` is the responsive overlay, while `OpeningConfig`
+and `OpeningAudio` own data-driven presentation and optional licensed sound cues. Buy/Daily
 show a box, Redeem goes directly to the figure spotlight. Skipping or interrupting presentation
 cannot affect the already-granted item. See [opening behavior and Studio checks](OPENING.md).
 No opening-specific remotes or server logic were introduced.

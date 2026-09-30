@@ -11,10 +11,15 @@ end
 -- Drive actual presentation logic with a deterministic clock, independent of Roblox rendering.
 local order = {
 	"Enter",
+	"Arrival",
 	"Anticipation",
+	"Charge",
 	"Shake",
 	"Await",
-	"Open",
+	"Break",
+	"Flight",
+	"RarityTease",
+	"Impact",
 	"Silhouette",
 	"Reveal",
 	"Result",
@@ -28,14 +33,14 @@ for rarity, profile in Config.rarities do
 		for index, phase in order do
 			check(state.phase == phase, rarity .. " order " .. phase)
 			if phase == "Await" then
-				check(not State.animated(state), "waiting must release frame connection")
+				check(State.animated(state) ~= reduced, "only normal mode keeps floating at Await")
 				State.advance(state, 300)
 				check(state.phase == "Await", "waiting cannot auto-open")
 				check(State.activate(state), "tap opens waiting box")
 			elseif phase == "Result" then
 				check(not State.activate(state), "same-frame click cannot dismiss result")
 				State.advance(state, 0.36)
-				check(not State.animated(state), "settled result must release frame connection")
+				check(State.animated(state) ~= reduced, "only normal mode keeps figure idle loop")
 				check(not State.skip(state), "skip cannot dismiss result")
 				State.advance(state, 300)
 				check(state.phase == "Result", "result must not disappear on a timer")
@@ -58,13 +63,14 @@ for rarity, profile in Config.rarities do
 				check(state.phase == order[index + 1], "timed transition")
 			end
 		end
-		check(elapsed < (if reduced then 1.5 else 4.5), "sequence stays short")
+		check(elapsed < (if reduced then 2.8 else 5.8), "sequence stays short")
 	end
 	for _, reduced in { false, true } do
 		for _, phase in order do
 			local state = State.create(profile.timing, reduced, false)
 			state.phase = phase
 			local expected = phase ~= "Enter"
+				and phase ~= "Arrival"
 				and phase ~= "Result"
 				and phase ~= "Closing"
 				and phase ~= "Done"
@@ -88,13 +94,91 @@ check(
 	"unknown rarity gets safe visual fallback"
 )
 check(
-	State.create(Config.rarities.Common.timing, false, true).phase == "Silhouette",
-	"redemption bypasses sealed box"
+	State.create(Config.rarities.Common.timing, false, true).phase == "Enter",
+	"redemption also transitions safely into cinematic camera"
 )
 check(
 	Config.rarities.Rare.rings > Config.rarities.Uncommon.rings
 		and Config.rarities.Uncommon.particles > Config.rarities.Common.particles,
 	"rarity intensity is data-driven"
+)
+
+local Catalog = require("./Catalog")
+for _, figure in Catalog.figures do
+	check(Config.rarities[figure.rarity] ~= nil, "every actual rarity has a profile")
+	local collection = Config.collection(figure.collection)
+	check(
+		collection.name ~= figure.collection
+			and collection.emblem ~= ""
+			and collection.pattern ~= "",
+		"catalog-driven collection packaging"
+	)
+end
+check(Config.collection("future").motif == "mote", "future collection gets neutral presentation")
+local direct = State.create(Config.rarities.Rare.timing, true, true)
+State.advance(direct, State.duration(direct))
+check(direct.phase == "Silhouette", "direct acquisition bypasses box after safe camera transition")
+local invalidDelta = State.create(Config.rarities.Common.timing, false, false)
+State.advance(invalidDelta, 0 / 0)
+State.advance(invalidDelta, math.huge)
+State.advance(invalidDelta, -4)
+check(invalidDelta.elapsed == 0, "invalid and negative clock deltas cannot corrupt progress")
+local totalTimes = {}
+for rarity, profile in Config.rarities do
+	local total, reducedTotal = 0, 0
+	for _, phase in order do
+		local full = State.create(profile.timing, false, false)
+		local reduced = State.create(profile.timing, true, false)
+		full.phase, reduced.phase = phase, phase
+		local duration = State.duration(full)
+		if duration < math.huge and phase ~= "Closing" then
+			total += duration
+			reducedTotal += State.duration(reduced)
+			check(State.duration(reduced) <= duration, "reduced motion never lengthens a phase")
+		end
+	end
+	totalTimes[rarity] = total
+	check(total >= 3.5 and total <= 5.8, "cinematic pacing target")
+	check(reducedTotal < total * 0.65, "reduced motion substantially shortens travel")
+	local beat = Config.teaseBeat(profile, 0)
+	check(
+		beat.color == profile.tint and Config.sounds[beat.cue] ~= nil,
+		"data-driven rarity color and cue"
+	)
+end
+check(
+	totalTimes.Common < totalTimes.Uncommon and totalTimes.Uncommon < totalTimes.Rare,
+	"rarity extends anticipation through data"
+)
+local future = table.clone(Config.rarities.Rare)
+future.tease = {
+	{ at = 0, color = future.tint, secondary = future.accent, cue = "rarityRare" },
+	{
+		at = 0.3,
+		color = future.tint,
+		secondary = future.accent,
+		cue = "",
+		quiet = true,
+		freeze = true,
+	},
+	{
+		at = 0.5,
+		color = Config.rarities.Uncommon.tint,
+		secondary = future.accent,
+		cue = "futureSting",
+		shatter = true,
+	},
+}
+check(Config.teaseBeat(future, 0.4).freeze == true, "future profile can freeze and go quiet")
+check(Config.teaseBeat(future, 0.6).shatter == true, "future profile can shatter into another tint")
+check(
+	Config.teaseMotion(future, 0.3) == Config.teaseMotion(future, 0.49),
+	"freeze holds path position"
+)
+check(Config.teaseMotion(future, 1) == 1, "multi-beat profile still lands before impact")
+check(
+	Catalog.byId["secret"] == nil and Config.rarities.Secret == nil,
+	"extensibility adds no fake catalog drops"
 )
 
 local id = "grove.pebble"

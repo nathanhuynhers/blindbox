@@ -60,11 +60,18 @@ end
 local bounds = gui:WaitForChild("SafeArea") :: Frame
 local screens = bounds:WaitForChild("Screens") :: Frame
 local shopHost = screens:WaitForChild("ShopPresentation") :: Frame
+local systemsOpen = false
+for _, id in { "Display", "Shelves", "Goals" } do
+	local host = screens:FindFirstChild(id .. "Presentation")
+	if host and host:IsA("Frame") and host.Visible then
+		systemsOpen = true
+	end
+end
 local blur = game:GetService("Lighting"):FindFirstChild("InterfaceBackgroundBlur")
-if not shopHost.Visible then
+if not shopHost.Visible and not systemsOpen then
 	assert(
 		not blur or not blur:IsA("BlurEffect") or not blur.Enabled,
-		"Shop blur must be disabled after leaving the Shop"
+		"Blur must be disabled when no treated presentation is open"
 	)
 end
 for _, host in screens:GetChildren() do

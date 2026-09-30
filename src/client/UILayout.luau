@@ -9,20 +9,23 @@ function Layout.screen(id: string, width: number, height: number, desktop: boole
 	local left, right = if desktop then 144 else 12, 12
 	local top, bottom =
 		if height < 420 then 58 else 76, if height < 420 then 12 elseif desktop then 20 else 76
+	if not desktop and height >= 420 and (id == "Display" or id == "Shelves" or id == "Goals") then
+		bottom = 96 -- Clear the image navigation bar and its shadow.
+	end
 	local availableWidth = math.max(1, width - left - right)
 	local availableHeight = math.max(1, height - top - bottom)
 	local maxWidth = if id == "Collection"
 		then 1500
 		elseif id == "Shop" then 1360
-		elseif id == "Goals" then 620
-		elseif id == "Shelves" then 780
-		else 740
+		elseif id == "Goals" then 1040
+		elseif id == "Shelves" then 1180
+		else 1280
 	local maxHeight = if id == "Collection"
 		then 860
 		elseif id == "Shop" then 780
-		elseif id == "Goals" then 430
-		elseif id == "Shelves" then 450
-		else 330
+		elseif id == "Goals" then 760
+		elseif id == "Shelves" then 780
+		else 740
 	local w, h = math.min(availableWidth, maxWidth), math.min(availableHeight, maxHeight)
 	if id == "Collection" and w >= 940 then
 		-- Keep the approved broad open-book silhouette rather than stretching its pages tall.

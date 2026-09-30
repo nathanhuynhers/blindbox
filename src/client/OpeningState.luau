@@ -1,12 +1,17 @@
 --!strict
--- A presentation clock only: no transaction, inventory or random-roll behavior.
-local OpeningState = {}
+-- A presentation clock only. No rolls, spends, grants or server calls.
+local State = {}
 export type Phase =
 	"Enter"
+	| "Arrival"
 	| "Anticipation"
+	| "Charge"
 	| "Shake"
 	| "Await"
-	| "Open"
+	| "Break"
+	| "Flight"
+	| "RarityTease"
+	| "Impact"
 	| "Silhouette"
 	| "Reveal"
 	| "Result"
@@ -14,94 +19,144 @@ export type Phase =
 	| "Done"
 export type Timing = {
 	anticipation: number,
+	charge: number,
 	shake: number,
 	opening: number,
+	flight: number,
+	rarityTease: number,
+	impact: number,
 	silhouette: number,
 	reveal: number,
 }
-export type State = { phase: Phase, elapsed: number, reduced: boolean, timing: Timing }
-
-local nextPhase: { [Phase]: Phase } = {
-	Enter = "Anticipation",
-	Anticipation = "Shake",
+export type State = {
+	phase: Phase,
+	elapsed: number,
+	reduced: boolean,
+	timing: Timing,
+	durations: { [Phase]: number },
+	direct: boolean,
+	skipped: boolean,
+}
+State.transition = 0.22
+State.arrival = 0.5
+State.resultGuard = 0.35
+local phaseOrder: { [Phase]: number } = {}
+for index, phase in
+	{
+		"Enter",
+		"Arrival",
+		"Anticipation",
+		"Charge",
+		"Shake",
+		"Await",
+		"Break",
+		"Flight",
+		"RarityTease",
+		"Impact",
+		"Silhouette",
+		"Reveal",
+		"Result",
+		"Closing",
+		"Done",
+	}
+do
+	phaseOrder[phase :: Phase] = index
+end
+function State.isForward(previous: Phase?, nextPhase: Phase): boolean
+	return previous == nil or phaseOrder[nextPhase] > phaseOrder[previous]
+end
+local following: { [Phase]: Phase } = {
+	Enter = "Arrival",
+	Arrival = "Anticipation",
+	Anticipation = "Charge",
+	Charge = "Shake",
 	Shake = "Await",
-	Open = "Silhouette",
+	Break = "Flight",
+	Flight = "RarityTease",
+	RarityTease = "Impact",
+	Impact = "Silhouette",
 	Silhouette = "Reveal",
 	Reveal = "Result",
 	Closing = "Done",
 }
-
-function OpeningState.create(timing: Timing, reduced: boolean, direct: boolean): State
+local reducedCaps: { [Phase]: number } = {
+	Arrival = 0.2,
+	Anticipation = 0.12,
+	Charge = 0.22,
+	Shake = 0.12,
+	Break = 0.2,
+	Flight = 0.18,
+	RarityTease = 0.3,
+	Impact = 0.14,
+	Silhouette = 0.4,
+	Reveal = 0.28,
+}
+function State.create(timing: Timing, reduced: boolean, direct: boolean): State
 	return {
-		phase = if direct then "Silhouette" else "Enter",
+		phase = "Enter",
 		elapsed = 0,
 		reduced = reduced,
 		timing = timing,
+		durations = {
+			Enter = State.transition,
+			Closing = State.transition,
+			Arrival = State.arrival,
+			Anticipation = timing.anticipation,
+			Charge = timing.charge,
+			Shake = timing.shake,
+			Break = timing.opening,
+			Flight = timing.flight,
+			RarityTease = timing.rarityTease,
+			Impact = timing.impact,
+			Silhouette = timing.silhouette,
+			Reveal = timing.reveal,
+		},
+		direct = direct,
+		skipped = false,
 	}
 end
-
-function OpeningState.duration(state: State): number
-	local phase = state.phase
-	if phase == "Enter" then
-		return if state.reduced then 0.2 else 0.55
-	end
-	if phase == "Anticipation" then
-		return if state.reduced then 0.25 else state.timing.anticipation
-	end
-	if phase == "Shake" then
-		return if state.reduced then 0.15 else state.timing.shake
-	end
-	if phase == "Open" then
-		return if state.reduced then 0.2 else state.timing.opening
-	end
-	if phase == "Silhouette" then
-		return if state.reduced then 0.2 else state.timing.silhouette
-	end
-	if phase == "Reveal" then
-		return if state.reduced then 0.2 else state.timing.reveal
-	end
-	if phase == "Closing" then
-		return if state.reduced then 0.15 else 0.25
-	end
-	return math.huge
+function State.duration(state: State): number
+	local phase: Phase = state.phase
+	local duration = state.durations[phase] or math.huge
+	return if state.reduced and reducedCaps[phase]
+		then math.min(duration, reducedCaps[phase])
+		else duration
 end
-
-function OpeningState.progress(state: State): number
-	return math.clamp(state.elapsed / OpeningState.duration(state), 0, 1)
+function State.progress(state: State): number
+	return math.clamp(state.elapsed / State.duration(state), 0, 1)
 end
-
-function OpeningState.advance(state: State, delta: number): boolean
-	if state.phase == "Done" then
+function State.advance(state: State, delta: number): boolean
+	if state.phase == "Done" or delta ~= delta or math.abs(delta) == math.huge then
 		return false
 	end
 	state.elapsed += math.max(0, delta)
-	local following: Phase? = nextPhase[state.phase]
-	if following and state.elapsed >= OpeningState.duration(state) then
-		state.phase = following
+	local nextPhase: Phase? = following[state.phase]
+	if nextPhase and state.elapsed >= State.duration(state) then
+		-- Visit every phase after stalled frames; never skip a cue or the interaction gate.
+		state.phase = if state.direct and state.phase == "Enter" then "Silhouette" else nextPhase
 		state.elapsed = 0
 		return true
 	end
 	return false
 end
-
-function OpeningState.skip(state: State): boolean
-	if
-		state.phase == "Enter"
-		or state.phase == "Result"
-		or state.phase == "Closing"
-		or state.phase == "Done"
-	then
+function State.canSkip(state: State): boolean
+	return state.phase ~= "Enter"
+		and state.phase ~= "Arrival"
+		and state.phase ~= "Result"
+		and state.phase ~= "Closing"
+		and state.phase ~= "Done"
+end
+function State.skip(state: State): boolean
+	if not State.canSkip(state) then
 		return false
 	end
-	state.phase = "Result"
-	state.elapsed = 0
+	state.phase, state.elapsed, state.skipped = "Result", 0, true
 	return true
 end
-
-function OpeningState.activate(state: State): boolean
+function State.activate(state: State): boolean
 	if state.phase == "Await" then
-		state.phase = "Open"
-	elseif state.phase == "Result" and state.elapsed >= 0.35 then
+		state.phase = "Break"
+	elseif state.phase == "Result" and state.elapsed >= State.resultGuard then
 		state.phase = "Closing"
 	else
 		return false
@@ -109,16 +164,18 @@ function OpeningState.activate(state: State): boolean
 	state.elapsed = 0
 	return true
 end
-
-function OpeningState.animated(state: State): boolean
-	return state.phase ~= "Await"
-		and state.phase ~= "Done"
-		and (state.phase ~= "Result" or state.elapsed < 0.35)
+function State.animated(state: State): boolean
+	-- One bounded loop for floating/idle; reduced motion sleeps at the interaction gates.
+	return state.phase ~= "Done"
+		and (
+			not state.reduced
+			or (
+				state.phase ~= "Await"
+				and (state.phase ~= "Result" or state.elapsed < State.resultGuard)
+			)
+		)
 end
-
-function OpeningState.cancel(state: State)
-	state.phase = "Done"
-	state.elapsed = 0
+function State.cancel(state: State)
+	state.phase, state.elapsed = "Done", 0
 end
-
-return OpeningState
+return State

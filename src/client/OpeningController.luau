@@ -10,33 +10,31 @@ local State = require(script.Parent.OpeningState)
 local Result = require(script.Parent.OpeningResult)
 local View = require(script.Parent.OpeningView)
 local Audio = require(script.Parent.OpeningAudio)
+local Scope = require(script.Parent.OpeningScope)
+local Cinematic = require(script.Parent.OpeningCinematic)
 local Controller = {}
 export type Controller = {
 	present: (Result.Result, boolean) -> boolean,
 	isActive: () -> boolean,
+	skip: () -> (),
 	cancel: () -> (),
 	destroy: () -> (),
 }
 type Session = {
 	state: State.State,
-	gui: ScreenGui,
-	view: View.View?,
-	audio: Audio.Audio?,
-	connections: { RBXScriptConnection },
+	scope: Scope.Scope,
 	render: RBXScriptConnection?,
-	selection: GuiObject?,
+	interact: ((boolean) -> ())?,
 }
-
-local actionName = "BlindboxOpeningInput"
-local movementName = "BlindboxOpeningMovement"
+local actionName, movementName = "BlindboxOpeningInput", "BlindboxOpeningMovement"
 local function isGamepad(): boolean
 	return string.find(UserInputService:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
 end
-
 function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Controller
 	local active: Session? = nil
 	local destroyed = false
-	local lastRequest: string? = nil
+	local seen: { [string]: boolean } = {}
+	local receipts: { string } = {}
 	local function close()
 		local session = active
 		if not session then
@@ -44,25 +42,7 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 		end
 		active = nil
 		State.cancel(session.state)
-		if session.render then
-			session.render:Disconnect()
-		end
-		for _, connection in session.connections do
-			connection:Disconnect()
-		end
-		ContextActionService:UnbindAction(actionName)
-		ContextActionService:UnbindAction(movementName)
-		if session.view then
-			session.view.destroy()
-		end
-		if session.audio then
-			session.audio.destroy()
-		end
-		session.gui:Destroy()
-		focus(false)
-		GuiService.SelectedObject = if session.selection and session.selection.Parent
-			then session.selection
-			else nil
+		session.scope.destroy()
 	end
 	local function fail(reason: unknown)
 		close()
@@ -70,167 +50,290 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 		report("Your figure is in your collection. The opening could not be displayed.")
 	end
 	local characterConnection = Players.LocalPlayer.CharacterRemoving:Connect(close)
+	local addedConnection = Players.LocalPlayer.CharacterAdded:Connect(close)
 	return {
-		isActive = function(): boolean
+		isActive = function()
 			return active ~= nil
 		end,
 		cancel = close,
-		present = function(result: Result.Result, reduced: boolean): boolean
-			if destroyed or active or lastRequest == result.requestId then
+		skip = function()
+			if active and active.interact then
+				active.interact(true)
+			end
+		end,
+		present = function(result, reduced)
+			if destroyed or active or seen[result.requestId] then
 				return false
 			end
 			local figure = Catalog.byId[result.figureId]
-			if not figure then
-				return false
-			end
 			local playerGui = Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
-			if not playerGui then
+			if not figure or not playerGui or playerGui:FindFirstChild("BlindboxOpening") then
 				return false
 			end
-			lastRequest = result.requestId
-			local profile = Config.profile(figure.rarity)
-			local gui = Instance.new("ScreenGui")
-			gui.Name = "BlindboxOpening"
-			gui.ResetOnSpawn = false
-			gui.DisplayOrder = 100
-			gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-			gui.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
-			gui.Parent = playerGui
+			seen[result.requestId] = true
+			table.insert(receipts, result.requestId)
+			if #receipts > 64 then
+				local oldest = table.remove(receipts, 1)
+				if oldest then
+					seen[oldest] = nil
+				end
+			end
+			local profile, collection =
+				Config.profile(figure.rarity), Config.collection(figure.collection)
+			local scope = Scope.create()
 			local session: Session = {
 				state = State.create(profile.timing, reduced, result.direct),
-				gui = gui,
-				view = nil,
-				audio = nil,
-				connections = {},
+				scope = scope,
 				render = nil,
-				selection = GuiService.SelectedObject,
+				interact = nil,
 			}
 			active = session
+			-- Signals already queued by Roblox can arrive after Disconnect. Never close a successor.
+			local function closeSession()
+				if active == session then
+					close()
+				end
+			end
 			local ok, reason = pcall(function()
+				local selection = GuiService.SelectedObject
+				scope.add(function()
+					GuiService.SelectedObject = if selection and selection.Parent
+						then selection
+						else nil
+				end)
+				scope.add(function()
+					focus(false)
+				end)
 				focus(true)
-				local view = View.create(gui, result, profile, reduced)
-				session.view = view
-				local audio = Audio.create()
-				session.audio = audio
-				local impacted = false
-				local function enterPhase()
-					local phase = session.state.phase
-					if phase == "Enter" then
-						audio.play(Config.sounds.entrance)
-					elseif phase == "Shake" then
-						audio.play(Config.sounds.shake)
-					elseif phase == "Open" then
-						audio.play(Config.sounds.open)
-					elseif phase == "Silhouette" then
-						audio.play(Config.sounds.buildup)
+				local gui = Instance.new("ScreenGui")
+				gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "BlindboxOpening", false, 100
+				gui.ZIndexBehavior, gui.ScreenInsets =
+					Enum.ZIndexBehavior.Sibling, Enum.ScreenInsets.DeviceSafeInsets
+				gui.Parent = playerGui
+				scope.add(function()
+					gui:Destroy()
+				end)
+				local function connect(signal: RBXScriptSignal, callback: (...unknown) -> ())
+					local connection = signal:Connect(function(...)
+						if active == session then
+							callback(...)
+						end
+					end)
+					scope.add(function()
+						connection:Disconnect()
+					end)
+				end
+				connect(gui.Destroying, closeSession)
+				connect(gui.AncestryChanged, function()
+					if not gui:IsDescendantOf(playerGui) then
+						closeSession()
 					end
-					if (phase == "Reveal" or phase == "Result") and not impacted then
-						impacted = true
-						audio.play(Config.sounds.impact)
-						audio.play(profile.sound)
+				end)
+				connect(gui:GetPropertyChangedSignal("Enabled"), function()
+					if not gui.Enabled then
+						closeSession()
+					end
+				end)
+				local view = View.create(gui, scope, result, profile)
+				local cinematic =
+					Cinematic.create(scope, gui, result, profile, collection, reduced, closeSession)
+				local audio = Audio.create(scope)
+				scope.add(function()
+					if session.render then
+						session.render:Disconnect()
+						session.render = nil
+					end
+					ContextActionService:UnbindAction(actionName)
+					ContextActionService:UnbindAction(movementName)
+				end)
+				local revealed, teaseIndex, breakIndex = false, 0, 0
+				local selectionPhase: State.Phase? = nil
+				local function enterPhase()
+					local phase: State.Phase = session.state.phase
+					cinematic.enter(phase)
+					if phase == "Arrival" then
+						audio.play("entrance")
+						audio.play(collection.ambience, true)
+					elseif phase == "Charge" then
+						audio.play("charge", true)
+					elseif phase == "Shake" then
+						audio.play("shake")
+					elseif phase == "Await" or phase == "Result" then
+						audio.stop()
+					elseif phase == "Break" then
+						audio.stop()
+						audio.play("click")
+					elseif phase == "Flight" then
+						audio.play("flight", true)
+					elseif phase == "Impact" then
+						audio.stop()
+						audio.play("impact")
+					elseif phase == "Silhouette" then
+						audio.stop()
+						audio.play("silhouette")
+					elseif phase == "Closing" then
+						audio.stop()
+						audio.play("close")
+					end
+					if (phase == "Reveal" or phase == "Result") and not revealed then
+						revealed = true
+						audio.play("reveal")
 						if result.isNew then
-							audio.play(Config.sounds.discovery)
+							audio.play("discovery")
 						end
 					end
 				end
-				local function draw()
+				local function cues()
+					local state = session.state
+					if state.phase == "Break" then
+						for i, cue in Config.breakCues do
+							-- Reduced mode scales the same synchronized crack/lid/launch beats.
+							local at = if reduced
+								then cue.at * State.duration(state) / profile.timing.opening
+								else cue.at
+							if i > breakIndex and state.elapsed >= at then
+								breakIndex = i
+								audio.play(cue.cue)
+							end
+						end
+					elseif state.phase == "RarityTease" then
+						local _, index = Config.teaseBeat(profile, State.progress(state))
+						for i = teaseIndex + 1, index do
+							local beat = profile.tease[i]
+							if beat.quiet then
+								audio.stop()
+							end
+							cinematic.tease(beat)
+							audio.play(beat.cue)
+						end
+						teaseIndex = index
+					end
+				end
+				local function draw(delta: number)
 					if active ~= session then
 						return
 					end
+					cues()
+					cinematic.draw(session.state, delta)
 					view.draw(session.state, isGamepad())
 					if isGamepad() then
-						local selected = if view.primary.Visible and view.primary.Selectable
-							then view.primary
-							elseif view.skip.Visible then view.skip
-							else nil
-						if GuiService.SelectedObject ~= selected then
-							GuiService.SelectedObject = selected
+						if
+							selectionPhase ~= session.state.phase
+							and session.state.phase == "Await"
+						then
+							GuiService.SelectedObject = view.primary
 						end
+						selectionPhase = session.state.phase
+						local current = GuiService.SelectedObject
+						if
+							current ~= view.primary and current ~= view.skip
+							or (current == view.primary and not view.primary.Selectable)
+							or (current == view.skip and not view.skip.Visible)
+						then
+							GuiService.SelectedObject = if view.primary.Visible
+									and view.primary.Selectable
+								then view.primary
+								elseif view.skip.Visible then view.skip
+								else nil
+						end
+					end
+				end
+				local function safely(callback: () -> ())
+					if active ~= session then
+						return
+					end
+					local success, problem = pcall(function()
+						callback()
+						return true
+					end)
+					if not success and active == session then
+						fail(problem)
 					end
 				end
 				local function tick(delta: number)
 					if active ~= session then
 						return
 					end
-					local success, problem = pcall(function()
+					safely(function()
+						-- Audio ages by wall-clock delta; animation advances one phase at a time after stalls.
+						audio.update(
+							delta,
+							if session.state.phase == "Charge"
+								then State.progress(session.state)
+								else 1
+						)
 						if State.advance(session.state, delta) then
 							enterPhase()
 						end
 						if session.state.phase == "Done" then
 							close()
-							return true
+							return
 						end
-						draw()
+						draw(math.min(delta, 0.1))
 						if not State.animated(session.state) and session.render then
 							session.render:Disconnect()
 							session.render = nil
+							gui:SetAttribute("RenderConnections", 0)
 						end
-						return true
 					end)
-					if not success then
-						fail(problem)
-					end
 				end
 				local function wake()
 					if State.animated(session.state) and not session.render then
 						session.render = RunService.RenderStepped:Connect(tick)
+						gui:SetAttribute("RenderConnections", 1)
 					end
 				end
 				local function interact(skip: boolean)
 					if active ~= session then
 						return
 					end
-					local changed = if skip
-						then State.skip(session.state)
-						else State.activate(session.state)
-					if changed then
-						local success, problem = pcall(function()
+					safely(function()
+						local changed = if skip
+							then State.skip(session.state)
+							else State.activate(session.state)
+						if changed then
+							if skip then
+								audio.stop()
+								cinematic.skip()
+							end
 							enterPhase()
-							draw()
+							draw(0)
 							wake()
-						end)
-						if not success then
-							fail(problem)
 						end
-					end
+					end)
 				end
-				local function activated(input: InputObject, skip: boolean)
-					-- Gamepad A is owned by the action binding, not also GuiButton.Activated.
-					if string.find(input.UserInputType.Name, "Gamepad", 1, true) == nil then
+				session.interact = interact
+				local function activated(value: unknown, skip: boolean)
+					if
+						typeof(value) == "Instance"
+						and value:IsA("InputObject")
+						and string.find(value.UserInputType.Name, "Gamepad", 1, true) == nil
+					then
 						interact(skip)
 					end
 				end
-				table.insert(
-					session.connections,
-					view.primary.Activated:Connect(function(input: InputObject)
-						activated(input, false)
+				connect(view.primary.Activated, function(input)
+					activated(input, false)
+				end)
+				connect(view.hitTarget.Activated, function(input)
+					activated(input, false)
+				end)
+				connect(view.skip.Activated, function(input)
+					activated(input, true)
+				end)
+				connect(UserInputService.LastInputTypeChanged, function()
+					safely(function()
+						draw(0)
 					end)
-				)
-				table.insert(
-					session.connections,
-					view.hitTarget.Activated:Connect(function(input: InputObject)
-						activated(input, false)
+				end)
+				local camera = workspace.CurrentCamera
+				if camera then
+					connect(camera:GetPropertyChangedSignal("ViewportSize"), function()
+						safely(function()
+							draw(0)
+						end)
 					end)
-				)
-				table.insert(
-					session.connections,
-					view.skip.Activated:Connect(function(input: InputObject)
-						activated(input, true)
-					end)
-				)
-				table.insert(
-					session.connections,
-					UserInputService.LastInputTypeChanged:Connect(draw)
-				)
-				table.insert(session.connections, view.resized:Connect(draw))
-				table.insert(
-					session.connections,
-					gui.Destroying:Connect(function()
-						if active == session then
-							close()
-						end
-					end)
-				)
+				end
 				ContextActionService:BindActionAtPriority(
 					actionName,
 					function(_, inputState, input)
@@ -247,11 +350,12 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 						return Enum.ContextActionResult.Sink
 					end,
 					false,
-					3000,
+					3100,
 					Enum.KeyCode.ButtonA,
 					Enum.KeyCode.ButtonB,
 					Enum.KeyCode.ButtonX,
-					Enum.KeyCode.Return
+					Enum.KeyCode.Return,
+					Enum.KeyCode.Space
 				)
 				ContextActionService:BindActionAtPriority(
 					movementName,
@@ -266,15 +370,24 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 					Enum.PlayerActions.CharacterRight,
 					Enum.PlayerActions.CharacterJump
 				)
+				-- Clear existing thumbstick/keyboard movement immediately; input bindings own future movement.
+				Players.LocalPlayer:Move(Vector3.zero, false)
+				local character = Players.LocalPlayer.Character
+				local humanoid = if character
+					then character:FindFirstChildOfClass("Humanoid")
+					else nil
+				if humanoid then
+					connect(humanoid.Died, closeSession)
+				end
 				enterPhase()
-				draw()
+				draw(0)
 				wake()
 			end)
 			if not ok then
 				fail(reason)
 				return false
 			end
-			return true
+			return active == session
 		end,
 		destroy = function()
 			if destroyed then
@@ -282,9 +395,11 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 			end
 			destroyed = true
 			characterConnection:Disconnect()
+			addedConnection:Disconnect()
 			close()
+			table.clear(seen)
+			table.clear(receipts)
 		end,
 	}
 end
-
 return Controller

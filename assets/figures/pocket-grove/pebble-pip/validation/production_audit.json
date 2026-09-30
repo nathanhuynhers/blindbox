@@ -1,0 +1,3315 @@
+{
+  "master_file": "C:\\Users\\natha\\Documents\\RobloxWorkspace\\assets\\figures\\pocket-grove\\pebble-pip\\model\\pebble_pip_master.blend",
+  "master_sha256": "d8efe7e4d5fbc7c061a8c7e8b4d7f6996624b66e5f0e31386cc90bcb2a2e7705",
+  "live_scene_was_dirty": true,
+  "blender_version": "5.2.2 LTS",
+  "source_note": "Approved live scene had unsaved state at initial inspection; saved verbatim as a separate working copy before geometry changes. Original disk master remains byte-identical.",
+  "objects": [
+    {
+      "name": "PP_Head",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        -0.03500000014901161,
+        1.8200000524520874
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.03500000014901161
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.8200000524520874
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        2.0484566688537598,
+        1.506913661956787,
+        1.346634030342102
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 2,
+          "render_levels": 2
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 1986,
+      "faces": 2048,
+      "triangles": 3968,
+      "evaluated": {
+        "vertices": 32258,
+        "faces": 32256,
+        "triangles": 64512
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          32258
+        ],
+        "signed_volume": 2.205612899316579,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Body",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        0.019999999552965164,
+        0.8399999737739563
+      ],
+      "rotation": [
+        -0.05585053563117981,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.9984407424926758,
+          0.055821504443883896,
+          0.019999999552965164
+        ],
+        [
+          0.0,
+          -0.055821504443883896,
+          0.9984407424926758,
+          0.8399999737739563
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.8172637224197388,
+        0.6688387989997864,
+        1.21999990940094
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 2,
+          "render_levels": 2
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 1986,
+      "faces": 2048,
+      "triangles": 3968,
+      "evaluated": {
+        "vertices": 32258,
+        "faces": 32256,
+        "triangles": 64512
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          32258
+        ],
+        "signed_volume": 0.3271143213155626,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Leg_L",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -0.17000000178813934,
+        -0.019999999552965164,
+        0.3400000035762787
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.17000000178813934
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.019999999552965164
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.3400000035762787
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.2600001096725464,
+        0.2800000309944153,
+        0.41999998688697815
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 762,
+      "faces": 800,
+      "triangles": 1520,
+      "evaluated": {
+        "vertices": 3122,
+        "faces": 3120,
+        "triangles": 6240
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          3122
+        ],
+        "signed_volume": 0.01564431176809934,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Leg_R",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.17000000178813934,
+        -0.019999999552965164,
+        0.3400000035762787
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.17000000178813934
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.019999999552965164
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.3400000035762787
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.2600001096725464,
+        0.2800000309944153,
+        0.41999998688697815
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 762,
+      "faces": 800,
+      "triangles": 1520,
+      "evaluated": {
+        "vertices": 3122,
+        "faces": 3120,
+        "triangles": 6240
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          3122
+        ],
+        "signed_volume": 0.015644311768730487,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Foot_L",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -0.2199999988079071,
+        -0.2199999988079071,
+        0.14499999582767487
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        -0.13962633907794952
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          0.9902680516242981,
+          0.13917310535907745,
+          0.0,
+          -0.2199999988079071
+        ],
+        [
+          -0.13917310535907745,
+          0.9902680516242981,
+          0.0,
+          -0.2199999988079071
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.14499999582767487
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.4800003170967102,
+        0.6800006628036499,
+        0.28999999165534973
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "evaluated": {
+        "vertices": 4514,
+        "faces": 4512,
+        "triangles": 9024
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          4514
+        ],
+        "signed_volume": 0.048773303794265574,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Foot_R",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.2199999988079071,
+        -0.2199999988079071,
+        0.14499999582767487
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.13962633907794952
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          0.9902680516242981,
+          -0.13917310535907745,
+          0.0,
+          0.2199999988079071
+        ],
+        [
+          0.13917310535907745,
+          0.9902680516242981,
+          0.0,
+          -0.2199999988079071
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.14499999582767487
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.4800003170967102,
+        0.6800006628036499,
+        0.28999999165534973
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "evaluated": {
+        "vertices": 4514,
+        "faces": 4512,
+        "triangles": 9024
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          4514
+        ],
+        "signed_volume": 0.048773303791685776,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Arm_L",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -0.4872889518737793,
+        -0.00714859738945961,
+        0.921670138835907
+      ],
+      "rotation": [
+        -0.49874308705329895,
+        -0.004775369074195623,
+        4.818361759185791
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          0.10577333718538284,
+          0.8734995722770691,
+          0.4751951992511749,
+          -0.4872889518737793
+        ],
+        [
+          -0.9943788051605225,
+          0.09061821550130844,
+          0.05476441606879234,
+          -0.00714859738945961
+        ],
+        [
+          0.004775350913405418,
+          -0.47831666469573975,
+          0.8781744241714478,
+          0.921670138835907
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.3000001907348633,
+        0.24000024795532227,
+        0.7400000095367432
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "evaluated": {
+        "vertices": 4514,
+        "faces": 4512,
+        "triangles": 9024
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          4514
+        ],
+        "signed_volume": 0.02745353317640639,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Arm_R",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.4446958601474762,
+        -0.13251464068889618,
+        0.9186201691627502
+      ],
+      "rotation": [
+        -0.3287152647972107,
+        0.27519816160202026,
+        1.5152475833892822
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          0.05343103036284447,
+          -0.9498685002326965,
+          -0.308050274848938,
+          0.4446958601474762
+        ],
+        [
+          0.9608869552612305,
+          -0.03504152223467827,
+          0.27471497654914856,
+          -0.13251464068889618
+        ],
+        [
+          -0.27173763513565063,
+          -0.3106797933578491,
+          0.9108439683914185,
+          0.9186201691627502
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.3000001609325409,
+        0.24000024795532227,
+        0.7400000095367432
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "evaluated": {
+        "vertices": 4514,
+        "faces": 4512,
+        "triangles": 9024
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          4514
+        ],
+        "signed_volume": 0.027453533172667067,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Back_Bump",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        0.36500000953674316,
+        0.5799999833106995
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.36500000953674316
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.5799999833106995
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.2599998414516449,
+        0.15999993681907654,
+        0.25999999046325684
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Body"
+      ],
+      "vertices": 482,
+      "faces": 512,
+      "triangles": 960,
+      "evaluated": {
+        "vertices": 1986,
+        "faces": 1984,
+        "triangles": 3968
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1986
+        ],
+        "signed_volume": 0.005462878498302562,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Eye_L",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -0.3400000035762787,
+        -0.7699999809265137,
+        1.8250000476837158
+      ],
+      "rotation": [
+        0.03490658476948738,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0499999523162842,
+        1.0,
+        1.0800000429153442
+      ],
+      "matrix_world": [
+        [
+          1.0499999523162842,
+          0.0,
+          0.0,
+          -0.3400000035762787
+        ],
+        [
+          0.0,
+          0.9993908405303955,
+          -0.03769145533442497,
+          -0.7699999809265137
+        ],
+        [
+          0.0,
+          0.03489949554204941,
+          1.0793421268463135,
+          1.8250000476837158
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.19320012629032135,
+        0.05000005289912224,
+        0.3996000289916992
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Eyes"
+      ],
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "evaluated": {
+        "vertices": 4514,
+        "faces": 4512,
+        "triangles": 9024
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          4514
+        ],
+        "signed_volume": 0.001753975737569458,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Eye_R",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.3400000035762787,
+        -0.7699999809265137,
+        1.8250000476837158
+      ],
+      "rotation": [
+        0.03490658476948738,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0499999523162842,
+        1.0,
+        1.0800000429153442
+      ],
+      "matrix_world": [
+        [
+          1.0499999523162842,
+          0.0,
+          0.0,
+          0.3400000035762787
+        ],
+        [
+          0.0,
+          0.9993908405303955,
+          -0.03769145533442497,
+          -0.7699999809265137
+        ],
+        [
+          0.0,
+          0.03489949554204941,
+          1.0793421268463135,
+          1.8250000476837158
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.19320012629032135,
+        0.05000005289912224,
+        0.3996000289916992
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Eyes"
+      ],
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "evaluated": {
+        "vertices": 4514,
+        "faces": 4512,
+        "triangles": 9024
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          4514
+        ],
+        "signed_volume": 0.0017539757374838542,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Cheek_L",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -0.550000011920929,
+        -0.7599999904632568,
+        1.6100000143051147
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.059999942779541,
+        1.0,
+        1.0499999523162842
+      ],
+      "matrix_world": [
+        [
+          1.059999942779541,
+          0.0,
+          0.0,
+          -0.550000011920929
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.7599999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          1.0499999523162842,
+          1.6100000143051147
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.32860010862350464,
+        0.020000003278255463,
+        0.16380000114440918
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Blush"
+      ],
+      "vertices": 602,
+      "faces": 640,
+      "triangles": 1200,
+      "evaluated": {
+        "vertices": 2482,
+        "faces": 2480,
+        "triangles": 4960
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          2482
+        ],
+        "signed_volume": 0.0004910606215199261,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Cheek_R",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.550000011920929,
+        -0.7599999904632568,
+        1.6100000143051147
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.059999942779541,
+        1.0,
+        1.0499999523162842
+      ],
+      "matrix_world": [
+        [
+          1.059999942779541,
+          0.0,
+          0.0,
+          0.550000011920929
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.7599999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          1.0499999523162842,
+          1.6100000143051147
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.32860010862350464,
+        0.020000003278255463,
+        0.16380000114440918
+      ],
+      "modifiers": [
+        {
+          "name": "PP_vinyl_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_Blush"
+      ],
+      "vertices": 602,
+      "faces": 640,
+      "triangles": 1200,
+      "evaluated": {
+        "vertices": 2482,
+        "faces": 2480,
+        "triangles": 4960
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          2482
+        ],
+        "signed_volume": 0.0004910606215858468,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Mouth",
+      "type": "CURVE",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        -0.012000000104308128,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.012000000104308128
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.18238615989685059,
+        0.04277658462524414,
+        0.06614291667938232
+      ],
+      "modifiers": [],
+      "materials": [
+        "PP_Mouth"
+      ],
+      "evaluated": {
+        "vertices": 518,
+        "faces": 504,
+        "triangles": 1008
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 28,
+        "nonmanifold_edges": 28,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          518
+        ],
+        "signed_volume": -0.0001351975811825373,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Clover_Stem",
+      "type": "CURVE",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.22850310802459717,
+        0.6799371838569641,
+        0.6998865604400635
+      ],
+      "modifiers": [],
+      "materials": [
+        "PP_CloverStem"
+      ],
+      "evaluated": {
+        "vertices": 1530,
+        "faces": 1512,
+        "triangles": 3024
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 36,
+        "nonmanifold_edges": 36,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1530
+        ],
+        "signed_volume": 0.007279336753797874,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Clover_Leaf_A",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -0.054999999701976776,
+        -0.6650000214576721,
+        3.430000066757202
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.054999999701976776
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.6650000214576721
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          3.430000066757202
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.5806015729904175,
+        0.17000000178813934,
+        0.6969999074935913
+      ],
+      "modifiers": [
+        {
+          "name": "PP_leaf_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_CloverLeaves"
+      ],
+      "vertices": 1474,
+      "faces": 1536,
+      "triangles": 2944,
+      "evaluated": {
+        "vertices": 6018,
+        "faces": 6016,
+        "triangles": 12032
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          6018
+        ],
+        "signed_volume": 0.032986106375131816,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Clover_Leaf_B",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -0.2750000059604645,
+        -0.6650000214576721,
+        3.2699999809265137
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.2750000059604645
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.6650000214576721
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          3.2699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.6794532537460327,
+        0.15600000321865082,
+        0.5123738646507263
+      ],
+      "modifiers": [
+        {
+          "name": "PP_leaf_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_CloverLeaves"
+      ],
+      "vertices": 1474,
+      "faces": 1536,
+      "triangles": 2944,
+      "evaluated": {
+        "vertices": 6018,
+        "faces": 6016,
+        "triangles": 12032
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          6018
+        ],
+        "signed_volume": 0.026861969345629136,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Clover_Leaf_C",
+      "type": "MESH",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.16499999165534973,
+        -0.6650000214576721,
+        3.265000104904175
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.16499999165534973
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.6650000214576721
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          3.265000104904175
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.6826248168945312,
+        0.15600000321865082,
+        0.510715126991272
+      ],
+      "modifiers": [
+        {
+          "name": "PP_leaf_subdivision",
+          "type": "SUBSURF",
+          "levels": 1,
+          "render_levels": 1
+        }
+      ],
+      "materials": [
+        "PP_CloverLeaves"
+      ],
+      "vertices": 1474,
+      "faces": 1536,
+      "triangles": 2944,
+      "evaluated": {
+        "vertices": 6018,
+        "faces": 6016,
+        "triangles": 12032
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          6018
+        ],
+        "signed_volume": 0.026861971831330853,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Clover_Vein_A",
+      "type": "CURVE",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.01600000262260437,
+        0.01921635866165161,
+        0.4501354694366455
+      ],
+      "modifiers": [],
+      "materials": [
+        "PP_CloverLeafSoftVein"
+      ],
+      "evaluated": {
+        "vertices": 20,
+        "faces": 10,
+        "triangles": 20
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 20,
+        "nonmanifold_edges": 20,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 5.642973550215191e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Clover_Vein_B",
+      "type": "CURVE",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.49578049778938293,
+        0.01899963617324829,
+        0.21408867835998535
+      ],
+      "modifiers": [],
+      "materials": [
+        "PP_CloverLeafSoftVein"
+      ],
+      "evaluated": {
+        "vertices": 20,
+        "faces": 10,
+        "triangles": 20
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 20,
+        "nonmanifold_edges": 20,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 6.636567959346956e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Clover_Vein_C",
+      "type": "CURVE",
+      "collections": [
+        "FIG_PebblePip"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.4955314099788666,
+        0.01899963617324829,
+        0.20418787002563477
+      ],
+      "modifiers": [],
+      "materials": [
+        "PP_CloverLeafSoftVein"
+      ],
+      "evaluated": {
+        "vertices": 20,
+        "faces": 10,
+        "triangles": 20
+      },
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 20,
+        "nonmanifold_edges": 20,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 6.590220881204931e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      }
+    },
+    {
+      "name": "PP_Studio_GroundPlane",
+      "type": "MESH",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        2.5,
+        2.5,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          2.5,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          2.5,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        17.5,
+        17.5,
+        0.0
+      ],
+      "modifiers": [],
+      "materials": [
+        "PP_Studio_WarmMatte"
+      ],
+      "vertices": 4,
+      "faces": 1,
+      "triangles": 2
+    },
+    {
+      "name": "PP_Key_Light_LargeSoftbox",
+      "type": "LIGHT",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        -3.0,
+        -4.199999809265137,
+        5.0
+      ],
+      "rotation": [
+        1.0821040868759155,
+        0.0,
+        -0.593411922454834
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          0.829037606716156,
+          0.26252517104148865,
+          -0.49373799562454224,
+          -3.0
+        ],
+        [
+          -0.5591928958892822,
+          0.3892095983028412,
+          -0.7319967150688171,
+          -4.199999809265137
+        ],
+        [
+          0.0,
+          0.882947564125061,
+          0.46947160363197327,
+          5.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "PP_Fill_Light_Soft",
+      "type": "LIGHT",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        3.200000047683716,
+        -3.200000047683716,
+        3.200000047683716
+      ],
+      "rotation": [
+        1.1344640254974365,
+        0.0,
+        0.6283185482025146
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          0.80901700258255,
+          -0.24840877950191498,
+          0.5327143669128418,
+          3.200000047683716
+        ],
+        [
+          0.5877852439880371,
+          0.3419053554534912,
+          -0.7332183718681335,
+          -3.200000047683716
+        ],
+        [
+          0.0,
+          0.9063078165054321,
+          0.42261824011802673,
+          3.200000047683716
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "PP_Rim_Light_Subtle",
+      "type": "LIGHT",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        3.200000047683716,
+        3.0
+      ],
+      "rotation": [
+        2.059488534927368,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          -1.0,
+          -4.104251161152206e-08,
+          -7.718973193959755e-08,
+          0.0
+        ],
+        [
+          -8.742277657347586e-08,
+          0.4694715738296509,
+          0.882947564125061,
+          3.200000047683716
+        ],
+        [
+          0.0,
+          0.882947564125061,
+          -0.4694715738296509,
+          3.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "PP_Camera_Front",
+      "type": "CAMERA",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        -6.599999904632568,
+        1.9199999570846558
+      ],
+      "rotation": [
+        1.5554600954055786,
+        -0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.015335630625486374,
+          -0.9998824000358582,
+          -6.599999904632568
+        ],
+        [
+          0.0,
+          0.9998824000358582,
+          0.015335630625486374,
+          1.9199999570846558
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "PP_Camera_ThreeQuarter",
+      "type": "CAMERA",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        4.550000190734863,
+        -5.849999904632568,
+        2.0799999237060547
+      ],
+      "rotation": [
+        1.5354279279708862,
+        -8.739036161387048e-10,
+        0.6677272915840149
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          0.7852309346199036,
+          -0.021895652636885643,
+          0.6188157200813293,
+          4.550000190734863
+        ],
+        [
+          0.6192029714584351,
+          0.027766572311520576,
+          -0.7847398519515991,
+          -5.849999904632568
+        ],
+        [
+          8.739036161387048e-10,
+          0.9993746280670166,
+          0.03536102548241615,
+          2.0799999237060547
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "PP_Camera_Side",
+      "type": "CAMERA",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        6.599999904632568,
+        0.0,
+        1.9199999570846558
+      ],
+      "rotation": [
+        1.5556471347808838,
+        -7.338530139122668e-08,
+        1.5829169750213623
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          -0.012120351195335388,
+          -0.015147498808801174,
+          0.9998118281364441,
+          6.599999904632568
+        ],
+        [
+          0.9999265670776367,
+          -0.00018367987649980932,
+          0.012118959799408913,
+          0.0
+        ],
+        [
+          7.338530139122668e-08,
+          0.9998852610588074,
+          0.015148612670600414,
+          1.9199999570846558
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": []
+    },
+    {
+      "name": "PP_Camera_Back",
+      "type": "CAMERA",
+      "collections": [
+        "PP_Presentation"
+      ],
+      "hidden": false,
+      "hide_render": false,
+      "location": [
+        0.0,
+        6.599999904632568,
+        1.9199999570846558
+      ],
+      "rotation": [
+        1.5558276176452637,
+        8.741297108372237e-08,
+        3.1415927410125732
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "matrix_world": [
+        [
+          -1.0,
+          -8.609462298636572e-08,
+          -8.87214000044878e-08,
+          0.0
+        ],
+        [
+          -8.742277657347586e-08,
+          -0.014968150295317173,
+          0.9998879432678223,
+          6.599999904632568
+        ],
+        [
+          -8.741297108372237e-08,
+          0.9998879432678223,
+          0.014968150295317173,
+          1.9199999570846558
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": []
+    }
+  ],
+  "materials": [
+    {
+      "name": "PP_Eyes",
+      "nodes": [
+        "BSDF_PRINCIPLED",
+        "OUTPUT_MATERIAL"
+      ],
+      "links": [
+        [
+          "BSDF_PRINCIPLED",
+          "BSDF",
+          "OUTPUT_MATERIAL",
+          "Surface"
+        ]
+      ],
+      "base_color": [
+        0.054999999701976776,
+        0.04600000008940697,
+        0.03799999877810478,
+        1.0
+      ],
+      "roughness": 0.23999999463558197,
+      "metallic": 0.0,
+      "alpha": 1.0,
+      "specular": 0.7200000286102295
+    },
+    {
+      "name": "PP_CloverLeaves",
+      "nodes": [
+        "BSDF_PRINCIPLED",
+        "OUTPUT_MATERIAL"
+      ],
+      "links": [
+        [
+          "BSDF_PRINCIPLED",
+          "BSDF",
+          "OUTPUT_MATERIAL",
+          "Surface"
+        ]
+      ],
+      "base_color": [
+        0.47999998927116394,
+        0.6700000166893005,
+        0.33000001311302185,
+        1.0
+      ],
+      "roughness": 0.41999998688697815,
+      "metallic": 0.0,
+      "alpha": 1.0,
+      "specular": 0.5199999809265137
+    },
+    {
+      "name": "PP_Blush",
+      "nodes": [
+        "BSDF_PRINCIPLED",
+        "OUTPUT_MATERIAL"
+      ],
+      "links": [
+        [
+          "BSDF_PRINCIPLED",
+          "BSDF",
+          "OUTPUT_MATERIAL",
+          "Surface"
+        ]
+      ],
+      "base_color": [
+        0.9411764740943909,
+        0.686274528503418,
+        0.6823529601097107,
+        0.6800000071525574
+      ],
+      "roughness": 0.6200000047683716,
+      "metallic": 0.0,
+      "alpha": 0.6800000071525574,
+      "specular": 0.23999999463558197
+    },
+    {
+      "name": "PP_CloverLeafSoftVein",
+      "nodes": [
+        "BSDF_PRINCIPLED",
+        "OUTPUT_MATERIAL"
+      ],
+      "links": [
+        [
+          "BSDF_PRINCIPLED",
+          "BSDF",
+          "OUTPUT_MATERIAL",
+          "Surface"
+        ]
+      ],
+      "base_color": [
+        0.43921568989753723,
+        0.6196078658103943,
+        0.32156863808631897,
+        1.0
+      ],
+      "roughness": 0.46000000834465027,
+      "metallic": 0.0,
+      "alpha": 1.0,
+      "specular": 0.3499999940395355
+    },
+    {
+      "name": "PP_CloverStem",
+      "nodes": [
+        "BSDF_PRINCIPLED",
+        "OUTPUT_MATERIAL"
+      ],
+      "links": [
+        [
+          "BSDF_PRINCIPLED",
+          "BSDF",
+          "OUTPUT_MATERIAL",
+          "Surface"
+        ]
+      ],
+      "base_color": [
+        0.3400000035762787,
+        0.5400000214576721,
+        0.23999999463558197,
+        1.0
+      ],
+      "roughness": 0.46000000834465027,
+      "metallic": 0.0,
+      "alpha": 1.0,
+      "specular": 0.5
+    },
+    {
+      "name": "PP_Mouth",
+      "nodes": [
+        "BSDF_PRINCIPLED",
+        "OUTPUT_MATERIAL"
+      ],
+      "links": [
+        [
+          "BSDF_PRINCIPLED",
+          "BSDF",
+          "OUTPUT_MATERIAL",
+          "Surface"
+        ]
+      ],
+      "base_color": [
+        0.07000000029802322,
+        0.054999999701976776,
+        0.04500000178813934,
+        1.0
+      ],
+      "roughness": 0.36000001430511475,
+      "metallic": 0.0,
+      "alpha": 1.0,
+      "specular": 0.6499999761581421
+    },
+    {
+      "name": "PP_Body",
+      "nodes": [
+        "BSDF_PRINCIPLED",
+        "OUTPUT_MATERIAL"
+      ],
+      "links": [
+        [
+          "BSDF_PRINCIPLED",
+          "BSDF",
+          "OUTPUT_MATERIAL",
+          "Surface"
+        ]
+      ],
+      "base_color": [
+        0.7411764860153198,
+        0.7176470756530762,
+        0.658823549747467,
+        1.0
+      ],
+      "roughness": 0.7200000286102295,
+      "metallic": 0.0,
+      "alpha": 1.0,
+      "specular": 0.41999998688697815
+    }
+  ],
+  "production": [
+    {
+      "source": "PP_Head",
+      "name": "PP_Head_Export",
+      "vertices": 8066,
+      "faces": 8064,
+      "triangles": 16128,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          8066
+        ],
+        "signed_volume": 2.2038504416208853,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          8066
+        ],
+        "signed_volume": 2.203850474059303,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0009036289411596954,
+      "subdivision": 1
+    },
+    {
+      "source": "PP_Body",
+      "name": "PP_Body_Export",
+      "vertices": 1986,
+      "faces": 2048,
+      "triangles": 3968,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1986
+        ],
+        "signed_volume": 0.32853433179438635,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1986
+        ],
+        "signed_volume": 0.32853431960077917,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0015334337949752808,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Leg_L",
+      "name": "PP_Leg_L_Export",
+      "vertices": 762,
+      "faces": 800,
+      "triangles": 1520,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          762
+        ],
+        "signed_volume": 0.015845669448272617,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          762
+        ],
+        "signed_volume": 0.015845669638197255,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0011467039585113525,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Leg_R",
+      "name": "PP_Leg_R_Export",
+      "vertices": 762,
+      "faces": 800,
+      "triangles": 1520,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          762
+        ],
+        "signed_volume": 0.015845669448272617,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          762
+        ],
+        "signed_volume": 0.015845669685048993,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0011467039585113525,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Foot_L",
+      "name": "PP_Foot_L_Export",
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.049209009607933875,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.049209008682185515,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.001936584711074829,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Foot_R",
+      "name": "PP_Foot_R_Export",
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.04920900960793387,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.04920900861638526,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.001936584711074829,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Arm_L",
+      "name": "PP_Arm_L_Export",
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.02769878272716903,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.027698781826171085,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0009923725156113505,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Arm_R",
+      "name": "PP_Arm_R_Export",
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.02769878272716903,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.027698782977723345,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0009923725156113505,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Back_Bump",
+      "name": "PP_Back_Bump_Export",
+      "vertices": 482,
+      "faces": 512,
+      "triangles": 960,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          482
+        ],
+        "signed_volume": 0.005572861121038213,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          482
+        ],
+        "signed_volume": 0.005572861060551118,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0016599297523498535,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Eye_L",
+      "name": "PP_Eye_L_Export",
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.0017696444487801909,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.0020067767019757094,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0005239769816398621,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Eye_R",
+      "name": "PP_Eye_R_Export",
+      "vertices": 1106,
+      "faces": 1152,
+      "triangles": 2208,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.001769644448780191,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.0020067767115437988,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0005239769816398621,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Cheek_L",
+      "name": "PP_Cheek_L_Export",
+      "vertices": 602,
+      "faces": 640,
+      "triangles": 1200,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          602
+        ],
+        "signed_volume": 0.000499499657287635,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          602
+        ],
+        "signed_volume": 0.0005559431410834077,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0016248077154159546,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Cheek_R",
+      "name": "PP_Cheek_R_Export",
+      "vertices": 602,
+      "faces": 640,
+      "triangles": 1200,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          602
+        ],
+        "signed_volume": 0.0004994996572876347,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          602
+        ],
+        "signed_volume": 0.0005559431390719314,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0016248077154159546,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Mouth",
+      "name": "PP_Mouth_Export",
+      "vertices": 518,
+      "faces": 506,
+      "triangles": 1032,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 28,
+        "nonmanifold_edges": 28,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          518
+        ],
+        "signed_volume": -0.0001351975811825373,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          518
+        ],
+        "signed_volume": 0.00011522918952418118,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 2,
+      "max_vertex_surface_distance": 0.0,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Clover_Stem",
+      "name": "PP_Clover_Stem_Export",
+      "vertices": 1530,
+      "faces": 1514,
+      "triangles": 3056,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 36,
+        "nonmanifold_edges": 36,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1530
+        ],
+        "signed_volume": 0.007279336753797874,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1530
+        ],
+        "signed_volume": 0.007613358377436805,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 2,
+      "max_vertex_surface_distance": 0.0,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Clover_Leaf_A",
+      "name": "PP_Clover_Leaf_A_Export",
+      "vertices": 1474,
+      "faces": 1536,
+      "triangles": 2944,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.033227102984854706,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.03322710284838496,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0027779287192970514,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Clover_Leaf_B",
+      "name": "PP_Clover_Leaf_B_Export",
+      "vertices": 1474,
+      "faces": 1536,
+      "triangles": 2944,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.027058222598635696,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.02705822378163624,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.002545479917898774,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Clover_Leaf_C",
+      "name": "PP_Clover_Leaf_C_Export",
+      "vertices": 1474,
+      "faces": 1536,
+      "triangles": 2944,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.027058225153695357,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.0270582254171502,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 0,
+      "max_vertex_surface_distance": 0.0025454815477132797,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Clover_Vein_A",
+      "name": "PP_Clover_Vein_A_Export",
+      "vertices": 20,
+      "faces": 12,
+      "triangles": 36,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 20,
+        "nonmanifold_edges": 20,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 5.642973550215191e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 8.464460888757023e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 2,
+      "max_vertex_surface_distance": 0.0,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Clover_Vein_B",
+      "name": "PP_Clover_Vein_B_Export",
+      "vertices": 20,
+      "faces": 12,
+      "triangles": 36,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 20,
+        "nonmanifold_edges": 20,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 6.636567959346956e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 9.954761081119913e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 2,
+      "max_vertex_surface_distance": 0.0,
+      "subdivision": 0
+    },
+    {
+      "source": "PP_Clover_Vein_C",
+      "name": "PP_Clover_Vein_C_Export",
+      "vertices": 20,
+      "faces": 12,
+      "triangles": 36,
+      "audit_before": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 20,
+        "nonmanifold_edges": 20,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 6.590220881204931e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "audit_after": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          20
+        ],
+        "signed_volume": 9.885320800540034e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "caps_added": 2,
+      "max_vertex_surface_distance": 0.0,
+      "subdivision": 0
+    }
+  ],
+  "production_dimensions_xyz": [
+    2.0414867401123047,
+    1.5013427734375,
+    3.7870001792907715
+  ],
+  "ground_translation_z": -0.0,
+  "master_evaluated_triangles": 249724,
+  "totals": {
+    "vertices": 26428,
+    "faces": 27080,
+    "triangles": 52772,
+    "mesh_objects": 21
+  },
+  "approved_live_snapshot": "validation/approved_live_snapshot.blend"
+}

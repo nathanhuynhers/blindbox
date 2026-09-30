@@ -3,74 +3,70 @@ local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Config = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Context = require(script.Parent.UIContext)
-local Theme = require(script.Parent.UITheme)
-local State = require(script.Parent.UIState)
+local Style = require(script.Parent.SystemStyle)
+local Layout = require(script.Parent.SystemLayout)
+local State = require(script.Parent.SystemState)
+local UI = require(script.Parent.UIState)
 local W = require(script.Parent.Widgets)
-local Icons = require(script.Parent.UIIcons)
 local Preview = require(script.Parent.UIPreview)
+local Slot = require(script.Parent.DisplaySlotCard)
 local Display = {}
 function Display.create(parent: Instance, ctx: Context.Context)
-	local root = W.frame(parent, "Display", Theme.paper)
-	root.BackgroundTransparency = 0.08
-	W.corner(root, 16)
-	W.outline(root, Theme.card, 0.2)
-	local page = W.scroll(root, "DisplayControls", ctx.scope)
-	page.Position = UDim2.fromOffset(0, 80)
-	page.Size = UDim2.new(1, 0, 1, -80)
+	local shell = Style.shell(parent, "Display", ctx)
+	local root, content = shell.root, shell.content
+	local header = W.frame(content, "ShowcaseHeader")
+	Style.header(
+		header,
+		"My Display",
+		"Your favorites, earning around the clock while you play.",
+		"Display"
+	)
+	local incomeCard = Style.panel(header, "IncomePlaque", Style.successWash)
+	local income = Style.text(incomeCard, "TotalIncome", "-- Coins/sec", 28, true)
+	W.inset(income, 6, 40)
+	income.TextColor3 = Style.success
+	local capacity = Style.text(incomeCard, "Capacity", "Loading your Display...", 14)
+	W.inset(capacity, 48, 26)
+	local bonusCard = Style.panel(header, "MatchingSet", Style.card)
+	local bonus = Style.text(bonusCard, "BonusStatus", "Matching set", 16, true)
+	W.inset(bonus, 6, 28)
+	local rule = Style.text(bonusCard, "BonusRule", "3 different figures from one collection", 13)
+	W.inset(rule, 34, 32)
+	local segments: { Frame } = {}
+	for index = 1, 3 do
+		local segment = Style.panel(bonusCard, "SetSegment" .. index, Style.inset, 4)
+		segment.Position = UDim2.new((index - 1) / 3, 12, 1, -12)
+		segment.Size = UDim2.new(1 / 3, -16, 0, 5)
+		segments[index] = segment
+	end
 	local selected: string? = nil
-	local summary = W.frame(root, "DisplaySummary")
-	summary.Size = UDim2.new(1, 0, 0, 80)
-	local income = W.title(summary, "", 34)
-	W.inset(income, 8, 30)
-	income.TextSize = 21
-	local bonus = W.label(summary, "", 32, 15)
-	W.inset(bonus, 40, 34)
-	bonus.TextSize = 12
-
-	local choice = W.action(page, "", ctx.scope, ctx.effects, function()
+	local refresh: () -> () = function() end
+	local placement = Style.panel(content, "PlacementBanner", Style.selection)
+	placement.Visible = false
+	local mini = Preview.create(placement, ctx.scope, true)
+	Style.rect(mini.frame, 8, 8, 52, 64)
+	local placing = Style.text(placement, "PlacingFigure", "", 15, true)
+	placing.Position = UDim2.fromOffset(68, 8)
+	placing.Size = UDim2.new(1, -158, 0, 68)
+	placing.TextTruncate = Enum.TextTruncate.AtEnd
+	local cancel = Style.action(placement, "Cancel", ctx, function()
 		selected = nil
+		refresh()
 	end, true)
-	choice.button.LayoutOrder = 2
-	choice.button.Visible = false
-	local tiles = W.tiles(page, ctx.scope, 126, 3, 210)
-	tiles.LayoutOrder = 3
-	local slots: {
-		{
-			root: Frame,
-			portrait: Preview.Preview,
-			name: TextLabel,
-			label: TextLabel,
-			placeholder: Frame,
-			lock: Frame,
-			action: W.Action,
-			remove: W.Action,
-		}
-	} =
-		{}
+	cancel.button.Position = UDim2.new(1, -84, 0, 20)
+	cancel.button.Size = UDim2.fromOffset(76, 48)
+	local cards = {}
 	for slot = 1, Config.maxSlots do
-		local card = W.card(tiles, "Slot" .. slot, 210)
-		card.LayoutOrder = slot
-		local label = W.label(card, "Slot " .. slot, 26, 14)
-		W.inset(label, 4, 26)
-		local portrait = Preview.create(card, ctx.scope)
-		portrait.frame.Position = UDim2.fromOffset(6, 20)
-		portrait.frame.Size = UDim2.new(1, -12, 0, 68)
-		local placeholder = Icons.create(card, "Display", Theme.muted)
-		placeholder.Position = UDim2.new(0.5, -22, 0, 34)
-		placeholder.Size = UDim2.fromOffset(44, 44)
-		local lock = Icons.create(card, "Lock", Theme.muted)
-		lock.Position = placeholder.Position
-		lock.Size = placeholder.Size
-		local name = W.label(card, "", 38, 14)
-		W.inset(name, 88, 26)
-		name.TextSize = 12
-		name.TextXAlignment = Enum.TextXAlignment.Center
-		local action = W.action(card, "Choose", ctx.scope, ctx.effects, function()
+		cards[slot] = Slot.create(content, ctx, slot, function()
 			local snapshot = ctx.snapshot()
 			if not snapshot then
 				return
 			end
-			if slot == 4 and slot > snapshot.unlocked then
+			local state = State.display(snapshot, slot, selected, ctx.canAct())
+			if not state.enabled then
+				return
+			end
+			if state.available then
 				ctx.send("Expand", nil, nil, nil)
 			elseif selected then
 				ctx.send("Place", selected, slot, nil)
@@ -78,86 +74,79 @@ function Display.create(parent: Instance, ctx: Context.Context)
 				ctx.pick(slot)
 			end
 		end)
-		W.inset(action.button, 118, 44)
-		local remove = W.action(card, "Remove", ctx.scope, ctx.effects, function()
-			ctx.send("Remove", nil, slot, nil)
-		end, true)
-		W.inset(remove.button, 164, 44)
-		remove.button:SetAttribute("Quiet", true)
-		slots[slot] = {
-			root = card,
-			portrait = portrait,
-			name = name,
-			label = label,
-			placeholder = placeholder,
-			lock = lock,
-			action = action,
-			remove = remove,
-		}
+	end
+	local function resize()
+		local width = shell.width()
+		local geometry = Layout.display(width, Config.maxSlots, selected ~= nil)
+		Style.rect(header, 0, 0, width, geometry.header)
+		-- Compact headers keep full-width earning and set summaries beneath the title.
+		local narrow = width < 560
+		Style.rect(incomeCard, 0, 102, if narrow then width else (width - 16) * 0.5, 82)
+		Style.rect(
+			bonusCard,
+			if narrow then 0 else (width + 16) * 0.5,
+			if narrow then 194 else 102,
+			if narrow then width else (width - 16) * 0.5,
+			84
+		)
+		local headerHeight = geometry.header
+		local top = geometry.top
+		Style.rect(placement, 0, headerHeight + 12, width, geometry.placementHeight)
+		placing.Size = UDim2.new(1, if width < 420 then -80 else -158, 0, 68)
+		cancel.button.Position = UDim2.new(1, -84, 0, geometry.placementHeight - 56)
+		for index, card in cards do
+			Style.rect(
+				card.root,
+				(index - 1) % geometry.columns * (geometry.cell + 12),
+				top + math.floor((index - 1) / geometry.columns) * (geometry.card + 12),
+				geometry.cell,
+				geometry.card
+			)
+		end
+		shell.fit(geometry.height)
 	end
 	local function update(snapshot: Types.Snapshot)
-		income.Text =
-			string.format("My Display - %d / %d slots", snapshot.unlocked, Config.maxSlots)
-		bonus.Text = string.format(
-			"%g Coins/sec\n%s",
-			snapshot.rate,
-			if snapshot.bonus > 0
-				then string.format("Set bonus +%g/sec", snapshot.bonus)
-				else string.format("Matching set %d/3 (+1/sec)", State.bonusProgress(snapshot))
-		)
-		choice.button.Visible = selected ~= nil
-		if selected then
-			choice.set("Placing " .. Catalog.byId[selected].name .. "  ·  Cancel", true)
+		income.Text = string.format("%g Coins/sec", snapshot.rate)
+		capacity.Text = string.format("%d of %d Display slots", snapshot.unlocked, Config.maxSlots)
+		local progress = UI.bonusProgress(snapshot)
+		bonus.Text = if snapshot.bonus > 0
+			then string.format("Set bonus  +%g/sec", snapshot.bonus)
+			else string.format("Matching set  %d / 3", progress)
+		bonus.TextColor3 = if snapshot.bonus > 0 then Style.success else Style.ink
+		for index, segment in segments do
+			segment.BackgroundColor3 = if index <= progress then Style.success else Style.inset
 		end
-		for slot, card in slots do
-			local id = snapshot.slots[slot] or ""
-			local locked = slot > snapshot.unlocked
-			card.label.Text = if locked then "Extra slot" else "Slot " .. slot
-			card.root.BackgroundColor3 = if locked then Theme.soft else Theme.card
-			card.portrait.figure(if id == "" then nil else id, true)
-			card.placeholder.Visible = id == "" and not locked
-			card.lock.Visible = locked
-			card.name.Text = if locked
-				then (if slot == 4
-					then State.number(snapshot.expansionCost) .. " Coins"
-					else "Unlock method TBD")
-				elseif id ~= "" then Catalog.byId[id].name .. " - " .. tostring(
-					snapshot.rates[id]
-				) .. "/sec"
-				else "Choose a figure"
-			if locked then
-				card.action.set(
-					if slot == 4 then "Unlock slot" else "Locked",
-					ctx.canAct() and slot == 4 and snapshot.coins >= snapshot.expansionCost
+		placement.Visible = selected ~= nil
+		mini.figure(selected, true)
+		if selected then
+			local _, free = UI.copies(snapshot, selected)
+			placing.Text = "Placing "
+				.. Catalog.byId[selected].name
+				.. (
+					if free > 0
+						then "\nChoose a highlighted slot"
+						else "\nNo spare copies available"
 				)
-			elseif selected then
-				local _, free = State.copies(snapshot, selected)
-				card.action.set(
-					if selected == id then "Displayed here" else "Place here",
-					ctx.canAct() and free > 0 and selected ~= id
-				)
-			else
-				card.action.set(if id == "" then "Choose" else "Change", ctx.canAct())
-			end
-			card.remove.button.Visible = not locked and id ~= ""
-			card.remove.set("Remove", ctx.canAct())
+		end
+		for _, card in cards do
+			card.update(snapshot, selected)
 		end
 	end
-	ctx.scope.connect(choice.button.Activated, function()
+	refresh = function()
 		local snapshot = ctx.snapshot()
 		if snapshot then
 			update(snapshot)
 		end
-	end)
+		resize()
+	end
+	ctx.scope.connect(root:GetPropertyChangedSignal("AbsoluteSize"), resize)
+	resize()
 	return {
 		root = root,
 		update = update,
 		select = function(id: string?)
 			selected = id
-			local snapshot = ctx.snapshot()
-			if snapshot then
-				update(snapshot)
-			end
+			refresh()
 		end,
 	}
 end

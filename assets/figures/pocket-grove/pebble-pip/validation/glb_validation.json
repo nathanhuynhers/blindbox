@@ -1,0 +1,1446 @@
+{
+  "glb_sha256": "524462ed3733fcc8d4cc60daf3a69ab78a6081e8ee458bd2252ba2294ad97030",
+  "bytes": 1205604,
+  "nodes": [
+    "PP_Arm_L_Export",
+    "PP_Arm_R_Export",
+    "PP_Back_Bump_Export",
+    "PP_Body_Export",
+    "PP_Cheek_L_Export",
+    "PP_Cheek_R_Export",
+    "PP_Clover_Leaf_A_Export",
+    "PP_Clover_Leaf_B_Export",
+    "PP_Clover_Leaf_C_Export",
+    "PP_Clover_Stem_Export",
+    "PP_Clover_Vein_A_Export",
+    "PP_Clover_Vein_B_Export",
+    "PP_Clover_Vein_C_Export",
+    "PP_Eye_L_Export",
+    "PP_Eye_R_Export",
+    "PP_Foot_L_Export",
+    "PP_Foot_R_Export",
+    "PP_Head_Export",
+    "PP_Leg_L_Export",
+    "PP_Leg_R_Export",
+    "PP_Mouth_Export"
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.8399999737739563
+        }
+      },
+      "name": "PP_Body_Export",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7200000286102295
+      }
+    },
+    {
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.47999998927116394
+        }
+      },
+      "name": "PP_Blush_Export",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.6200000047683716
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularColorFactor": [
+            1.0399999618530273,
+            1.0399999618530273,
+            1.0399999618530273
+          ]
+        }
+      },
+      "name": "PP_CloverLeaves_Export",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.41999998688697815
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "PP_CloverStem_Export",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.46000000834465027
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.699999988079071
+        }
+      },
+      "name": "PP_CloverLeafSoftVein_Export",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 4
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.46000000834465027
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularColorFactor": [
+            1.440000057220459,
+            1.440000057220459,
+            1.440000057220459
+          ]
+        }
+      },
+      "name": "PP_Eyes_Export",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 5
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.23999999463558197
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularColorFactor": [
+            1.2999999523162842,
+            1.2999999523162842,
+            1.2999999523162842
+          ]
+        }
+      },
+      "name": "PP_Mouth_Export",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 6
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.36000001430511475
+      }
+    }
+  ],
+  "images": [
+    {
+      "bufferView": 4,
+      "mimeType": "image/png",
+      "name": "pebble_pip_body_albedo"
+    },
+    {
+      "bufferView": 21,
+      "mimeType": "image/png",
+      "name": "pebble_pip_blush_albedo"
+    },
+    {
+      "bufferView": 30,
+      "mimeType": "image/png",
+      "name": "pebble_pip_cloverleaves_albedo"
+    },
+    {
+      "bufferView": 44,
+      "mimeType": "image/png",
+      "name": "pebble_pip_cloverstem_albedo"
+    },
+    {
+      "bufferView": 50,
+      "mimeType": "image/png",
+      "name": "pebble_pip_cloverleafsoftvein_albedo"
+    },
+    {
+      "bufferView": 63,
+      "mimeType": "image/png",
+      "name": "pebble_pip_eyes_albedo"
+    },
+    {
+      "bufferView": 93,
+      "mimeType": "image/png",
+      "name": "pebble_pip_mouth_albedo"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    },
+    {
+      "sampler": 0,
+      "source": 5
+    },
+    {
+      "sampler": 0,
+      "source": 6
+    }
+  ],
+  "extensions_used": [
+    "KHR_materials_specular"
+  ],
+  "objects": [
+    {
+      "name": "PP_Arm_L_Export",
+      "vertices": 1106,
+      "faces": 2208,
+      "triangles": 2208,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.0276987818249867,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Arm_R_Export",
+      "vertices": 1106,
+      "faces": 2208,
+      "triangles": 2208,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.027698782977762175,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Back_Bump_Export",
+      "vertices": 482,
+      "faces": 960,
+      "triangles": 960,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          482
+        ],
+        "signed_volume": 0.0055728610606494925,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Body_Export",
+      "vertices": 1986,
+      "faces": 3968,
+      "triangles": 3968,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1986
+        ],
+        "signed_volume": 0.32853431958821866,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Cheek_L_Export",
+      "vertices": 602,
+      "faces": 1200,
+      "triangles": 1200,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          602
+        ],
+        "signed_volume": 0.000555943141087087,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.9386858627251523,
+          0.6866854379866726,
+          0.6795425948454239,
+          1.0
+        ],
+        "roughness": 0.6200000047683716,
+        "metallic": 0.0,
+        "alpha": 0.6784313917160034,
+        "specular": 0.23999999463558197,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.9386858627251523,
+          0.6866854379866726,
+          0.6795425948454239,
+          1.0
+        ],
+        "roughness": 0.6200000047683716,
+        "metallic": 0.0,
+        "alpha": 0.6784313917160034,
+        "specular": 0.23999999463558197,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Cheek_R_Export",
+      "vertices": 602,
+      "faces": 1200,
+      "triangles": 1200,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          602
+        ],
+        "signed_volume": 0.0005559431390756411,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.9386858627251523,
+          0.6866854379866726,
+          0.6795425948454239,
+          1.0
+        ],
+        "roughness": 0.6200000047683716,
+        "metallic": 0.0,
+        "alpha": 0.6784313917160034,
+        "specular": 0.23999999463558197,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.9386858627251523,
+          0.6866854379866726,
+          0.6795425948454239,
+          1.0
+        ],
+        "roughness": 0.6200000047683716,
+        "metallic": 0.0,
+        "alpha": 0.6784313917160034,
+        "specular": 0.23999999463558197,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Clover_Leaf_A_Export",
+      "vertices": 1474,
+      "faces": 2944,
+      "triangles": 2944,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.03322710286693758,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.47932020768498806,
+          0.6724432818271362,
+          0.32777812579742915,
+          1.0
+        ],
+        "roughness": 0.41999998688697815,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5199999809265137,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.47932020768498806,
+          0.6724432818271362,
+          0.32777812579742915,
+          1.0
+        ],
+        "roughness": 0.41999998688697815,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.0399999618530273,
+          1.0399999618530273,
+          1.0399999618530273,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Clover_Leaf_B_Export",
+      "vertices": 1474,
+      "faces": 2944,
+      "triangles": 2944,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.02705822379128644,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.47932020768498806,
+          0.6724432818271362,
+          0.32777812579742915,
+          1.0
+        ],
+        "roughness": 0.41999998688697815,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5199999809265137,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.47932020768498806,
+          0.6724432818271362,
+          0.32777812579742915,
+          1.0
+        ],
+        "roughness": 0.41999998688697815,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.0399999618530273,
+          1.0399999618530273,
+          1.0399999618530273,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Clover_Leaf_C_Export",
+      "vertices": 1474,
+      "faces": 2944,
+      "triangles": 2944,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1474
+        ],
+        "signed_volume": 0.027058225397706012,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.47932020768498806,
+          0.6724432818271362,
+          0.32777812579742915,
+          1.0
+        ],
+        "roughness": 0.41999998688697815,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5199999809265137,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.47932020768498806,
+          0.6724432818271362,
+          0.32777812579742915,
+          1.0
+        ],
+        "roughness": 0.41999998688697815,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.0399999618530273,
+          1.0399999618530273,
+          1.0399999618530273,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Clover_Stem_Export",
+      "vertices": 1615,
+      "faces": 3056,
+      "triangles": 3056,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 85,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 172,
+        "nonmanifold_edges": 172,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1615
+        ],
+        "signed_volume": 0.007613358289330556,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.34191445248832336,
+          0.5394796062418635,
+          0.2383976016891078,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.34191445248832336,
+          0.5394796062418635,
+          0.2383976016891078,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Clover_Vein_A_Export",
+      "vertices": 22,
+      "faces": 36,
+      "triangles": 36,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 2,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 6,
+        "nonmanifold_edges": 6,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          22
+        ],
+        "signed_volume": 8.464460888756875e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.43965719952179955,
+          0.6172066844094343,
+          0.32314323689945174,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.3499999940395355,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.43965719952179955,
+          0.6172066844094343,
+          0.32314323689945174,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.3499999940395355,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Clover_Vein_B_Export",
+      "vertices": 22,
+      "faces": 36,
+      "triangles": 36,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 2,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 6,
+        "nonmanifold_edges": 6,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          22
+        ],
+        "signed_volume": 9.954760859417423e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.43965719952179955,
+          0.6172066844094343,
+          0.32314323689945174,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.3499999940395355,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.43965719952179955,
+          0.6172066844094343,
+          0.32314323689945174,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.3499999940395355,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Clover_Vein_C_Export",
+      "vertices": 22,
+      "faces": 36,
+      "triangles": 36,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 2,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 6,
+        "nonmanifold_edges": 6,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          22
+        ],
+        "signed_volume": 9.885320948289836e-05,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.43965719952179955,
+          0.6172066844094343,
+          0.32314323689945174,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.3499999940395355,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.43965719952179955,
+          0.6172066844094343,
+          0.32314323689945174,
+          1.0
+        ],
+        "roughness": 0.46000000834465027,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.3499999940395355,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Eye_L_Export",
+      "vertices": 1106,
+      "faces": 2208,
+      "triangles": 2208,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.0020067767019874873,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.054480282431797915,
+          0.04666509225384614,
+          0.038204377335665354,
+          1.0
+        ],
+        "roughness": 0.23999999463558197,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.7200000286102295,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.054480282431797915,
+          0.04666509225384614,
+          0.038204377335665354,
+          1.0
+        ],
+        "roughness": 0.23999999463558197,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.440000057220459,
+          1.440000057220459,
+          1.440000057220459,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Eye_R_Export",
+      "vertices": 1106,
+      "faces": 2208,
+      "triangles": 2208,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.002006776711555581,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.054480282431797915,
+          0.04666509225384614,
+          0.038204377335665354,
+          1.0
+        ],
+        "roughness": 0.23999999463558197,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.7200000286102295,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.054480282431797915,
+          0.04666509225384614,
+          0.038204377335665354,
+          1.0
+        ],
+        "roughness": 0.23999999463558197,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.440000057220459,
+          1.440000057220459,
+          1.440000057220459,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Foot_L_Export",
+      "vertices": 1106,
+      "faces": 2208,
+      "triangles": 2208,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.04920900868228669,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Foot_R_Export",
+      "vertices": 1106,
+      "faces": 2208,
+      "triangles": 2208,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          1106
+        ],
+        "signed_volume": 0.049209008616579154,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Head_Export",
+      "vertices": 8066,
+      "faces": 16128,
+      "triangles": 16128,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          8066
+        ],
+        "signed_volume": 2.2038522971953878,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Leg_L_Export",
+      "vertices": 762,
+      "faces": 1520,
+      "triangles": 1520,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          762
+        ],
+        "signed_volume": 0.01584566963828021,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Leg_R_Export",
+      "vertices": 762,
+      "faces": 1520,
+      "triangles": 1520,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 0,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          762
+        ],
+        "signed_volume": 0.015845669685131968,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.7379105365880021,
+          0.7156936273750918,
+          0.6583749414516458,
+          1.0
+        ],
+        "roughness": 0.7200000286102295,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.41999998688697815,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "PP_Mouth_Export",
+      "vertices": 555,
+      "faces": 1032,
+      "triangles": 1032,
+      "max_position_delta": 0.0,
+      "audit": {
+        "duplicate_vertex_pairs_1e_7": 37,
+        "duplicate_faces": 0,
+        "zero_area_faces": 0,
+        "boundary_edges": 76,
+        "nonmanifold_edges": 76,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "components": [
+          555
+        ],
+        "signed_volume": 0.00011522918934623543,
+        "hidden_faces": 0,
+        "nonfinite_vertices": 0
+      },
+      "material_before": {
+        "base_color": [
+          0.07036010163220234,
+          0.054480282431797915,
+          0.04518621027984452,
+          1.0
+        ],
+        "roughness": 0.36000001430511475,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.6499999761581421,
+        "specular_tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "material_after": {
+        "base_color": [
+          0.07036010163220234,
+          0.054480282431797915,
+          0.04518621027984452,
+          1.0
+        ],
+        "roughness": 0.36000001430511475,
+        "metallic": 0.0,
+        "alpha": 1.0,
+        "specular": 0.5,
+        "specular_tint": [
+          1.2999999523162842,
+          1.2999999523162842,
+          1.2999999523162842,
+          1.0
+        ]
+      }
+    }
+  ],
+  "glb_totals": {
+    "vertices": 26556,
+    "triangles": 52772,
+    "mesh_objects": 21,
+    "faces": 52772
+  },
+  "master_hash_unchanged": true
+}
