@@ -84,7 +84,7 @@ function View.create(
 		Theme.heading, UDim2.fromOffset(0, 26), UDim2.new(1, 0, 0, 38)
 	local detail = label(info, "RarityAndQuantity", 15)
 	detail.Position, detail.Size, detail.TextColor3 =
-		UDim2.fromOffset(0, 68), UDim2.new(1, 0, 0, 42), profile.tint
+		UDim2.fromOffset(0, 68), UDim2.new(1, 0, 0, 42), profile.resultText
 	local primary = button(content, "OpenOrContinue")
 	local hint = label(content, "InputHint", 12)
 	hint.TextTransparency, hint.Size = 0.25, UDim2.new(1, 0, 0, 18)
@@ -129,7 +129,7 @@ function View.create(
 				else 0
 			badge.Visible, name.Text = final and result.isNew, if final then figure.name else ""
 			detail.Text = if final
-				then figure.rarity .. (if result.isNew
+				then profile.rarity .. (if result.isNew
 					then ""
 					else "  ·  " .. tostring(result.quantity) .. " owned")
 				else ""

@@ -1,4 +1,5 @@
 --!strict
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 -- Uploaded artwork replaces ONLY decorative surfaces. Keep names/numbers/models out of images.
 local Scope = require(script.Parent.UIScope)
 local W = require(script.Parent.Widgets)
@@ -56,7 +57,10 @@ for id, keys in collectionKeys do
 	artwork.emblem = production(keys.Emblem)
 end
 Assets.buttons = { display = empty(), recycle = empty(), paper = empty() }
-Assets.badges = { Common = empty(), Uncommon = empty(), Rare = empty() } :: { [string]: Image }
+Assets.badges = {} :: { [string]: Image }
+for _, id in Rarity.order do
+	Assets.badges[id] = empty()
+end
 local fallback = skin()
 function Assets.get(id: string): Skin
 	return Assets.collections[id] or fallback

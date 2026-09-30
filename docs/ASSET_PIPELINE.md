@@ -26,6 +26,12 @@ Reviewed reusable models live under `assets/models/<model-slug>/`. Model entries
 `assetType: Model`, a lowercase snake_case `.glb` source, and may declare `requiredNodes`.
 Dry-run validation checks the GLB 2.0 container and every declared semantic node before upload.
 
+All six Tidepool Tales figures are uploaded (`Models.TidepoolTales.*`, aliases `bubble_bean`,
+`coral_cuddle`, `shell_scribe`, `jelly_jive`, `ripple_ray`, `pearl_regent`) and adopted at runtime
+through `src/shared/FigureAssets.luau`; see the
+[Tidepool Tales receipt](../assets/figures/tidepool-tales/PRODUCTION.md). Adding another production
+figure means a manifest entry, an upload, and a `FigureAssets` entry keyed by its catalog ID.
+
 The first production figure, Pebble Pip, is prepared under
 `assets/figures/pocket-grove/pebble-pip/model/pebble_pip_roblox.glb` with alias
 `pebble_pip` and semantic key `Models.PocketGrove.PebblePip`. It is registered locally

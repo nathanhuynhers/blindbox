@@ -261,5 +261,9 @@ Engine.FigureModel = {
 		model:PivotTo(cf * frame(vector(0, 1, 0)))
 		return model
 	end,
+	variant = function(id)
+		return Engine.figureVariants[id] or "placeholder"
+	end,
 }
+Engine.figureVariants = {}
 return Engine

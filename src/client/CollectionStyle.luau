@@ -1,6 +1,7 @@
 --!strict
 -- Collection art direction only. No prices, rates, odds or ownership live here.
 local Style = {}
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 export type Style = {
 	page: Color3,
 	wash: Color3,
@@ -42,13 +43,11 @@ Style.collections = {
 function Style.get(id: string): Style
 	return Style.collections[id] or neutral
 end
--- Book-only rarity badges match the approved sheet; opening/global rarity styling is unchanged.
-Style.rarities = {
-	Common = Color3.fromRGB(104, 156, 74),
-	Uncommon = Color3.fromRGB(101, 130, 234),
-	Rare = Color3.fromRGB(165, 94, 224),
-} :: { [string]: Color3 }
+Style.rarities = {} :: { [string]: Color3 }
+for _, id in Rarity.order do
+	Style.rarities[id] = Rarity.get(id).tint
+end
 function Style.rarity(name: string): Color3
-	return Style.rarities[name] or Color3.fromRGB(128, 120, 146)
+	return Rarity.get(name).tint
 end
 return Style

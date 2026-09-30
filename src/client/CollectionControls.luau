@@ -1,4 +1,5 @@
 --!strict
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Context = require(script.Parent.UIContext)
 local Assets = require(script.Parent.CollectionAssets)
 local Style = require(script.Parent.CollectionStyle)
@@ -92,6 +93,7 @@ function Controls.badge(parent: Instance, ctx: Context.Context)
 			local tint = Style.rarity(rarity)
 			gradient.Color = ColorSequence.new(tint:Lerp(Color3.new(1, 1, 1), 0.16), tint)
 			label.Text = string.upper(rarity)
+			label.TextColor3 = Rarity.get(rarity).onTint
 			slot.set(Assets.badges[rarity] or { id = "" })
 		end,
 	}

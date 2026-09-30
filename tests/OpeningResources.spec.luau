@@ -20,7 +20,7 @@ local controller = Controller.create(function() end, function(message)
 	table.insert(errors, message)
 end)
 local request = 0
-local function start(id, reduced, direct)
+local function start(id, reduced, direct, rarity)
 	request += 1
 	check(
 		controller.present({
@@ -29,7 +29,7 @@ local function start(id, reduced, direct)
 			isNew = true,
 			quantity = 1,
 			direct = direct or false,
-		}, reduced),
+		}, reduced, rarity),
 		"start real cinematic: " .. tostring(E.warnings[#E.warnings])
 	)
 end
@@ -223,6 +223,81 @@ for _, reduced in { false, true } do
 		clean()
 	end
 end
+-- Skip after effects have started (phase-entry-only tests cannot catch live tail/light leakage).
+for _, reduced in { false, true } do
+	for _, fixture in
+		{ { "Break", 0.65 }, { "Flight", 0.5 }, { "RarityTease", 0.92 }, { "Impact", 0.25 } }
+	do
+		start("grove.star", reduced)
+		reach(fixture[1])
+		E.render:Fire(State.duration(E.state) * fixture[2])
+		local retired = stage():FindFirstChild(
+			if fixture[1] == "Impact" then "ImpactEffects" else "FlightEffects",
+			true
+		)
+		check(retired ~= nil, "transient effects exist before mid-beat Skip")
+		controller.skip()
+		check(retired.destroyed, "mid-beat Skip destroys active transient family")
+		resultClean()
+		clean()
+	end
+end
+-- Physical pursuit/FOV and fixed reduced camera use actual Cinematic code.
+for _, reduced in { false, true } do
+	start("grove.star", reduced)
+	reach("Flight")
+	local beforePosition, beforeFov = E.camera.CFrame.Position, E.camera.FieldOfView
+	for _ = 1, 8 do
+		E.render:Fire(State.duration(E.state) / 10)
+	end
+	local distance = (E.camera.CFrame.Position - beforePosition).Magnitude
+	check(
+		if reduced then distance < 0.00001 else distance > 6,
+		"camera travels with comet only in normal motion"
+	)
+	check(
+		if reduced then E.camera.FieldOfView == beforeFov else E.camera.FieldOfView > beforeFov + 5,
+		"pursuit FOV communicates acceleration"
+	)
+	clean()
+end
+E.studio = true
+for _, rarity in { "Legendary", "Mythical" } do
+	for _, reduced in { false, true } do
+		local expectedCount
+		for _ = 1, 10 do
+			start("grove.pebble", reduced, false, rarity)
+			reach("Flight")
+			local count = #stage():GetDescendants()
+			expectedCount = expectedCount or count
+			check(count == expectedCount, "high-tier opening 10 has opening 1 resource baseline")
+			reach("RarityTease")
+			E.render:Fire(Config.profile(rarity).flight.transition)
+			check(
+				E.profile.rarity == rarity and Catalog.byId["grove.pebble"].rarity == "Common",
+				"preview never mutates catalog"
+			)
+			reach("Silhouette")
+			check(
+				not stage():FindFirstChild("FlightEffects", true)
+					and not stage():FindFirstChild("ImpactEffects", true),
+				"high-tier transient families retired"
+			)
+			reach("Result")
+			resultClean()
+			clean()
+		end
+		for _, fixture in { { "RarityTease", 0.12 }, { "RarityTease", 0.9 }, { "Impact", 0.25 } } do
+			start("grove.pebble", reduced, false, rarity)
+			reach(fixture[1])
+			E.render:Fire(State.duration(E.state) * fixture[2])
+			controller.skip()
+			resultClean()
+			clean()
+		end
+	end
+end
+E.studio = false
 start(ids[1], false, true)
 reach("Result")
 resultClean()

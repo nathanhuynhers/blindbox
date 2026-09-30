@@ -24,6 +24,7 @@ export type Timing = {
 	opening: number,
 	flight: number,
 	rarityTease: number,
+	rarityReduced: number?,
 	impact: number,
 	silhouette: number,
 	reveal: number,
@@ -87,8 +88,7 @@ local reducedCaps: { [Phase]: number } = {
 	Break = 0.2,
 	Flight = 0.18,
 	RarityTease = 0.3,
-	Impact = 0.14,
-	Silhouette = 0.4,
+	Impact = 0.3,
 	Reveal = 0.28,
 }
 function State.create(timing: Timing, reduced: boolean, direct: boolean): State
@@ -118,6 +118,9 @@ end
 function State.duration(state: State): number
 	local phase: Phase = state.phase
 	local duration = state.durations[phase] or math.huge
+	if state.reduced and phase == "RarityTease" and state.timing.rarityReduced then
+		return math.min(duration, state.timing.rarityReduced)
+	end
 	return if state.reduced and reducedCaps[phase]
 		then math.min(duration, reducedCaps[phase])
 		else duration

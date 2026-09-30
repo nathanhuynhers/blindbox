@@ -1,5 +1,6 @@
 --!strict
 local Types = require(script.Parent.Types)
+local Rarity = require(script.Parent.Rarity)
 local figures: { Types.Figure } = {
 	{
 		id = "grove.pebble",
@@ -101,6 +102,7 @@ local figures: { Types.Figure } = {
 local byId: { [string]: Types.Figure } = {}
 for _, figure in figures do
 	assert(not byId[figure.id], "Duplicate catalog ID")
+	assert(Rarity.isValid(figure.rarity), "Invalid catalog rarity")
 	byId[figure.id] = figure
 	table.freeze(figure)
 end

@@ -1,0 +1,211 @@
+{
+  "figure": "JellyJive",
+  "title": "Jelly Jive",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.4824,
+    1.983,
+    2.2207
+  ],
+  "meshes": 8,
+  "triangles": 28890,
+  "materials": [
+    "JellyJive_Bell",
+    "JellyJive_Blush",
+    "JellyJive_EyeGloss",
+    "JellyJive_EyeShine",
+    "JellyJive_Mouth",
+    "JellyJive_Spots",
+    "JellyJive_Tentacle",
+    "JellyJive_Tongue"
+  ],
+  "components": {
+    "JellyJive_Bell": {
+      "tris": 13998,
+      "verts": 7001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.30753
+    },
+    "JellyJive_Spots": {
+      "tris": 2196,
+      "verts": 1130,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00853
+    },
+    "JellyJive_Tentacles": {
+      "tris": 9000,
+      "verts": 4504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.49083
+    },
+    "JellyJive_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00546
+    },
+    "JellyJive_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00014
+    },
+    "JellyJive_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00314
+    },
+    "JellyJive_Mouth": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00099
+    },
+    "JellyJive_Tongue": {
+      "tris": 400,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00017
+    }
+  },
+  "build": {
+    "JellyJive_Bell": {
+      "active_blocks": 8269,
+      "blocks": 20160,
+      "grid": [
+        241,
+        225,
+        193
+      ],
+      "raw_tris": 388796,
+      "removed_faces": 0,
+      "seconds": 16.6
+    },
+    "JellyJive_Spots": {
+      "active_blocks": 2657,
+      "blocks": 59925,
+      "grid": [
+        377,
+        409,
+        201
+      ],
+      "raw_tris": 72648,
+      "removed_faces": 0,
+      "seconds": 5.4
+    },
+    "JellyJive_Tentacles": {
+      "active_blocks": 4429,
+      "blocks": 18392,
+      "grid": [
+        305,
+        177,
+        177
+      ],
+      "raw_tris": 211904,
+      "removed_faces": 0,
+      "seconds": 48.9
+    },
+    "JellyJive_Eyes": {
+      "active_blocks": 864,
+      "blocks": 3432,
+      "grid": [
+        209,
+        89,
+        97
+      ],
+      "raw_tris": 26560,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "JellyJive_EyeShine": {
+      "active_blocks": 278,
+      "blocks": 2772,
+      "grid": [
+        225,
+        89,
+        73
+      ],
+      "raw_tris": 3380,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "JellyJive_Cheeks": {
+      "active_blocks": 870,
+      "blocks": 5184,
+      "grid": [
+        289,
+        129,
+        73
+      ],
+      "raw_tris": 24450,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "JellyJive_Mouth": {
+      "active_blocks": 447,
+      "blocks": 2002,
+      "grid": [
+        113,
+        105,
+        89
+      ],
+      "raw_tris": 10792,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "JellyJive_Tongue": {
+      "active_blocks": 238,
+      "blocks": 1152,
+      "grid": [
+        97,
+        97,
+        65
+      ],
+      "raw_tris": 3572,
+      "removed_faces": 0,
+      "seconds": 0.7
+    }
+  },
+  "glb": {
+    "bytes": 648844,
+    "nodes": [
+      "JellyJive_Bell",
+      "JellyJive_Cheeks",
+      "JellyJive_Eyes",
+      "JellyJive_EyeShine",
+      "JellyJive_Mouth",
+      "JellyJive_Spots",
+      "JellyJive_Tentacles",
+      "JellyJive_Tongue",
+      "JellyJive"
+    ],
+    "meshes": 8,
+    "materials": 8,
+    "images": 8,
+    "textures": 8,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "reimport": {
+    "meshes": 8,
+    "triangle_mismatches": {}
+  }
+}

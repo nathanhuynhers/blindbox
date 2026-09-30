@@ -8,6 +8,7 @@ local CameraOwner = require(script.Parent.OpeningCamera)
 local Box = require(script.Parent.OpeningBox)
 local Figure = require(script.Parent.OpeningFigure)
 local Effects = require(script.Parent.OpeningEffects)
+local Flight = require(script.Parent.OpeningFlight)
 local Result = require(script.Parent.OpeningResult)
 local Cinematic = {}
 export type Cinematic = {
@@ -20,16 +21,9 @@ export type Cinematic = {
 local function smooth(p: number): number
 	return p * p * (3 - 2 * p)
 end
-local function out(p: number): number
-	return 1 - (1 - p) ^ 3
-end
 local function back(p: number): number
 	local q = p - 1
 	return 1 + 2.70158 * q ^ 3 + 1.70158 * q ^ 2
-end
-local function bezier(a: Vector3, b: Vector3, c: Vector3, d: Vector3, p: number): Vector3
-	local q = 1 - p
-	return a * q ^ 3 + b * 3 * q ^ 2 * p + c * 3 * q * p ^ 2 + d * p ^ 3
 end
 local function solid(
 	parent: Instance,
@@ -166,21 +160,24 @@ function Cinematic.create(
 	)
 	local time = 0
 	local appearance = -1
-	local flightStart = Vector3.new(0, settings.boxY + 3, 0)
-	local apex = Vector3.new(2.5, settings.flightHeight, 2)
-	local landing = Vector3.new(0, 1.2, 0)
 	local basePosition = Vector3.new(0.8, 4.5, -settings.cameraDistance)
 	local baseTarget = Vector3.new(0, settings.boxY, 0)
 	local chargePosition = Vector3.new(0.55, 4.1, -settings.cameraDistance + 0.6)
-	local chaseA = Vector3.new(2, 8, -10)
-	local chaseB = Vector3.new(-2, settings.flightHeight - 1, -9)
-	local function cameraFrame(position: Vector3, target: Vector3, fov: number, impulse: number)
+	local pursuitPosition, pursuitTarget = chargePosition, baseTarget
+	local pursuitFov = settings.chargeFov
+	local function cameraFrame(
+		position: Vector3,
+		target: Vector3,
+		fov: number,
+		impulse: number,
+		roll: number
+	)
 		local viewport = camera.ViewportSize
 		local aspect = math.max(0.3, viewport.X / math.max(1, viewport.Y))
 		-- Extra distance fits narrow portrait devices without shrinking landscape staging.
 		local fit = math.max(1, settings.portraitFit / aspect)
 		local adjusted = target + (position - target) * fit
-		local cf = CFrame.lookAt(origin + adjusted, origin + target)
+		local cf = CFrame.lookAt(origin + adjusted, origin + target) * CFrame.Angles(0, 0, roll)
 		if not reduced and impulse > 0 then
 			local amount = profile.cameraShake * impulse
 			cf *= CFrame.new(math.sin(time * 47) * amount, math.sin(time * 59) * amount * 0.65, 0) * CFrame.Angles(
@@ -247,7 +244,12 @@ function Cinematic.create(
 				or phase == "Reveal"
 				or phase == "Result"
 				or phase == "Closing"
-			local lighting = Config.lightState(if phase == "Enter" then "Arrival" else phase, p)
+			local lighting = Config.lightState(
+				if phase == "Enter" then "Arrival" else phase,
+				p,
+				state.elapsed,
+				profile
+			)
 			for index, light in studioLights do
 				light.Enabled = true
 				light.Brightness = lighting.studio * (if index == 1 then 3 / 5.8 else 1.4 / 5.8)
@@ -289,8 +291,10 @@ function Cinematic.create(
 				3.5,
 				-settings.resultDistance - (if settled then 0 else settings.revealPush)
 			)
-			local comet = flightStart
+			local flight = Flight.sample(state, profile)
+			local comet = flight.position
 			local position, target, fov, impulse = basePosition, baseTarget, settings.fov, 0
+			local roll = 0
 			if phase == "Anticipation" then
 				position = basePosition:Lerp(chargePosition, p * 0.3)
 			elseif phase == "Charge" then
@@ -300,25 +304,61 @@ function Cinematic.create(
 				position, fov = chargePosition, settings.chargeFov
 				impulse = if phase == "Shake" then p * 0.12 else 0
 			elseif phase == "Break" then
-				position = chargePosition:Lerp(chaseA, smooth(p))
-				target = baseTarget:Lerp(flightStart, smooth(p))
-				fov = settings.chargeFov + (settings.fov - settings.chargeFov) * p
-				impulse = math.sin(p * math.pi) * 0.65
+				local react = smooth(
+					math.clamp(
+						(state.elapsed - Config.flight.launchAt - Config.flight.acquireDelay)
+							/ Config.flight.acquireDuration,
+						0,
+						1
+					)
+				)
+				position = chargePosition:Lerp(comet + Config.flight.riseOffset, react)
+				position =
+					Vector3.new(position.X, math.max(chargePosition.Y, position.Y), position.Z)
+				target = baseTarget:Lerp(comet + Config.flight.aimOffset, react)
+				fov = settings.chargeFov + (Config.flight.fovStart - settings.chargeFov) * react
+				impulse = math.sin(flight.launch * math.pi) * 0.5
 			elseif phase == "Flight" then
-				comet =
-					bezier(flightStart, Vector3.new(-2, 9, 0), Vector3.new(5, 13, 3), apex, out(p))
-				position = chaseA:Lerp(chaseB, smooth(p))
-				target = comet
-				fov = settings.fov + (profile.fovPeak - settings.fov) * smooth(p)
+				position = comet
+					+ Config.flight.riseOffset:Lerp(Config.flight.holdOffset, smooth(p))
+				target = comet + Config.flight.aimOffset
+				fov = Config.flight.fovStart
+					+ (profile.fovPeak - Config.flight.fovStart) * smooth(p)
+				roll = math.sin(p * math.pi) * Config.flight.roll
 			elseif phase == "RarityTease" then
-				local q = smooth(Config.teaseMotion(profile, p))
-				comet = bezier(apex, Vector3.new(4, 15, 3), Vector3.new(-2, 8, -1), landing, q)
-				position, target = chaseB:Lerp(finalPosition, q), comet:Lerp(finalTarget, q)
-				fov = profile.fovPeak + (settings.resultFov - profile.fovPeak) * q
+				local settle = smooth(
+					math.clamp(
+						(flight.dive - Config.flight.cameraSettleAt)
+							/ (1 - Config.flight.cameraSettleAt),
+						0,
+						1
+					)
+				)
+				local offset =
+					Config.flight.holdOffset:Lerp(Config.flight.diveOffset, smooth(flight.apex))
+				offset += offset.Unit * profile.signature.cameraPull * flight.pulse
+				position = (comet + offset):Lerp(finalPosition, settle)
+				target = (comet + Config.flight.aimOffset):Lerp(finalTarget, settle)
+				fov = (
+					profile.fovPeak
+					- profile.signature.holdFovDrop * flight.transition * (1 - flight.dive)
+					+ Config.flight.fovDiveExtra * flight.dive
+				)
+						* (1 - settle)
+					+ settings.resultFov * settle
+				impulse = flight.pulse * 0.25
+				roll = -math.sin(flight.apex * math.pi) * Config.flight.roll
 			elseif phase == "Impact" then
-				comet = landing
 				position, target, fov = finalPosition, finalTarget, settings.resultFov
-				impulse = (1 - p) ^ 2
+				local kick = math.clamp(
+					(state.elapsed - Config.flight.impactKickAt) / Config.flight.impactShakeDuration,
+					0,
+					1
+				)
+				impulse = if state.elapsed >= Config.flight.impactKickAt
+					then (1 - kick) ^ 3 * 1.5
+					else 0
+				fov -= math.sin(kick * math.pi) * Config.flight.impactFov
 			elseif showing then
 				target, position = finalTarget, finalPosition
 				fov = settings.resultFov
@@ -330,8 +370,21 @@ function Cinematic.create(
 					else 0
 				local turn = if reduced then 0 else math.sin(time * 0.34) * 0.14
 				figure.pose(
-					CFrame.new(origin + Vector3.new(0, 0.8 + pop + float * 0.4, 0))
-						* CFrame.Angles(0, turn, 0)
+					CFrame.new(
+						origin
+							+ Vector3.new(
+								0,
+								0.8
+									+ pop
+									+ float * 0.4
+									- (
+										if phase == "Silhouette" and not reduced
+											then (1 - smooth(p)) * 0.18
+											else 0
+									),
+								0
+							)
+					) * CFrame.Angles(0, turn, 0)
 				)
 				local amount = if phase == "Silhouette"
 					then 0
@@ -348,13 +401,23 @@ function Cinematic.create(
 					Vector3.new(shift, 1.8, 0),
 					settings.reducedFov,
 					0
-				comet = Vector3.new(
-					0,
-					5.3 + (if phase == "RarityTease" then -smooth(p) * 4.1 else 0),
-					0
-				)
+				roll = 0
+			elseif
+				phase == "Break"
+				or phase == "Flight"
+				or phase == "RarityTease"
+				or phase == "Impact"
+			then
+				-- Frame-rate-independent pursuit with a slight physical lag; no new render subscription.
+				local gain = 1 - math.exp(-Config.flight.pursuitStrength * delta)
+				pursuitPosition = pursuitPosition:Lerp(position, gain)
+				pursuitTarget = pursuitTarget:Lerp(target, gain)
+				pursuitFov += (fov - pursuitFov) * gain
+				position, target, fov = pursuitPosition, pursuitTarget, pursuitFov
+			else
+				pursuitPosition, pursuitTarget, pursuitFov = position, target, fov
 			end
-			cameraFrame(position, target, fov, impulse)
+			cameraFrame(position, target, fov, impulse, roll)
 			effects.update(state, boxAt, origin + comet, time)
 		end,
 	}

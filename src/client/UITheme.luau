@@ -1,5 +1,5 @@
 --!strict
-local OpeningConfig = require(script.Parent.OpeningConfig)
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Theme = {
 	paper = Color3.fromRGB(249, 247, 243),
 	card = Color3.fromRGB(255, 254, 251),
@@ -20,6 +20,6 @@ local Theme = {
 	transition = 0.14,
 }
 function Theme.rarity(name: string): Color3
-	return OpeningConfig.profile(name).tint
+	return Rarity.get(name).ink
 end
 return Theme

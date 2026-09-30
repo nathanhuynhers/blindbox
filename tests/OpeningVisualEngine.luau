@@ -147,6 +147,7 @@ for _, kind in
 		"NormalId",
 		"Font",
 		"ParticleEmitterShape",
+		"ParticleOrientation",
 		"ParticleEmitterShapeStyle",
 		"ParticleEmitterShapeInOut",
 		"AssetFetchStatus",

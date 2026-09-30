@@ -290,12 +290,12 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 
 	local function layoutDetails()
 		local width = info.AbsoluteSize.X
-		local rect = Layout.details(width)
+		local rect = Layout.details(width, ShopState.rarityCount(selected))
 		nameLimit.MaxTextSize = if width < 480 then 24 else 30
 		figures.Position = UDim2.fromOffset(rect.figuresX, rect.figuresY)
 		figures.Size = UDim2.fromOffset(rect.figuresWidth, rect.figuresHeight)
 		odds.Position = UDim2.fromOffset(rect.oddsX, rect.oddsY)
-		odds.Size = UDim2.fromOffset(rect.oddsWidth, 132)
+		odds.Size = UDim2.fromOffset(rect.oddsWidth, rect.oddsHeight)
 		purchase.Position = UDim2.fromOffset(rect.purchaseX, rect.purchaseY)
 		purchase.Size = UDim2.fromOffset(rect.purchaseWidth, rect.purchaseHeight)
 		progressGroup.Size = UDim2.fromOffset(math.max(120, math.min(170, width - 40)), 32)
@@ -326,7 +326,11 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		daily.button.Size = if rect.wide then UDim2.new(0.68, 0, 0, 40) else UDim2.new(1, 0, 0, 40)
 	end
 	resize = function()
-		local g = Layout.calculate(root.AbsoluteSize.X, root.AbsoluteSize.Y)
+		local g = Layout.calculate(
+			root.AbsoluteSize.X,
+			root.AbsoluteSize.Y,
+			ShopState.rarityCount(selected)
+		)
 		nav.Position = UDim2.fromOffset(12, 12)
 		nav.Size = UDim2.fromOffset(
 			if g.compact then root.AbsoluteSize.X - 24 else g.sidebarWidth,

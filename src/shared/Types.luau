@@ -1,8 +1,9 @@
 --!strict
+local Rarity = require(script.Parent.Rarity)
 export type Figure = {
 	id: string,
 	name: string,
-	rarity: string,
+	rarity: Rarity.Id,
 	color: Color3,
 	shape: string,
 	collection: string,

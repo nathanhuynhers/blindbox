@@ -23,6 +23,8 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 	local key = ""
 	local visible: boolean? = nil
 	local colors: { [BasePart]: Color3 } = {}
+	local textures: { [MeshPart]: string } = {}
+	local shownVariant = ""
 	local extent = 1.7
 	local dimensions = Vector3.new(3.4, 3.4, 3.4)
 	local function fit()
@@ -44,6 +46,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 		end
 		model = nextModel
 		table.clear(colors)
+		table.clear(textures)
 		visible = nil
 		if nextModel then
 			local bounds, size = nextModel:GetBoundingBox()
@@ -55,24 +58,51 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 				if part:IsA("BasePart") then
 					colors[part] = part.Color
 				end
+				if part:IsA("MeshPart") and part.TextureID ~= "" then
+					textures[part] = part.TextureID
+				end
 			end
 		end
 		fit()
 	end
+	local function show(id: string?)
+		shownVariant = if id and id ~= "" then FigureModel.variant(id) else ""
+		replace(if id and id ~= "" then FigureModel.create(id, CFrame.new()) else nil)
+	end
+	local function paint(discovered: boolean)
+		visible = discovered
+		for part, color in colors do
+			part.Color = if discovered then color else Color3.fromRGB(120, 114, 130)
+		end
+		-- Production figures carry their colours in textures; hide them for silhouettes.
+		for part, texture in textures do
+			part.TextureID = if discovered then texture else ""
+		end
+	end
 	scope.connect(frame:GetPropertyChangedSignal("AbsoluteSize"), fit)
+	scope.add(FigureModel.onTemplatesChanged(function()
+		if
+			key ~= ""
+			and string.sub(key, 1, 4) ~= "box:"
+			and FigureModel.variant(key) ~= shownVariant
+		then
+			local discovered = visible
+			show(key)
+			if discovered ~= nil then
+				paint(discovered)
+			end
+		end
+	end))
 	return {
 		frame = frame,
 		figure = function(id: string?, discovered: boolean)
 			local nextKey = id or ""
 			if nextKey ~= key then
 				key = nextKey
-				replace(if id and id ~= "" then FigureModel.create(id, CFrame.new()) else nil)
+				show(id)
 			end
 			if visible ~= discovered then
-				visible = discovered
-				for part, color in colors do
-					part.Color = if discovered then color else Color3.fromRGB(120, 114, 130)
-				end
+				paint(discovered)
 			end
 		end,
 		box = function(collection: string)
@@ -80,6 +110,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 				return
 			end
 			key = "box:" .. collection
+			shownVariant = ""
 			local asset = Box.create(frame, collection)
 			asset.pose(CFrame.Angles(-0.06, 0.24, 0), 0)
 			replace(asset.model)

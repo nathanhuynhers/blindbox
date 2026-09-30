@@ -70,6 +70,9 @@ function Audio.create(scope: Scope.Scope): Audio
 				elseif entry.key == "charge" then
 					entry.sound.PlaybackSpeed = 0.92 + energy * 0.22
 					entry.sound.Volume = Config.volume * (0.55 + energy * 0.45)
+				elseif entry.key == "flight" then
+					entry.sound.PlaybackSpeed = 0.9 + energy * 0.2
+					entry.sound.Volume = Config.volume * (0.25 + energy * 0.5)
 				end
 			end
 		end,

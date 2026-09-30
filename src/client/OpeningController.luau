@@ -12,9 +12,11 @@ local View = require(script.Parent.OpeningView)
 local Audio = require(script.Parent.OpeningAudio)
 local Scope = require(script.Parent.OpeningScope)
 local Cinematic = require(script.Parent.OpeningCinematic)
+local Flight = require(script.Parent.OpeningFlight)
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Controller = {}
 export type Controller = {
-	present: (Result.Result, boolean) -> boolean,
+	present: (Result.Result, boolean, Rarity.Id?) -> boolean,
 	isActive: () -> boolean,
 	skip: () -> (),
 	cancel: () -> (),
@@ -61,7 +63,14 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				active.interact(true)
 			end
 		end,
-		present = function(result, reduced)
+		present = function(result, reduced, presentationRarity)
+			-- A local development preview only. Never accepted through remotes/result metadata.
+			if
+				presentationRarity ~= nil
+				and (not RunService:IsStudio() or not Rarity.isValid(presentationRarity))
+			then
+				return false
+			end
 			if destroyed or active or seen[result.requestId] then
 				return false
 			end
@@ -79,7 +88,8 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				end
 			end
 			local profile, collection =
-				Config.profile(figure.rarity), Config.collection(figure.collection)
+				Config.profile(presentationRarity or figure.rarity),
+				Config.collection(figure.collection)
 			local scope = Scope.create()
 			local session: Session = {
 				state = State.create(profile.timing, reduced, result.direct),
@@ -147,6 +157,8 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 					ContextActionService:UnbindAction(movementName)
 				end)
 				local revealed, teaseIndex, breakIndex = false, 0, 0
+				local diving, shimmer = false, false
+				local flightResumed = false
 				local selectionPhase: State.Phase? = nil
 				local function enterPhase()
 					local phase: State.Phase = session.state.phase
@@ -165,9 +177,12 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 						audio.play("click")
 					elseif phase == "Flight" then
 						audio.play("flight", true)
+						audio.play("acceleration")
+					elseif phase == "RarityTease" and profile.signature.quietUntil > 0 then
+						audio.stop("flight")
 					elseif phase == "Impact" then
 						audio.stop()
-						audio.play("impact")
+						audio.play(profile.cues.impact)
 					elseif phase == "Silhouette" then
 						audio.stop()
 						audio.play("silhouette")
@@ -177,7 +192,7 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 					end
 					if (phase == "Reveal" or phase == "Result") and not revealed then
 						revealed = true
-						audio.play("reveal")
+						audio.play(profile.cues.reveal)
 						if result.isNew then
 							audio.play("discovery")
 						end
@@ -204,9 +219,33 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 								audio.stop()
 							end
 							cinematic.tease(beat)
+							if not beat.quiet then
+								audio.play(profile.cues.transformation)
+							end
 							audio.play(beat.cue)
 						end
 						teaseIndex = index
+						if
+							profile.signature.quietUntil > 0
+							and not flightResumed
+							and state.elapsed
+								>= profile.flight.transition * profile.signature.quietUntil
+						then
+							flightResumed = true
+							audio.play("flight", true)
+						end
+						if not diving and Flight.sample(state, profile).dive > 0 then
+							diving = true
+							audio.play("dive")
+						end
+					elseif
+						state.phase == "Impact"
+						and not shimmer
+						and state.elapsed >= Config.flight.impactCalmAt
+					then
+						shimmer = true
+						audio.stop()
+						audio.play("postImpactShimmer")
 					end
 				end
 				local function draw(delta: number)
@@ -260,6 +299,10 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 							delta,
 							if session.state.phase == "Charge"
 								then State.progress(session.state)
+								elseif
+									session.state.phase == "Flight"
+									or session.state.phase == "RarityTease"
+								then Flight.sample(session.state, profile).energy
 								else 1
 						)
 						if State.advance(session.state, delta) then

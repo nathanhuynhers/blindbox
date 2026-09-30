@@ -63,7 +63,10 @@ for rarity, profile in Config.rarities do
 				check(state.phase == order[index + 1], "timed transition")
 			end
 		end
-		check(elapsed < (if reduced then 2.8 else 5.8), "sequence stays short")
+		check(
+			elapsed < (if reduced then 4.7 else 7.8),
+			"sequence includes readable rarity hold and calm impact"
+		)
 	end
 	for _, reduced in { false, true } do
 		for _, phase in order do
@@ -138,7 +141,7 @@ for rarity, profile in Config.rarities do
 		end
 	end
 	totalTimes[rarity] = total
-	check(total >= 3.5 and total <= 5.8, "cinematic pacing target")
+	check(total >= 5.2 and total <= 7.5, "five-tier pacing target")
 	check(reducedTotal < total * 0.65, "reduced motion substantially shortens travel")
 	local beat = Config.teaseBeat(profile, 0)
 	check(

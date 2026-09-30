@@ -32,6 +32,126 @@
         "PP_Clover_Vein_C_Export"
       ]
     },
+    "bubble_bean": {
+      "key": "Models.TidepoolTales.BubbleBean",
+      "source": "assets/figures/tidepool-tales/bubble-bean/model/bubble_bean_roblox.glb",
+      "displayName": "Tidepool Tales - Bubble Bean",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BubbleBean",
+        "BubbleBean_Body",
+        "BubbleBean_Belly",
+        "BubbleBean_Spots",
+        "BubbleBean_LeftFin",
+        "BubbleBean_RightFin",
+        "BubbleBean_BubbleCap",
+        "BubbleBean_Eyes",
+        "BubbleBean_EyeShine",
+        "BubbleBean_Cheeks",
+        "BubbleBean_Mouth"
+      ]
+    },
+    "coral_cuddle": {
+      "key": "Models.TidepoolTales.CoralCuddle",
+      "source": "assets/figures/tidepool-tales/coral-cuddle/model/coral_cuddle_roblox.glb",
+      "displayName": "Tidepool Tales - Coral Cuddle",
+      "assetType": "Model",
+      "requiredNodes": [
+        "CoralCuddle",
+        "CoralCuddle_CoralCrown",
+        "CoralCuddle_CoralDots",
+        "CoralCuddle_Face",
+        "CoralCuddle_Body",
+        "CoralCuddle_Belly",
+        "CoralCuddle_Starfish",
+        "CoralCuddle_StarfishDots",
+        "CoralCuddle_Eyes",
+        "CoralCuddle_EyeShine",
+        "CoralCuddle_Cheeks",
+        "CoralCuddle_Mouth"
+      ]
+    },
+    "shell_scribe": {
+      "key": "Models.TidepoolTales.ShellScribe",
+      "source": "assets/figures/tidepool-tales/shell-scribe/model/shell_scribe_roblox.glb",
+      "displayName": "Tidepool Tales - Shell Scribe",
+      "assetType": "Model",
+      "requiredNodes": [
+        "ShellScribe",
+        "ShellScribe_ShellHood",
+        "ShellScribe_Head",
+        "ShellScribe_Body",
+        "ShellScribe_BookCover",
+        "ShellScribe_BookPages",
+        "ShellScribe_BookEmblem",
+        "ShellScribe_Pencil",
+        "ShellScribe_PencilFerrule",
+        "ShellScribe_PencilEraser",
+        "ShellScribe_PencilWood",
+        "ShellScribe_PencilLead",
+        "ShellScribe_Eyes",
+        "ShellScribe_EyeShine",
+        "ShellScribe_Cheeks",
+        "ShellScribe_Mouth"
+      ]
+    },
+    "jelly_jive": {
+      "key": "Models.TidepoolTales.JellyJive",
+      "source": "assets/figures/tidepool-tales/jelly-jive/model/jelly_jive_roblox.glb",
+      "displayName": "Tidepool Tales - Jelly Jive",
+      "assetType": "Model",
+      "requiredNodes": [
+        "JellyJive",
+        "JellyJive_Bell",
+        "JellyJive_Spots",
+        "JellyJive_Tentacles",
+        "JellyJive_Eyes",
+        "JellyJive_EyeShine",
+        "JellyJive_Cheeks",
+        "JellyJive_Mouth",
+        "JellyJive_Tongue"
+      ]
+    },
+    "ripple_ray": {
+      "key": "Models.TidepoolTales.RippleRay",
+      "source": "assets/figures/tidepool-tales/ripple-ray/model/ripple_ray_roblox.glb",
+      "displayName": "Tidepool Tales - Ripple Ray",
+      "assetType": "Model",
+      "requiredNodes": [
+        "RippleRay",
+        "RippleRay_Body",
+        "RippleRay_Belly",
+        "RippleRay_LeftWing",
+        "RippleRay_RightWing",
+        "RippleRay_LeftWingUnderside",
+        "RippleRay_RightWingUnderside",
+        "RippleRay_Tail",
+        "RippleRay_Spots",
+        "RippleRay_Eyes",
+        "RippleRay_EyeShine",
+        "RippleRay_Cheeks",
+        "RippleRay_Mouth"
+      ]
+    },
+    "pearl_regent": {
+      "key": "Models.TidepoolTales.PearlRegent",
+      "source": "assets/figures/tidepool-tales/pearl-regent/model/pearl_regent_roblox.glb",
+      "displayName": "Tidepool Tales - Pearl Regent",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PearlRegent",
+        "PearlRegent_ShellThrone",
+        "PearlRegent_ShellTrim",
+        "PearlRegent_Body",
+        "PearlRegent_Crown",
+        "PearlRegent_Scepter",
+        "PearlRegent_Pearls",
+        "PearlRegent_Eyes",
+        "PearlRegent_EyeShine",
+        "PearlRegent_Cheeks",
+        "PearlRegent_Mouth"
+      ]
+    },
     "blind_box_base": {
       "key": "Models.BlindBoxBase",
       "source": "assets/models/blind-box/blind_box_base.glb",

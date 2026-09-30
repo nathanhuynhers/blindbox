@@ -206,7 +206,12 @@ function Engine.actions:UnbindAction(name)
 end
 local services = {
 	Players = { LocalPlayer = Engine.player },
-	RunService = { RenderStepped = Engine.render },
+	RunService = {
+		RenderStepped = Engine.render,
+		IsStudio = function()
+			return Engine.studio == true
+		end,
+	},
 	UserInputService = Engine.input,
 	ContextActionService = Engine.actions,
 	GuiService = Engine.guiService,
@@ -227,7 +232,8 @@ function Engine.click(which)
 	Engine.view[which].Activated:Fire(input)
 end
 Engine.View = {
-	create = function(gui, _scope, result)
+	create = function(gui, _scope, result, profile)
+		Engine.profile = profile
 		local primary, hit, skip = node("TextButton"), node("TextButton"), node("TextButton")
 		primary.Parent, hit.Parent, skip.Parent = gui, gui, gui
 		Engine.view = { primary = primary, hitTarget = hit, skip = skip }

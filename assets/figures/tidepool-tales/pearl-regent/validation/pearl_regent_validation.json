@@ -1,0 +1,252 @@
+{
+  "figure": "PearlRegent",
+  "title": "Pearl Regent",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    3.2522,
+    2.3799,
+    3.3811
+  ],
+  "meshes": 10,
+  "triangles": 53464,
+  "materials": [
+    "PearlRegent_Blush",
+    "PearlRegent_EyeGloss",
+    "PearlRegent_EyeShine",
+    "PearlRegent_Gold",
+    "PearlRegent_Mouth",
+    "PearlRegent_Pearl",
+    "PearlRegent_ShellPink"
+  ],
+  "components": {
+    "PearlRegent_ShellThrone": {
+      "tris": 18956,
+      "verts": 9480,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.88541
+    },
+    "PearlRegent_ShellTrim": {
+      "tris": 8916,
+      "verts": 4456,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.14561
+    },
+    "PearlRegent_Body": {
+      "tris": 12000,
+      "verts": 6002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.62877
+    },
+    "PearlRegent_Crown": {
+      "tris": 5000,
+      "verts": 2500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04482
+    },
+    "PearlRegent_Scepter": {
+      "tris": 2998,
+      "verts": 1501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01406
+    },
+    "PearlRegent_Pearls": {
+      "tris": 2398,
+      "verts": 1203,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01964
+    },
+    "PearlRegent_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00372
+    },
+    "PearlRegent_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0001
+    },
+    "PearlRegent_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0025
+    },
+    "PearlRegent_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00018
+    }
+  },
+  "build": {
+    "PearlRegent_ShellThrone": {
+      "active_blocks": 12771,
+      "blocks": 36936,
+      "grid": [
+        289,
+        217,
+        305
+      ],
+      "raw_tris": 708776,
+      "removed_faces": 40,
+      "seconds": 10.9
+    },
+    "PearlRegent_ShellTrim": {
+      "active_blocks": 10836,
+      "blocks": 138880,
+      "grid": [
+        497,
+        321,
+        449
+      ],
+      "raw_tris": 382856,
+      "removed_faces": 84,
+      "seconds": 7.5
+    },
+    "PearlRegent_Body": {
+      "active_blocks": 6371,
+      "blocks": 14400,
+      "grid": [
+        193,
+        161,
+        241
+      ],
+      "raw_tris": 302456,
+      "removed_faces": 0,
+      "seconds": 5.5
+    },
+    "PearlRegent_Crown": {
+      "active_blocks": 2655,
+      "blocks": 6930,
+      "grid": [
+        177,
+        169,
+        121
+      ],
+      "raw_tris": 110520,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "PearlRegent_Scepter": {
+      "active_blocks": 1352,
+      "blocks": 7072,
+      "grid": [
+        129,
+        105,
+        273
+      ],
+      "raw_tris": 57052,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "PearlRegent_Pearls": {
+      "active_blocks": 1140,
+      "blocks": 12870,
+      "grid": [
+        265,
+        121,
+        209
+      ],
+      "raw_tris": 49338,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "PearlRegent_Eyes": {
+      "active_blocks": 650,
+      "blocks": 2530,
+      "grid": [
+        185,
+        81,
+        89
+      ],
+      "raw_tris": 18854,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "PearlRegent_EyeShine": {
+      "active_blocks": 237,
+      "blocks": 2112,
+      "grid": [
+        193,
+        89,
+        65
+      ],
+      "raw_tris": 2608,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "PearlRegent_Cheeks": {
+      "active_blocks": 740,
+      "blocks": 4158,
+      "grid": [
+        265,
+        113,
+        73
+      ],
+      "raw_tris": 20004,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "PearlRegent_Mouth": {
+      "active_blocks": 210,
+      "blocks": 792,
+      "grid": [
+        89,
+        73,
+        65
+      ],
+      "raw_tris": 3792,
+      "removed_faces": 0,
+      "seconds": 0.1
+    }
+  },
+  "glb": {
+    "bytes": 1189656,
+    "nodes": [
+      "PearlRegent_Body",
+      "PearlRegent_Cheeks",
+      "PearlRegent_Crown",
+      "PearlRegent_Eyes",
+      "PearlRegent_EyeShine",
+      "PearlRegent_Mouth",
+      "PearlRegent_Pearls",
+      "PearlRegent_Scepter",
+      "PearlRegent_ShellThrone",
+      "PearlRegent_ShellTrim",
+      "PearlRegent"
+    ],
+    "meshes": 10,
+    "materials": 7,
+    "images": 7,
+    "textures": 7,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "reimport": {
+    "meshes": 10,
+    "triangle_mismatches": {}
+  }
+}

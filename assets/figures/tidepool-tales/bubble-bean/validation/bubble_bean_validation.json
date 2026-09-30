@@ -1,0 +1,253 @@
+{
+  "figure": "BubbleBean",
+  "title": "Bubble Bean",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.2324,
+    1.7409,
+    3.0856
+  ],
+  "meshes": 10,
+  "triangles": 27990,
+  "materials": [
+    "BubbleBean_Aqua",
+    "BubbleBean_Blush",
+    "BubbleBean_Bubble",
+    "BubbleBean_Cream",
+    "BubbleBean_EyeGloss",
+    "BubbleBean_EyeShine",
+    "BubbleBean_Mouth",
+    "BubbleBean_Spots"
+  ],
+  "components": {
+    "BubbleBean_Body": {
+      "tris": 12000,
+      "verts": 6002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 4.20338
+    },
+    "BubbleBean_Belly": {
+      "tris": 2398,
+      "verts": 1201,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04088
+    },
+    "BubbleBean_Spots": {
+      "tris": 2600,
+      "verts": 1328,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0113
+    },
+    "BubbleBean_LeftFin": {
+      "tris": 1400,
+      "verts": 702,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02834
+    },
+    "BubbleBean_RightFin": {
+      "tris": 1400,
+      "verts": 702,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02834
+    },
+    "BubbleBean_BubbleCap": {
+      "tris": 4996,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.85242
+    },
+    "BubbleBean_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00686
+    },
+    "BubbleBean_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00018
+    },
+    "BubbleBean_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00315
+    },
+    "BubbleBean_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00027
+    }
+  },
+  "build": {
+    "BubbleBean_Body": {
+      "active_blocks": 6761,
+      "blocks": 15950,
+      "grid": [
+        201,
+        177,
+        233
+      ],
+      "raw_tris": 319632,
+      "removed_faces": 0,
+      "seconds": 12.3
+    },
+    "BubbleBean_Belly": {
+      "active_blocks": 2514,
+      "blocks": 8640,
+      "grid": [
+        193,
+        145,
+        161
+      ],
+      "raw_tris": 121652,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "BubbleBean_Spots": {
+      "active_blocks": 2851,
+      "blocks": 54378,
+      "grid": [
+        425,
+        305,
+        217
+      ],
+      "raw_tris": 89252,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "BubbleBean_LeftFin": {
+      "active_blocks": 654,
+      "blocks": 1430,
+      "grid": [
+        89,
+        81,
+        105
+      ],
+      "raw_tris": 26568,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "BubbleBean_RightFin": {
+      "active_blocks": 662,
+      "blocks": 1430,
+      "grid": [
+        89,
+        81,
+        105
+      ],
+      "raw_tris": 26568,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "BubbleBean_BubbleCap": {
+      "active_blocks": 3049,
+      "blocks": 7650,
+      "grid": [
+        201,
+        145,
+        137
+      ],
+      "raw_tris": 147744,
+      "removed_faces": 0,
+      "seconds": 5.3
+    },
+    "BubbleBean_Eyes": {
+      "active_blocks": 948,
+      "blocks": 3240,
+      "grid": [
+        217,
+        81,
+        97
+      ],
+      "raw_tris": 29706,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "BubbleBean_EyeShine": {
+      "active_blocks": 292,
+      "blocks": 2871,
+      "grid": [
+        233,
+        89,
+        73
+      ],
+      "raw_tris": 4268,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "BubbleBean_Cheeks": {
+      "active_blocks": 754,
+      "blocks": 4329,
+      "grid": [
+        297,
+        105,
+        73
+      ],
+      "raw_tris": 21012,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "BubbleBean_Mouth": {
+      "active_blocks": 258,
+      "blocks": 1053,
+      "grid": [
+        105,
+        73,
+        73
+      ],
+      "raw_tris": 4636,
+      "removed_faces": 0,
+      "seconds": 0.4
+    }
+  },
+  "glb": {
+    "bytes": 630672,
+    "nodes": [
+      "BubbleBean_Belly",
+      "BubbleBean_Body",
+      "BubbleBean_BubbleCap",
+      "BubbleBean_Cheeks",
+      "BubbleBean_Eyes",
+      "BubbleBean_EyeShine",
+      "BubbleBean_LeftFin",
+      "BubbleBean_Mouth",
+      "BubbleBean_RightFin",
+      "BubbleBean_Spots",
+      "BubbleBean"
+    ],
+    "meshes": 10,
+    "materials": 8,
+    "images": 8,
+    "textures": 8,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "reimport": {
+    "meshes": 10,
+    "triangle_mismatches": {}
+  }
+}

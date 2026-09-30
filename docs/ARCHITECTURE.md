@@ -23,7 +23,8 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent COLLECTION
   SurfaceGui header, row lighting, icon-only side controls and runtime anchors. Visual construction
   is separate from shelf ownership, carousel decisions and migration; indices stay in owner UI.
-- `FigureSlots`: per-slot figure cache using existing FigureModel assets; replace only changed IDs.
+- `FigureSlots`: per-slot figure cache using existing FigureModel assets; replace only changed IDs,
+  or a figure whose production template became ready (`FigureModel.variant`).
 - `Shelves`: discovered-reference rules, visible owned-unit validation, stable slot IDs, runtime carousel
   revision/wraparound/cooldown and bounded three-unit projections. Zero economy/inventory reservations.
 - `Rules`/`Economy`: unchanged Display rate/bonus/reservations, purchases, inventory and daily logic.
@@ -96,7 +97,14 @@ sessions. Leaving destroys owner content and connections and releases the slot. 
 on the shared ground safely. Plot allocation/coordinates and carousel visibility are not saved.
 
 Shared Catalog/Types/FigureModel contain only public definitions, contracts and original
-procedural art. Figure identity is a quantity stack; trading/unique variants are not implemented.
+procedural art. Production figure models: `ModelAssets` (server) loads each `FigureAssets` entry
+with `InsertService`, validates part count and authored proportions, turns the eyes toward -Z,
+applies the uniform collection scale and a base-centre pivot, and publishes the template to
+`ReplicatedStorage.ProductionModels.Figures.<catalog id>`, incrementing `FigureRevision`.
+`FigureModel.create` clones a template once its replicated part count matches and otherwise
+builds the procedural placeholder. Plots re-render and `UIPreview` rebuilds when a template
+arrives; undiscovered previews hide production textures. Failures leave the placeholder and set
+`<Root>Status`/`<Root>Reason` attributes on the `Figures` folder. Figure identity is a quantity stack; trading/unique variants are not implemented.
 
 Shared `AssetManifest` resolves semantic artwork keys through generated `AssetIds`; absent
 entries resolve to an empty string. The local standard-library Python uploader records public

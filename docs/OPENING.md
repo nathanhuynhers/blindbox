@@ -1,6 +1,7 @@
 # Blind-box cinematic opening
 
-Implemented cinematic lifecycle correction. Automated checks now execute the actual cinematic,
+Implemented the focused launch/flight/rarity/impact/silhouette polish pass, preserving the
+previous cinematic lifecycle correction. Automated checks execute the actual cinematic,
 box, skin, figure appearance, effects and audio against engine primitives.
 **Native Studio visual, input, performance and multiplayer acceptance is still pending.**
 No server, economy, catalog, inventory, persistence, purchase contract or generated asset ID changed.
@@ -18,6 +19,8 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 | OpeningState | Deterministic clock, phase transitions, Await activation, Skip, Continue guard, cancellation |
 | OpeningConfig | Rarity timings/intensity, collection presentation, camera/effect limits, sound slots and future tease beats |
 | OpeningCinematic | Local stage, model placement, curved flight, camera choreography and figure presentation |
+| OpeningFlight | Pure deterministic path, timed rarity transformation, hold/apex/dive and layered color samples |
+| OpeningFlightEffects | Preallocated layered comet, curved taper, trailing glints and three depths of atmospheric emitters; owned by FlightEffects |
 | OpeningCamera | Captures/restores camera type, subject, CFrame, Focus and FOV; detects camera replacement/destruction |
 | OpeningEffects | Real inward particles, orbit beams, comet trail/aura/light, impact rings, halo, dust and local post effects |
 | OpeningBox / OpeningBoxSource | Production clone validation, normalization, semantic animation handles, bounded content loading and fallback selection |
@@ -48,24 +51,54 @@ property mutation is introduced.
 | Charge | Particles emit inward from a sphere; five shrinking orbit paths feed beams into the lid seam; FOV tightens |
 | Shake | Small bounded rotational impulses increase; seam light builds |
 | Await | Indefinite Tap to Open; no automatic opening and no rarity color |
-| Break | Immediate prompt removal/click cue, 3% compression, seam pulse, independent backward rotating lid launch |
-| Flight | Neutral comet launches; camera follows a cubic Bezier ascent with widening FOV |
-| RarityTease | Mint, lavender or gold colors the comet/trail before identity; short apex hold, curved descent and tightening FOV |
-| Impact | Local sparks, expanding beam rings, short bloom and restrained camera impulse |
-| Silhouette | Flight debris clears; actual awarded figure appears dark against a rarity halo |
+| Break | 0.40s; lid opens, energy gathers/compresses, launches at 0.18s with accelerating travel; camera reacts after another 0.035s |
+| Flight | 0.85s neutral ascent; moving camera pursues a readable layered comet, widening FOV and restrained parallax |
+| RarityTease | Compression/neutral pulse, staggered core-to-trail-to-spark tint bloom, explicit rarity hold, rounded apex, accelerating dive and late destination ring |
+| Impact | 0.38s; flight family retires at contact, short camera kick/core pulse/rings/sparks/light/Bloom, calm from 0.22s |
+| Silhouette | Actual awarded figure rises 0.18 studs into a dark, quiet rarity halo; no flight or impact resources remain |
 | Reveal | Colors restore, small upward settle, restrained rotation and camera push; result details fade in |
 | Result | Calm figure idle, low ambient particles, correct metadata and indefinite Continue |
 | Closing / Done | 0.22s dark transition; camera restores at opaque midpoint, then the session releases everything |
 
 The lid cap, top panel and top trim travel together; the lid is not immediately destroyed.
-Crack/lid/launch audio markers start at 0.08/0.16/0.20s after activation. No full-screen white flash,
+Crack/lid/launch audio markers start at 0.00/0.08/0.18s after activation. No full-screen white flash,
 giant rarity lettering or rainbow burst is used.
 
 | Profile | Timed opening, excluding Await/Result/Closing | Silhouette | Peak flight FOV | Impact rings |
 | --- | --- | --- | --- | --- |
-| Common | 3.99s | 0.35s | 61 | 1 |
-| Uncommon | 4.57s | 0.48s | 64 | 2 |
-| Rare | 5.21s | 0.65s | 67 | 3 |
+| Common | 5.47s | 0.35s | 61 | 1 |
+| Uncommon | 5.97s | 0.48s | 64 | 2 |
+| Rare | 6.60s | 0.65s | 67 | 3 |
+
+Rarity transitions take 0.19 / 0.22 / 0.25s, followed by **0.25 / 0.35 / 0.55s holds**.
+The 0.24s apex and 0.62s accelerating dive begin only after recognition. The mint Common has
+a restrained taper; lavender Uncommon adds width/aura and secondary glints; gold Rare adds
+a larger aura, stronger compression/pulse, transformation ring and camera response. Initial
+core, tail, sparks and flight atmosphere are ivory, with no rarity-colored surroundings.
+
+`OpeningConfig.flight` owns the path points, acceleration, launch/camera cue offsets, tail,
+streak and impact tuning. Rarity profiles derive their timing from that configuration and own
+transition/hold, trail width/length, aura scale, sparkle rate and pulse intensity. The two new
+flight helpers share those samples with the existing controller, effects and cinematic; the
+phase order and authoritative result flow are unchanged.
+
+Camera acquisition has a deliberate short delay and smooth response, followed by positional
+pursuit with exponential interpolation, a small off-center aim, restrained roll and 46-to-61/64/67
+FOV expansion. The rarity hold stabilizes the frame. Dive adds up to three degrees before
+the late approach settles toward the existing reveal framing. Impact adds a short damped kick
+and two-degree FOV response. Portrait framing retains the existing distance-fit rule.
+
+The energy uses a compact bright core, translucent inner glow, soft world-sized billboard aura,
+a seven-segment tapered Beam tail sampled along the curved path, and a native Trail. The sampled
+tail retains presence while speed drops at the hold/apex. Six preallocated flank emitters at
+three depths provide distant motes, middle streaks and occasional faster foreground streaks.
+Their rates fall during the rarity hold and rise during the dive; the center stays clear.
+Built-in Roblox textures are used; no image/audio assets or dependencies were added.
+
+Impact cues are contact, camera kick at 0.02s, compact core at 0.03s, rings at 0.05s, sparks at
+0.06s, and light/Bloom peak at 0.08s. At 0.22s, transient brightness and particles collapse;
+the stage settles to the silhouette light baseline. Only quiet dust, halo and stage remain
+for the figure. The silhouette hold completes before colors or result identity are shown.
 
 These are configured clock durations; real frame scheduling can add a small amount. On a stalled
 frame the clock visits each phase instead of skipping interaction/visual beats. Timers accept
@@ -130,7 +163,7 @@ cleanup still runs. The granted item remains owned even when presentation fails.
 
 BloomEffect and ColorCorrectionEffect live only under the local camera. No Lighting service
 properties are edited. Real ParticleEmitters use built-in Roblox particle textures; Beams,
-Trails, lights and a small neon comet provide depth without physics. Effects are preallocated;
+Trails, lights and the layered energy star provide depth without physics. Effects are preallocated;
 no parts/emitters/tweens/tasks are created per render frame. Bursts cap at 32 particles, rings
 at four, orbit motes at five. Touch devices reduce emission to 55%, with fewer ring segments.
 Transient families are destroyed at their retirement boundaries below; disabling an emitter
@@ -170,18 +203,18 @@ explicitly destroyed; they are never stored under PlayerGui.
 | Complete box wrapper: all semantic parts, nameplate, artwork, lid pivot and dynamic descendants | `retireBoxPresentation()` at RarityTease, after lid travel through Flight; immediately on Skip/result/direct spotlight or session cleanup |
 | Box loading/deadline/replication listener | Same box scope; invalidate generation/closed flag, cancel tasks and disconnect listener before destroying the wrapper |
 | BoxEffects: seam light, charge/collection particles, gathering geometry/beams | Flight, or any jump beyond it |
-| FlightEffects: comet, light, aura, sparks, attachments and trail | Impact, or any jump beyond it |
-| ImpactEffects: burst and expanding rings | Silhouette, or any jump beyond it |
+| FlightEffects: core/inner glow, billboard aura, sampled Beam tail, native Trail, sparks/glints, light, launch/transformation/destination rings and six atmospheric emitter mounts | Impact, or any jump beyond it |
+| ImpactEffects: contact pulse, sparks, controlled light and expanding rings | Illumination/particles clear by 0.22s; entire family destroys at Silhouette, or any jump beyond it |
 | RevealEffects: reveal sparkle mount/emitter | Result, or any jump beyond it |
 | ResultEffects: quiet dust, halo and halo ring; three studio lights; awarded figure | Closing curtain disables illumination/VFX; session cleanup destroys them |
 | OpeningBloom / OpeningGrade | Exactly one named pair under the captured Camera; reset at phase entry, explicit phase targets, disabled behind Closing curtain, destroyed on cleanup |
 
 Each phase entry clears live particle/trail history and disables the previous visual state before
-applying its new targets. `OpeningConfig.lightState` bounds combined studio/seam/comet brightness
-to 1.8, with a 1.4 studio baseline and range 18; accent lights consume that budget rather than
-stacking onto full studio illumination. Positions, light colors, relative key/fill/rim weights,
-camera path, lid/figure animation and rarity profiles are preserved. Impact Bloom decays; the
-silhouette/result use an explicit 0.15 profile multiplier instead of inheriting impact state.
+applying its new targets. `OpeningConfig.lightState` bounds combined studio/seam/comet/impact
+brightness to 1.8, with a 1.4 studio baseline and range 18; accent lights consume that budget
+rather than stacking onto full studio illumination. The calm/silhouette studio target is 0.35;
+Result returns to the existing 1.4 baseline. Impact Bloom decays; silhouette/result use an
+explicit 0.15 profile multiplier instead of inheriting impact state.
 These are deterministic safety baselines, not a claim of finished artistic tuning.
 
 No shared Lighting property is changed, so existing ExposureCompensation, Brightness, Ambient,
@@ -215,10 +248,12 @@ figure presentation and Continue flow. No additional server request or award occ
 
 Reduced motion is captured from the existing Shop preference at session start. It removes
 box shake, camera impulses/chase/FOV pumping, entrance travel and figure pop/rotation/float.
-The camera stays fixed; a short vertical energy/tint presentation retains rarity-before-identity.
-It uses 25% effect density (combined with the touch multiplier), one impact ring, shortened
-timings and color fades. Common takes 2.33s and the other profiles 2.38s excluding user waits
-and Closing. It does not skip the reveal or discard metadata.
+The camera stays fixed; a short energy/tint presentation retains rarity-before-identity.
+It uses 25% effect density (combined with the touch multiplier), distant motes only, no streaks
+or long moving tail, one impact ring, 0.18s ascent, 0.12s apex and 0.24s descent. Transformation,
+rarity recognition and the full rarity-specific silhouette hold remain intact. Common takes
+2.99s, Uncommon 3.25s and Rare 3.65s excluding user waits and Closing. It does not skip the reveal
+or discard metadata.
 
 ## Audio slots
 
@@ -226,13 +261,15 @@ All sound IDs currently remain empty. Insert original/licensed `rbxassetid://` I
 `OpeningConfig.sounds`:
 
 - entrance; ambience / ambienceGrove / ambienceTide
-- charge; shake; click; crack; lid; launch; flight
-- rarityCommon; rarityUncommon; rarityRare
-- impact; silhouette; reveal; discovery; close
+- charge; shake; click; crack; lid; launch; flight; acceleration
+- rarityTransformation; rarityCommon; rarityUncommon; rarityRare; dive
+- impact; postImpactShimmer; silhouette; reveal; discovery; close
 
 Collection ambience, charge and flight can loop only while their phase group is active.
 Await, Break, Impact, Silhouette, Skip and teardown stop temporary layers. Charge pitch rises
-with progress. Playback is capped at eight concurrent sounds with an eight-second hard lifetime.
+with progress; flight volume/pitch follow energy and ease during the recognition hold. Dive
+fires after the apex; impact stops flight audio; postImpactShimmer fires at the 0.22s calm
+boundary. Playback is capped at eight concurrent sounds with an eight-second hard lifetime.
 The controller emits the reveal/NEW cues at most once per session, including Skip during Reveal.
 Sound loading never drives or blocks the clock.
 
@@ -249,12 +286,16 @@ bloom and tease beats. Unknown names safely use Common. This is presentation ext
 not authorization to add catalog drops or odds.
 
 `tease` is an ordered list with normalized `at` times starting at zero, `color`,
-`secondary`, `cue`, and optional `quiet`, `freeze`, `shatter` flags. A future profile
-can start gold, enter a quiet frozen beat, then burst into its final color with a new sting.
+`secondary`, `cue`, and optional `quiet`, `freeze`, `destabilize`, `shatter` flags. A future profile
+can start gold, hold it, cut audio/motion, destabilize the shell, then burst into its final color
+with a new sting. Each beat interpolates its palette instead of setting the entire system instantly.
 `teaseMotion` excludes frozen intervals from path progress, so freezing does not jump backward;
 `teaseHold` controls the apex hold. Set the profile's final tint/accent to its final reveal palette,
 include a nonfrozen section, keep beat times ascending below 1, and add the requested sound keys.
-No Secret profile or fake Secret drop ships in this change.
+An optional `flight.continuation` overrides the five apex/dive control points while retaining
+the same landing/impact handoff. Set the total tease duration and normalized beat positions to
+leave room for each transformation and recognition hold. No Secret profile, catalog entry or
+fake Secret drop ships in this change.
 
 **Upgraded box artwork:** replace the GLB under the same semantic key using the existing
 [asset pipeline](ASSET_PIPELINE.md). Preserve semantic surfaces and sane geometry bounds; panel
@@ -270,7 +311,9 @@ is not included in the production Rojo mapping, sends no remotes and grants/spen
 
 The scrolling launcher provides all six collection/rarity combinations, a NEW/duplicate toggle,
 reduced motion, a catalog-ID input for every existing figure, redemption, and an automatic Skip
-test that cycles through every skippable phase. Choose Skip mode before launching. The native
+test that cycles through every skippable phase, plus **Rarity hold**, **Dive** (90% of tease)
+and **Impact peak** (0.08s into impact). Choose Skip mode before launching. Those delayed fixture
+checks are bound to that exact opening/phase and canceled on fixture exit. The native
 lifecycle check interrupts 20 sessions **after camera takeover**, including GUI destruction,
 and asserts camera type/FOV, stage, post effects, sounds and input cleanup. Exit restores the
 previous main-UI enabled state and cancels owned fixture tasks.
@@ -315,6 +358,31 @@ Manual acceptance still required:
 9. On a normal mobile device, inspect frame rate and effect density; tune camera motion, quiet
    intervals, lighting, surface branding and original audio by human visual/listening judgment.
 
+## Recording the flight comparison
+
+1. Sync the current source through Rojo, or open the freshly built `RobloxWorkspace.rbxlx`.
+   Start **Play**, choose **Client** in the Command Bar and paste the entire
+   `tests/StudioOpening.client.luau` file. It previews existing catalog figures without purchases.
+2. Leave **Reduced motion: OFF**, **Result: NEW**, and **Skip test: Manual**. Record the three
+   **Pocket Grove / Common**, **Uncommon**, **Rare** buttons in that order. For each, press
+   **Tap to Open**, let the whole silhouette hold finish, then **Continue**. Repeat with the
+   three **Tidepool Tales** buttons using the same viewport and graphics quality.
+3. Pause each recording at launch, neutral pursuit, color bloom, recognition hold, rounded apex,
+   accelerating dive, destination approach, impact peak, calm and silhouette. Check that the
+   core/aura/taper stay readable; foreground streaks move faster than distant motes; no rarity
+   color precedes the transformation; gold has its longer hold; identity remains hidden until
+   the silhouette finishes. Impact must lose its light, streaks, trail and burst quickly.
+4. Repeat all six with **Reduced motion: ON**. The camera/FOV must stay fixed, the energy stay
+   inside the frame, and rarity/shape anticipation remain legible without streaks or impact shake.
+5. Switch **Result** to duplicate (5 owned). Cycle **Skip test** through **Flight**, **Rarity
+   hold**, **Dive**, **Impact**, and **Impact peak**; launch a preview for each. Each must land
+   on the correct result/quantity with no comet, tail, streaks, transient lights or package.
+   Repeat with NEW and reduced motion. Restore **Manual** afterward.
+6. Run the existing **10-opening regression** and **20 interruptions** buttons as described
+   above. Compare opening 1 versus 10, including a 15-second result hold. Record desktop and
+   portrait/mobile framing; native rendering, device performance and multiplayer remain manual
+   acceptance gates.
+
 ## Automated verification
 
 Run pinned `rokit install`, `wally install`, `stylua src`, `stylua --check src`, `selene src`,
@@ -332,7 +400,7 @@ pipeline. `python scripts/upload_assets.py blind_box_base --dry-run` validates t
 and required nodes without uploading. Automated success is not evidence of Studio rendering,
 asset delivery, audio quality or multiplayer playtesting.
 
-Validation recorded for this pass: all standalone Luau suites passed, including 2,911 opening
+Original opening implementation validation: all standalone Luau suites passed, including 2,911 opening
 state/result/config checks, 532 controller/camera lifecycle checks, five production source/fallback
 checks and the four existing semantic fixtures. All 21 offline Python asset tests passed.
 StyLua source/changed-test checks, Selene source/changed-test lint (zero diagnostics using its cached
@@ -353,3 +421,31 @@ LSP's standalone watcher-registration warning does not report a source diagnosti
 Analyzing the unmapped Studio fixture directly still reports its pre-existing unsupported
 `PlayerScripts:WaitForChild(...)` require path; it must resolve against the live client in Studio.
 No native Studio playtest or visual acceptance is claimed for this correction.
+
+### Flight polish validation and changed files
+
+The flight polish passes the full standalone Luau runner, including **5,942 flight timing,
+curve/palette, recognition hold, impact/silhouette, reduced-motion and VFX ownership checks**;
+**580 controller/camera/cue checks**; **13,360 actual-module resource checks**; and the unchanged
+2,911 opening state/result assertions. The resource suite covers twenty full normal/reduced
+openings, mid-launch/flight/dive/impact Skip, cancellation, stale work, figure material restoration,
+bounded lights, no per-frame instance creation and camera restoration. Engine doubles do not
+simulate GPU rendering or asset delivery.
+
+Pinned StyLua formatting/checks, Selene (zero errors/warnings, using the cached Roblox API),
+Luau Language Server source analysis with Roblox definitions and current sourcemap, Rojo 7.7.0
+build and whitespace checks pass. All 21 Python asset-pipeline tests pass. `rokit install
+--no-trust-check` and pinned Wally install completed; checks used the existing pinned executables
+directly where the sandbox's Rokit command shims could not resolve them. No tool versions,
+dependencies, mappings, catalog entries, odds or server behavior changed. Native Studio recording,
+device performance, input and multiplayer acceptance are still pending.
+
+Files changed in this pass:
+
+- Added `src/client/OpeningFlight.luau`, `src/client/OpeningFlightEffects.luau`, and
+  `tests/OpeningFlight.spec.luau`.
+- Updated `src/client/OpeningConfig.luau`, `OpeningCinematic.luau`, `OpeningEffects.luau`,
+  `OpeningController.luau`, `OpeningAudio.luau`, and `OpeningState.luau`.
+- Updated `tests/Opening.spec.luau`, `OpeningLifecycle.spec.luau`, `OpeningResources.spec.luau`,
+  `OpeningVisualEngine.luau`, `StudioOpening.client.luau`, and `run.py`.
+- Updated this document with timings, ownership, hooks, validation and the recording procedure.

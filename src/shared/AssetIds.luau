@@ -14,4 +14,10 @@ return {
 	["Collection.TidepoolTales.Emblem"] = "118737797825057",
 	["Collection.TidepoolTales.ShopPattern"] = "95708306454837",
 	["Models.BlindBoxBase"] = "79870100381887",
+	["Models.TidepoolTales.BubbleBean"] = "133206366502054",
+	["Models.TidepoolTales.CoralCuddle"] = "97988350261409",
+	["Models.TidepoolTales.JellyJive"] = "93788585590607",
+	["Models.TidepoolTales.PearlRegent"] = "140650013990266",
+	["Models.TidepoolTales.RippleRay"] = "85804505305548",
+	["Models.TidepoolTales.ShellScribe"] = "96721580926536",
 } :: { [string]: string }

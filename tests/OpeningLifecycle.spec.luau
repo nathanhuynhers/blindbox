@@ -3,6 +3,7 @@ local Engine = require("./OpeningEngine")
 local Controller = require("./OpeningController")
 local Camera = require("./OpeningCamera")
 local Scope = require("./OpeningScope")
+local Config = require("./OpeningConfig")
 local checks = 0
 local function check(value, message)
 	checks += 1
@@ -16,11 +17,11 @@ end, function()
 	reports += 1
 end)
 local sequence = 0
-local function result()
+local function result(id)
 	sequence += 1
 	return table.freeze({
 		requestId = "opening-" .. sequence,
-		figureId = "tide.pearl",
+		figureId = id or "tide.pearl",
 		isNew = false,
 		quantity = 7,
 		direct = false,
@@ -202,6 +203,95 @@ check(Engine.state.phase == "Result", "gamepad B skips independently of selectio
 controller.cancel()
 Engine.input.last = "MouseButton1"
 clean()
+-- Preview capability is gated before allocation/receipt tracking and never rewrites results.
+local previewResult = result()
+Engine.studio = false
+check(
+	not controller.present(previewResult, false, "Mythical"),
+	"production rejects presentation override"
+)
+Engine.studio = true
+check(
+	not controller.present(previewResult, false, "mythical"),
+	"override validation is case-sensitive"
+)
+check(not controller.present(previewResult, false, "Unknown"), "unknown preview tier rejected")
+for _, rarity in { "Legendary", "Mythical" } do
+	for _, reduced in { false, true } do
+		table.clear(Engine.cues)
+		local awarded = result()
+		check(controller.present(awarded, reduced, rarity), "Studio preview accepted")
+		check(
+			Engine.profile.rarity == rarity and Engine.result == awarded,
+			"profile override preserves authoritative result"
+		)
+		reach("RarityTease")
+		local cues = {}
+		for _, cue in Engine.cues do
+			cues[cue] = true
+		end
+		check(
+			cues["rarity" .. rarity] and cues["transform" .. rarity],
+			"tier-specific audio signature hooks"
+		)
+		reach("Impact")
+		check(Engine.cues[#Engine.cues] == "impact" .. rarity, "tier impact cue")
+		controller.skip()
+		check(
+			Engine.result == awarded and awarded.quantity == 7 and not awarded.isNew,
+			"high-tier Skip preserves result metadata"
+		)
+		check(Engine.cues[#Engine.cues] == "reveal" .. rarity, "tier reveal cue on Skip")
+		controller.cancel()
+		clean()
+	end
+end
+Engine.studio = false
+for _, fixture in
+	{ { "grove.pebble", "Common" }, { "grove.moth", "Uncommon" }, { "tide.pearl", "Rare" } }
+do
+	table.clear(Engine.cues)
+	controller.present(result(fixture[1]), false)
+	local profile = Config.rarities[fixture[2]]
+	local function countCue(key)
+		local count = 0
+		for _, cue in Engine.cues do
+			if cue == key then
+				count += 1
+			end
+		end
+		return count
+	end
+	reach("Flight")
+	check(
+		countCue("launch") == 1 and countCue("acceleration") == 1,
+		"launch and acceleration audio hooks"
+	)
+	reach("RarityTease")
+	check(
+		countCue("rarityTransformation") == 1 and countCue("rarity" .. fixture[2]) == 1,
+		"one profile transformation cue"
+	)
+	Engine.render:Fire(profile.flight.transition + profile.flight.hold - 0.01)
+	check(countCue("dive") == 0, "no dive audio during recognition hold")
+	Engine.render:Fire(profile.flight.apex + 0.02)
+	check(countCue("dive") == 1, "dive audio begins after apex")
+	reach("Impact")
+	check(
+		countCue("impact") == 1 and countCue("postImpactShimmer") == 0,
+		"contact precedes quiet shimmer"
+	)
+	Engine.render:Fire(Config.flight.impactCalmAt + 0.01)
+	check(countCue("postImpactShimmer") == 1, "post-impact shimmer at calm boundary")
+	controller.skip()
+	Engine.render:Fire(0.1)
+	check(
+		countCue("dive") == 1 and countCue("impact") == 1 and countCue("postImpactShimmer") == 1,
+		"skip cannot replay flight audio"
+	)
+	controller.cancel()
+	clean()
+end
 controller.destroy()
 controller.destroy()
 check(Engine.connections == baseline, "controller lifetime subscriptions released")

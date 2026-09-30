@@ -11,6 +11,7 @@ root = Path(__file__).resolve().parents[1]
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "Rarity": "shared", "UITheme": "client",
     "PlotFixture": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "CollectionAssets": "client",
@@ -20,6 +21,7 @@ modules = {
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
     "OpeningScope": "client", "OpeningBoxSource": "client", "OpeningCamera": "client", "OpeningController": "client",
     "OpeningCinematic": "client", "OpeningEffects": "client", "OpeningBox": "client",
+    "OpeningFlight": "client", "OpeningFlightEffects": "client",
     "OpeningFallbackBox": "client", "OpeningFigure": "client", "OpeningAudio": "client", "BlindBoxSkin": "client",
     "CollectionLayout": "client", "CollectionSelection": "client",
     "ShopLayout": "client", "ShopState": "client", "ShopTheme": "client",
@@ -41,7 +43,7 @@ for name, folder in modules.items():
             source = source.replace(f"require({expression})", f'require("./{dependency}")')
     if name == "OpeningConfig":
         source = source.replace("--!strict", '--!strict\nlocal Vector3 = require("./OpeningVisualEngine").Vector3')
-    if name in ("OpeningCinematic", "OpeningEffects", "OpeningBox", "OpeningFallbackBox", "OpeningFigure", "OpeningAudio", "BlindBoxSkin", "BlindBoxModel"):
+    if name in ("UITheme", "OpeningFlight", "OpeningFlightEffects", "OpeningCinematic", "OpeningEffects", "OpeningBox", "OpeningFallbackBox", "OpeningFigure", "OpeningAudio", "BlindBoxSkin", "BlindBoxModel"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./OpeningVisualEngine")\nlocal game, workspace, Instance, Enum, task, warn = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task, Engine.warn\nlocal Vector3, Vector2, Color3, CFrame, UDim2 = Engine.Vector3, Engine.Vector2, Engine.Color3, Engine.CFrame, Engine.UDim2\nlocal NumberRange, NumberSequence, NumberSequenceKeypoint, ColorSequence = Engine.NumberRange, Engine.NumberSequence, Engine.NumberSequenceKeypoint, Engine.ColorSequence')
         for dependency in ("BlindBoxModel", "AssetManifest", "BlindBoxSpec"):
             for prefix in ("ReplicatedStorage.Shared", "Shared"):
@@ -63,7 +65,7 @@ for name, folder in modules.items():
     if name == "CollectionAssets":
         source = source.replace('local W = require(script.Parent.Widgets)', 'local W = Engine.Widgets')
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./AssetMountEngine")\nlocal Instance, UDim2, Rect, Enum = Engine.Instance, Engine.UDim2, Engine.Rect, Engine.Enum')
-    if name in ("Catalog", "OpeningConfig", "CollectionStyle", "ShopTheme"):
+    if name in ("Rarity", "Catalog", "OpeningConfig", "CollectionStyle", "ShopTheme"):
         source = source.replace("--!strict", '--!strict\nlocal Color3 = require("./OpeningVisualEngine").Color3')
     if name in ("SystemStyle", "DisplaySlotCard", "ShelfFigureCard", "DailyGoalCard", "DisplayScreen", "ShelvesScreen", "GoalsScreen"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./SystemUIEngine")\nlocal Instance, Color3, UDim2, Enum, TweenInfo = Engine.Instance, Engine.Color3, Engine.UDim2, Engine.Enum, Engine.TweenInfo')
@@ -71,12 +73,18 @@ for name, folder in modules.items():
             source = source.replace(f'require(script.Parent.{module})', f'Engine.{field}')
         source = source.replace('game:GetService("TweenService")', 'Engine.TweenService')
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
-for name in ("OpeningEngine", "OpeningVisualEngine", "OpeningLifecycle.spec", "OpeningResources.spec"):
+for name in ("OpeningEngine", "OpeningVisualEngine", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec", "AssetMountEngine"):
     (out / f"{name}.luau").write_text((root / "tests" / f"{name}.luau").read_text(encoding="utf-8"), encoding="utf-8")
 result = subprocess.run([sys.argv[1], str(out / "OpeningLifecycle.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 result = subprocess.run([sys.argv[1], str(out / "OpeningResources.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+result = subprocess.run([sys.argv[1], str(out / "OpeningFlight.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+result = subprocess.run([sys.argv[1], str(out / "Rarity.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 (out / "Mvp.spec.luau").write_text((root / "tests" / "Mvp.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")

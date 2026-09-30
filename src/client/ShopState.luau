@@ -1,9 +1,10 @@
 --!strict
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 
 local ShopState = {}
-export type OddsRow = { rarity: string, minimum: number, maximum: number, count: number }
+export type OddsRow = { rarity: Rarity.Id, minimum: number, maximum: number, count: number }
 
 function ShopState.figures(collectionId: string): { Types.Figure }
 	local result: { Types.Figure } = {}
@@ -28,8 +29,18 @@ function ShopState.progress(snapshot: Types.Snapshot, collectionId: string): (nu
 	return discovered, total
 end
 
+function ShopState.rarityCount(collectionId: string): number
+	local seen: { [string]: boolean } = {}
+	local count = 0
+	for _, figure in Catalog.figures do
+		if figure.collection == collectionId and not seen[figure.rarity] then
+			seen[figure.rarity], count = true, count + 1
+		end
+	end
+	return count
+end
+
 function ShopState.rarityOdds(snapshot: Types.Snapshot, collectionId: string): { OddsRow }
-	local order: { string } = {}
 	local byRarity: { [string]: OddsRow } = {}
 	for _, figure in Catalog.figures do
 		if figure.collection == collectionId then
@@ -42,13 +53,15 @@ function ShopState.rarityOdds(snapshot: Types.Snapshot, collectionId: string): {
 			else
 				row = { rarity = figure.rarity, minimum = chance, maximum = chance, count = 1 }
 				byRarity[figure.rarity] = row
-				table.insert(order, figure.rarity)
 			end
 		end
 	end
 	local result: { OddsRow } = {}
-	for _, rarity in order do
-		table.insert(result, byRarity[rarity])
+	for _, rarity in Rarity.order do
+		local row = byRarity[rarity]
+		if row then
+			table.insert(result, row)
+		end
 	end
 	return result
 end

@@ -178,6 +178,15 @@ end
 local connections: { RBXScriptConnection } = {}
 table.insert(connections, Players.PlayerAdded:Connect(added))
 table.insert(connections, Players.PlayerRemoving:Connect(remove))
+-- Production figure templates load asynchronously; swap placeholders as each becomes ready.
+table.insert(
+	connections,
+	productionModels:GetAttributeChangedSignal("FigureRevision"):Connect(function()
+		for _, session in sessions do
+			PlayerPlot.render(session.plot, session.transaction.state)
+		end
+	end)
+)
 for _, player in Players:GetPlayers() do
 	task.spawn(added, player)
 end

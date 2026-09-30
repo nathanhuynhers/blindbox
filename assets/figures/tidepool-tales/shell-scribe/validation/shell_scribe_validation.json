@@ -1,0 +1,365 @@
+{
+  "figure": "ShellScribe",
+  "title": "Shell Scribe",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.2333,
+    1.9162,
+    2.9547
+  ],
+  "meshes": 15,
+  "triangles": 45268,
+  "materials": [
+    "ShellScribe_Blush",
+    "ShellScribe_BookCover",
+    "ShellScribe_BookEmblem",
+    "ShellScribe_BookPages",
+    "ShellScribe_EyeGloss",
+    "ShellScribe_EyeShine",
+    "ShellScribe_Face",
+    "ShellScribe_Lavender",
+    "ShellScribe_Mouth",
+    "ShellScribe_PencilBody",
+    "ShellScribe_PencilEraser",
+    "ShellScribe_PencilFerrule",
+    "ShellScribe_PencilLead",
+    "ShellScribe_PencilWood",
+    "ShellScribe_Shell"
+  ],
+  "components": {
+    "ShellScribe_ShellHood": {
+      "tris": 17578,
+      "verts": 8783,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.49913
+    },
+    "ShellScribe_Head": {
+      "tris": 6998,
+      "verts": 3501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.2728
+    },
+    "ShellScribe_Body": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.55362
+    },
+    "ShellScribe_BookCover": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0209
+    },
+    "ShellScribe_BookPages": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02819
+    },
+    "ShellScribe_BookEmblem": {
+      "tris": 1198,
+      "verts": 557,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00039
+    },
+    "ShellScribe_Pencil": {
+      "tris": 1400,
+      "verts": 702,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00537
+    },
+    "ShellScribe_PencilFerrule": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00065
+    },
+    "ShellScribe_PencilEraser": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00061
+    },
+    "ShellScribe_PencilWood": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00088
+    },
+    "ShellScribe_PencilLead": {
+      "tris": 200,
+      "verts": 102,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 6e-05
+    },
+    "ShellScribe_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00332
+    },
+    "ShellScribe_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 9e-05
+    },
+    "ShellScribe_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00205
+    },
+    "ShellScribe_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00016
+    }
+  },
+  "build": {
+    "ShellScribe_ShellHood": {
+      "active_blocks": 11418,
+      "blocks": 24192,
+      "grid": [
+        257,
+        217,
+        225
+      ],
+      "raw_tris": 658840,
+      "removed_faces": 420,
+      "seconds": 21.2
+    },
+    "ShellScribe_Head": {
+      "active_blocks": 3580,
+      "blocks": 8360,
+      "grid": [
+        177,
+        153,
+        161
+      ],
+      "raw_tris": 170366,
+      "removed_faces": 0,
+      "seconds": 6.1
+    },
+    "ShellScribe_Body": {
+      "active_blocks": 3179,
+      "blocks": 7600,
+      "grid": [
+        153,
+        161,
+        161
+      ],
+      "raw_tris": 154084,
+      "removed_faces": 0,
+      "seconds": 21.0
+    },
+    "ShellScribe_BookCover": {
+      "active_blocks": 1290,
+      "blocks": 2565,
+      "grid": [
+        153,
+        73,
+        121
+      ],
+      "raw_tris": 62132,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "ShellScribe_BookPages": {
+      "active_blocks": 1239,
+      "blocks": 2380,
+      "grid": [
+        137,
+        81,
+        113
+      ],
+      "raw_tris": 54060,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "ShellScribe_BookEmblem": {
+      "active_blocks": 478,
+      "blocks": 3468,
+      "grid": [
+        137,
+        97,
+        137
+      ],
+      "raw_tris": 14696,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "ShellScribe_Pencil": {
+      "active_blocks": 580,
+      "blocks": 2090,
+      "grid": [
+        89,
+        81,
+        153
+      ],
+      "raw_tris": 22428,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "ShellScribe_PencilFerrule": {
+      "active_blocks": 229,
+      "blocks": 1089,
+      "grid": [
+        89,
+        89,
+        73
+      ],
+      "raw_tris": 7156,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "ShellScribe_PencilEraser": {
+      "active_blocks": 200,
+      "blocks": 1089,
+      "grid": [
+        89,
+        89,
+        73
+      ],
+      "raw_tris": 6552,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "ShellScribe_PencilWood": {
+      "active_blocks": 245,
+      "blocks": 1573,
+      "grid": [
+        89,
+        89,
+        105
+      ],
+      "raw_tris": 8856,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "ShellScribe_PencilLead": {
+      "active_blocks": 86,
+      "blocks": 648,
+      "grid": [
+        73,
+        73,
+        65
+      ],
+      "raw_tris": 1352,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "ShellScribe_Eyes": {
+      "active_blocks": 590,
+      "blocks": 2310,
+      "grid": [
+        169,
+        81,
+        89
+      ],
+      "raw_tris": 17410,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "ShellScribe_EyeShine": {
+      "active_blocks": 224,
+      "blocks": 1728,
+      "grid": [
+        193,
+        73,
+        65
+      ],
+      "raw_tris": 2512,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "ShellScribe_Cheeks": {
+      "active_blocks": 636,
+      "blocks": 4030,
+      "grid": [
+        249,
+        105,
+        81
+      ],
+      "raw_tris": 16606,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "ShellScribe_Mouth": {
+      "active_blocks": 192,
+      "blocks": 968,
+      "grid": [
+        89,
+        89,
+        65
+      ],
+      "raw_tris": 3468,
+      "removed_faces": 0,
+      "seconds": 0.2
+    }
+  },
+  "glb": {
+    "bytes": 1016920,
+    "nodes": [
+      "ShellScribe_Body",
+      "ShellScribe_BookCover",
+      "ShellScribe_BookEmblem",
+      "ShellScribe_BookPages",
+      "ShellScribe_Cheeks",
+      "ShellScribe_Eyes",
+      "ShellScribe_EyeShine",
+      "ShellScribe_Head",
+      "ShellScribe_Mouth",
+      "ShellScribe_Pencil",
+      "ShellScribe_PencilEraser",
+      "ShellScribe_PencilFerrule",
+      "ShellScribe_PencilLead",
+      "ShellScribe_PencilWood",
+      "ShellScribe_ShellHood",
+      "ShellScribe"
+    ],
+    "meshes": 15,
+    "materials": 15,
+    "images": 15,
+    "textures": 15,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "reimport": {
+    "meshes": 15,
+    "triangle_mismatches": {}
+  }
+}

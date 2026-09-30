@@ -1,6 +1,7 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Economy = require(script.Parent.Economy)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Rules = {}
@@ -34,10 +35,27 @@ for _, entry in Economy.entries do
 		"Invalid rate/weight"
 	)
 	local band = bands[Catalog.byId[entry.id].rarity]
-	assert(band and entry.rate >= band[1] and entry.rate <= band[2], "Rate outside rarity band")
+	assert(Rarity.isValid(Catalog.byId[entry.id].rarity), "Invalid rarity")
+	-- Existing tuned bands stay enforced. Future tiers require explicit per-figure rates,
+	-- validated below against the canonical hierarchy; no rates or weights are synthesized.
+	assert(
+		not band or (entry.rate >= band[1] and entry.rate <= band[2]),
+		"Rate outside rarity band"
+	)
 	rates[entry.id] = entry.rate
 	local collection = Catalog.byId[entry.id].collection
 	totalWeights[collection] += entry.weight
+end
+local lowerMaximum = 0
+for _, rarity in Rarity.order do
+	local minimum, maximum = math.huge, 0
+	for _, entry in Economy.entries do
+		if Catalog.byId[entry.id].rarity == rarity then
+			minimum, maximum = math.min(minimum, entry.rate), math.max(maximum, entry.rate)
+		end
+	end
+	assert(minimum > lowerMaximum, "Rate violates rarity order")
+	lowerMaximum = math.max(lowerMaximum, maximum)
 end
 for _, totalWeight in totalWeights do
 	assert(totalWeight > 0 and totalWeight < math.huge, "Invalid collection weight total")

@@ -7,6 +7,7 @@ export type Render = {
 	anchors: { [string]: CFrame },
 	ids: { [string]: string? },
 	models: { [string]: Instance },
+	variants: { [string]: string },
 	standingScale: number?,
 }
 local FigureSlots = {}
@@ -24,6 +25,7 @@ function FigureSlots.new(
 		anchors = anchors,
 		ids = {},
 		models = {},
+		variants = {},
 		standingScale = standingScale,
 	}
 end
@@ -38,6 +40,7 @@ function FigureSlots.setAnchors(render: Render, anchors: { [string]: CFrame })
 			end
 			render.models[slot] = nil
 			render.ids[slot] = nil
+			render.variants[slot] = nil
 		elseif object and anchor ~= previous then
 			local delta = anchor * previous:Inverse()
 			if object:IsA("Model") then
@@ -56,7 +59,13 @@ function FigureSlots.render(render: Render, placements: { [string]: string })
 			id = nil
 		end
 		local old = render.models[slot]
-		if id == render.ids[slot] and (not id or (old and old.Parent == render.parent)) then
+		-- Rebuild when a production template replaces the placeholder for this figure.
+		local variant = if id then FigureModel.variant(id) else nil
+		if
+			id == render.ids[slot]
+			and variant == render.variants[slot]
+			and (not id or (old and old.Parent == render.parent))
+		then
 			continue
 		end
 		if old then
@@ -64,13 +73,14 @@ function FigureSlots.render(render: Render, placements: { [string]: string })
 			render.models[slot] = nil
 		end
 		render.ids[slot] = id
+		render.variants[slot] = variant
 		if id then
 			local ok, model = pcall(FigureModel.create, id, anchor)
 			local object: Instance
 			if ok then
 				-- Optional presentation scale and bottom alignment to the counter/shelf surface.
 				if render.standingScale then
-					model:ScaleTo(render.standingScale)
+					model:ScaleTo(model:GetScale() * render.standingScale)
 					local bounds, size = model:GetBoundingBox()
 					local lift = anchor.Position.Y - (bounds.Position.Y - size.Y / 2)
 					model:PivotTo(model:GetPivot() + Vector3.new(0, lift, 0))

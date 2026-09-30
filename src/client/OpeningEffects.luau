@@ -2,6 +2,8 @@
 local Config = require(script.Parent.OpeningConfig)
 local State = require(script.Parent.OpeningState)
 local Scope = require(script.Parent.OpeningScope)
+local Flight = require(script.Parent.OpeningFlight)
+local FlightEffects = require(script.Parent.OpeningFlightEffects)
 local Effects = {}
 export type Effects = {
 	update: (State.State, CFrame, Vector3, number) -> (),
@@ -176,33 +178,24 @@ function Effects.create(
 		beam.Parent = mote
 		table.insert(orbits, { part = mote, beam = beam })
 	end
-	local comet = part(flightGroup, "CometCore", CFrame.new(), Vector3.one * 0.25)
-	comet.Shape, comet.Material, comet.Color =
-		Enum.PartType.Ball, Enum.Material.Neon, Config.neutral
-	local aura = make(comet, "SoftCometAura", Config.effects.softTexture, 0.7)
-	aura.Rate, aura.Lifetime, aura.Speed, aura.LockedToPart =
-		16 * density, NumberRange.new(0.12, 0.2), NumberRange.new(0), true
-	local sparks = make(comet, "FlightSparks", Config.effects.texture, 0.07)
-	sparks.Rate, sparks.Lifetime = 14 * density, NumberRange.new(0.16, 0.3)
-	local attachment0, attachment1 = Instance.new("Attachment"), Instance.new("Attachment")
-	attachment0.Position, attachment1.Position =
-		Vector3.new(-profile.trailWidth / 2, 0, 0), Vector3.new(profile.trailWidth / 2, 0, 0)
-	attachment0.Parent, attachment1.Parent = comet, comet
-	local trail = Instance.new("Trail")
-	trail.Attachment0, trail.Attachment1 = attachment0, attachment1
-	trail.Lifetime, trail.MinLength, trail.FaceCamera = 0.22, 0.02, true
-	trail.Color, trail.LightEmission = ColorSequence.new(Config.neutral), 0.85
-	trail.Transparency = NumberSequence.new(0.25, 1)
-	trail.WidthScale = NumberSequence.new(1, 0)
-	trail.Enabled, trail.Parent = false, comet
-	local cometLight = Instance.new("PointLight")
-	cometLight.Range, cometLight.Brightness, cometLight.Color = 14, 0, Config.neutral
-	cometLight.Name, cometLight.Enabled, cometLight.Parent = "OpeningCometLight", false, comet
+	local flight = FlightEffects.create(flightGroup, profile, reduced, density)
+	local launchRing, destination = ring(flightGroup, 24), ring(flightGroup, 24)
+	local transformRings: { Ring } = {}
+	for _ = 1, profile.signature.transformRings do
+		table.insert(transformRings, ring(flightGroup, if mobile then 16 else 24))
+	end
 	local impactAnchor =
 		part(impactGroup, "RevealLight", CFrame.new(origin + Vector3.new(0, 1.1, 0)), Vector3.one)
 	local impact = make(impactAnchor, "ImpactSparks", Config.effects.texture, 0.13)
 	impact.Speed, impact.Drag, impact.Lifetime =
 		NumberRange.new(4, 8), 6, NumberRange.new(0.2, 0.42)
+	impact.SpreadAngle, impact.EmissionDirection = Vector2.new(85, 85), Enum.NormalId.Top
+	local impactCore = make(impactAnchor, "ContactPulse", Config.effects.softTexture, 2.4)
+	impactCore.Lifetime, impactCore.Speed = NumberRange.new(0.14), NumberRange.new(0)
+	local impactLight = Instance.new("PointLight")
+	impactLight.Name, impactLight.Range, impactLight.Enabled, impactLight.Brightness, impactLight.Parent =
+		"OpeningImpactLight", 12, false, 0, impactAnchor
+	local impactBurst, contactBurst = false, false
 	local revealAnchor = part(revealGroup, "RevealSparkleMount", impactAnchor.CFrame, Vector3.one)
 	local reveal = make(revealAnchor, "RevealSparkles", Config.effects.texture, 0.11)
 	reveal.Speed, reveal.Lifetime, reveal.Acceleration =
@@ -218,6 +211,9 @@ function Effects.create(
 		NumberSequenceKeypoint.new(1, 1),
 	})
 	local haloRing = ring(resultGroup, if mobile then 20 else 28)
+	local edgeHalo = if profile.signature.spectral or profile.signature.trailLayers > 1
+		then ring(resultGroup, if mobile then 20 else 28)
+		else nil
 	local impactRings: { Ring } = {}
 	for _ = 1, math.min(profile.rings, if reduced then 1 else Config.effects.maxRings) do
 		table.insert(impactRings, ring(impactGroup, if mobile then 16 else 24))
@@ -235,17 +231,16 @@ function Effects.create(
 	scope.add(function()
 		grade:Destroy()
 	end)
-	local color, secondary = Config.neutral, Config.neutral
+	local color = Config.neutral
 	local function tint(main: Color3, accent: Color3)
-		color, secondary = main, accent
-		if flightGroup.Parent then
-			comet.Color, cometLight.Color = accent, main
-			trail.Color = ColorSequence.new(accent, main)
-		end
-		for _, object in { aura, sparks, impact, reveal, halo } do
+		color = main
+		for _, object in { impact, reveal, halo } do
 			if object.Parent then
 				object.Color = ColorSequence.new(main, accent)
 			end
+		end
+		if impactCore.Parent then
+			impactCore.Color = ColorSequence.new(accent)
 		end
 	end
 	local function burst(object: ParticleEmitter, count: number)
@@ -276,6 +271,9 @@ function Effects.create(
 			elseif object:IsA("BasePart") then
 				object.Transparency = 1
 			end
+			if object:IsA("BillboardGui") then
+				object.Enabled = false
+			end
 		end
 		haloRing.show(CFrame.new(), 1, color, 1)
 		bloom.Intensity, bloom.Enabled, grade.Enabled = 0, false, false
@@ -301,9 +299,8 @@ function Effects.create(
 			if not scope.isAlive() or suspended or currentPhase ~= "RarityTease" then
 				return
 			end
-			tint(beat.color, beat.secondary)
 			if beat.shatter then
-				burst(sparks, profile.particles)
+				flight.shatter()
 			end
 		end,
 		enter = function(phase)
@@ -352,7 +349,7 @@ function Effects.create(
 			elseif phase == "Break" then
 				burst(seam, 8)
 			elseif phase == "Impact" then
-				burst(impact, profile.particles)
+				tint(profile.tint, profile.accent)
 			elseif phase == "Silhouette" or phase == "Result" then
 				-- Contrast: no flight/impact debris survives into the silhouette beat.
 				clear()
@@ -367,7 +364,7 @@ function Effects.create(
 			end
 			local phase: State.Phase = state.phase
 			local p = State.progress(state)
-			local lighting = Config.lightState(phase, p)
+			local lighting = Config.lightState(phase, p, state.elapsed, profile)
 			local boxPhase = phase == "Arrival"
 				or phase == "Anticipation"
 				or phase == "Charge"
@@ -375,20 +372,26 @@ function Effects.create(
 				or phase == "Await"
 				or phase == "Break"
 			local charging = phase == "Charge" or phase == "Shake" or phase == "Await"
-			local flying = phase == "Flight"
-				or phase == "RarityTease"
-				or (phase == "Break" and state.elapsed >= 0.2)
 			local showing = phase == "Silhouette"
 				or phase == "Reveal"
 				or phase == "Result"
 				or phase == "Closing"
+			local sample = Flight.sample(state, profile)
+			if phase == "RarityTease" then
+				tint(sample.color, sample.accent)
+			end
 
 			bloom.Enabled, grade.Enabled = phase ~= "Enter", phase ~= "Enter"
 			bloom.Intensity = (if reduced then 0.08 else profile.bloom) * lighting.bloom
 			grade.Contrast = if phase == "Impact" then (1 - p) * 0.06 else 0
-			grade.TintColor =
-				Color3.new(1, 1, 1)
-					:Lerp(if showing or phase == "Impact" then color else Config.neutral, 0.035)
+			grade.TintColor = Color3.new(1, 1, 1):Lerp(
+				if showing
+						or phase == "Impact"
+						or phase == "RarityTease"
+					then color
+					else Config.neutral,
+				0.035
+			)
 			dust.Enabled = boxPhase or showing
 			if boxGroup.Parent then
 				motif.Enabled = boxPhase and phase ~= "Break"
@@ -413,12 +416,36 @@ function Effects.create(
 				end
 			end
 			if flightGroup.Parent then
-				comet.CFrame = CFrame.new(cometPosition)
-				comet.Transparency = if flying then 0 else 1
-				cometLight.Brightness, cometLight.Enabled =
-					if flying then lighting.comet else 0, flying
-				trail.Enabled, aura.Enabled, sparks.Enabled =
-					flying and not reduced, flying, flying and not reduced
+				flight.update(state, sample, camera)
+				launchRing.show(
+					CFrame.new(origin + Vector3.new(0, Config.stage.boxY + 1.2, 0))
+						* CFrame.Angles(math.pi / 2, 0, 0),
+					0.3 + sample.launch * 1.7,
+					Config.neutral,
+					if phase == "Break" and sample.launch > 0 then 0.5 + sample.launch * 0.5 else 1
+				)
+				for i, wave in transformRings do
+					local strength = sample.waves[i] or 0
+					wave.show(
+						CFrame.new(cometPosition),
+						(0.7 + (1 - strength) * 1.8) * (if i == 1 then 1 else 0.72),
+						if i == 1
+							then sample.color
+							elseif profile.signature.spectral then sample.highlight
+							else sample.accent,
+						if phase == "RarityTease"
+							then 1 - strength * (if reduced then 0.2 else 0.45)
+							else 1
+					)
+				end
+				destination.show(
+					CFrame.new(origin + Vector3.new(0, 0.83, 0)) * CFrame.Angles(math.pi / 2, 0, 0),
+					2.35,
+					color,
+					if sample.dive > 0.45 and phase == "RarityTease"
+						then 0.8 - sample.dive * 0.16
+						else 1
+				)
 			end
 			halo.Enabled = showing or phase == "Impact"
 			local haloAlpha = if showing
@@ -426,15 +453,53 @@ function Effects.create(
 				elseif phase == "Impact" then 0.4 + p * 0.25
 				else 1
 			haloRing.show(CFrame.new(origin + Vector3.new(0, 2.45, 1.35)), 2.05, color, haloAlpha)
+			if edgeHalo then
+				edgeHalo.show(
+					CFrame.new(origin + Vector3.new(0, 2.45, 1.32)),
+					2.17,
+					if profile.signature.spectral then profile.highlight else profile.accent,
+					if showing or phase == "Impact" then 0.78 else 1
+				)
+			end
+			if showing and profile.signature.spectral then
+				dust.Color = ColorSequence.new(profile.accent, profile.highlight)
+			end
 			if impactGroup.Parent then
+				local elapsed = state.elapsed
+				if phase == "Impact" then
+					if not contactBurst and elapsed >= Config.flight.impactPulseAt then
+						contactBurst = true
+						burst(impactCore, 1)
+					end
+					if not impactBurst and elapsed >= Config.flight.impactBurstAt then
+						impactBurst = true
+						burst(impact, profile.particles)
+					end
+					impactLight.Color, impactLight.Brightness, impactLight.Enabled =
+						color, lighting.comet, lighting.comet > 0
+					if elapsed >= Config.flight.impactCalmAt then
+						impact:Clear()
+						impactCore:Clear()
+						impactLight.Enabled, impactLight.Brightness = false, 0
+					end
+				end
 				for i, value in impactRings do
-					local progress = math.clamp(p * 1.3 - (i - 1) * 0.12, 0, 1)
+					local age = elapsed - Config.flight.impactRingAt - (i - 1) * 0.025
+					local progress = math.clamp(
+						age / (Config.flight.impactCalmAt - Config.flight.impactRingAt),
+						0,
+						1
+					)
 					value.show(
 						CFrame.new(origin + Vector3.new(0, 0.82 + i * 0.015, 0))
 							* CFrame.Angles(math.pi / 2, 0, 0),
 						0.35 + progress * (2.7 + i * 0.4),
-						secondary,
-						if phase == "Impact" then 0.25 + progress * 0.75 else 1
+						profile.signature.ringColors[(i - 1) % #profile.signature.ringColors + 1],
+						if phase == "Impact"
+								and age >= 0
+								and elapsed < Config.flight.impactCalmAt
+							then 0.25 + progress * 0.75
+							else 1
 					)
 				end
 			end

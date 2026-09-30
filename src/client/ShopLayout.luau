@@ -20,7 +20,7 @@ export type Geometry = {
 	canvasHeight: number,
 }
 
-function Layout.calculate(width: number, height: number): Geometry
+function Layout.calculate(width: number, height: number, rarityCount: number?): Geometry
 	local compact = width < 760 or height < 460
 	local inset = 12
 	local sidebarWidth = if compact then 0 else math.clamp(math.floor(width * 0.16), 166, 206)
@@ -38,8 +38,10 @@ function Layout.calculate(width: number, height: number): Geometry
 	local infoX = if sideBySide then heroWidth + 12 else 0
 	local infoY = if sideBySide then detailY else detailY + heroHeight + 12
 	local infoWidth = if sideBySide then detailWidth - infoX else detailWidth
-	local infoHeight =
-		math.max(Layout.details(infoWidth).height, if sideBySide then heroHeight else 0)
+	local infoHeight = math.max(
+		Layout.details(infoWidth, rarityCount).height,
+		if sideBySide then heroHeight else 0
+	)
 	local canvasHeight = math.max(contentHeight, infoY + infoHeight)
 	return {
 		compact = compact,
@@ -62,15 +64,18 @@ function Layout.calculate(width: number, height: number): Geometry
 	}
 end
 
-function Layout.details(width: number)
+function Layout.details(width: number, rarityCount: number?)
 	local narrow = width < 480
 	local wide = width >= 640
 	local inner = math.max(1, width - 40)
 	local figuresWidth = if wide then math.floor(inner * 0.64) - 10 else inner
+	local oddsHeight = math.max(132, 36 + (rarityCount or 3) * 29)
+	local extra = oddsHeight - 132
 	return {
 		wide = wide,
 		narrow = narrow,
-		height = if narrow then 560 elseif wide then 400 else 416,
+		height = (if narrow then 560 elseif wide then 400 else 416) + extra,
+		oddsHeight = oddsHeight,
 		figuresX = 20,
 		figuresY = 132,
 		figuresWidth = figuresWidth,
@@ -82,7 +87,7 @@ function Layout.details(width: number)
 			elseif narrow then inner
 			else math.floor(inner * 0.43),
 		purchaseX = if wide or narrow then 20 else math.floor(inner * 0.43) + 38,
-		purchaseY = if wide then 290 elseif narrow then 398 else 250,
+		purchaseY = if wide then 290 + extra elseif narrow then 398 + extra else 250,
 		purchaseWidth = if wide or narrow then inner else inner - math.floor(inner * 0.43) - 18,
 		purchaseHeight = if wide then 104 else 148,
 	}

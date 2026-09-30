@@ -858,6 +858,29 @@ check(
 	Engine.figureCreates == before + 1 and plot.shelves.models[secondAnchor] == unchangedModel,
 	"single edit touches one figure only"
 )
+local pearls = 0
+for _, render in { plot.display, plot.shelves } do
+	for _, id in render.ids do
+		if id == "tide.pearl" then
+			pearls += 1
+		end
+	end
+end
+Engine.figureVariants["tide.pearl"] = "production"
+Plot.render(plot, state)
+check(
+	pearls > 0
+		and Engine.figureCreates == before + 1 + pearls
+		and plot.shelves.models[secondAnchor] == unchangedModel,
+	"a ready production template rebuilds only the figures that use it"
+)
+Plot.render(plot, state)
+check(
+	Engine.figureCreates == before + 1 + pearls,
+	"production figures persist across unchanged snapshots"
+)
+Engine.figureVariants["tide.pearl"] = nil
+Plot.render(plot, state)
 for index = 4, 5 do
 	table.insert(state.shelves.units, {
 		id = "shelf:" .. index,

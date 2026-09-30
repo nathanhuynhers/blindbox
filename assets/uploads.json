@@ -115,5 +115,59 @@
     },
     "sha256": "9bad381e0e12ef02115db560681b360db90af192d7456b5e43f5ec6a73a8cb0d",
     "source": "assets/models/blind-box/blind_box_base.glb"
+  },
+  "Models.TidepoolTales.BubbleBean": {
+    "assetId": "133206366502054",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "89de29a2b06c5ecabf3300f68c144653996bf444c32298917d7b45a59e03a0df",
+    "source": "assets/figures/tidepool-tales/bubble-bean/model/bubble_bean_roblox.glb"
+  },
+  "Models.TidepoolTales.CoralCuddle": {
+    "assetId": "97988350261409",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "36ba754ecb24c76857337b4f315a707994e4a3dddb26b5642cb5d43923b35362",
+    "source": "assets/figures/tidepool-tales/coral-cuddle/model/coral_cuddle_roblox.glb"
+  },
+  "Models.TidepoolTales.JellyJive": {
+    "assetId": "93788585590607",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "aa756b8eef0226aa7fa94cf3cf7001c0ecf3a9df8b2d06fb47a8c6b827412c7d",
+    "source": "assets/figures/tidepool-tales/jelly-jive/model/jelly_jive_roblox.glb"
+  },
+  "Models.TidepoolTales.PearlRegent": {
+    "assetId": "140650013990266",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "c1558ccff11e42415e0861b878230b3dfe1bdf6d60cb86345a72023067917cbd",
+    "source": "assets/figures/tidepool-tales/pearl-regent/model/pearl_regent_roblox.glb"
+  },
+  "Models.TidepoolTales.RippleRay": {
+    "assetId": "85804505305548",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "0dee8d2a130ba0fd8ac110916f11859c36d1f87b67321fe41eb2f335417d99c1",
+    "source": "assets/figures/tidepool-tales/ripple-ray/model/ripple_ray_roblox.glb"
+  },
+  "Models.TidepoolTales.ShellScribe": {
+    "assetId": "96721580926536",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f2e29a1c52a9d574e0cddac82da09af0838cddaa51652a0480ec7cc5440e10e7",
+    "source": "assets/figures/tidepool-tales/shell-scribe/model/shell_scribe_roblox.glb"
   }
 }

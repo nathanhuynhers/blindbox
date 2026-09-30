@@ -1,8 +1,71 @@
 --!strict
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Catalog = require(script.Parent.Catalog)
 local FigureModel = {}
+
+-- A production template published by ModelAssets, once all of its parts have replicated.
+local function template(id: string): Model?
+	local folder = ReplicatedStorage:FindFirstChild("ProductionModels")
+	local figures = folder and folder:FindFirstChild("Figures")
+	local model = figures and figures:FindFirstChild(id)
+	if not model or not model:IsA("Model") then
+		return nil
+	end
+	local count = 0
+	for _, descendant in model:GetDescendants() do
+		if descendant:IsA("BasePart") then
+			count += 1
+		end
+	end
+	return if count > 0 and count == model:GetAttribute("ExpectedPartCount") then model else nil
+end
+
+-- Which build create() would return now; callers rebuild when this changes.
+function FigureModel.variant(id: string): string
+	return if template(id) then "production" else "placeholder"
+end
+
+-- Calls back whenever production figure templates may have changed. Returns a disconnect.
+function FigureModel.onTemplatesChanged(callback: () -> ()): () -> ()
+	local connections: { RBXScriptConnection } = {}
+	local function watch(folder: Instance)
+		table.insert(
+			connections,
+			folder:GetAttributeChangedSignal("FigureRevision"):Connect(callback)
+		)
+		table.insert(connections, folder.DescendantAdded:Connect(callback))
+	end
+	local existing = ReplicatedStorage:FindFirstChild("ProductionModels")
+	if existing then
+		watch(existing)
+	end
+	table.insert(
+		connections,
+		ReplicatedStorage.ChildAdded:Connect(function(child)
+			if child.Name == "ProductionModels" then
+				watch(child)
+				callback()
+			end
+		end)
+	)
+	return function()
+		for _, connection in connections do
+			connection:Disconnect()
+		end
+		table.clear(connections)
+	end
+end
+
 function FigureModel.create(id: string, at: CFrame): Model
 	local definition = Catalog.byId[id]
+	local production = template(id)
+	if production then
+		-- Templates are normalized to face -Z with their pivot at the centre of the base.
+		local model = production:Clone()
+		model.Name = definition.name
+		model:PivotTo(at)
+		return model
+	end
 	local model = Instance.new("Model")
 	model.Name = definition.name
 	local function ball(name: string, size: Vector3, offset: Vector3, color: Color3): Part

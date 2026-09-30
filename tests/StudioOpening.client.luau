@@ -11,7 +11,9 @@ assert(not playerGui:FindFirstChild("OpeningPreview"), "Exit the existing fixtur
 assert(not playerGui:FindFirstChild("BlindboxOpening"), "Finish the real opening first")
 local source = player.PlayerScripts:WaitForChild("Client")
 local Controller = require(source:WaitForChild("OpeningController") :: ModuleScript)
+local Config = require(source:WaitForChild("OpeningConfig") :: ModuleScript)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local main = playerGui:WaitForChild("PocketGrove") :: ScreenGui
 local wasEnabled = main.Enabled
 main.Enabled = false
@@ -35,6 +37,8 @@ padding.Parent = panel
 local connections: { RBXScriptConnection } = {}
 local jobs: { thread } = {}
 local reduced, fresh, closed, runningLoop = false, true, false, false
+local previewRarity: Rarity.Id? = nil
+local rarityIndex = 0
 local skipPhases = {
 	"Manual",
 	"Anticipation",
@@ -44,7 +48,10 @@ local skipPhases = {
 	"Break",
 	"Flight",
 	"RarityTease",
+	"Rarity hold",
+	"Dive",
 	"Impact",
+	"Impact peak",
 	"Silhouette",
 	"Reveal",
 }
@@ -69,7 +76,7 @@ local function button(text: string, callback: () -> ()): TextButton
 	table.insert(connections, object.Activated:Connect(callback))
 	return object
 end
-local function present(id: string, direct: boolean?)
+local function present(id: string, direct: boolean?, override: Rarity.Id?)
 	disconnectPhase()
 	assert(Catalog.byId[id], "Use an existing catalog ID")
 	local result = {
@@ -79,14 +86,44 @@ local function present(id: string, direct: boolean?)
 		quantity = if fresh then 1 else 5,
 		direct = direct == true,
 	}
-	assert(controller.present(result, reduced), "Opening should start")
+	local presentation = override or previewRarity
+	assert(controller.present(result, reduced, presentation), "Opening should start")
 	assert(not controller.present(result, reduced), "Concurrent/replayed opening must be rejected")
 	local opening = playerGui:FindFirstChild("BlindboxOpening")
 	if opening and skipIndex > 1 then
+		local selected = skipPhases[skipIndex]
+		local profile = Config.profile(presentation or Catalog.byId[id].rarity)
+		local target = if selected == "Rarity hold" or selected == "Dive"
+			then "RarityTease"
+			elseif selected == "Impact peak" then "Impact"
+			else selected
+		local delay = if selected == "Rarity hold"
+			then profile.flight.transition + 0.05
+			elseif selected == "Dive" then (if reduced
+				then profile.timing.rarityReduced
+				else profile.timing.rarityTease) * 0.9
+			elseif selected == "Impact peak" then Config.flight.impactPeakAt
+			else 0
 		phaseConnection = opening:GetAttributeChangedSignal("Phase"):Connect(function()
-			if opening:GetAttribute("Phase") == skipPhases[skipIndex] then
+			if opening:GetAttribute("Phase") == target then
 				disconnectPhase()
-				controller.skip()
+				if delay == 0 then
+					controller.skip()
+				else
+					-- Test-only delay belongs to this fixture and this exact opening/phase.
+					table.insert(
+						jobs,
+						task.delay(delay, function()
+							if
+								not closed
+								and opening.Parent
+								and opening:GetAttribute("Phase") == target
+							then
+								controller.skip()
+							end
+						end)
+					)
+				end
 			end
 		end)
 	end
@@ -105,6 +142,67 @@ do
 		present(fixture[2])
 	end)
 end
+local rarityButton: TextButton? = nil
+rarityButton = button("Presentation rarity: Catalog (click to cycle)", function()
+	rarityIndex = (rarityIndex + 1) % (#Rarity.order + 1)
+	previewRarity = Rarity.order[rarityIndex]
+	if rarityButton then
+		rarityButton.Text = "Presentation rarity: "
+			.. (previewRarity or "Catalog")
+			.. " (preview only)"
+	end
+end)
+button("Compare all five tiers: manually Open / Continue each", function()
+	if runningLoop or controller.isActive() then
+		return
+	end
+	runningLoop, panel.Visible = true, false
+	table.insert(
+		jobs,
+		task.spawn(function()
+			local ok, reason = pcall(function()
+				for _, rarity in Rarity.order do
+					if closed then
+						return
+					end
+					print(
+						"Presentation-only comparison: " .. rarity .. " / existing Pebble Pip model"
+					)
+					present("grove.pebble", false, rarity)
+					local seenResult, deadline = false, os.clock() + 180
+					while controller.isActive() and not closed do
+						assert(os.clock() < deadline, "Timed out waiting for Open/Continue")
+						local opening = playerGui:FindFirstChild("BlindboxOpening")
+						if opening and opening:GetAttribute("Phase") == "Result" then
+							local label = opening:FindFirstChild("RarityAndQuantity", true)
+							assert(
+								label
+									and label:IsA("TextLabel")
+									and string.find(label.Text, rarity, 1, true),
+								"Preview result rarity mismatch"
+							)
+							seenResult = true
+						end
+						task.wait(0.05)
+					end
+					if closed then
+						return
+					end
+					assert(seenResult, "Comparison interrupted before Result")
+				end
+				print("PASS: five presentation tiers; no catalog edits, purchases or grants")
+			end)
+			controller.cancel()
+			runningLoop = false
+			if not closed then
+				panel.Visible = true
+			end
+			if not ok then
+				warn(reason)
+			end
+		end)
+	)
+end)
 local motionButton: TextButton? = nil
 motionButton = button("Reduced motion: OFF", function()
 	reduced = not reduced

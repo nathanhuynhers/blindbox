@@ -1,0 +1,275 @@
+{
+  "figure": "CoralCuddle",
+  "title": "Coral Cuddle",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.3644,
+    1.8726,
+    3.0269
+  ],
+  "meshes": 11,
+  "triangles": 41290,
+  "materials": [
+    "CoralCuddle_Blush",
+    "CoralCuddle_Coral",
+    "CoralCuddle_CoralDots",
+    "CoralCuddle_Cream",
+    "CoralCuddle_EyeGloss",
+    "CoralCuddle_EyeShine",
+    "CoralCuddle_Mouth",
+    "CoralCuddle_Starfish",
+    "CoralCuddle_StarfishDots"
+  ],
+  "components": {
+    "CoralCuddle_CoralCrown": {
+      "tris": 16000,
+      "verts": 8002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.02829
+    },
+    "CoralCuddle_CoralDots": {
+      "tris": 3500,
+      "verts": 1820,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00742
+    },
+    "CoralCuddle_Face": {
+      "tris": 2400,
+      "verts": 1202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06092
+    },
+    "CoralCuddle_Body": {
+      "tris": 8996,
+      "verts": 4500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.71804
+    },
+    "CoralCuddle_Belly": {
+      "tris": 1398,
+      "verts": 701,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02416
+    },
+    "CoralCuddle_Starfish": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04543
+    },
+    "CoralCuddle_StarfishDots": {
+      "tris": 1800,
+      "verts": 932,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00096
+    },
+    "CoralCuddle_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0054
+    },
+    "CoralCuddle_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00014
+    },
+    "CoralCuddle_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00161
+    },
+    "CoralCuddle_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    }
+  },
+  "build": {
+    "CoralCuddle_CoralCrown": {
+      "active_blocks": 6831,
+      "blocks": 18000,
+      "grid": [
+        241,
+        193,
+        201
+      ],
+      "raw_tris": 332848,
+      "removed_faces": 0,
+      "seconds": 54.5
+    },
+    "CoralCuddle_CoralDots": {
+      "active_blocks": 4088,
+      "blocks": 125788,
+      "grid": [
+        473,
+        329,
+        417
+      ],
+      "raw_tris": 84208,
+      "removed_faces": 0,
+      "seconds": 48.3
+    },
+    "CoralCuddle_Face": {
+      "active_blocks": 2307,
+      "blocks": 7098,
+      "grid": [
+        209,
+        105,
+        169
+      ],
+      "raw_tris": 120132,
+      "removed_faces": 0,
+      "seconds": 6.3
+    },
+    "CoralCuddle_Body": {
+      "active_blocks": 3060,
+      "blocks": 7182,
+      "grid": [
+        145,
+        153,
+        169
+      ],
+      "raw_tris": 143350,
+      "removed_faces": 0,
+      "seconds": 18.0
+    },
+    "CoralCuddle_Belly": {
+      "active_blocks": 1637,
+      "blocks": 4320,
+      "grid": [
+        161,
+        97,
+        145
+      ],
+      "raw_tris": 77988,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "CoralCuddle_Starfish": {
+      "active_blocks": 1566,
+      "blocks": 4400,
+      "grid": [
+        161,
+        89,
+        161
+      ],
+      "raw_tris": 56460,
+      "removed_faces": 0,
+      "seconds": 3.6
+    },
+    "CoralCuddle_StarfishDots": {
+      "active_blocks": 1140,
+      "blocks": 10206,
+      "grid": [
+        217,
+        113,
+        217
+      ],
+      "raw_tris": 23872,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "CoralCuddle_Eyes": {
+      "active_blocks": 872,
+      "blocks": 4032,
+      "grid": [
+        193,
+        113,
+        97
+      ],
+      "raw_tris": 28244,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "CoralCuddle_EyeShine": {
+      "active_blocks": 286,
+      "blocks": 2376,
+      "grid": [
+        193,
+        89,
+        73
+      ],
+      "raw_tris": 3400,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "CoralCuddle_Cheeks": {
+      "active_blocks": 542,
+      "blocks": 3300,
+      "grid": [
+        241,
+        89,
+        81
+      ],
+      "raw_tris": 13940,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "CoralCuddle_Mouth": {
+      "active_blocks": 267,
+      "blocks": 1152,
+      "grid": [
+        97,
+        97,
+        65
+      ],
+      "raw_tris": 4724,
+      "removed_faces": 0,
+      "seconds": 0.3
+    }
+  },
+  "glb": {
+    "bytes": 927076,
+    "nodes": [
+      "CoralCuddle_Belly",
+      "CoralCuddle_Body",
+      "CoralCuddle_Cheeks",
+      "CoralCuddle_CoralCrown",
+      "CoralCuddle_CoralDots",
+      "CoralCuddle_Eyes",
+      "CoralCuddle_EyeShine",
+      "CoralCuddle_Face",
+      "CoralCuddle_Mouth",
+      "CoralCuddle_Starfish",
+      "CoralCuddle_StarfishDots",
+      "CoralCuddle"
+    ],
+    "meshes": 11,
+    "materials": 9,
+    "images": 9,
+    "textures": 9,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "reimport": {
+    "meshes": 11,
+    "triangle_mismatches": {}
+  }
+}
