@@ -248,7 +248,7 @@ def bubble_bean():
     ]
     comps += face(N, torso, -0.3, 0.33, 1.3, (0.1, 0.132), (0.0, 1.14, 0.075, 58, 0.015),
                   0.49, 1.12, (0.115, 0.075), fm)
-    return assemble(N, "Bubble Bean", "Common", comps, {}, ((-1.6, -1.4, -0.3), (1.6, 1.4, 3.4)))
+    return assemble(N, "Bubble Bean", "Common", comps, {}, ((-1.6, -1.4, -0.3), (1.6, 1.4, 3.4)), catalog="tide.bubble")
 
 
 # ---------------------------------------------------------------- 2. Coral Cuddle
@@ -373,7 +373,7 @@ def coral_cuddle():
     ]
     comps += face(N, face_surface, -0.3, 0.25, 1.55, (0.085, 0.112), (0.0, 1.41, 0.06, 58, 0.013),
                   0.39, 1.39, (0.095, 0.064), fm)
-    return assemble(N, "Coral Cuddle", "Common", comps, {}, ((-1.5, -1.2, -0.3), (1.5, 1.4, 3.4)))
+    return assemble(N, "Coral Cuddle", "Common", comps, {}, ((-1.5, -1.2, -0.3), (1.5, 1.4, 3.4)), catalog="tide.coral")
 
 
 # ---------------------------------------------------------------- 3. Shell Scribe
@@ -506,7 +506,7 @@ def shell_scribe():
     ]
     comps += face(N, head, -0.35, 0.235, 1.66, (0.07, 0.095), (0.0, 1.53, 0.055, 58, 0.012),
                   0.4, 1.52, (0.09, 0.06), fm)
-    return assemble(N, "Shell Scribe", "Common", comps, {}, ((-1.4, -1.2, -0.3), (1.4, 1.4, 3.3)))
+    return assemble(N, "Shell Scribe", "Common", comps, {}, ((-1.4, -1.2, -0.3), (1.4, 1.4, 3.3)), catalog="tide.shell")
 
 
 # ---------------------------------------------------------------- 4. Jelly Jive
@@ -564,7 +564,7 @@ def jelly_jive():
     ]
     comps += face(N, bell, -0.4, 0.3, 1.18, (0.09, 0.118), None, 0.49, 1.04, (0.11, 0.072), fm,
                   open_mouth=(0.0, 1.03, 0.1, 0.085))
-    return assemble(N, "Jelly Jive", "Uncommon", comps, {}, ((-1.5, -1.2, -0.3), (1.5, 1.2, 2.6)))
+    return assemble(N, "Jelly Jive", "Uncommon", comps, {}, ((-1.5, -1.2, -0.3), (1.5, 1.2, 2.6)), catalog="tide.jelly")
 
 
 # ---------------------------------------------------------------- 5. Ripple Ray
@@ -678,7 +678,7 @@ def ripple_ray():
     ]
     comps += face(N, lambda p: torso(p) - 0.012, -0.3, 0.29, 0.78, (0.095, 0.122), (0.0, 0.63, 0.065, 58, 0.014),
                   0.48, 0.62, (0.105, 0.07), fm)
-    return assemble(N, "Ripple Ray", "Uncommon", comps, {}, ((-2.3, -1.2, -0.3), (2.3, 1.7, 2.4)))
+    return assemble(N, "Ripple Ray", "Uncommon", comps, {}, ((-2.3, -1.2, -0.3), (2.3, 1.7, 2.4)), catalog="tide.ray")
 
 
 # ---------------------------------------------------------------- 6. Pearl Regent
@@ -791,7 +791,7 @@ def pearl_regent():
     ]
     comps += face(N, head, -0.7, 0.245, 1.9, (0.075, 0.1), (0.0, 1.77, 0.058, 58, 0.013),
                   0.42, 1.75, (0.1, 0.066), fm)
-    return assemble(N, "Pearl Regent", "Rare", comps, {}, ((-1.8, -1.6, -0.3), (1.8, 1.4, 3.6)))
+    return assemble(N, "Pearl Regent", "Rare", comps, {}, ((-1.8, -1.6, -0.3), (1.8, 1.4, 3.6)), catalog="tide.pearl")
 
 
 FIGURES = {

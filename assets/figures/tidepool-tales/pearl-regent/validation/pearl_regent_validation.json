@@ -248,5 +248,9 @@
   "reimport": {
     "meshes": 10,
     "triangle_mismatches": {}
-  }
+  },
+  "catalog": "tide.pearl",
+  "root": "PearlRegent",
+  "face": "PearlRegent_Eyes",
+  "glass": []
 }

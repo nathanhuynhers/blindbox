@@ -28,19 +28,19 @@ Per figure folder (`<slug>/`):
 
 ## How the figures are built
 
-The models are generated reproducibly by [generator/](generator/). `figures.py` defines each figure
-as signed-distance fields (smooth unions of ellipsoids, tapered tubes and rounded boxes; sculpted
+The models are generated reproducibly: [figures.py](figures.py) defines each figure as
+signed-distance fields (smooth unions of ellipsoids, tapered tubes and rounded boxes; sculpted
 scallop ribs; coral branches). Faces, bellies, spots, cheeks and trims are thin skins that conform
-to the underlying surface rather than floating decals. `build.py` runs inside Blender 5.2: it meshes
-each part with OpenVDB (bundled with Blender), collapse-decimates it to a per-part triangle budget,
-grounds the figure, assigns materials, exports GLB, re-imports it and renders.
+to the underlying surface rather than floating decals. The shared tooling in
+[tools/figures/](../../../tools/figures/) meshes each part with OpenVDB inside Blender 5.2,
+decimates it to a per-part budget, exports and re-imports the GLB, renders, and publishes.
 
 ```
-blender -b --factory-startup --python assets/figures/tidepool-tales/generator/build.py -- bubble-bean final
+python tools/figures/publish.py tidepool-tales --build
 ```
 
-`preview` instead of `final` writes a quick four-view contact sheet to `generator/_preview/`
-(scratch, safe to delete). `x lineup` renders the six-figure lineup from the production `.blend` files.
+See the [figure collection runbook](../../../docs/FIGURE_COLLECTION_RUNBOOK.md) for previews and
+single-figure builds.
 
 ## Geometry checks (all six)
 
@@ -50,14 +50,15 @@ blender -b --factory-startup --python assets/figures/tidepool-tales/generator/bu
 - Smooth shading, consistent outward normals, identity transforms, ground pivot at Z = 0 on the
   figure's centreline.
 - GLB re-import: mesh count and per-mesh triangle counts match exactly for every figure.
-- Parts intentionally interpenetrate (limbs into bodies, skins over surfaces), as Pebble Pip's do.
+- Parts intentionally interpenetrate (limbs into bodies, skins over surfaces).
   Nothing floats: the bubble cluster, starfish, book, pencil, crown and scepter all intersect
   their supporting parts.
 
 ## Materials
 
-The Pebble Pip color fix is followed: every material has an embedded albedo PNG wired to Base
-Color, UV0 on every mesh, and white base-color multipliers. The GLBs use **no glTF extensions**.
+Every material has an embedded albedo PNG wired to Base Color, UV0 on every mesh, and white
+base-color multipliers, because Studio imports factor-only glTF colors near-white. The GLBs use
+**no glTF extensions**.
 
 - Flat colors use a 16×4 swatch. Gradients (Shell Scribe's hood, Jelly Jive's bell, Pearl
   Regent's shell) use a 64×4 ramp with UVs mapped along height or distance from the scallop hinge.
@@ -70,9 +71,9 @@ Color, UV0 on every mesh, and white base-color multipliers. The GLBs use **no gl
 
 ## Axes and scale
 
-Blender: forward -Y, up +Z, 1 unit = 1 stud. The GLB uses glTF Y-up (forward +Z). As with Pebble Pip,
-check facing after import and, if needed, rotate the whole Model 180° about Y around the ground
-pivot. Final shelf and display scale is a Studio acceptance decision.
+Blender: forward -Y, up +Z, 1 unit = 1 stud. The GLB uses glTF Y-up (forward +Z). No manual
+rotation or scaling is needed in Studio: at runtime `ModelAssets` turns each figure so its eyes face
+-Z, applies the uniform `FigureAssets.scale` (0.8), and pivots it at the centre of its base.
 
 ## Known differences from the sheets
 

@@ -9,6 +9,8 @@
   These documents are proposals, not evidence of implemented features or authorization to
   build future milestones. Implement only the task authorized by the user; preserve the
   distinction between confirmed direction, prototype defaults, and unresolved design choices.
+- Before creating, revising, uploading or wiring up 3D figures or a figure collection, read
+  [the figure collection runbook](docs/FIGURE_COLLECTION_RUNBOOK.md) and follow it.
 
 ## Before changing code
 

@@ -1,5 +1,8 @@
 # Figure Production Workflow
 
+> For the concrete, working process used today (character sheets to uploaded, wired figures), follow
+> [FIGURE_COLLECTION_RUNBOOK.md](FIGURE_COLLECTION_RUNBOOK.md). This document describes the long-term goal.
+
 This document defines the intended end-to-end workflow for producing collectible figures for the Blind Box game.
 
 The goal is to keep **art direction and approval human-controlled** while automating the repetitive technical work between Blender and Roblox.

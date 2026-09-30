@@ -271,5 +271,9 @@
   "reimport": {
     "meshes": 11,
     "triangle_mismatches": {}
-  }
+  },
+  "catalog": "tide.coral",
+  "root": "CoralCuddle",
+  "face": "CoralCuddle_Eyes",
+  "glass": []
 }

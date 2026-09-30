@@ -29,8 +29,10 @@ Dry-run validation checks the GLB 2.0 container and every declared semantic node
 All six Tidepool Tales figures are uploaded (`Models.TidepoolTales.*`, aliases `bubble_bean`,
 `coral_cuddle`, `shell_scribe`, `jelly_jive`, `ripple_ray`, `pearl_regent`) and adopted at runtime
 through `src/shared/FigureAssets.luau`; see the
-[Tidepool Tales receipt](../assets/figures/tidepool-tales/PRODUCTION.md). Adding another production
-figure means a manifest entry, an upload, and a `FigureAssets` entry keyed by its catalog ID.
+[Tidepool Tales receipt](../assets/figures/tidepool-tales/PRODUCTION.md). Figures are published with
+`python tools/figures/publish.py <collection> --build`, which gates the build, adds the manifest
+entries, uploads, and regenerates `src/shared/FigureAssetEntries.luau`; see the
+[figure collection runbook](FIGURE_COLLECTION_RUNBOOK.md).
 
 The first production figure, Pebble Pip, is prepared under
 `assets/figures/pocket-grove/pebble-pip/model/pebble_pip_roblox.glb` with alias

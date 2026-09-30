@@ -207,5 +207,9 @@
   "reimport": {
     "meshes": 8,
     "triangle_mismatches": {}
-  }
+  },
+  "catalog": "tide.jelly",
+  "root": "JellyJive",
+  "face": "JellyJive_Eyes",
+  "glass": []
 }

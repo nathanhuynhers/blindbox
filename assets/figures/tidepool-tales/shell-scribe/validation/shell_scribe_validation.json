@@ -361,5 +361,9 @@
   "reimport": {
     "meshes": 15,
     "triangle_mismatches": {}
-  }
+  },
+  "catalog": "tide.shell",
+  "root": "ShellScribe",
+  "face": "ShellScribe_Eyes",
+  "glass": []
 }

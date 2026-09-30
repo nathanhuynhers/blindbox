@@ -249,5 +249,11 @@
   "reimport": {
     "meshes": 10,
     "triangle_mismatches": {}
-  }
+  },
+  "catalog": "tide.bubble",
+  "root": "BubbleBean",
+  "face": "BubbleBean_Eyes",
+  "glass": [
+    "BubbleBean_BubbleCap"
+  ]
 }

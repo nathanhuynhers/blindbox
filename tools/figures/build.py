@@ -1,10 +1,15 @@
-"""Build, validate, export and render Tidepool Tales figures inside Blender.
+"""Build, validate, export and render collectible figures inside Blender.
+
+Each collection defines its figures in assets/figures/<collection>/figures.py (a FIGURES dict of
+figure slug -> builder, using sdf.py from this folder). See docs/FIGURE_COLLECTION_RUNBOOK.md.
 
 Usage (from the repository root):
-  blender -b --factory-startup --python assets/figures/tidepool-tales/generator/build.py -- <slug> [mode]
+  blender -b --factory-startup --python tools/figures/build.py -- <collection> <figure> [mode]
+  blender -b --factory-startup --python tools/figures/build.py -- <collection> lineup
 
-mode: preview (default, fast contact sheet), final (meshes, .blend, GLB, validation, renders)
-      or lineup (renders all figures from their production .blend files side by side).
+mode: preview (default, fast contact sheet in build/figures/<collection>/preview/) or final
+      (meshes, .blend, GLB, validation, renders). lineup renders every figure in the collection
+      side by side from their production .blend files.
 """
 
 import json
@@ -19,11 +24,12 @@ import numpy as np
 import openvdb as vdb
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 
-from figures import FIGURES  # noqa: E402
 
-ROOT = os.path.dirname(HERE)  # assets/figures/tidepool-tales
+ROOT = ""  # assets/figures/<collection>, set by main()
+PREVIEW = ""  # build/figures/<collection>/preview (ignored scratch)
 BLOCK = 8
 
 VIEWS = {  # azimuth measured from the front (-Y) toward the character's left (+X)
@@ -300,7 +306,7 @@ def setup_render(scene, res, samples):
     scene.render.resolution_y = res
     scene.render.film_transparent = True
     scene.cycles.film_transparent_glass = True
-    vt, look, expo = os.environ.get("TT_VIEW", "AgX|AgX - Punchy|-0.35").split("|")
+    vt, look, expo = os.environ.get("FIG_VIEW", "AgX|AgX - Punchy|-0.35").split("|")
     scene.view_settings.view_transform = vt
     scene.view_settings.look = look
     scene.view_settings.exposure = float(expo)
@@ -436,11 +442,20 @@ def reimport_check(path, expected):
 # --------------------------------------------------------------- main
 
 def main():
+    global ROOT, PREVIEW
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    slug = argv[0]
-    mode = argv[1] if len(argv) > 1 else "preview"
-    if mode == "lineup":
-        return lineup()
+    if len(argv) < 2:
+        raise SystemExit("usage: build.py -- <collection> <figure|lineup> [preview|final]")
+    collection, slug = argv[0], argv[1]
+    mode = argv[2] if len(argv) > 2 else "preview"
+    ROOT = os.path.join(REPO, "assets", "figures", collection)
+    PREVIEW = os.path.join(REPO, "build", "figures", collection, "preview")
+    os.makedirs(PREVIEW, exist_ok=True)
+    sys.path.insert(0, ROOT)
+    from figures import FIGURES
+
+    if slug == "lineup":
+        return lineup(collection, list(FIGURES))
     spec = FIGURES[slug]()
     base = os.path.join(ROOT, slug)
     snake = slug.replace("-", "_")
@@ -468,6 +483,9 @@ def main():
             figure=spec["name"], title=spec["title"], rarity=spec["rarity"],
             size_xyz_studs=size, meshes=len(objs), triangles=sum(expected.values()),
             materials=sorted(mats.keys()), components=audits, build=report, glb=glb_summary(glb),
+            # Runtime wiring data consumed by tools/figures/publish.py.
+            catalog=spec.get("catalog"), root=spec["name"], face=f"{spec['name']}_Eyes",
+            glass=[c.name for c in spec["comps"] if spec["mats"][c.mat].alpha < 1.0],
         )
         summary["reimport"] = reimport_check(glb, expected)
         with open(os.path.join(base, "validation", f"{snake}_validation.json"), "w") as fh:
@@ -483,10 +501,10 @@ def main():
         if "render_garnish" in m:
             apply_render_garnish(m)
     cam = setup_render(scene, res, samples)
-    out_dir = os.path.join(base, "renders") if mode == "final" else os.path.join(HERE, "_preview")
+    out_dir = os.path.join(base, "renders") if mode == "final" else PREVIEW
     os.makedirs(out_dir, exist_ok=True)
     paths = []
-    views = {k: VIEWS[k] for k in os.environ.get("TT_VIEWS", ",".join(VIEWS)).split(",")}
+    views = {k: VIEWS[k] for k in os.environ.get("FIG_VIEWS", ",".join(VIEWS)).split(",")}
     for view, (az, el) in views.items():
         aim(cam, az, el)
         p = os.path.join(out_dir, f"{snake}_{view}.png")
@@ -496,14 +514,23 @@ def main():
         aim(cam, -30.0, 11.0, dist=10.2, target=(0.0, 0.0, 1.45))
         p = os.path.join(out_dir, f"{snake}_beauty.png")
         render_to(p, p.replace(".png", ".webp"))
-    contact_sheet(paths, os.path.join(HERE, "_preview", f"{snake}_sheet{os.environ.get('TT_TAG', '')}.png"))
+    contact_sheet(paths, os.path.join(PREVIEW, f"{snake}_sheet{os.environ.get('FIG_TAG', '')}.png"))
     print("done", time.time() - t0, flush=True)
 
 
-def lineup():
+def lineup(collection, order, gap=0.9):
+    """Every figure in catalogue order, at true relative scale, spaced by measured width."""
     reset()
-    order = ["bubble-bean", "coral-cuddle", "shell-scribe", "jelly-jive", "ripple-ray", "pearl-regent"]
-    xs = [-8.6, -5.35, -2.3, 0.75, 4.2, 8.3]
+    widths = []
+    for slug in order:
+        snake = slug.replace("-", "_")
+        with open(os.path.join(ROOT, slug, "validation", f"{snake}_validation.json")) as fh:
+            widths.append(json.load(fh)["size_xyz_studs"][0])
+    total = sum(widths) + gap * (len(widths) - 1)
+    xs, cursor = [], -total / 2
+    for w in widths:
+        xs.append(cursor + w / 2)
+        cursor += w + gap
     scene = bpy.context.scene
     for slug, x in zip(order, xs):
         snake = slug.replace("-", "_")
@@ -524,8 +551,8 @@ def lineup():
     scene.render.resolution_x = 2400
     scene.render.resolution_y = 900
     cam.data.lens = 50
-    aim(cam, -6.0, 7.0, dist=30.0, target=(0.0, 0.0, 1.7))
-    out = os.path.join(ROOT, "tidepool_tales_lineup.png")
+    aim(cam, -6.0, 7.0, dist=max(20.0, total * 1.55), target=(0.0, 0.0, 1.7))
+    out = os.path.join(ROOT, f"{collection.replace('-', '_')}_lineup.png")
     render_to(out, out.replace(".png", ".webp"))
 
 

@@ -97,7 +97,8 @@ sessions. Leaving destroys owner content and connections and releases the slot. 
 on the shared ground safely. Plot allocation/coordinates and carousel visibility are not saved.
 
 Shared Catalog/Types/FigureModel contain only public definitions, contracts and original
-procedural art. Production figure models: `ModelAssets` (server) loads each `FigureAssets` entry
+procedural art. Production figure models: `ModelAssets` (server) loads each `FigureAssets` entry (generated
+`FigureAssetEntries`, written by `tools/figures/publish.py`)
 with `InsertService`, validates part count and authored proportions, turns the eyes toward -Z,
 applies the uniform collection scale and a base-centre pivot, and publishes the template to
 `ReplicatedStorage.ProductionModels.Figures.<catalog id>`, incrementing `FigureRevision`.

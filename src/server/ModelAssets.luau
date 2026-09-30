@@ -71,7 +71,7 @@ local function prepareFigure(loaded: Model, entry: FigureAssets.Entry): string?
 	local scaledBounds, scaledSize = loaded:GetBoundingBox()
 	loaded.WorldPivot = CFrame.new(scaledBounds.Position - Vector3.new(0, scaledSize.Y / 2, 0))
 	loaded:PivotTo(CFrame.new())
-	for _, name in entry.glass or {} do
+	for _, name in entry.glass do
 		local part = loaded:FindFirstChild(name, true)
 		if part and part:IsA("BasePart") then
 			part.Transparency = FigureAssets.glassTransparency

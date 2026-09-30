@@ -290,5 +290,9 @@
   "reimport": {
     "meshes": 12,
     "triangle_mismatches": {}
-  }
+  },
+  "catalog": "tide.ray",
+  "root": "RippleRay",
+  "face": "RippleRay_Eyes",
+  "glass": []
 }
