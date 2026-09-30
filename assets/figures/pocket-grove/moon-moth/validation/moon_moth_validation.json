@@ -1,0 +1,300 @@
+{
+  "figure": "MoonMoth",
+  "title": "Moon Moth",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    3.139,
+    1.5392,
+    3.426
+  ],
+  "meshes": 12,
+  "triangles": 63984,
+  "materials": [
+    "MoonMoth_Blush",
+    "MoonMoth_EarInner",
+    "MoonMoth_EyeGloss",
+    "MoonMoth_Face",
+    "MoonMoth_Lavender",
+    "MoonMoth_Moon",
+    "MoonMoth_Mouth",
+    "MoonMoth_Wing",
+    "MoonMoth_WingInner"
+  ],
+  "components": {
+    "MoonMoth_Head": {
+      "tris": 8998,
+      "verts": 4501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.76932
+    },
+    "MoonMoth_Face": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07518
+    },
+    "MoonMoth_Ears": {
+      "tris": 3998,
+      "verts": 2003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09458
+    },
+    "MoonMoth_EarInner": {
+      "tris": 2400,
+      "verts": 1204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01631
+    },
+    "MoonMoth_Antennae": {
+      "tris": 5998,
+      "verts": 3003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05526
+    },
+    "MoonMoth_Wings": {
+      "tris": 14000,
+      "verts": 7004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.11626
+    },
+    "MoonMoth_WingInner": {
+      "tris": 9998,
+      "verts": 5003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.31925
+    },
+    "MoonMoth_WingMarks": {
+      "tris": 4000,
+      "verts": 2022,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0162
+    },
+    "MoonMoth_Body": {
+      "tris": 7998,
+      "verts": 4001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.48671
+    },
+    "MoonMoth_Eyes": {
+      "tris": 1198,
+      "verts": 603,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00198
+    },
+    "MoonMoth_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00346
+    },
+    "MoonMoth_Mouth": {
+      "tris": 498,
+      "verts": 251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00021
+    }
+  },
+  "build": {
+    "MoonMoth_Head": {
+      "active_blocks": 4472,
+      "blocks": 11000,
+      "grid": [
+        201,
+        177,
+        161
+      ],
+      "raw_tris": 212894,
+      "removed_faces": 0,
+      "seconds": 4.2
+    },
+    "MoonMoth_Face": {
+      "active_blocks": 3840,
+      "blocks": 12896,
+      "grid": [
+        249,
+        129,
+        209
+      ],
+      "raw_tris": 225064,
+      "removed_faces": 0,
+      "seconds": 4.5
+    },
+    "MoonMoth_Ears": {
+      "active_blocks": 2304,
+      "blocks": 6588,
+      "grid": [
+        489,
+        73,
+        97
+      ],
+      "raw_tris": 97744,
+      "removed_faces": 0,
+      "seconds": 3.9
+    },
+    "MoonMoth_EarInner": {
+      "active_blocks": 2682,
+      "blocks": 11583,
+      "grid": [
+        649,
+        89,
+        105
+      ],
+      "raw_tris": 86664,
+      "removed_faces": 0,
+      "seconds": 4.4
+    },
+    "MoonMoth_Antennae": {
+      "active_blocks": 3416,
+      "blocks": 12470,
+      "grid": [
+        345,
+        81,
+        233
+      ],
+      "raw_tris": 156354,
+      "removed_faces": 0,
+      "seconds": 8.0
+    },
+    "MoonMoth_Wings": {
+      "active_blocks": 9175,
+      "blocks": 40204,
+      "grid": [
+        369,
+        185,
+        305
+      ],
+      "raw_tris": 524908,
+      "removed_faces": 0,
+      "seconds": 15.3
+    },
+    "MoonMoth_WingInner": {
+      "active_blocks": 12424,
+      "blocks": 74704,
+      "grid": [
+        465,
+        225,
+        369
+      ],
+      "raw_tris": 746240,
+      "removed_faces": 0,
+      "seconds": 34.1
+    },
+    "MoonMoth_WingMarks": {
+      "active_blocks": 3652,
+      "blocks": 49560,
+      "grid": [
+        473,
+        193,
+        281
+      ],
+      "raw_tris": 78040,
+      "removed_faces": 0,
+      "seconds": 11.5
+    },
+    "MoonMoth_Body": {
+      "active_blocks": 3498,
+      "blocks": 8892,
+      "grid": [
+        153,
+        145,
+        209
+      ],
+      "raw_tris": 168400,
+      "removed_faces": 0,
+      "seconds": 9.2
+    },
+    "MoonMoth_Eyes": {
+      "active_blocks": 1066,
+      "blocks": 8118,
+      "grid": [
+        329,
+        145,
+        89
+      ],
+      "raw_tris": 30664,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "MoonMoth_Cheeks": {
+      "active_blocks": 768,
+      "blocks": 5577,
+      "grid": [
+        313,
+        105,
+        89
+      ],
+      "raw_tris": 26558,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "MoonMoth_Mouth": {
+      "active_blocks": 248,
+      "blocks": 1287,
+      "grid": [
+        89,
+        105,
+        73
+      ],
+      "raw_tris": 4516,
+      "removed_faces": 0,
+      "seconds": 0.3
+    }
+  },
+  "glb": {
+    "bytes": 1424928,
+    "nodes": [
+      "MoonMoth_Antennae",
+      "MoonMoth_Body",
+      "MoonMoth_Cheeks",
+      "MoonMoth_EarInner",
+      "MoonMoth_Ears",
+      "MoonMoth_Eyes",
+      "MoonMoth_Face",
+      "MoonMoth_Head",
+      "MoonMoth_Mouth",
+      "MoonMoth_WingInner",
+      "MoonMoth_WingMarks",
+      "MoonMoth_Wings",
+      "MoonMoth"
+    ],
+    "meshes": 12,
+    "materials": 9,
+    "images": 9,
+    "textures": 9,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "grove.moth",
+  "root": "MoonMoth",
+  "face": "MoonMoth_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 12,
+    "triangle_mismatches": {}
+  }
+}

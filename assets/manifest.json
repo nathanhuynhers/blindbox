@@ -9,27 +9,15 @@
       "displayName": "Pocket Grove - Pebble Pip",
       "assetType": "Model",
       "requiredNodes": [
-        "PP_Head_Export",
-        "PP_Body_Export",
-        "PP_Leg_L_Export",
-        "PP_Leg_R_Export",
-        "PP_Foot_L_Export",
-        "PP_Foot_R_Export",
-        "PP_Arm_L_Export",
-        "PP_Arm_R_Export",
-        "PP_Back_Bump_Export",
-        "PP_Eye_L_Export",
-        "PP_Eye_R_Export",
-        "PP_Cheek_L_Export",
-        "PP_Cheek_R_Export",
-        "PP_Mouth_Export",
-        "PP_Clover_Stem_Export",
-        "PP_Clover_Leaf_A_Export",
-        "PP_Clover_Leaf_B_Export",
-        "PP_Clover_Leaf_C_Export",
-        "PP_Clover_Vein_A_Export",
-        "PP_Clover_Vein_B_Export",
-        "PP_Clover_Vein_C_Export"
+        "PebblePip",
+        "PebblePip_Head",
+        "PebblePip_Body",
+        "PebblePip_Clover",
+        "PebblePip_CloverStem",
+        "PebblePip_Eyes",
+        "PebblePip_EyeShine",
+        "PebblePip_Cheeks",
+        "PebblePip_Mouth"
       ]
     },
     "bubble_bean": {
@@ -279,6 +267,105 @@
       "source": "assets/ui/shop/tidepool-tales/tidepool_tales_shop_pattern.png",
       "displayName": "Tidepool Tales Shop Pattern",
       "assetType": "Image"
+    },
+    "sprout_scout": {
+      "key": "Models.PocketGrove.SproutScout",
+      "source": "assets/figures/pocket-grove/sprout-scout/model/sprout_scout_roblox.glb",
+      "displayName": "Pocket Grove - Sprout Scout",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SproutScout",
+        "SproutScout_Head",
+        "SproutScout_Body",
+        "SproutScout_Sprout",
+        "SproutScout_Scarf",
+        "SproutScout_Strap",
+        "SproutScout_Bag",
+        "SproutScout_BagFlap",
+        "SproutScout_Buckle",
+        "SproutScout_Staff",
+        "SproutScout_StaffLeaf",
+        "SproutScout_Eyes",
+        "SproutScout_EyeShine",
+        "SproutScout_Cheeks",
+        "SproutScout_Mouth"
+      ]
+    },
+    "acorn_dot": {
+      "key": "Models.PocketGrove.AcornDot",
+      "source": "assets/figures/pocket-grove/acorn-dot/model/acorn_dot_roblox.glb",
+      "displayName": "Pocket Grove - Acorn Dot",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AcornDot",
+        "AcornDot_Cap",
+        "AcornDot_CapLeaf",
+        "AcornDot_Head",
+        "AcornDot_Body",
+        "AcornDot_Acorn",
+        "AcornDot_AcornCap",
+        "AcornDot_Eyes",
+        "AcornDot_EyeShine",
+        "AcornDot_Cheeks",
+        "AcornDot_Mouth"
+      ]
+    },
+    "mallow_cap": {
+      "key": "Models.PocketGrove.MallowCap",
+      "source": "assets/figures/pocket-grove/mallow-cap/model/mallow_cap_roblox.glb",
+      "displayName": "Pocket Grove - Mallow Cap",
+      "assetType": "Model",
+      "requiredNodes": [
+        "MallowCap",
+        "MallowCap_Cap",
+        "MallowCap_Gills",
+        "MallowCap_Spots",
+        "MallowCap_Body",
+        "MallowCap_Eyes",
+        "MallowCap_Cheeks",
+        "MallowCap_Mouth"
+      ]
+    },
+    "moon_moth": {
+      "key": "Models.PocketGrove.MoonMoth",
+      "source": "assets/figures/pocket-grove/moon-moth/model/moon_moth_roblox.glb",
+      "displayName": "Pocket Grove - Moon Moth",
+      "assetType": "Model",
+      "requiredNodes": [
+        "MoonMoth",
+        "MoonMoth_Head",
+        "MoonMoth_Face",
+        "MoonMoth_Ears",
+        "MoonMoth_EarInner",
+        "MoonMoth_Antennae",
+        "MoonMoth_Wings",
+        "MoonMoth_WingInner",
+        "MoonMoth_WingMarks",
+        "MoonMoth_Body",
+        "MoonMoth_Eyes",
+        "MoonMoth_Cheeks",
+        "MoonMoth_Mouth"
+      ]
+    },
+    "sunbeam_sprite": {
+      "key": "Models.PocketGrove.SunbeamSprite",
+      "source": "assets/figures/pocket-grove/sunbeam-sprite/model/sunbeam_sprite_roblox.glb",
+      "displayName": "Pocket Grove - Sunbeam Sprite",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SunbeamSprite",
+        "SunbeamSprite_Head",
+        "SunbeamSprite_Ears",
+        "SunbeamSprite_Petals",
+        "SunbeamSprite_Braid",
+        "SunbeamSprite_Crown",
+        "SunbeamSprite_Orb",
+        "SunbeamSprite_OrbSun",
+        "SunbeamSprite_Body",
+        "SunbeamSprite_Eyes",
+        "SunbeamSprite_Cheeks",
+        "SunbeamSprite_Mouth"
+      ]
     }
   }
 }

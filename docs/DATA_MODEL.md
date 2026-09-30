@@ -3,6 +3,11 @@
 Current schema: **5**. Stable `grove.*` and `tide.*` figure IDs and discovery are unchanged.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
+Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
+shared `Rarity.Id` type: Common, Uncommon, Rare, Legendary or Mythical. Catalog startup rejects
+unknown labels. Five-tier support needs no schema migration; existing figure IDs and assignments
+are unchanged. See [rarity architecture and future content](RARITY.md).
+
 | Field | Meaning |
 | --- | --- |
 | schemaVersion | 5; unsupported versions block loading/writing |

@@ -3,6 +3,8 @@
 Status: user playtested and accepted the MVP, reporting collection scroll truncation.
 The new candidate fixes scrolling and expands beyond this historical scope; see [full-game scope](FULL_GAME.md).
 The acceptance criteria below document the original MVP, not the current larger feature set.
+Current rarity capability supports five tiers, while live figures retain their original three
+tiers; see [rarity architecture](RARITY.md). The historical table below is unchanged.
 Its use of "showroom" means the passive-income **Display** in current terminology. The current
 architecture is [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 See [the verification and playtest checklist](STUDIO_TESTS.md).

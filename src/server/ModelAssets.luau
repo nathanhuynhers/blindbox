@@ -61,7 +61,9 @@ local function prepareFigure(loaded: Model, entry: FigureAssets.Entry): string?
 	loaded:PivotTo(CFrame.new(bounds.Position))
 	local _, size = loaded:GetBoundingBox()
 	local expected = entry.size
-	for axis, pair in { X = { size.X, expected.X }, Z = { size.Z, expected.Z } } do
+	local proportions: { [string]: { number } } =
+		{ X = { size.X, expected.X }, Z = { size.Z, expected.Z } }
+	for axis, pair in proportions do
 		local got, want = pair[1] / size.Y, pair[2] / expected.Y
 		if not (math.abs(got - want) <= want * 0.2) then
 			return `proportions differ on {axis}: {got} vs {want}`

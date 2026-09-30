@@ -143,7 +143,10 @@ This writes `build/figures/<collection>/preview/<figure>_sheet.png`: four 420 px
 10–100 s each). Run figures in parallel as background processes. Look at the sheet next to the
 reference views and fix the biggest mismatch first: silhouette, then proportions, then features,
 then color. Environment variables: `FIG_VIEWS=front,side` renders a subset, `FIG_TAG=_x` suffixes the
-output name, and `FIG_VIEW="AgX|AgX - Punchy|-0.35"` sets the tone mapping.
+output name, and `FIG_VIEW="AgX|AgX - Punchy|-0.35"` sets the tone mapping. A collection can set its
+default the same way with a module-level `RENDER_VIEW = "<transform>|<look>|<exposure>"` in its
+`figures.py`; renders only, the GLB albedo is unaffected. Pocket Grove uses
+`"Khronos PBR Neutral|None|-1.1"` because AgX washed its pastel palette toward white.
 
 ### Lessons from Tidepool Tales
 

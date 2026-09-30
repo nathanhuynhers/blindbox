@@ -1,0 +1,344 @@
+{
+  "figure": "SproutScout",
+  "title": "Sprout Scout",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.8411,
+    1.8887,
+    3.2463
+  ],
+  "meshes": 14,
+  "triangles": 47588,
+  "materials": [
+    "SproutScout_BagFlap",
+    "SproutScout_Blush",
+    "SproutScout_Buckle",
+    "SproutScout_EyeGloss",
+    "SproutScout_EyeShine",
+    "SproutScout_Leaf",
+    "SproutScout_Leather",
+    "SproutScout_Mouth",
+    "SproutScout_Sage",
+    "SproutScout_Scarf",
+    "SproutScout_Staff"
+  ],
+  "components": {
+    "SproutScout_Head": {
+      "tris": 11000,
+      "verts": 5502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.0091
+    },
+    "SproutScout_Body": {
+      "tris": 8998,
+      "verts": 4501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.56619
+    },
+    "SproutScout_Sprout": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.25682
+    },
+    "SproutScout_Scarf": {
+      "tris": 4998,
+      "verts": 2499,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.19437
+    },
+    "SproutScout_Strap": {
+      "tris": 3000,
+      "verts": 1500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03063
+    },
+    "SproutScout_Bag": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04089
+    },
+    "SproutScout_BagFlap": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01089
+    },
+    "SproutScout_Buckle": {
+      "tris": 400,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00051
+    },
+    "SproutScout_Staff": {
+      "tris": 2498,
+      "verts": 1251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02796
+    },
+    "SproutScout_StaffLeaf": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00778
+    },
+    "SproutScout_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00595
+    },
+    "SproutScout_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00016
+    },
+    "SproutScout_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00608
+    },
+    "SproutScout_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00025
+    }
+  },
+  "build": {
+    "SproutScout_Head": {
+      "active_blocks": 5398,
+      "blocks": 11856,
+      "grid": [
+        209,
+        193,
+        153
+      ],
+      "raw_tris": 247184,
+      "removed_faces": 0,
+      "seconds": 5.1
+    },
+    "SproutScout_Body": {
+      "active_blocks": 3795,
+      "blocks": 11160,
+      "grid": [
+        249,
+        145,
+        161
+      ],
+      "raw_tris": 177840,
+      "removed_faces": 0,
+      "seconds": 4.4
+    },
+    "SproutScout_Sprout": {
+      "active_blocks": 5083,
+      "blocks": 30475,
+      "grid": [
+        425,
+        185,
+        201
+      ],
+      "raw_tris": 274920,
+      "removed_faces": 0,
+      "seconds": 17.9
+    },
+    "SproutScout_Scarf": {
+      "active_blocks": 4837,
+      "blocks": 17298,
+      "grid": [
+        249,
+        249,
+        145
+      ],
+      "raw_tris": 228428,
+      "removed_faces": 0,
+      "seconds": 7.8
+    },
+    "SproutScout_Strap": {
+      "active_blocks": 3194,
+      "blocks": 22103,
+      "grid": [
+        249,
+        249,
+        185
+      ],
+      "raw_tris": 139048,
+      "removed_faces": 0,
+      "seconds": 3.6
+    },
+    "SproutScout_Bag": {
+      "active_blocks": 1258,
+      "blocks": 2704,
+      "grid": [
+        129,
+        105,
+        105
+      ],
+      "raw_tris": 53148,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "SproutScout_BagFlap": {
+      "active_blocks": 2058,
+      "blocks": 7245,
+      "grid": [
+        185,
+        169,
+        121
+      ],
+      "raw_tris": 87412,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "SproutScout_Buckle": {
+      "active_blocks": 191,
+      "blocks": 1331,
+      "grid": [
+        89,
+        89,
+        89
+      ],
+      "raw_tris": 5852,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "SproutScout_Staff": {
+      "active_blocks": 1922,
+      "blocks": 6765,
+      "grid": [
+        121,
+        89,
+        329
+      ],
+      "raw_tris": 80114,
+      "removed_faces": 0,
+      "seconds": 3.3
+    },
+    "SproutScout_StaffLeaf": {
+      "active_blocks": 1001,
+      "blocks": 4536,
+      "grid": [
+        145,
+        113,
+        145
+      ],
+      "raw_tris": 48588,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "SproutScout_Eyes": {
+      "active_blocks": 860,
+      "blocks": 4356,
+      "grid": [
+        265,
+        89,
+        97
+      ],
+      "raw_tris": 28192,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "SproutScout_EyeShine": {
+      "active_blocks": 292,
+      "blocks": 3663,
+      "grid": [
+        297,
+        89,
+        73
+      ],
+      "raw_tris": 4044,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "SproutScout_Cheeks": {
+      "active_blocks": 1334,
+      "blocks": 9823,
+      "grid": [
+        377,
+        153,
+        89
+      ],
+      "raw_tris": 40766,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "SproutScout_Mouth": {
+      "active_blocks": 237,
+      "blocks": 1053,
+      "grid": [
+        105,
+        73,
+        73
+      ],
+      "raw_tris": 4416,
+      "removed_faces": 0,
+      "seconds": 0.2
+    }
+  },
+  "glb": {
+    "bytes": 1066180,
+    "nodes": [
+      "SproutScout_Bag",
+      "SproutScout_BagFlap",
+      "SproutScout_Body",
+      "SproutScout_Buckle",
+      "SproutScout_Cheeks",
+      "SproutScout_Eyes",
+      "SproutScout_EyeShine",
+      "SproutScout_Head",
+      "SproutScout_Mouth",
+      "SproutScout_Scarf",
+      "SproutScout_Sprout",
+      "SproutScout_Staff",
+      "SproutScout_StaffLeaf",
+      "SproutScout_Strap",
+      "SproutScout"
+    ],
+    "meshes": 14,
+    "materials": 11,
+    "images": 11,
+    "textures": 11,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "grove.sprout",
+  "root": "SproutScout",
+  "face": "SproutScout_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 14,
+    "triangle_mismatches": {}
+  }
+}

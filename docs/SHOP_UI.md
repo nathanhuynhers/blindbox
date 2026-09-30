@@ -1,5 +1,9 @@
 # Scalable blind-box Shop
 
+The five-tier integration uses shared canonical rarity order/colors and sizes the odds panel
+to the selected collection's actual tier count. Empty Legendary/Mythical tiers are omitted;
+existing per-figure odds are unchanged. See [rarity architecture](RARITY.md).
+
 The Shop is a neutral reusable presentation, with collection identity limited to cards,
 product skin, emblems and progress/purchase accents. No world, Collection screen, figures,
 economy, persistence, purchase protocol or opening behavior is changed by this reconstruction.

@@ -1,6 +1,12 @@
-# Pebble Pip production receipt
+# Pebble Pip production receipt (superseded)
 
-**Ready for the first manual Studio test:** exported, re-imported, technically checked and visually compared. No Roblox upload or gameplay adoption was performed.
+> **Superseded.** This describes the earlier hand-built Pebble Pip, which was never uploaded. The
+> production Pebble Pip was rebuilt from the approved sheet with the collection pipeline, overwrote
+> `model/pebble_pip_production.blend` and `model/pebble_pip_roblox.glb`, and is uploaded as asset
+> 76559793748219. See the [Pocket Grove receipt](../PRODUCTION.md). The files named below that still
+> exist (master, textures, old validation artifacts) are historical and unused.
+
+**Historical status: ready for the first manual Studio test:** exported, re-imported, technically checked and visually compared. No Roblox upload or gameplay adoption was performed.
 
 ## Source and deliverables
 

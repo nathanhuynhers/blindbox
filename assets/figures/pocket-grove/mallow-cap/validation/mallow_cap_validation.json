@@ -1,0 +1,193 @@
+{
+  "figure": "MallowCap",
+  "title": "Mallow Cap",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    3.4139,
+    3.1494,
+    2.9003
+  ],
+  "meshes": 7,
+  "triangles": 46566,
+  "materials": [
+    "MallowCap_Blush",
+    "MallowCap_Cap",
+    "MallowCap_EyeGloss",
+    "MallowCap_Gills",
+    "MallowCap_Mouth",
+    "MallowCap_Skin",
+    "MallowCap_Spots"
+  ],
+  "components": {
+    "MallowCap_Cap": {
+      "tris": 14000,
+      "verts": 7002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 5.86757
+    },
+    "MallowCap_Gills": {
+      "tris": 11970,
+      "verts": 5987,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.54685
+    },
+    "MallowCap_Spots": {
+      "tris": 4000,
+      "verts": 2020,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.1162
+    },
+    "MallowCap_Body": {
+      "tris": 14000,
+      "verts": 7002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.9683
+    },
+    "MallowCap_Eyes": {
+      "tris": 1198,
+      "verts": 603,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00183
+    },
+    "MallowCap_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00414
+    },
+    "MallowCap_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00019
+    }
+  },
+  "build": {
+    "MallowCap_Cap": {
+      "active_blocks": 12953,
+      "blocks": 44772,
+      "grid": [
+        329,
+        313,
+        225
+      ],
+      "raw_tris": 631504,
+      "removed_faces": 0,
+      "seconds": 18.4
+    },
+    "MallowCap_Gills": {
+      "active_blocks": 25588,
+      "blocks": 180411,
+      "grid": [
+        617,
+        569,
+        265
+      ],
+      "raw_tris": 1740320,
+      "removed_faces": 28,
+      "seconds": 70.5
+    },
+    "MallowCap_Spots": {
+      "active_blocks": 7797,
+      "blocks": 93330,
+      "grid": [
+        489,
+        361,
+        273
+      ],
+      "raw_tris": 382684,
+      "removed_faces": 0,
+      "seconds": 18.2
+    },
+    "MallowCap_Body": {
+      "active_blocks": 7579,
+      "blocks": 23529,
+      "grid": [
+        265,
+        185,
+        249
+      ],
+      "raw_tris": 361728,
+      "removed_faces": 0,
+      "seconds": 24.1
+    },
+    "MallowCap_Eyes": {
+      "active_blocks": 968,
+      "blocks": 6688,
+      "grid": [
+        305,
+        129,
+        89
+      ],
+      "raw_tris": 27528,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "MallowCap_Cheeks": {
+      "active_blocks": 892,
+      "blocks": 6006,
+      "grid": [
+        313,
+        113,
+        89
+      ],
+      "raw_tris": 30818,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MallowCap_Mouth": {
+      "active_blocks": 212,
+      "blocks": 1188,
+      "grid": [
+        89,
+        97,
+        73
+      ],
+      "raw_tris": 4168,
+      "removed_faces": 0,
+      "seconds": 0.4
+    }
+  },
+  "glb": {
+    "bytes": 1035652,
+    "nodes": [
+      "MallowCap_Body",
+      "MallowCap_Cap",
+      "MallowCap_Cheeks",
+      "MallowCap_Eyes",
+      "MallowCap_Gills",
+      "MallowCap_Mouth",
+      "MallowCap_Spots",
+      "MallowCap"
+    ],
+    "meshes": 7,
+    "materials": 7,
+    "images": 7,
+    "textures": 7,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "grove.mushroom",
+  "root": "MallowCap",
+  "face": "MallowCap_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 7,
+    "triangle_mismatches": {}
+  }
+}

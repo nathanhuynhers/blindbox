@@ -1,5 +1,12 @@
 # Implemented architecture
 
+`src/shared/Rarity.luau` is the canonical public rarity identity/order/type/palette module:
+Common < Uncommon < Rare < Legendary < Mythical. Catalog validates against it; server Rules
+retains explicit per-figure weights/rates and checks rate ordering across populated tiers.
+UI colors and Shop ordering consume it, while client OpeningConfig owns presentation profiles.
+The new tiers are supported without adding obtainable content. See [the audit and extension
+procedure](RARITY.md); persistence, inventory and grants remain figure-ID based.
+
 The user accepted the MVP and authorized the full-game roadmap. The new candidate implements
 that feature set; real storage, device and multi-client acceptance are still pending. See
 [scope](FULL_GAME.md) and [operations](OPERATIONS.md). No package/framework dependency was added.

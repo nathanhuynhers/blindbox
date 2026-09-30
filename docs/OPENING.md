@@ -1,10 +1,13 @@
 # Blind-box cinematic opening
 
-Implemented the focused launch/flight/rarity/impact/silhouette polish pass, preserving the
-previous cinematic lifecycle correction. Automated checks execute the actual cinematic,
+Five standard rarities are supported: **Common < Uncommon < Rare < Legendary < Mythical**.
+The five-tier integration preserves the preceding flight polish and cinematic lifecycle
+correction. Automated checks execute the actual cinematic,
 box, skin, figure appearance, effects and audio against engine primitives.
 **Native Studio visual, input, performance and multiplayer acceptance is still pending.**
-No server, economy, catalog, inventory, persistence, purchase contract or generated asset ID changed.
+Live figure assignments, rates, weights, inventory, persistence, purchase contract and generated
+asset IDs are unchanged. Shared rarity validation and server rate validation now support future
+high-tier content. See [rarity architecture, audit and future-content procedure](RARITY.md).
 
 ## Ownership and architecture
 
@@ -15,6 +18,7 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 
 | Module | Responsibility |
 | --- | --- |
+| Shared Rarity | Canonical identities, order, strict validation and public color palette; no economic state |
 | OpeningController | One session, bounded replay cache, inputs, phase/audio coordination, errors, UI/movement focus and teardown |
 | OpeningState | Deterministic clock, phase transitions, Await activation, Skip, Continue guard, cancellation |
 | OpeningConfig | Rarity timings/intensity, collection presentation, camera/effect limits, sound slots and future tease beats |
@@ -69,22 +73,35 @@ giant rarity lettering or rainbow burst is used.
 | Common | 5.47s | 0.35s | 61 | 1 |
 | Uncommon | 5.97s | 0.48s | 64 | 2 |
 | Rare | 6.60s | 0.65s | 67 | 3 |
+| Legendary | 6.95s | 0.80s | 67 | 2 |
+| Mythical | 7.38s | 0.95s | 68 | 3 |
 
-Rarity transitions take 0.19 / 0.22 / 0.25s, followed by **0.25 / 0.35 / 0.55s holds**.
+Rarity transitions take 0.19 / 0.22 / 0.25 / 0.30 / 0.38s, followed by
+**0.25 / 0.35 / 0.55 / 0.70 / 0.90s holds**, in canonical order.
 The 0.24s apex and 0.62s accelerating dive begin only after recognition. The mint Common has
 a restrained taper; lavender Uncommon adds width/aura and secondary glints; gold Rare adds
 a larger aura, stronger compression/pulse, transformation ring and camera response. Initial
 core, tail, sparks and flight atmosphere are ivory, with no rarity-colored surroundings.
+Legendary uses warm crimson with delayed orange-gold highlights, two separated pulses, a gold
+inner trail, stronger aura and a crimson/gold layered impact. Mythical uses a quiet compression
+beat, pearl core, pink-violet aura, slowly drifting cyan spectral rim and three trail layers.
+Its impact layers are pink-violet/cyan/pearl and quickly settle into a quiet spectral silhouette.
+There is no rainbow cycling. Both profiles retain Rare's particle/Bloom budgets and the existing
+combined lighting ceiling; reduced motion retains softened pulses and spectral treatment.
 
 `OpeningConfig.flight` owns the path points, acceleration, launch/camera cue offsets, tail,
 streak and impact tuning. Rarity profiles derive their timing from that configuration and own
-transition/hold, trail width/length, aura scale, sparkle rate and pulse intensity. The two new
+transition/hold, trail width/length, aura scale, sparkle rate and pulse intensity. Optional
+signature parameters own compression, quiet fraction, pulse waves, trail/ring structure,
+highlights and camera response. Profile cue keys allow unique transformation, impact and reveal
+sounds; the Legendary/Mythical sound slots are intentionally empty and safely silent. The two
 flight helpers share those samples with the existing controller, effects and cinematic; the
 phase order and authoritative result flow are unchanged.
 
 Camera acquisition has a deliberate short delay and smooth response, followed by positional
 pursuit with exponential interpolation, a small off-center aim, restrained roll and 46-to-61/64/67
-FOV expansion. The rarity hold stabilizes the frame. Dive adds up to three degrees before
+FOV expansion (68 for Mythical). The rarity hold stabilizes the frame; Legendary/Mythical add
+a restrained configured pull and 2/3-degree hold settling. Dive adds up to three degrees before
 the late approach settles toward the existing reveal framing. Impact adds a short damped kick
 and two-degree FOV response. Portrait framing retains the existing distance-fit rule.
 
@@ -252,7 +269,9 @@ The camera stays fixed; a short energy/tint presentation retains rarity-before-i
 It uses 25% effect density (combined with the touch multiplier), distant motes only, no streaks
 or long moving tail, one impact ring, 0.18s ascent, 0.12s apex and 0.24s descent. Transformation,
 rarity recognition and the full rarity-specific silhouette hold remain intact. Common takes
-2.99s, Uncommon 3.25s and Rare 3.65s excluding user waits and Closing. It does not skip the reveal
+2.99s, Uncommon 3.25s, Rare 3.65s, Legendary 4.00s and Mythical 4.43s excluding user waits and
+Closing. Softened signature transformation rings retain the two high-tier waves even though
+reduced impact uses one ring. It does not skip the reveal
 or discard metadata.
 
 ## Audio slots
@@ -263,6 +282,8 @@ All sound IDs currently remain empty. Insert original/licensed `rbxassetid://` I
 - entrance; ambience / ambienceGrove / ambienceTide
 - charge; shake; click; crack; lid; launch; flight; acceleration
 - rarityTransformation; rarityCommon; rarityUncommon; rarityRare; dive
+- rarityLegendary; rarityMythical; transformLegendary; transformMythical
+- impactLegendary; impactMythical; revealLegendary; revealMythical
 - impact; postImpactShimmer; silhouette; reveal; discovery; close
 
 Collection ambience, charge and flight can loop only while their phase group is active.
@@ -280,10 +301,11 @@ pattern, primary/secondary/wash/trim/ink); optionally add a motif/ambience entry
 `OpeningConfig.collectionEffects`. Unspecified motifs use neutral motes. The cinematic,
 camera paths, box structure and rarity profiles need no collection branches.
 
-**Another rarity:** add a named `OpeningConfig.rarities` profile with timings, tint/accent/glow,
-shake frequency/amplitude, camera impulse/peak FOV, particles/multiplier, ring count, trail width,
-bloom and tease beats. Unknown names safely use Common. This is presentation extensibility,
-not authorization to add catalog drops or odds.
+**Another rarity:** extend the shared `Rarity.Id`, canonical order and palette, then add a complete
+`OpeningConfig.rarities` profile including timings, signature parameters and cue keys. See
+[future content and rarity extension](RARITY.md#adding-future-content). Unknown presentation names
+safely use Common; catalog validation and Studio overrides reject unknown values. This is
+presentation extensibility, not authorization to add catalog drops or odds.
 
 `tease` is an ordered list with normalized `at` times starting at zero, `color`,
 `secondary`, `cue`, and optional `quiet`, `freeze`, `destabilize`, `shatter` flags. A future profile
@@ -359,6 +381,10 @@ Manual acceptance still required:
    intervals, lighting, surface branding and original audio by human visual/listening judgment.
 
 ## Recording the flight comparison
+
+For the new five-tier comparison and repeated high-tier/Skip/reduced-motion procedure, follow
+[the exact Studio preview steps](RARITY.md#exact-studio-preview-procedure). The following
+six-button procedure remains useful for comparing the actual existing catalog content.
 
 1. Sync the current source through Rojo, or open the freshly built `RobloxWorkspace.rbxlx`.
    Start **Play**, choose **Client** in the Command Bar and paste the entire
@@ -449,3 +475,42 @@ Files changed in this pass:
 - Updated `tests/Opening.spec.luau`, `OpeningLifecycle.spec.luau`, `OpeningResources.spec.luau`,
   `OpeningVisualEngine.luau`, `StudioOpening.client.luau`, and `run.py`.
 - Updated this document with timings, ownership, hooks, validation and the recording procedure.
+
+## Five-rarity integration validation
+
+The full standalone Luau runner passed: 717 canonical rarity/profile/UI/live-economy assertions,
+9,998 flight checks, 643 controller/camera checks, 33,740 actual-module resource/phase checks,
+4,819 opening state/result checks and all existing gameplay, persistence, UI, asset-manifest,
+Shelf Unit and plot suites. Four invalid economy startup fixtures also passed. The forty new
+high-tier sessions cover ten Legendary and ten Mythical openings in each motion mode, plus
+high-tier mid-transformation/dive/impact Skip. No native rendering is simulated by these tests.
+
+All 21 Python asset-pipeline tests passed. Pinned StyLua source/changed-test formatting checks,
+Selene source/changed-test lint (zero errors/warnings with cached Roblox API definitions), source
+Luau Language Server analysis with Roblox definitions, Rojo 7.7.0 build and Git whitespace checks
+passed. Rokit and Wally installation completed with pinned versions and no new dependencies.
+The standalone LSP watcher-registration warning is not a source diagnostic. Two type-only fixes
+were needed in concurrently updated model code: optional variant entries in FigureSlots and
+explicit numeric comparison pairs in ModelAssets. They do not change model-loading behavior.
+
+Five-tier implementation files (some also contain the preceding flight-polish changes):
+
+- Shared/server: added `src/shared/Rarity.luau`; updated `Types.luau`, `Catalog.luau` and
+  `src/server/Rules.luau`. `Economy.luau` content remains unchanged. Type annotations also updated
+  in `src/server/FigureSlots.luau` and `ModelAssets.luau` during final validation.
+- Presentation: `src/client/OpeningConfig.luau`, `OpeningFlight.luau`,
+  `OpeningFlightEffects.luau`, `OpeningCinematic.luau`, `OpeningEffects.luau`,
+  `OpeningController.luau` and `OpeningView.luau`. Existing State/Audio lifecycle behavior is
+  retained; their preceding flight changes remain in place.
+- UI: `src/client/UITheme.luau`, `CollectionStyle.luau`, `CollectionControls.luau`,
+  `CollectionAssets.luau`, `ShopState.luau`, `ShopLayout.luau` and `ShopScreen.luau`.
+- Tests: added `tests/Rarity.spec.luau`; updated `Opening.spec.luau`, `OpeningEngine.luau`,
+  `OpeningLifecycle.spec.luau`, `OpeningResources.spec.luau`, `StudioOpening.client.luau` and
+  `run.py`. Prior `OpeningFlight.spec.luau` and `OpeningVisualEngine.luau` regressions remain.
+- Documentation: added `docs/RARITY.md`; updated this file, `ARCHITECTURE.md`, `DATA_MODEL.md`,
+  `ECONOMY.md`, `GAME_DESIGN.md`, `MVP.md`, `COLLECTION_UI.md` and `SHOP_UI.md`.
+
+Existing figure rarities, rates and weights are protected by golden assertions. No high-tier
+content, fake production grant, live odds or sound asset was added. Studio recordings, subjective
+hierarchy/contrast review, mobile performance and two-client acceptance remain manual checks;
+none was claimed as run. The separate final comprehensive cinematic polish pass is deferred.

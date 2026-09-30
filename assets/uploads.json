@@ -116,6 +116,60 @@
     "sha256": "9bad381e0e12ef02115db560681b360db90af192d7456b5e43f5ec6a73a8cb0d",
     "source": "assets/models/blind-box/blind_box_base.glb"
   },
+  "Models.PocketGrove.AcornDot": {
+    "assetId": "108614572737539",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "58ebb74d6bc1eeef3ec7d56b3cec8a00bc1d755f9853ba7f81c952e3616c626c",
+    "source": "assets/figures/pocket-grove/acorn-dot/model/acorn_dot_roblox.glb"
+  },
+  "Models.PocketGrove.MallowCap": {
+    "assetId": "108811295282720",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d8ad277c91f8be4411922f110d0db423613a43b31645f9e2d86edebf671349c9",
+    "source": "assets/figures/pocket-grove/mallow-cap/model/mallow_cap_roblox.glb"
+  },
+  "Models.PocketGrove.MoonMoth": {
+    "assetId": "112900779762440",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1ce45f85ef036b3fc6ae6554bdcb1222541f7e52e0db0de557b38c9535ed0cdd",
+    "source": "assets/figures/pocket-grove/moon-moth/model/moon_moth_roblox.glb"
+  },
+  "Models.PocketGrove.PebblePip": {
+    "assetId": "76559793748219",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "66cd2a4ec735b08bfb873747a9883ade44cc08a89c88a2738d1cfe309a307057",
+    "source": "assets/figures/pocket-grove/pebble-pip/model/pebble_pip_roblox.glb"
+  },
+  "Models.PocketGrove.SproutScout": {
+    "assetId": "122774967155364",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d017f32ae5c49ee29c96a1e41e858fc9eae6842bf75970f8a06a59d4cd1071e8",
+    "source": "assets/figures/pocket-grove/sprout-scout/model/sprout_scout_roblox.glb"
+  },
+  "Models.PocketGrove.SunbeamSprite": {
+    "assetId": "89097067357395",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d29dc5b3d2af2ab05e1042ec97b337ed31bdaf5f785f79cef4b0a935b810db27",
+    "source": "assets/figures/pocket-grove/sunbeam-sprite/model/sunbeam_sprite_roblox.glb"
+  },
   "Models.TidepoolTales.BubbleBean": {
     "assetId": "133206366502054",
     "assetType": "Model",

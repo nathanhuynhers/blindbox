@@ -1,0 +1,214 @@
+{
+  "figure": "PebblePip",
+  "title": "Pebble Pip",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.1258,
+    2.0211,
+    3.2487
+  ],
+  "meshes": 8,
+  "triangles": 28796,
+  "materials": [
+    "PebblePip_Blush",
+    "PebblePip_CloverLeaf",
+    "PebblePip_CloverStem",
+    "PebblePip_EyeGloss",
+    "PebblePip_EyeShine",
+    "PebblePip_Mouth",
+    "PebblePip_Stone"
+  ],
+  "components": {
+    "PebblePip_Head": {
+      "tris": 11000,
+      "verts": 5502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.64122
+    },
+    "PebblePip_Body": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.27848
+    },
+    "PebblePip_Clover": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08464
+    },
+    "PebblePip_CloverStem": {
+      "tris": 1600,
+      "verts": 802,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00931
+    },
+    "PebblePip_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00588
+    },
+    "PebblePip_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00016
+    },
+    "PebblePip_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00547
+    },
+    "PebblePip_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00025
+    }
+  },
+  "build": {
+    "PebblePip_Head": {
+      "active_blocks": 6117,
+      "blocks": 14040,
+      "grid": [
+        217,
+        209,
+        161
+      ],
+      "raw_tris": 278876,
+      "removed_faces": 0,
+      "seconds": 5.9
+    },
+    "PebblePip_Body": {
+      "active_blocks": 2383,
+      "blocks": 6048,
+      "grid": [
+        193,
+        113,
+        145
+      ],
+      "raw_tris": 111140,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "PebblePip_Clover": {
+      "active_blocks": 4597,
+      "blocks": 31320,
+      "grid": [
+        289,
+        233,
+        241
+      ],
+      "raw_tris": 258040,
+      "removed_faces": 0,
+      "seconds": 14.0
+    },
+    "PebblePip_CloverStem": {
+      "active_blocks": 881,
+      "blocks": 3900,
+      "grid": [
+        105,
+        97,
+        201
+      ],
+      "raw_tris": 37612,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "PebblePip_Eyes": {
+      "active_blocks": 840,
+      "blocks": 4224,
+      "grid": [
+        257,
+        89,
+        97
+      ],
+      "raw_tris": 27406,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "PebblePip_EyeShine": {
+      "active_blocks": 279,
+      "blocks": 3996,
+      "grid": [
+        297,
+        97,
+        73
+      ],
+      "raw_tris": 3936,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "PebblePip_Cheeks": {
+      "active_blocks": 1192,
+      "blocks": 8602,
+      "grid": [
+        369,
+        137,
+        89
+      ],
+      "raw_tris": 36560,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "PebblePip_Mouth": {
+      "active_blocks": 259,
+      "blocks": 972,
+      "grid": [
+        97,
+        73,
+        73
+      ],
+      "raw_tris": 4468,
+      "removed_faces": 0,
+      "seconds": 0.4
+    }
+  },
+  "glb": {
+    "bytes": 645156,
+    "nodes": [
+      "PebblePip_Body",
+      "PebblePip_Cheeks",
+      "PebblePip_Clover",
+      "PebblePip_CloverStem",
+      "PebblePip_Eyes",
+      "PebblePip_EyeShine",
+      "PebblePip_Head",
+      "PebblePip_Mouth",
+      "PebblePip"
+    ],
+    "meshes": 8,
+    "materials": 7,
+    "images": 7,
+    "textures": 7,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "grove.pebble",
+  "root": "PebblePip",
+  "face": "PebblePip_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 8,
+    "triangle_mismatches": {}
+  }
+}

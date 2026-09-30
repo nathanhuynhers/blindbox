@@ -8,6 +8,9 @@ Open boxes, discover original collectibles, choose active Display earners, earn 
 more figures and arrange cosmetic shelves on a large open personal plot. Visitors simply walk
 over from the shared world. Pocket Grove and Tidepool Tales are collections, not plot identities.
 
+The supported standard hierarchy is Common < Uncommon < Rare < Legendary < Mythical, with
+Mythical highest. Legendary/Mythical presentation and validation are available before any live
+figures use them; see [rarity architecture](RARITY.md). No high-tier content or odds are implied.
 Two collections contain six figures each: three Common, two Uncommon and one Rare. Catalog IDs,
 server rarity rates/odds and the 150-Coin box price are unchanged. Buying resolves spend and grant
 atomically; the existing skippable opening cannot grant items. The Collection Book records owned

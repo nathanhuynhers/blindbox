@@ -4,6 +4,12 @@ These are tuning values for the user-authorized full-game candidate, not validat
 balance. Income remains automatic and server-owned; visitors cannot affect payouts. No paid currency,
 offline income, trading or escalating multipliers are implemented.
 
+Supported tiers are Common < Uncommon < Rare < Legendary < Mythical. Live content and odds
+below remain unchanged. Weights belong to individual server economy entries, not rarity tiers;
+no Legendary/Mythical weights or rates are synthesized. Future figures require explicit approved
+values. Startup enforces positive finite rates/weights, existing Common/Uncommon/Rare bands and
+strictly increasing rates across all populated tiers. See [rarity architecture](RARITY.md).
+
 | Parameter | Value |
 | --- | --- |
 | New profile | 450 Coins once; unsaved Studio preview recreates this on join |

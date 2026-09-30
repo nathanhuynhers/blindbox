@@ -28,8 +28,10 @@ pull chance, owned count and income form one information column. Pull chance com
 snapshot generated from the same configured weights used by the roll. Display is the primary green
 action; Recycle and Redeem share a quieter secondary row. Recycling remains disabled when no
 eligible extra exists and redemption remains accessible.
-Common/Uncommon/Rare use green/periwinkle/purple Collection badges. Opening rarity colors, catalog
-rarities, rates and odds are unchanged. A six-thumbnail strip and previous/next controls provide
+Rarity badges now use the shared five-tier identity: mint Common, lavender Uncommon, gold Rare,
+crimson Legendary and pink-violet Mythical, with contrasting label colors. Catalog rarities,
+rates and odds are unchanged; higher tiers are supported before live figures use them.
+See [rarity architecture](RARITY.md). A six-thumbnail strip and previous/next controls provide
 selection without another modal. The strip disappears when it cannot fit its 44px targets.
 
 Global currency pills and the existing left navigation remain separate. Close sits at the book's
@@ -51,7 +53,7 @@ never remove catalog entries or change ownership. Overflow stays scrollable.
 - `CollectionSkin`: native cover/page stacks, fold, shadows and decorative skin slots.
 - `CollectionTabs`: physical catalog-generated index tabs and progress.
 - `CollectionArt`: book emblems/corner illustrations; the existing Shop renderer is unchanged.
-- `CollectionStyle`: existing per-collection colors plus separate Collection rarity badge colors.
+- `CollectionStyle`: per-collection colors and canonical shared rarity badge colors.
 - `CollectionControls`: specialized glossy paper, green primary Display and quieter secondary/filter surfaces.
 - `FigureCard` / `FigureDetails`: mounted portraits and the right-page showcase.
 - `CollectionAssets`: optional uploaded artwork; resolved IDs select production artwork exclusively, and missing/invalid IDs select the retained native fallback.
@@ -69,7 +71,7 @@ The precise insertion points in `src/client/CollectionAssets.luau` are:
 | `collections.<id>.cardSelected.id`, `.cardLocked.id` | Selected/unknown portrait mounts; no character/name baked in |
 | `collections.<id>.detail.id` | Blank right-page showcase border/background |
 | `buttons.display.id`, `buttons.recycle.id`, `buttons.paper.id` | Text-free button surfaces |
-| `badges.Common.id`, `badges.Uncommon.id`, `badges.Rare.id` | Text-free rarity pills |
+| `badges.<rarity>.id` for all five canonical rarities | Text-free rarity pills; generated empty slots include Legendary and Mythical |
 
 Set `id` to the actual uploaded `rbxassetid://...`. Each entry optionally takes
 `slice = {left, top, right, bottom}` in source-image pixels for nine-slice scaling. Without a

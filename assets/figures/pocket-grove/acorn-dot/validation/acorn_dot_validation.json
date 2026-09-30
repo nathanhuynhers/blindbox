@@ -1,0 +1,257 @@
+{
+  "figure": "AcornDot",
+  "title": "Acorn Dot",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.4401,
+    2.2364,
+    2.8945
+  ],
+  "meshes": 10,
+  "triangles": 43492,
+  "materials": [
+    "AcornDot_Blush",
+    "AcornDot_Cap",
+    "AcornDot_EyeGloss",
+    "AcornDot_EyeShine",
+    "AcornDot_Leaf",
+    "AcornDot_Mouth",
+    "AcornDot_Nut",
+    "AcornDot_Skin"
+  ],
+  "components": {
+    "AcornDot_Cap": {
+      "tris": 16000,
+      "verts": 8002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.02398
+    },
+    "AcornDot_CapLeaf": {
+      "tris": 800,
+      "verts": 402,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00349
+    },
+    "AcornDot_Head": {
+      "tris": 9998,
+      "verts": 5001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.56485
+    },
+    "AcornDot_Body": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.43139
+    },
+    "AcornDot_Acorn": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08663
+    },
+    "AcornDot_AcornCap": {
+      "tris": 2998,
+      "verts": 1501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04751
+    },
+    "AcornDot_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0059
+    },
+    "AcornDot_EyeShine": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00016
+    },
+    "AcornDot_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00612
+    },
+    "AcornDot_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00025
+    }
+  },
+  "build": {
+    "AcornDot_Cap": {
+      "active_blocks": 9958,
+      "blocks": 34580,
+      "grid": [
+        305,
+        281,
+        209
+      ],
+      "raw_tris": 559244,
+      "removed_faces": 0,
+      "seconds": 16.7
+    },
+    "AcornDot_CapLeaf": {
+      "active_blocks": 641,
+      "blocks": 3672,
+      "grid": [
+        145,
+        97,
+        137
+      ],
+      "raw_tris": 29428,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "AcornDot_Head": {
+      "active_blocks": 6127,
+      "blocks": 12064,
+      "grid": [
+        233,
+        209,
+        129
+      ],
+      "raw_tris": 263554,
+      "removed_faces": 0,
+      "seconds": 7.8
+    },
+    "AcornDot_Body": {
+      "active_blocks": 3235,
+      "blocks": 8360,
+      "grid": [
+        161,
+        177,
+        153
+      ],
+      "raw_tris": 149784,
+      "removed_faces": 0,
+      "seconds": 7.6
+    },
+    "AcornDot_Acorn": {
+      "active_blocks": 1735,
+      "blocks": 4608,
+      "grid": [
+        129,
+        129,
+        145
+      ],
+      "raw_tris": 80604,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "AcornDot_AcornCap": {
+      "active_blocks": 2194,
+      "blocks": 8064,
+      "grid": [
+        193,
+        169,
+        129
+      ],
+      "raw_tris": 105308,
+      "removed_faces": 2,
+      "seconds": 2.9
+    },
+    "AcornDot_Eyes": {
+      "active_blocks": 864,
+      "blocks": 4992,
+      "grid": [
+        257,
+        97,
+        105
+      ],
+      "raw_tris": 26974,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "AcornDot_EyeShine": {
+      "active_blocks": 275,
+      "blocks": 3888,
+      "grid": [
+        289,
+        97,
+        73
+      ],
+      "raw_tris": 3796,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "AcornDot_Cheeks": {
+      "active_blocks": 1324,
+      "blocks": 9936,
+      "grid": [
+        369,
+        145,
+        97
+      ],
+      "raw_tris": 42506,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "AcornDot_Mouth": {
+      "active_blocks": 227,
+      "blocks": 972,
+      "grid": [
+        97,
+        73,
+        73
+      ],
+      "raw_tris": 4556,
+      "removed_faces": 0,
+      "seconds": 0.2
+    }
+  },
+  "glb": {
+    "bytes": 970720,
+    "nodes": [
+      "AcornDot_Acorn",
+      "AcornDot_AcornCap",
+      "AcornDot_Body",
+      "AcornDot_Cap",
+      "AcornDot_CapLeaf",
+      "AcornDot_Cheeks",
+      "AcornDot_Eyes",
+      "AcornDot_EyeShine",
+      "AcornDot_Head",
+      "AcornDot_Mouth",
+      "AcornDot"
+    ],
+    "meshes": 10,
+    "materials": 8,
+    "images": 8,
+    "textures": 8,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "grove.acorn",
+  "root": "AcornDot",
+  "face": "AcornDot_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 10,
+    "triangle_mismatches": {}
+  }
+}

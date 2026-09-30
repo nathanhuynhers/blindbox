@@ -1,0 +1,279 @@
+{
+  "figure": "SunbeamSprite",
+  "title": "Sunbeam Sprite",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    3.6303,
+    2.3966,
+    3.3867
+  ],
+  "meshes": 11,
+  "triangles": 60038,
+  "materials": [
+    "SunbeamSprite_Blush",
+    "SunbeamSprite_Braid",
+    "SunbeamSprite_EyeGloss",
+    "SunbeamSprite_Gold",
+    "SunbeamSprite_Mouth",
+    "SunbeamSprite_Orb",
+    "SunbeamSprite_OrbSun",
+    "SunbeamSprite_Petals",
+    "SunbeamSprite_Skin"
+  ],
+  "components": {
+    "SunbeamSprite_Head": {
+      "tris": 11000,
+      "verts": 5502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.04887
+    },
+    "SunbeamSprite_Ears": {
+      "tris": 4000,
+      "verts": 2004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.20619
+    },
+    "SunbeamSprite_Petals": {
+      "tris": 17942,
+      "verts": 8941,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.1777
+    },
+    "SunbeamSprite_Braid": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.37498
+    },
+    "SunbeamSprite_Crown": {
+      "tris": 4998,
+      "verts": 2499,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05002
+    },
+    "SunbeamSprite_Orb": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07
+    },
+    "SunbeamSprite_OrbSun": {
+      "tris": 2500,
+      "verts": 1268,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00546
+    },
+    "SunbeamSprite_Body": {
+      "tris": 9000,
+      "verts": 4502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.50603
+    },
+    "SunbeamSprite_Eyes": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00202
+    },
+    "SunbeamSprite_Cheeks": {
+      "tris": 898,
+      "verts": 453,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00493
+    },
+    "SunbeamSprite_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00022
+    }
+  },
+  "build": {
+    "SunbeamSprite_Head": {
+      "active_blocks": 5207,
+      "blocks": 12584,
+      "grid": [
+        209,
+        177,
+        177
+      ],
+      "raw_tris": 253108,
+      "removed_faces": 0,
+      "seconds": 5.3
+    },
+    "SunbeamSprite_Ears": {
+      "active_blocks": 3921,
+      "blocks": 18060,
+      "grid": [
+        345,
+        113,
+        241
+      ],
+      "raw_tris": 184132,
+      "removed_faces": 0,
+      "seconds": 5.6
+    },
+    "SunbeamSprite_Petals": {
+      "active_blocks": 17169,
+      "blocks": 37842,
+      "grid": [
+        425,
+        137,
+        337
+      ],
+      "raw_tris": 1209292,
+      "removed_faces": 58,
+      "seconds": 243.1
+    },
+    "SunbeamSprite_Braid": {
+      "active_blocks": 5534,
+      "blocks": 17296,
+      "grid": [
+        129,
+        185,
+        377
+      ],
+      "raw_tris": 261820,
+      "removed_faces": 0,
+      "seconds": 19.8
+    },
+    "SunbeamSprite_Crown": {
+      "active_blocks": 4274,
+      "blocks": 16146,
+      "grid": [
+        209,
+        217,
+        185
+      ],
+      "raw_tris": 184508,
+      "removed_faces": 0,
+      "seconds": 15.8
+    },
+    "SunbeamSprite_Orb": {
+      "active_blocks": 1993,
+      "blocks": 4851,
+      "grid": [
+        169,
+        89,
+        169
+      ],
+      "raw_tris": 84060,
+      "removed_faces": 0,
+      "seconds": 3.4
+    },
+    "SunbeamSprite_OrbSun": {
+      "active_blocks": 1737,
+      "blocks": 11774,
+      "grid": [
+        233,
+        113,
+        233
+      ],
+      "raw_tris": 62720,
+      "removed_faces": 0,
+      "seconds": 3.9
+    },
+    "SunbeamSprite_Body": {
+      "active_blocks": 3672,
+      "blocks": 9240,
+      "grid": [
+        161,
+        177,
+        169
+      ],
+      "raw_tris": 169332,
+      "removed_faces": 0,
+      "seconds": 11.0
+    },
+    "SunbeamSprite_Eyes": {
+      "active_blocks": 1021,
+      "blocks": 7744,
+      "grid": [
+        353,
+        129,
+        89
+      ],
+      "raw_tris": 29992,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "SunbeamSprite_Cheeks": {
+      "active_blocks": 984,
+      "blocks": 7260,
+      "grid": [
+        353,
+        121,
+        89
+      ],
+      "raw_tris": 37400,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "SunbeamSprite_Mouth": {
+      "active_blocks": 237,
+      "blocks": 1296,
+      "grid": [
+        97,
+        97,
+        73
+      ],
+      "raw_tris": 4412,
+      "removed_faces": 0,
+      "seconds": 0.4
+    }
+  },
+  "glb": {
+    "bytes": 1335892,
+    "nodes": [
+      "SunbeamSprite_Body",
+      "SunbeamSprite_Braid",
+      "SunbeamSprite_Cheeks",
+      "SunbeamSprite_Crown",
+      "SunbeamSprite_Ears",
+      "SunbeamSprite_Eyes",
+      "SunbeamSprite_Head",
+      "SunbeamSprite_Mouth",
+      "SunbeamSprite_Orb",
+      "SunbeamSprite_OrbSun",
+      "SunbeamSprite_Petals",
+      "SunbeamSprite"
+    ],
+    "meshes": 11,
+    "materials": 9,
+    "images": 9,
+    "textures": 9,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "grove.star",
+  "root": "SunbeamSprite",
+  "face": "SunbeamSprite_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 11,
+    "triangle_mismatches": {}
+  }
+}

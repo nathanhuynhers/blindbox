@@ -34,12 +34,12 @@ through `src/shared/FigureAssets.luau`; see the
 entries, uploads, and regenerates `src/shared/FigureAssetEntries.luau`; see the
 [figure collection runbook](FIGURE_COLLECTION_RUNBOOK.md).
 
-The first production figure, Pebble Pip, is prepared under
-`assets/figures/pocket-grove/pebble-pip/model/pebble_pip_roblox.glb` with alias
-`pebble_pip` and semantic key `Models.PocketGrove.PebblePip`. It is registered locally
-but **not uploaded or adopted by gameplay**. See its
-[production receipt and manual Studio import/integration plan](../assets/figures/pocket-grove/pebble-pip/PRODUCTION.md).
-Run only `python scripts/upload_assets.py pebble_pip --dry-run` until Studio acceptance.
+All six Pocket Grove figures are uploaded (`Models.PocketGrove.*`, aliases `pebble_pip`,
+`sprout_scout`, `acorn_dot`, `mallow_cap`, `moon_moth`, `sunbeam_sprite`) and adopted at runtime
+the same way; see the [Pocket Grove receipt](../assets/figures/pocket-grove/PRODUCTION.md).
+Pebble Pip was rebuilt with the collection pipeline and replaced the earlier hand-built model
+(never uploaded), keeping the same alias, key and GLB path; its
+[old receipt](../assets/figures/pocket-grove/pebble-pip/PRODUCTION.md) is kept as history.
 
 ### Flat-color collectible materials
 

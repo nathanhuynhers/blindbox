@@ -30,6 +30,8 @@ sys.path.insert(0, HERE)
 
 ROOT = ""  # assets/figures/<collection>, set by main()
 PREVIEW = ""  # build/figures/<collection>/preview (ignored scratch)
+# "view transform|look|exposure"; FIG_VIEW overrides, else the collection's RENDER_VIEW, else this.
+RENDER_VIEW = "AgX|AgX - Punchy|-0.35"
 BLOCK = 8
 
 VIEWS = {  # azimuth measured from the front (-Y) toward the character's left (+X)
@@ -306,7 +308,7 @@ def setup_render(scene, res, samples):
     scene.render.resolution_y = res
     scene.render.film_transparent = True
     scene.cycles.film_transparent_glass = True
-    vt, look, expo = os.environ.get("FIG_VIEW", "AgX|AgX - Punchy|-0.35").split("|")
+    vt, look, expo = os.environ.get("FIG_VIEW", RENDER_VIEW).split("|")
     scene.view_settings.view_transform = vt
     scene.view_settings.look = look
     scene.view_settings.exposure = float(expo)
@@ -442,7 +444,7 @@ def reimport_check(path, expected):
 # --------------------------------------------------------------- main
 
 def main():
-    global ROOT, PREVIEW
+    global ROOT, PREVIEW, RENDER_VIEW
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     if len(argv) < 2:
         raise SystemExit("usage: build.py -- <collection> <figure|lineup> [preview|final]")
@@ -452,7 +454,9 @@ def main():
     PREVIEW = os.path.join(REPO, "build", "figures", collection, "preview")
     os.makedirs(PREVIEW, exist_ok=True)
     sys.path.insert(0, ROOT)
-    from figures import FIGURES
+    import figures
+    FIGURES = figures.FIGURES
+    RENDER_VIEW = getattr(figures, "RENDER_VIEW", RENDER_VIEW)
 
     if slug == "lineup":
         return lineup(collection, list(FIGURES))

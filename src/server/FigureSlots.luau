@@ -7,7 +7,7 @@ export type Render = {
 	anchors: { [string]: CFrame },
 	ids: { [string]: string? },
 	models: { [string]: Instance },
-	variants: { [string]: string },
+	variants: { [string]: string? },
 	standingScale: number?,
 }
 local FigureSlots = {}
