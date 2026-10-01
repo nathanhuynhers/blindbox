@@ -1,0 +1,672 @@
+{
+  "figure": "HearthHelm",
+  "title": "Hearth Helm",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.2249,
+    2.1043,
+    3.512
+  ],
+  "meshes": 29,
+  "triangles": 67180,
+  "materials": [
+    "HearthHelm_Blush",
+    "HearthHelm_Bricks",
+    "HearthHelm_Brow",
+    "HearthHelm_EyeShine",
+    "HearthHelm_EyeWhite",
+    "HearthHelm_Hair",
+    "HearthHelm_Iris",
+    "HearthHelm_Lash",
+    "HearthHelm_Mouth",
+    "HearthHelm_Nose",
+    "HearthHelm_Pane",
+    "HearthHelm_Roof",
+    "HearthHelm_Shoes",
+    "HearthHelm_ShortStripes",
+    "HearthHelm_Shorts",
+    "HearthHelm_Shutters",
+    "HearthHelm_Skin",
+    "HearthHelm_Socks",
+    "HearthHelm_Sole",
+    "HearthHelm_Stitch",
+    "HearthHelm_Stone",
+    "HearthHelm_Toggle",
+    "HearthHelm_Tunic",
+    "HearthHelm_Window"
+  ],
+  "components": {
+    "HearthHelm_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08258
+    },
+    "HearthHelm_Hair": {
+      "tris": 6978,
+      "verts": 3495,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.25057
+    },
+    "HearthHelm_Helmet": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.82326
+    },
+    "HearthHelm_Roof": {
+      "tris": 9576,
+      "verts": 4754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.06741
+    },
+    "HearthHelm_Chimney": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03983
+    },
+    "HearthHelm_ChimneyCap": {
+      "tris": 750,
+      "verts": 377,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01113
+    },
+    "HearthHelm_WindowFrame": {
+      "tris": 1250,
+      "verts": 621,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00812
+    },
+    "HearthHelm_WindowPane": {
+      "tris": 750,
+      "verts": 379,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0068
+    },
+    "HearthHelm_Shutters": {
+      "tris": 1000,
+      "verts": 506,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0085
+    },
+    "HearthHelm_Bricks": {
+      "tris": 2494,
+      "verts": 1271,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0093
+    },
+    "HearthHelm_Stitches": {
+      "tris": 750,
+      "verts": 381,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00178
+    },
+    "HearthHelm_Tunic": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.31403
+    },
+    "HearthHelm_Toggle": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00016
+    },
+    "HearthHelm_Arms": {
+      "tris": 2998,
+      "verts": 1501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04823
+    },
+    "HearthHelm_Shorts": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.16959
+    },
+    "HearthHelm_ShortStripes": {
+      "tris": 4498,
+      "verts": 2221,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02611
+    },
+    "HearthHelm_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04919
+    },
+    "HearthHelm_Socks": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04327
+    },
+    "HearthHelm_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08956
+    },
+    "HearthHelm_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01498
+    },
+    "HearthHelm_ShoeStitch": {
+      "tris": 450,
+      "verts": 233,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00099
+    },
+    "HearthHelm_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01049
+    },
+    "HearthHelm_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00842
+    },
+    "HearthHelm_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "HearthHelm_Lash": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00147
+    },
+    "HearthHelm_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "HearthHelm_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "HearthHelm_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "HearthHelm_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "HearthHelm_Head": {
+      "active_blocks": 5424,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 250908,
+      "removed_faces": 0,
+      "seconds": 7.0
+    },
+    "HearthHelm_Hair": {
+      "active_blocks": 6808,
+      "blocks": 26400,
+      "grid": [
+        265,
+        257,
+        201
+      ],
+      "raw_tris": 243844,
+      "removed_faces": 22,
+      "seconds": 15.8
+    },
+    "HearthHelm_Helmet": {
+      "active_blocks": 13020,
+      "blocks": 43956,
+      "grid": [
+        297,
+        289,
+        265
+      ],
+      "raw_tris": 616260,
+      "removed_faces": 0,
+      "seconds": 16.0
+    },
+    "HearthHelm_Roof": {
+      "active_blocks": 14621,
+      "blocks": 49364,
+      "grid": [
+        345,
+        329,
+        225
+      ],
+      "raw_tris": 935394,
+      "removed_faces": 172,
+      "seconds": 19.3
+    },
+    "HearthHelm_Chimney": {
+      "active_blocks": 1802,
+      "blocks": 4004,
+      "grid": [
+        113,
+        105,
+        177
+      ],
+      "raw_tris": 72464,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "HearthHelm_ChimneyCap": {
+      "active_blocks": 818,
+      "blocks": 1890,
+      "grid": [
+        113,
+        121,
+        73
+      ],
+      "raw_tris": 29080,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "HearthHelm_WindowFrame": {
+      "active_blocks": 2191,
+      "blocks": 9702,
+      "grid": [
+        177,
+        169,
+        169
+      ],
+      "raw_tris": 86024,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "HearthHelm_WindowPane": {
+      "active_blocks": 1499,
+      "blocks": 6498,
+      "grid": [
+        153,
+        153,
+        145
+      ],
+      "raw_tris": 54492,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "HearthHelm_Shutters": {
+      "active_blocks": 1917,
+      "blocks": 10948,
+      "grid": [
+        185,
+        225,
+        137
+      ],
+      "raw_tris": 64736,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "HearthHelm_Bricks": {
+      "active_blocks": 3941,
+      "blocks": 150696,
+      "grid": [
+        553,
+        449,
+        313
+      ],
+      "raw_tris": 121100,
+      "removed_faces": 6,
+      "seconds": 6.1
+    },
+    "HearthHelm_Stitches": {
+      "active_blocks": 1078,
+      "blocks": 8250,
+      "grid": [
+        201,
+        121,
+        177
+      ],
+      "raw_tris": 36936,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "HearthHelm_Tunic": {
+      "active_blocks": 3129,
+      "blocks": 6804,
+      "grid": [
+        169,
+        145,
+        145
+      ],
+      "raw_tris": 135612,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "HearthHelm_Toggle": {
+      "active_blocks": 176,
+      "blocks": 1694,
+      "grid": [
+        89,
+        89,
+        113
+      ],
+      "raw_tris": 4660,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "HearthHelm_Arms": {
+      "active_blocks": 2902,
+      "blocks": 11594,
+      "grid": [
+        249,
+        177,
+        137
+      ],
+      "raw_tris": 137626,
+      "removed_faces": 0,
+      "seconds": 10.4
+    },
+    "HearthHelm_Shorts": {
+      "active_blocks": 3155,
+      "blocks": 6688,
+      "grid": [
+        177,
+        153,
+        129
+      ],
+      "raw_tris": 131004,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "HearthHelm_ShortStripes": {
+      "active_blocks": 8079,
+      "blocks": 22176,
+      "grid": [
+        265,
+        225,
+        193
+      ],
+      "raw_tris": 598114,
+      "removed_faces": 0,
+      "seconds": 12.1
+    },
+    "HearthHelm_Legs": {
+      "active_blocks": 1349,
+      "blocks": 2304,
+      "grid": [
+        129,
+        73,
+        129
+      ],
+      "raw_tris": 53828,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "HearthHelm_Socks": {
+      "active_blocks": 1530,
+      "blocks": 3360,
+      "grid": [
+        193,
+        113,
+        81
+      ],
+      "raw_tris": 75350,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "HearthHelm_Shoes": {
+      "active_blocks": 1730,
+      "blocks": 2940,
+      "grid": [
+        169,
+        113,
+        81
+      ],
+      "raw_tris": 74336,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "HearthHelm_Soles": {
+      "active_blocks": 1694,
+      "blocks": 4640,
+      "grid": [
+        233,
+        161,
+        65
+      ],
+      "raw_tris": 71392,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "HearthHelm_ShoeStitch": {
+      "active_blocks": 1359,
+      "blocks": 10240,
+      "grid": [
+        257,
+        129,
+        161
+      ],
+      "raw_tris": 30764,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "HearthHelm_Eyes": {
+      "active_blocks": 1936,
+      "blocks": 10260,
+      "grid": [
+        289,
+        153,
+        121
+      ],
+      "raw_tris": 66936,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "HearthHelm_Iris": {
+      "active_blocks": 1585,
+      "blocks": 9405,
+      "grid": [
+        265,
+        153,
+        121
+      ],
+      "raw_tris": 52644,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "HearthHelm_EyeShine": {
+      "active_blocks": 825,
+      "blocks": 7280,
+      "grid": [
+        281,
+        129,
+        105
+      ],
+      "raw_tris": 13924,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "HearthHelm_Lash": {
+      "active_blocks": 1480,
+      "blocks": 10824,
+      "grid": [
+        329,
+        177,
+        97
+      ],
+      "raw_tris": 38656,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "HearthHelm_Brow": {
+      "active_blocks": 498,
+      "blocks": 2912,
+      "grid": [
+        225,
+        105,
+        65
+      ],
+      "raw_tris": 8512,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "HearthHelm_Nose": {
+      "active_blocks": 138,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "HearthHelm_Mouth": {
+      "active_blocks": 220,
+      "blocks": 1188,
+      "grid": [
+        97,
+        89,
+        73
+      ],
+      "raw_tris": 3564,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "HearthHelm_Blush": {
+      "active_blocks": 1142,
+      "blocks": 5280,
+      "grid": [
+        265,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 0.9
+    }
+  },
+  "glb": {
+    "bytes": 1517812,
+    "nodes": [
+      "HearthHelm_Arms",
+      "HearthHelm_Blush",
+      "HearthHelm_Bricks",
+      "HearthHelm_Brow",
+      "HearthHelm_Chimney",
+      "HearthHelm_ChimneyCap",
+      "HearthHelm_Eyes",
+      "HearthHelm_EyeShine",
+      "HearthHelm_Hair",
+      "HearthHelm_Head",
+      "HearthHelm_Helmet",
+      "HearthHelm_Iris",
+      "HearthHelm_Lash",
+      "HearthHelm_Legs",
+      "HearthHelm_Mouth",
+      "HearthHelm_Nose",
+      "HearthHelm_Roof",
+      "HearthHelm_Shoes",
+      "HearthHelm_ShoeStitch",
+      "HearthHelm_Shorts",
+      "HearthHelm_ShortStripes",
+      "HearthHelm_Shutters",
+      "HearthHelm_Socks",
+      "HearthHelm_Soles",
+      "HearthHelm_Stitches",
+      "HearthHelm_Toggle",
+      "HearthHelm_Tunic",
+      "HearthHelm_WindowFrame",
+      "HearthHelm_WindowPane",
+      "HearthHelm"
+    ],
+    "meshes": 29,
+    "materials": 24,
+    "images": 24,
+    "textures": 24,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.hearth-helm",
+  "root": "HearthHelm",
+  "face": "HearthHelm_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 29,
+    "triangle_mismatches": {}
+  }
+}

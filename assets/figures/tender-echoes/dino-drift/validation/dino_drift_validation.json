@@ -1,0 +1,584 @@
+{
+  "figure": "DinoDrift",
+  "title": "Dino Drift",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    1.8496,
+    2.2174,
+    3.3886
+  ],
+  "meshes": 25,
+  "triangles": 55174,
+  "materials": [
+    "DinoDrift_Blush",
+    "DinoDrift_Boots",
+    "DinoDrift_Brow",
+    "DinoDrift_Cords",
+    "DinoDrift_Dots",
+    "DinoDrift_Emblem",
+    "DinoDrift_EyeShine",
+    "DinoDrift_EyeWhite",
+    "DinoDrift_Fleece",
+    "DinoDrift_Footprint",
+    "DinoDrift_Hair",
+    "DinoDrift_Iris",
+    "DinoDrift_Lash",
+    "DinoDrift_Lining",
+    "DinoDrift_Mouth",
+    "DinoDrift_Nose",
+    "DinoDrift_Skin",
+    "DinoDrift_Socks",
+    "DinoDrift_Spikes",
+    "DinoDrift_Toggles"
+  ],
+  "components": {
+    "DinoDrift_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08259
+    },
+    "DinoDrift_Hair": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.27069
+    },
+    "DinoDrift_Hood": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.84571
+    },
+    "DinoDrift_Lining": {
+      "tris": 2996,
+      "verts": 1500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.16638
+    },
+    "DinoDrift_HoodDots": {
+      "tris": 600,
+      "verts": 308,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00147
+    },
+    "DinoDrift_Horns": {
+      "tris": 748,
+      "verts": 378,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00712
+    },
+    "DinoDrift_Spikes": {
+      "tris": 3998,
+      "verts": 2017,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05821
+    },
+    "DinoDrift_Coat": {
+      "tris": 9000,
+      "verts": 4502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.90392
+    },
+    "DinoDrift_Hands": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00902
+    },
+    "DinoDrift_Pocket": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01582
+    },
+    "DinoDrift_PocketPrint": {
+      "tris": 598,
+      "verts": 295,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00118
+    },
+    "DinoDrift_Toggles": {
+      "tris": 748,
+      "verts": 378,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00116
+    },
+    "DinoDrift_Cords": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00239
+    },
+    "DinoDrift_Legs": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02903
+    },
+    "DinoDrift_Socks": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02972
+    },
+    "DinoDrift_Boots": {
+      "tris": 3500,
+      "verts": 1754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0924
+    },
+    "DinoDrift_BootEmblem": {
+      "tris": 600,
+      "verts": 296,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0016
+    },
+    "DinoDrift_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00959
+    },
+    "DinoDrift_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00854
+    },
+    "DinoDrift_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00066
+    },
+    "DinoDrift_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00149
+    },
+    "DinoDrift_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "DinoDrift_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "DinoDrift_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "DinoDrift_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "DinoDrift_Head": {
+      "active_blocks": 5428,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 250936,
+      "removed_faces": 0,
+      "seconds": 9.0
+    },
+    "DinoDrift_Hair": {
+      "active_blocks": 6662,
+      "blocks": 22848,
+      "grid": [
+        273,
+        225,
+        193
+      ],
+      "raw_tris": 248816,
+      "removed_faces": 0,
+      "seconds": 22.3
+    },
+    "DinoDrift_Hood": {
+      "active_blocks": 13793,
+      "blocks": 45325,
+      "grid": [
+        281,
+        297,
+        281
+      ],
+      "raw_tris": 624372,
+      "removed_faces": 0,
+      "seconds": 24.0
+    },
+    "DinoDrift_Lining": {
+      "active_blocks": 13922,
+      "blocks": 55473,
+      "grid": [
+        329,
+        265,
+        329
+      ],
+      "raw_tris": 691330,
+      "removed_faces": 2,
+      "seconds": 21.6
+    },
+    "DinoDrift_HoodDots": {
+      "active_blocks": 618,
+      "blocks": 15624,
+      "grid": [
+        249,
+        225,
+        145
+      ],
+      "raw_tris": 17096,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "DinoDrift_Horns": {
+      "active_blocks": 752,
+      "blocks": 2772,
+      "grid": [
+        169,
+        89,
+        97
+      ],
+      "raw_tris": 27452,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "DinoDrift_Spikes": {
+      "active_blocks": 4781,
+      "blocks": 37632,
+      "grid": [
+        129,
+        225,
+        673
+      ],
+      "raw_tris": 199114,
+      "removed_faces": 0,
+      "seconds": 8.1
+    },
+    "DinoDrift_Coat": {
+      "active_blocks": 6576,
+      "blocks": 28830,
+      "grid": [
+        241,
+        249,
+        249
+      ],
+      "raw_tris": 313516,
+      "removed_faces": 0,
+      "seconds": 38.6
+    },
+    "DinoDrift_Hands": {
+      "active_blocks": 850,
+      "blocks": 5460,
+      "grid": [
+        281,
+        97,
+        105
+      ],
+      "raw_tris": 34542,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "DinoDrift_Pocket": {
+      "active_blocks": 1582,
+      "blocks": 5586,
+      "grid": [
+        169,
+        113,
+        153
+      ],
+      "raw_tris": 62536,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "DinoDrift_PocketPrint": {
+      "active_blocks": 620,
+      "blocks": 5415,
+      "grid": [
+        121,
+        153,
+        153
+      ],
+      "raw_tris": 29516,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "DinoDrift_Toggles": {
+      "active_blocks": 459,
+      "blocks": 2016,
+      "grid": [
+        129,
+        73,
+        113
+      ],
+      "raw_tris": 13376,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "DinoDrift_Cords": {
+      "active_blocks": 884,
+      "blocks": 6422,
+      "grid": [
+        209,
+        105,
+        153
+      ],
+      "raw_tris": 30096,
+      "removed_faces": 0,
+      "seconds": 3.4
+    },
+    "DinoDrift_Legs": {
+      "active_blocks": 1232,
+      "blocks": 2720,
+      "grid": [
+        137,
+        81,
+        129
+      ],
+      "raw_tris": 49864,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "DinoDrift_Socks": {
+      "active_blocks": 1758,
+      "blocks": 3888,
+      "grid": [
+        217,
+        129,
+        73
+      ],
+      "raw_tris": 91848,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "DinoDrift_Boots": {
+      "active_blocks": 2389,
+      "blocks": 4928,
+      "grid": [
+        177,
+        129,
+        113
+      ],
+      "raw_tris": 103656,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "DinoDrift_BootEmblem": {
+      "active_blocks": 1238,
+      "blocks": 7410,
+      "grid": [
+        305,
+        105,
+        121
+      ],
+      "raw_tris": 29456,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "DinoDrift_Eyes": {
+      "active_blocks": 1832,
+      "blocks": 9576,
+      "grid": [
+        289,
+        153,
+        113
+      ],
+      "raw_tris": 62304,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "DinoDrift_Iris": {
+      "active_blocks": 1615,
+      "blocks": 9044,
+      "grid": [
+        273,
+        153,
+        113
+      ],
+      "raw_tris": 53156,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "DinoDrift_EyeShine": {
+      "active_blocks": 813,
+      "blocks": 6435,
+      "grid": [
+        265,
+        121,
+        105
+      ],
+      "raw_tris": 14216,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "DinoDrift_Lash": {
+      "active_blocks": 1476,
+      "blocks": 9020,
+      "grid": [
+        329,
+        177,
+        81
+      ],
+      "raw_tris": 37880,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "DinoDrift_Brow": {
+      "active_blocks": 499,
+      "blocks": 2688,
+      "grid": [
+        225,
+        97,
+        65
+      ],
+      "raw_tris": 8512,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "DinoDrift_Nose": {
+      "active_blocks": 138,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "DinoDrift_Mouth": {
+      "active_blocks": 228,
+      "blocks": 1296,
+      "grid": [
+        97,
+        97,
+        73
+      ],
+      "raw_tris": 3600,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "DinoDrift_Blush": {
+      "active_blocks": 1184,
+      "blocks": 5280,
+      "grid": [
+        265,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.7
+    }
+  },
+  "glb": {
+    "bytes": 1249120,
+    "nodes": [
+      "DinoDrift_Blush",
+      "DinoDrift_BootEmblem",
+      "DinoDrift_Boots",
+      "DinoDrift_Brow",
+      "DinoDrift_Coat",
+      "DinoDrift_Cords",
+      "DinoDrift_Eyes",
+      "DinoDrift_EyeShine",
+      "DinoDrift_Hair",
+      "DinoDrift_Hands",
+      "DinoDrift_Head",
+      "DinoDrift_Hood",
+      "DinoDrift_HoodDots",
+      "DinoDrift_Horns",
+      "DinoDrift_Iris",
+      "DinoDrift_Lash",
+      "DinoDrift_Legs",
+      "DinoDrift_Lining",
+      "DinoDrift_Mouth",
+      "DinoDrift_Nose",
+      "DinoDrift_Pocket",
+      "DinoDrift_PocketPrint",
+      "DinoDrift_Socks",
+      "DinoDrift_Spikes",
+      "DinoDrift_Toggles",
+      "DinoDrift"
+    ],
+    "meshes": 25,
+    "materials": 20,
+    "images": 20,
+    "textures": 20,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.dino-drift",
+  "root": "DinoDrift",
+  "face": "DinoDrift_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 25,
+    "triangle_mismatches": {}
+  }
+}

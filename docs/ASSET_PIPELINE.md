@@ -48,6 +48,15 @@ keys `Collection.Concepts.*`) is rendered from the production models by
 [ui_art.py](../assets/figures/concepts/ui_art.py); see the
 [Concepts receipt](../assets/figures/concepts/PRODUCTION.md).
 
+All thirteen Tender Echoes figures are uploaded (`Models.TenderEchoes.*`, aliases `thread_parade`,
+`wander_knit`, `dino_drift`, `still_pebble`, `hearth_helm`, `echo_line`, `paper_crown`,
+`mask_nuzzle`, `hush_veil`, `crate_spark`, `feather_hush`, `mumble_beast`, `moon_doze`) and
+adopted at runtime the same way. Its collection artwork (aliases `tender_echoes_emblem`,
+`tender_echoes_shop_pattern`, `tender_echoes_corner_{top_left,top_right,bottom_left,bottom_right}`,
+keys `Collection.TenderEchoes.*`) is rendered from the production models by
+[ui_art.py](../assets/figures/tender-echoes/ui_art.py); see the
+[Tender Echoes receipt](../assets/figures/tender-echoes/PRODUCTION.md).
+
 ### Flat-color collectible materials
 
 Roblox figure GLBs must not rely on glTF `baseColorFactor` alone. Pebble Pip's first Studio import

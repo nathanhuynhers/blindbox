@@ -226,6 +226,15 @@ for _, rarity in { "Legendary", "Mythical" } do
 			"profile override preserves authoritative result"
 		)
 		reach("RarityTease")
+		if rarity == "Mythical" then
+			for _, cue in Engine.cues do
+				check(
+					cue ~= "transformMythical" and cue ~= "rarityMythical",
+					"pearl suspense has no premature sting"
+				)
+			end
+			Engine.render:Fire(0.15)
+		end
 		local cues = {}
 		for _, cue in Engine.cues do
 			cues[cue] = true
@@ -236,6 +245,8 @@ for _, rarity in { "Legendary", "Mythical" } do
 		)
 		reach("Impact")
 		check(Engine.cues[#Engine.cues] == "impact" .. rarity, "tier impact cue")
+		Engine.render:Fire(Config.impactCalmAt(Config.profile(rarity)) + 0.001)
+		check(Engine.cues[#Engine.cues] == "postImpactShimmer", "profile calm and audio agree")
 		controller.skip()
 		check(
 			Engine.result == awarded and awarded.quantity == 7 and not awarded.isNew,
@@ -245,6 +256,22 @@ for _, rarity in { "Legendary", "Mythical" } do
 		controller.cancel()
 		clean()
 	end
+end
+for _, reduced in { false, true } do
+	table.clear(Engine.cues)
+	controller.present(result(), reduced, "Mythical")
+	reach("RarityTease")
+	Engine.render:Fire(0.1)
+	controller.skip()
+	Engine.render:Fire(0.2)
+	for _, cue in Engine.cues do
+		check(
+			cue ~= "transformMythical" and cue ~= "rarityMythical",
+			"Skip invalidates pending Mythical bloom cue"
+		)
+	end
+	controller.cancel()
+	clean()
 end
 Engine.studio = false
 for _, fixture in

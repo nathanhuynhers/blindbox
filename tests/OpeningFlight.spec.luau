@@ -212,6 +212,154 @@ for _, reduced in { false, true } do
 	parent:Destroy()
 	check(#E.camera:GetChildren() == 0, "post effects cleaned")
 end
+-- Mythical's distinction is ordered contrast, including in reduced motion.
+for _, reduced in { false, true } do
+	local profile = Config.rarities.Mythical
+	local state = State.create(profile.timing, reduced, false)
+	state.phase = "RarityTease"
+	local function at(elapsed)
+		state.elapsed = elapsed
+		return Flight.sample(state, profile)
+	end
+	local pearl = at(0.11)
+	check(
+		pearl.hushed and pearl.pulse == 0 and pearl.scale <= 0.51,
+		"compressed suspension precedes the bloom"
+	)
+	check(
+		colorNear(pearl.accent, profile.accent) and colorNear(pearl.color, Config.neutral),
+		"pearl core arrives before pink body"
+	)
+	local bloom = at(0.24)
+	check(
+		not bloom.hushed and bloom.pulse > 0.6 and not colorNear(bloom.color, Config.neutral),
+		"one colored bloom releases suspension"
+	)
+	check(
+		bloom.spectralRings[1] > 0 and bloom.spectralRings[2] == 0,
+		"outer response precedes inner wave"
+	)
+	local follow = at(0.38)
+	check(
+		follow.spectralRings[1] > follow.spectralRings[2] and follow.spectralRings[2] > 0,
+		"staggered rings expand independently of core pulse"
+	)
+	check(
+		follow.pulse < 0.001 and follow.spectralSweep > 0 and follow.spectralSweep < 1,
+		"cyan travels into recognition after core settles"
+	)
+	local held = at(0.8)
+	check(
+		held.spectralSweep == 1 and held.recognition == 1 and held.apex == 0 and held.dive == 0,
+		"stable recognition after one completed sweep"
+	)
+	check(
+		held.spectralRings[1] == 1 and held.spectralRings[2] == 1,
+		"both transformation rings finish within recognition"
+	)
+	local calm = Config.lightState("Impact", 0.18 / profile.timing.impact, 0.18, profile)
+	local legendary =
+		Config.lightState("Impact", 0.18 / profile.timing.impact, 0.18, Config.rarities.Legendary)
+	check(
+		calm.comet == 0 and calm.studio == 0.35 and legendary.comet > 0,
+		"Mythical retires aggression sooner without changing Legendary"
+	)
+
+	local scope = Scope.create()
+	local parent = E.Instance.new("Model")
+	local effects =
+		Effects.create(parent, E.camera, scope, profile, Config.collection("grove"), reduced, false)
+	local function draw(phase, elapsed)
+		state.phase, state.elapsed = phase, elapsed
+		effects.enter(phase)
+		effects.update(
+			state,
+			E.CFrame.new(),
+			Config.stage.origin + Flight.sample(state, profile).position,
+			elapsed
+		)
+	end
+	draw("Flight", 0.5)
+	local sparks = parent:FindFirstChild("FlightSparks", true)
+	check(sparks.liveParticles > 0, "neutral launch has particles to retire")
+	draw("RarityTease", 0.11)
+	check(
+		sparks.liveParticles == 0 and not sparks.Enabled,
+		"suspense clears existing flight particles"
+	)
+	for _, object in parent:GetDescendants() do
+		if object.Name == "SpeedStreaks" or object.Name == "DistantMotes" then
+			check(
+				not object.Enabled and object.liveParticles == 0,
+				"surroundings are quiet during pearl beat"
+			)
+		end
+	end
+	local cyan = {}
+	for _, object in parent:GetDescendants() do
+		if object.Name == "IridescentEdgeTrail" then
+			table.insert(cyan, object)
+		end
+	end
+	draw("RarityTease", 0.33)
+	-- Descendant enumeration has no order; the taper identifies head-to-tail segments.
+	table.sort(cyan, function(left, right)
+		return left.Width0 > right.Width0
+	end)
+	check(
+		cyan[1].Enabled and cyan[1].Transparency[1] < cyan[#cyan].Transparency[1],
+		"cyan starts at the comet end in both motion modes"
+	)
+	draw("RarityTease", 0.56)
+	check(
+		cyan[#cyan].Enabled and cyan[#cyan].Transparency[1] < cyan[1].Transparency[1],
+		"cyan pass travels toward the tail instead of cycling all layers"
+	)
+	check(
+		colorNear(parent:FindFirstChild("InnerGlow", true).Color, profile.tint)
+			and colorNear(parent:FindFirstChild("CometCore", true).Color, profile.accent),
+		"pearl core separates from pink body"
+	)
+	local count = #E.nodes
+	for step = 1, 30 do
+		draw("RarityTease", 0.56 + step * 0.02)
+	end
+	check(#E.nodes == count, "spectral sweep and recognition allocate no per-frame Instances")
+	draw("Impact", 0.08)
+	check(
+		not parent:FindFirstChild("FlightEffects", true),
+		"spectral trails and transform rings retire at contact"
+	)
+	local impact = parent:FindFirstChild("ImpactSparks", true)
+	check(impact.liveParticles > 0 and impact.liveParticles <= 17, "bounded sparse impact")
+	check(
+		not parent:FindFirstChild("SoftHalo", true).Enabled,
+		"halo waits for impact aggression to retire"
+	)
+	draw("Impact", 0.18)
+	check(
+		impact.liveParticles == 0 and not parent:FindFirstChild("OpeningImpactLight", true).Enabled,
+		"spectral calm clears actual transient resources"
+	)
+	for _, object in parent:FindFirstChild("ImpactEffects", true):GetDescendants() do
+		if object:IsA("Beam") then
+			check(not object.Enabled, "impact rings absent throughout calm")
+		end
+	end
+	draw("Silhouette", 0.2)
+	check(not parent:FindFirstChild("ImpactEffects", true), "no impact family survives silhouette")
+	local halo = parent:FindFirstChild("SoftHalo", true)
+	check(
+		halo.Enabled and colorNear(halo.Color[1], profile.accent),
+		"quiet pearl backlight keeps spectral silhouette readable"
+	)
+	check(parent:FindFirstChild("QuietDust", true).Rate <= 2, "prestige halo uses fewer motes")
+	scope.destroy()
+	effects.update(state, E.CFrame.new(), E.Vector3.zero, 0)
+	effects.clear()
+	parent:Destroy()
+	check(#E.camera:GetChildren() == 0, "spectral cleanup is idempotent and stale draws are inert")
+end
 print(
 	"PASS: " .. checks .. " flight timing, curve, palette, reduced-motion and VFX ownership checks"
 )

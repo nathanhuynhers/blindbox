@@ -1,0 +1,564 @@
+{
+  "figure": "HushVeil",
+  "title": "Hush Veil",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    2.6534,
+    2.1462,
+    3.1427
+  ],
+  "meshes": 24,
+  "triangles": 52058,
+  "materials": [
+    "HushVeil_Blanket",
+    "HushVeil_Blush",
+    "HushVeil_Boots",
+    "HushVeil_Brow",
+    "HushVeil_Button",
+    "HushVeil_Clasp",
+    "HushVeil_EyeShine",
+    "HushVeil_EyeWhite",
+    "HushVeil_FeltStars",
+    "HushVeil_Hair",
+    "HushVeil_Iris",
+    "HushVeil_Lash",
+    "HushVeil_Leaves",
+    "HushVeil_MintStitch",
+    "HushVeil_Mouth",
+    "HushVeil_Nose",
+    "HushVeil_Skin",
+    "HushVeil_Socks",
+    "HushVeil_Sole",
+    "HushVeil_Stitch",
+    "HushVeil_Tunic"
+  ],
+  "components": {
+    "HushVeil_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.0826
+    },
+    "HushVeil_Hair": {
+      "tris": 6998,
+      "verts": 3503,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.32329
+    },
+    "HushVeil_Blanket": {
+      "tris": 9748,
+      "verts": 4876,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 6.25139
+    },
+    "HushVeil_EdgeStitch": {
+      "tris": 6990,
+      "verts": 3593,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0205
+    },
+    "HushVeil_FeltStars": {
+      "tris": 1996,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.014
+    },
+    "HushVeil_CrossStitch": {
+      "tris": 1998,
+      "verts": 1027,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00641
+    },
+    "HushVeil_Clasp": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00745
+    },
+    "HushVeil_ClaspStitch": {
+      "tris": 642,
+      "verts": 357,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 7e-05
+    },
+    "HushVeil_ClaspButton": {
+      "tris": 400,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00029
+    },
+    "HushVeil_ClaspLeaves": {
+      "tris": 750,
+      "verts": 379,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00262
+    },
+    "HushVeil_Tunic": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.28019
+    },
+    "HushVeil_Legs": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.10659
+    },
+    "HushVeil_Socks": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03175
+    },
+    "HushVeil_Boots": {
+      "tris": 3000,
+      "verts": 1504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07801
+    },
+    "HushVeil_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01233
+    },
+    "HushVeil_BootStitch": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00054
+    },
+    "HushVeil_Eyes": {
+      "tris": 798,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01031
+    },
+    "HushVeil_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00828
+    },
+    "HushVeil_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "HushVeil_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00147
+    },
+    "HushVeil_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "HushVeil_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "HushVeil_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "HushVeil_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "HushVeil_Head": {
+      "active_blocks": 5439,
+      "blocks": 16675,
+      "grid": [
+        201,
+        185,
+        233
+      ],
+      "raw_tris": 250772,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "HushVeil_Hair": {
+      "active_blocks": 6897,
+      "blocks": 21216,
+      "grid": [
+        273,
+        193,
+        209
+      ],
+      "raw_tris": 274926,
+      "removed_faces": 0,
+      "seconds": 9.6
+    },
+    "HushVeil_Blanket": {
+      "active_blocks": 21915,
+      "blocks": 82368,
+      "grid": [
+        353,
+        289,
+        417
+      ],
+      "raw_tris": 1080436,
+      "removed_faces": 0,
+      "seconds": 16.8
+    },
+    "HushVeil_EdgeStitch": {
+      "active_blocks": 27938,
+      "blocks": 494910,
+      "grid": [
+        649,
+        521,
+        753
+      ],
+      "raw_tris": 331170,
+      "removed_faces": 4,
+      "seconds": 12.3
+    },
+    "HushVeil_FeltStars": {
+      "active_blocks": 2004,
+      "blocks": 110656,
+      "grid": [
+        449,
+        305,
+        417
+      ],
+      "raw_tris": 68820,
+      "removed_faces": 2,
+      "seconds": 2.3
+    },
+    "HushVeil_CrossStitch": {
+      "active_blocks": 3960,
+      "blocks": 398784,
+      "grid": [
+        537,
+        513,
+        745
+      ],
+      "raw_tris": 113470,
+      "removed_faces": 0,
+      "seconds": 6.0
+    },
+    "HushVeil_Clasp": {
+      "active_blocks": 989,
+      "blocks": 4104,
+      "grid": [
+        153,
+        97,
+        145
+      ],
+      "raw_tris": 38156,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "HushVeil_ClaspStitch": {
+      "active_blocks": 510,
+      "blocks": 3876,
+      "grid": [
+        153,
+        97,
+        137
+      ],
+      "raw_tris": 13640,
+      "removed_faces": 102,
+      "seconds": 0.2
+    },
+    "HushVeil_ClaspButton": {
+      "active_blocks": 252,
+      "blocks": 1440,
+      "grid": [
+        97,
+        81,
+        97
+      ],
+      "raw_tris": 6848,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "HushVeil_ClaspLeaves": {
+      "active_blocks": 688,
+      "blocks": 3366,
+      "grid": [
+        145,
+        89,
+        137
+      ],
+      "raw_tris": 30212,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "HushVeil_Tunic": {
+      "active_blocks": 2120,
+      "blocks": 4256,
+      "grid": [
+        129,
+        113,
+        153
+      ],
+      "raw_tris": 97228,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "HushVeil_Legs": {
+      "active_blocks": 2921,
+      "blocks": 6048,
+      "grid": [
+        145,
+        169,
+        129
+      ],
+      "raw_tris": 141208,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "HushVeil_Socks": {
+      "active_blocks": 1817,
+      "blocks": 4928,
+      "grid": [
+        225,
+        129,
+        89
+      ],
+      "raw_tris": 94952,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "HushVeil_Boots": {
+      "active_blocks": 2083,
+      "blocks": 4140,
+      "grid": [
+        185,
+        121,
+        97
+      ],
+      "raw_tris": 91440,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "HushVeil_Soles": {
+      "active_blocks": 1522,
+      "blocks": 4256,
+      "grid": [
+        225,
+        153,
+        65
+      ],
+      "raw_tris": 59200,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "HushVeil_BootStitch": {
+      "active_blocks": 743,
+      "blocks": 4620,
+      "grid": [
+        225,
+        89,
+        121
+      ],
+      "raw_tris": 17396,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "HushVeil_Eyes": {
+      "active_blocks": 1919,
+      "blocks": 8092,
+      "grid": [
+        273,
+        137,
+        113
+      ],
+      "raw_tris": 66196,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "HushVeil_Iris": {
+      "active_blocks": 1602,
+      "blocks": 7616,
+      "grid": [
+        257,
+        137,
+        113
+      ],
+      "raw_tris": 52144,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "HushVeil_EyeShine": {
+      "active_blocks": 782,
+      "blocks": 7425,
+      "grid": [
+        265,
+        121,
+        121
+      ],
+      "raw_tris": 14652,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "HushVeil_Lash": {
+      "active_blocks": 1374,
+      "blocks": 12558,
+      "grid": [
+        337,
+        185,
+        105
+      ],
+      "raw_tris": 38584,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "HushVeil_Brow": {
+      "active_blocks": 477,
+      "blocks": 3654,
+      "grid": [
+        233,
+        113,
+        73
+      ],
+      "raw_tris": 8608,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "HushVeil_Nose": {
+      "active_blocks": 140,
+      "blocks": 891,
+      "grid": [
+        73,
+        73,
+        89
+      ],
+      "raw_tris": 3404,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "HushVeil_Mouth": {
+      "active_blocks": 214,
+      "blocks": 1452,
+      "grid": [
+        89,
+        97,
+        89
+      ],
+      "raw_tris": 3608,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "HushVeil_Blush": {
+      "active_blocks": 1104,
+      "blocks": 5120,
+      "grid": [
+        257,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 0.6
+    }
+  },
+  "glb": {
+    "bytes": 1185004,
+    "nodes": [
+      "HushVeil_Blanket",
+      "HushVeil_Blush",
+      "HushVeil_Boots",
+      "HushVeil_BootStitch",
+      "HushVeil_Brow",
+      "HushVeil_Clasp",
+      "HushVeil_ClaspButton",
+      "HushVeil_ClaspLeaves",
+      "HushVeil_ClaspStitch",
+      "HushVeil_CrossStitch",
+      "HushVeil_EdgeStitch",
+      "HushVeil_Eyes",
+      "HushVeil_EyeShine",
+      "HushVeil_FeltStars",
+      "HushVeil_Hair",
+      "HushVeil_Head",
+      "HushVeil_Iris",
+      "HushVeil_Lash",
+      "HushVeil_Legs",
+      "HushVeil_Mouth",
+      "HushVeil_Nose",
+      "HushVeil_Socks",
+      "HushVeil_Soles",
+      "HushVeil_Tunic",
+      "HushVeil"
+    ],
+    "meshes": 24,
+    "materials": 21,
+    "images": 21,
+    "textures": 21,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.hush-veil",
+  "root": "HushVeil",
+  "face": "HushVeil_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 24,
+    "triangle_mismatches": {}
+  }
+}

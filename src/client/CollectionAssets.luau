@@ -40,7 +40,8 @@ local function skin(): Skin
 end
 -- Resolve adopted artwork through the shared semantic manifest; empty slots stay native.
 -- Optional slice = {left, top, right, bottom} in source-image pixels enables nine-slice.
-Assets.collections = { grove = skin(), tide = skin(), concept = skin() } :: { [string]: Skin }
+Assets.collections =
+	{ grove = skin(), tide = skin(), concept = skin(), echo = skin() } :: { [string]: Skin }
 local function production(key: string): Image
 	return { id = Manifest.resolve(key), fit = true }
 end
@@ -48,6 +49,7 @@ local collectionKeys: { [string]: Manifest.CollectionKeys } = {
 	grove = Manifest.Collection.PocketGrove,
 	tide = Manifest.Collection.TidepoolTales,
 	concept = Manifest.Collection.Concepts,
+	echo = Manifest.Collection.TenderEchoes,
 }
 for id, keys in collectionKeys do
 	local artwork = Assets.collections[id]

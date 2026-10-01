@@ -1,0 +1,562 @@
+{
+  "figure": "MoonDoze",
+  "title": "Moon Doze",
+  "rarity": "Mythical",
+  "size_xyz_studs": [
+    2.5194,
+    2.1855,
+    3.0854
+  ],
+  "meshes": 24,
+  "triangles": 66484,
+  "materials": [
+    "MoonDoze_Beads",
+    "MoonDoze_Blush",
+    "MoonDoze_Cap",
+    "MoonDoze_CapStars",
+    "MoonDoze_Cloud",
+    "MoonDoze_FeltStars",
+    "MoonDoze_Hair",
+    "MoonDoze_Lash",
+    "MoonDoze_Lavender",
+    "MoonDoze_Moon",
+    "MoonDoze_Mouth",
+    "MoonDoze_Nose",
+    "MoonDoze_PajamaCream",
+    "MoonDoze_Pajamas",
+    "MoonDoze_PlushFace",
+    "MoonDoze_Skin",
+    "MoonDoze_StarPlush",
+    "MoonDoze_Stitch",
+    "MoonDoze_Trim"
+  ],
+  "components": {
+    "MoonDoze_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.0826
+    },
+    "MoonDoze_Hair": {
+      "tris": 7996,
+      "verts": 3996,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.97946
+    },
+    "MoonDoze_Cap": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.65459
+    },
+    "MoonDoze_CapTrim": {
+      "tris": 3500,
+      "verts": 1750,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.18738
+    },
+    "MoonDoze_CapSeam": {
+      "tris": 970,
+      "verts": 555,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0016
+    },
+    "MoonDoze_CapStars": {
+      "tris": 2498,
+      "verts": 1273,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00574
+    },
+    "MoonDoze_Moon": {
+      "tris": 1250,
+      "verts": 627,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00454
+    },
+    "MoonDoze_Pompom": {
+      "tris": 3500,
+      "verts": 1752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05624
+    },
+    "MoonDoze_Charm": {
+      "tris": 750,
+      "verts": 377,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00203
+    },
+    "MoonDoze_Pajamas": {
+      "tris": 5990,
+      "verts": 2995,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.56433
+    },
+    "MoonDoze_Collar": {
+      "tris": 1998,
+      "verts": 999,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03401
+    },
+    "MoonDoze_Hands": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00834
+    },
+    "MoonDoze_Slippers": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03997
+    },
+    "MoonDoze_StarPlush": {
+      "tris": 2998,
+      "verts": 1501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06668
+    },
+    "MoonDoze_PlushFace": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 8e-05
+    },
+    "MoonDoze_Bow": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02282
+    },
+    "MoonDoze_BowTails": {
+      "tris": 1250,
+      "verts": 627,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.004
+    },
+    "MoonDoze_Cloud": {
+      "tris": 9748,
+      "verts": 4876,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.46274
+    },
+    "MoonDoze_CloudStars": {
+      "tris": 2000,
+      "verts": 1008,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00752
+    },
+    "MoonDoze_CloudBeads": {
+      "tris": 1000,
+      "verts": 516,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00136
+    },
+    "MoonDoze_Eyes": {
+      "tris": 598,
+      "verts": 303,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00168
+    },
+    "MoonDoze_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "MoonDoze_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "MoonDoze_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "MoonDoze_Head": {
+      "active_blocks": 5439,
+      "blocks": 16675,
+      "grid": [
+        201,
+        185,
+        233
+      ],
+      "raw_tris": 250772,
+      "removed_faces": 0,
+      "seconds": 7.2
+    },
+    "MoonDoze_Hair": {
+      "active_blocks": 10173,
+      "blocks": 33696,
+      "grid": [
+        289,
+        289,
+        209
+      ],
+      "raw_tris": 530108,
+      "removed_faces": 2,
+      "seconds": 52.9
+    },
+    "MoonDoze_Cap": {
+      "active_blocks": 9002,
+      "blocks": 30400,
+      "grid": [
+        305,
+        257,
+        201
+      ],
+      "raw_tris": 408464,
+      "removed_faces": 0,
+      "seconds": 32.7
+    },
+    "MoonDoze_CapTrim": {
+      "active_blocks": 6045,
+      "blocks": 28350,
+      "grid": [
+        361,
+        361,
+        113
+      ],
+      "raw_tris": 292344,
+      "removed_faces": 0,
+      "seconds": 6.9
+    },
+    "MoonDoze_CapSeam": {
+      "active_blocks": 2507,
+      "blocks": 50268,
+      "grid": [
+        569,
+        473,
+        97
+      ],
+      "raw_tris": 66932,
+      "removed_faces": 278,
+      "seconds": 7.4
+    },
+    "MoonDoze_CapStars": {
+      "active_blocks": 3535,
+      "blocks": 88972,
+      "grid": [
+        473,
+        417,
+        233
+      ],
+      "raw_tris": 101756,
+      "removed_faces": 0,
+      "seconds": 15.2
+    },
+    "MoonDoze_Moon": {
+      "active_blocks": 898,
+      "blocks": 4608,
+      "grid": [
+        129,
+        129,
+        145
+      ],
+      "raw_tris": 37012,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "MoonDoze_Pompom": {
+      "active_blocks": 1788,
+      "blocks": 6498,
+      "grid": [
+        145,
+        153,
+        153
+      ],
+      "raw_tris": 100092,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "MoonDoze_Charm": {
+      "active_blocks": 696,
+      "blocks": 4048,
+      "grid": [
+        129,
+        89,
+        185
+      ],
+      "raw_tris": 23868,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "MoonDoze_Pajamas": {
+      "active_blocks": 5760,
+      "blocks": 13041,
+      "grid": [
+        217,
+        185,
+        169
+      ],
+      "raw_tris": 289138,
+      "removed_faces": 8,
+      "seconds": 35.7
+    },
+    "MoonDoze_Collar": {
+      "active_blocks": 2252,
+      "blocks": 8736,
+      "grid": [
+        209,
+        193,
+        113
+      ],
+      "raw_tris": 111440,
+      "removed_faces": 0,
+      "seconds": 4.1
+    },
+    "MoonDoze_Hands": {
+      "active_blocks": 756,
+      "blocks": 2376,
+      "grid": [
+        145,
+        97,
+        89
+      ],
+      "raw_tris": 31514,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "MoonDoze_Slippers": {
+      "active_blocks": 1386,
+      "blocks": 3718,
+      "grid": [
+        209,
+        105,
+        89
+      ],
+      "raw_tris": 60048,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "MoonDoze_StarPlush": {
+      "active_blocks": 2371,
+      "blocks": 6624,
+      "grid": [
+        185,
+        97,
+        193
+      ],
+      "raw_tris": 101808,
+      "removed_faces": 0,
+      "seconds": 3.0
+    },
+    "MoonDoze_PlushFace": {
+      "active_blocks": 285,
+      "blocks": 2280,
+      "grid": [
+        153,
+        81,
+        97
+      ],
+      "raw_tris": 4368,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "MoonDoze_Bow": {
+      "active_blocks": 1408,
+      "blocks": 4056,
+      "grid": [
+        209,
+        97,
+        105
+      ],
+      "raw_tris": 57860,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "MoonDoze_BowTails": {
+      "active_blocks": 906,
+      "blocks": 4356,
+      "grid": [
+        177,
+        89,
+        145
+      ],
+      "raw_tris": 38712,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "MoonDoze_Cloud": {
+      "active_blocks": 12013,
+      "blocks": 30096,
+      "grid": [
+        353,
+        305,
+        145
+      ],
+      "raw_tris": 554148,
+      "removed_faces": 0,
+      "seconds": 25.4
+    },
+    "MoonDoze_CloudStars": {
+      "active_blocks": 2667,
+      "blocks": 107448,
+      "grid": [
+        593,
+        529,
+        177
+      ],
+      "raw_tris": 82796,
+      "removed_faces": 0,
+      "seconds": 5.3
+    },
+    "MoonDoze_CloudBeads": {
+      "active_blocks": 963,
+      "blocks": 126874,
+      "grid": [
+        633,
+        585,
+        177
+      ],
+      "raw_tris": 23020,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "MoonDoze_Eyes": {
+      "active_blocks": 1538,
+      "blocks": 11592,
+      "grid": [
+        337,
+        185,
+        97
+      ],
+      "raw_tris": 39704,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "MoonDoze_Nose": {
+      "active_blocks": 140,
+      "blocks": 891,
+      "grid": [
+        73,
+        73,
+        89
+      ],
+      "raw_tris": 3404,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "MoonDoze_Mouth": {
+      "active_blocks": 214,
+      "blocks": 1452,
+      "grid": [
+        89,
+        97,
+        89
+      ],
+      "raw_tris": 3608,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "MoonDoze_Blush": {
+      "active_blocks": 1104,
+      "blocks": 5120,
+      "grid": [
+        257,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.1
+    }
+  },
+  "glb": {
+    "bytes": 1498668,
+    "nodes": [
+      "MoonDoze_Blush",
+      "MoonDoze_Bow",
+      "MoonDoze_BowTails",
+      "MoonDoze_Cap",
+      "MoonDoze_CapSeam",
+      "MoonDoze_CapStars",
+      "MoonDoze_CapTrim",
+      "MoonDoze_Charm",
+      "MoonDoze_Cloud",
+      "MoonDoze_CloudBeads",
+      "MoonDoze_CloudStars",
+      "MoonDoze_Collar",
+      "MoonDoze_Eyes",
+      "MoonDoze_Hair",
+      "MoonDoze_Hands",
+      "MoonDoze_Head",
+      "MoonDoze_Moon",
+      "MoonDoze_Mouth",
+      "MoonDoze_Nose",
+      "MoonDoze_Pajamas",
+      "MoonDoze_PlushFace",
+      "MoonDoze_Pompom",
+      "MoonDoze_Slippers",
+      "MoonDoze_StarPlush",
+      "MoonDoze"
+    ],
+    "meshes": 24,
+    "materials": 19,
+    "images": 19,
+    "textures": 19,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.moon-doze",
+  "root": "MoonDoze",
+  "face": "MoonDoze_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 24,
+    "triangle_mismatches": {}
+  }
+}

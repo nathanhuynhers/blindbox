@@ -88,6 +88,16 @@ export type Profile = {
 		accentDelay: number,
 		trailLayers: number,
 		spectral: boolean,
+		spectralTiming: {
+			pearlAt: number,
+			bloomAt: number,
+			bloomEnd: number,
+			sweepAt: number,
+			sweepDuration: number,
+			ringDuration: number,
+			innerDelay: number,
+			calmAt: number,
+		}?,
 		transformRings: number,
 		lightScale: number,
 		cameraPull: number,
@@ -271,20 +281,31 @@ legendary.signature = {
 }
 mythical.flight.auraScale, mythical.trailWidth = 1.52, 1.1
 mythical.flight.trailLength, mythical.flight.pulse = 9.2, 0.56
-mythical.rings, mythical.cameraShake, mythical.fovPeak = 3, 0.069, 68
+mythical.rings, mythical.cameraShake, mythical.fovPeak = 2, 0.061, 68
 mythical.resultText = mythical.tint:Lerp(mythical.accent, 0.4)
 mythical.signature = {
-	pulses = { { at = 0.2, span = 0.36, strength = 1 }, { at = 0.68, span = 0.3, strength = 0.55 } },
-	quietUntil = 0.2,
-	compression = 0.4,
+	-- One bloom after a pearl suspension; the rings have their own outward cadence.
+	pulses = { { at = 0.145 / 0.38, span = 1 - 0.145 / 0.38, strength = 0.75 } },
+	quietUntil = 0.145 / 0.38,
+	compression = 0.5,
 	accentDelay = 0.38,
 	trailLayers = 3,
 	spectral = true,
+	spectralTiming = {
+		pearlAt = 0.08,
+		bloomAt = 0.145,
+		bloomEnd = 0.32,
+		sweepAt = 0.24,
+		sweepDuration = 0.42,
+		ringDuration = 0.36,
+		innerDelay = 0.12,
+		calmAt = 0.17,
+	},
 	transformRings = 2,
-	lightScale = 1.18,
+	lightScale = 1.12,
 	cameraPull = 0.5,
 	holdFovDrop = 3,
-	ringColors = { mythical.tint, mythical.highlight, mythical.accent },
+	ringColors = { mythical.tint, mythical.highlight },
 }
 for _, data in { legendary, mythical } do
 	data.cues = {
@@ -328,6 +349,7 @@ Config.packaging = {
 	grove = Config.collection("grove"),
 	tide = Config.collection("tide"),
 	concept = Config.collection("concept"),
+	echo = Config.collection("echo"),
 }
 Config.neutral = Color3.fromRGB(255, 238, 208)
 Config.stage = {
@@ -357,6 +379,10 @@ Config.effects = {
 -- One shared direct-light budget. Box/comet accents replace some studio illumination;
 -- they no longer stack on top of three full-strength, range-32 point lights.
 Config.lighting = { baseline = 1.4, peak = 1.8, range = 18 }
+function Config.impactCalmAt(presentation: Profile?): number
+	local spectral = if presentation then presentation.signature.spectralTiming else nil
+	return if spectral then spectral.calmAt else Config.flight.impactCalmAt
+end
 export type LightState = { studio: number, seam: number, comet: number, bloom: number }
 function Config.lightState(
 	phase: State.Phase,
@@ -365,6 +391,8 @@ function Config.lightState(
 	presentation: Profile?
 ): LightState
 	local p = math.clamp(progress, 0, 1)
+	local calmAt = Config.impactCalmAt(presentation)
+	local spectral = if presentation then presentation.signature.spectralTiming else nil
 	local seam, comet, bloom = 0, 0, 0.5
 	if phase == "Enter" or phase == "Done" then
 		return { studio = 0, seam = 0, comet = 0, bloom = 0 }
@@ -377,15 +405,20 @@ function Config.lightState(
 		comet = if p >= 0.625 then 0.5 else 0
 	elseif phase == "Flight" or phase == "RarityTease" then
 		comet = 0.5
+		if phase == "RarityTease" and spectral then
+			local age = elapsed or 0
+			local bloomProgress =
+				math.clamp((age - spectral.bloomAt) / (spectral.bloomEnd - spectral.bloomAt), 0, 1)
+			comet = 0.12 + 0.38 * bloomProgress
+			bloom = 0.2 + 0.3 * bloomProgress
+		end
 	elseif phase == "Impact" then
 		local age = elapsed or p * Config.flight.impactDuration
 		local pulse = math.clamp(
 			if age < Config.flight.impactPeakAt
 				then (age - Config.flight.impactPulseAt)
 					/ (Config.flight.impactPeakAt - Config.flight.impactPulseAt)
-				else 1
-					- (age - Config.flight.impactPeakAt)
-						/ (Config.flight.impactCalmAt - Config.flight.impactPeakAt),
+				else 1 - (age - Config.flight.impactPeakAt) / (calmAt - Config.flight.impactPeakAt),
 			0,
 			1
 		)
@@ -401,11 +434,7 @@ function Config.lightState(
 	end
 	return {
 		studio = if phase == "Silhouette"
-				or (
-					phase == "Impact"
-					and (elapsed or p * Config.flight.impactDuration)
-						>= Config.flight.impactCalmAt
-				)
+				or (phase == "Impact" and (elapsed or p * Config.flight.impactDuration) >= calmAt)
 			then 0.35
 			else math.min(Config.lighting.baseline, Config.lighting.peak - seam - comet),
 		seam = seam,

@@ -30,6 +30,7 @@ function FlightEffects.create(
 	density: number
 ): Visual
 	local settings = Config.flight
+	local spectralTiming = profile.signature.spectralTiming
 	local core = part(parent, "CometCore", Vector3.one * settings.coreSize)
 	core.Material, core.Shape = Enum.Material.Neon, Enum.PartType.Ball
 	local glow = part(parent, "InnerGlow", Vector3.one * settings.coreSize * 2)
@@ -130,6 +131,7 @@ function FlightEffects.create(
 		end
 	end
 	local launched = false
+	local wasHushed = false
 	return {
 		shatter = function()
 			if parent.Parent then
@@ -147,6 +149,16 @@ function FlightEffects.create(
 				or (state.phase == "Break" and sample.launch > 0)
 			local gathering = state.phase == "Break" and state.elapsed >= settings.gatherAt
 			local visible = active or gathering
+			if sample.hushed and not wasHushed then
+				-- Silence the particles already in flight as well as future emission.
+				sparks:Clear()
+				secondary:Clear()
+				trail:Clear()
+				for _, layer in layers do
+					layer.emitter:Clear()
+				end
+			end
+			wasHushed = sample.hushed
 			local position = Config.stage.origin + sample.position
 			local earlier = Flight.position(profile, reduced, sample.age - 0.025)
 			local direction = sample.position - earlier
@@ -172,13 +184,17 @@ function FlightEffects.create(
 			aura.Size, aura.Enabled = UDim2.fromScale(auraScale, auraScale), visible
 			soft.ImageColor3, star.ImageColor3 = sample.color, sample.accent
 			soft.ImageTransparency, star.ImageTransparency = 0.25, 0.12
-			if spectral then
-				spectral.Visible = active and sample.transition > 0.55
-				spectral.ImageColor3 = sample.highlight
-				spectral.Position =
-					UDim2.fromScale(-0.06 + math.sin(state.elapsed * 1.6) * 0.04, 0.1)
+			if spectralTiming then
+				soft.ImageTransparency = 0.25 + sample.suspense * 0.5
 			end
-			if profile.signature.trailLayers > 1 then
+			if spectral then
+				spectral.Visible = active and sample.spectralSweep > 0
+				spectral.ImageColor3 = sample.highlight
+				-- One iridescent pass, then a faint stable edge throughout recognition.
+				spectral.Position = UDim2.fromScale(-0.18 + sample.spectralSweep * 0.24, 0.1)
+				spectral.ImageTransparency = 0.88 - math.sin(sample.spectralSweep * math.pi) * 0.2
+			end
+			if profile.signature.trailLayers > 1 and not spectralTiming then
 				glow.Color = sample.accent
 			end
 			light.Enabled, light.Brightness =
@@ -192,10 +208,13 @@ function FlightEffects.create(
 					).comet
 					else 0
 			local width = (0.72 + (profile.trailWidth - 0.72) * rarity) * (1 + sample.dive * 0.18)
+			if spectralTiming then
+				width *= (1 - sample.suspense * 0.55) * (if reduced then 0.65 else 1)
+			end
 			left.Position, right.Position =
 				Vector3.new(-width / 2, 0, 0), Vector3.new(width / 2, 0, 0)
 			trail.Enabled, trail.Color =
-				active and not reduced, ColorSequence.new(sample.trailColor)
+				active and not reduced and not sample.hushed, ColorSequence.new(sample.trailColor)
 			sparks.Enabled, secondary.Enabled =
 				active and not sample.hushed,
 				active and rarity > 0.8 and profile.rings > 1 and not reduced and not sample.hushed
@@ -204,12 +223,16 @@ function FlightEffects.create(
 			sparks.Color, secondary.Color =
 				ColorSequence.new(sample.sparkColor),
 				ColorSequence.new(sample.sparkColor, sample.accent)
-			if active and not launched then
+			if active and not launched and not sample.hushed then
 				launched = true
 				sparks:Emit(math.max(1, math.floor(10 * density)))
 			end
 			local length = (6.5 + (profile.flight.trailLength - 6.5) * rarity)
 				* (1 + sample.dive * 0.2)
+			if spectralTiming then
+				length *= (1 - sample.suspense * 0.6) * (if reduced then 0.22 else 1)
+			end
+			local tailVisible = active and (not reduced or (spectralTiming ~= nil and rarity > 0))
 			for i, point in points do
 				local q = (i - 1) / settings.tailSegments
 				local past =
@@ -224,15 +247,12 @@ function FlightEffects.create(
 					local beam = beams[i - 1]
 					beam.Width0, beam.Width1 =
 						width * (1 - (i - 2) / settings.tailSegments), width * (1 - q)
-					beam.Color, beam.Enabled =
-						ColorSequence.new(sample.trailColor), active and not reduced
+					beam.Color, beam.Enabled = ColorSequence.new(sample.trailColor), tailVisible
 				end
 			end
 			for _, inner in innerTrails do
 				local beam, index = inner.beam, inner.segment
-				local side = if inner.layer == 3
-					then math.sin(state.elapsed * 1.6 - index * 0.45) * width * 0.2
-					else 0
+				local side = if inner.layer == 3 then width * 0.2 else 0
 				local offset = Vector3.new(side, 0, -0.02 * inner.layer)
 				inner.start.Position, inner.finish.Position =
 					points[index].Position + offset, points[index + 1].Position + offset
@@ -241,7 +261,15 @@ function FlightEffects.create(
 					beams[index].Width0 * widthScale, beams[index].Width1 * widthScale
 				beam.Color =
 					ColorSequence.new(if inner.layer == 2 then sample.accent else sample.highlight)
-				beam.Enabled = active and not reduced and sample.transition > 0.45
+				beam.Enabled = tailVisible
+					and sample.transition > (if spectralTiming then 0.18 else 0.45)
+				if spectralTiming and inner.layer == 3 then
+					local q = (index - 0.5) / settings.tailSegments
+					local pass =
+						math.max(0, 1 - math.abs(sample.spectralSweep * 1.4 - 0.2 - q) / 0.24)
+					beam.Transparency = NumberSequence.new(0.9 - pass * 0.6)
+					beam.Enabled = tailVisible and sample.spectralSweep > 0
+				end
 			end
 			for _, layer in layers do
 				local mountPosition = (camera.CFrame * CFrame.new(

@@ -1,0 +1,582 @@
+{
+  "figure": "MumbleBeast",
+  "title": "Mumble Beast",
+  "rarity": "Legendary",
+  "size_xyz_studs": [
+    2.2735,
+    1.9508,
+    3.3613
+  ],
+  "meshes": 25,
+  "triangles": 55312,
+  "materials": [
+    "MumbleBeast_Blush",
+    "MumbleBeast_Boucle",
+    "MumbleBeast_Brow",
+    "MumbleBeast_Cords",
+    "MumbleBeast_Cream",
+    "MumbleBeast_Dots",
+    "MumbleBeast_EyeShine",
+    "MumbleBeast_EyeWhite",
+    "MumbleBeast_Hair",
+    "MumbleBeast_Horns",
+    "MumbleBeast_Iris",
+    "MumbleBeast_Lash",
+    "MumbleBeast_Mouth",
+    "MumbleBeast_Nose",
+    "MumbleBeast_Pompoms",
+    "MumbleBeast_Seam",
+    "MumbleBeast_Skin",
+    "MumbleBeast_Stitches"
+  ],
+  "components": {
+    "MumbleBeast_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.0826
+    },
+    "MumbleBeast_Hair": {
+      "tris": 6992,
+      "verts": 3434,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.28401
+    },
+    "MumbleBeast_Hood": {
+      "tris": 9486,
+      "verts": 4743,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.84593
+    },
+    "MumbleBeast_Teeth": {
+      "tris": 1498,
+      "verts": 761,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01651
+    },
+    "MumbleBeast_Ears": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09345
+    },
+    "MumbleBeast_EarStitch": {
+      "tris": 748,
+      "verts": 382,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00445
+    },
+    "MumbleBeast_Horns": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03044
+    },
+    "MumbleBeast_HoodEyes": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00102
+    },
+    "MumbleBeast_Seam": {
+      "tris": 1498,
+      "verts": 751,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01627
+    },
+    "MumbleBeast_Suit": {
+      "tris": 9742,
+      "verts": 4871,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.7473
+    },
+    "MumbleBeast_Claws": {
+      "tris": 1500,
+      "verts": 758,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00555
+    },
+    "MumbleBeast_Belly": {
+      "tris": 2498,
+      "verts": 1253,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01796
+    },
+    "MumbleBeast_BellyStitch": {
+      "tris": 822,
+      "verts": 451,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00074
+    },
+    "MumbleBeast_KneePatches": {
+      "tris": 748,
+      "verts": 378,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00464
+    },
+    "MumbleBeast_KneeStitch": {
+      "tris": 748,
+      "verts": 368,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00183
+    },
+    "MumbleBeast_Pompoms": {
+      "tris": 3500,
+      "verts": 1756,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.019
+    },
+    "MumbleBeast_Cords": {
+      "tris": 998,
+      "verts": 505,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0021
+    },
+    "MumbleBeast_Eyes": {
+      "tris": 798,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01049
+    },
+    "MumbleBeast_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00842
+    },
+    "MumbleBeast_EyeShine": {
+      "tris": 298,
+      "verts": 157,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "MumbleBeast_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00147
+    },
+    "MumbleBeast_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "MumbleBeast_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "MumbleBeast_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "MumbleBeast_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "MumbleBeast_Head": {
+      "active_blocks": 5421,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 250904,
+      "removed_faces": 0,
+      "seconds": 9.2
+    },
+    "MumbleBeast_Hair": {
+      "active_blocks": 6825,
+      "blocks": 27200,
+      "grid": [
+        273,
+        257,
+        201
+      ],
+      "raw_tris": 287600,
+      "removed_faces": 6,
+      "seconds": 23.6
+    },
+    "MumbleBeast_Hood": {
+      "active_blocks": 13167,
+      "blocks": 46398,
+      "grid": [
+        305,
+        297,
+        265
+      ],
+      "raw_tris": 698760,
+      "removed_faces": 12,
+      "seconds": 25.5
+    },
+    "MumbleBeast_Teeth": {
+      "active_blocks": 4215,
+      "blocks": 30100,
+      "grid": [
+        345,
+        225,
+        201
+      ],
+      "raw_tris": 231498,
+      "removed_faces": 0,
+      "seconds": 6.6
+    },
+    "MumbleBeast_Ears": {
+      "active_blocks": 2456,
+      "blocks": 13312,
+      "grid": [
+        417,
+        129,
+        129
+      ],
+      "raw_tris": 122600,
+      "removed_faces": 0,
+      "seconds": 5.2
+    },
+    "MumbleBeast_EarStitch": {
+      "active_blocks": 2008,
+      "blocks": 20216,
+      "grid": [
+        609,
+        153,
+        113
+      ],
+      "raw_tris": 78316,
+      "removed_faces": 2,
+      "seconds": 4.7
+    },
+    "MumbleBeast_Horns": {
+      "active_blocks": 1894,
+      "blocks": 10140,
+      "grid": [
+        313,
+        105,
+        161
+      ],
+      "raw_tris": 82970,
+      "removed_faces": 0,
+      "seconds": 7.4
+    },
+    "MumbleBeast_HoodEyes": {
+      "active_blocks": 380,
+      "blocks": 3388,
+      "grid": [
+        225,
+        89,
+        89
+      ],
+      "raw_tris": 11704,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "MumbleBeast_Seam": {
+      "active_blocks": 3886,
+      "blocks": 30492,
+      "grid": [
+        89,
+        265,
+        673
+      ],
+      "raw_tris": 156832,
+      "removed_faces": 0,
+      "seconds": 5.3
+    },
+    "MumbleBeast_Suit": {
+      "active_blocks": 6792,
+      "blocks": 26622,
+      "grid": [
+        217,
+        233,
+        273
+      ],
+      "raw_tris": 359912,
+      "removed_faces": 8,
+      "seconds": 30.9
+    },
+    "MumbleBeast_Claws": {
+      "active_blocks": 1489,
+      "blocks": 68962,
+      "grid": [
+        329,
+        233,
+        465
+      ],
+      "raw_tris": 61092,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "MumbleBeast_Belly": {
+      "active_blocks": 1937,
+      "blocks": 9177,
+      "grid": [
+        153,
+        169,
+        185
+      ],
+      "raw_tris": 72640,
+      "removed_faces": 0,
+      "seconds": 8.1
+    },
+    "MumbleBeast_BellyStitch": {
+      "active_blocks": 1486,
+      "blocks": 17342,
+      "grid": [
+        185,
+        209,
+        233
+      ],
+      "raw_tris": 53442,
+      "removed_faces": 426,
+      "seconds": 7.7
+    },
+    "MumbleBeast_KneePatches": {
+      "active_blocks": 1829,
+      "blocks": 8712,
+      "grid": [
+        265,
+        177,
+        97
+      ],
+      "raw_tris": 36536,
+      "removed_faces": 0,
+      "seconds": 8.3
+    },
+    "MumbleBeast_KneeStitch": {
+      "active_blocks": 2040,
+      "blocks": 33110,
+      "grid": [
+        281,
+        345,
+        177
+      ],
+      "raw_tris": 54748,
+      "removed_faces": 0,
+      "seconds": 19.1
+    },
+    "MumbleBeast_Pompoms": {
+      "active_blocks": 2040,
+      "blocks": 23408,
+      "grid": [
+        449,
+        177,
+        153
+      ],
+      "raw_tris": 98464,
+      "removed_faces": 0,
+      "seconds": 3.9
+    },
+    "MumbleBeast_Cords": {
+      "active_blocks": 1031,
+      "blocks": 19159,
+      "grid": [
+        393,
+        137,
+        185
+      ],
+      "raw_tris": 33084,
+      "removed_faces": 0,
+      "seconds": 5.0
+    },
+    "MumbleBeast_Eyes": {
+      "active_blocks": 1946,
+      "blocks": 9576,
+      "grid": [
+        289,
+        153,
+        113
+      ],
+      "raw_tris": 67164,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "MumbleBeast_Iris": {
+      "active_blocks": 1600,
+      "blocks": 8778,
+      "grid": [
+        265,
+        153,
+        113
+      ],
+      "raw_tris": 52872,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "MumbleBeast_EyeShine": {
+      "active_blocks": 820,
+      "blocks": 7425,
+      "grid": [
+        265,
+        121,
+        121
+      ],
+      "raw_tris": 14396,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "MumbleBeast_Lash": {
+      "active_blocks": 1416,
+      "blocks": 11726,
+      "grid": [
+        329,
+        177,
+        105
+      ],
+      "raw_tris": 38816,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "MumbleBeast_Brow": {
+      "active_blocks": 485,
+      "blocks": 3276,
+      "grid": [
+        225,
+        105,
+        73
+      ],
+      "raw_tris": 8608,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "MumbleBeast_Nose": {
+      "active_blocks": 140,
+      "blocks": 1089,
+      "grid": [
+        89,
+        73,
+        89
+      ],
+      "raw_tris": 3404,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MumbleBeast_Mouth": {
+      "active_blocks": 228,
+      "blocks": 1440,
+      "grid": [
+        97,
+        97,
+        81
+      ],
+      "raw_tris": 3572,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "MumbleBeast_Blush": {
+      "active_blocks": 1052,
+      "blocks": 5610,
+      "grid": [
+        265,
+        137,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.4
+    }
+  },
+  "glb": {
+    "bytes": 1250440,
+    "nodes": [
+      "MumbleBeast_Belly",
+      "MumbleBeast_BellyStitch",
+      "MumbleBeast_Blush",
+      "MumbleBeast_Brow",
+      "MumbleBeast_Claws",
+      "MumbleBeast_Cords",
+      "MumbleBeast_Ears",
+      "MumbleBeast_EarStitch",
+      "MumbleBeast_Eyes",
+      "MumbleBeast_EyeShine",
+      "MumbleBeast_Hair",
+      "MumbleBeast_Head",
+      "MumbleBeast_Hood",
+      "MumbleBeast_HoodEyes",
+      "MumbleBeast_Horns",
+      "MumbleBeast_Iris",
+      "MumbleBeast_KneePatches",
+      "MumbleBeast_KneeStitch",
+      "MumbleBeast_Lash",
+      "MumbleBeast_Mouth",
+      "MumbleBeast_Nose",
+      "MumbleBeast_Pompoms",
+      "MumbleBeast_Seam",
+      "MumbleBeast_Suit",
+      "MumbleBeast_Teeth",
+      "MumbleBeast"
+    ],
+    "meshes": 25,
+    "materials": 18,
+    "images": 18,
+    "textures": 18,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.mumble-beast",
+  "root": "MumbleBeast",
+  "face": "MumbleBeast_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 25,
+    "triangle_mismatches": {}
+  }
+}

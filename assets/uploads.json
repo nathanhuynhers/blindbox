@@ -107,6 +107,60 @@
     "sha256": "ad137ddb825db915ddcd1cecde149d0390f6acee939a40f5013ce8fdf83d0d27",
     "source": "assets/ui/shop/pocket-grove/pocket_grove_shop_pattern.png"
   },
+  "Collection.TenderEchoes.CornerBottomLeft": {
+    "assetId": "128974677022896",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4ca3bd7fb8c8cd90cd120396338f627cd2007f041eb9251f0ea9ddcfd9817b25",
+    "source": "assets/ui/collection/tender-echoes/tender_echoes_corner_bottom_left.png"
+  },
+  "Collection.TenderEchoes.CornerBottomRight": {
+    "assetId": "127063035897430",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e92b49af226f0916861b6fea4da2dbbe45e62517d87be2eb03e1c05d4548e386",
+    "source": "assets/ui/collection/tender-echoes/tender_echoes_corner_bottom_right.png"
+  },
+  "Collection.TenderEchoes.CornerTopLeft": {
+    "assetId": "134104301979046",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7f7729a709009f9dedd6f577d6be0b62de46d960bf0d910057290ddd8231b3c2",
+    "source": "assets/ui/collection/tender-echoes/tender_echoes_corner_top_left.png"
+  },
+  "Collection.TenderEchoes.CornerTopRight": {
+    "assetId": "109232671065272",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d5a90e6018116cab980a8a730f15b973894191a2d48b9dde6dd461bb395c10a5",
+    "source": "assets/ui/collection/tender-echoes/tender_echoes_corner_top_right.png"
+  },
+  "Collection.TenderEchoes.Emblem": {
+    "assetId": "133211070991916",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f6464b5e15f552b5c6969a0ca20c096c8b51b6fe78367be84d228851a8ff9fa1",
+    "source": "assets/ui/collection/tender-echoes/tender_echoes_emblem.png"
+  },
+  "Collection.TenderEchoes.ShopPattern": {
+    "assetId": "106427566156643",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f072fcbf869e26a5c2fd66ae1b616445a2cf1a96c6549847ab798aac84dff52e",
+    "source": "assets/ui/shop/tender-echoes/tender_echoes_shop_pattern.png"
+  },
   "Collection.TidepoolTales.CornerBottomLeft": {
     "assetId": "136271632565492",
     "assetType": "Image",
@@ -268,6 +322,123 @@
     },
     "sha256": "d29dc5b3d2af2ab05e1042ec97b337ed31bdaf5f785f79cef4b0a935b810db27",
     "source": "assets/figures/pocket-grove/sunbeam-sprite/model/sunbeam_sprite_roblox.glb"
+  },
+  "Models.TenderEchoes.CrateSpark": {
+    "assetId": "91143941429865",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b54934f0a907599d16fbec8d3b637e94efbcb6cc79b9170585c4c6d6db0d227b",
+    "source": "assets/figures/tender-echoes/crate-spark/model/crate_spark_roblox.glb"
+  },
+  "Models.TenderEchoes.DinoDrift": {
+    "assetId": "111538227099957",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8d621718e80960b15ef9eabb70353c663df7c5cbf57c130cef821a30b133bacc",
+    "source": "assets/figures/tender-echoes/dino-drift/model/dino_drift_roblox.glb"
+  },
+  "Models.TenderEchoes.EchoLine": {
+    "assetId": "73170948668337",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3fad196ebb7ad87646c8664cab7bbd2bfda0706c825baf03fa8f5f582fd19df5",
+    "source": "assets/figures/tender-echoes/echo-line/model/echo_line_roblox.glb"
+  },
+  "Models.TenderEchoes.FeatherHush": {
+    "assetId": "103421071507922",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a0bd97efcc2eccb940b416072047290a09eb3e5c0709a09911713dde938cc447",
+    "source": "assets/figures/tender-echoes/feather-hush/model/feather_hush_roblox.glb"
+  },
+  "Models.TenderEchoes.HearthHelm": {
+    "assetId": "92497511806284",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "c3a468298f43b715520b861c9961bf0f86b5ac10a827d041d5154ed0ecc856fd",
+    "source": "assets/figures/tender-echoes/hearth-helm/model/hearth_helm_roblox.glb"
+  },
+  "Models.TenderEchoes.HushVeil": {
+    "assetId": "92687355906820",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4a3010fd4993c9fd7c76009403e4ccdf66f1dd753eab6f38500a0413bb2c1e26",
+    "source": "assets/figures/tender-echoes/hush-veil/model/hush_veil_roblox.glb"
+  },
+  "Models.TenderEchoes.MaskNuzzle": {
+    "assetId": "121583876971898",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b55e31a2d3fbd4f232527423650d6056745257bae9b6d2b977a2a7be5b49f212",
+    "source": "assets/figures/tender-echoes/mask-nuzzle/model/mask_nuzzle_roblox.glb"
+  },
+  "Models.TenderEchoes.MoonDoze": {
+    "assetId": "71309632580103",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "c7bc2580b0e6226f0fba49573a10513fb55626518b800003df12067278ca441f",
+    "source": "assets/figures/tender-echoes/moon-doze/model/moon_doze_roblox.glb"
+  },
+  "Models.TenderEchoes.MumbleBeast": {
+    "assetId": "114114339910710",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7fc0b57890ef8e2c874e80a8e48de13fc1a6beb2165303ab90bca85c50d8b8f1",
+    "source": "assets/figures/tender-echoes/mumble-beast/model/mumble_beast_roblox.glb"
+  },
+  "Models.TenderEchoes.PaperCrown": {
+    "assetId": "90215258574522",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6712da10e34b42c8d8a8c9ec43a3501311000500dd3d917848da446e1ff1a8bc",
+    "source": "assets/figures/tender-echoes/paper-crown/model/paper_crown_roblox.glb"
+  },
+  "Models.TenderEchoes.StillPebble": {
+    "assetId": "109753811133527",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f548bbe163e6a6e834494b62bd15e21aaa73660ceb9a89a7f7f886a86a85abbf",
+    "source": "assets/figures/tender-echoes/still-pebble/model/still_pebble_roblox.glb"
+  },
+  "Models.TenderEchoes.ThreadParade": {
+    "assetId": "99929948140391",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "14e766700773f884193ba2ec8422c661e4ca6d2b3bcadd6ea033230861970ada",
+    "source": "assets/figures/tender-echoes/thread-parade/model/thread_parade_roblox.glb"
+  },
+  "Models.TenderEchoes.WanderKnit": {
+    "assetId": "74450401894243",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "149f35a4ddd44dcdf38e7a6e3ba096e5bf263fecc501203667f2de63d211e08f",
+    "source": "assets/figures/tender-echoes/wander-knit/model/wander_knit_roblox.glb"
   },
   "Models.TidepoolTales.BubbleBean": {
     "assetId": "133206366502054",

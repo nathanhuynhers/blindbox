@@ -1,0 +1,716 @@
+{
+  "figure": "StillPebble",
+  "title": "Still Pebble",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.1022,
+    1.9448,
+    2.9642
+  ],
+  "meshes": 31,
+  "triangles": 67966,
+  "materials": [
+    "StillPebble_Beanie",
+    "StillPebble_Blush",
+    "StillPebble_Brow",
+    "StillPebble_Cream",
+    "StillPebble_Denim",
+    "StillPebble_Dino",
+    "StillPebble_DinoBelly",
+    "StillPebble_DinoBlush",
+    "StillPebble_DinoEyes",
+    "StillPebble_DinoSpikes",
+    "StillPebble_EyeShine",
+    "StillPebble_EyeWhite",
+    "StillPebble_Hair",
+    "StillPebble_Iris",
+    "StillPebble_Lash",
+    "StillPebble_Leaf",
+    "StillPebble_Mouth",
+    "StillPebble_Nose",
+    "StillPebble_Patch",
+    "StillPebble_Scarf",
+    "StillPebble_Shoes",
+    "StillPebble_Skin",
+    "StillPebble_Socks",
+    "StillPebble_Sole",
+    "StillPebble_Stitch",
+    "StillPebble_Sweater"
+  ],
+  "components": {
+    "StillPebble_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08259
+    },
+    "StillPebble_Hair": {
+      "tris": 7804,
+      "verts": 3892,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.9169
+    },
+    "StillPebble_Beanie": {
+      "tris": 9022,
+      "verts": 4514,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.68422
+    },
+    "StillPebble_Pompom": {
+      "tris": 3000,
+      "verts": 1504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05125
+    },
+    "StillPebble_Patch": {
+      "tris": 1250,
+      "verts": 627,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00742
+    },
+    "StillPebble_PatchLeaf": {
+      "tris": 594,
+      "verts": 303,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00051
+    },
+    "StillPebble_Stitches": {
+      "tris": 1244,
+      "verts": 642,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00137
+    },
+    "StillPebble_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01049
+    },
+    "StillPebble_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00816
+    },
+    "StillPebble_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "StillPebble_Lash": {
+      "tris": 444,
+      "verts": 226,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00147
+    },
+    "StillPebble_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00056
+    },
+    "StillPebble_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "StillPebble_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "StillPebble_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    },
+    "StillPebble_Sweater": {
+      "tris": 5498,
+      "verts": 2751,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.37018
+    },
+    "StillPebble_Hands": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00957
+    },
+    "StillPebble_Shorts": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.20112
+    },
+    "StillPebble_Legs": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04587
+    },
+    "StillPebble_Socks": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06361
+    },
+    "StillPebble_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06748
+    },
+    "StillPebble_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0136
+    },
+    "StillPebble_ShoeStitch": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00047
+    },
+    "StillPebble_Scarf": {
+      "tris": 6000,
+      "verts": 3000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.32286
+    },
+    "StillPebble_ScarfFringe": {
+      "tris": 1996,
+      "verts": 994,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00281
+    },
+    "StillPebble_ScarfStitch": {
+      "tris": 382,
+      "verts": 193,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00029
+    },
+    "StillPebble_Dino": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08339
+    },
+    "StillPebble_DinoSpikes": {
+      "tris": 1500,
+      "verts": 756,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00352
+    },
+    "StillPebble_DinoBelly": {
+      "tris": 998,
+      "verts": 501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0032
+    },
+    "StillPebble_DinoEyes": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00014
+    },
+    "StillPebble_DinoBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00022
+    }
+  },
+  "build": {
+    "StillPebble_Head": {
+      "active_blocks": 5414,
+      "blocks": 16100,
+      "grid": [
+        201,
+        185,
+        225
+      ],
+      "raw_tris": 251360,
+      "removed_faces": 0,
+      "seconds": 8.2
+    },
+    "StillPebble_Hair": {
+      "active_blocks": 11409,
+      "blocks": 43173,
+      "grid": [
+        329,
+        313,
+        217
+      ],
+      "raw_tris": 604040,
+      "removed_faces": 194,
+      "seconds": 108.0
+    },
+    "StillPebble_Beanie": {
+      "active_blocks": 8329,
+      "blocks": 28900,
+      "grid": [
+        273,
+        273,
+        201
+      ],
+      "raw_tris": 542738,
+      "removed_faces": 726,
+      "seconds": 14.3
+    },
+    "StillPebble_Pompom": {
+      "active_blocks": 1218,
+      "blocks": 3840,
+      "grid": [
+        129,
+        129,
+        121
+      ],
+      "raw_tris": 71604,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "StillPebble_Patch": {
+      "active_blocks": 961,
+      "blocks": 4788,
+      "grid": [
+        145,
+        153,
+        113
+      ],
+      "raw_tris": 29080,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "StillPebble_PatchLeaf": {
+      "active_blocks": 654,
+      "blocks": 5632,
+      "grid": [
+        129,
+        177,
+        129
+      ],
+      "raw_tris": 20544,
+      "removed_faces": 6,
+      "seconds": 0.9
+    },
+    "StillPebble_Stitches": {
+      "active_blocks": 1547,
+      "blocks": 31694,
+      "grid": [
+        425,
+        209,
+        185
+      ],
+      "raw_tris": 65328,
+      "removed_faces": 2,
+      "seconds": 3.4
+    },
+    "StillPebble_Eyes": {
+      "active_blocks": 1957,
+      "blocks": 14994,
+      "grid": [
+        273,
+        169,
+        169
+      ],
+      "raw_tris": 67548,
+      "removed_faces": 0,
+      "seconds": 3.8
+    },
+    "StillPebble_Iris": {
+      "active_blocks": 1540,
+      "blocks": 12768,
+      "grid": [
+        257,
+        153,
+        169
+      ],
+      "raw_tris": 52472,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "StillPebble_EyeShine": {
+      "active_blocks": 823,
+      "blocks": 9600,
+      "grid": [
+        257,
+        121,
+        161
+      ],
+      "raw_tris": 14388,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "StillPebble_Lash": {
+      "active_blocks": 1448,
+      "blocks": 22550,
+      "grid": [
+        329,
+        201,
+        177
+      ],
+      "raw_tris": 39464,
+      "removed_faces": 6,
+      "seconds": 2.4
+    },
+    "StillPebble_Brow": {
+      "active_blocks": 534,
+      "blocks": 5096,
+      "grid": [
+        225,
+        105,
+        113
+      ],
+      "raw_tris": 9232,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "StillPebble_Nose": {
+      "active_blocks": 145,
+      "blocks": 792,
+      "grid": [
+        89,
+        65,
+        73
+      ],
+      "raw_tris": 3472,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "StillPebble_Mouth": {
+      "active_blocks": 207,
+      "blocks": 1188,
+      "grid": [
+        89,
+        97,
+        73
+      ],
+      "raw_tris": 3580,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "StillPebble_Blush": {
+      "active_blocks": 1135,
+      "blocks": 8959,
+      "grid": [
+        249,
+        137,
+        137
+      ],
+      "raw_tris": 26300,
+      "removed_faces": 10,
+      "seconds": 1.1
+    },
+    "StillPebble_Sweater": {
+      "active_blocks": 4241,
+      "blocks": 11362,
+      "grid": [
+        209,
+        185,
+        153
+      ],
+      "raw_tris": 222152,
+      "removed_faces": 0,
+      "seconds": 19.3
+    },
+    "StillPebble_Hands": {
+      "active_blocks": 748,
+      "blocks": 2376,
+      "grid": [
+        145,
+        97,
+        89
+      ],
+      "raw_tris": 33034,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "StillPebble_Shorts": {
+      "active_blocks": 2747,
+      "blocks": 6156,
+      "grid": [
+        145,
+        153,
+        145
+      ],
+      "raw_tris": 129812,
+      "removed_faces": 0,
+      "seconds": 3.8
+    },
+    "StillPebble_Legs": {
+      "active_blocks": 1693,
+      "blocks": 4800,
+      "grid": [
+        161,
+        121,
+        129
+      ],
+      "raw_tris": 76892,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "StillPebble_Socks": {
+      "active_blocks": 1946,
+      "blocks": 4725,
+      "grid": [
+        169,
+        121,
+        121
+      ],
+      "raw_tris": 95088,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "StillPebble_Shoes": {
+      "active_blocks": 1943,
+      "blocks": 4048,
+      "grid": [
+        185,
+        129,
+        89
+      ],
+      "raw_tris": 84264,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "StillPebble_Soles": {
+      "active_blocks": 1582,
+      "blocks": 4560,
+      "grid": [
+        241,
+        153,
+        65
+      ],
+      "raw_tris": 65304,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "StillPebble_ShoeStitch": {
+      "active_blocks": 578,
+      "blocks": 3720,
+      "grid": [
+        249,
+        81,
+        97
+      ],
+      "raw_tris": 14304,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "StillPebble_Scarf": {
+      "active_blocks": 7705,
+      "blocks": 40392,
+      "grid": [
+        289,
+        273,
+        265
+      ],
+      "raw_tris": 390376,
+      "removed_faces": 0,
+      "seconds": 14.8
+    },
+    "StillPebble_ScarfFringe": {
+      "active_blocks": 1095,
+      "blocks": 20787,
+      "grid": [
+        313,
+        329,
+        105
+      ],
+      "raw_tris": 53096,
+      "removed_faces": 4,
+      "seconds": 3.0
+    },
+    "StillPebble_ScarfStitch": {
+      "active_blocks": 401,
+      "blocks": 2925,
+      "grid": [
+        121,
+        105,
+        121
+      ],
+      "raw_tris": 10060,
+      "removed_faces": 18,
+      "seconds": 0.6
+    },
+    "StillPebble_Dino": {
+      "active_blocks": 3027,
+      "blocks": 12096,
+      "grid": [
+        169,
+        193,
+        193
+      ],
+      "raw_tris": 138016,
+      "removed_faces": 0,
+      "seconds": 7.8
+    },
+    "StillPebble_DinoSpikes": {
+      "active_blocks": 968,
+      "blocks": 5184,
+      "grid": [
+        97,
+        129,
+        217
+      ],
+      "raw_tris": 36716,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "StillPebble_DinoBelly": {
+      "active_blocks": 850,
+      "blocks": 3952,
+      "grid": [
+        129,
+        105,
+        153
+      ],
+      "raw_tris": 36808,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "StillPebble_DinoEyes": {
+      "active_blocks": 256,
+      "blocks": 3234,
+      "grid": [
+        169,
+        113,
+        89
+      ],
+      "raw_tris": 5636,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "StillPebble_DinoBlush": {
+      "active_blocks": 308,
+      "blocks": 2964,
+      "grid": [
+        153,
+        105,
+        97
+      ],
+      "raw_tris": 6392,
+      "removed_faces": 0,
+      "seconds": 0.9
+    }
+  },
+  "glb": {
+    "bytes": 1539644,
+    "nodes": [
+      "StillPebble_Beanie",
+      "StillPebble_Blush",
+      "StillPebble_Brow",
+      "StillPebble_Dino",
+      "StillPebble_DinoBelly",
+      "StillPebble_DinoBlush",
+      "StillPebble_DinoEyes",
+      "StillPebble_DinoSpikes",
+      "StillPebble_Eyes",
+      "StillPebble_EyeShine",
+      "StillPebble_Hair",
+      "StillPebble_Hands",
+      "StillPebble_Head",
+      "StillPebble_Iris",
+      "StillPebble_Lash",
+      "StillPebble_Legs",
+      "StillPebble_Mouth",
+      "StillPebble_Nose",
+      "StillPebble_Patch",
+      "StillPebble_PatchLeaf",
+      "StillPebble_Pompom",
+      "StillPebble_Scarf",
+      "StillPebble_ScarfFringe",
+      "StillPebble_ScarfStitch",
+      "StillPebble_Shoes",
+      "StillPebble_ShoeStitch",
+      "StillPebble_Shorts",
+      "StillPebble_Socks",
+      "StillPebble_Soles",
+      "StillPebble_Stitches",
+      "StillPebble_Sweater",
+      "StillPebble"
+    ],
+    "meshes": 31,
+    "materials": 26,
+    "images": 26,
+    "textures": 26,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.still-pebble",
+  "root": "StillPebble",
+  "face": "StillPebble_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 31,
+    "triangle_mismatches": {}
+  }
+}

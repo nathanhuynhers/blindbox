@@ -69,6 +69,7 @@ function Cinematic.create(
 		hidden:Destroy()
 	end)
 	local origin, settings = Config.stage.origin, Config.stage
+	local spectral = profile.signature.spectralTiming
 	solid(
 		stage,
 		"Floor",
@@ -336,7 +337,11 @@ function Cinematic.create(
 				)
 				local offset =
 					Config.flight.holdOffset:Lerp(Config.flight.diveOffset, smooth(flight.apex))
-				offset += offset.Unit * profile.signature.cameraPull * flight.pulse
+				local framing = if spectral
+					then (profile.signature.cameraPull * flight.suspense - 0.3 * flight.recognition)
+						* (1 - flight.apex)
+					else profile.signature.cameraPull * flight.pulse
+				offset += offset.Unit * framing
 				position = (comet + offset):Lerp(finalPosition, settle)
 				target = (comet + Config.flight.aimOffset):Lerp(finalTarget, settle)
 				fov = (
@@ -346,7 +351,7 @@ function Cinematic.create(
 				)
 						* (1 - settle)
 					+ settings.resultFov * settle
-				impulse = flight.pulse * 0.25
+				impulse = if spectral then 0 else flight.pulse * 0.25
 				roll = -math.sin(flight.apex * math.pi) * Config.flight.roll
 			elseif phase == "Impact" then
 				position, target, fov = finalPosition, finalTarget, settings.resultFov
@@ -359,6 +364,20 @@ function Cinematic.create(
 					then (1 - kick) ^ 3 * 1.5
 					else 0
 				fov -= math.sin(kick * math.pi) * Config.flight.impactFov
+				if spectral then
+					-- A single axial breath replaces lateral shake and ends before the halo settles.
+					local response = math.sin(
+						math.clamp(
+							(state.elapsed - Config.flight.impactKickAt)
+								/ (spectral.calmAt - Config.flight.impactKickAt),
+							0,
+							1
+						) * math.pi
+					)
+					impulse = 0
+					position += Vector3.new(0, 0, response * 0.12)
+					fov = settings.resultFov - response * 1.2
+				end
 			elseif showing then
 				target, position = finalTarget, finalPosition
 				fov = settings.resultFov
@@ -369,6 +388,12 @@ function Cinematic.create(
 					then math.sin(p * math.pi) * 0.18
 					else 0
 				local turn = if reduced then 0 else math.sin(time * 0.34) * 0.14
+				local composed = spectral ~= nil and phase == "Silhouette"
+				if composed then
+					turn, float = 0, 0
+				elseif spectral and phase == "Reveal" then
+					turn, float = turn * smooth(p), float * smooth(p)
+				end
 				figure.pose(
 					CFrame.new(
 						origin
@@ -378,7 +403,9 @@ function Cinematic.create(
 									+ pop
 									+ float * 0.4
 									- (
-										if phase == "Silhouette" and not reduced
+										if phase == "Silhouette"
+												and not reduced
+												and not composed
 											then (1 - smooth(p)) * 0.18
 											else 0
 									),
@@ -413,6 +440,12 @@ function Cinematic.create(
 				pursuitPosition = pursuitPosition:Lerp(position, gain)
 				pursuitTarget = pursuitTarget:Lerp(target, gain)
 				pursuitFov += (fov - pursuitFov) * gain
+				if spectral and phase == "Impact" then
+					local settle = smooth(math.clamp(state.elapsed / spectral.calmAt, 0, 1))
+					pursuitPosition = pursuitPosition:Lerp(position, settle)
+					pursuitTarget = pursuitTarget:Lerp(target, settle)
+					pursuitFov += (fov - pursuitFov) * settle
+				end
 				position, target, fov = pursuitPosition, pursuitTarget, pursuitFov
 			else
 				pursuitPosition, pursuitTarget, pursuitFov = position, target, fov

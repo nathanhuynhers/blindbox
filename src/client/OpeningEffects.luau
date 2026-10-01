@@ -94,6 +94,8 @@ function Effects.create(
 	reduced: boolean,
 	mobile: boolean
 ): Effects
+	local spectral = profile.signature.spectralTiming
+	local calmAt = Config.impactCalmAt(profile)
 	local density = (if mobile then Config.effects.mobileDensity else 1)
 		* (if reduced then Config.effects.reducedDensity else 1)
 	local origin = Config.stage.origin
@@ -192,6 +194,10 @@ function Effects.create(
 	impact.SpreadAngle, impact.EmissionDirection = Vector2.new(85, 85), Enum.NormalId.Top
 	local impactCore = make(impactAnchor, "ContactPulse", Config.effects.softTexture, 2.4)
 	impactCore.Lifetime, impactCore.Speed = NumberRange.new(0.14), NumberRange.new(0)
+	if spectral then
+		impact.Speed, impact.Lifetime = NumberRange.new(1.5, 3.5), NumberRange.new(0.12, 0.2)
+		impactCore.Size = NumberSequence.new(1.8, 0)
+	end
 	local impactLight = Instance.new("PointLight")
 	impactLight.Name, impactLight.Range, impactLight.Enabled, impactLight.Brightness, impactLight.Parent =
 		"OpeningImpactLight", 12, false, 0, impactAnchor
@@ -215,7 +221,7 @@ function Effects.create(
 		then ring(resultGroup, if mobile then 20 else 28)
 		else nil
 	local impactRings: { Ring } = {}
-	for _ = 1, math.min(profile.rings, if reduced then 1 else Config.effects.maxRings) do
+	for _ = 1, math.min(profile.rings, if reduced and not spectral then 1 else Config.effects.maxRings) do
 		table.insert(impactRings, ring(impactGroup, if mobile then 16 else 24))
 	end
 	local bloom = Instance.new("BloomEffect")
@@ -355,7 +361,7 @@ function Effects.create(
 				clear()
 				tint(profile.tint, profile.accent)
 			elseif phase == "Reveal" then
-				burst(reveal, profile.particles * 0.55)
+				burst(reveal, profile.particles * (if spectral then 0.35 else 0.55))
 			end
 		end,
 		update = function(state, boxAt, cometPosition, time)
@@ -383,7 +389,9 @@ function Effects.create(
 
 			bloom.Enabled, grade.Enabled = phase ~= "Enter", phase ~= "Enter"
 			bloom.Intensity = (if reduced then 0.08 else profile.bloom) * lighting.bloom
-			grade.Contrast = if phase == "Impact" then (1 - p) * 0.06 else 0
+			grade.Contrast = if phase == "Impact" and (not spectral or state.elapsed < calmAt)
+				then (1 - p) * 0.06
+				else 0
 			grade.TintColor = Color3.new(1, 1, 1):Lerp(
 				if showing
 						or phase == "Impact"
@@ -426,6 +434,24 @@ function Effects.create(
 				)
 				for i, wave in transformRings do
 					local strength = sample.waves[i] or 0
+					local response = sample.spectralRings[i]
+					if response then
+						-- Radius only grows: a thin outer response, then a smaller cyan wave.
+						wave.show(
+							CFrame.lookAt(cometPosition, camera.CFrame.Position)
+								* CFrame.Angles(0, if i == 2 then 0.35 else 0, 0),
+							(0.5 + response * 2.1)
+								* (if i == 1 then 1 else 0.7)
+								* (if reduced then 0.7 else 1),
+							if i == 1 then profile.tint else profile.highlight,
+							if phase == "RarityTease"
+								then 1 - math.sin(response * math.pi) * (if reduced
+									then 0.25
+									else 0.45)
+								else 1
+						)
+						continue
+					end
 					wave.show(
 						CFrame.new(cometPosition),
 						(0.7 + (1 - strength) * 1.8) * (if i == 1 then 1 else 0.72),
@@ -447,21 +473,40 @@ function Effects.create(
 						else 1
 				)
 			end
-			halo.Enabled = showing or phase == "Impact"
-			local haloAlpha = if showing
-				then 0.65
-				elseif phase == "Impact" then 0.4 + p * 0.25
-				else 1
-			haloRing.show(CFrame.new(origin + Vector3.new(0, 2.45, 1.35)), 2.05, color, haloAlpha)
+			local haloVisible = showing
+				or (phase == "Impact" and (not spectral or state.elapsed >= calmAt))
+			halo.Enabled = haloVisible
+			local haloAlpha = if showing then 0.65 elseif haloVisible then 0.4 + p * 0.25 else 1
+			if spectral and phase == "Impact" and haloVisible then
+				haloAlpha = 1
+					- math.clamp(
+							(state.elapsed - calmAt) / (profile.timing.impact - calmAt),
+							0,
+							1
+						)
+						* 0.35
+			end
+			haloRing.show(
+				CFrame.new(origin + Vector3.new(0, 2.45, 1.35)),
+				if spectral then 2.3 else 2.05,
+				color,
+				haloAlpha
+			)
 			if edgeHalo then
 				edgeHalo.show(
-					CFrame.new(origin + Vector3.new(0, 2.45, 1.32)),
-					2.17,
+					CFrame.new(origin + Vector3.new(0, 2.45, 1.32))
+						* CFrame.Angles(0, if spectral then 0.4 else 0, 0),
+					if spectral then 1.85 else 2.17,
 					if profile.signature.spectral then profile.highlight else profile.accent,
-					if showing or phase == "Impact" then 0.78 else 1
+					if haloVisible
+						then (if spectral then 1 - (1 - haloAlpha) * 0.5 else 0.78)
+						else 1
 				)
 			end
-			if showing and profile.signature.spectral then
+			if spectral and haloVisible then
+				halo.Color = ColorSequence.new(profile.accent)
+				halo.Rate = 4
+				dust.Rate = 2 * density
 				dust.Color = ColorSequence.new(profile.accent, profile.highlight)
 			end
 			if impactGroup.Parent then
@@ -473,32 +518,42 @@ function Effects.create(
 					end
 					if not impactBurst and elapsed >= Config.flight.impactBurstAt then
 						impactBurst = true
-						burst(impact, profile.particles)
+						burst(impact, profile.particles * (if spectral then 0.6 else 1))
 					end
 					impactLight.Color, impactLight.Brightness, impactLight.Enabled =
-						color, lighting.comet, lighting.comet > 0
-					if elapsed >= Config.flight.impactCalmAt then
+						if spectral then profile.accent else color,
+						lighting.comet,
+						lighting.comet > 0
+					if elapsed >= calmAt then
 						impact:Clear()
 						impactCore:Clear()
 						impactLight.Enabled, impactLight.Brightness = false, 0
 					end
 				end
 				for i, value in impactRings do
-					local age = elapsed - Config.flight.impactRingAt - (i - 1) * 0.025
+					local start = Config.flight.impactRingAt
+						+ (i - 1) * (if spectral then 0.045 else 0.025)
+					local age = elapsed - start
 					local progress = math.clamp(
-						age / (Config.flight.impactCalmAt - Config.flight.impactRingAt),
+						age / (calmAt - (if spectral then start else Config.flight.impactRingAt)),
 						0,
 						1
 					)
 					value.show(
 						CFrame.new(origin + Vector3.new(0, 0.82 + i * 0.015, 0))
 							* CFrame.Angles(math.pi / 2, 0, 0),
-						0.35 + progress * (2.7 + i * 0.4),
+						0.35
+							+ progress
+								* (if spectral
+									then (if i == 1 then 2.8 else 1.85)
+									else 2.7 + i * 0.4),
 						profile.signature.ringColors[(i - 1) % #profile.signature.ringColors + 1],
 						if phase == "Impact"
 								and age >= 0
-								and elapsed < Config.flight.impactCalmAt
-							then 0.25 + progress * 0.75
+								and elapsed < calmAt
+							then (if spectral
+								then 0.45 + progress * 0.55
+								else 0.25 + progress * 0.75)
 							else 1
 					)
 				end

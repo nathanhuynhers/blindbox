@@ -1,0 +1,694 @@
+{
+  "figure": "PaperCrown",
+  "title": "Paper Crown",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.1133,
+    1.9562,
+    3.1502
+  ],
+  "meshes": 30,
+  "triangles": 63052,
+  "materials": [
+    "PaperCrown_BlueInk",
+    "PaperCrown_Blush",
+    "PaperCrown_Brow",
+    "PaperCrown_Button",
+    "PaperCrown_Dark",
+    "PaperCrown_Denim",
+    "PaperCrown_DenimCuff",
+    "PaperCrown_EyeShine",
+    "PaperCrown_EyeWhite",
+    "PaperCrown_Gold",
+    "PaperCrown_Hair",
+    "PaperCrown_Iris",
+    "PaperCrown_Lash",
+    "PaperCrown_Mouth",
+    "PaperCrown_Nose",
+    "PaperCrown_Paper",
+    "PaperCrown_Pouch",
+    "PaperCrown_RedInk",
+    "PaperCrown_Sash",
+    "PaperCrown_Shoes",
+    "PaperCrown_Skin",
+    "PaperCrown_Socks",
+    "PaperCrown_Sole",
+    "PaperCrown_Stitch",
+    "PaperCrown_Sweater"
+  ],
+  "components": {
+    "PaperCrown_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.0826
+    },
+    "PaperCrown_Hair": {
+      "tris": 9748,
+      "verts": 4876,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.49519
+    },
+    "PaperCrown_Crown": {
+      "tris": 5998,
+      "verts": 2999,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08888
+    },
+    "PaperCrown_CrownStar": {
+      "tris": 998,
+      "verts": 503,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00057
+    },
+    "PaperCrown_CrownSprig": {
+      "tris": 1500,
+      "verts": 764,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00042
+    },
+    "PaperCrown_CrownDoodle": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00063
+    },
+    "PaperCrown_Sweater": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.33189
+    },
+    "PaperCrown_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01047
+    },
+    "PaperCrown_Overalls": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.35751
+    },
+    "PaperCrown_Cuffs": {
+      "tris": 2000,
+      "verts": 1000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01657
+    },
+    "PaperCrown_Pocket": {
+      "tris": 998,
+      "verts": 505,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00611
+    },
+    "PaperCrown_PocketCrown": {
+      "tris": 982,
+      "verts": 515,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00025
+    },
+    "PaperCrown_Straps": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01035
+    },
+    "PaperCrown_Buttons": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00042
+    },
+    "PaperCrown_Sash": {
+      "tris": 6000,
+      "verts": 2998,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07067
+    },
+    "PaperCrown_Pouch": {
+      "tris": 998,
+      "verts": 501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00417
+    },
+    "PaperCrown_PouchFace": {
+      "tris": 300,
+      "verts": 156,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 4e-05
+    },
+    "PaperCrown_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04366
+    },
+    "PaperCrown_Socks": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03122
+    },
+    "PaperCrown_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0721
+    },
+    "PaperCrown_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01329
+    },
+    "PaperCrown_SoleStitch": {
+      "tris": 748,
+      "verts": 382,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00158
+    },
+    "PaperCrown_Eyes": {
+      "tris": 798,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01031
+    },
+    "PaperCrown_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00816
+    },
+    "PaperCrown_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "PaperCrown_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00148
+    },
+    "PaperCrown_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00056
+    },
+    "PaperCrown_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "PaperCrown_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "PaperCrown_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "PaperCrown_Head": {
+      "active_blocks": 5440,
+      "blocks": 16744,
+      "grid": [
+        209,
+        185,
+        225
+      ],
+      "raw_tris": 250884,
+      "removed_faces": 0,
+      "seconds": 5.7
+    },
+    "PaperCrown_Hair": {
+      "active_blocks": 15642,
+      "blocks": 51414,
+      "grid": [
+        329,
+        305,
+        265
+      ],
+      "raw_tris": 822194,
+      "removed_faces": 0,
+      "seconds": 120.6
+    },
+    "PaperCrown_Crown": {
+      "active_blocks": 8671,
+      "blocks": 74256,
+      "grid": [
+        417,
+        409,
+        225
+      ],
+      "raw_tris": 468212,
+      "removed_faces": 0,
+      "seconds": 12.4
+    },
+    "PaperCrown_CrownStar": {
+      "active_blocks": 678,
+      "blocks": 65274,
+      "grid": [
+        345,
+        529,
+        185
+      ],
+      "raw_tris": 16776,
+      "removed_faces": 2,
+      "seconds": 1.3
+    },
+    "PaperCrown_CrownSprig": {
+      "active_blocks": 1092,
+      "blocks": 113022,
+      "grid": [
+        553,
+        505,
+        209
+      ],
+      "raw_tris": 18024,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "PaperCrown_CrownDoodle": {
+      "active_blocks": 808,
+      "blocks": 58080,
+      "grid": [
+        441,
+        385,
+        177
+      ],
+      "raw_tris": 24136,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "PaperCrown_Sweater": {
+      "active_blocks": 4151,
+      "blocks": 11550,
+      "grid": [
+        201,
+        169,
+        177
+      ],
+      "raw_tris": 198176,
+      "removed_faces": 0,
+      "seconds": 20.5
+    },
+    "PaperCrown_Hands": {
+      "active_blocks": 830,
+      "blocks": 2736,
+      "grid": [
+        153,
+        97,
+        97
+      ],
+      "raw_tris": 37966,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "PaperCrown_Overalls": {
+      "active_blocks": 4794,
+      "blocks": 12696,
+      "grid": [
+        185,
+        185,
+        193
+      ],
+      "raw_tris": 224128,
+      "removed_faces": 0,
+      "seconds": 6.9
+    },
+    "PaperCrown_Cuffs": {
+      "active_blocks": 1279,
+      "blocks": 3654,
+      "grid": [
+        233,
+        73,
+        113
+      ],
+      "raw_tris": 54852,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "PaperCrown_Pocket": {
+      "active_blocks": 1403,
+      "blocks": 6048,
+      "grid": [
+        129,
+        217,
+        113
+      ],
+      "raw_tris": 55508,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "PaperCrown_PocketCrown": {
+      "active_blocks": 690,
+      "blocks": 6624,
+      "grid": [
+        145,
+        185,
+        129
+      ],
+      "raw_tris": 15256,
+      "removed_faces": 18,
+      "seconds": 1.1
+    },
+    "PaperCrown_Straps": {
+      "active_blocks": 1592,
+      "blocks": 8400,
+      "grid": [
+        169,
+        201,
+        129
+      ],
+      "raw_tris": 62232,
+      "removed_faces": 0,
+      "seconds": 4.4
+    },
+    "PaperCrown_Buttons": {
+      "active_blocks": 282,
+      "blocks": 2024,
+      "grid": [
+        185,
+        65,
+        89
+      ],
+      "raw_tris": 6456,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "PaperCrown_Sash": {
+      "active_blocks": 3827,
+      "blocks": 22113,
+      "grid": [
+        313,
+        169,
+        217
+      ],
+      "raw_tris": 183660,
+      "removed_faces": 0,
+      "seconds": 26.1
+    },
+    "PaperCrown_Pouch": {
+      "active_blocks": 640,
+      "blocks": 2464,
+      "grid": [
+        129,
+        89,
+        113
+      ],
+      "raw_tris": 26006,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "PaperCrown_PouchFace": {
+      "active_blocks": 222,
+      "blocks": 2156,
+      "grid": [
+        113,
+        113,
+        89
+      ],
+      "raw_tris": 2736,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "PaperCrown_Legs": {
+      "active_blocks": 1638,
+      "blocks": 5049,
+      "grid": [
+        217,
+        137,
+        89
+      ],
+      "raw_tris": 70372,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "PaperCrown_Socks": {
+      "active_blocks": 1206,
+      "blocks": 3828,
+      "grid": [
+        233,
+        89,
+        97
+      ],
+      "raw_tris": 55020,
+      "removed_faces": 2,
+      "seconds": 1.3
+    },
+    "PaperCrown_Shoes": {
+      "active_blocks": 2126,
+      "blocks": 6240,
+      "grid": [
+        257,
+        105,
+        121
+      ],
+      "raw_tris": 92888,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "PaperCrown_Soles": {
+      "active_blocks": 1766,
+      "blocks": 9282,
+      "grid": [
+        313,
+        113,
+        137
+      ],
+      "raw_tris": 79840,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "PaperCrown_SoleStitch": {
+      "active_blocks": 2685,
+      "blocks": 21528,
+      "grid": [
+        417,
+        145,
+        185
+      ],
+      "raw_tris": 80680,
+      "removed_faces": 0,
+      "seconds": 3.0
+    },
+    "PaperCrown_Eyes": {
+      "active_blocks": 1892,
+      "blocks": 10944,
+      "grid": [
+        289,
+        153,
+        129
+      ],
+      "raw_tris": 66196,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "PaperCrown_Iris": {
+      "active_blocks": 1557,
+      "blocks": 10032,
+      "grid": [
+        265,
+        153,
+        129
+      ],
+      "raw_tris": 51392,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "PaperCrown_EyeShine": {
+      "active_blocks": 828,
+      "blocks": 6825,
+      "grid": [
+        281,
+        121,
+        105
+      ],
+      "raw_tris": 14252,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "PaperCrown_Lash": {
+      "active_blocks": 1500,
+      "blocks": 10824,
+      "grid": [
+        329,
+        177,
+        97
+      ],
+      "raw_tris": 38400,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "PaperCrown_Brow": {
+      "active_blocks": 596,
+      "blocks": 3906,
+      "grid": [
+        249,
+        113,
+        73
+      ],
+      "raw_tris": 9480,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "PaperCrown_Nose": {
+      "active_blocks": 134,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3404,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "PaperCrown_Mouth": {
+      "active_blocks": 213,
+      "blocks": 1296,
+      "grid": [
+        97,
+        97,
+        73
+      ],
+      "raw_tris": 3684,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "PaperCrown_Blush": {
+      "active_blocks": 1194,
+      "blocks": 5808,
+      "grid": [
+        265,
+        129,
+        89
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.1
+    }
+  },
+  "glb": {
+    "bytes": 1430992,
+    "nodes": [
+      "PaperCrown_Blush",
+      "PaperCrown_Brow",
+      "PaperCrown_Buttons",
+      "PaperCrown_Crown",
+      "PaperCrown_CrownDoodle",
+      "PaperCrown_CrownSprig",
+      "PaperCrown_CrownStar",
+      "PaperCrown_Cuffs",
+      "PaperCrown_Eyes",
+      "PaperCrown_EyeShine",
+      "PaperCrown_Hair",
+      "PaperCrown_Hands",
+      "PaperCrown_Head",
+      "PaperCrown_Iris",
+      "PaperCrown_Lash",
+      "PaperCrown_Legs",
+      "PaperCrown_Mouth",
+      "PaperCrown_Nose",
+      "PaperCrown_Overalls",
+      "PaperCrown_Pocket",
+      "PaperCrown_PocketCrown",
+      "PaperCrown_Pouch",
+      "PaperCrown_PouchFace",
+      "PaperCrown_Sash",
+      "PaperCrown_Shoes",
+      "PaperCrown_Socks",
+      "PaperCrown_Soles",
+      "PaperCrown_SoleStitch",
+      "PaperCrown_Straps",
+      "PaperCrown_Sweater",
+      "PaperCrown"
+    ],
+    "meshes": 30,
+    "materials": 25,
+    "images": 25,
+    "textures": 25,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.paper-crown",
+  "root": "PaperCrown",
+  "face": "PaperCrown_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 30,
+    "triangle_mismatches": {}
+  }
+}

@@ -297,6 +297,34 @@ for _, rarity in { "Legendary", "Mythical" } do
 		end
 	end
 end
+for _, reduced in { false, true } do
+	for _, beat in { { "RarityTease", 0.11 }, { "RarityTease", 0.44 }, { "Impact", 0.18 } } do
+		start("grove.pebble", reduced, false, "Mythical")
+		reach(beat[1])
+		E.render:Fire(beat[2])
+		if beat[1] == "Impact" then
+			check(
+				E.camera.FieldOfView
+					== (if reduced then Config.stage.reducedFov else Config.stage.resultFov),
+				"Mythical impact camera reaches calm with effects"
+			)
+		end
+		local queuedDraws = E.render:Capture()
+		controller.skip()
+		resultClean()
+		clean()
+		start("grove.pebble", reduced, false, "Mythical")
+		local successor = stage()
+		for _, callback in queuedDraws do
+			callback(0.5)
+		end
+		check(
+			stage() == successor and E.state.phase == "Enter",
+			"obsolete Mythical suspense/sweep/calm draws cannot alter successor"
+		)
+		clean()
+	end
+end
 E.studio = false
 start(ids[1], false, true)
 reach("Result")

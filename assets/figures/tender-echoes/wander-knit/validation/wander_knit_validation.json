@@ -1,0 +1,689 @@
+{
+  "figure": "WanderKnit",
+  "title": "Wander Knit",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.0365,
+    1.7323,
+    3.2582
+  ],
+  "meshes": 30,
+  "triangles": 54824,
+  "materials": [
+    "WanderKnit_Blush",
+    "WanderKnit_Brow",
+    "WanderKnit_Button",
+    "WanderKnit_Cream",
+    "WanderKnit_Dress",
+    "WanderKnit_EyeShine",
+    "WanderKnit_EyeWhite",
+    "WanderKnit_Hair",
+    "WanderKnit_Iris",
+    "WanderKnit_Knit",
+    "WanderKnit_Lash",
+    "WanderKnit_Leather",
+    "WanderKnit_Mouth",
+    "WanderKnit_Nose",
+    "WanderKnit_Patch",
+    "WanderKnit_Shoes",
+    "WanderKnit_Skin",
+    "WanderKnit_Socks",
+    "WanderKnit_Sole",
+    "WanderKnit_Stitch"
+  ],
+  "components": {
+    "WanderKnit_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08258
+    },
+    "WanderKnit_Hair": {
+      "tris": 6998,
+      "verts": 3501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.41044
+    },
+    "WanderKnit_Beanie": {
+      "tris": 8804,
+      "verts": 4308,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.82547
+    },
+    "WanderKnit_BeanieEars": {
+      "tris": 1936,
+      "verts": 972,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09058
+    },
+    "WanderKnit_Braids": {
+      "tris": 3000,
+      "verts": 1504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02647
+    },
+    "WanderKnit_HatPatch": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01248
+    },
+    "WanderKnit_HatStitch": {
+      "tris": 1250,
+      "verts": 645,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00141
+    },
+    "WanderKnit_Darning": {
+      "tris": 1248,
+      "verts": 630,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00446
+    },
+    "WanderKnit_Dress": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.4602
+    },
+    "WanderKnit_DressPatch": {
+      "tris": 400,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00089
+    },
+    "WanderKnit_DressStitch": {
+      "tris": 498,
+      "verts": 251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00032
+    },
+    "WanderKnit_Arms": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03958
+    },
+    "WanderKnit_Bag": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03309
+    },
+    "WanderKnit_BagFlap": {
+      "tris": 1250,
+      "verts": 627,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00926
+    },
+    "WanderKnit_BagStitch": {
+      "tris": 750,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00019
+    },
+    "WanderKnit_Strap": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01076
+    },
+    "WanderKnit_Bunny": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00055
+    },
+    "WanderKnit_BagButton": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0001
+    },
+    "WanderKnit_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04753
+    },
+    "WanderKnit_Socks": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04321
+    },
+    "WanderKnit_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08956
+    },
+    "WanderKnit_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01498
+    },
+    "WanderKnit_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01148
+    },
+    "WanderKnit_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00913
+    },
+    "WanderKnit_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "WanderKnit_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00143
+    },
+    "WanderKnit_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0006
+    },
+    "WanderKnit_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "WanderKnit_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "WanderKnit_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "WanderKnit_Head": {
+      "active_blocks": 5444,
+      "blocks": 16675,
+      "grid": [
+        201,
+        185,
+        233
+      ],
+      "raw_tris": 250784,
+      "removed_faces": 0,
+      "seconds": 7.5
+    },
+    "WanderKnit_Hair": {
+      "active_blocks": 8003,
+      "blocks": 27753,
+      "grid": [
+        265,
+        233,
+        233
+      ],
+      "raw_tris": 477288,
+      "removed_faces": 0,
+      "seconds": 30.4
+    },
+    "WanderKnit_Beanie": {
+      "active_blocks": 12848,
+      "blocks": 45045,
+      "grid": [
+        313,
+        265,
+        281
+      ],
+      "raw_tris": 892268,
+      "removed_faces": 944,
+      "seconds": 24.9
+    },
+    "WanderKnit_BeanieEars": {
+      "active_blocks": 1704,
+      "blocks": 5746,
+      "grid": [
+        273,
+        105,
+        105
+      ],
+      "raw_tris": 87716,
+      "removed_faces": 64,
+      "seconds": 2.7
+    },
+    "WanderKnit_Braids": {
+      "active_blocks": 1532,
+      "blocks": 8778,
+      "grid": [
+        305,
+        89,
+        169
+      ],
+      "raw_tris": 65996,
+      "removed_faces": 0,
+      "seconds": 5.1
+    },
+    "WanderKnit_HatPatch": {
+      "active_blocks": 1051,
+      "blocks": 6156,
+      "grid": [
+        145,
+        145,
+        153
+      ],
+      "raw_tris": 47060,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "WanderKnit_HatStitch": {
+      "active_blocks": 958,
+      "blocks": 9702,
+      "grid": [
+        177,
+        169,
+        169
+      ],
+      "raw_tris": 59312,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "WanderKnit_Darning": {
+      "active_blocks": 1441,
+      "blocks": 32480,
+      "grid": [
+        225,
+        321,
+        233
+      ],
+      "raw_tris": 43816,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "WanderKnit_Dress": {
+      "active_blocks": 3020,
+      "blocks": 6120,
+      "grid": [
+        161,
+        137,
+        145
+      ],
+      "raw_tris": 134740,
+      "removed_faces": 0,
+      "seconds": 4.6
+    },
+    "WanderKnit_DressPatch": {
+      "active_blocks": 451,
+      "blocks": 2856,
+      "grid": [
+        113,
+        137,
+        97
+      ],
+      "raw_tris": 10088,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "WanderKnit_DressStitch": {
+      "active_blocks": 395,
+      "blocks": 3211,
+      "grid": [
+        105,
+        153,
+        105
+      ],
+      "raw_tris": 14708,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "WanderKnit_Arms": {
+      "active_blocks": 1791,
+      "blocks": 6510,
+      "grid": [
+        249,
+        81,
+        169
+      ],
+      "raw_tris": 77324,
+      "removed_faces": 0,
+      "seconds": 4.3
+    },
+    "WanderKnit_Bag": {
+      "active_blocks": 1071,
+      "blocks": 2535,
+      "grid": [
+        121,
+        105,
+        105
+      ],
+      "raw_tris": 44732,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "WanderKnit_BagFlap": {
+      "active_blocks": 1058,
+      "blocks": 3510,
+      "grid": [
+        145,
+        121,
+        105
+      ],
+      "raw_tris": 42692,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "WanderKnit_BagStitch": {
+      "active_blocks": 636,
+      "blocks": 6270,
+      "grid": [
+        177,
+        153,
+        121
+      ],
+      "raw_tris": 16396,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "WanderKnit_Strap": {
+      "active_blocks": 1893,
+      "blocks": 18676,
+      "grid": [
+        233,
+        225,
+        185
+      ],
+      "raw_tris": 75548,
+      "removed_faces": 0,
+      "seconds": 11.3
+    },
+    "WanderKnit_Bunny": {
+      "active_blocks": 278,
+      "blocks": 1386,
+      "grid": [
+        89,
+        73,
+        113
+      ],
+      "raw_tris": 8160,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "WanderKnit_BagButton": {
+      "active_blocks": 116,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 2044,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "WanderKnit_Legs": {
+      "active_blocks": 1273,
+      "blocks": 2048,
+      "grid": [
+        129,
+        65,
+        129
+      ],
+      "raw_tris": 52424,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "WanderKnit_Socks": {
+      "active_blocks": 1507,
+      "blocks": 2990,
+      "grid": [
+        185,
+        105,
+        81
+      ],
+      "raw_tris": 74896,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "WanderKnit_Shoes": {
+      "active_blocks": 1716,
+      "blocks": 2800,
+      "grid": [
+        161,
+        113,
+        81
+      ],
+      "raw_tris": 74296,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "WanderKnit_Soles": {
+      "active_blocks": 1696,
+      "blocks": 4704,
+      "grid": [
+        225,
+        169,
+        65
+      ],
+      "raw_tris": 71392,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "WanderKnit_Eyes": {
+      "active_blocks": 2090,
+      "blocks": 9180,
+      "grid": [
+        273,
+        145,
+        121
+      ],
+      "raw_tris": 72288,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "WanderKnit_Iris": {
+      "active_blocks": 1658,
+      "blocks": 8640,
+      "grid": [
+        257,
+        145,
+        121
+      ],
+      "raw_tris": 56460,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "WanderKnit_EyeShine": {
+      "active_blocks": 809,
+      "blocks": 5577,
+      "grid": [
+        265,
+        105,
+        105
+      ],
+      "raw_tris": 14216,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "WanderKnit_Lash": {
+      "active_blocks": 1493,
+      "blocks": 11592,
+      "grid": [
+        337,
+        185,
+        97
+      ],
+      "raw_tris": 41164,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "WanderKnit_Brow": {
+      "active_blocks": 554,
+      "blocks": 3654,
+      "grid": [
+        233,
+        113,
+        73
+      ],
+      "raw_tris": 9736,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "WanderKnit_Nose": {
+      "active_blocks": 140,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "WanderKnit_Mouth": {
+      "active_blocks": 242,
+      "blocks": 1188,
+      "grid": [
+        89,
+        97,
+        73
+      ],
+      "raw_tris": 3600,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "WanderKnit_Blush": {
+      "active_blocks": 1100,
+      "blocks": 5120,
+      "grid": [
+        257,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 0.8
+    }
+  },
+  "glb": {
+    "bytes": 1244220,
+    "nodes": [
+      "WanderKnit_Arms",
+      "WanderKnit_Bag",
+      "WanderKnit_BagButton",
+      "WanderKnit_BagFlap",
+      "WanderKnit_BagStitch",
+      "WanderKnit_Beanie",
+      "WanderKnit_BeanieEars",
+      "WanderKnit_Blush",
+      "WanderKnit_Braids",
+      "WanderKnit_Brow",
+      "WanderKnit_Bunny",
+      "WanderKnit_Darning",
+      "WanderKnit_Dress",
+      "WanderKnit_DressPatch",
+      "WanderKnit_DressStitch",
+      "WanderKnit_Eyes",
+      "WanderKnit_EyeShine",
+      "WanderKnit_Hair",
+      "WanderKnit_HatPatch",
+      "WanderKnit_HatStitch",
+      "WanderKnit_Head",
+      "WanderKnit_Iris",
+      "WanderKnit_Lash",
+      "WanderKnit_Legs",
+      "WanderKnit_Mouth",
+      "WanderKnit_Nose",
+      "WanderKnit_Shoes",
+      "WanderKnit_Socks",
+      "WanderKnit_Soles",
+      "WanderKnit_Strap",
+      "WanderKnit"
+    ],
+    "meshes": 30,
+    "materials": 20,
+    "images": 20,
+    "textures": 20,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.wander-knit",
+  "root": "WanderKnit",
+  "face": "WanderKnit_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 30,
+    "triangle_mismatches": {}
+  }
+}

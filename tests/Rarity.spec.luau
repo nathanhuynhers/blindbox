@@ -92,7 +92,8 @@ for _, invalid in { "", "rare", "MYTHICAL", "Secret", "future", 5, false, {} } d
 end
 check(not Rarity.isValid(nil), "nil is invalid")
 check(not pcall(Rarity.rank, "Unknown"), "rank does not legitimize unknown labels")
-for _, rarity in { "Legendary", "Mythical" } do
+-- Legendary keeps its original bold double pulse. Mythical now has a separate cadence.
+for _, rarity in { "Legendary" } do
 	local profile = Config.profile(rarity)
 	for _, reduced in { false, true } do
 		local state = State.create(profile.timing, reduced, false)
@@ -154,6 +155,20 @@ local expected = {
 	{ "concept.cruelty", "Rare", 7, 10 / 56 * 100, 10 },
 	{ "concept.lovity", "Legendary", 12, 8 / 56 * 100, 8 },
 	{ "concept.verity-true-form", "Mythical", 18, 3 / 56 * 100, 3 },
+	-- Tender Echoes weights are relative within a 173-weight collection, so odds are weight / 173.
+	{ "echo.thread-parade", "Common", 1, 20 / 173 * 100, 20 },
+	{ "echo.wander-knit", "Common", 1.2, 20 / 173 * 100, 20 },
+	{ "echo.dino-drift", "Common", 1.4, 20 / 173 * 100, 20 },
+	{ "echo.still-pebble", "Common", 1.6, 20 / 173 * 100, 20 },
+	{ "echo.hearth-helm", "Uncommon", 3, 15 / 173 * 100, 15 },
+	{ "echo.echo-line", "Uncommon", 3.5, 15 / 173 * 100, 15 },
+	{ "echo.paper-crown", "Uncommon", 4, 15 / 173 * 100, 15 },
+	{ "echo.mask-nuzzle", "Rare", 6, 10 / 173 * 100, 10 },
+	{ "echo.hush-veil", "Rare", 7, 10 / 173 * 100, 10 },
+	{ "echo.crate-spark", "Rare", 8, 10 / 173 * 100, 10 },
+	{ "echo.feather-hush", "Legendary", 12, 8 / 173 * 100, 8 },
+	{ "echo.mumble-beast", "Legendary", 14, 8 / 173 * 100, 8 },
+	{ "echo.moon-doze", "Mythical", 20, 2 / 173 * 100, 2 },
 }
 check(#Catalog.figures == #expected and #Economy.entries == #expected, "no invented live content")
 for _, entry in expected do
@@ -172,17 +187,23 @@ for _, entry in expected do
 	end
 	check(found, "explicit weights unchanged")
 end
-local tiers = { grove = 3, tide = 3, concept = 5 }
-local sizes = { grove = 6, tide = 6, concept = 5 }
+local tiers = { grove = 3, tide = 3, concept = 5, echo = 5 }
+local sizes = { grove = 6, tide = 6, concept = 5, echo = 13 }
 for _, collection in Catalog.collections do
 	local rows = Shop.rarityOdds({ odds = Rules.odds }, collection.id)
 	local tierCount = tiers[collection.id]
-	check(#rows == tierCount and Shop.rarityCount(collection.id) == tierCount, "Shop omits unavailable tiers")
+	check(
+		#rows == tierCount and Shop.rarityCount(collection.id) == tierCount,
+		"Shop omits unavailable tiers"
+	)
 	for index, row in rows do
 		check(row.rarity == order[index], "Shop canonical order")
 	end
 	local discovered, total = Shop.progress({ discovered = {} }, collection.id)
-	check(discovered == 0 and total == sizes[collection.id], "completion still follows actual figures")
+	check(
+		discovered == 0 and total == sizes[collection.id],
+		"completion still follows actual figures"
+	)
 end
 for _, width in { 320, 568, 800 } do
 	for _, count in { 3, 5, 6 } do

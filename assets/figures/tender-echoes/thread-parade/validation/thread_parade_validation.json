@@ -1,0 +1,821 @@
+{
+  "figure": "ThreadParade",
+  "title": "Thread Parade",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.1781,
+    2.1865,
+    3.2423
+  ],
+  "meshes": 36,
+  "triangles": 70462,
+  "materials": [
+    "ThreadParade_Band",
+    "ThreadParade_Blouse",
+    "ThreadParade_Blush",
+    "ThreadParade_Bow",
+    "ThreadParade_Brow",
+    "ThreadParade_Cuff",
+    "ThreadParade_Denim",
+    "ThreadParade_EyeShine",
+    "ThreadParade_EyeWhite",
+    "ThreadParade_Flower",
+    "ThreadParade_FlowerStitch",
+    "ThreadParade_Hair",
+    "ThreadParade_Iris",
+    "ThreadParade_Lash",
+    "ThreadParade_Mouth",
+    "ThreadParade_Nose",
+    "ThreadParade_Patch",
+    "ThreadParade_Ring",
+    "ThreadParade_Shoes",
+    "ThreadParade_Skin",
+    "ThreadParade_Socks",
+    "ThreadParade_Sole",
+    "ThreadParade_Stitch",
+    "ThreadParade_Straw",
+    "ThreadParade_Thread",
+    "ThreadParade_Wood"
+  ],
+  "components": {
+    "ThreadParade_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08259
+    },
+    "ThreadParade_Hair": {
+      "tris": 9744,
+      "verts": 4870,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.6226
+    },
+    "ThreadParade_Hat": {
+      "tris": 6370,
+      "verts": 2670,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.37183
+    },
+    "ThreadParade_HatBand": {
+      "tris": 3000,
+      "verts": 1500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.10263
+    },
+    "ThreadParade_BandStitch": {
+      "tris": 1248,
+      "verts": 704,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00479
+    },
+    "ThreadParade_HatFlower": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0019
+    },
+    "ThreadParade_HatFlowerStitch": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 9e-05
+    },
+    "ThreadParade_HatBow": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00284
+    },
+    "ThreadParade_RibbonTails": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00524
+    },
+    "ThreadParade_Blouse": {
+      "tris": 4498,
+      "verts": 2251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.25587
+    },
+    "ThreadParade_Arms": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01934
+    },
+    "ThreadParade_Bowtie": {
+      "tris": 1250,
+      "verts": 627,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00103
+    },
+    "ThreadParade_Overalls": {
+      "tris": 5500,
+      "verts": 2752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.22446
+    },
+    "ThreadParade_Cuffs": {
+      "tris": 2000,
+      "verts": 998,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02236
+    },
+    "ThreadParade_Straps": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01321
+    },
+    "ThreadParade_Buttons": {
+      "tris": 750,
+      "verts": 379,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00166
+    },
+    "ThreadParade_ButtonStitch": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00014
+    },
+    "ThreadParade_Patch": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00159
+    },
+    "ThreadParade_PatchStitch": {
+      "tris": 574,
+      "verts": 308,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00034
+    },
+    "ThreadParade_Spool": {
+      "tris": 2998,
+      "verts": 1499,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06767
+    },
+    "ThreadParade_SpoolThread": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07944
+    },
+    "ThreadParade_Cord": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00245
+    },
+    "ThreadParade_Ring": {
+      "tris": 1500,
+      "verts": 750,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00476
+    },
+    "ThreadParade_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05084
+    },
+    "ThreadParade_Socks": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04327
+    },
+    "ThreadParade_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07875
+    },
+    "ThreadParade_Soles": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01567
+    },
+    "ThreadParade_ShoeStitch": {
+      "tris": 450,
+      "verts": 233,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00107
+    },
+    "ThreadParade_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01148
+    },
+    "ThreadParade_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00913
+    },
+    "ThreadParade_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "ThreadParade_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00143
+    },
+    "ThreadParade_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0006
+    },
+    "ThreadParade_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "ThreadParade_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "ThreadParade_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "ThreadParade_Head": {
+      "active_blocks": 5450,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 250812,
+      "removed_faces": 0,
+      "seconds": 6.9
+    },
+    "ThreadParade_Hair": {
+      "active_blocks": 14255,
+      "blocks": 49364,
+      "grid": [
+        345,
+        329,
+        225
+      ],
+      "raw_tris": 775128,
+      "removed_faces": 6,
+      "seconds": 136.6
+    },
+    "ThreadParade_Hat": {
+      "active_blocks": 16739,
+      "blocks": 73950,
+      "grid": [
+        401,
+        409,
+        233
+      ],
+      "raw_tris": 1089804,
+      "removed_faces": 3374,
+      "seconds": 29.7
+    },
+    "ThreadParade_HatBand": {
+      "active_blocks": 7711,
+      "blocks": 61152,
+      "grid": [
+        393,
+        385,
+        209
+      ],
+      "raw_tris": 370948,
+      "removed_faces": 0,
+      "seconds": 9.9
+    },
+    "ThreadParade_BandStitch": {
+      "active_blocks": 2921,
+      "blocks": 93987,
+      "grid": [
+        473,
+        473,
+        217
+      ],
+      "raw_tris": 129574,
+      "removed_faces": 0,
+      "seconds": 4.3
+    },
+    "ThreadParade_HatFlower": {
+      "active_blocks": 399,
+      "blocks": 2352,
+      "grid": [
+        113,
+        97,
+        113
+      ],
+      "raw_tris": 18768,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "ThreadParade_HatFlowerStitch": {
+      "active_blocks": 285,
+      "blocks": 3136,
+      "grid": [
+        129,
+        113,
+        113
+      ],
+      "raw_tris": 6836,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "ThreadParade_HatBow": {
+      "active_blocks": 437,
+      "blocks": 1760,
+      "grid": [
+        89,
+        129,
+        81
+      ],
+      "raw_tris": 15380,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "ThreadParade_RibbonTails": {
+      "active_blocks": 1172,
+      "blocks": 7888,
+      "grid": [
+        129,
+        137,
+        233
+      ],
+      "raw_tris": 55896,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "ThreadParade_Blouse": {
+      "active_blocks": 2937,
+      "blocks": 7488,
+      "grid": [
+        209,
+        129,
+        145
+      ],
+      "raw_tris": 138504,
+      "removed_faces": 0,
+      "seconds": 5.1
+    },
+    "ThreadParade_Arms": {
+      "active_blocks": 1460,
+      "blocks": 8436,
+      "grid": [
+        297,
+        97,
+        153
+      ],
+      "raw_tris": 62118,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "ThreadParade_Bowtie": {
+      "active_blocks": 380,
+      "blocks": 1584,
+      "grid": [
+        129,
+        73,
+        89
+      ],
+      "raw_tris": 11412,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "ThreadParade_Overalls": {
+      "active_blocks": 3278,
+      "blocks": 6384,
+      "grid": [
+        153,
+        129,
+        169
+      ],
+      "raw_tris": 133564,
+      "removed_faces": 0,
+      "seconds": 3.5
+    },
+    "ThreadParade_Cuffs": {
+      "active_blocks": 1390,
+      "blocks": 2688,
+      "grid": [
+        193,
+        129,
+        57
+      ],
+      "raw_tris": 63324,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "ThreadParade_Straps": {
+      "active_blocks": 1718,
+      "blocks": 7752,
+      "grid": [
+        153,
+        193,
+        137
+      ],
+      "raw_tris": 71768,
+      "removed_faces": 0,
+      "seconds": 4.3
+    },
+    "ThreadParade_Buttons": {
+      "active_blocks": 512,
+      "blocks": 2808,
+      "grid": [
+        209,
+        73,
+        97
+      ],
+      "raw_tris": 16312,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "ThreadParade_ButtonStitch": {
+      "active_blocks": 450,
+      "blocks": 4092,
+      "grid": [
+        249,
+        89,
+        97
+      ],
+      "raw_tris": 7872,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "ThreadParade_Patch": {
+      "active_blocks": 824,
+      "blocks": 3978,
+      "grid": [
+        137,
+        145,
+        105
+      ],
+      "raw_tris": 15216,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "ThreadParade_PatchStitch": {
+      "active_blocks": 754,
+      "blocks": 8064,
+      "grid": [
+        169,
+        193,
+        129
+      ],
+      "raw_tris": 28960,
+      "removed_faces": 26,
+      "seconds": 1.2
+    },
+    "ThreadParade_Spool": {
+      "active_blocks": 2540,
+      "blocks": 5632,
+      "grid": [
+        177,
+        129,
+        129
+      ],
+      "raw_tris": 122864,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "ThreadParade_SpoolThread": {
+      "active_blocks": 2564,
+      "blocks": 5712,
+      "grid": [
+        169,
+        137,
+        129
+      ],
+      "raw_tris": 115444,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "ThreadParade_Cord": {
+      "active_blocks": 641,
+      "blocks": 5382,
+      "grid": [
+        145,
+        185,
+        105
+      ],
+      "raw_tris": 26128,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "ThreadParade_Ring": {
+      "active_blocks": 855,
+      "blocks": 3366,
+      "grid": [
+        137,
+        89,
+        145
+      ],
+      "raw_tris": 38944,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "ThreadParade_Legs": {
+      "active_blocks": 1384,
+      "blocks": 2304,
+      "grid": [
+        129,
+        73,
+        129
+      ],
+      "raw_tris": 55320,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "ThreadParade_Socks": {
+      "active_blocks": 1503,
+      "blocks": 3360,
+      "grid": [
+        193,
+        113,
+        81
+      ],
+      "raw_tris": 73758,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "ThreadParade_Shoes": {
+      "active_blocks": 1616,
+      "blocks": 2940,
+      "grid": [
+        169,
+        113,
+        81
+      ],
+      "raw_tris": 69120,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "ThreadParade_Soles": {
+      "active_blocks": 1738,
+      "blocks": 4640,
+      "grid": [
+        233,
+        161,
+        65
+      ],
+      "raw_tris": 74288,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "ThreadParade_ShoeStitch": {
+      "active_blocks": 1339,
+      "blocks": 9120,
+      "grid": [
+        257,
+        121,
+        153
+      ],
+      "raw_tris": 31236,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "ThreadParade_Eyes": {
+      "active_blocks": 2016,
+      "blocks": 11628,
+      "grid": [
+        289,
+        153,
+        137
+      ],
+      "raw_tris": 72288,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "ThreadParade_Iris": {
+      "active_blocks": 1653,
+      "blocks": 9405,
+      "grid": [
+        265,
+        153,
+        121
+      ],
+      "raw_tris": 56460,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "ThreadParade_EyeShine": {
+      "active_blocks": 823,
+      "blocks": 6825,
+      "grid": [
+        281,
+        121,
+        105
+      ],
+      "raw_tris": 14120,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "ThreadParade_Lash": {
+      "active_blocks": 1530,
+      "blocks": 11726,
+      "grid": [
+        329,
+        177,
+        105
+      ],
+      "raw_tris": 40256,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "ThreadParade_Brow": {
+      "active_blocks": 493,
+      "blocks": 3276,
+      "grid": [
+        225,
+        105,
+        73
+      ],
+      "raw_tris": 9536,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "ThreadParade_Nose": {
+      "active_blocks": 140,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "ThreadParade_Mouth": {
+      "active_blocks": 211,
+      "blocks": 1296,
+      "grid": [
+        97,
+        97,
+        73
+      ],
+      "raw_tris": 3648,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "ThreadParade_Blush": {
+      "active_blocks": 1154,
+      "blocks": 5610,
+      "grid": [
+        265,
+        137,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.1
+    }
+  },
+  "glb": {
+    "bytes": 1585232,
+    "nodes": [
+      "ThreadParade_Arms",
+      "ThreadParade_BandStitch",
+      "ThreadParade_Blouse",
+      "ThreadParade_Blush",
+      "ThreadParade_Bowtie",
+      "ThreadParade_Brow",
+      "ThreadParade_Buttons",
+      "ThreadParade_ButtonStitch",
+      "ThreadParade_Cord",
+      "ThreadParade_Cuffs",
+      "ThreadParade_Eyes",
+      "ThreadParade_EyeShine",
+      "ThreadParade_Hair",
+      "ThreadParade_Hat",
+      "ThreadParade_HatBand",
+      "ThreadParade_HatBow",
+      "ThreadParade_HatFlower",
+      "ThreadParade_HatFlowerStitch",
+      "ThreadParade_Head",
+      "ThreadParade_Iris",
+      "ThreadParade_Lash",
+      "ThreadParade_Legs",
+      "ThreadParade_Mouth",
+      "ThreadParade_Nose",
+      "ThreadParade_Overalls",
+      "ThreadParade_Patch",
+      "ThreadParade_PatchStitch",
+      "ThreadParade_RibbonTails",
+      "ThreadParade_Ring",
+      "ThreadParade_Shoes",
+      "ThreadParade_ShoeStitch",
+      "ThreadParade_Socks",
+      "ThreadParade_Soles",
+      "ThreadParade_Spool",
+      "ThreadParade_SpoolThread",
+      "ThreadParade_Straps",
+      "ThreadParade"
+    ],
+    "meshes": 36,
+    "materials": 26,
+    "images": 26,
+    "textures": 26,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.thread-parade",
+  "root": "ThreadParade",
+  "face": "ThreadParade_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 36,
+    "triangle_mismatches": {}
+  }
+}

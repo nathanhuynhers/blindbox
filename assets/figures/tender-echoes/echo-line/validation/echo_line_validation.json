@@ -1,0 +1,711 @@
+{
+  "figure": "EchoLine",
+  "title": "Echo Line",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.1748,
+    1.8954,
+    3.4663
+  ],
+  "meshes": 31,
+  "triangles": 61284,
+  "materials": [
+    "EchoLine_Blush",
+    "EchoLine_Brow",
+    "EchoLine_Clip",
+    "EchoLine_Cream",
+    "EchoLine_EyeShine",
+    "EchoLine_EyeWhite",
+    "EchoLine_Hair",
+    "EchoLine_Iris",
+    "EchoLine_Lash",
+    "EchoLine_Mouth",
+    "EchoLine_Nose",
+    "EchoLine_Overalls",
+    "EchoLine_Patch",
+    "EchoLine_Phone",
+    "EchoLine_Shoes",
+    "EchoLine_Skin",
+    "EchoLine_Socks",
+    "EchoLine_Sole",
+    "EchoLine_Stitch",
+    "EchoLine_Strap",
+    "EchoLine_Sweater"
+  ],
+  "components": {
+    "EchoLine_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08259
+    },
+    "EchoLine_Hair": {
+      "tris": 9730,
+      "verts": 4867,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.98118
+    },
+    "EchoLine_Clip": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00423
+    },
+    "EchoLine_Sweater": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.18055
+    },
+    "EchoLine_Sleeves": {
+      "tris": 3500,
+      "verts": 1754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.10194
+    },
+    "EchoLine_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01186
+    },
+    "EchoLine_Overalls": {
+      "tris": 5498,
+      "verts": 2751,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.22556
+    },
+    "EchoLine_Patches": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00249
+    },
+    "EchoLine_PatchStitch": {
+      "tris": 794,
+      "verts": 419,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00022
+    },
+    "EchoLine_Straps": {
+      "tris": 1248,
+      "verts": 628,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00701
+    },
+    "EchoLine_StrapButtons": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00028
+    },
+    "EchoLine_Receiver": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05404
+    },
+    "EchoLine_ReceiverPlates": {
+      "tris": 1250,
+      "verts": 631,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00694
+    },
+    "EchoLine_ReceiverHoles": {
+      "tris": 978,
+      "verts": 559,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00044
+    },
+    "EchoLine_Cord": {
+      "tris": 7902,
+      "verts": 3683,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02043
+    },
+    "EchoLine_PhoneBag": {
+      "tris": 2000,
+      "verts": 1002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02151
+    },
+    "EchoLine_BagFace": {
+      "tris": 748,
+      "verts": 376,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00318
+    },
+    "EchoLine_BagMark": {
+      "tris": 500,
+      "verts": 262,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00039
+    },
+    "EchoLine_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04753
+    },
+    "EchoLine_Socks": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0432
+    },
+    "EchoLine_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08956
+    },
+    "EchoLine_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01498
+    },
+    "EchoLine_ShoeStitch": {
+      "tris": 450,
+      "verts": 233,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00099
+    },
+    "EchoLine_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01148
+    },
+    "EchoLine_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00927
+    },
+    "EchoLine_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "EchoLine_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00143
+    },
+    "EchoLine_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00069
+    },
+    "EchoLine_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "EchoLine_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "EchoLine_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "EchoLine_Head": {
+      "active_blocks": 5428,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 250936,
+      "removed_faces": 0,
+      "seconds": 5.1
+    },
+    "EchoLine_Hair": {
+      "active_blocks": 18682,
+      "blocks": 62092,
+      "grid": [
+        345,
+        305,
+        305
+      ],
+      "raw_tris": 890398,
+      "removed_faces": 18,
+      "seconds": 350.1
+    },
+    "EchoLine_Clip": {
+      "active_blocks": 772,
+      "blocks": 4896,
+      "grid": [
+        137,
+        129,
+        145
+      ],
+      "raw_tris": 36528,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "EchoLine_Sweater": {
+      "active_blocks": 1579,
+      "blocks": 3360,
+      "grid": [
+        129,
+        113,
+        121
+      ],
+      "raw_tris": 72396,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "EchoLine_Sleeves": {
+      "active_blocks": 2180,
+      "blocks": 11160,
+      "grid": [
+        249,
+        145,
+        161
+      ],
+      "raw_tris": 99328,
+      "removed_faces": 0,
+      "seconds": 8.7
+    },
+    "EchoLine_Hands": {
+      "active_blocks": 1019,
+      "blocks": 31280,
+      "grid": [
+        321,
+        185,
+        273
+      ],
+      "raw_tris": 41930,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "EchoLine_Overalls": {
+      "active_blocks": 3318,
+      "blocks": 7392,
+      "grid": [
+        169,
+        129,
+        177
+      ],
+      "raw_tris": 146256,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "EchoLine_Patches": {
+      "active_blocks": 1193,
+      "blocks": 9072,
+      "grid": [
+        217,
+        169,
+        129
+      ],
+      "raw_tris": 25728,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "EchoLine_PatchStitch": {
+      "active_blocks": 587,
+      "blocks": 11408,
+      "grid": [
+        249,
+        185,
+        129
+      ],
+      "raw_tris": 17244,
+      "removed_faces": 6,
+      "seconds": 0.6
+    },
+    "EchoLine_Straps": {
+      "active_blocks": 1272,
+      "blocks": 7106,
+      "grid": [
+        153,
+        177,
+        137
+      ],
+      "raw_tris": 48480,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "EchoLine_StrapButtons": {
+      "active_blocks": 258,
+      "blocks": 1863,
+      "grid": [
+        185,
+        73,
+        73
+      ],
+      "raw_tris": 4680,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "EchoLine_Receiver": {
+      "active_blocks": 1711,
+      "blocks": 7140,
+      "grid": [
+        161,
+        137,
+        169
+      ],
+      "raw_tris": 78912,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "EchoLine_ReceiverPlates": {
+      "active_blocks": 1975,
+      "blocks": 19488,
+      "grid": [
+        225,
+        193,
+        233
+      ],
+      "raw_tris": 69344,
+      "removed_faces": 0,
+      "seconds": 4.1
+    },
+    "EchoLine_ReceiverHoles": {
+      "active_blocks": 888,
+      "blocks": 19600,
+      "grid": [
+        225,
+        201,
+        225
+      ],
+      "raw_tris": 29280,
+      "removed_faces": 22,
+      "seconds": 2.1
+    },
+    "EchoLine_Cord": {
+      "active_blocks": 3627,
+      "blocks": 34200,
+      "grid": [
+        289,
+        305,
+        201
+      ],
+      "raw_tris": 289012,
+      "removed_faces": 96,
+      "seconds": 14.8
+    },
+    "EchoLine_PhoneBag": {
+      "active_blocks": 834,
+      "blocks": 1960,
+      "grid": [
+        113,
+        81,
+        113
+      ],
+      "raw_tris": 33816,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "EchoLine_BagFace": {
+      "active_blocks": 867,
+      "blocks": 3072,
+      "grid": [
+        129,
+        97,
+        129
+      ],
+      "raw_tris": 26384,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "EchoLine_BagMark": {
+      "active_blocks": 534,
+      "blocks": 2925,
+      "grid": [
+        121,
+        105,
+        121
+      ],
+      "raw_tris": 15792,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "EchoLine_Legs": {
+      "active_blocks": 1315,
+      "blocks": 2048,
+      "grid": [
+        129,
+        65,
+        129
+      ],
+      "raw_tris": 52412,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "EchoLine_Socks": {
+      "active_blocks": 1504,
+      "blocks": 3120,
+      "grid": [
+        193,
+        105,
+        81
+      ],
+      "raw_tris": 74864,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "EchoLine_Shoes": {
+      "active_blocks": 1724,
+      "blocks": 2940,
+      "grid": [
+        169,
+        113,
+        81
+      ],
+      "raw_tris": 74352,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "EchoLine_Soles": {
+      "active_blocks": 1700,
+      "blocks": 4872,
+      "grid": [
+        233,
+        169,
+        65
+      ],
+      "raw_tris": 71392,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "EchoLine_ShoeStitch": {
+      "active_blocks": 1363,
+      "blocks": 9728,
+      "grid": [
+        257,
+        129,
+        153
+      ],
+      "raw_tris": 30812,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "EchoLine_Eyes": {
+      "active_blocks": 2064,
+      "blocks": 10260,
+      "grid": [
+        289,
+        153,
+        121
+      ],
+      "raw_tris": 72288,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "EchoLine_Iris": {
+      "active_blocks": 1728,
+      "blocks": 9405,
+      "grid": [
+        265,
+        153,
+        121
+      ],
+      "raw_tris": 57216,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "EchoLine_EyeShine": {
+      "active_blocks": 808,
+      "blocks": 6435,
+      "grid": [
+        265,
+        121,
+        105
+      ],
+      "raw_tris": 14052,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "EchoLine_Lash": {
+      "active_blocks": 1570,
+      "blocks": 10824,
+      "grid": [
+        329,
+        177,
+        97
+      ],
+      "raw_tris": 40800,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "EchoLine_Brow": {
+      "active_blocks": 658,
+      "blocks": 3906,
+      "grid": [
+        249,
+        113,
+        73
+      ],
+      "raw_tris": 11200,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "EchoLine_Nose": {
+      "active_blocks": 138,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "EchoLine_Mouth": {
+      "active_blocks": 228,
+      "blocks": 1296,
+      "grid": [
+        97,
+        97,
+        73
+      ],
+      "raw_tris": 3600,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "EchoLine_Blush": {
+      "active_blocks": 1184,
+      "blocks": 5280,
+      "grid": [
+        265,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.0
+    }
+  },
+  "glb": {
+    "bytes": 1384064,
+    "nodes": [
+      "EchoLine_BagFace",
+      "EchoLine_BagMark",
+      "EchoLine_Blush",
+      "EchoLine_Brow",
+      "EchoLine_Clip",
+      "EchoLine_Cord",
+      "EchoLine_Eyes",
+      "EchoLine_EyeShine",
+      "EchoLine_Hair",
+      "EchoLine_Hands",
+      "EchoLine_Head",
+      "EchoLine_Iris",
+      "EchoLine_Lash",
+      "EchoLine_Legs",
+      "EchoLine_Mouth",
+      "EchoLine_Nose",
+      "EchoLine_Overalls",
+      "EchoLine_Patches",
+      "EchoLine_PatchStitch",
+      "EchoLine_PhoneBag",
+      "EchoLine_Receiver",
+      "EchoLine_ReceiverHoles",
+      "EchoLine_ReceiverPlates",
+      "EchoLine_Shoes",
+      "EchoLine_ShoeStitch",
+      "EchoLine_Sleeves",
+      "EchoLine_Socks",
+      "EchoLine_Soles",
+      "EchoLine_StrapButtons",
+      "EchoLine_Straps",
+      "EchoLine_Sweater",
+      "EchoLine"
+    ],
+    "meshes": 31,
+    "materials": 21,
+    "images": 21,
+    "textures": 21,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.echo-line",
+  "root": "EchoLine",
+  "face": "EchoLine_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 31,
+    "triangle_mismatches": {}
+  }
+}

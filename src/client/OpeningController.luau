@@ -159,6 +159,8 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				local revealed, teaseIndex, breakIndex = false, 0, 0
 				local diving, shimmer = false, false
 				local flightResumed = false
+				local spectral = profile.signature.spectralTiming
+				local pendingCue: { beat: Config.TeaseBeat, at: number }? = nil
 				local selectionPhase: State.Phase? = nil
 				local function enterPhase()
 					local phase: State.Phase = session.state.phase
@@ -179,7 +181,7 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 						audio.play("flight", true)
 						audio.play("acceleration")
 					elseif phase == "RarityTease" and profile.signature.quietUntil > 0 then
-						audio.stop("flight")
+						audio.stop(if spectral then nil else "flight")
 					elseif phase == "Impact" then
 						audio.stop()
 						audio.play(profile.cues.impact)
@@ -219,12 +221,24 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 								audio.stop()
 							end
 							cinematic.tease(beat)
-							if not beat.quiet then
-								audio.play(profile.cues.transformation)
+							if spectral and not beat.quiet then
+								pendingCue = {
+									beat = beat,
+									at = beat.at * State.duration(state) + spectral.bloomAt,
+								}
+							else
+								if not beat.quiet then
+									audio.play(profile.cues.transformation)
+								end
+								audio.play(beat.cue)
 							end
-							audio.play(beat.cue)
 						end
 						teaseIndex = index
+						if pendingCue and state.elapsed >= pendingCue.at then
+							audio.play(profile.cues.transformation)
+							audio.play(pendingCue.beat.cue)
+							pendingCue = nil
+						end
 						if
 							profile.signature.quietUntil > 0
 							and not flightResumed
@@ -241,7 +255,7 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 					elseif
 						state.phase == "Impact"
 						and not shimmer
-						and state.elapsed >= Config.flight.impactCalmAt
+						and state.elapsed >= Config.impactCalmAt(profile)
 					then
 						shimmer = true
 						audio.stop()

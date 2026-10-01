@@ -22,6 +22,10 @@ export type Sample = {
 	waves: { number },
 	hushed: boolean,
 	transition: number,
+	suspense: number,
+	recognition: number,
+	spectralSweep: number,
+	spectralRings: { number },
 }
 local function smooth(p: number): number
 	p = math.clamp(p, 0, 1)
@@ -119,6 +123,8 @@ function Flight.sample(state: State.State, profile: Config.Profile): Sample
 	local pulse, compression, apex, dive = 0, 0, 0, 0
 	local waves: { number } = {}
 	local highlight, hushed, transition = Config.neutral, false, 0
+	local suspense, recognition, spectralSweep = 0, 0, 0
+	local spectralRings: { number } = {}
 	local destabilization = 0
 	local energy = if phase == "Break" then launch else 0.4 + p * 0.6
 	if phase == "Break" then
@@ -154,6 +160,32 @@ function Flight.sample(state: State.State, profile: Config.Profile): Sample
 		trailColor = from:Lerp(beat.color, smooth((t - 0.36) / 0.52))
 		sparkColor = from:Lerp(beat.color, smooth((t - 0.48) / 0.48))
 		atmosphereColor = from:Lerp(beat.color, smooth((t - 0.55) / 0.45))
+		local spectral = profile.signature.spectralTiming
+		if spectral then
+			local elapsed = (p - beat.at) * tease
+			local pearl = smooth(elapsed / spectral.pearlAt)
+			local bloom =
+				smooth((elapsed - spectral.bloomAt) / (spectral.bloomEnd - spectral.bloomAt))
+			-- Suspend the compressed pearl before releasing a single colored bloom.
+			suspense = pearl * (1 - bloom)
+			compression = suspense
+			accent = fromAccent:Lerp(beat.secondary, pearl)
+			color = from:Lerp(beat.color, bloom)
+			trailColor = from:Lerp(
+				beat.color,
+				smooth((elapsed - spectral.bloomAt) / (duration - spectral.bloomAt))
+			)
+			recognition = smooth((elapsed - duration) / spectral.ringDuration)
+			spectralSweep = math.clamp((elapsed - spectral.sweepAt) / spectral.sweepDuration, 0, 1)
+			for i = 1, profile.signature.transformRings do
+				spectralRings[i] = math.clamp(
+					(elapsed - spectral.bloomAt - (i - 1) * spectral.innerDelay)
+						/ spectral.ringDuration,
+					0,
+					1
+				)
+			end
+		end
 		local _hold
 		_hold, apex, dive = Flight.motion(profile, state.reduced, p)
 		energy = if hushed then 0.03 else 0.22 + dive * 0.78
@@ -166,6 +198,10 @@ function Flight.sample(state: State.State, profile: Config.Profile): Sample
 		end
 	end
 	return {
+		suspense = suspense,
+		recognition = recognition,
+		spectralSweep = spectralSweep,
+		spectralRings = spectralRings,
 		highlight = highlight,
 		waves = waves,
 		hushed = hushed,

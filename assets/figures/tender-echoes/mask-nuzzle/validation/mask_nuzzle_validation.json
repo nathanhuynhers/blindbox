@@ -1,0 +1,903 @@
+{
+  "figure": "MaskNuzzle",
+  "title": "Mask Nuzzle",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    2.086,
+    2.0201,
+    3.37
+  ],
+  "meshes": 40,
+  "triangles": 85234,
+  "materials": [
+    "MaskNuzzle_Bell",
+    "MaskNuzzle_Blush",
+    "MaskNuzzle_Brow",
+    "MaskNuzzle_EarTips",
+    "MaskNuzzle_EyeShine",
+    "MaskNuzzle_EyeWhite",
+    "MaskNuzzle_Fur",
+    "MaskNuzzle_Hair",
+    "MaskNuzzle_Iris",
+    "MaskNuzzle_Jacket",
+    "MaskNuzzle_Lash",
+    "MaskNuzzle_Mask",
+    "MaskNuzzle_MaskEyes",
+    "MaskNuzzle_MaskPaint",
+    "MaskNuzzle_Mouth",
+    "MaskNuzzle_Nose",
+    "MaskNuzzle_Satchel",
+    "MaskNuzzle_Scarf",
+    "MaskNuzzle_Shoes",
+    "MaskNuzzle_Skin",
+    "MaskNuzzle_Socks",
+    "MaskNuzzle_Sole",
+    "MaskNuzzle_Stitch",
+    "MaskNuzzle_Trim"
+  ],
+  "components": {
+    "MaskNuzzle_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08259
+    },
+    "MaskNuzzle_Hair": {
+      "tris": 6986,
+      "verts": 3443,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.31032
+    },
+    "MaskNuzzle_Hood": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.70862
+    },
+    "MaskNuzzle_HoodTrim": {
+      "tris": 4480,
+      "verts": 2242,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.28592
+    },
+    "MaskNuzzle_Ears": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08381
+    },
+    "MaskNuzzle_EarInner": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01407
+    },
+    "MaskNuzzle_EarTips": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01176
+    },
+    "MaskNuzzle_Stitches": {
+      "tris": 1498,
+      "verts": 765,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00211
+    },
+    "MaskNuzzle_Mask": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06817
+    },
+    "MaskNuzzle_MaskPaint": {
+      "tris": 1000,
+      "verts": 512,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00197
+    },
+    "MaskNuzzle_MaskEyes": {
+      "tris": 598,
+      "verts": 305,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00081
+    },
+    "MaskNuzzle_Cord": {
+      "tris": 998,
+      "verts": 499,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00128
+    },
+    "MaskNuzzle_Bell": {
+      "tris": 750,
+      "verts": 377,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00175
+    },
+    "MaskNuzzle_BellMark": {
+      "tris": 298,
+      "verts": 151,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0001
+    },
+    "MaskNuzzle_Tassels": {
+      "tris": 1998,
+      "verts": 1005,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0064
+    },
+    "MaskNuzzle_Capelet": {
+      "tris": 4998,
+      "verts": 2501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.61643
+    },
+    "MaskNuzzle_CapeTrim": {
+      "tris": 3500,
+      "verts": 1752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.11524
+    },
+    "MaskNuzzle_Pompoms": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02456
+    },
+    "MaskNuzzle_Scarf": {
+      "tris": 3500,
+      "verts": 1750,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08543
+    },
+    "MaskNuzzle_Jacket": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.29192
+    },
+    "MaskNuzzle_Hands": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01038
+    },
+    "MaskNuzzle_Pants": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.23563
+    },
+    "MaskNuzzle_Tail": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.29444
+    },
+    "MaskNuzzle_TailTip": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06532
+    },
+    "MaskNuzzle_Satchel": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01777
+    },
+    "MaskNuzzle_SatchelFlap": {
+      "tris": 998,
+      "verts": 501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00414
+    },
+    "MaskNuzzle_SatchelButton": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "MaskNuzzle_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04919
+    },
+    "MaskNuzzle_Socks": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04328
+    },
+    "MaskNuzzle_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08956
+    },
+    "MaskNuzzle_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01498
+    },
+    "MaskNuzzle_ShoeStitch": {
+      "tris": 450,
+      "verts": 233,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00099
+    },
+    "MaskNuzzle_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01048
+    },
+    "MaskNuzzle_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00842
+    },
+    "MaskNuzzle_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "MaskNuzzle_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00147
+    },
+    "MaskNuzzle_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "MaskNuzzle_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "MaskNuzzle_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "MaskNuzzle_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00329
+    }
+  },
+  "build": {
+    "MaskNuzzle_Head": {
+      "active_blocks": 5435,
+      "blocks": 16675,
+      "grid": [
+        201,
+        185,
+        233
+      ],
+      "raw_tris": 250756,
+      "removed_faces": 0,
+      "seconds": 5.4
+    },
+    "MaskNuzzle_Hair": {
+      "active_blocks": 6680,
+      "blocks": 24750,
+      "grid": [
+        265,
+        241,
+        201
+      ],
+      "raw_tris": 279452,
+      "removed_faces": 14,
+      "seconds": 22.4
+    },
+    "MaskNuzzle_Hood": {
+      "active_blocks": 13200,
+      "blocks": 41440,
+      "grid": [
+        297,
+        281,
+        257
+      ],
+      "raw_tris": 624648,
+      "removed_faces": 0,
+      "seconds": 16.7
+    },
+    "MaskNuzzle_HoodTrim": {
+      "active_blocks": 9281,
+      "blocks": 24360,
+      "grid": [
+        281,
+        193,
+        233
+      ],
+      "raw_tris": 542368,
+      "removed_faces": 20,
+      "seconds": 15.9
+    },
+    "MaskNuzzle_Ears": {
+      "active_blocks": 2569,
+      "blocks": 8360,
+      "grid": [
+        305,
+        89,
+        161
+      ],
+      "raw_tris": 113676,
+      "removed_faces": 0,
+      "seconds": 4.3
+    },
+    "MaskNuzzle_EarInner": {
+      "active_blocks": 2142,
+      "blocks": 7980,
+      "grid": [
+        337,
+        81,
+        153
+      ],
+      "raw_tris": 68800,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "MaskNuzzle_EarTips": {
+      "active_blocks": 1344,
+      "blocks": 7176,
+      "grid": [
+        369,
+        97,
+        105
+      ],
+      "raw_tris": 59800,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "MaskNuzzle_Stitches": {
+      "active_blocks": 1851,
+      "blocks": 91388,
+      "grid": [
+        537,
+        249,
+        353
+      ],
+      "raw_tris": 42232,
+      "removed_faces": 0,
+      "seconds": 3.8
+    },
+    "MaskNuzzle_Mask": {
+      "active_blocks": 3838,
+      "blocks": 15456,
+      "grid": [
+        185,
+        169,
+        257
+      ],
+      "raw_tris": 172384,
+      "removed_faces": 0,
+      "seconds": 5.1
+    },
+    "MaskNuzzle_MaskPaint": {
+      "active_blocks": 2384,
+      "blocks": 27378,
+      "grid": [
+        217,
+        209,
+        313
+      ],
+      "raw_tris": 69308,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "MaskNuzzle_MaskEyes": {
+      "active_blocks": 1082,
+      "blocks": 17496,
+      "grid": [
+        217,
+        193,
+        217
+      ],
+      "raw_tris": 28824,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MaskNuzzle_Cord": {
+      "active_blocks": 409,
+      "blocks": 2244,
+      "grid": [
+        89,
+        97,
+        137
+      ],
+      "raw_tris": 15846,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "MaskNuzzle_Bell": {
+      "active_blocks": 339,
+      "blocks": 2028,
+      "grid": [
+        105,
+        97,
+        105
+      ],
+      "raw_tris": 13212,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "MaskNuzzle_BellMark": {
+      "active_blocks": 289,
+      "blocks": 2352,
+      "grid": [
+        113,
+        97,
+        113
+      ],
+      "raw_tris": 6964,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MaskNuzzle_Tassels": {
+      "active_blocks": 1318,
+      "blocks": 35156,
+      "grid": [
+        353,
+        137,
+        377
+      ],
+      "raw_tris": 73066,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "MaskNuzzle_Capelet": {
+      "active_blocks": 5085,
+      "blocks": 12376,
+      "grid": [
+        225,
+        209,
+        137
+      ],
+      "raw_tris": 249568,
+      "removed_faces": 0,
+      "seconds": 7.5
+    },
+    "MaskNuzzle_CapeTrim": {
+      "active_blocks": 4463,
+      "blocks": 10850,
+      "grid": [
+        281,
+        249,
+        81
+      ],
+      "raw_tris": 290668,
+      "removed_faces": 0,
+      "seconds": 9.0
+    },
+    "MaskNuzzle_Pompoms": {
+      "active_blocks": 1692,
+      "blocks": 15400,
+      "grid": [
+        401,
+        113,
+        177
+      ],
+      "raw_tris": 78398,
+      "removed_faces": 0,
+      "seconds": 8.1
+    },
+    "MaskNuzzle_Scarf": {
+      "active_blocks": 2933,
+      "blocks": 11050,
+      "grid": [
+        201,
+        209,
+        137
+      ],
+      "raw_tris": 142712,
+      "removed_faces": 0,
+      "seconds": 13.5
+    },
+    "MaskNuzzle_Jacket": {
+      "active_blocks": 3427,
+      "blocks": 8512,
+      "grid": [
+        225,
+        129,
+        153
+      ],
+      "raw_tris": 167536,
+      "removed_faces": 0,
+      "seconds": 16.3
+    },
+    "MaskNuzzle_Hands": {
+      "active_blocks": 904,
+      "blocks": 5544,
+      "grid": [
+        289,
+        89,
+        113
+      ],
+      "raw_tris": 36520,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MaskNuzzle_Pants": {
+      "active_blocks": 2946,
+      "blocks": 5760,
+      "grid": [
+        161,
+        129,
+        145
+      ],
+      "raw_tris": 129416,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "MaskNuzzle_Tail": {
+      "active_blocks": 3225,
+      "blocks": 11025,
+      "grid": [
+        201,
+        169,
+        169
+      ],
+      "raw_tris": 169612,
+      "removed_faces": 0,
+      "seconds": 13.9
+    },
+    "MaskNuzzle_TailTip": {
+      "active_blocks": 2426,
+      "blocks": 6240,
+      "grid": [
+        105,
+        193,
+        161
+      ],
+      "raw_tris": 135832,
+      "removed_faces": 0,
+      "seconds": 9.6
+    },
+    "MaskNuzzle_Satchel": {
+      "active_blocks": 1423,
+      "blocks": 10080,
+      "grid": [
+        241,
+        113,
+        193
+      ],
+      "raw_tris": 59562,
+      "removed_faces": 0,
+      "seconds": 5.4
+    },
+    "MaskNuzzle_SatchelFlap": {
+      "active_blocks": 845,
+      "blocks": 3744,
+      "grid": [
+        145,
+        129,
+        105
+      ],
+      "raw_tris": 34096,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MaskNuzzle_SatchelButton": {
+      "active_blocks": 195,
+      "blocks": 1728,
+      "grid": [
+        97,
+        97,
+        97
+      ],
+      "raw_tris": 4420,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MaskNuzzle_Legs": {
+      "active_blocks": 1330,
+      "blocks": 2304,
+      "grid": [
+        129,
+        73,
+        129
+      ],
+      "raw_tris": 53840,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "MaskNuzzle_Socks": {
+      "active_blocks": 1538,
+      "blocks": 3220,
+      "grid": [
+        185,
+        113,
+        81
+      ],
+      "raw_tris": 75564,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "MaskNuzzle_Shoes": {
+      "active_blocks": 1728,
+      "blocks": 2800,
+      "grid": [
+        161,
+        113,
+        81
+      ],
+      "raw_tris": 74288,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "MaskNuzzle_Soles": {
+      "active_blocks": 1689,
+      "blocks": 4480,
+      "grid": [
+        225,
+        161,
+        65
+      ],
+      "raw_tris": 71392,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "MaskNuzzle_ShoeStitch": {
+      "active_blocks": 1359,
+      "blocks": 10560,
+      "grid": [
+        265,
+        129,
+        161
+      ],
+      "raw_tris": 30764,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "MaskNuzzle_Eyes": {
+      "active_blocks": 1950,
+      "blocks": 9792,
+      "grid": [
+        273,
+        145,
+        129
+      ],
+      "raw_tris": 66936,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "MaskNuzzle_Iris": {
+      "active_blocks": 1562,
+      "blocks": 9216,
+      "grid": [
+        257,
+        145,
+        129
+      ],
+      "raw_tris": 52644,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "MaskNuzzle_EyeShine": {
+      "active_blocks": 803,
+      "blocks": 6435,
+      "grid": [
+        265,
+        121,
+        105
+      ],
+      "raw_tris": 14176,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "MaskNuzzle_Lash": {
+      "active_blocks": 1406,
+      "blocks": 12600,
+      "grid": [
+        337,
+        201,
+        97
+      ],
+      "raw_tris": 38672,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "MaskNuzzle_Brow": {
+      "active_blocks": 493,
+      "blocks": 2592,
+      "grid": [
+        217,
+        97,
+        65
+      ],
+      "raw_tris": 8512,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MaskNuzzle_Nose": {
+      "active_blocks": 146,
+      "blocks": 648,
+      "grid": [
+        73,
+        65,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "MaskNuzzle_Mouth": {
+      "active_blocks": 234,
+      "blocks": 1089,
+      "grid": [
+        89,
+        89,
+        73
+      ],
+      "raw_tris": 3576,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "MaskNuzzle_Blush": {
+      "active_blocks": 1088,
+      "blocks": 5440,
+      "grid": [
+        257,
+        137,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.2
+    }
+  },
+  "glb": {
+    "bytes": 1925736,
+    "nodes": [
+      "MaskNuzzle_Bell",
+      "MaskNuzzle_BellMark",
+      "MaskNuzzle_Blush",
+      "MaskNuzzle_Brow",
+      "MaskNuzzle_Capelet",
+      "MaskNuzzle_CapeTrim",
+      "MaskNuzzle_Cord",
+      "MaskNuzzle_EarInner",
+      "MaskNuzzle_Ears",
+      "MaskNuzzle_EarTips",
+      "MaskNuzzle_Eyes",
+      "MaskNuzzle_EyeShine",
+      "MaskNuzzle_Hair",
+      "MaskNuzzle_Hands",
+      "MaskNuzzle_Head",
+      "MaskNuzzle_Hood",
+      "MaskNuzzle_HoodTrim",
+      "MaskNuzzle_Iris",
+      "MaskNuzzle_Jacket",
+      "MaskNuzzle_Lash",
+      "MaskNuzzle_Legs",
+      "MaskNuzzle_Mask",
+      "MaskNuzzle_MaskEyes",
+      "MaskNuzzle_MaskPaint",
+      "MaskNuzzle_Mouth",
+      "MaskNuzzle_Nose",
+      "MaskNuzzle_Pants",
+      "MaskNuzzle_Pompoms",
+      "MaskNuzzle_Satchel",
+      "MaskNuzzle_SatchelButton",
+      "MaskNuzzle_SatchelFlap",
+      "MaskNuzzle_Scarf",
+      "MaskNuzzle_Shoes",
+      "MaskNuzzle_ShoeStitch",
+      "MaskNuzzle_Socks",
+      "MaskNuzzle_Soles",
+      "MaskNuzzle_Stitches",
+      "MaskNuzzle_Tail",
+      "MaskNuzzle_TailTip",
+      "MaskNuzzle_Tassels",
+      "MaskNuzzle"
+    ],
+    "meshes": 40,
+    "materials": 24,
+    "images": 24,
+    "textures": 24,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.mask-nuzzle",
+  "root": "MaskNuzzle",
+  "face": "MaskNuzzle_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 40,
+    "triangle_mismatches": {}
+  }
+}

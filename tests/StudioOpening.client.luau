@@ -48,6 +48,8 @@ local skipPhases = {
 	"Break",
 	"Flight",
 	"RarityTease",
+	"Pearl suspension",
+	"Spectral sweep",
 	"Rarity hold",
 	"Dive",
 	"Impact",
@@ -93,12 +95,17 @@ local function present(id: string, direct: boolean?, override: Rarity.Id?)
 	if opening and skipIndex > 1 then
 		local selected = skipPhases[skipIndex]
 		local profile = Config.profile(presentation or Catalog.byId[id].rarity)
-		local target = if selected == "Rarity hold" or selected == "Dive"
+		local target = if selected == "Rarity hold"
+				or selected == "Dive"
+				or selected == "Pearl suspension"
+				or selected == "Spectral sweep"
 			then "RarityTease"
 			elseif selected == "Impact peak" then "Impact"
 			else selected
 		local delay = if selected == "Rarity hold"
 			then profile.flight.transition + 0.05
+			elseif selected == "Pearl suspension" then 0.11
+			elseif selected == "Spectral sweep" then 0.44
 			elseif selected == "Dive" then (if reduced
 				then profile.timing.rarityReduced
 				else profile.timing.rarityTease) * 0.9
@@ -152,7 +159,7 @@ rarityButton = button("Presentation rarity: Catalog (click to cycle)", function(
 			.. " (preview only)"
 	end
 end)
-button("Compare all five tiers: manually Open / Continue each", function()
+local function compare(tiers: { Rarity.Id })
 	if runningLoop or controller.isActive() then
 		return
 	end
@@ -161,7 +168,7 @@ button("Compare all five tiers: manually Open / Continue each", function()
 		jobs,
 		task.spawn(function()
 			local ok, reason = pcall(function()
-				for _, rarity in Rarity.order do
+				for _, rarity in tiers do
 					if closed then
 						return
 					end
@@ -190,7 +197,7 @@ button("Compare all five tiers: manually Open / Continue each", function()
 					end
 					assert(seenResult, "Comparison interrupted before Result")
 				end
-				print("PASS: five presentation tiers; no catalog edits, purchases or grants")
+				print("PASS: presentation comparison; no catalog edits, purchases or grants")
 			end)
 			controller.cancel()
 			runningLoop = false
@@ -202,6 +209,12 @@ button("Compare all five tiers: manually Open / Continue each", function()
 			end
 		end)
 	)
+end
+button("Compare Rare / Legendary / Mythical: Open / Continue each", function()
+	compare({ "Rare", "Legendary", "Mythical" })
+end)
+button("Compare all five tiers: manually Open / Continue each", function()
+	compare(Rarity.order)
 end)
 local motionButton: TextButton? = nil
 motionButton = button("Reduced motion: OFF", function()

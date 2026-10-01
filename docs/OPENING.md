@@ -58,8 +58,8 @@ property mutation is introduced.
 | Break | 0.40s; lid opens, energy gathers/compresses, launches at 0.18s with accelerating travel; camera reacts after another 0.035s |
 | Flight | 0.85s neutral ascent; moving camera pursues a readable layered comet, widening FOV and restrained parallax |
 | RarityTease | Compression/neutral pulse, staggered core-to-trail-to-spark tint bloom, explicit rarity hold, rounded apex, accelerating dive and late destination ring |
-| Impact | 0.38s; flight family retires at contact, short camera kick/core pulse/rings/sparks/light/Bloom, calm from 0.22s |
-| Silhouette | Actual awarded figure rises 0.18 studs into a dark, quiet rarity halo; no flight or impact resources remain |
+| Impact | 0.38s; flight family retires at contact, short camera/core/ring response, calm from 0.22s (Mythical: 0.17s) |
+| Silhouette | Actual awarded figure rises 0.18 studs into a dark, quiet rarity halo (Mythical holds still); no flight or impact resources remain |
 | Reveal | Colors restore, small upward settle, restrained rotation and camera push; result details fade in |
 | Result | Calm figure idle, low ambient particles, correct metadata and indefinite Continue |
 | Closing / Done | 0.22s dark transition; camera restores at opaque midpoint, then the session releases everything |
@@ -74,7 +74,7 @@ giant rarity lettering or rainbow burst is used.
 | Uncommon | 5.97s | 0.48s | 64 | 2 |
 | Rare | 6.60s | 0.65s | 67 | 3 |
 | Legendary | 6.95s | 0.80s | 67 | 2 |
-| Mythical | 7.38s | 0.95s | 68 | 3 |
+| Mythical | 7.38s | 0.95s | 68 | 2 |
 
 Rarity transitions take 0.19 / 0.22 / 0.25 / 0.30 / 0.38s, followed by
 **0.25 / 0.35 / 0.55 / 0.70 / 0.90s holds**, in canonical order.
@@ -83,17 +83,21 @@ a restrained taper; lavender Uncommon adds width/aura and secondary glints; gold
 a larger aura, stronger compression/pulse, transformation ring and camera response. Initial
 core, tail, sparks and flight atmosphere are ivory, with no rarity-colored surroundings.
 Legendary uses warm crimson with delayed orange-gold highlights, two separated pulses, a gold
-inner trail, stronger aura and a crimson/gold layered impact. Mythical uses a quiet compression
-beat, pearl core, pink-violet aura, slowly drifting cyan spectral rim and three trail layers.
-Its impact layers are pink-violet/cyan/pearl and quickly settle into a quiet spectral silhouette.
-There is no rainbow cycling. Both profiles retain Rare's particle/Bloom budgets and the existing
-combined lighting ceiling; reduced motion retains softened pulses and spectral treatment.
+inner trail, stronger aura and a crimson/gold layered impact. Its tuning is unchanged by the
+Mythical hierarchy pass. Mythical compresses to half size, resolves a pearl core at 0.08s and
+suspends surrounding emission/audio until 0.145s. A single pink-violet bloom follows; two thin
+rings expand outward with a 0.12s separation. Cyan travels once from core to tail between
+0.24s and 0.66s, then remains a faint edge. Body and trail fully resolve by 0.38s; the existing
+0.90s recognition hold gives the sweep time to settle. No rainbow cycling, extra Bloom, lights
+or particle budget is added. Mythical's direct-light multiplier and shake ceiling are lower
+than before; its impact/reveal bursts and residual motes are sparser.
 
 `OpeningConfig.flight` owns the path points, acceleration, launch/camera cue offsets, tail,
 streak and impact tuning. Rarity profiles derive their timing from that configuration and own
 transition/hold, trail width/length, aura scale, sparkle rate and pulse intensity. Optional
 signature parameters own compression, quiet fraction, pulse waves, trail/ring structure,
-highlights and camera response. Profile cue keys allow unique transformation, impact and reveal
+highlights and camera response. Mythical's optional `signature.spectralTiming` owns pearl,
+bloom, sweep, ring and calm markers in seconds. Profile cue keys allow unique transformation, impact and reveal
 sounds; the Legendary/Mythical sound slots are intentionally empty and safely silent. The two
 flight helpers share those samples with the existing controller, effects and cinematic; the
 phase order and authoritative result flow are unchanged.
@@ -103,7 +107,10 @@ pursuit with exponential interpolation, a small off-center aim, restrained roll 
 FOV expansion (68 for Mythical). The rarity hold stabilizes the frame; Legendary/Mythical add
 a restrained configured pull and 2/3-degree hold settling. Dive adds up to three degrees before
 the late approach settles toward the existing reveal framing. Impact adds a short damped kick
-and two-degree FOV response. Portrait framing retains the existing distance-fit rule.
+and two-degree FOV response. Mythical instead uses a slight suspense pullback, a deliberate
+recognition push-in, no transformation shake, and a single 0.12-stud axial impact response with
+1.2-degree FOV narrowing. Pursuit fully settles by its 0.17s calm marker. Portrait framing
+retains the existing distance-fit rule.
 
 The energy uses a compact bright core, translucent inner glow, soft world-sized billboard aura,
 a seven-segment tapered Beam tail sampled along the curved path, and a native Trail. The sampled
@@ -116,6 +123,11 @@ Impact cues are contact, camera kick at 0.02s, compact core at 0.03s, rings at 0
 0.06s, and light/Bloom peak at 0.08s. At 0.22s, transient brightness and particles collapse;
 the stage settles to the silhouette light baseline. Only quiet dust, halo and stage remain
 for the figure. The silhouette hold completes before colors or result identity are shown.
+Mythical uses a compact pearl contact, pink-violet outer expansion and a smaller cyan response
+45ms later. All impact aggression ends at 0.17s; its halo fades in through the remaining 0.21s.
+A larger pink-violet outline, smaller tilted cyan edge and soft pearl backlight frame the still
+0.95s silhouette. Gentle idle motion eases in during Reveal; the figure's true colors remain
+hidden until then. These reuse the existing lifecycle-owned ring and halo objects.
 
 These are configured clock durations; real frame scheduling can add a small amount. On a stalled
 frame the clock visits each phase instead of skipping interaction/visual beats. Timers accept
@@ -267,12 +279,12 @@ Reduced motion is captured from the existing Shop preference at session start. I
 box shake, camera impulses/chase/FOV pumping, entrance travel and figure pop/rotation/float.
 The camera stays fixed; a short energy/tint presentation retains rarity-before-identity.
 It uses 25% effect density (combined with the touch multiplier), distant motes only, no streaks
-or long moving tail, one impact ring, 0.18s ascent, 0.12s apex and 0.24s descent. Transformation,
+or long moving tail, one impact ring (Mythical: two faint staggered rings), 0.18s ascent, 0.12s apex and 0.24s descent. Transformation,
 rarity recognition and the full rarity-specific silhouette hold remain intact. Common takes
 2.99s, Uncommon 3.25s, Rare 3.65s, Legendary 4.00s and Mythical 4.43s excluding user waits and
-Closing. Softened signature transformation rings retain the two high-tier waves even though
-reduced impact uses one ring. It does not skip the reveal
-or discard metadata.
+Closing. Mythical retains the pearl suspension, single bloom, cyan sweep, a compact layered tail
+(22% length, 65% width), softened transformation rings and the same spectral halo. Its camera
+and FOV stay fixed. It does not skip the reveal or discard metadata.
 
 ## Audio slots
 
@@ -289,8 +301,10 @@ All sound IDs currently remain empty. Insert original/licensed `rbxassetid://` I
 Collection ambience, charge and flight can loop only while their phase group is active.
 Await, Break, Impact, Silhouette, Skip and teardown stop temporary layers. Charge pitch rises
 with progress; flight volume/pitch follow energy and ease during the recognition hold. Dive
-fires after the apex; impact stops flight audio; postImpactShimmer fires at the 0.22s calm
-boundary. Playback is capped at eight concurrent sounds with an eight-second hard lifetime.
+fires after the apex; impact stops flight audio; postImpactShimmer fires at the profile's calm
+boundary (0.17s Mythical, otherwise 0.22s). Mythical stops remaining flight/acceleration cues
+during suspense and defers its transformation/rarity sting until 0.145s. Skip discards that
+pending cue without creating a delayed task. Playback is capped at eight concurrent sounds with an eight-second hard lifetime.
 The controller emits the reveal/NEW cues at most once per session, including Skip during Reveal.
 Sound loading never drives or blocks the clock.
 
@@ -381,6 +395,38 @@ Manual acceptance still required:
    intervals, lighting, surface branding and original audio by human visual/listening judgment.
 
 ## Recording the flight comparison
+
+For the Mythical hierarchy pass, use this focused comparison before the general checks:
+
+1. Sync through Rojo or open the rebuilt `RobloxWorkspace.rbxlx`, start **Play**, switch the
+   Command Bar to **Client**, and paste all of `tests/StudioOpening.client.luau`.
+2. Leave **Reduced motion: OFF**, **Skip test: Manual**, and **Result: NEW**. Click
+   **Compare Rare / Legendary / Mythical: Open / Continue each**. Use Tap to Open and Continue
+   for each preview. All three use Pebble Pip, so model differences cannot determine the winner.
+3. Record Legendary immediately followed by Mythical at the same viewport/graphics quality.
+   Legendary should read as two forceful crimson/gold pulses. Mythical should read as pearl
+   suspense, one pink-violet bloom, a traveling cyan accent, sequential outer/inner rings,
+   recognition, pearl contact and an earlier quiet silhouette. Reject the pass if Mythical
+   still feels weaker, obscures the figure, or only wins through brightness.
+4. Run **Compare all five tiers: manually Open / Continue each**. Repeat both comparisons with
+   **Reduced motion: ON**; verify the static camera still leaves Mythical's cadence and layers
+   recognizable. For Tide context, cycle **Presentation rarity** to Legendary then Mythical
+   and use the same **Tidepool Tales / Common** button for both.
+5. Select **Presentation rarity: Mythical** and exercise automatic Skip at **Pearl suspension**
+   (0.11s), **Spectral sweep** (0.44s), **Impact peak**, and **Silhouette** in both motion modes.
+   Result must be correct with no late sting, trail, impact light or transformation ring.
+6. Keep the Mythical override and run **10-opening regression: manually Open / Continue each**;
+   hold Results 1 and 10 for 15s and compare baseline/resource counts. Repeat in reduced motion,
+   then run **Lifecycle check: 20 interruptions AFTER camera takeover**. Exit the preview.
+
+Automated coverage checks cadence, traveling cyan segments, reduced-motion layers, early calm,
+audio deferral/Skip, stale draws, bounded allocations and ten openings per high tier/motion mode.
+The full Luau runner, pinned StyLua/Selene checks (source and changed tests), Roblox LSP source
+analysis, Rojo 7.7.0 build and Git whitespace check passed. Rokit/Wally completed without new
+dependencies. The Windows computer-use connection failed with native pipe unavailable
+(`os error 2`), preventing playback through this session.
+**Native Studio comparison has not been run for this pass; subjective hierarchy acceptance
+remains pending.**
 
 For the new five-tier comparison and repeated high-tier/Skip/reduced-motion procedure, follow
 [the exact Studio preview steps](RARITY.md#exact-studio-preview-procedure). The following

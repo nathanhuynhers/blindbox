@@ -13,12 +13,13 @@ strictly increasing rates across all populated tiers. See [rarity architecture](
 | Parameter | Value |
 | --- | --- |
 | New profile | 450 Coins once; unsaved Studio preview recreates this on join |
-| Boxes | Pocket Grove, Tidepool Tales or Concepts; 150 Coins per figure |
-| Content | Two fixed six-figure collections, each with 3 Commons, 2 Uncommons, 1 Rare; Concepts has one figure per tier (Common to Mythical) |
-| Per-figure odds | Grove/Tide: each Common 20%, each Uncommon 15%, Rare 10%; Concepts weights 20/15/10/8/3 of 56 (35.7%, 26.8%, 17.9%, 14.3%, 5.4%), within selected collection |
+| Boxes | Pocket Grove, Tidepool Tales, Concepts or Tender Echoes; 150 Coins per figure |
+| Content | Two fixed six-figure collections, each with 3 Commons, 2 Uncommons, 1 Rare; Concepts has one figure per tier (Common to Mythical); Tender Echoes has 4 Commons, 3 Uncommons, 3 Rares, 2 Legendaries, 1 Mythical |
+| Per-figure odds | Grove/Tide: each Common 20%, each Uncommon 15%, Rare 10%; Concepts weights 20/15/10/8/3 of 56 (35.7%, 26.8%, 17.9%, 14.3%, 5.4%); Tender Echoes weights 20 each Common, 15 each Uncommon, 10 each Rare, 8 each Legendary, 2 Mythical of 173 (11.6%, 8.7%, 5.8%, 4.6%, 1.2% per figure), within selected collection |
 | Grove rates | 1, 1.5, 2, 3, 4, 7 Coins/sec |
 | Tide rates | 1.25, 1.75, 2, 3.25, 4, 7.5 Coins/sec |
 | Concepts rates | 1, 3, 7, 12, 18 Coins/sec (Verity, Falsity, Cruelty, Lovity, Verity True Form) |
+| Tender Echoes rates | Commons 1, 1.2, 1.4, 1.6; Uncommons 3, 3.5, 4; Rares 6, 7, 8; Legendaries 12, 14; Mythical 20 Coins/sec |
 | Rate bands | Common 1-2, Uncommon 3-4, Rare 6-8; validated at startup |
 | Display capacity | Starts at 3; supports 6; legacy fourth-slot unlock costs 4,000 Coins |
 | Themed display | +1 Coin/sec once when at least 3 distinct displayed IDs share a collection |
@@ -59,7 +60,7 @@ balance. Save markers and rewards live in the same profile aggregate.
 A new player can open three funded boxes plus the optional daily free box. Even three weakest
 Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. Individual Shelf Unit acquisition is deferred. Test 10/30-minute sessions and returning
 sessions for content exhaustion, value of both collections, idle dominance and stockpiling.
-Current content is seventeen figures; do not disguise that limit with artificial grind.
+Current content is thirty figures; do not disguise that limit with artificial grind.
 
 Prices, rates, box weights, safety bounds and rewards belong to server Economy. Clients receive
 sanitized previews; they never calculate grants or authorize purchases. See [operations](OPERATIONS.md)

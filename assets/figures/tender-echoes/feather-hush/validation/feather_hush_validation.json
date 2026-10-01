@@ -1,0 +1,735 @@
+{
+  "figure": "FeatherHush",
+  "title": "Feather Hush",
+  "rarity": "Legendary",
+  "size_xyz_studs": [
+    2.2054,
+    2.3429,
+    3.1968
+  ],
+  "meshes": 32,
+  "triangles": 73720,
+  "materials": [
+    "FeatherHush_Beak",
+    "FeatherHush_Berry",
+    "FeatherHush_Blush",
+    "FeatherHush_Boots",
+    "FeatherHush_Brow",
+    "FeatherHush_Button",
+    "FeatherHush_ButtonHoles",
+    "FeatherHush_EyeShine",
+    "FeatherHush_EyeWhite",
+    "FeatherHush_Feathers",
+    "FeatherHush_Gold",
+    "FeatherHush_Hair",
+    "FeatherHush_Hood",
+    "FeatherHush_Iris",
+    "FeatherHush_Lash",
+    "FeatherHush_Leaf",
+    "FeatherHush_Mouth",
+    "FeatherHush_Nose",
+    "FeatherHush_Satchel",
+    "FeatherHush_Skin",
+    "FeatherHush_Socks",
+    "FeatherHush_Sole",
+    "FeatherHush_Stitch",
+    "FeatherHush_Tunic"
+  ],
+  "components": {
+    "FeatherHush_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08261
+    },
+    "FeatherHush_Hair": {
+      "tris": 6870,
+      "verts": 3437,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.23357
+    },
+    "FeatherHush_Hood": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.5837
+    },
+    "FeatherHush_Beak": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.18832
+    },
+    "FeatherHush_HoodFeathers": {
+      "tris": 9702,
+      "verts": 4839,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.47736
+    },
+    "FeatherHush_Cloak": {
+      "tris": 3998,
+      "verts": 2001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.37755
+    },
+    "FeatherHush_CloakFeathers": {
+      "tris": 9670,
+      "verts": 4765,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.45778
+    },
+    "FeatherHush_Button": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00506
+    },
+    "FeatherHush_ButtonThread": {
+      "tris": 598,
+      "verts": 301,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00026
+    },
+    "FeatherHush_Chain": {
+      "tris": 1250,
+      "verts": 625,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00101
+    },
+    "FeatherHush_Berry": {
+      "tris": 750,
+      "verts": 377,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00303
+    },
+    "FeatherHush_Stitches": {
+      "tris": 1496,
+      "verts": 766,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00648
+    },
+    "FeatherHush_Tunic": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.48547
+    },
+    "FeatherHush_Hands": {
+      "tris": 1748,
+      "verts": 878,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00823
+    },
+    "FeatherHush_Apple": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.009
+    },
+    "FeatherHush_AppleLeaf": {
+      "tris": 750,
+      "verts": 375,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00038
+    },
+    "FeatherHush_Satchel": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02461
+    },
+    "FeatherHush_SatchelRings": {
+      "tris": 750,
+      "verts": 375,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00022
+    },
+    "FeatherHush_SatchelFlower": {
+      "tris": 300,
+      "verts": 150,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00014
+    },
+    "FeatherHush_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05084
+    },
+    "FeatherHush_Socks": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04321
+    },
+    "FeatherHush_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08956
+    },
+    "FeatherHush_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01498
+    },
+    "FeatherHush_ShoeStitch": {
+      "tris": 450,
+      "verts": 233,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00099
+    },
+    "FeatherHush_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01048
+    },
+    "FeatherHush_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00842
+    },
+    "FeatherHush_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "FeatherHush_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00147
+    },
+    "FeatherHush_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "FeatherHush_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "FeatherHush_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "FeatherHush_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "FeatherHush_Head": {
+      "active_blocks": 5441,
+      "blocks": 16675,
+      "grid": [
+        201,
+        185,
+        233
+      ],
+      "raw_tris": 250716,
+      "removed_faces": 0,
+      "seconds": 5.3
+    },
+    "FeatherHush_Hair": {
+      "active_blocks": 7038,
+      "blocks": 24552,
+      "grid": [
+        265,
+        249,
+        193
+      ],
+      "raw_tris": 285808,
+      "removed_faces": 128,
+      "seconds": 25.9
+    },
+    "FeatherHush_Hood": {
+      "active_blocks": 12491,
+      "blocks": 41580,
+      "grid": [
+        289,
+        281,
+        265
+      ],
+      "raw_tris": 559440,
+      "removed_faces": 0,
+      "seconds": 10.8
+    },
+    "FeatherHush_Beak": {
+      "active_blocks": 3884,
+      "blocks": 16675,
+      "grid": [
+        185,
+        233,
+        201
+      ],
+      "raw_tris": 185300,
+      "removed_faces": 0,
+      "seconds": 4.5
+    },
+    "FeatherHush_HoodFeathers": {
+      "active_blocks": 17226,
+      "blocks": 76516,
+      "grid": [
+        377,
+        353,
+        297
+      ],
+      "raw_tris": 1031632,
+      "removed_faces": 48,
+      "seconds": 271.3
+    },
+    "FeatherHush_Cloak": {
+      "active_blocks": 8088,
+      "blocks": 23296,
+      "grid": [
+        257,
+        225,
+        209
+      ],
+      "raw_tris": 384868,
+      "removed_faces": 0,
+      "seconds": 8.6
+    },
+    "FeatherHush_CloakFeathers": {
+      "active_blocks": 13799,
+      "blocks": 58938,
+      "grid": [
+        377,
+        305,
+        265
+      ],
+      "raw_tris": 925904,
+      "removed_faces": 78,
+      "seconds": 266.1
+    },
+    "FeatherHush_Button": {
+      "active_blocks": 781,
+      "blocks": 4352,
+      "grid": [
+        129,
+        137,
+        129
+      ],
+      "raw_tris": 39716,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "FeatherHush_ButtonThread": {
+      "active_blocks": 463,
+      "blocks": 5491,
+      "grid": [
+        153,
+        137,
+        137
+      ],
+      "raw_tris": 13632,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "FeatherHush_Chain": {
+      "active_blocks": 720,
+      "blocks": 6525,
+      "grid": [
+        121,
+        121,
+        233
+      ],
+      "raw_tris": 25424,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "FeatherHush_Berry": {
+      "active_blocks": 457,
+      "blocks": 2028,
+      "grid": [
+        97,
+        105,
+        105
+      ],
+      "raw_tris": 19164,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "FeatherHush_Stitches": {
+      "active_blocks": 4461,
+      "blocks": 435175,
+      "grid": [
+        521,
+        521,
+        825
+      ],
+      "raw_tris": 183216,
+      "removed_faces": 2,
+      "seconds": 108.3
+    },
+    "FeatherHush_Tunic": {
+      "active_blocks": 4644,
+      "blocks": 11088,
+      "grid": [
+        193,
+        169,
+        177
+      ],
+      "raw_tris": 207664,
+      "removed_faces": 0,
+      "seconds": 18.8
+    },
+    "FeatherHush_Hands": {
+      "active_blocks": 728,
+      "blocks": 2178,
+      "grid": [
+        145,
+        89,
+        89
+      ],
+      "raw_tris": 31514,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "FeatherHush_Apple": {
+      "active_blocks": 884,
+      "blocks": 3584,
+      "grid": [
+        113,
+        129,
+        129
+      ],
+      "raw_tris": 39516,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "FeatherHush_AppleLeaf": {
+      "active_blocks": 431,
+      "blocks": 4032,
+      "grid": [
+        169,
+        97,
+        129
+      ],
+      "raw_tris": 15788,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "FeatherHush_Satchel": {
+      "active_blocks": 2488,
+      "blocks": 23250,
+      "grid": [
+        201,
+        241,
+        249
+      ],
+      "raw_tris": 97672,
+      "removed_faces": 0,
+      "seconds": 10.6
+    },
+    "FeatherHush_SatchelRings": {
+      "active_blocks": 417,
+      "blocks": 4116,
+      "grid": [
+        169,
+        113,
+        113
+      ],
+      "raw_tris": 12400,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "FeatherHush_SatchelFlower": {
+      "active_blocks": 342,
+      "blocks": 2688,
+      "grid": [
+        97,
+        129,
+        113
+      ],
+      "raw_tris": 5560,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "FeatherHush_Legs": {
+      "active_blocks": 1351,
+      "blocks": 2048,
+      "grid": [
+        129,
+        65,
+        129
+      ],
+      "raw_tris": 55384,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "FeatherHush_Socks": {
+      "active_blocks": 1507,
+      "blocks": 2990,
+      "grid": [
+        185,
+        105,
+        81
+      ],
+      "raw_tris": 74896,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "FeatherHush_Shoes": {
+      "active_blocks": 1716,
+      "blocks": 2800,
+      "grid": [
+        161,
+        113,
+        81
+      ],
+      "raw_tris": 74296,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "FeatherHush_Soles": {
+      "active_blocks": 1696,
+      "blocks": 4704,
+      "grid": [
+        225,
+        169,
+        65
+      ],
+      "raw_tris": 71392,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "FeatherHush_ShoeStitch": {
+      "active_blocks": 1353,
+      "blocks": 10560,
+      "grid": [
+        265,
+        129,
+        161
+      ],
+      "raw_tris": 30836,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "FeatherHush_Eyes": {
+      "active_blocks": 1930,
+      "blocks": 8670,
+      "grid": [
+        273,
+        137,
+        121
+      ],
+      "raw_tris": 66936,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "FeatherHush_Iris": {
+      "active_blocks": 1579,
+      "blocks": 7616,
+      "grid": [
+        257,
+        137,
+        113
+      ],
+      "raw_tris": 52644,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "FeatherHush_EyeShine": {
+      "active_blocks": 780,
+      "blocks": 6435,
+      "grid": [
+        265,
+        121,
+        105
+      ],
+      "raw_tris": 14412,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "FeatherHush_Lash": {
+      "active_blocks": 1504,
+      "blocks": 11592,
+      "grid": [
+        337,
+        185,
+        97
+      ],
+      "raw_tris": 38924,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "FeatherHush_Brow": {
+      "active_blocks": 481,
+      "blocks": 3654,
+      "grid": [
+        233,
+        113,
+        73
+      ],
+      "raw_tris": 8512,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "FeatherHush_Nose": {
+      "active_blocks": 139,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "FeatherHush_Mouth": {
+      "active_blocks": 244,
+      "blocks": 1188,
+      "grid": [
+        89,
+        97,
+        73
+      ],
+      "raw_tris": 3668,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "FeatherHush_Blush": {
+      "active_blocks": 1122,
+      "blocks": 5120,
+      "grid": [
+        257,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.1
+    }
+  },
+  "glb": {
+    "bytes": 1663248,
+    "nodes": [
+      "FeatherHush_Apple",
+      "FeatherHush_AppleLeaf",
+      "FeatherHush_Beak",
+      "FeatherHush_Berry",
+      "FeatherHush_Blush",
+      "FeatherHush_Brow",
+      "FeatherHush_Button",
+      "FeatherHush_ButtonThread",
+      "FeatherHush_Chain",
+      "FeatherHush_Cloak",
+      "FeatherHush_CloakFeathers",
+      "FeatherHush_Eyes",
+      "FeatherHush_EyeShine",
+      "FeatherHush_Hair",
+      "FeatherHush_Hands",
+      "FeatherHush_Head",
+      "FeatherHush_Hood",
+      "FeatherHush_HoodFeathers",
+      "FeatherHush_Iris",
+      "FeatherHush_Lash",
+      "FeatherHush_Legs",
+      "FeatherHush_Mouth",
+      "FeatherHush_Nose",
+      "FeatherHush_Satchel",
+      "FeatherHush_SatchelFlower",
+      "FeatherHush_SatchelRings",
+      "FeatherHush_Shoes",
+      "FeatherHush_ShoeStitch",
+      "FeatherHush_Socks",
+      "FeatherHush_Soles",
+      "FeatherHush_Stitches",
+      "FeatherHush_Tunic",
+      "FeatherHush"
+    ],
+    "meshes": 32,
+    "materials": 24,
+    "images": 24,
+    "textures": 24,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.feather-hush",
+  "root": "FeatherHush",
+  "face": "FeatherHush_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 32,
+    "triangle_mismatches": {}
+  }
+}

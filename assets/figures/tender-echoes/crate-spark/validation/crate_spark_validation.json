@@ -1,0 +1,628 @@
+{
+  "figure": "CrateSpark",
+  "title": "Crate Spark",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    2.3607,
+    2.1207,
+    3.5678
+  ],
+  "meshes": 27,
+  "triangles": 63534,
+  "materials": [
+    "CrateSpark_Blush",
+    "CrateSpark_Brow",
+    "CrateSpark_Cream",
+    "CrateSpark_EyeShine",
+    "CrateSpark_EyeWhite",
+    "CrateSpark_Hair",
+    "CrateSpark_Iris",
+    "CrateSpark_Lash",
+    "CrateSpark_Mouth",
+    "CrateSpark_Nails",
+    "CrateSpark_Nose",
+    "CrateSpark_Pompom",
+    "CrateSpark_Red",
+    "CrateSpark_Shoes",
+    "CrateSpark_Skin",
+    "CrateSpark_Socks",
+    "CrateSpark_Sole",
+    "CrateSpark_Splotch",
+    "CrateSpark_StarPaint",
+    "CrateSpark_Strap",
+    "CrateSpark_Wood",
+    "CrateSpark_WoodPost"
+  ],
+  "components": {
+    "CrateSpark_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.08259
+    },
+    "CrateSpark_Hair": {
+      "tris": 9724,
+      "verts": 4862,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.47578
+    },
+    "CrateSpark_Hat": {
+      "tris": 2998,
+      "verts": 1501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.1578
+    },
+    "CrateSpark_HatStripes": {
+      "tris": 2998,
+      "verts": 1495,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02245
+    },
+    "CrateSpark_Pompom": {
+      "tris": 2484,
+      "verts": 1246,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01191
+    },
+    "CrateSpark_Shirt": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.26525
+    },
+    "CrateSpark_ShirtStripes": {
+      "tris": 5998,
+      "verts": 2999,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05628
+    },
+    "CrateSpark_Hands": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01088
+    },
+    "CrateSpark_Crate": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.29184
+    },
+    "CrateSpark_CratePosts": {
+      "tris": 3000,
+      "verts": 1508,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04762
+    },
+    "CrateSpark_Nails": {
+      "tris": 1500,
+      "verts": 798,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00096
+    },
+    "CrateSpark_StarPaint": {
+      "tris": 998,
+      "verts": 495,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00329
+    },
+    "CrateSpark_Splotches": {
+      "tris": 998,
+      "verts": 501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00454
+    },
+    "CrateSpark_Straps": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01009
+    },
+    "CrateSpark_Legs": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04919
+    },
+    "CrateSpark_Socks": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04319
+    },
+    "CrateSpark_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08956
+    },
+    "CrateSpark_Soles": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01498
+    },
+    "CrateSpark_ShoeStitch": {
+      "tris": 450,
+      "verts": 233,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00099
+    },
+    "CrateSpark_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01148
+    },
+    "CrateSpark_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00913
+    },
+    "CrateSpark_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00067
+    },
+    "CrateSpark_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00143
+    },
+    "CrateSpark_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00069
+    },
+    "CrateSpark_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "CrateSpark_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "CrateSpark_Blush": {
+      "tris": 440,
+      "verts": 224,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0033
+    }
+  },
+  "build": {
+    "CrateSpark_Head": {
+      "active_blocks": 5450,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 250864,
+      "removed_faces": 0,
+      "seconds": 5.9
+    },
+    "CrateSpark_Hair": {
+      "active_blocks": 18411,
+      "blocks": 66693,
+      "grid": [
+        377,
+        345,
+        265
+      ],
+      "raw_tris": 947676,
+      "removed_faces": 24,
+      "seconds": 317.0
+    },
+    "CrateSpark_Hat": {
+      "active_blocks": 2615,
+      "blocks": 7776,
+      "grid": [
+        145,
+        145,
+        193
+      ],
+      "raw_tris": 123198,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "CrateSpark_HatStripes": {
+      "active_blocks": 3922,
+      "blocks": 16128,
+      "grid": [
+        193,
+        193,
+        225
+      ],
+      "raw_tris": 197920,
+      "removed_faces": 0,
+      "seconds": 5.4
+    },
+    "CrateSpark_Pompom": {
+      "active_blocks": 687,
+      "blocks": 2548,
+      "grid": [
+        113,
+        113,
+        105
+      ],
+      "raw_tris": 44340,
+      "removed_faces": 16,
+      "seconds": 0.9
+    },
+    "CrateSpark_Shirt": {
+      "active_blocks": 3354,
+      "blocks": 9000,
+      "grid": [
+        201,
+        161,
+        145
+      ],
+      "raw_tris": 161536,
+      "removed_faces": 0,
+      "seconds": 13.4
+    },
+    "CrateSpark_ShirtStripes": {
+      "active_blocks": 7844,
+      "blocks": 24500,
+      "grid": [
+        281,
+        225,
+        201
+      ],
+      "raw_tris": 427300,
+      "removed_faces": 0,
+      "seconds": 30.5
+    },
+    "CrateSpark_Hands": {
+      "active_blocks": 872,
+      "blocks": 2652,
+      "grid": [
+        137,
+        97,
+        105
+      ],
+      "raw_tris": 38654,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "CrateSpark_Crate": {
+      "active_blocks": 9613,
+      "blocks": 14976,
+      "grid": [
+        257,
+        209,
+        145
+      ],
+      "raw_tris": 540216,
+      "removed_faces": 0,
+      "seconds": 13.3
+    },
+    "CrateSpark_CratePosts": {
+      "active_blocks": 5385,
+      "blocks": 17136,
+      "grid": [
+        273,
+        225,
+        145
+      ],
+      "raw_tris": 87912,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "CrateSpark_Nails": {
+      "active_blocks": 1732,
+      "blocks": 42294,
+      "grid": [
+        425,
+        337,
+        153
+      ],
+      "raw_tris": 27936,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "CrateSpark_StarPaint": {
+      "active_blocks": 1113,
+      "blocks": 14784,
+      "grid": [
+        265,
+        225,
+        129
+      ],
+      "raw_tris": 44328,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "CrateSpark_Splotches": {
+      "active_blocks": 1437,
+      "blocks": 36777,
+      "grid": [
+        329,
+        313,
+        185
+      ],
+      "raw_tris": 53704,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "CrateSpark_Straps": {
+      "active_blocks": 1726,
+      "blocks": 9918,
+      "grid": [
+        153,
+        233,
+        145
+      ],
+      "raw_tris": 70120,
+      "removed_faces": 0,
+      "seconds": 7.1
+    },
+    "CrateSpark_Legs": {
+      "active_blocks": 1357,
+      "blocks": 2048,
+      "grid": [
+        129,
+        65,
+        129
+      ],
+      "raw_tris": 53908,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "CrateSpark_Socks": {
+      "active_blocks": 1537,
+      "blocks": 2860,
+      "grid": [
+        177,
+        105,
+        81
+      ],
+      "raw_tris": 76416,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "CrateSpark_Shoes": {
+      "active_blocks": 1724,
+      "blocks": 2940,
+      "grid": [
+        169,
+        113,
+        81
+      ],
+      "raw_tris": 74352,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "CrateSpark_Soles": {
+      "active_blocks": 1700,
+      "blocks": 4872,
+      "grid": [
+        233,
+        169,
+        65
+      ],
+      "raw_tris": 71392,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "CrateSpark_ShoeStitch": {
+      "active_blocks": 1363,
+      "blocks": 9728,
+      "grid": [
+        257,
+        129,
+        153
+      ],
+      "raw_tris": 30812,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "CrateSpark_Eyes": {
+      "active_blocks": 2034,
+      "blocks": 11628,
+      "grid": [
+        289,
+        153,
+        137
+      ],
+      "raw_tris": 72288,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "CrateSpark_Iris": {
+      "active_blocks": 1670,
+      "blocks": 10032,
+      "grid": [
+        265,
+        153,
+        129
+      ],
+      "raw_tris": 56460,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "CrateSpark_EyeShine": {
+      "active_blocks": 823,
+      "blocks": 6825,
+      "grid": [
+        281,
+        121,
+        105
+      ],
+      "raw_tris": 14136,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "CrateSpark_Lash": {
+      "active_blocks": 1548,
+      "blocks": 11726,
+      "grid": [
+        329,
+        177,
+        105
+      ],
+      "raw_tris": 40312,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "CrateSpark_Brow": {
+      "active_blocks": 636,
+      "blocks": 4340,
+      "grid": [
+        249,
+        113,
+        81
+      ],
+      "raw_tris": 11176,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "CrateSpark_Nose": {
+      "active_blocks": 138,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "CrateSpark_Mouth": {
+      "active_blocks": 223,
+      "blocks": 1296,
+      "grid": [
+        97,
+        97,
+        73
+      ],
+      "raw_tris": 3676,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "CrateSpark_Blush": {
+      "active_blocks": 1192,
+      "blocks": 5280,
+      "grid": [
+        265,
+        129,
+        81
+      ],
+      "raw_tris": 26508,
+      "removed_faces": 8,
+      "seconds": 1.3
+    }
+  },
+  "glb": {
+    "bytes": 1437108,
+    "nodes": [
+      "CrateSpark_Blush",
+      "CrateSpark_Brow",
+      "CrateSpark_Crate",
+      "CrateSpark_CratePosts",
+      "CrateSpark_Eyes",
+      "CrateSpark_EyeShine",
+      "CrateSpark_Hair",
+      "CrateSpark_Hands",
+      "CrateSpark_Hat",
+      "CrateSpark_HatStripes",
+      "CrateSpark_Head",
+      "CrateSpark_Iris",
+      "CrateSpark_Lash",
+      "CrateSpark_Legs",
+      "CrateSpark_Mouth",
+      "CrateSpark_Nails",
+      "CrateSpark_Nose",
+      "CrateSpark_Pompom",
+      "CrateSpark_Shirt",
+      "CrateSpark_ShirtStripes",
+      "CrateSpark_Shoes",
+      "CrateSpark_ShoeStitch",
+      "CrateSpark_Socks",
+      "CrateSpark_Soles",
+      "CrateSpark_Splotches",
+      "CrateSpark_StarPaint",
+      "CrateSpark_Straps",
+      "CrateSpark"
+    ],
+    "meshes": 27,
+    "materials": 22,
+    "images": 22,
+    "textures": 22,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "echo.crate-spark",
+  "root": "CrateSpark",
+  "face": "CrateSpark_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 27,
+    "triangle_mismatches": {}
+  }
+}
