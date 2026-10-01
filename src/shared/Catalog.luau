@@ -98,6 +98,46 @@ local figures: { Types.Figure } = {
 		color = Color3.fromRGB(255, 232, 204),
 		shape = "pearl",
 	},
+	{
+		id = "concept.verity",
+		name = "Verity",
+		collection = "concept",
+		rarity = "Common",
+		color = Color3.fromRGB(255, 235, 59),
+		shape = "round",
+	},
+	{
+		id = "concept.falsity",
+		name = "Falsity",
+		collection = "concept",
+		rarity = "Uncommon",
+		color = Color3.fromRGB(30, 144, 255),
+		shape = "round",
+	},
+	{
+		id = "concept.cruelty",
+		name = "Cruelty",
+		collection = "concept",
+		rarity = "Rare",
+		color = Color3.fromRGB(233, 30, 30),
+		shape = "round",
+	},
+	{
+		id = "concept.lovity",
+		name = "Lovity",
+		collection = "concept",
+		rarity = "Legendary",
+		color = Color3.fromRGB(255, 20, 147),
+		shape = "round",
+	},
+	{
+		id = "concept.verity-true-form",
+		name = "Verity True Form",
+		collection = "concept",
+		rarity = "Mythical",
+		color = Color3.fromRGB(212, 175, 55),
+		shape = "tall",
+	},
 }
 local byId: { [string]: Types.Figure } = {}
 for _, figure in figures do
@@ -118,6 +158,12 @@ local collections = {
 		name = "Tidepool Tales",
 		description = "Treasures from a tiny ocean",
 		color = Color3.fromRGB(116, 195, 234),
+	},
+	{
+		id = "concept",
+		name = "Verities",
+		description = "All the Verities!",
+		color = Color3.fromRGB(212, 165, 32),
 	},
 }
 local collectionIds: { [string]: boolean } = {}

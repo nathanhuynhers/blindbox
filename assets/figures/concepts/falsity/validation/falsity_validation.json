@@ -1,0 +1,104 @@
+{
+  "figure": "Falsity",
+  "title": "Falsity",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.1999,
+    2.2268,
+    2.1499
+  ],
+  "meshes": 3,
+  "triangles": 16798,
+  "materials": [
+    "Falsity_Ink",
+    "Falsity_Vinyl"
+  ],
+  "components": {
+    "Falsity_Body": {
+      "tris": 12000,
+      "verts": 6002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 5.56373
+    },
+    "Falsity_Eyes": {
+      "tris": 2398,
+      "verts": 1203,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00578
+    },
+    "Falsity_Mouth": {
+      "tris": 2400,
+      "verts": 1202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00715
+    }
+  },
+  "build": {
+    "Falsity_Body": {
+      "active_blocks": 6476,
+      "blocks": 16900,
+      "grid": [
+        209,
+        209,
+        201
+      ],
+      "raw_tris": 315604,
+      "removed_faces": 0,
+      "seconds": 3.4
+    },
+    "Falsity_Eyes": {
+      "active_blocks": 846,
+      "blocks": 2730,
+      "grid": [
+        169,
+        81,
+        105
+      ],
+      "raw_tris": 25482,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Falsity_Mouth": {
+      "active_blocks": 2361,
+      "blocks": 20988,
+      "grid": [
+        425,
+        145,
+        177
+      ],
+      "raw_tris": 89936,
+      "removed_faces": 0,
+      "seconds": 1.3
+    }
+  },
+  "glb": {
+    "bytes": 373760,
+    "nodes": [
+      "Falsity_Body",
+      "Falsity_Eyes",
+      "Falsity_Mouth",
+      "Falsity"
+    ],
+    "meshes": 3,
+    "materials": 2,
+    "images": 2,
+    "textures": 2,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "concept.falsity",
+  "root": "Falsity",
+  "face": "Falsity_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 3,
+    "triangle_mismatches": {}
+  }
+}

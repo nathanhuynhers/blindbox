@@ -1,4 +1,58 @@
 {
+  "Collection.Concepts.CornerBottomLeft": {
+    "assetId": "127603092899733",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "81143c397ac5c7779ea97632d5ba152f869484fff1df3ac6aaf1f4842517a107",
+    "source": "assets/ui/collection/concepts/concepts_corner_bottom_left.png"
+  },
+  "Collection.Concepts.CornerBottomRight": {
+    "assetId": "91589004947316",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4bf971ae0d2aa92880449b76b494a23b3cd92eaeb36381739c5f8cb6f1530511",
+    "source": "assets/ui/collection/concepts/concepts_corner_bottom_right.png"
+  },
+  "Collection.Concepts.CornerTopLeft": {
+    "assetId": "110567541144322",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "013e122c2776e30abdd7883c63291116d664a437198e615a8f6a288c12e0359c",
+    "source": "assets/ui/collection/concepts/concepts_corner_top_left.png"
+  },
+  "Collection.Concepts.CornerTopRight": {
+    "assetId": "137938464993853",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "c09515b9ca8326943aa2bb06359370f7e0f7271f74e52971e6ed4f0e89aae04c",
+    "source": "assets/ui/collection/concepts/concepts_corner_top_right.png"
+  },
+  "Collection.Concepts.Emblem": {
+    "assetId": "123227463141624",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ada006215219f20ecd9ff5548b8efb62a7e588ff8dd627005ad40ed8e2524835",
+    "source": "assets/ui/collection/concepts/concepts_emblem.png"
+  },
+  "Collection.Concepts.ShopPattern": {
+    "assetId": "117202962378521",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "dbb4315d67bed8d934fefa45b4d945b4da2e229d152d5472aeb6f0ef1d7daf4c",
+    "source": "assets/ui/shop/concepts/concepts_shop_pattern.png"
+  },
   "Collection.PocketGrove.CornerBottomLeft": {
     "assetId": "124027410851506",
     "assetType": "Image",
@@ -115,6 +169,51 @@
     },
     "sha256": "9bad381e0e12ef02115db560681b360db90af192d7456b5e43f5ec6a73a8cb0d",
     "source": "assets/models/blind-box/blind_box_base.glb"
+  },
+  "Models.Concepts.Cruelty": {
+    "assetId": "89159574176340",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8545ec3bf299f247bede3d2862c46024bee98759cb5b52257d597c410e77cbf1",
+    "source": "assets/figures/concepts/cruelty/model/cruelty_roblox.glb"
+  },
+  "Models.Concepts.Falsity": {
+    "assetId": "96309730880296",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "bce22e24a2538dc83ac286a0855ed1561161119d317bd8c4ee110aa77bcc0941",
+    "source": "assets/figures/concepts/falsity/model/falsity_roblox.glb"
+  },
+  "Models.Concepts.Lovity": {
+    "assetId": "81477041201834",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5251bdb39124c17388910193ab155980ad8f563798a2b32a818575d398b0be6b",
+    "source": "assets/figures/concepts/lovity/model/lovity_roblox.glb"
+  },
+  "Models.Concepts.Verity": {
+    "assetId": "109372339520223",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "95bafc11c060127674e578bf454dc953caf3c90d91ded0d5c22a662b047b08c3",
+    "source": "assets/figures/concepts/verity/model/verity_roblox.glb"
+  },
+  "Models.Concepts.VerityTrueForm": {
+    "assetId": "119788043148480",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "be32d7ebcb1d1c95485347b326d8ac43a1d1d834d144cb5e077cacc9a8b24c10",
+    "source": "assets/figures/concepts/verity-true-form/model/verity_true_form_roblox.glb"
   },
   "Models.PocketGrove.AcornDot": {
     "assetId": "108614572737539",

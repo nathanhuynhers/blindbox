@@ -34,6 +34,14 @@ Manifest.Collection = {
 		CornerBottomLeft = "Collection.TidepoolTales.CornerBottomLeft",
 		CornerBottomRight = "Collection.TidepoolTales.CornerBottomRight",
 	},
+	Concepts = {
+		Emblem = "Collection.Concepts.Emblem",
+		ShopPattern = "Collection.Concepts.ShopPattern",
+		CornerTopLeft = "Collection.Concepts.CornerTopLeft",
+		CornerTopRight = "Collection.Concepts.CornerTopRight",
+		CornerBottomLeft = "Collection.Concepts.CornerBottomLeft",
+		CornerBottomRight = "Collection.Concepts.CornerBottomRight",
+	},
 }
 Manifest.Global = { IconCollection = "Global.IconCollection" }
 Manifest.Navigation = {

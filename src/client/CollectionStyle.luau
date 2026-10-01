@@ -39,6 +39,15 @@ Style.collections = {
 		trim = Color3.fromRGB(234, 166, 158),
 		motif = "shell",
 	},
+	concept = {
+		page = Color3.fromRGB(250, 248, 232),
+		wash = Color3.fromRGB(245, 245, 220),
+		cover = Color3.fromRGB(139, 105, 20),
+		ink = Color3.fromRGB(47, 47, 47),
+		accent = Color3.fromRGB(212, 165, 32),
+		trim = Color3.fromRGB(192, 167, 109),
+		motif = "spark",
+	},
 } :: { [string]: Style }
 function Style.get(id: string): Style
 	return Style.collections[id] or neutral

@@ -68,8 +68,12 @@ check(
 for _, collection in Catalog.collections do
 	local first = Selection.first(collection.id, nil, false)
 	Selection.choose(selected, first)
+	local members = 0
+	for _, figure in Catalog.figures do
+		members += if figure.collection == collection.id then 1 else 0
+	end
 	local visited: { [string]: boolean } = {}
-	for _ = 1, 6 do
+	for _ = 1, members do
 		visited[selected.figure] = true
 		Selection.step(selected, 1)
 	end
@@ -78,8 +82,8 @@ for _, collection in Catalog.collections do
 		count += 1
 	end
 	check(
-		count == 6 and selected.figure == first,
-		"figure navigation wraps all six without crossing collections"
+		count == members and selected.figure == first,
+		"figure navigation wraps every member without crossing collections"
 	)
 	Selection.step(selected, -1)
 	check(

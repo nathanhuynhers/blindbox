@@ -213,8 +213,12 @@ for _, figure in Catalog.figures do
 	snapshot.discovered[figure.id] = true
 end
 for _, collection in Catalog.collections do
+	local members = 0
+	for _, figure in Catalog.figures do
+		members += if figure.collection == collection.id then 1 else 0
+	end
 	found, total = UI.completion(snapshot, collection.id)
-	check(found == total and total == 6, "completed collection derives from catalog membership")
+	check(found == total and total == members and members > 0, "completed collection derives from catalog membership")
 end
 for width = 240, 1600, 17 do
 	for maximum = 1, 4 do

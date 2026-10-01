@@ -13,17 +13,18 @@ strictly increasing rates across all populated tiers. See [rarity architecture](
 | Parameter | Value |
 | --- | --- |
 | New profile | 450 Coins once; unsaved Studio preview recreates this on join |
-| Boxes | Pocket Grove or Tidepool Tales; 150 Coins per figure |
-| Content | Two fixed six-figure collections, each with 3 Commons, 2 Uncommons, 1 Rare |
-| Per-figure odds | Each Common 20%, each Uncommon 15%, Rare 10%, within selected collection |
+| Boxes | Pocket Grove, Tidepool Tales or Concepts; 150 Coins per figure |
+| Content | Two fixed six-figure collections, each with 3 Commons, 2 Uncommons, 1 Rare; Concepts has one figure per tier (Common to Mythical) |
+| Per-figure odds | Grove/Tide: each Common 20%, each Uncommon 15%, Rare 10%; Concepts weights 20/15/10/8/3 of 56 (35.7%, 26.8%, 17.9%, 14.3%, 5.4%), within selected collection |
 | Grove rates | 1, 1.5, 2, 3, 4, 7 Coins/sec |
 | Tide rates | 1.25, 1.75, 2, 3.25, 4, 7.5 Coins/sec |
+| Concepts rates | 1, 3, 7, 12, 18 Coins/sec (Verity, Falsity, Cruelty, Lovity, Verity True Form) |
 | Rate bands | Common 1-2, Uncommon 3-4, Rare 6-8; validated at startup |
 | Display capacity | Starts at 3; supports 6; legacy fourth-slot unlock costs 4,000 Coins |
 | Themed display | +1 Coin/sec once when at least 3 distinct displayed IDs share a collection |
 | Shelf Units | Three starting units, nine cosmetic positions each; future expansion adds one unit; no price/curve or product-design maximum |
 | Duplicates | Recycle one extra undisplayed copy for 1 Scrap; keep at least one owned copy |
-| Targeted redemption | 6 Scrap for any chosen figure from either collection |
+| Targeted redemption | 6 Scrap for any chosen figure from any collection |
 | Daily box | One free choice of collection per UTC day, no streak |
 | Daily goal | Display 3 distinct figures simultaneously; claim 100 Coins once per UTC day |
 | Completion | Permanent discovery/index tracking; rewards TBD, no room or Shelf Unit grant |
@@ -58,7 +59,7 @@ balance. Save markers and rewards live in the same profile aggregate.
 A new player can open three funded boxes plus the optional daily free box. Even three weakest
 Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. Individual Shelf Unit acquisition is deferred. Test 10/30-minute sessions and returning
 sessions for content exhaustion, value of both collections, idle dominance and stockpiling.
-Current content is twelve figures; do not disguise that limit with artificial grind.
+Current content is seventeen figures; do not disguise that limit with artificial grind.
 
 Prices, rates, box weights, safety bounds and rewards belong to server Economy. Clients receive
 sanitized previews; they never calculate grants or authorize purchases. See [operations](OPERATIONS.md)

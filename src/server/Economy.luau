@@ -22,5 +22,10 @@ return table.freeze({
 		{ id = "tide.jelly", rate = 3.25, weight = 15 },
 		{ id = "tide.ray", rate = 4, weight = 15 },
 		{ id = "tide.pearl", rate = 7.5, weight = 10 },
+		{ id = "concept.verity", rate = 1, weight = 20 },
+		{ id = "concept.falsity", rate = 3, weight = 15 },
+		{ id = "concept.cruelty", rate = 7, weight = 10 },
+		{ id = "concept.lovity", rate = 12, weight = 8 },
+		{ id = "concept.verity-true-form", rate = 18, weight = 3 },
 	},
 })

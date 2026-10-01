@@ -148,13 +148,20 @@ local expected = {
 	{ "tide.jelly", "Uncommon", 3.25, 15 },
 	{ "tide.ray", "Uncommon", 4, 15 },
 	{ "tide.pearl", "Rare", 7.5, 10 },
+	-- Concepts weights are relative within a 56-weight collection, so odds are weight / 56.
+	{ "concept.verity", "Common", 1, 20 / 56 * 100, 20 },
+	{ "concept.falsity", "Uncommon", 3, 15 / 56 * 100, 15 },
+	{ "concept.cruelty", "Rare", 7, 10 / 56 * 100, 10 },
+	{ "concept.lovity", "Legendary", 12, 8 / 56 * 100, 8 },
+	{ "concept.verity-true-form", "Mythical", 18, 3 / 56 * 100, 3 },
 }
 check(#Catalog.figures == #expected and #Economy.entries == #expected, "no invented live content")
 for _, entry in expected do
-	local id, rarity, rate, weight = entry[1], entry[2], entry[3], entry[4]
+	local id, rarity, rate, odds = entry[1], entry[2], entry[3], entry[4]
+	local weight = entry[5] or odds
 	check(Catalog.byId[id].rarity == rarity, "existing rarity unchanged: " .. id)
 	check(
-		Rules.rates[id] == rate and Rules.odds[id] == weight,
+		Rules.rates[id] == rate and math.abs(Rules.odds[id] - odds) < 1e-9,
 		"existing rate/odds unchanged: " .. id
 	)
 	local found = false
@@ -165,14 +172,17 @@ for _, entry in expected do
 	end
 	check(found, "explicit weights unchanged")
 end
+local tiers = { grove = 3, tide = 3, concept = 5 }
+local sizes = { grove = 6, tide = 6, concept = 5 }
 for _, collection in Catalog.collections do
 	local rows = Shop.rarityOdds({ odds = Rules.odds }, collection.id)
-	check(#rows == 3 and Shop.rarityCount(collection.id) == 3, "Shop omits unavailable tiers")
+	local tierCount = tiers[collection.id]
+	check(#rows == tierCount and Shop.rarityCount(collection.id) == tierCount, "Shop omits unavailable tiers")
 	for index, row in rows do
 		check(row.rarity == order[index], "Shop canonical order")
 	end
 	local discovered, total = Shop.progress({ discovered = {} }, collection.id)
-	check(discovered == 0 and total == 6, "completion still follows actual figures")
+	check(discovered == 0 and total == sizes[collection.id], "completion still follows actual figures")
 end
 for _, width in { 320, 568, 800 } do
 	for _, count in { 3, 5, 6 } do

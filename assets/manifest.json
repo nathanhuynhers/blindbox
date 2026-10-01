@@ -366,6 +366,107 @@
         "SunbeamSprite_Cheeks",
         "SunbeamSprite_Mouth"
       ]
+    },
+    "verity": {
+      "key": "Models.Concepts.Verity",
+      "source": "assets/figures/concepts/verity/model/verity_roblox.glb",
+      "displayName": "Concepts - Verity",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Verity",
+        "Verity_Body",
+        "Verity_Eyes",
+        "Verity_Mouth"
+      ]
+    },
+    "falsity": {
+      "key": "Models.Concepts.Falsity",
+      "source": "assets/figures/concepts/falsity/model/falsity_roblox.glb",
+      "displayName": "Concepts - Falsity",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Falsity",
+        "Falsity_Body",
+        "Falsity_Eyes",
+        "Falsity_Mouth"
+      ]
+    },
+    "cruelty": {
+      "key": "Models.Concepts.Cruelty",
+      "source": "assets/figures/concepts/cruelty/model/cruelty_roblox.glb",
+      "displayName": "Concepts - Cruelty",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Cruelty",
+        "Cruelty_Body",
+        "Cruelty_Eyes",
+        "Cruelty_Mouth",
+        "Cruelty_Teeth"
+      ]
+    },
+    "lovity": {
+      "key": "Models.Concepts.Lovity",
+      "source": "assets/figures/concepts/lovity/model/lovity_roblox.glb",
+      "displayName": "Concepts - Lovity",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Lovity",
+        "Lovity_Body",
+        "Lovity_Eyes",
+        "Lovity_EyeShine",
+        "Lovity_Mouth",
+        "Lovity_Hearts"
+      ]
+    },
+    "verity_true_form": {
+      "key": "Models.Concepts.VerityTrueForm",
+      "source": "assets/figures/concepts/verity-true-form/model/verity_true_form_roblox.glb",
+      "displayName": "Concepts - Verity True Form",
+      "assetType": "Model",
+      "requiredNodes": [
+        "VerityTrueForm",
+        "VerityTrueForm_Body",
+        "VerityTrueForm_Head",
+        "VerityTrueForm_Hands",
+        "VerityTrueForm_Eyes",
+        "VerityTrueForm_Mouth"
+      ]
+    },
+    "concepts_emblem": {
+      "key": "Collection.Concepts.Emblem",
+      "source": "assets/ui/collection/concepts/concepts_emblem.png",
+      "displayName": "Concepts Emblem",
+      "assetType": "Image"
+    },
+    "concepts_shop_pattern": {
+      "key": "Collection.Concepts.ShopPattern",
+      "source": "assets/ui/shop/concepts/concepts_shop_pattern.png",
+      "displayName": "Concepts Shop Pattern",
+      "assetType": "Image"
+    },
+    "concepts_corner_top_left": {
+      "key": "Collection.Concepts.CornerTopLeft",
+      "source": "assets/ui/collection/concepts/concepts_corner_top_left.png",
+      "displayName": "Concepts Corner Top Left",
+      "assetType": "Image"
+    },
+    "concepts_corner_top_right": {
+      "key": "Collection.Concepts.CornerTopRight",
+      "source": "assets/ui/collection/concepts/concepts_corner_top_right.png",
+      "displayName": "Concepts Corner Top Right",
+      "assetType": "Image"
+    },
+    "concepts_corner_bottom_left": {
+      "key": "Collection.Concepts.CornerBottomLeft",
+      "source": "assets/ui/collection/concepts/concepts_corner_bottom_left.png",
+      "displayName": "Concepts Corner Bottom Left",
+      "assetType": "Image"
+    },
+    "concepts_corner_bottom_right": {
+      "key": "Collection.Concepts.CornerBottomRight",
+      "source": "assets/ui/collection/concepts/concepts_corner_bottom_right.png",
+      "displayName": "Concepts Corner Bottom Right",
+      "assetType": "Image"
     }
   }
 }

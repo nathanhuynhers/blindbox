@@ -324,7 +324,11 @@ function Config.collection(id: string): Collection
 		ambience = if effect then effect.ambience else "ambience",
 	}
 end
-Config.packaging = { grove = Config.collection("grove"), tide = Config.collection("tide") }
+Config.packaging = {
+	grove = Config.collection("grove"),
+	tide = Config.collection("tide"),
+	concept = Config.collection("concept"),
+}
 Config.neutral = Color3.fromRGB(255, 238, 208)
 Config.stage = {
 	origin = Vector3.new(0, 10000, 0),

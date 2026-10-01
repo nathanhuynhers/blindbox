@@ -41,6 +41,13 @@ Pebble Pip was rebuilt with the collection pipeline and replaced the earlier han
 (never uploaded), keeping the same alias, key and GLB path; its
 [old receipt](../assets/figures/pocket-grove/pebble-pip/PRODUCTION.md) is kept as history.
 
+All five Concepts figures are uploaded (`Models.Concepts.*`, aliases `verity`, `falsity`, `cruelty`,
+`lovity`, `verity_true_form`) and adopted at runtime the same way. Its collection artwork (aliases
+`concepts_emblem`, `concepts_shop_pattern`, `concepts_corner_{top_left,top_right,bottom_left,bottom_right}`,
+keys `Collection.Concepts.*`) is rendered from the production models by
+[ui_art.py](../assets/figures/concepts/ui_art.py); see the
+[Concepts receipt](../assets/figures/concepts/PRODUCTION.md).
+
 ### Flat-color collectible materials
 
 Roblox figure GLBs must not rely on glTF `baseColorFactor` alone. Pebble Pip's first Studio import

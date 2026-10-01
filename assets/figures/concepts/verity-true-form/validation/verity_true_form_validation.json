@@ -1,0 +1,147 @@
+{
+  "figure": "VerityTrueForm",
+  "title": "Verity True Form",
+  "rarity": "Mythical",
+  "size_xyz_studs": [
+    0.7912,
+    0.6188,
+    3.4171
+  ],
+  "meshes": 5,
+  "triangles": 40198,
+  "materials": [
+    "VerityTrueForm_Flesh",
+    "VerityTrueForm_Seam",
+    "VerityTrueForm_Void"
+  ],
+  "components": {
+    "VerityTrueForm_Body": {
+      "tris": 18998,
+      "verts": 9501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.1388
+    },
+    "VerityTrueForm_Head": {
+      "tris": 9000,
+      "verts": 4502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02624
+    },
+    "VerityTrueForm_Hands": {
+      "tris": 9000,
+      "verts": 4504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00313
+    },
+    "VerityTrueForm_Eyes": {
+      "tris": 1600,
+      "verts": 804,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00045
+    },
+    "VerityTrueForm_Mouth": {
+      "tris": 1600,
+      "verts": 806,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 7e-05
+    }
+  },
+  "build": {
+    "VerityTrueForm_Body": {
+      "active_blocks": 7618,
+      "blocks": 28336,
+      "grid": [
+        185,
+        129,
+        617
+      ],
+      "raw_tris": 331120,
+      "removed_faces": 0,
+      "seconds": 47.8
+    },
+    "VerityTrueForm_Head": {
+      "active_blocks": 1788,
+      "blocks": 6156,
+      "grid": [
+        145,
+        145,
+        153
+      ],
+      "raw_tris": 81916,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "VerityTrueForm_Hands": {
+      "active_blocks": 1592,
+      "blocks": 17280,
+      "grid": [
+        321,
+        129,
+        217
+      ],
+      "raw_tris": 64368,
+      "removed_faces": 0,
+      "seconds": 9.3
+    },
+    "VerityTrueForm_Eyes": {
+      "active_blocks": 505,
+      "blocks": 3120,
+      "grid": [
+        129,
+        121,
+        105
+      ],
+      "raw_tris": 11696,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "VerityTrueForm_Mouth": {
+      "active_blocks": 604,
+      "blocks": 6137,
+      "grid": [
+        153,
+        153,
+        137
+      ],
+      "raw_tris": 10212,
+      "removed_faces": 0,
+      "seconds": 0.2
+    }
+  },
+  "glb": {
+    "bytes": 891176,
+    "nodes": [
+      "VerityTrueForm_Body",
+      "VerityTrueForm_Eyes",
+      "VerityTrueForm_Hands",
+      "VerityTrueForm_Head",
+      "VerityTrueForm_Mouth",
+      "VerityTrueForm"
+    ],
+    "meshes": 5,
+    "materials": 3,
+    "images": 3,
+    "textures": 3,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "concept.verity-true-form",
+  "root": "VerityTrueForm",
+  "face": "VerityTrueForm_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 5,
+    "triangle_mismatches": {}
+  }
+}

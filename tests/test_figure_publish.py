@@ -32,6 +32,13 @@ class GateTests(unittest.TestCase):
     def test_clean_report_passes(self):
         self.assertEqual(publish.gate(report()), [])
 
+    def test_hyphenated_figure_ids_pass(self):
+        self.assertEqual(publish.gate(report(catalog="concept.verity-true-form")), [])
+
+    def test_malformed_catalog_ids_block_publishing(self):
+        for bad in ("concept", "concept.", "Concept.verity", "concept.-x", "concept.x-", "concept.x--y", "concept.x y"):
+            self.assertTrue(publish.gate(report(catalog=bad)), bad)
+
     def test_each_defect_blocks_publishing(self):
         cases = []
         broken = report()

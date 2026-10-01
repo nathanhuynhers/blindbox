@@ -112,11 +112,11 @@ local reset = Rules.new(10000)
 Rules.settle(reset, 10001)
 check(reset.coins == 450 and next(reset.owned) == nil, "rejoin has no offline income")
 local full = Rules.new(0)
-full.scrap = 72
+full.scrap = #Economy.entries * Economy.redeemCost
 for _, entry in Economy.entries do check(Rules.mutate(full, intent("Redeem", full.revision, entry.id), 0), "redeem every discovery") end
 local discoveries = 0
 for _ in full.discovered do discoveries += 1 end
-check(discoveries == 12 and full.scrap == 0, "completion without lucky rolls")
+check(discoveries == #Economy.entries and full.scrap == 0, "completion without lucky rolls")
 -- Deterministic mixed actions exercise reservations through many replacements/recycles.
 local mixed = Transactions.new(0)
 mixed.state.coins = 100000

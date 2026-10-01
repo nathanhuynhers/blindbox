@@ -45,6 +45,16 @@ ShopTheme.collections = {
 		ink = Color3.fromRGB(42, 80, 99),
 		trim = Color3.fromRGB(220, 180, 116),
 	},
+	concept = {
+		collectionId = "concept",
+		emblemKey = Manifest.Collection.Concepts.Emblem,
+		patternKey = Manifest.Collection.Concepts.ShopPattern,
+		primary = Color3.fromRGB(212, 165, 32),
+		secondary = Color3.fromRGB(139, 105, 20),
+		wash = Color3.fromRGB(245, 245, 220),
+		ink = Color3.fromRGB(47, 47, 47),
+		trim = Color3.fromRGB(192, 167, 109),
+	},
 } :: { [string]: Theme }
 
 function ShopTheme.get(collectionId: string): Theme

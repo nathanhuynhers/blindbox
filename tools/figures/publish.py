@@ -31,7 +31,7 @@ ENTRIES = ROOT / "src" / "shared" / "FigureAssetEntries.luau"
 BLENDER = Path(os.environ.get("BLENDER", r"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe"))
 TOOLS = Path.home() / ".rokit" / "bin"
 MAX_TRIS = 20_000
-CATALOG_ID = re.compile(r"[a-z][a-z0-9]*\.[a-z][a-z0-9]*")
+CATALOG_ID = re.compile(r"[a-z][a-z0-9]*\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*")
 
 
 class PublishError(Exception):

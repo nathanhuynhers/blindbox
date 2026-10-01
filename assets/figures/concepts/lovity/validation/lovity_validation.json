@@ -1,0 +1,149 @@
+{
+  "figure": "Lovity",
+  "title": "Lovity",
+  "rarity": "Legendary",
+  "size_xyz_studs": [
+    2.9481,
+    2.2002,
+    2.7906
+  ],
+  "meshes": 5,
+  "triangles": 26496,
+  "materials": [
+    "Lovity_EyeGloss",
+    "Lovity_EyeShine",
+    "Lovity_Heart",
+    "Lovity_Mouth",
+    "Lovity_Vinyl"
+  ],
+  "components": {
+    "Lovity_Body": {
+      "tris": 12000,
+      "verts": 6002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 5.56373
+    },
+    "Lovity_Eyes": {
+      "tris": 2398,
+      "verts": 1203,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01185
+    },
+    "Lovity_EyeShine": {
+      "tris": 700,
+      "verts": 354,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0003
+    },
+    "Lovity_Mouth": {
+      "tris": 2398,
+      "verts": 1201,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00714
+    },
+    "Lovity_Hearts": {
+      "tris": 9000,
+      "verts": 4508,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09158
+    }
+  },
+  "build": {
+    "Lovity_Body": {
+      "active_blocks": 6500,
+      "blocks": 16900,
+      "grid": [
+        209,
+        209,
+        201
+      ],
+      "raw_tris": 315664,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "Lovity_Eyes": {
+      "active_blocks": 1362,
+      "blocks": 6120,
+      "grid": [
+        273,
+        97,
+        121
+      ],
+      "raw_tris": 48598,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Lovity_EyeShine": {
+      "active_blocks": 381,
+      "blocks": 4884,
+      "grid": [
+        297,
+        97,
+        89
+      ],
+      "raw_tris": 6900,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "Lovity_Mouth": {
+      "active_blocks": 2232,
+      "blocks": 17493,
+      "grid": [
+        393,
+        137,
+        169
+      ],
+      "raw_tris": 85840,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Lovity_Hearts": {
+      "active_blocks": 3161,
+      "blocks": 99528,
+      "grid": [
+        529,
+        209,
+        465
+      ],
+      "raw_tris": 147344,
+      "removed_faces": 0,
+      "seconds": 1.9
+    }
+  },
+  "glb": {
+    "bytes": 590824,
+    "nodes": [
+      "Lovity_Body",
+      "Lovity_Eyes",
+      "Lovity_EyeShine",
+      "Lovity_Hearts",
+      "Lovity_Mouth",
+      "Lovity"
+    ],
+    "meshes": 5,
+    "materials": 5,
+    "images": 5,
+    "textures": 5,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "concept.lovity",
+  "root": "Lovity",
+  "face": "Lovity_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 5,
+    "triangle_mismatches": {}
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "figure": "Cruelty",
+  "title": "Cruelty",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    2.1999,
+    2.2003,
+    2.1499
+  ],
+  "meshes": 4,
+  "triangles": 30396,
+  "materials": [
+    "Cruelty_Paint",
+    "Cruelty_Teeth",
+    "Cruelty_Vinyl"
+  ],
+  "components": {
+    "Cruelty_Body": {
+      "tris": 12000,
+      "verts": 6002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 5.56373
+    },
+    "Cruelty_Eyes": {
+      "tris": 2400,
+      "verts": 1204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01138
+    },
+    "Cruelty_Mouth": {
+      "tris": 3998,
+      "verts": 2001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0445
+    },
+    "Cruelty_Teeth": {
+      "tris": 11998,
+      "verts": 6053,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02521
+    }
+  },
+  "build": {
+    "Cruelty_Body": {
+      "active_blocks": 6476,
+      "blocks": 16900,
+      "grid": [
+        209,
+        209,
+        201
+      ],
+      "raw_tris": 315604,
+      "removed_faces": 0,
+      "seconds": 3.8
+    },
+    "Cruelty_Eyes": {
+      "active_blocks": 1708,
+      "blocks": 7812,
+      "grid": [
+        249,
+        97,
+        169
+      ],
+      "raw_tris": 63448,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "Cruelty_Mouth": {
+      "active_blocks": 4378,
+      "blocks": 19890,
+      "grid": [
+        361,
+        137,
+        209
+      ],
+      "raw_tris": 233252,
+      "removed_faces": 0,
+      "seconds": 4.3
+    },
+    "Cruelty_Teeth": {
+      "active_blocks": 5274,
+      "blocks": 26163,
+      "grid": [
+        409,
+        153,
+        217
+      ],
+      "raw_tris": 281848,
+      "removed_faces": 0,
+      "seconds": 7.7
+    }
+  },
+  "glb": {
+    "bytes": 676032,
+    "nodes": [
+      "Cruelty_Body",
+      "Cruelty_Eyes",
+      "Cruelty_Mouth",
+      "Cruelty_Teeth",
+      "Cruelty"
+    ],
+    "meshes": 4,
+    "materials": 3,
+    "images": 3,
+    "textures": 3,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "concept.cruelty",
+  "root": "Cruelty",
+  "face": "Cruelty_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 4,
+    "triangle_mismatches": {}
+  }
+}
