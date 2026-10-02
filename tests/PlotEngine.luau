@@ -51,6 +51,7 @@ Engine.Vector2 = {
 	end,
 }
 Engine.Enum = {
+	KeyCode = {E = 1},
 	Material = { Wood = "Wood", WoodPlanks = "WoodPlanks", SmoothPlastic = "SmoothPlastic" },
 	PartType = { Cylinder = "Cylinder" },
 	SurfaceType = { Smooth = "Smooth" },
@@ -123,6 +124,7 @@ local function node(class)
 		attrs = {},
 		Destroying = signal(),
 		MouseClick = signal(),
+		Triggered = signal(),
 		dead = false,
 		CanCollide = true,
 		Transparency = 0,

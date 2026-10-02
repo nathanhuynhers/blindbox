@@ -24,8 +24,9 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 6,
+		schemaVersion = 7,
 		coins = state.coins,
+		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
 		owned = table.clone(state.owned),
 		discovered = table.clone(state.discovered),
@@ -46,10 +47,11 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	-- The user requested a fresh economy. A new store isolates old schemas;
 	-- unexpected old/corrupt data in this store fails closed instead of resetting.
 	if
-		data.schemaVersion ~= 6
+		(data.schemaVersion ~= 6 and data.schemaVersion ~= 7)
 		or not fields(data, {
 			"schemaVersion",
 			"coins",
+			"earnings",
 			"owned",
 			"discovered",
 			"display",
@@ -95,6 +97,26 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	for id in state.owned do
 		if not state.discovered[id] then
 			return nil
+		end
+	end
+	if data.schemaVersion == 6 then
+		if data.earnings ~= nil then
+			return nil
+		end
+	else
+		if typeof(data.earnings) ~= "table" then
+			return nil
+		end
+		for id, value in data.earnings :: { [string]: unknown } do
+			if
+				typeof(id) ~= "string"
+				or not state.owned[id]
+				or typeof(value) ~= "number"
+				or not (value >= 0 and value <= Economy.coinLimit)
+			then
+				return nil
+			end
+			state.earnings[id] = value
 		end
 	end
 	for group, rawCounters in data.pityByGroup :: { [string]: unknown } do

@@ -18,7 +18,7 @@ local function same(a, b)
 	return true
 end
 local state = Rules.new(0)
-check(state.schemaVersion == 6 and #state.shelves.units == 3, "fresh schema 6 owns three independent shelves")
+check(state.schemaVersion == 7 and #state.shelves.units == 3, "fresh schema 7 owns three independent shelves")
 check(#Config.slots() == 9 and Config.visibleShelfUnits == 3 and Config.shelfAcquisition == "Unassigned", "nine configured local positions and no acquisition policy")
 local view = Shelves.newView()
 local access = { actorId = 1, ownerId = 1, near = true, view = view }
@@ -121,7 +121,7 @@ check(Profile.decode(huge,0)==nil,"unit decoding allocation guard")
 huge=Profile.encode(Rules.new(0)); huge.discovered[id]=true
 for index=1,Shelves.decodeLimits.placements+1 do huge.shelves.units[1].placements["row:1/slot:"..index]=id end
 check(Profile.decode(huge,0)==nil,"placement decoding budget")
-local future=Profile.encode(state); future.schemaVersion=7
+local future=Profile.encode(state); future.schemaVersion=8
 check(Profile.decode(future,0)==nil,"future schemas fail closed")
 
 for version=1,5 do

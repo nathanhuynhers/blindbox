@@ -9,7 +9,7 @@ direct path to each inward-facing entrance. Each plot has a horizontally expandi
 positions. Three physical structures show a viewport that shifts one owned unit per turn. Nearby players walk in freely and may turn
 the shared carousel; only owners edit. Shelves use permanent discoveries and reserve zero copies.
 
-Schema 5 safely migrates v1-v4 profiles, including legacy cosmetic placements. Collection rewards
+Schema 6 starts fresh profiles in the authorized Economy2 save namespaces. Collection rewards
 are TBD. There is no active Gallery/interior/teleport architecture. See
 [current design](docs/PLAYER_PLOTS_AND_SHELVES.md) and
 [implementation, changed files and tests](docs/PLOT_SHELF_IMPLEMENTATION.md).
@@ -93,6 +93,6 @@ python tests/run.py build/tools/luau/luau.exe
 The implementation was checked with the official standalone Luau 0.739 executable in that
 ignored path. A separately installed Luau executable can be passed instead. This tool is for
 verification only; it is not a Wally dependency or a replacement for Studio testing.
-The suite covers transaction conservation, income, reservation/recycling rules, redemption,
+The suite covers transaction conservation, duplicate income, unique Display placement, soft pity,
 roll boundaries, malformed payloads, replay/stale requests, rate limits, invalid configs,
-profile migration, conflicting leases, lost save replies, failed storage calls and scroll sizing.
+schema validation, conflicting leases, lost save replies, failed storage calls and scroll sizing.

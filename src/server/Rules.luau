@@ -12,7 +12,7 @@ local Rules = {
 }
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 6,
+		schemaVersion = 7,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
@@ -24,7 +24,7 @@ function Rules.new(now: number): Types.State
 		owned = {},
 		discovered = {},
 		revision = 0,
-		fraction = 0,
+		earnings = {},
 		time = now,
 		step = 1,
 	}
@@ -77,13 +77,36 @@ end
 function Rules.settle(state: Types.State, now: number)
 	local elapsed = math.max(0, now - state.time)
 	state.time = math.max(state.time, now)
-	local earned = state.fraction + elapsed * Rules.rate(state)
-	local whole = math.floor(earned)
-	state.coins = math.min(Economy.coinLimit, state.coins + whole)
-	state.fraction = if state.coins == Economy.coinLimit then 0 else earned - whole
+	local multiplier = if Rules.bonus(state) > 0 then 1 + Economy.setBonus else 1
+	for _, id in state.display.slots do
+		if id ~= "" then
+			state.earnings[id] = math.min(
+				Economy.coinLimit,
+				(state.earnings[id] or 0) + elapsed * Rules.figureRate(state, id) * multiplier
+			)
+		end
+	end
+end
+-- Server-only transfer primitive, also reusable by a future authorized auto-collect service.
+function Rules.collect(state: Types.State, slot: number, id: string): (boolean, string)
+	if id == "" or state.display.slots[slot] ~= id or not state.owned[id] then
+		return false, "That figure is no longer displayed."
+	end
+	local bank = state.earnings[id] or 0
+	local amount = math.min(math.floor(bank), Economy.coinLimit - state.coins)
+	if amount <= 0 then
+		return false,
+			if state.coins == Economy.coinLimit
+				then "Spend Coins before collecting."
+				else "No whole Coins ready yet."
+	end
+	state.earnings[id] = bank - amount
+	state.coins += amount
+	state.revision += 1
 	if state.step == 3 and state.coins >= Rules.prices[Economy.dailyCollection] then
 		state.step = 4
 	end
+	return true, string.format("Collected %d Coins!", amount)
 end
 -- Available earning placement, not the quantity of spare copies.
 function Rules.available(state: Types.State, id: string): number
@@ -111,7 +134,10 @@ function Rules.mutate(
 	local action, id = intent.action, intent.figure or ""
 	local today = day or 0
 	Rules.refreshDay(state, today)
-	if action == "Buy" or action == "Daily" then
+	if action == "Collect" then
+		local ok, message = Rules.collect(state, intent.slot or 0, id)
+		return ok, message, nil
+	elseif action == "Buy" or action == "Daily" then
 		local collection = intent.choice or Economy.dailyCollection
 		local price = Rules.prices[collection]
 		if not price then

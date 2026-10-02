@@ -96,17 +96,18 @@ ShopTheme.collections.<collection> = {
 
 ### Phase 6: Economy Configuration
 
-Update [Economy.luau](../src/server/Economy.luau):
+Follow [economy collection onboarding](ECONOMY_COLLECTION_ONBOARDING.md).
+Select a reusable economic tier, bucket profile and independent pity group in
+[Economy.luau](../src/server/Economy.luau), then add explicit figure units and weights:
 ```lua
-{ id = "<collection>.<figure>", rate = X, weight = Y },
+{ id = "<collection>.<figure>", units = X, weight = Y },
 ```
 
-**Rates by rarity (must stay within bands):**
-- Common: 1–2
-- Uncommon: 3–4
-- Rare: 6–8
+**Normalized income units:** Common 0.55-0.70; Uncommon 1.20-1.40; Rare 2.80-3.20;
+Legendary 7.50-8.50; Mythical 22. Actual Coins/sec is derived from the collection tier.
 
-**Weights:** Relative drop rates within collection (validated by Rules.luau)
+**Weights:** Relative shares within the same rarity in the selected collection. Rarity bucket
+percentages and soft pity are separate profiles validated by CollectionEconomy.
 
 ### Phase 7: Catalog Updates (If Needed)
 

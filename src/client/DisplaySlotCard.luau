@@ -41,7 +41,7 @@ function Card.create(parent: Instance, ctx: Context.Context, slot: number, choos
 	name.TextXAlignment = Enum.TextXAlignment.Center
 	name.TextTruncate = Enum.TextTruncate.AtEnd
 	local rate = Style.text(root, "Income", "Put this plinth to work", 14)
-	W.inset(rate, 227, 28)
+	W.inset(rate, 222, 40)
 	rate.TextXAlignment = Enum.TextXAlignment.Center
 	local action = Style.action(root, "Choose figure", ctx, choose)
 	action.set("Loading...", false)
@@ -83,7 +83,11 @@ function Card.create(parent: Instance, ctx: Context.Context, slot: number, choos
 				then (if state.available
 					then UI.number(snapshot.expansionCost) .. " Coins"
 					else "Unlock the previous slot first")
-				elseif state.id ~= "" then string.format("+%g Coins/sec", state.rate)
+				elseif state.id ~= "" then string.format(
+					"+%.2f/sec\n%s Coins ready",
+					state.rate,
+					UI.number(math.floor(snapshot.earnings[state.id] or 0))
+				)
 				else "Choose a figure to earn Coins"
 			rate.TextColor3 = if not state.locked and state.id ~= ""
 				then Style.success

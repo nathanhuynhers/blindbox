@@ -47,10 +47,10 @@ function Layout.shelves(width: number, rows: number, slotsPerRow: number)
 		height = math.max(176 + shelfHeight, pickerY + pickerHeight) + 16,
 	}
 end
-function Layout.goals(width: number, collections: number)
+function Layout.goals(width: number, collections: number, dailyChoices: number?)
 	local wide = width >= 720
 	local cardWidth = if wide then math.floor((width - 16) / 2) else width
-	local dailyHeight = 144 + collections * 68
+	local dailyHeight = 144 + (dailyChoices or collections) * 68
 	local heroHeight = math.max(304, dailyHeight)
 	local freeY = if wide then 110 else 110 + 304 + 16
 	local progressY = if wide then 110 + heroHeight + 24 else freeY + dailyHeight + 24

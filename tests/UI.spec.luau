@@ -7,6 +7,7 @@ local Catalog = require("./Catalog")
 local Types = require("./Types")
 local ShopLayout = require("./ShopLayout")
 local ShopState = require("./ShopState")
+local CollectionEconomy = require("./CollectionEconomy")
 local ShopTheme = require("./ShopTheme")
 local BlindBoxSpec = require("./BlindBoxSpec")
 local checks = 0
@@ -15,11 +16,18 @@ local function check(condition: boolean, message: string)
 	assert(condition, message)
 end
 local state = Rules.new(0)
+local boostedRows = ShopState.rarityOdds({
+	odds = CollectionEconomy.odds({ echo = { legendaryDryRolls = 100, mythicalDryRolls = 500 } }),
+	baseOdds = Rules.odds,
+}, "echo")
+check(math.abs(boostedRows[4].total - 4) < 1e-9 and boostedRows[4].baseTotal == 1, "Shop shows Legendary bucket total and base rather than per-figure odds")
+check(math.abs(boostedRows[5].total - 0.4) < 1e-9 and boostedRows[5].baseTotal == 0.1, "Shop shows current Mythical luck")
 local snapshot: Types.Snapshot = {
 	shelves = { ownedCount = 3, visible = {
 		{id="shelf:1",index=1,placements={}}, {id="shelf:2",index=2,placements={}}, {id="shelf:3",index=3,placements={}},
 	}, carouselRevision = 0, canNavigate = false },
 	coins = state.coins,
+	earnings = {},
 	owned = state.owned,
 	discovered = state.discovered,
 	slots = state.display.slots,
@@ -230,6 +238,7 @@ check(
 	"HUD abbreviations never round up available money"
 )
 check(UI.compact(1000000000) == "1B" and UI.compact(150) == "150", "HUD cap and everyday balance")
+check(UI.compact(1000000000000) == "1T", "trillion Coin ceiling remains readable")
 
 table.freeze(snapshot.owned)
 table.freeze(snapshot.discovered)

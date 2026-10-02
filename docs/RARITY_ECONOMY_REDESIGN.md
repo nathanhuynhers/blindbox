@@ -1,9 +1,20 @@
 # Rarity, duplicates and collection-economy redesign
 
-Status: **planning direction; not implemented**. This document records the agreed redesign and
-the provisional numbers to simulate and playtest before implementation. It does not supersede
-the implemented values documented in [ECONOMY.md](ECONOMY.md) until a separately authorized
-implementation task updates the game and its canonical documentation.
+Status: **implemented candidate on `codex/economy-redesign`; Studio acceptance pending**.
+The discussion below is the original design record. [ECONOMY.md](ECONOMY.md) owns current tuning,
+[DATA_MODEL.md](DATA_MODEL.md) owns schema 7 (including valid schema-6 upgrades), and
+[verification](ECONOMY_REDESIGN_VERIFICATION.md) records checks and simulation assumptions.
+
+Implementation decisions superseding the original candidate sections below:
+
+- The user requested a full progression reset: fresh save namespaces, no Scrap conversion.
+- The user selected fully random first three Starter purchases.
+- The user selected roughly 4-6 hours to the first Mythical on entering a tier.
+- Starter/near-starter normalization remains 180 seconds; Niche uses 550 and Prestige 850.
+  The uniform 180-second higher-tier normalization and its illustrative rate tables are superseded.
+- Tender Echoes and We Are All Stars remain equal-price Prestige peers with independent pity.
+- Slots 4/5/6 use the proposed sequential Coin prices; the daily free box is Pocket Grove only.
+- Adding a collection follows [the onboarding guide](ECONOMY_COLLECTION_ONBOARDING.md).
 
 ## Confirmed direction
 

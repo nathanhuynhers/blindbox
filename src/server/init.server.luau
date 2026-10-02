@@ -1,6 +1,7 @@
 --!strict
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local Types = require(ReplicatedStorage.Shared.Types)
 local Rules = require(script.Rules)
@@ -51,6 +52,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	local snapshot: Types.Snapshot = {
 		shelves = Shelves.publicView(state.shelves, session.plot.view),
 		coins = state.coins,
+		earnings = table.clone(state.earnings),
 		owned = table.clone(state.owned),
 		discovered = table.clone(state.discovered),
 		slots = table.clone(state.display.slots),
@@ -157,6 +159,31 @@ local function added(player: Player)
 			PlayerPlot.turn(session.plot, actor, session.transaction.state, direction, os.clock())
 		then
 			send(player, session, nil)
+		end
+	end)
+	PlayerPlot.bindCollectors(session.plot, function(actor, slot, figure)
+		local now = os.clock()
+		if
+			actor ~= player
+			or sessions[player] ~= session
+			or shuttingDown
+			or not storage.ready
+			or now >= storage.safeUntil
+		then
+			return
+		end
+		local reply, changed = Transactions.process(transaction, {
+			action = "Collect",
+			id = "collect:" .. HttpService:GenerateGUID(false),
+			revision = transaction.state.revision,
+			slot = slot,
+			figure = figure,
+		}, now, true, 0, math.floor(os.time() / 86400), nil, true)
+		if changed and storage.handle and not storage.busy then
+			storage.status = "Autosave pending"
+		end
+		if reply then
+			send(player, session, reply)
 		end
 	end)
 	PlayerPlot.render(session.plot, storage.state)

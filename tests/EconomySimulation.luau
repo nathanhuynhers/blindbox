@@ -37,10 +37,11 @@ local function optimize(state)
 	state.display.slots=bestSlots
 end
 local function fund(state,cost)
-	if state.coins<cost then
+	while state.coins<cost do
 		local rate=Rules.rate(state)
 		assert(rate>0,"Unfunded start")
-		Rules.settle(state,state.time+(cost-state.coins)/rate+0.001)
+		Rules.settle(state,state.time+(cost-state.coins+state.display.unlocked)/rate+0.001)
+		for slot,id in state.display.slots do Rules.collect(state,slot,id) end
 	end
 end
 local function buy(state,collection)

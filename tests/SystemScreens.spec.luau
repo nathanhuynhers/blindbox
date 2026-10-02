@@ -29,6 +29,7 @@ local snapshot: Types.Snapshot = {
 		},
 	},
 	coins = 0,
+	earnings = {},
 	owned = {},
 	discovered = {},
 	slots = { "", "", "" },

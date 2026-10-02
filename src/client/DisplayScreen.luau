@@ -18,7 +18,7 @@ function Display.create(parent: Instance, ctx: Context.Context)
 	Style.header(
 		header,
 		"My Display",
-		"Your favorites, earning around the clock while you play.",
+		"Click each displayed figure or press E nearby to collect its Coins.",
 		"Display"
 	)
 	local incomeCard = Style.panel(header, "IncomePlaque", Style.successWash)

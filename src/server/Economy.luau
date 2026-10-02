@@ -7,7 +7,7 @@ export type Duplicate = { maximum: number, curve: number }
 local tiers: { [string]: Tier } = {
 	starter = { price = 1500, paybackSeconds = 180 },
 	nearStarter = { price = 2000, paybackSeconds = 180 },
-	niche = { price = 20000, paybackSeconds = 700 },
+	niche = { price = 20000, paybackSeconds = 550 },
 	prestige = { price = 200000, paybackSeconds = 850 },
 }
 local collections: { [string]: Collection } = {

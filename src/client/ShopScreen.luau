@@ -240,7 +240,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		strip.CanvasSize = UDim2.fromOffset(figureList.AbsoluteContentSize.X, 0)
 	end)
 	local odds = W.frame(info, "RarityOdds")
-	local oddsTitle = Style.label(odds, "Heading", "Rarity Odds", 17, true)
+	local oddsTitle = Style.label(odds, "Heading", "Current Rarity Odds", 17, true)
 	oddsTitle.Size = UDim2.new(1, 0, 0, 30)
 	type Odds = { root: Frame, value: TextLabel }
 	local rows: { [string]: Odds } = {}

@@ -73,7 +73,7 @@ function Goals.create(parent: Instance, ctx: Context.Context): Context.Screen
 	end
 	local function resize()
 		local width = shell.width()
-		local g = Layout.goals(width, #Catalog.collections)
+		local g = Layout.goals(width, #Catalog.collections, 1)
 		Style.rect(goal.root, 0, 110, g.cardWidth, g.heroHeight)
 		Style.rect(free, if g.wide then g.cardWidth + 16 else 0, g.freeY, g.cardWidth, g.freeHeight)
 		Style.rect(collectionHeading, 0, g.progressY, width, 40)

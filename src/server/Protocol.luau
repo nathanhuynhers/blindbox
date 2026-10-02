@@ -43,6 +43,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 	end
 	if
 		action ~= "Buy"
+		and action ~= "Collect"
 		and action ~= "Place"
 		and action ~= "Remove"
 		and action ~= "Daily"
@@ -86,8 +87,8 @@ function Protocol.parse(raw: unknown): Types.Intent?
 	elseif shelfId ~= nil or shelfSlotId ~= nil or carouselRevision ~= nil then
 		return nil
 	end
-	local needsFigure = action == "Place" or action == "ShelfPlace"
-	local needsSlot = action == "Place" or action == "Remove"
+	local needsFigure = action == "Collect" or action == "Place" or action == "ShelfPlace"
+	local needsSlot = action == "Collect" or action == "Place" or action == "Remove"
 	local figure, slot = data.figure, data.slot
 	if needsFigure then
 		if typeof(figure) ~= "string" or #figure > 64 or not Catalog.byId[figure] then

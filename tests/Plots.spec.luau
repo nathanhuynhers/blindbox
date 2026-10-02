@@ -1126,7 +1126,40 @@ check(
 	#other.shelves.parent:GetChildren() == 0 and otherState.coins == 4500,
 	"other owner's state stays isolated"
 )
+local collects = 0
+Plot.bindCollectors(other, function(actor, slot, id)
+	check(actor == guest and slot == 1 and id == "grove.pebble", "physical target identity")
+	collects += 1
+end)
+otherState.owned["grove.pebble"] = 1
+otherState.discovered["grove.pebble"] = true
+otherState.display.slots[1] = "grove.pebble"
+Plot.render(other, otherState)
+local target = other.collectors[1]
+local detector = target:FindFirstChildOfClass("ClickDetector")
+local prompt = target:FindFirstChildOfClass("ProximityPrompt")
+guest.Character:PivotTo(target.CFrame)
+detector.MouseClick:fire(guest)
+prompt.Triggered:fire(guest)
+check(collects == 2 and prompt.Enabled and prompt.KeyboardKeyCode == Engine.Enum.KeyCode.E, "click and E route to collection")
+owner.Character:PivotTo(target.CFrame)
+prompt.Triggered:fire(owner)
+check(collects == 2, "visitor cannot collect")
+move(guest, other, 0, 4, -33)
+prompt.Triggered:fire(guest)
+check(collects == 2, "out-of-range collection rejected")
+guest.Character:PivotTo(target.CFrame)
+guest.Character:FindFirstChildOfClass("Humanoid").Health = 0
+prompt.Triggered:fire(guest)
+check(collects == 2, "dead character cannot collect")
+guest.Character:FindFirstChildOfClass("Humanoid").Health = 100
+otherState.display.slots[1] = ""
+Plot.render(other, otherState)
+prompt.Triggered:fire(guest)
+check(collects == 2 and not prompt.Enabled and detector.MaxActivationDistance == 0, "empty slots disable collection")
 Plot.destroy(other)
+prompt.Triggered:fire(guest)
+check(collects == 2, "destroyed collector disconnected")
 Plot.destroy(replacement)
 world:Destroy()
 check(Engine.connections == 0, "no owned connections remain")

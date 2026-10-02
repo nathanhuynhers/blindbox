@@ -38,9 +38,9 @@ check(not Rules.mutate(state,request("Place",state,common,2),0),"duplicate canno
 check(close(Rules.rate(state),Rules.rates[common]*(1+0.6*2/7)),"duplicates enhance one earner")
 local initialRate=Rules.rate(state)
 Rules.settle(state,0.17)
-check(close(state.coins+state.fraction,initialRate*.17),"fraction retained")
+check(close(state.coins+(state.earnings[common] or 0),initialRate*.17),"fraction retained")
 Rules.settle(state,0.17)
-check(close(state.coins+state.fraction,initialRate*.17),"same timestamp cannot earn twice")
+check(close(state.coins+(state.earnings[common] or 0),initialRate*.17),"same timestamp cannot earn twice")
 for _, figure in Catalog.figures do
  local cfg=Config.duplicates[figure.rarity]
  check(close(Economy.multiplier(figure.id,2),1+cfg.maximum/(1+cfg.curve)),"first duplicate")
@@ -98,10 +98,10 @@ check(not Transactions.process(session,place,3,false,0).ok,"distance guard")
 place.id="near"
 check(Transactions.process(session,place,4,true,0).ok,"owned nearby placement")
 local oldRate=Rules.rate(session.state)
-local before=session.state.coins+session.state.fraction
+local before=session.state.coins+(session.state.earnings[first.figure] or 0)
 local nextBuy=request("Buy",session.state,nil,nil,"echo")
 check(Transactions.process(session,nextBuy,14,true,0).ok,"duplicate purchase")
-check(close(session.state.coins+session.state.fraction,before+oldRate*10-200000),"settle old rate before duplicate")
+check(close(session.state.coins+(session.state.earnings[first.figure] or 0),before+oldRate*10-200000),"settle old rate before duplicate")
 check(Rules.rate(session.state)>oldRate,"new duplicate rate")
 local spam=Transactions.new(0)
 for _=1,4 do Transactions.process(spam,{},0,true,0) end
@@ -118,6 +118,58 @@ for i=1,1000 do
 end
 state.coins=Config.coinLimit-1
 Rules.settle(state,10000)
-check(state.coins==Config.coinLimit and state.fraction==0,"ceiling discards hidden credit")
-check(Profile.decode(Profile.encode(session.state),1000).fraction==0,"no offline income")
+check(state.coins==Config.coinLimit-1,"income stays banked")
+local bank=state.earnings[common]
+check(Rules.collect(state,1,common) and state.coins==Config.coinLimit,"partial wallet transfer")
+check(close(state.earnings[common],bank-1),"full wallet retains overflow")
+check(not Rules.collect(state,1,common),"full wallet cannot collect twice")
+local restored=Profile.decode(Profile.encode(session.state),1000)
+check(restored and restored.time==1000 and restored.earnings[first.figure]==session.state.earnings[first.figure],"bank persisted; no offline income")
+local manual=Transactions.new(0)
+manual.state.owned[common]=1;manual.state.discovered[common]=true;manual.state.display.slots[1]=common
+Rules.settle(manual.state,10)
+check(manual.state.coins==4500,"settlement never deposits automatically")
+local collect=request("Collect",manual.state,common,1)
+check(not Transactions.process(manual,collect,10,true,0).ok,"remote cannot authorize collection")
+collect.id="physical"
+local result=Transactions.process(manual,collect,11,true,0,nil,nil,true)
+local balance=manual.state.coins
+check(result and result.ok and balance>4500,"authorized physical collection")
+check(Transactions.process(manual,collect,11,true,0,nil,nil,true)==result and manual.state.coins==balance,"collection receipt prevents double credit")
+manual.state.earnings[common]=12.75
+manual.state.display.slots[1]=""
+check(not Rules.collect(manual.state,1,common) and manual.state.earnings[common]==12.75,"removed figure retains bank")
+manual.state.display.slots[1]=common
+check(Rules.collect(manual.state,1,common) and manual.state.earnings[common]==.75,"redisplay collection retains fractions")
+local legacy=Profile.encode(manual.state); legacy.schemaVersion=6;legacy.earnings=nil
+check(Profile.decode(legacy,20).coins==manual.state.coins,"schema 6 migrates without reset")
+for _, amount in {-1,0/0,math.huge,Config.coinLimit+1} do
+ local invalid=Profile.encode(manual.state); invalid.earnings[common]=amount
+ check(Profile.decode(invalid,20)==nil,"invalid banks rejected")
+end
+local themed=Rules.new(0)
+local ids={}
+for _,entry in Catalog.figures do
+ if entry.collection=="grove" and #ids<3 then table.insert(ids,entry.id) end
+end
+for slot,id in ids do
+ themed.owned[id]=1;themed.discovered[id]=true;themed.display.slots[slot]=id
+end
+Rules.settle(themed,10)
+local total=0
+for _,id in ids do
+ check(close(themed.earnings[id],Rules.figureRate(themed,id)*11),"themed bonus banked proportionally")
+ total+=themed.earnings[id]
+end
+check(close(total,Rules.rate(themed)*10),"per-figure banks conserve total income")
+local encoded=Profile.encode(themed)
+encoded.earnings[ids[1]]=0
+check(themed.earnings[ids[1]]>0,"saved banks deep copied")
+local otherBank=themed.earnings[ids[2]]
+check(Rules.collect(themed,1,ids[1]) and themed.earnings[ids[2]]==otherBank,"collection affects only selected figure")
+local wallet=themed.coins
+check(not Rules.collect(themed,1,ids[2]) and themed.coins==wallet,"stale target cannot collect replacement")
+themed.earnings[ids[1]]=Config.coinLimit-1
+Rules.settle(themed,100)
+check(themed.earnings[ids[1]]==Config.coinLimit,"per-figure bank safety ceiling")
 print("PASS: "..checks.." redesigned economy and transaction checks")

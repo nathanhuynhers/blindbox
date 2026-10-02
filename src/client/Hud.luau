@@ -18,6 +18,7 @@ function Hud.create(parent: Instance, ctx: Context.Context)
 					.. " Coins  /  "
 					.. snapshot.rate
 					.. " Coins/sec"
+					.. "\nClick your displayed figures or press E nearby to collect."
 					.. (
 						if not snapshot.ready
 								or string.find(

@@ -2,6 +2,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local Types = require(ReplicatedStorage.Shared.Types)
 local ShelfConfig = require(ReplicatedStorage.Shared.ShelfConfig)
 local Interface = require(script.Interface)
@@ -48,13 +50,42 @@ opening = OpeningController.create(ui.openingFocus, ui.message)
 local connections: { RBXScriptConnection } = {}
 table.insert(
 	connections,
+	ProximityPromptService.PromptShown:Connect(function(prompt: ProximityPrompt)
+		local owner = prompt:GetAttribute("CollectorOwnerId")
+		if typeof(owner) == "number" and owner ~= Players.LocalPlayer.UserId then
+			prompt.Enabled = false -- Presentation only; the server independently checks ownership.
+		end
+	end)
+)
+local function updateCollectors(state: Types.Snapshot)
+	local plots = workspace:FindFirstChild("PlayerPlots")
+	local plot = if plots then plots:FindFirstChild(tostring(Players.LocalPlayer.UserId)) else nil
+	local targets = if plot then plot:FindFirstChild("FigureCollectors") else nil
+	if not targets then
+		return
+	end
+	for slot, id in state.slots do
+		local target = targets:FindFirstChild(tostring(slot))
+		local prompt = if target then target:FindFirstChildOfClass("ProximityPrompt") else nil
+		if prompt then
+			prompt.ActionText =
+				string.format("Collect %d Coins", math.floor(state.earnings[id] or 0))
+		end
+	end
+end
+table.insert(
+	connections,
 	stateRemote.OnClientEvent:Connect(function(state: Types.Snapshot, reply: Types.Reply?)
 		if state.sequence > sequence then
 			sequence = state.sequence
 			current = state
 			ui.update(state)
+			updateCollectors(state)
 		end
 		local request = pending
+		if reply and string.sub(reply.id, 1, 8) == "collect:" then
+			ui.message(reply.message, if reply.ok then "success" else "error")
+		end
 		if reply and request and reply.id == request.id then
 			local before = beforeRequest
 			pending = nil

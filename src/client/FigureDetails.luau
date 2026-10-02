@@ -137,17 +137,19 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 		name.Text = if discovered then figure.name else "???"
 		badge.set(figure.rarity)
 		local chance = State.percent(snapshot.odds[id] or 0)
-		stats.Size = UDim2.new(1, 0, 0, if discovered then 124 else 24)
+		stats.Size = UDim2.fromScale(1, 0)
+		stats.AutomaticSize = Enum.AutomaticSize.Y
 		stats.Text = if discovered
 			then string.format(
-				"Pull chance    %s\nOwned          %d\nBase income    %.2f/sec\nDuplicate bonus +%.2f%%\nIncome         %.2f/sec\nNext copy      %.2f/sec",
+				"Pull chance    %s\nOwned          %d\nBase income    %.2f/sec\nDuplicate bonus +%.2f%%\nIncome         %.2f/sec\nNext copy      %.2f/sec\nUncollected    %d Coins\nClick figure / E to collect",
 				chance,
 				owned,
 				snapshot.baseRates[id] or 0,
 				((snapshot.rates[id] or 0) / math.max(snapshot.baseRates[id] or 1, 0.000001) - 1)
 					* 100,
 				snapshot.rates[id] or 0,
-				snapshot.nextRates[id] or 0
+				snapshot.nextRates[id] or 0,
+				math.floor(snapshot.earnings[id] or 0)
 			)
 			else "Pull chance    " .. chance
 		local description = figure.description
