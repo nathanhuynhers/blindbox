@@ -21,10 +21,11 @@ export type Handle = { thread: thread, atmosphere: Atmosphere?, owned: boolean }
 local DayNight = {}
 
 local segments: { Segment } = {
-	{ from = 6, to = 17, seconds = 600 }, -- day
-	{ from = 17, to = 19.5, seconds = 180 }, -- golden hour into dusk
-	{ from = 19.5, to = 29, seconds = 300 }, -- night (clock wraps past midnight)
-	{ from = 29, to = 30, seconds = 120 }, -- dawn
+	-- Roblox's default sky sets around 17:50 and rises around 06:10.
+	{ from = 6.5, to = 16.5, seconds = 540 }, -- day
+	{ from = 16.5, to = 18.2, seconds = 180 }, -- golden hour into dusk
+	{ from = 18.2, to = 29.6, seconds = 300 }, -- night (clock wraps past midnight)
+	{ from = 29.6, to = 30.5, seconds = 180 }, -- dawn
 }
 local cycle = 0
 for _, segment in segments do
@@ -35,8 +36,8 @@ DayNight.config = table.freeze({
 	cycleSeconds = cycle,
 	tickSeconds = 1,
 	startClock = 10,
-	lightsOn = 18.6,
-	lightsOff = 5.6,
+	lightsOn = 17.8,
+	lightsOff = 6.2,
 })
 
 local function rgb(r: number, g: number, b: number): Color3
@@ -105,13 +106,13 @@ local dusk: Look = {
 -- Sorted by clock hour; sampling wraps from the last keyframe back to the first.
 DayNight.looks = {
 	look(0, night),
-	look(5.2, night),
-	look(6.3, dawn),
-	look(8.5, day),
-	look(16.3, day),
-	look(17.6, golden),
-	look(18.6, dusk),
-	look(19.8, night),
+	look(5, night),
+	look(6, dawn),
+	look(8, day),
+	look(16, day),
+	look(17.1, golden),
+	look(17.9, dusk),
+	look(18.7, night),
 }
 
 function DayNight.clockAt(elapsed: number): number

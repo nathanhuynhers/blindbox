@@ -47,9 +47,9 @@ dusk-to-dawn lights (49 static plus one arch glow per active plot, 57 at eight p
 ### Day and night
 
 `DayNight` advances `Lighting.ClockTime` on the server once per second over a 20-minute cycle:
-11 minutes of day, 3 of golden hour into dusk, 5 of night and 2 of dawn. Ambient, outdoor
+9 minutes of day, 3 of golden hour into dusk, 5 of night and 3 of dawn. Ambient, outdoor
 ambient, brightness, sun tint and an owned `Atmosphere` interpolate between day, golden-hour,
-dusk, night and dawn looks. At dusk (18.6) and dawn (5.6) `NightLights` switches every registered
+dusk, night and dawn looks. At dusk (17.8, as the default sky sets) and dawn (6.2) `NightLights` switches every registered
 lantern, bollard, giant-box and arch light and swaps lens parts to Neon or back. Switching only
 happens when that state changes; nothing runs per frame.
 

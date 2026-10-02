@@ -156,9 +156,9 @@ check(Store.refresh(hostile, 0) and #hostile.top.figures == 1 and hostile.top.fi
 -- Day/night clock: ~20 minutes, mostly daylight, lights only between dusk and dawn.
 local config = DayNight.config
 check(config.cycleSeconds == 1200, "a full day/night cycle lasts twenty minutes")
-check(close(DayNight.clockAt(0), 6) and close(DayNight.clockAt(600), 17), "day runs from 6:00 to 17:00")
-check(close(DayNight.clockAt(780), 19.5) and close(DayNight.clockAt(1080), 5), "golden hour then night")
-check(close(DayNight.clockAt(1200), 6) and close(DayNight.clockAt(1500), DayNight.clockAt(300)), "the cycle repeats")
+check(close(DayNight.clockAt(0), 6.5) and close(DayNight.clockAt(540), 16.5), "day runs from 6:30 to 16:30")
+check(close(DayNight.clockAt(720), 18.2) and close(DayNight.clockAt(1020), 5.6), "golden hour then night")
+check(close(DayNight.clockAt(1200), 6.5) and close(DayNight.clockAt(1500), DayNight.clockAt(300)), "the cycle repeats")
 for t = 0, 1199, 7 do
 	check(close(DayNight.elapsedFor(DayNight.clockAt(t)), t), "clock and elapsed time invert")
 end
@@ -176,10 +176,10 @@ check(
 for _, keyframe in DayNight.looks do
 	check(close(DayNight.sample(keyframe.clock).brightness, keyframe.brightness), "keyframes are exact")
 end
-local noon, golden, midnight = DayNight.sample(12), DayNight.sample(17.6), DayNight.sample(0)
+local noon, golden, midnight = DayNight.sample(12), DayNight.sample(17.1), DayNight.sample(0)
 check(noon.brightness > midnight.brightness and golden.shift.R > golden.shift.B, "bright day, warm golden hour")
 check(
-	DayNight.sample(23.99).brightness == midnight.brightness and close(DayNight.sample(19.2).brightness, 1.25),
+	DayNight.sample(23.99).brightness == midnight.brightness and close(DayNight.sample(18.3).brightness, 1.25),
 	"looks interpolate smoothly and wrap past midnight"
 )
 print(string.format("PASS: %d leaderboard store/stat and day-night checks", checks))
