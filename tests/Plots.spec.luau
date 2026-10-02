@@ -845,8 +845,8 @@ for _, node in fixtureNodes do
 			)
 		end
 		check(
-			node.Material == "Wood" or node.Material == "SmoothPlastic" or node.Material == "Fabric",
-			"warm native wood/plastic/fabric only, no neon"
+			node.Material == "Wood" or node.Material == "SmoothPlastic",
+			"warm native wood/plastic only, no neon"
 		)
 	elseif node.ClassName == "SurfaceLight" then
 		lights += 1

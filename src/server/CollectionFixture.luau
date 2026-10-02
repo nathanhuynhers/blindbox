@@ -18,9 +18,9 @@ Fixture.palette = table.freeze({
 })
 Fixture.style = table.freeze({ depth = 5, post = 0.55, board = 0.3, figureScale = 1 })
 -- Striped awning above the COLLECTION header, overhanging toward the plot center (-X).
--- Its valance bottom (backY - rise - 0.8 = top + 3.4) clears the header top (top + 2.85).
+-- Its valance bottom (backY - rise - 1.4 = top + 3.2) clears the header top (top + 2.85).
 Fixture.awning =
-	table.freeze({ backX = 3.2, backRise = 5.4, depth = 7.5, rise = 1.2, endMargin = 9.5 })
+	table.freeze({ backX = 3.2, backRise = 7.2, depth = 7.5, rise = 2.6, endMargin = 9.5 })
 local palette, style = Fixture.palette, Fixture.style
 export type Control = { panel: Part, accents: { Part } }
 export type Render = {

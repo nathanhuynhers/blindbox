@@ -7,7 +7,7 @@ local Awning = {}
 Awning.style = table.freeze({
 	stripeWidth = 2.4,
 	thickness = 0.2,
-	valanceHeight = 0.8,
+	valanceHeight = 1.4,
 	valanceThickness = 0.12,
 	ivory = Color3.fromRGB(252, 249, 243),
 })
@@ -26,7 +26,7 @@ end
 
 local function piece(parent: Instance, name: string, size: Vector3, at: CFrame, color: Color3): Part
 	local part = Geometry.partAt(parent, name, size, at, color)
-	part.Material = Enum.Material.Fabric
+	part.Material = Enum.Material.SmoothPlastic
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
 	part.CanCollide = false

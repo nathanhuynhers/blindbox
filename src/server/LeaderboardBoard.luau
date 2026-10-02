@@ -202,19 +202,20 @@ end
 -- Writes only changed properties, so cycling pages replicates a handful of strings.
 function Board.show(board: Board, page: number, title: string, lines: { Line }, status: string)
 	for _, face in board.faces do
-		set(face.title, title)
-		set(face.status, status)
-		for index, row in face.rows do
-			local line = lines[index]
-			set(row.name, if line then line.name else "—")
-			set(row.value, if line then line.value else "")
-		end
+		-- Dots, rows, status, then title: every changed property is written in one non-yielding pass.
 		for index, dot in face.dots do
 			local color = if index == page then colors.gold else style.dotOff
 			if dot.BackgroundColor3 ~= color then
 				dot.BackgroundColor3 = color
 			end
 		end
+		for index, row in face.rows do
+			local line = lines[index]
+			set(row.name, if line then line.name else "—")
+			set(row.value, if line then line.value else "")
+		end
+		set(face.status, status)
+		set(face.title, title)
 	end
 end
 

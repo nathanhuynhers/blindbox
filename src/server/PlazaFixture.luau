@@ -52,7 +52,8 @@ local function questionMarks(body: Part)
 		gui.Name = "QuestionMark"
 		gui.Face = face
 		gui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
-		gui.CanvasSize = Vector2.new(450, 400)
+		-- TextScaled caps glyphs at 100 px, so a small canvas lets the mark fill the face.
+		gui.CanvasSize = Vector2.new(124, 110)
 		gui.LightInfluence = 0.4
 		gui.Parent = body
 		local mark = Instance.new("TextLabel")
@@ -67,7 +68,7 @@ local function questionMarks(body: Part)
 		mark.Parent = gui
 		local stroke = Instance.new("UIStroke")
 		stroke.Color = colors.pinkDark
-		stroke.Thickness = 8
+		stroke.Thickness = 2.5
 		stroke.Parent = mark
 	end
 end

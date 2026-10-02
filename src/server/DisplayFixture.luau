@@ -8,9 +8,9 @@ local Fixture = {}
 Fixture.style =
 	table.freeze({ spacing = 8, sideMargin = 6, counterY = 3, figureScale = 2, title = "DISPLAY" })
 -- Striped awning above the sign: raised back edge behind the panel, lower front over the counter.
--- The valance bottom (frontY - 0.8) stays above the sign top (Y=13.3) so the sign stays readable.
+-- The valance bottom (frontY - 1.4) stays above the sign top (Y=13.3) so the sign stays readable.
 Fixture.awning =
-	table.freeze({ backY = 15.6, backZ = 4.2, depth = 8.6, rise = 1.2, overhang = 0.5 })
+	table.freeze({ backY = 17.6, backZ = 4.2, depth = 8.6, rise = 2.6, overhang = 0.5 })
 local ivory = Color3.fromRGB(242, 235, 220)
 local oak = Color3.fromRGB(198, 165, 120)
 local warmPanel = Color3.fromRGB(235, 225, 204)
@@ -109,16 +109,16 @@ local pieces: { Piece } = {
 	},
 	{
 		name = "LeftAwningPost",
-		size = Vector3.new(0.5, 5, 0.5),
-		offset = Vector3.new(0, 12.8, 3),
+		size = Vector3.new(0.5, 6.8, 0.5),
+		offset = Vector3.new(0, 13.7, 3),
 		color = oak,
 		wood = true,
 		edge = -1,
 	},
 	{
 		name = "RightAwningPost",
-		size = Vector3.new(0.5, 5, 0.5),
-		offset = Vector3.new(0, 12.8, 3),
+		size = Vector3.new(0.5, 6.8, 0.5),
+		offset = Vector3.new(0, 13.7, 3),
 		color = oak,
 		wood = true,
 		edge = 1,
