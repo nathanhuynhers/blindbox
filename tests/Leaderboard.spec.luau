@@ -23,7 +23,8 @@ state.display.slots = { "grove.star", "tide.pearl", "" }
 state.boxesOpened = 1234567
 local values = Stats.of(state)
 check(values.figures == 2, "Most Figures counts permanent discoveries")
-check(values.rate == 1450, "Coins/sec is the current Display rate in hundredths")
+local expectedRate = math.floor(Rules.rate(state) * 100 + 0.5)
+check(expectedRate > 0 and values.rate == expectedRate, "Coins/sec is the current Display rate in hundredths")
 check(values.boxes == 1234567, "Boxes Opened reads the persistent counter")
 check(Stats.format("rate", 1450) == "14.5/s" and Stats.format("rate", 125) == "1.25/s", "rate formatting")
 check(
@@ -94,7 +95,7 @@ local options: Store.Options = {
 local store = Store.new(io, options)
 check(Store.offer(store, 1, values) == 3, "first offer queues all three stats")
 check(Store.offer(store, 1, values) == 0 and Store.pendingCount(store) == 3, "repeat offers coalesce")
-check(Store.pump(store, 0) == 3 and data.rate[1] == 1450 and writes == 3, "pump writes queued scores")
+check(Store.pump(store, 0) == 3 and data.rate[1] == expectedRate and writes == 3, "pump writes queued scores")
 check(Store.offer(store, 1, values) == 0, "unchanged scores are never rewritten")
 values.boxes += 1
 check(Store.offer(store, 1, values) == 1, "only the changed stat is queued")

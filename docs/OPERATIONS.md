@@ -1,5 +1,11 @@
 # Full-game testing and release
 
+The economy redesign uses fresh `BlindBox_Economy2_Studio` /
+`BlindBox_Economy2_Live` stores; the current profile schema is 8 (6 and 7 upgrade). Run the
+[current economy acceptance checklist](ECONOMY_REDESIGN_VERIFICATION.md) for variable prices,
+duplicates, soft pity and the authorized progression reset. The older schema migrations,
+Scrap/recycling and redemption checks below describe pre-redesign behavior and are superseded.
+
 The user accepted the MVP. The expanded game is a **closed-test candidate**, not published or
 verified in live Roblox servers. The agent has no Studio control connector and has not run the
 new engine, mobile, multiplayer or real DataStore tests. Existing MVP playtesting is not proof
@@ -90,7 +96,7 @@ all rarities, both cartons, NEW/duplicates and reduced motion without changing R
 items. Neither these Studio checks nor the launcher's lifecycle assertions have been run by the
 agent. Real purchase/retry testing is separate from those presentation-only fixtures.
 
-The redesigned regular UI has a [dedicated device/input checklist](UI_UX.md#verification-and-studio-checklist)
+The redesigned regular UI has a [dedicated device/input checklist](ui-redesign/IMPLEMENTATION.md#studio-checklist-not-yet-run)
 and read-only `tests/StudioUI.client.luau` checks for target sizes, canvas bounds and safe areas.
 Run that script from the client Command Bar on each screen. These engine checks remain unrun.
 
@@ -142,9 +148,9 @@ Run that script from the client Command Bar on each screen. These engine checks 
     place figures on two accounts in different servers; within about 2.5 minutes both should
     appear on each server's board. Leave and confirm the final score is written. Disable API
     access and confirm the board stays on its last page or placeholders without errors in play.
-13. **Schema 6 migration:** load a saved v5 test profile; it must keep all progress with
-    `boxesOpened = 0`, then count Buy and Daily boxes only. Confirm a v6 save never loads on an
-    older (v5-only) server build.
+13. **Schema 8 migration:** load saved v6 and v7 Economy2 test profiles; they must keep all
+    progress with `boxesOpened = 0`, then count Buy and Daily boxes only. Confirm a v8 save never
+    loads on an older (schema-7) server build.
 
 ## Persistence guarantees and limits
 

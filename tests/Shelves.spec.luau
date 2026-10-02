@@ -18,7 +18,7 @@ local function same(a, b)
 	return true
 end
 local state = Rules.new(0)
-check(state.schemaVersion == 6 and #state.shelves.units == 3, "fresh schema 6 owns three independent shelves")
+check(state.schemaVersion == 8 and #state.shelves.units == 3, "fresh schema 8 owns three independent shelves")
 check(#Config.slots() == 9 and Config.visibleShelfUnits == 3 and Config.shelfAcquisition == "Unassigned", "nine configured local positions and no acquisition policy")
 local view = Shelves.newView()
 local access = { actorId = 1, ownerId = 1, near = true, view = view }
@@ -39,11 +39,11 @@ state.discovered[id] = true; state.owned[id] = 1; state.display.slots[1] = id
 check(Shelves.mutate(state, request("ShelfPlace", id, first), access, 0), "owner places simultaneously with Display")
 check(Shelves.mutate(state, request("ShelfPlace", id, first, "shelf:2"), access, 0), "same discovery repeats across persistent units")
 check(Shelves.mutate(state, request("ShelfPlace", id, second), access, 0), "same discovery repeats within a unit")
-check(state.owned[id] == 1 and Rules.available(state, id) == 0 and Rules.rate(state) == 7, "no shelf reservations or income")
+check(state.owned[id] == 1 and Rules.available(state, id) == 0 and Rules.rate(state) == Rules.rates[id], "no shelf reservations or income")
 state.display.slots[1] = ""
 check(Rules.rate(state) == 0 and Rules.available(state, id) == 1, "shelves alone earn zero")
 state.owned[id] = 2
-check(Rules.mutate(state, { action="Recycle", id="r", revision=state.revision, figure=id }, 0), "shelves do not block recycling")
+check(state.owned[id] == 2, "shelf use leaves duplicate count intact")
 state.owned[id] = nil
 check(Shelves.mutate(state, request("ShelfPlace", id, first, "shelf:3"), access, 0), "zero-copy discovered cosmetics remain usable")
 access.actorId = 2
@@ -105,45 +105,6 @@ check(Protocol.parse(nav) ~= nil, "navigation needs revision, not an arbitrary s
 local badNav = table.clone(nav); badNav.shelfId="shelf:1"
 check(Protocol.parse(badNav)==nil,"navigation rejects redundant target identity")
 
--- Retired schema-v4 migration fixtures: each page contains three logical units.
-local function legacy4(count)
-	local raw = Profile.encode(Rules.new(0)); raw.schemaVersion = 4; raw.boxesOpened = nil
-	raw.coins=9876; raw.scrap=5; raw.step=5; raw.lastDailyDay=101; raw.goalDay=102; raw.goalProgress=3; raw.goalClaimed=true
-	raw.owned[id]=2; raw.display={unlocked=4,slots={id,"","",id}}
-	for _, figure in Catalog.figures do raw.discovered[figure.id]=true end
-	raw.shelves={pages={}}
-	for index=1,count do
-		local page={id="page:"..index,placements={},customization={}}
-		for unit=1,3 do for row=1,3 do for slot=1,3 do
-			page.placements[string.format("unit:%d/row:%d/slot:%d",unit,row,slot)] = Catalog.figures[(index+unit+row+slot)%#Catalog.figures+1].id
-		end end end
-		table.insert(raw.shelves.pages,page)
-	end
-	return raw
-end
-for _, capacity in {1,2} do
-	local raw = legacy4(capacity)
-	local migrated = Profile.decode(raw,30); assert(migrated)
-	check(migrated.schemaVersion==6 and #migrated.shelves.units==capacity*3,"every v4 page becomes exactly three shelves")
-	for index,page in raw.shelves.pages do for unit=1,3 do for row=1,3 do for slot=1,3 do
-		local target=migrated.shelves.units[(index-1)*3+unit]
-		check(target.id=="shelf:"..((index-1)*3+unit) and target.placements[Config.slotId(row,slot)]==page.placements[string.format("unit:%d/row:%d/slot:%d",unit,row,slot)],"every retired placement maps without deduplication")
-	end end end end
-	check(migrated.coins==9876 and migrated.scrap==5 and migrated.display.unlocked==4 and migrated.display.slots[4]==id and migrated.step==5 and migrated.lastDailyDay==101 and migrated.goalDay==102 and migrated.goalProgress==3 and migrated.goalClaimed,"all unrelated v4 progression preserved")
-	check(same(Profile.encode(migrated),Profile.encode(Profile.decode(raw,50))) and raw.schemaVersion==4,"migration deterministic without mutating input")
-	check(same(Profile.encode(migrated),Profile.encode(Profile.decode(Profile.encode(migrated),50))),"v6 round trip idempotent")
-end
-local empty=legacy4(2); for _,page in empty.shelves.pages do page.placements={} end
-check(#Profile.decode(empty,0).shelves.units==6,"empty capacity preserved")
-local hidden=legacy4(1)
-hidden.shelves.pages[1].placements["unit:999/row:1/slot:2"]=id
-hidden.shelves.pages[1].placements["unit:4/row:8/slot:7"]=id
-local retained=Profile.decode(hidden,0); assert(retained)
-check(#retained.shelves.units==3 and #retained.shelves.legacyOverflow==2 and retained.shelves.legacyOverflow[1].logicalUnit==4,"overflow preserved deterministically without capacity grant")
-check(retained.shelves.legacyOverflow[2].placements["row:1/slot:2"]==id and same(Profile.encode(retained),Profile.encode(Profile.decode(Profile.encode(retained),0))),"dormant zero-copy references survive v6 round trip")
-local snapshot=Profile.encode(retained); snapshot.shelves.legacyOverflow[1].placements["row:8/slot:7"]=nil
-check(retained.shelves.legacyOverflow[1].placements["row:8/slot:7"]==id,"dormant snapshots deep copied")
-check(Shelves.publicView(retained.shelves,Shelves.newView()).legacyOverflow==nil,"dormant references never projected")
 for _, mutate in {
 	function(s) s.units={} end,
 	function(s) s.units[1]=nil end,
@@ -160,36 +121,13 @@ check(Profile.decode(huge,0)==nil,"unit decoding allocation guard")
 huge=Profile.encode(Rules.new(0)); huge.discovered[id]=true
 for index=1,Shelves.decodeLimits.placements+1 do huge.shelves.units[1].placements["row:1/slot:"..index]=id end
 check(Profile.decode(huge,0)==nil,"placement decoding budget")
-local future=Profile.encode(state); future.schemaVersion=7
+local future=Profile.encode(state); future.schemaVersion=9
 check(Profile.decode(future,0)==nil,"future schemas fail closed")
-local corrupt=legacy4(1); corrupt.shelves.pages[1].customization.future=true
-check(Profile.decode(corrupt,0)==nil,"unknown retired customization never erased")
-corrupt=legacy4(2); corrupt.shelves.pages[2].id=corrupt.shelves.pages[1].id
-check(Profile.decode(corrupt,0)==nil,"duplicate retired identifiers rejected")
 
--- Retired v3 compatibility still uses validated deterministic packing before v4 conversion.
-local old=legacy4(1); old.schemaVersion=3; old.shelves=nil
-old.showrooms={palette="dusk",palettes={grove=true,dusk=true},rooms={}}
-for roomIndex=1,7 do
-	local roomId="custom:"..roomIndex; local placements={}
-	for anchor=1,6 do placements["figure_"..anchor]=Catalog.figures[(roomIndex+anchor)%#Catalog.figures+1].id end
-	old.showrooms.rooms[roomId]={roomId=roomId,sourceType="Custom",theme="dusk",placements=placements,customization={}}
+for version=1,5 do
+ local old=Profile.encode(state);old.schemaVersion=version
+ check(Profile.decode(old,0)==nil,"old schemas cannot enter the reset save namespace")
 end
-local migrated=Profile.decode(old,0); assert(migrated)
-check(#migrated.shelves.units==6,"v3 retains capacity of its two intermediate v4 configurations")
-for index=1,42 do
-	local room=math.floor((index-1)/6)+1; local anchor=(index-1)%6+1
-	local shelf=math.floor((index-1)/9)+1; local localIndex=(index-1)%9
-	check(migrated.shelves.units[shelf].placements[Config.slotId(math.floor(localIndex/3)+1,localIndex%3+1)]==old.showrooms.rooms["custom:"..room].placements["figure_"..anchor],"every legacy v3 reference preserved in deterministic order")
-end
-local v1={schemaVersion=1,coins=33,scrap=2,step=3,owned={[id]=1},discovered={[id]=true},slots={id,"",""}}
-local v2=table.clone(v1); v2.schemaVersion=2; v2.unlocked=3; v2.theme="grove"; v2.themes={grove=true}; v2.lastDailyDay=-1; v2.goalDay=-1; v2.goalProgress=0; v2.goalClaimed=false
-check(#Profile.decode(v1,0).shelves.units==3 and #Profile.decode(v2,0).shelves.units==3,"v1/v2 migrate to three empty persistent units")
-local database: unknown={data=old,token="",writer="old",expires=0,generation=9}
-local update: Persistence.Update=function(_,transform) local result=transform(database); if result then database=result end; return result end
-local handle,loaded=Persistence.load(update,"test","new",1000,0)
-check(handle~=nil and loaded~=nil and loaded.schemaVersion==6 and #loaded.shelves.units==6,"v3 migration through storage lease acquisition")
-local complete=Profile.decode(legacy4(1),0); assert(complete)
-check(#complete.shelves.units==3,"completion tracking creates no new capacity or reward")
-check(Profile.encode(state).shelves.startIndex==nil and Shelves.newView().startIndex==1,"carousel is runtime only and resets on rejoin")
-print(string.format("PASS: %d Shelf Unit schema/migration/carousel/domain checks",checks))
+check(Profile.encode(state).shelves.startIndex==nil and Shelves.newView().startIndex==1,"carousel remains runtime only")
+print("PASS: "..checks.." Shelf Unit persistence, validation and carousel checks")
+

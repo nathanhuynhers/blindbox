@@ -1,15 +1,10 @@
 # Main navigation UI
 
-The persistent navigation uses the approved PNG artwork for Collection, Display, Shop,
-Goals and Shelves. The shared configuration in `src/client/NavigationConfig.luau` owns
-ordering, labels, semantic asset keys and the small per-image scale adjustments.
-`NavigationButton.luau` owns the common hover, press, selection and badge behavior. Page
-routing remains in `Interface.luau`.
-
-Desktop uses a left rail inside the existing 144-pixel UI safe area. Touch and compact
-layouts use a five-item bottom bar inside the existing 76-pixel safe area. The current
-daily reward state drives the Goals dot; `Navigation.badge(id, value)` also accepts an
-empty string for a dot, text for a short count, or `nil` to clear a badge.
+The bottom dock (desktop and phone landscape) uses the approved PNG artwork for Collection,
+Display, Shop, Goals and Shelves. `src/client/NavigationConfig.luau` owns order, labels and
+semantic asset keys; `Dock.luau` owns tiles, the active state and badges. Routing is in
+`Interface.luau`. See [ui-redesign/IMPLEMENTATION.md](ui-redesign/IMPLEMENTATION.md). The image
+import and diagnosis notes below still apply.
 
 ## Missing-image diagnosis
 

@@ -234,17 +234,28 @@ function Engine.click(which)
 	Engine.view[which].Activated:Fire(input)
 end
 Engine.View = {
-	create = function(gui, _scope, result, profile)
+	create = function(gui, _scope, result, profile, reveal)
 		Engine.profile = profile
+		Engine.reveal = reveal
 		local primary, hit, skip = node("TextButton"), node("TextButton"), node("TextButton")
 		primary.Parent, hit.Parent, skip.Parent = gui, gui, gui
-		Engine.view = { primary = primary, hitTarget = hit, skip = skip }
+		-- Reveal card choices; the real RevealCard is covered by Screens.spec.
+		local display, keep = node("TextButton"), node("TextButton")
+		display.Parent, keep.Parent = gui, gui
+		Engine.view = { primary = primary, hitTarget = hit, skip = skip, display = display, keep = keep }
 		Engine.result = result
 		local State = require("./OpeningState")
 		return {
 			primary = primary,
 			hitTarget = hit,
 			skip = skip,
+			choices = { display = display, keep = keep },
+			firstChoice = function()
+				return display
+			end,
+			refresh = function(model)
+				Engine.reveal = model
+			end,
 			draw = function(state)
 				Engine.state = state
 				gui:SetAttribute("Phase", state.phase)

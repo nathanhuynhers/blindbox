@@ -14,9 +14,13 @@ local Scope = require(script.Parent.OpeningScope)
 local Cinematic = require(script.Parent.OpeningCinematic)
 local AudioSequence = require(script.Parent.OpeningAudioSequence)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
+local Projection = require(script.Parent.UIState)
 local Controller = {}
+-- Reveal choices: "display" (place/swap), "another" (buy the same box), "keep" (close).
+export type Choose = (string, Result.Result) -> ()
 export type Controller = {
-	present: (Result.Result, boolean, Rarity.Id?) -> boolean,
+	present: (Result.Result, boolean, Rarity.Id?, Projection.Reveal?) -> boolean,
+	refresh: (Projection.Reveal?) -> (),
 	isActive: () -> boolean,
 	skip: () -> (),
 	cancel: () -> (),
@@ -27,12 +31,18 @@ type Session = {
 	scope: Scope.Scope,
 	render: RBXScriptConnection?,
 	interact: ((boolean) -> ())?,
+	refresh: ((Projection.Reveal?) -> ())?,
+	choice: string?,
 }
 local actionName, movementName = "BlindboxOpeningInput", "BlindboxOpeningMovement"
 local function isGamepad(): boolean
 	return string.find(UserInputService:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
 end
-function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Controller
+function Controller.create(
+	focus: (boolean) -> (),
+	report: (string) -> (),
+	choose: Choose?
+): Controller
 	local audioCache = Scope.create()
 	Audio.preload(audioCache)
 	local active: Session? = nil
@@ -65,7 +75,13 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				active.interact(true)
 			end
 		end,
-		present = function(result, reduced, presentationRarity)
+		refresh = function(reveal)
+			local session = active
+			if session and session.refresh then
+				session.refresh(reveal)
+			end
+		end,
+		present = function(result, reduced, presentationRarity, reveal)
 			-- A local development preview only. Never accepted through remotes/result metadata.
 			if
 				presentationRarity ~= nil
@@ -98,6 +114,8 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				scope = scope,
 				render = nil,
 				interact = nil,
+				refresh = nil,
+				choice = nil,
 			}
 			active = session
 			-- Signals already queued by Roblox can arrive after Disconnect. Never close a successor.
@@ -146,7 +164,18 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 						closeSession()
 					end
 				end)
-				local view = View.create(gui, scope, result, profile)
+				local view = View.create(gui, scope, result, profile, reveal, function()
+					return not reduced
+				end)
+				local choices: { [string]: TextButton } = view.choices or {}
+				local function choiceOf(object: Instance?): string?
+					for key, choiceButton in choices do
+						if choiceButton == object then
+							return key
+						end
+					end
+					return nil
+				end
 				local cinematic =
 					Cinematic.create(scope, gui, result, profile, collection, reduced, closeSession)
 				local audio = Audio.create(scope)
@@ -185,15 +214,20 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 					cinematic.draw(session.state, delta)
 					view.draw(session.state, isGamepad())
 					if isGamepad() then
-						if
-							selectionPhase ~= session.state.phase
-							and session.state.phase == "Await"
-						then
+						local phase: State.Phase = session.state.phase
+						if selectionPhase ~= phase and phase == "Await" then
 							GuiService.SelectedObject = view.primary
 						end
-						selectionPhase = session.state.phase
+						selectionPhase = phase
 						local current = GuiService.SelectedObject
-						if
+						local onChoice = choiceOf(current) ~= nil
+						if phase == "Result" and view.firstChoice then
+							-- Gamepad A presses the selected Reveal choice; start on the best one.
+							local first = view.firstChoice()
+							if not onChoice or not (current :: GuiObject).Selectable then
+								GuiService.SelectedObject = if first.Selectable then first else nil
+							end
+						elseif
 							current ~= view.primary and current ~= view.skip
 							or (current == view.primary and not view.primary.Selectable)
 							or (current == view.skip and not view.skip.Visible)
@@ -227,7 +261,17 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 							enterPhase()
 						end
 						if session.state.phase == "Done" then
+							local choice = session.choice
 							close()
+							if choose and choice and choice ~= "keep" then
+								-- The session is fully closed (focus released) before acting.
+								local chosen, problem = pcall(function()
+									choose(choice, result)
+								end)
+								if not chosen then
+									warn("Reveal choice failed: " .. tostring(problem))
+								end
+							end
 							return
 						end
 						draw(math.min(delta, 0.1))
@@ -244,11 +288,32 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 						gui:SetAttribute("RenderConnections", 1)
 					end
 				end
+				local function pick(key: string)
+					local state = session.state
+					local target = choices[key]
+					if
+						state.phase ~= "Result"
+						or state.elapsed < State.resultGuard
+						or (target and target:GetAttribute("Enabled") == false)
+					then
+						return
+					end
+					session.choice = key
+				end
 				local function interact(skip: boolean)
 					if active ~= session then
 						return
 					end
 					safely(function()
+						if session.state.phase == "Result" then
+							-- B/X keep; A/Enter/Space press the selected choice (default Keep).
+							pick(
+								if skip
+									then "keep"
+									else choiceOf(GuiService.SelectedObject) or "keep"
+							)
+							skip = false
+						end
 						local changed = if skip
 							then State.skip(session.state)
 							else State.activate(session.state)
@@ -264,6 +329,11 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 					end)
 				end
 				session.interact = interact
+				session.refresh = function(next)
+					if active == session and view.refresh then
+						view.refresh(next)
+					end
+				end
 				local function activated(value: unknown, skip: boolean)
 					if
 						typeof(value) == "Instance"
@@ -282,6 +352,25 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				connect(view.skip.Activated, function(input)
 					activated(input, true)
 				end)
+				for key, choiceButton in choices do
+					connect(choiceButton.Activated, function(input)
+						if
+							typeof(input) == "Instance"
+							and input:IsA("InputObject")
+							and string.find(input.UserInputType.Name, "Gamepad", 1, true) == nil
+							and active == session
+						then
+							safely(function()
+								pick(key)
+								if session.choice == key and State.activate(session.state) then
+									enterPhase()
+									draw(0)
+									wake()
+								end
+							end)
+						end
+					end)
+				end
 				connect(UserInputService.LastInputTypeChanged, function()
 					safely(function()
 						draw(0)

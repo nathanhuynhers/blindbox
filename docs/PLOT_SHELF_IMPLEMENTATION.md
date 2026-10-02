@@ -10,7 +10,7 @@ See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.
 This pass replaces the recessed foundation, ivory plaza, plaque entrance and fixed entrance spawn
 described in the older sections below; those sections remain as history. Plot slots, the 170-stud
 ring, plot dimensions, ownership, Display/Collection layout and Shelf behavior are unchanged.
-Current schema is **6** (adds `boxesOpened`; see [data model](DATA_MODEL.md)).
+Current schema is **8** (schema 7 plus `boxesOpened`; see [data model](DATA_MODEL.md)).
 
 | Area | Implementation |
 | --- | --- |
@@ -33,7 +33,7 @@ corner enters any path corridor, plot footprint or the street; that the street a
 have no gaps; the walls; the arch clearance and post placement; the flush noncolliding spawn pad
 and spawn `CFrame`; the awning sizes and stripes; the night-light budget, switching and release;
 leaderboard write throttling/coalescing/backoff/budget handling and last-good reads; the stat
-formulas; the clock mapping; and the v6 counter's increments and migration.
+formulas; the clock mapping; and the v8 counter's increments and migration.
 
 ## Eight-plot radial world pass
 

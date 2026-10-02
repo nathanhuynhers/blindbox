@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Display</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#4B32C3}a:hover{color:#2B1F4A}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; position: relative; overflow: hidden; background: #CBE5F3; font-family: 'Nunito', sans-serif; color: #2B1F4A">
+<div style="position: absolute; left: 0; top: 430px; width: 1280px; height: 290px; background: #A6CE86"></div>
+<div style="position: absolute; left: 290px; top: 360px; width: 700px; height: 210px; border-radius: 50%; background: #EFDDBD; border-bottom: 16px solid #D2B488; box-sizing: border-box"></div>
+<div style="position: absolute; inset: 0; background: rgba(35, 24, 61, 0.55)"></div>
+
+<div style="position: absolute; left: 112px; top: 14px; display: flex; gap: 10px; align-items: center">
+<button aria-label="12,480 coins, earning 35 per second" style="height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 10px; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 26px; box-shadow: 0 4px 0 #2B1F4A; cursor: pointer; font-family: 'Fredoka', sans-serif">
+<svg width="30" height="30" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"></circle><circle cx="14" cy="14" r="6.5" fill="none" stroke="#C98A00" stroke-width="2.2"></circle></svg>
+<span style="font-size: 24px; font-weight: 600; color: #2B1F4A">12,480</span>
+<span style="font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; color: #1E6B47; background: #DDF3E6; border-radius: 12px; padding: 4px 9px">+35/s</span>
+</button>
+</div>
+
+<section aria-label="Display" style="position: absolute; left: 64px; top: 84px; width: 1152px; height: 508px; background: #FFFDF9; border: 3px solid #2B1F4A; border-radius: 28px; box-shadow: 0 8px 0 #2B1F4A; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden">
+<div style="height: 76px; flex-shrink: 0; display: flex; align-items: center; gap: 14px; padding: 0 16px 0 18px; border-bottom: 2px solid #ECE5F6">
+<img src="/_blob/5ebfd00e4ff394c1233bb0cf5c80d2f9" alt="" style="width: 56px; height: 56px; object-fit: contain">
+<div style="display: flex; flex-direction: column; flex-grow: 1">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 30px; font-weight: 600; line-height: 1.1">Display</h1>
+<p style="margin: 0; font-size: 14px; font-weight: 700; color: #5C5276">Figures on your Display earn coins every second</p>
+</div>
+<span style="height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-radius: 16px; background: #DDF3E6; border: 2px solid #3BA272; font-family: 'Fredoka', sans-serif; font-size: 22px; font-weight: 600; color: #174F36">+35 coins/s</span>
+<a href="Main.dc.html" aria-label="Close Display" style="width: 48px; height: 48px; border-radius: 24px; background: #2B1F4A; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"></path></svg>
+</a>
+</div>
+
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; padding: 12px 20px 14px; min-height: 0">
+<div style="height: 40px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-radius: 12px; background: #FCEADB; font-size: 14px; font-weight: 800; color: #6B3512">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7Z"></path></svg>
+<span style="flex-grow: 1">Tender Echoes set bonus is on: 3 different Tender Echoes figures on Display</span>
+<span style="font-family: 'Fredoka', sans-serif; font-size: 17px; font-weight: 600">+1/s</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; flex-shrink: 0">
+<sc-for list="{{slots}}" as="s" hint-placeholder-count="6">
+<div style="height: 184px; border-radius: 18px; border: 3px {{s.borderStyle}} {{s.border}}; background: {{s.bg}}; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; overflow: hidden; position: relative">
+<span style="position: absolute; left: 8px; top: 6px; font-size: 12px; font-weight: 900; color: #5C5276">{{s.num}}</span>
+<sc-if value="{{s.filled}}" hint-placeholder-val="{{true}}">
+<img src="{{s.img}}" alt="" style="width: 112px; height: 112px; object-fit: contain; mix-blend-mode: multiply; margin-top: 4px">
+<span style="font-size: 15px; font-weight: 800">{{s.name}}</span>
+<span style="margin-top: 4px; height: 26px; display: flex; align-items: center; padding: 0 10px; border-radius: 13px; background: #DDF3E6; color: #174F36; font-size: 13px; font-weight: 900">{{s.rate}}</span>
+</sc-if>
+<sc-if value="{{s.empty}}" hint-placeholder-val="{{false}}">
+<span style="margin-top: 38px; width: 60px; height: 60px; border-radius: 30px; background: #6B4EE6; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+</span>
+<span style="margin-top: 12px; font-family: 'Fredoka', sans-serif; font-size: 17px; font-weight: 600; color: #4B32C3">Choosing…</span>
+<span style="font-size: 13px; font-weight: 700; color: #5C5276">Pick a figure below</span>
+</sc-if>
+<sc-if value="{{s.later}}" hint-placeholder-val="{{false}}">
+<span style="margin-top: 46px; color: #8C83A3">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+</span>
+<span style="margin-top: 8px; font-size: 15px; font-weight: 800; color: #5C5276">Coming later</span>
+</sc-if>
+</div>
+</sc-for>
+</div>
+
+<div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 18px; background: #F6F2FC; border: 2px solid #E2DAEF">
+<div style="display: flex; align-items: center; gap: 10px">
+<h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 19px; font-weight: 600; flex-grow: 1">Choose a figure for slot 4</h2>
+<span style="font-size: 13px; font-weight: 800; color: #5C5276">Best earners first</span>
+<button style="height: 40px; padding: 0 14px; border-radius: 12px; background: #FFFFFF; border: 2px solid #2B1F4A; font: inherit; font-size: 14px; font-weight: 800; color: #2B1F4A; cursor: pointer">Cancel</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{picks}}" as="p" hint-placeholder-count="6">
+<button style="height: 72px; display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 14px; background: #FFFFFF; border: 3px solid {{p.border}}; font: inherit; color: #2B1F4A; text-align: left; cursor: pointer; position: relative; box-sizing: border-box">
+<img src="{{p.img}}" alt="" style="width: 54px; height: 54px; flex-shrink: 0; object-fit: cover; border-radius: 10px">
+<span style="display: flex; flex-direction: column; min-width: 0">
+<span style="font-size: 14px; font-weight: 800; line-height: 1.15">{{p.name}}</span>
+<span style="font-family: 'Fredoka', sans-serif; font-size: 16px; font-weight: 600; color: #1E6B47">{{p.rate}}</span>
+</span>
+<sc-if value="{{p.best}}" hint-placeholder-val="{{false}}"><span style="position: absolute; top: -10px; right: 6px; height: 20px; padding: 0 7px; display: flex; align-items: center; border-radius: 10px; background: #FFC83D; border: 2px solid #2B1F4A; font-size: 11px; font-weight: 900">BEST</span></sc-if>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+</section>
+
+<nav aria-label="Main" style="position: absolute; left: 366px; top: 606px; display: flex; gap: 12px">
+<a href="Collection.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/9c1a7ac2fc725a1e7e0e267a09accf10" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Collection</span>
+</a>
+<a href="Display.dc.html" aria-current="page" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #EFE8FF; border: 3px solid #6B4EE6; border-radius: 22px; box-shadow: 0 5px 0 #4B32C3; box-sizing: border-box; text-decoration: none; position: relative; transform: translateY(-6px)">
+<img src="/_blob/5ebfd00e4ff394c1233bb0cf5c80d2f9" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #4B32C3">Display</span>
+</a>
+<a href="Shop.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/9ec00bb0642de8485a672e499d08477b" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Shop</span>
+<span style="position: absolute; top: -10px; right: -10px; height: 24px; padding: 0 8px; display: flex; align-items: center; border-radius: 12px; background: #FFC83D; border: 2px solid #2B1F4A; color: #2B1F4A; font-size: 12px; font-weight: 900">FREE</span>
+</a>
+<a href="Goals.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/5439db593011800f0de0a283ae5bc59d" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Goals</span>
+<span style="position: absolute; top: -10px; right: -10px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 13px; background: #D92D46; border: 2px solid #2B1F4A; color: #FFFFFF; font-size: 13px; font-weight: 900; box-sizing: border-box">1</span>
+</a>
+<a href="Shelves.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/6e56e5cac9cca9fe71f359997d9fbce1" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Shelves</span>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const filled = (num, name, rate, img) => ({ num, name, rate, img, filled: true, empty: false, later: false, bg: '#FCEADB', border: '#2B1F4A', borderStyle: 'solid' });
+    const slots = [
+      filled('1', 'Moon Doze', '+20/s', '/_blob/88cf2e1b1ed896943f96c2d8cfcc5403'),
+      filled('2', 'Crate Spark', '+8/s', '/_blob/07b8f8d111ef6eb718a69dc0b552a107'),
+      filled('3', 'Mask Nuzzle', '+6/s', '/_blob/5c8bd2b2b4094b4e0b2a1db381408e19'),
+      { num: '4', filled: false, empty: true, later: false, bg: '#EFE8FF', border: '#6B4EE6', borderStyle: 'dashed' },
+      { num: '5', filled: false, empty: false, later: true, bg: '#F3F1F6', border: '#D6D0E0', borderStyle: 'solid' },
+      { num: '6', filled: false, empty: false, later: true, bg: '#F3F1F6', border: '#D6D0E0', borderStyle: 'solid' }
+    ];
+    const picks = [
+      ['Lovity', '+12/s', '/_blob/6b41a9caf327c2a8f1039ec174b3ffae'],
+      ['Sunbeam Sprite', '+7/s', '/_blob/ee8ea0a3d4b825245ff52b7f3ae494b8'],
+      ['Paper Crown', '+4/s', '/_blob/7c8986ccf31fc3a99f909eec3e8d87ee'],
+      ['Moon Moth', '+4/s', '/_blob/cddbb280f0771b030531fcf8182780fb'],
+      ['Hearth Helm', '+3/s', '/_blob/abce08ed4d5633e1c5892467c075f73d'],
+      ['Mallow Cap', '+3/s', '/_blob/84735026d0940d80dfaaffe2b44ae905']
+    ].map((p, i) => ({ name: p[0], rate: p[1], img: p[2], best: i === 0, border: i === 0 ? '#6B4EE6' : '#2B1F4A' }));
+    return { slots, picks };
+  }
+}
+</script>
+</body>
+</html>

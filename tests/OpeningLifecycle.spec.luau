@@ -332,6 +332,58 @@ controller.destroy()
 check(Engine.connections == baseline, "controller lifetime subscriptions released")
 check(not controller.present(result(), false), "destroyed controller cannot reopen")
 
+-- Reveal choices: dispatched only after the session has fully closed; Keep/B/cancel do nothing.
+local chosen = {}
+local chooser
+chooser = Controller.create(function(value)
+	focused = value
+end, function() end, function(choice, awarded)
+	table.insert(chosen, {
+		choice = choice,
+		id = awarded.figureId,
+		active = chooser.isActive(),
+		focused = focused,
+	})
+end)
+local model = { label = "reveal model" }
+chooser.present(result("echo.feather-hush"), false, nil, model)
+check(Engine.reveal == model, "reveal model reaches the view")
+reach("Result")
+Engine.click("display")
+check(Engine.state.phase == "Result" and #chosen == 0, "choices wait for the result guard")
+Engine.render:Fire(0.4)
+local refreshed = { label = "live" }
+chooser.refresh(refreshed)
+check(Engine.reveal == refreshed, "refresh forwards live affordability to the card")
+Engine.click("display")
+check(Engine.state.phase == "Closing" and #chosen == 0, "choice closes first")
+Engine.render:Fire(0.12)
+Engine.render:Fire(0.12)
+check(
+	#chosen == 1
+		and chosen[1].choice == "display"
+		and chosen[1].id == "echo.feather-hush"
+		and not chosen[1].active
+		and not chosen[1].focused,
+	"choice runs after the opening released focus"
+)
+for _, key in { "B", "A" } do
+	chooser.present(result(), false, nil, model)
+	reach("Result")
+	Engine.render:Fire(0.4)
+	Engine.key(key)
+	Engine.render:Fire(0.12)
+	Engine.render:Fire(0.12)
+	check(not chooser.isActive() and #chosen == 1, key .. " with no selected choice keeps the figure")
+end
+chooser.present(result(), false, nil, model)
+reach("Result")
+chooser.cancel()
+check(#chosen == 1, "reset/cancel during the reveal sends nothing")
+chooser.destroy()
+chooser.refresh(model)
+check(Engine.connections == baseline, "chooser lifetime subscriptions released")
+
 local scope = Scope.create()
 local order = {}
 scope.add(function()

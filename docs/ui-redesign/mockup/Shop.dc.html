@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#4B32C3}a:hover{color:#2B1F4A}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; position: relative; overflow: hidden; background: #CBE5F3; font-family: 'Nunito', sans-serif; color: #2B1F4A">
+<div style="position: absolute; left: 0; top: 430px; width: 1280px; height: 290px; background: #A6CE86"></div>
+<div style="position: absolute; left: 290px; top: 360px; width: 700px; height: 210px; border-radius: 50%; background: #EFDDBD; border-bottom: 16px solid #D2B488; box-sizing: border-box"></div>
+<div style="position: absolute; inset: 0; background: rgba(35, 24, 61, 0.55)"></div>
+
+<div style="position: absolute; left: 112px; top: 14px; display: flex; gap: 10px; align-items: center">
+<button aria-label="12,480 coins, earning 35 per second" style="height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 10px; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 26px; box-shadow: 0 4px 0 #2B1F4A; cursor: pointer; font-family: 'Fredoka', sans-serif">
+<svg width="30" height="30" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"></circle><circle cx="14" cy="14" r="6.5" fill="none" stroke="#C98A00" stroke-width="2.2"></circle></svg>
+<span style="font-size: 24px; font-weight: 600; color: #2B1F4A">12,480</span>
+<span style="font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; color: #1E6B47; background: #DDF3E6; border-radius: 12px; padding: 4px 9px">+35/s</span>
+</button>
+</div>
+
+<section aria-label="Shop" style="position: absolute; left: 64px; top: 84px; width: 1152px; height: 508px; background: #FFFDF9; border: 3px solid #2B1F4A; border-radius: 28px; box-shadow: 0 8px 0 #2B1F4A; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden">
+<div style="height: 76px; flex-shrink: 0; display: flex; align-items: center; gap: 14px; padding: 0 16px 0 18px; border-bottom: 2px solid #ECE5F6">
+<img src="/_blob/9ec00bb0642de8485a672e499d08477b" alt="" style="width: 56px; height: 56px; object-fit: contain">
+<div style="display: flex; flex-direction: column; flex-grow: 1">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 30px; font-weight: 600; line-height: 1.1">Shop</h1>
+<p style="margin: 0; font-size: 14px; font-weight: 700; color: #5C5276">Every box holds one figure from its collection</p>
+</div>
+<a href="Main.dc.html" aria-label="Close Shop" style="width: 48px; height: 48px; border-radius: 24px; background: #2B1F4A; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"></path></svg>
+</a>
+</div>
+
+<div style="flex-grow: 1; display: grid; grid-template-columns: 256px minmax(0, 1fr) 404px; min-height: 0">
+
+<div style="background: #F6F2FC; border-right: 2px solid #ECE5F6; padding: 14px 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12px; font-weight: 900; letter-spacing: 0.08em; color: #5C5276; padding: 0 6px 4px">COLLECTIONS</span>
+<sc-for list="{{cols}}" as="c" hint-placeholder-count="5">
+<button onClick="{{c.pick}}" aria-pressed="{{c.current}}" style="width: 100%; min-height: 62px; display: flex; align-items: center; gap: 12px; padding: 8px 10px; background: {{c.bg}}; border: 3px solid {{c.border}}; border-radius: 16px; text-align: left; font: inherit; color: #2B1F4A; cursor: pointer; box-sizing: border-box">
+<span style="width: 42px; height: 42px; flex-shrink: 0; border-radius: 12px; background: {{c.wash}}; display: flex; align-items: center; justify-content: center; overflow: hidden; font-family: 'Fredoka', sans-serif; font-size: 16px; font-weight: 700; color: {{c.color}}">
+<sc-if value="{{c.hasIcon}}" hint-placeholder-val="{{true}}"><img src="{{c.icon}}" alt="" style="width: 42px; height: 42px; object-fit: cover; mix-blend-mode: multiply"></sc-if>
+<sc-if value="{{c.noIcon}}" hint-placeholder-val="{{false}}">{{c.mono}}</sc-if>
+</span>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0">
+<span style="font-size: 15px; font-weight: 800">{{c.name}}</span>
+<span style="height: 6px; border-radius: 3px; background: #E2DAEF; overflow: hidden; display: block"><span style="display: block; height: 6px; width: {{c.pct}}; background: {{c.color}}"></span></span>
+</span>
+<span style="font-size: 13px; font-weight: 800; color: #5C5276">{{c.label}}</span>
+</button>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px 24px">
+<div style="width: 176px; height: 176px; position: relative; border: 4px solid #2B1F4A; border-radius: 30px; background: {{col.wash}}; box-shadow: 0 6px 0 #2B1F4A; overflow: hidden; display: flex; align-items: center; justify-content: center; box-sizing: border-box">
+<div style="position: absolute; left: 0; top: 0; width: 100%; height: 38px; background: {{col.color}}; border-bottom: 4px solid #2B1F4A"></div>
+<div style="position: absolute; left: 72px; top: 0; width: 24px; height: 100%; background: {{col.color}}; opacity: 0.55"></div>
+<span style="position: relative; margin-top: 30px; width: 84px; height: 84px; border-radius: 42px; background: #FFFFFF; border: 3px solid #2B1F4A; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-size: 52px; font-weight: 700; color: {{col.color}}">?</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+<h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 24px; font-weight: 600">{{col.name}} box</h2>
+<span style="font-size: 14px; font-weight: 700; color: #5C5276">{{col.progress}}</span>
+</div>
+<button style="width: 300px; height: 64px; display: flex; align-items: center; justify-content: center; gap: 12px; background: #FFC83D; border: 3px solid #2B1F4A; border-radius: 20px; box-shadow: 0 5px 0 #2B1F4A; font-family: 'Fredoka', sans-serif; font-size: 24px; font-weight: 600; color: #2B1F4A; cursor: pointer">
+Open 1 box
+<span style="display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 10px; border-radius: 12px; background: #FFFFFF; border: 2px solid #2B1F4A; font-size: 20px">
+<svg width="22" height="22" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"></circle><circle cx="14" cy="14" r="6.5" fill="none" stroke="#C98A00" stroke-width="2.2"></circle></svg>150</span>
+</button>
+<button style="width: 300px; height: 52px; display: flex; align-items: center; justify-content: center; gap: 10px; background: #DDF3E6; border: 3px solid #2B1F4A; border-radius: 18px; font-family: 'Fredoka', sans-serif; font-size: 18px; font-weight: 600; color: #174F36; cursor: pointer">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11.5" rx="2"></rect><path d="M2.5 9h19M12 9v11.5M12 9c-1.5-3.5-6-4.5-6-1.5 0 1.5 3 1.5 6 1.5Zm0 0c1.5-3.5 6-4.5 6-1.5 0 1.5-3 1.5-6 1.5Z"></path></svg>
+Claim today's free box
+</button>
+</div>
+
+<div style="border-left: 2px solid #ECE5F6; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; min-height: 0">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h3 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 20px; font-weight: 600">What's inside</h3>
+<span style="font-size: 13px; font-weight: 800; color: #5C5276">{{col.count}} figures</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="13">
+<div title="{{t.name}}" style="height: 48px; border-radius: 12px; background: {{t.bg}}; border-bottom: 5px solid {{t.rbg}}; display: flex; align-items: center; justify-content: center; overflow: hidden; font-family: 'Fredoka', sans-serif; font-size: 18px; font-weight: 700; color: {{t.fg}}">
+<sc-if value="{{t.hasImg}}" hint-placeholder-val="{{true}}"><img src="{{t.img}}" alt="{{t.name}}" style="width: 48px; height: 48px; object-fit: cover; mix-blend-mode: multiply"></sc-if>
+<sc-if value="{{t.showText}}" hint-placeholder-val="{{false}}">{{t.text}}</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; margin-top: 4px">
+<h3 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 20px; font-weight: 600">Drop odds</h3>
+<span style="font-size: 13px; font-weight: 800; color: #5C5276">per box</span>
+</div>
+<div style="height: 16px; display: flex; border-radius: 8px; overflow: hidden; border: 2px solid #2B1F4A">
+<sc-for list="{{odds}}" as="o" hint-placeholder-count="5"><div style="height: 100%; width: {{o.width}}; background: {{o.bg}}"></div></sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{odds}}" as="o" hint-placeholder-count="5">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 800">
+<span style="width: 12px; height: 12px; border-radius: 4px; background: {{o.bg}}; border: 2px solid #2B1F4A"></span>
+<span style="width: 92px">{{o.name}}</span>
+<span style="flex-grow: 1; color: #5C5276; font-weight: 700">{{o.count}}</span>
+<span style="font-family: 'Fredoka', sans-serif; font-size: 16px; font-weight: 600">{{o.pct}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+</div>
+</section>
+
+<nav aria-label="Main" style="position: absolute; left: 366px; top: 606px; display: flex; gap: 12px">
+<a href="Collection.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/9c1a7ac2fc725a1e7e0e267a09accf10" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Collection</span>
+</a>
+<a href="Display.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/5ebfd00e4ff394c1233bb0cf5c80d2f9" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Display</span>
+<span style="position: absolute; top: -10px; right: -10px; height: 24px; padding: 0 8px; display: flex; align-items: center; border-radius: 12px; background: #6B4EE6; border: 2px solid #2B1F4A; color: #FFFFFF; font-size: 12px; font-weight: 900">1 empty</span>
+</a>
+<a href="Shop.dc.html" aria-current="page" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #EFE8FF; border: 3px solid #6B4EE6; border-radius: 22px; box-shadow: 0 5px 0 #4B32C3; box-sizing: border-box; text-decoration: none; position: relative; transform: translateY(-6px)">
+<img src="/_blob/9ec00bb0642de8485a672e499d08477b" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #4B32C3">Shop</span>
+</a>
+<a href="Goals.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/5439db593011800f0de0a283ae5bc59d" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Goals</span>
+<span style="position: absolute; top: -10px; right: -10px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 13px; background: #D92D46; border: 2px solid #2B1F4A; color: #FFFFFF; font-size: 13px; font-weight: 900; box-sizing: border-box">1</span>
+</a>
+<a href="Shelves.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/6e56e5cac9cca9fe71f359997d9fbce1" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Shelves</span>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+const RS = {
+  Common: { bg: '#B9DECC' },
+  Uncommon: { bg: '#CDBDE6' },
+  Rare: { bg: '#E7B656' },
+  Legendary: { bg: '#A9374C' },
+  Mythical: { bg: '#A44DB4' }
+};
+const ORDER = ['Common', 'Uncommon', 'Rare', 'Legendary', 'Mythical'];
+const COLS = [
+  { name: 'Pocket Grove', color: '#4F8A3F', wash: '#E4F1DA', icon: '/_blob/c7e7dfe8275bb249474386d1cc28569a', mono: 'PG', figs: [
+    ['Pebble Pip', 'Common', 20, 2, '/_blob/e0b6f4069400f5913936f2c3dceb5938'],
+    ['Sprout Scout', 'Common', 20, 1, '/_blob/c7e7dfe8275bb249474386d1cc28569a'],
+    ['Acorn Dot', 'Common', 20, 1, '/_blob/1fa3c9a9173b0080eadd1954f54f5d03'],
+    ['Mallow Cap', 'Uncommon', 15, 1, '/_blob/84735026d0940d80dfaaffe2b44ae905'],
+    ['Moon Moth', 'Uncommon', 15, 2, '/_blob/cddbb280f0771b030531fcf8182780fb'],
+    ['Sunbeam Sprite', 'Rare', 10, 1, '/_blob/ee8ea0a3d4b825245ff52b7f3ae494b8']
+  ] },
+  { name: 'Tidepool Tales', color: '#2F7FA6', wash: '#DCEEF7', icon: '', mono: 'TT', figs: [
+    ['Bubble Bean', 'Common', 20, 1, ''], ['Coral Cuddle', 'Common', 20, 2, ''], ['Shell Scribe', 'Common', 20, 1, ''],
+    ['Jelly Jive', 'Uncommon', 15, 1, ''], ['Ripple Ray', 'Uncommon', 15, 0, ''], ['Pearl Regent', 'Rare', 10, 0, '']
+  ] },
+  { name: 'Concepts', color: '#A84C70', wash: '#F7E1EA', icon: '/_blob/8ccface322384c38b64f84acfb586c92', mono: 'C', figs: [
+    ['Verity', 'Common', 20, 1, '/_blob/8ccface322384c38b64f84acfb586c92'], ['Falsity', 'Uncommon', 15, 0, ''],
+    ['Cruelty', 'Rare', 10, 0, ''], ['Lovity', 'Legendary', 8, 1, '/_blob/6b41a9caf327c2a8f1039ec174b3ffae'],
+    ['Verity True Form', 'Mythical', 3, 0, '']
+  ] },
+  { name: 'Tender Echoes', color: '#C46A2C', wash: '#FCEADB', icon: '/_blob/181aa3c2353cb21bd94991065595cbdb', mono: 'TE', figs: [
+    ['Thread Parade', 'Common', 20, 3, '/_blob/505e8ae450947202a2b2a5007eca8a39'],
+    ['Wander Knit', 'Common', 20, 1, '/_blob/44343135f06c2e37975a1600c113e79a'],
+    ['Dino Drift', 'Common', 20, 2, '/_blob/a6143754a82ce134b1f00beffeaaff1d'],
+    ['Still Pebble', 'Common', 20, 0, '/_blob/3d803025e1d0cd2a9b4800bcb5906201'],
+    ['Hearth Helm', 'Uncommon', 15, 1, '/_blob/abce08ed4d5633e1c5892467c075f73d'],
+    ['Echo Line', 'Uncommon', 15, 0, '/_blob/ca1792653ed3b2f9f582ea7ebea0aa96'],
+    ['Paper Crown', 'Uncommon', 15, 1, '/_blob/7c8986ccf31fc3a99f909eec3e8d87ee'],
+    ['Mask Nuzzle', 'Rare', 10, 1, '/_blob/5c8bd2b2b4094b4e0b2a1db381408e19'],
+    ['Hush Veil', 'Rare', 10, 0, '/_blob/41e8c938c2de615632f91e77e315576b'],
+    ['Crate Spark', 'Rare', 10, 1, '/_blob/07b8f8d111ef6eb718a69dc0b552a107'],
+    ['Feather Hush', 'Legendary', 8, 0, '/_blob/d8168813d27b67585b0bda349a877444'],
+    ['Mumble Beast', 'Legendary', 8, 0, '/_blob/ae5a5689ce962fc82e2c697ec0e68db0'],
+    ['Moon Doze', 'Mythical', 2, 1, '/_blob/88cf2e1b1ed896943f96c2d8cfcc5403']
+  ] },
+  { name: 'We Are All Stars', color: '#4A5BB8', wash: '#E1E5F8', icon: '', mono: 'WS', figs: [
+    ['Reminiscence Star', 'Common', 20, 0, ''], ['Mirrorlight Star', 'Common', 20, 0, ''], ['Wishing Star', 'Common', 20, 0, ''],
+    ['Page Turner Star', 'Common', 20, 0, ''], ['Nightlight Star', 'Uncommon', 15, 0, ''], ['Lamplight Star', 'Uncommon', 15, 0, ''],
+    ['Garden Star', 'Uncommon', 15, 0, ''], ['Sanctuary Star', 'Rare', 10, 0, ''], ['Echo Star', 'Rare', 10, 0, ''],
+    ['Radiant Star', 'Rare', 10, 0, ''], ['Cloud Rest Star', 'Legendary', 8, 0, ''], ['Meteor Shower Star', 'Legendary', 8, 0, ''],
+    ['Dreamcatcher Star', 'Mythical', 2, 0, '']
+  ] }
+];
+class Component extends DCLogic {
+  renderVals() {
+    const sel = this.state && this.state.sel != null ? this.state.sel : 3;
+    const col = COLS[sel];
+    const cols = COLS.map((c, i) => {
+      const found = c.figs.filter((f) => f[3] > 0).length;
+      return {
+        name: c.name, color: c.color, wash: c.wash, icon: c.icon, mono: c.mono,
+        hasIcon: !!c.icon, noIcon: !c.icon,
+        label: found + '/' + c.figs.length,
+        pct: Math.round((found / c.figs.length) * 100) + '%',
+        bg: i === sel ? '#FFFFFF' : 'transparent',
+        border: i === sel ? '#6B4EE6' : 'transparent',
+        current: i === sel ? 'true' : 'false',
+        pick: () => this.setState({ sel: i })
+      };
+    });
+    const found = col.figs.filter((f) => f[3] > 0).length;
+    const left = col.figs.length - found;
+    const total = col.figs.reduce((s, f) => s + f[2], 0);
+    const tiles = col.figs.map((f) => {
+      const own = f[3] > 0;
+      const initials = f[0].split(' ').map((w) => w[0]).join('').slice(0, 2);
+      return {
+        name: own ? f[0] : 'Not found yet',
+        hasImg: own && !!f[4], showText: !(own && f[4]),
+        img: f[4], text: own ? initials : '?',
+        bg: own ? col.wash : '#EDE8F5', fg: own ? col.color : '#6A6080',
+        rbg: RS[f[1]].bg
+      };
+    });
+    const odds = ORDER.filter((r) => col.figs.some((f) => f[1] === r)).map((r) => {
+      const fs = col.figs.filter((f) => f[1] === r);
+      const p = (fs.reduce((s, f) => s + f[2], 0) / total) * 100;
+      return { name: r, bg: RS[r].bg, width: p + '%', pct: p.toFixed(1) + '%', count: fs.length === 1 ? '1 figure' : fs.length + ' figures, ' + (p / fs.length).toFixed(1) + '% each' };
+    });
+    return {
+      cols, tiles, odds,
+      col: {
+        name: col.name, color: col.color, wash: col.wash, count: col.figs.length,
+        progress: left === 0 ? 'Complete! Every figure found' : found + ' of ' + col.figs.length + ' found · ' + left + ' left to discover'
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -82,13 +82,15 @@ Engine.Vector2 = {
 	end,
 }
 -- Enum items compare as their item names, e.g. Enum.Material.Wood == "Wood".
+local enumOverrides = { KeyCode = { E = 1 } }
 Engine.Enum = setmetatable({}, {
-	__index = function(_, _enum)
-		return setmetatable({}, {
-			__index = function(_, item)
-				return item
-			end,
-		})
+	__index = function(_, enum)
+		return enumOverrides[enum]
+			or setmetatable({}, {
+				__index = function(_, item)
+					return item
+				end,
+			})
 	end,
 })
 -- Full rigid-transform CFrames: rotation columns are Right, Up and Back (-Look).
@@ -206,6 +208,7 @@ local function node(class)
 		attrs = {},
 		Destroying = signal(),
 		MouseClick = signal(),
+		Triggered = signal(),
 		dead = false,
 		CanCollide = true,
 		Transparency = 0,

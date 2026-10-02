@@ -33,7 +33,7 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 | OpeningBox / OpeningBoxSource | Production clone validation, normalization, semantic animation handles, bounded content loading and fallback selection |
 | OpeningFallbackBox | Existing procedural emergency carton |
 | OpeningFigure | Existing FigureModel factory, normalized awarded model and reversible silhouette treatment on its own instance |
-| OpeningView | Safe-area UI only: transition curtain, Tap to Open, Skip, result name/rarity/NEW/quantity, Continue |
+| OpeningView | Safe-area UI only: transition curtain, Tap to Open, Skip, hint; the Result panel is the `RevealCard` (see [ui-redesign/IMPLEMENTATION.md](ui-redesign/IMPLEMENTATION.md)) |
 | OpeningAudioConfig | Approved asset slots, seven logical groups, cue gains/priorities/fades, modulation curves and explicit fallbacks |
 | OpeningAudioSequence | Phase/marker cue decisions, rarity rhythms, ducking, intentional silence and once-only reveal/NEW |
 | OpeningAudio | Session-owned non-positional Sound layers, mix envelopes, load deadlines, bounded voices and teardown |
@@ -66,7 +66,7 @@ property mutation is introduced.
 | Impact | 0.38s; flight family retires at contact, short camera/core/ring response, calm from 0.22s (Mythical: 0.17s) |
 | Silhouette | Actual awarded figure rises 0.18 studs into a dark, quiet rarity halo (Mythical holds still); no flight or impact resources remain |
 | Reveal | Colors restore, small upward settle, restrained rotation and camera push; result details fade in |
-| Result | Calm figure idle, low ambient particles, correct metadata and indefinite Continue |
+| Result | Calm figure idle, low ambient particles; the Reveal card (Put on Display/Swap, Open another, Keep) waits indefinitely. Without a Reveal model (Studio fixture) it shows Continue only |
 | Closing / Done | 0.22s dark transition; camera restores at opaque midpoint, then the session releases everything |
 
 The lid cap, top panel and top trim travel together; the lid is not immediately destroyed.

@@ -22,7 +22,7 @@ function OpeningResult.fromReply(
 	if not reply.ok or reply.id ~= request.id or not id or not Catalog.byId[id] then
 		return nil
 	end
-	if request.action ~= "Buy" and request.action ~= "Daily" and request.action ~= "Redeem" then
+	if request.action ~= "Buy" and request.action ~= "Daily" then
 		return nil
 	end
 	local quantity = after.owned[id] or 0
@@ -34,7 +34,7 @@ function OpeningResult.fromReply(
 		figureId = id,
 		isNew = before.discovered[id] ~= true,
 		quantity = quantity,
-		direct = request.action == "Redeem",
+		direct = false,
 	})
 end
 

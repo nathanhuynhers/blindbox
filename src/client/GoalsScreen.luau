@@ -1,123 +1,336 @@
 --!strict
+-- Goals: daily goal | free box of the day | collection progress. The header countdown reads
+-- the server's nextDay and refreshes at most once a minute, only while this screen is visible.
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
-local Context = require(script.Parent.UIContext)
-local Style = require(script.Parent.SystemStyle)
-local Layout = require(script.Parent.SystemLayout)
-local State = require(script.Parent.UIState)
-local CollectionTheme = require(script.Parent.ShopTheme)
-local GoalCard = require(script.Parent.DailyGoalCard)
-local W = require(script.Parent.Widgets)
+local Style = require(script.Parent.UIStyle)
+local Kit = require(script.Parent.UIKit)
 local Icons = require(script.Parent.UIIcons)
+local Badge = require(script.Parent.UIBadge)
+local Button = require(script.Parent.UIButton)
+local Progress = require(script.Parent.UIProgress)
+local State = require(script.Parent.UIState)
+local Context = require(script.Parent.UIContext)
+local Shell = require(script.Parent.ScreenShell)
+local List = require(script.Parent.CollectionList)
 local Goals = {}
-function Goals.create(parent: Instance, ctx: Context.Context): Context.Screen
-	local shell = Style.shell(parent, "Goals", ctx)
-	local root, content = shell.root, shell.content
-	Style.header(content, "Goals", "A little every day. A collection that's yours.", "Goals")
-	local goal = GoalCard.create(content, ctx)
-	local free = Style.panel(content, "DailySurprise", Style.card)
-	local giftSeal = Style.panel(free, "GiftSeal", Style.gold, 20)
-	Style.rect(giftSeal, 12, 12, 52, 52)
-	local gift = Icons.create(giftSeal, "Shop", Style.goldInk)
-	Style.rect(gift, 10, 10, 32, 32)
-	local title = Style.text(free, "DailyBoxTitle", "Your daily surprise", 22, true)
-	title.Position = UDim2.fromOffset(76, 12)
-	title.Size = UDim2.new(1, -88, 0, 56)
-	local status = Style.text(free, "DailyBoxStatus", "Loading your daily box...", 14)
-	W.inset(status, 78, 52)
-	local choices: { { action: W.Action, title: TextLabel, status: TextLabel, face: Frame } } = {}
-	local progressCards: { { root: Frame, status: TextLabel, count: TextLabel, progress: (number, number) -> () } } =
-		{}
-	local collectionHeading =
-		Style.text(content, "CollectionProgressTitle", "Your collection milestones", 22, true)
-	for index, collection in Catalog.collections do
-		local theme = CollectionTheme.get(collection.id)
-		local action = Style.action(free, "", ctx, function()
-			ctx.send("Daily", nil, nil, collection.id)
-		end, true)
-		action.button.Name = "Daily_" .. collection.id
-		action.set("", false)
-		W.inset(action.button, 136 + (index - 1) * 68, 60)
-		local face = Style.panel(action.button, "CollectionChoice", theme.wash, 12)
-		face.Position = UDim2.fromOffset(3, 3)
-		face.Size = UDim2.new(1, -6, 1, -6)
-		local mark = Icons.create(face, "Shop", theme.primary)
-		Style.rect(mark, 10, 12, 28, 28)
-		local name = Style.text(face, "CollectionName", collection.name, 15, true)
-		name.Position = UDim2.fromOffset(48, 2)
-		name.Size = UDim2.new(1, -60, 0, 32)
-		name.TextTruncate = Enum.TextTruncate.AtEnd
-		local hint = Style.text(face, "ActionHint", "Choose this free box", 12)
-		hint.Position = UDim2.fromOffset(48, 32)
-		hint.Size = UDim2.new(1, -60, 0, 20)
-		choices[index] = { action = action, title = name, status = hint, face = face }
-		local card = Style.panel(content, "CollectionProgress_" .. collection.id, Style.card)
-		local bar = W.frame(card, "CollectionAccent", theme.primary)
-		bar.Position = UDim2.fromOffset(0, 14)
-		bar.Size = UDim2.fromOffset(4, 46)
-		W.corner(bar, 2)
-		local collectionTitle = Style.text(card, "CollectionName", collection.name, 18, true)
-		W.inset(collectionTitle, 10, 42)
-		local count = Style.text(card, "DiscoveredCount", "", 14)
-		W.inset(count, 54, 26)
-		local track = W.frame(card, "Progress")
-		W.inset(track, 88, 8)
-		local caption = Style.text(card, "CompletionState", "", 12)
-		W.inset(caption, 102, 22)
-		progressCards[index] = {
-			root = card,
-			count = count,
-			status = caption,
-			progress = Style.progress(track, ctx, theme.primary),
-		}
-	end
-	local function resize()
-		local width = shell.width()
-		local g = Layout.goals(width, #Catalog.collections)
-		Style.rect(goal.root, 0, 110, g.cardWidth, g.heroHeight)
-		Style.rect(free, if g.wide then g.cardWidth + 16 else 0, g.freeY, g.cardWidth, g.freeHeight)
-		Style.rect(collectionHeading, 0, g.progressY, width, 40)
-		for index, card in progressCards do
-			Style.rect(
-				card.root,
-				(index - 1) % g.columns * (g.cell + 12),
-				g.progressY + 48 + math.floor((index - 1) / g.columns) * 142,
-				g.cell,
-				130
-			)
+
+type Choice = { button: TextButton, stroke: UIStroke, id: string }
+type Row = { button: TextButton, name: TextLabel, status: TextLabel, bar: Progress.Bar, id: string }
+
+local function heading(parent: Instance, text: string): TextLabel
+	return Kit.text(parent, "Heading", text, 12, Style.body(Enum.FontWeight.Heavy), Style.muted)
+end
+
+function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number): Context.Screen
+	local shell = Shell.create(parent, ctx, {
+		id = "Goals",
+		title = "Goals",
+		subtitle = "Daily rewards reset at 00:00 UTC",
+	})
+	local root = shell.root
+	local countdown = Badge.create(shell.chips, "Countdown", "", {
+		fill = Style.surface2,
+		color = Style.hex(0x4A4062),
+		height = 40,
+		size = 14,
+		icon = "Clock",
+	})
+	countdown.root.LayoutOrder = 1
+	local body = Kit.canvas(shell.body, "GoalsBody")
+	-- Daily goal
+	local goal = Kit.card(body, "DailyGoal", Style.white, 22, 4)
+	local goalHeading = heading(goal.face, "DAILY GOAL")
+	local goalChip = Badge.create(goal.face, "Status", "", {
+		fill = Style.mint,
+		color = Style.mintInk,
+		height = 26,
+		size = 13,
+	})
+	goalChip.root.AnchorPoint = Vector2.new(1, 0)
+	local goalTitle = Kit.text(
+		goal.face,
+		"GoalTitle",
+		"Display 3 different figures at the same time",
+		22,
+		Style.display()
+	)
+	goalTitle.TextWrapped = true
+	goalTitle.TextYAlignment = Enum.TextYAlignment.Top
+	goalTitle.TextTruncate = Enum.TextTruncate.None
+	local segments = Progress.segments(goal.face, "GoalProgress", 3, 14, 6)
+	local goalCount = Kit.text(goal.face, "GoalCount", "", 18, Style.display())
+	goalCount.TextXAlignment = Enum.TextXAlignment.Right
+	local reward = Kit.frame(goal.face, "Reward", Style.goldWash)
+	Kit.corner(reward, 16)
+	local rewardCoin = Icons.create(reward, "Coin", Style.ink, 56)
+	rewardCoin.AnchorPoint = Vector2.new(0.5, 0)
+	local rewardText = Kit.text(reward, "Amount", "", 26, Style.display())
+	rewardText.TextXAlignment = Enum.TextXAlignment.Center
+	local claim = Button.create(
+		goal.face,
+		"ClaimGoal",
+		{
+			variant = "gold",
+			text = "Claim",
+			size = 22,
+			radius = 18,
+			drop = 4,
+		},
+		ctx.scope,
+		ctx.effects,
+		function()
+			ctx.send("Goal", nil, nil, nil)
 		end
-		shell.fit(g.height)
+	)
+	-- Free box
+	local free = Kit.card(body, "FreeBox", Style.white, 22, 4)
+	local freeHeading = heading(free.face, "FREE BOX OF THE DAY")
+	local freeChip = Badge.create(free.face, "Status", "", {
+		fill = Style.readyWash,
+		color = Style.readyInk,
+		height = 26,
+		size = 13,
+	})
+	freeChip.root.AnchorPoint = Vector2.new(1, 0)
+	local freeTitle = Kit.text(free.face, "FreeTitle", "", 22, Style.display())
+	local chosen: string? = nil
+	local refresh: () -> () = function() end
+	local choices: { Choice } = {}
+	for index, collection in Catalog.collections do
+		local button = Instance.new("TextButton")
+		button.Name = "Daily_" .. collection.id
+		button.Text = ""
+		button.AutoButtonColor = false
+		button.BackgroundColor3 = Style.white
+		button.LayoutOrder = index
+		button.Parent = free.face
+		Kit.corner(button, 14)
+		local stroke = Kit.stroke(button, Style.track)
+		local icon = List.icon(button, collection.id, collection.name, 30)
+		icon.Position = UDim2.fromOffset(6, 7)
+		local label =
+			Kit.text(button, "Name", Style.collection(collection.id).short or collection.name, 14)
+		Kit.rect(label, 44, 0, 120, 44)
+		label.Size = UDim2.new(1, -50, 1, 0)
+		ctx.scope.connect(button.Activated, function()
+			chosen = collection.id
+			refresh()
+		end)
+		choices[index] = { button = button, stroke = stroke, id = collection.id }
 	end
-	ctx.scope.connect(root:GetPropertyChangedSignal("AbsoluteSize"), resize)
-	resize()
+	local open = Button.create(
+		free.face,
+		"OpenFreeBox",
+		{
+			variant = "mint",
+			text = "Open free box",
+			size = 20,
+			radius = 18,
+			drop = 4,
+		},
+		ctx.scope,
+		ctx.effects,
+		function()
+			if chosen then
+				ctx.send("Daily", nil, nil, chosen)
+			end
+		end
+	)
+	-- Collection progress
+	local progress = Kit.frame(body, "CollectionProgress", Style.surface2)
+	Kit.corner(progress, 22)
+	local progressTitle =
+		Kit.text(progress, "Title", "Complete your collections", 20, Style.display())
+	local progressTotal = Kit.text(progress, "Total", "", 13, nil, Style.muted)
+	progressTotal.TextXAlignment = Enum.TextXAlignment.Right
+	local rows: { Row } = {}
+	for index, collection in Catalog.collections do
+		local button = Instance.new("TextButton")
+		button.Name = "Progress_" .. collection.id
+		button.Text = ""
+		button.AutoButtonColor = false
+		button.BackgroundColor3 = Style.white
+		button.LayoutOrder = index
+		button.Parent = progress
+		Kit.corner(button, 16)
+		Kit.stroke(button, Style.track, Style.outlineSmall)
+		local icon = List.icon(button, collection.id, collection.name, 38)
+		icon.Position = UDim2.fromOffset(10, 8)
+		local name = Kit.text(button, "Name", collection.name, 15)
+		local status = Kit.text(button, "Status", "", 15)
+		status.TextXAlignment = Enum.TextXAlignment.Right
+		local bar = Progress.bar(button, "Progress", 8, Style.collection(collection.id).color)
+		ctx.scope.connect(button.Activated, function()
+			ctx.navigate("Collection", { collection = collection.id })
+		end)
+		rows[index] =
+			{ button = button, name = name, status = status, bar = bar, id = collection.id }
+	end
+	local width, height, phone = 0, 0, false
+	local function arrange()
+		local pad = if phone then 12 else 20
+		local gap = if phone then 10 else 16
+		local column = State.cells(width - pad * 2, 3, gap)
+		local cardHeight = math.max(if phone then 330 else 360, height - 38)
+		local top = 16
+		Kit.rect(goal.root, pad, top, column, cardHeight)
+		Kit.rect(free.root, pad + column + gap, top, column, cardHeight)
+		Kit.rect(progress, pad + (column + gap) * 2, top, column, cardHeight)
+		local inner = column - 36
+		-- Goal card
+		Kit.rect(goalHeading, 18, 18, inner - 110, 26)
+		goalChip.root.Position = UDim2.fromOffset(18 + inner, 18)
+		Kit.rect(goalTitle, 18, 54, inner, 56)
+		goalTitle.TextSize = if phone then 18 else 22
+		Kit.rect(segments.root, 18, 120, inner - 60, 14)
+		Kit.rect(goalCount, 18 + inner - 52, 112, 52, 30)
+		local claimY = cardHeight - 18 - 60
+		Kit.rect(reward, 18, 148, inner, math.max(80, claimY - 12 - 148))
+		rewardCoin.Position = UDim2.new(0.5, 0, 0.5, -46)
+		Kit.rect(rewardText, 0, 0, inner, 32)
+		rewardText.Position = UDim2.new(0, 0, 0.5, 14)
+		Kit.rect(claim.button, 18, claimY, inner, 60)
+		-- Free box card
+		Kit.rect(freeHeading, 18, 18, inner - 90, 26)
+		freeChip.root.Position = UDim2.fromOffset(18 + inner, 18)
+		Kit.rect(freeTitle, 18, 54, inner, 30)
+		local half = State.cells(inner, 2, 8)
+		for index, choice in choices do
+			local col, line = (index - 1) % 2, (index - 1) // 2
+			Kit.rect(choice.button, 18 + col * (half + 8), 94 + line * 52, half, 44)
+		end
+		Kit.rect(open.button, 18, cardHeight - 18 - 64, inner, 64)
+		-- Progress list
+		local pinner = column - 32
+		Kit.rect(progressTitle, 16, 16, pinner - 60, 26)
+		progressTitle.TextSize = if phone then 17 else 20
+		Kit.rect(progressTotal, 16 + pinner - 60, 16, 60, 26)
+		for index, row in rows do
+			Kit.rect(row.button, 16, 52 + (index - 1) * 62, pinner, 54)
+			Kit.rect(row.name, 60, 8, pinner - 60 - 90, 20)
+			Kit.rect(row.status, pinner - 100, 8, 88, 20)
+			Kit.rect(row.bar.root, 60, 34, pinner - 72, 8)
+		end
+		body.CanvasSize = UDim2.fromOffset(0, top + cardHeight + 22)
+	end
+	local timer: thread? = nil
+	local visible = false
+	local remaining = ""
+	local function stop()
+		if timer then
+			task.cancel(timer)
+			timer = nil
+		end
+	end
+	ctx.scope.add(stop)
+	local function tick()
+		timer = nil
+		local snapshot = ctx.snapshot()
+		if not visible or not snapshot then
+			return
+		end
+		local text, delay = State.countdown(snapshot.nextDay, now())
+		remaining = text
+		countdown.set("New goals in " .. text)
+		timer = task.delay(delay, tick)
+		refresh()
+	end
+	local function update(snapshot: Types.Snapshot)
+		shell.update(snapshot)
+		if visible and not timer then
+			-- First snapshot after the screen opened: start the minute clock.
+			tick()
+			return
+		end
+		local state = State.goal(snapshot)
+		local done = math.clamp(snapshot.goalProgress, 0, 3)
+		local amount = State.compact(State.goalReward(snapshot))
+		goalChip.set(
+			if state == "progress"
+				then done .. " / 3"
+				elseif state == "ready" then "Complete"
+				else "Claimed"
+		)
+		goalChip.paint(
+			if state == "progress" then Style.surface2 else Style.mint,
+			if state == "progress" then Style.muted else Style.mintInk
+		)
+		segments.set(done)
+		goalCount.Text = done .. " / 3"
+		rewardText.Text = amount .. " coins"
+		claim.set(
+			if state == "claimed"
+				then "Claimed · come back tomorrow"
+				else "Claim " .. amount .. " coins",
+			state == "ready" and ctx.canAct(),
+			if state == "progress"
+				then "Display " .. (3 - done) .. " more different figures"
+				else nil
+		)
+		local options = State.freeBoxOptions(snapshot)
+		if not chosen or not table.find(options, chosen) then
+			chosen = options[1]
+		end
+		local single = #options == 1
+		freeTitle.Text = if single
+			then State.collectionName(options[1]) .. " box"
+			else "Pick any collection"
+		for _, choice in choices do
+			local allowed = table.find(options, choice.id) ~= nil
+			choice.button.Visible = allowed and not single
+			local on = choice.id == chosen
+			choice.button.BackgroundColor3 = if on then Style.violetWash else Style.white
+			choice.stroke.Color = if on then Style.violet else Style.track
+			choice.button:SetAttribute("Selected", on)
+		end
+		freeChip.set(if snapshot.dailyReady then "Ready" else "Claimed")
+		freeChip.paint(
+			if snapshot.dailyReady then Style.readyWash else Style.mint,
+			if snapshot.dailyReady then Style.readyInk else Style.mintInk
+		)
+		local chosenName = if chosen then State.collectionName(chosen) else ""
+		open.set(
+			if snapshot.dailyReady then "Open free box" else "Claimed for today",
+			snapshot.dailyReady and chosen ~= nil and ctx.canAct(),
+			if snapshot.dailyReady then chosenName else "Next in " .. remaining
+		)
+		local found, total = State.totalCompletion(snapshot)
+		progressTotal.Text = found .. " / " .. total
+		for _, row in rows do
+			local f, t = State.completion(snapshot, row.id)
+			local complete = f >= t and t > 0
+			row.status.Text = if complete then "Complete!" else f .. " / " .. t
+			row.status.TextColor3 = if complete then Style.mintText else Style.muted
+			row.bar.set(f, t)
+		end
+	end
+	refresh = function()
+		local snapshot = ctx.snapshot()
+		if snapshot then
+			update(snapshot)
+		end
+	end
 	return {
 		root = root,
-		update = function(snapshot: Types.Snapshot)
-			goal.update(snapshot)
-			status.Text = if snapshot.dailyReady
-				then "One free box. Choose the collection you'd love to open."
-				else "Collected for today. Your next box arrives at 00:00 UTC."
-			status.TextColor3 = if snapshot.dailyReady then Style.ink else Style.success
-			for index, collection in Catalog.collections do
-				local choice = choices[index]
-				choice.action.set("", ctx.canAct() and snapshot.dailyReady)
-				choice.status.Text = if snapshot.dailyReady
-					then (if ctx.canAct() then "Choose this free box" else "Please wait...")
-					else "Available tomorrow"
-				choice.face.BackgroundColor3 = if snapshot.dailyReady
-					then CollectionTheme.get(collection.id).wash
-					else Style.paper
-				local found, total = State.completion(snapshot, collection.id)
-				local card = progressCards[index]
-				card.count.Text = string.format("%d / %d discovered", found, total)
-				card.status.Text = if total > 0 and found == total
-					then "\u{2713}  Collection complete"
-					else "Every discovery brings you closer"
-				card.status.TextColor3 = if found == total then Style.success else Style.muted
-				card.root:SetAttribute("Complete", total > 0 and found == total)
-				card.progress(found, total)
+		update = update,
+		layout = function(nextWidth: number, nextHeight: number, nextPhone: boolean)
+			phone = nextPhone
+			width, height = shell.layout(nextWidth, nextHeight, nextPhone)
+			arrange()
+			refresh()
+		end,
+		shown = function(value: boolean)
+			if visible == value then
+				return
+			end
+			visible = value
+			stop()
+			if value then
+				tick()
 			end
 		end,
 	}
 end
+
 return Goals

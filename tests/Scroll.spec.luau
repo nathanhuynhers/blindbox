@@ -25,4 +25,12 @@ size.fire()
 assert(frame.CanvasSize.Y.Offset == 516, "resize/filter recalculates height")
 stop()
 assert(content.count() == 0 and size.count() == 0, "connections cleaned up")
-print("PASS: 4 scrolling sizing/lifecycle checks (engine properties/signals stubbed)")
+local scaled = { CanvasSize = { Y = { Offset = 0 } }, GetPropertyChangedSignal = function() return size end }
+local ratio = 1.5
+local stopScaled = Scroll.bind(scaled, layout, 8, function() return ratio end)
+assert(scaled.CanvasSize.Y.Offset == math.ceil(500 / 1.5 + 16), "UIScale: canvas uses design units, not pixels")
+ratio = 2
+size.fire()
+assert(scaled.CanvasSize.Y.Offset == 266, "scale change re-measures the canvas")
+stopScaled()
+print("PASS: 6 scrolling sizing/lifecycle checks (engine properties/signals stubbed)")
