@@ -14,60 +14,59 @@ end
 local function request(action: string, revision: number, choice: string?, figure: string?, slot: number?): Types.Intent
 	return { action = action, id = tostring(revision) .. action, revision = revision, choice = choice, figure = figure, slot = slot }
 end
-local state = Rules.new(0)
-check(Rules.roll(0,"tide") == "tide.bubble" and Rules.roll(0.9,"tide") == "tide.pearl", "collection rolls isolated")
-check(not Rules.mutate(state,request("Expand",0),0,10) and state.coins==450, "expansion affordability")
-state.coins=10000
-check(Rules.mutate(state,request("Expand",0),0,10), "expand")
-check(state.display.unlocked==4 and #state.display.slots==4 and state.coins==6000, "single bounded expansion")
-check(not Rules.mutate(state,request("Expand",1),0,10) and state.coins==6000, "expansion cannot charge twice")
-check(Rules.mutate(state,request("Daily",4,"tide"),0.99,10), "daily claim")
-check(state.owned["tide.pearl"]==1 and state.coins==6000 and state.lastDailyDay==10, "daily marker and grant together")
-check(not Rules.mutate(state,request("Daily",5,"grove"),0,10), "daily choice cannot bypass limit")
-local restored=Profile.decode(Profile.encode(state),200)
-assert(restored)
-check(not Rules.mutate(restored,request("Daily",0,"grove"),0,10), "reconnect cannot reclaim")
-check(not Rules.mutate(restored,request("Daily",0,"grove"),0,9), "clock rollback cannot reclaim")
-check(Rules.mutate(restored,request("Daily",0,"grove"),0,11), "next UTC day eligible")
-local full=Rules.new(0); full.owned["grove.pebble"]=200; full.discovered["grove.pebble"]=true
-check(not Rules.mutate(full,request("Daily",0,"grove"),0,20) and full.lastDailyDay==-1, "full inventory preserves claim")
-local distinct={"grove.pebble","grove.sprout","grove.acorn"}
-for slot,id in distinct do restored.owned[id]=1; restored.discovered[id]=true; restored.display.slots[slot]=id end
-Rules.refreshDay(restored,11)
-check(restored.goalProgress==3 and Rules.bonus(restored)==1, "distinct themed shelf and goal")
-local before=restored.coins
-check(Rules.mutate(restored,request("Goal",restored.revision),0,11) and restored.coins==before+Economy.goalReward, "goal reward")
-check(not Rules.mutate(restored,request("Goal",restored.revision),0,11), "goal cannot repeat")
-Rules.refreshDay(restored,12)
-check(not restored.goalClaimed and restored.goalProgress==3, "new day resets goal claim")
-local duplicates=Rules.new(0); duplicates.owned["grove.star"]=3; duplicates.display.slots={"grove.star","grove.star","grove.star"}
-check(Rules.bonus(duplicates)==0 and Rules.rate(duplicates)==21, "duplicates have no themed bonus")
+local state=Rules.new(0)
+check(not Rules.mutate(state,request("Expand",0),0,10),"expansion affordability")
+state.coins=4440000
+for slot=4,6 do
+ check(Rules.mutate(state,request("Expand",state.revision),0,10),"sequential slot purchase")
+ check(state.display.unlocked==slot and #state.display.slots==slot,"dense unlocked slots")
+end
+check(state.coins==0 and not Rules.mutate(state,request("Expand",state.revision),0,10),"six-slot bound")
+local restored=Rules.new(0)
+restored.owned["grove.pebble"]=2000
+restored.discovered["grove.pebble"]=true
+restored.display.slots[1]="grove.pebble"
+restored.pityByGroup.echo={legendaryDryRolls=99,mythicalDryRolls=500}
 local encoded=Profile.encode(restored)
 local loaded=Profile.decode(encoded,10000)
-assert(loaded)
-check(loaded.coins==restored.coins and loaded.display.unlocked==4 and loaded.lastDailyDay==11, "profile round trip")
-check(loaded.time==10000 and loaded.fraction==0 and loaded.revision==0, "runtime data not persisted")
-encoded.owned["grove.pebble"]=99
-check(restored.owned["grove.pebble"]==1, "save snapshot owns copies")
-for _,field in {"coins","scrap","step","unlocked","lastDailyDay","goalDay","goalProgress"} do
-	for _,bad in {0/0,math.huge,-999,1.25} do
-		local corrupt = Profile.encode(restored) :: unknown
-		(corrupt :: { [string]: unknown })[field]=bad
-		check(Profile.decode(corrupt,0)==nil,"reject corrupt numeric "..field)
-	end
+check(loaded and loaded.owned["grove.pebble"]==2000 and loaded.pityByGroup.echo.mythicalDryRolls==500,"quantity and pity round trip")
+encoded.pityByGroup.echo.mythicalDryRolls=0
+check(restored.pityByGroup.echo.mythicalDryRolls==500,"pity snapshot deep copy")
+for _, field in {"coins","step","lastDailyDay","goalDay","goalProgress"} do
+ for _, bad in {0/0,math.huge,-999,1.25} do
+  local corrupt=Profile.encode(restored);corrupt[field]=bad
+  check(Profile.decode(corrupt,0)==nil,"invalid numeric field")
+ end
 end
-local corrupt=Profile.encode(restored); corrupt.schemaVersion=999
-check(Profile.decode(corrupt,0)==nil,"future schema blocked")
-corrupt=Profile.encode(restored); corrupt.owned["unknown"]=1
-check(Profile.decode(corrupt,0)==nil,"unknown inventory ID blocked")
-corrupt=Profile.encode(restored); corrupt.display.slots[1]="tide.ray"
-check(Profile.decode(corrupt,0)==nil,"unowned reservation blocked")
-corrupt=Profile.encode(restored); corrupt.goalProgress=0; corrupt.goalClaimed=true
-check(Profile.decode(corrupt,0)==nil,"invalid goal claim blocked")
-local legacy: { [string]: unknown } = {schemaVersion=1,coins=123,scrap=2,step=3,owned={ ["grove.pebble"]=1 },discovered={ ["grove.pebble"]=true },slots={"grove.pebble","",""}}
-local migrated=Profile.decode(legacy,90)
-check(migrated~=nil and migrated.coins==123 and migrated.display.unlocked==3 and migrated.lastDailyDay==-1,"version-one migration preserves facts")
-check(legacy.schemaVersion==1,"migration does not mutate input")
+for _, mutate in {
+ function(s) s.pityByGroup.echo.legendaryDryRolls=0/0 end,
+ function(s) s.pityByGroup.echo.mythicalDryRolls=-1 end,
+ function(s) s.pityByGroup.echo.extra=true end,
+ function(s) s.pityByGroup.foreign={legendaryDryRolls=0,mythicalDryRolls=0} end,
+ function(s) s.owned["unknown"]=1 end,
+ function(s) s.display.slots[2]="grove.pebble" end,
+ function(s) s.display.slots[2]="tide.ray" end,
+ function(s) s.display.slots[2]=nil end,
+ function(s) s.scrap=0 end,
+ function(s) s.schemaVersion=5 end,
+ function(s) s.schemaVersion=7 end,
+ function(s) s.goalClaimed=true; s.goalProgress=0 end,
+} do
+ local corrupt=Profile.encode(restored);mutate(corrupt)
+ check(Profile.decode(corrupt,0)==nil,"invalid profile fails closed")
+end
+check(Rules.mutate(restored,request("Daily",0,"grove"),0,10),"daily claim")
+check(not Rules.mutate(restored,request("Daily",0,"grove"),0,9),"daily clock rollback")
+local again=Profile.decode(Profile.encode(restored),100)
+check(not Rules.mutate(again,request("Daily",0,"grove"),0,10),"rejoin cannot reclaim")
+check(Rules.mutate(again,request("Daily",0,"grove"),0,11),"next UTC day")
+for slot,id in {"grove.pebble","grove.sprout","grove.acorn"} do
+ restored.owned[id]=1;restored.discovered[id]=true;restored.display.slots[slot]=id
+end
+Rules.refreshDay(restored,20)
+local before=restored.coins
+check(Rules.mutate(restored,request("Goal",0),0,20) and restored.coins==before+Economy.goalReward,"daily goal")
+check(not Rules.mutate(restored,request("Goal",0),0,20),"goal once")
 local database: { [string]: unknown }={}
 local calls=0
 local function update(key: string,transform: (unknown)->unknown): unknown
@@ -80,7 +79,7 @@ local function update(key: string,transform: (unknown)->unknown): unknown
 end
 local handle, original=Persistence.load(update,"p","server-a",100,0)
 assert(handle and original)
-check(original.coins==450,"new persisted profile gets starter once")
+check(original.coins==4500,"new persisted profile gets starter once")
 local other=Persistence.load(update,"p","server-b",101,0)
 check(other==nil,"active lease prevents competing server")
 local ownRetry=Persistence.load(update,"p","server-a",102,0)
@@ -98,14 +97,14 @@ local uncertain: Persistence.Update=function(key,transform)
 	if not thrown then thrown=true; error("reply lost after commit") end
 	return result
 end
-original.scrap=6
+original.pityByGroup.echo={legendaryDryRolls=70,mythicalDryRolls=400}
 local snapshot=Profile.encode(original)
 check(not Persistence.save(uncertain,handle,snapshot,112,false),"unknown save outcome")
 check(Persistence.save(uncertain,handle,snapshot,113,false) and handle.generation==2,"uncertain save recovered without duplicate generation")
 check(Persistence.save(update,handle,snapshot,114,true),"release saves and unlocks")
 local newHandle,rejoined=Persistence.load(update,"p","server-b",115,900)
 assert(newHandle and rejoined)
-check(rejoined.coins==300 and rejoined.scrap==6,"rejoin restores, no extra starter")
+check(rejoined.coins==300 and rejoined.pityByGroup.echo.mythicalDryRolls==400,"rejoin restores, no extra starter")
 check(not Persistence.save(update,handle,snapshot,116,false),"old owner cannot overwrite new owner")
 local takeover=Persistence.load(update,"p","server-c",236,0)
 assert(takeover)
@@ -114,11 +113,11 @@ database["broken"]={foo="bar"}
 check(Persistence.load(update,"broken","server-a",200,0)==nil,"corrupt stored record blocked")
 check((database["broken"] :: {foo:string}).foo=="bar","corrupt data preserved")
 local active=Transactions.new(0)
-active.state.coins=10000
+active.state.coins=100000
 local expansion=request("Expand",0)
 local first=Transactions.process(active,expansion,0,true,0,50)
 local repeated=Transactions.process(active,expansion,1,true,0,50)
-check(first~=nil and first==repeated and active.state.coins==6000,"expansion replay safe")
+check(first~=nil and first==repeated and active.state.coins==60000,"expansion replay safe")
 check(Protocol.parse({action="Theme",id="x",revision=0,choice="fake"})==nil,"unknown cosmetic rejected")
 check(Protocol.parse({action="Daily",id="x",revision=0,choice="fake"})==nil,"unknown daily box rejected")
 check(Protocol.parse({action="Goal",id="x",revision=0,choice="grove"})==nil,"extra goal field rejected")
@@ -135,7 +134,7 @@ end
 check(Persistence.load(lostAcquire, "uncertain", "new-token", 300, 0) == nil, "uncertain acquisition is not playable")
 local recovered, acquiredState = Persistence.load(lostAcquire, "uncertain", "new-token", 301, 0)
 assert(recovered and acquiredState)
-check(acquiredState.coins == 450, "acquisition retry does not double starter grant")
+check(acquiredState.coins == 4500, "acquisition retry does not double starter grant")
 local releaseLost = false
 local uncertainRelease: Persistence.Update = function(key, transform)
 	local result = update(key, transform)

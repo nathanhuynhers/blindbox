@@ -16,7 +16,7 @@ modules = {
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "CollectionAssets": "client",
     "Types": "shared", "Catalog": "shared", "Economy": "server",
-    "Rules": "server", "Protocol": "server", "Transactions": "server",
+    "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
     "OpeningAudioConfig": "client", "OpeningAudioSequence": "client",
@@ -140,9 +140,9 @@ if result.returncode:
     raise SystemExit(result.returncode)
 fixtures = [
     ('id = "grove.pebble"', 'id = "unknown"', "Invalid economy reference"),
-    ('weight = 20', 'weight = 0', "Invalid rate/weight"),
-    ('rate = 1,', 'rate = 8,', "Rate outside rarity band"),
-    ('price = 150', 'price = -1', "Invalid economy bound"),
+    ('weight = 1', 'weight = 0', "Invalid income units/weight"),
+    ('units = 0.55,', 'units = 8,', "Duplicate ceiling violates rarity order"),
+    ('price = 1500', 'price = -1', "Invalid tier price"),
 ]
 for index, (old, new, expected) in enumerate(fixtures):
     fixture = out / f"invalid-{index}"

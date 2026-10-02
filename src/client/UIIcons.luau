@@ -45,9 +45,6 @@ function Icons.create(parent: Instance, name: string, color: Color3): Frame
 		local tick = Icons.create(root, "Check", Color3.fromRGB(236, 231, 243))
 		tick.Size = UDim2.fromScale(0.58, 0.58)
 		tick.Position = UDim2.fromScale(0.21, 0.28)
-	elseif name == "Scrap" then
-		shape(0.12, 0.1, 0.65, 0.29, false, -8)
-		shape(0.28, 0.49, 0.58, 0.33, false, 12)
 	elseif name == "Shelves" then
 		shape(0.12, 0.1, 0.32, 0.32, true)
 		shape(0.57, 0.1, 0.32, 0.32, true)

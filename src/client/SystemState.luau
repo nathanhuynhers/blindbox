@@ -21,16 +21,18 @@ function State.display(
 ): Slot
 	local id = snapshot.slots[slot] or ""
 	local locked = slot > snapshot.unlocked
-	local purchase = locked and slot == 4 and DisplayConfig.unlockMethods[slot] == "LegacyCoins"
+	local purchase = locked
+		and slot == snapshot.unlocked + 1
+		and DisplayConfig.unlockMethods[slot] == "Coins"
 	local action, enabled = if id == "" then "Choose figure" else "Change figure", canAct
 	if locked then
-		action = if purchase then "Unlock slot" else "Coming later"
+		action = if purchase then "Unlock slot" else "Unlock previous slot"
 		enabled = canAct and purchase and snapshot.coins >= snapshot.expansionCost
 	elseif selected then
 		local _, free = UI.copies(snapshot, selected)
 		action = if selected == id
 			then "Displayed here"
-			elseif free == 0 then "No spare copies"
+			elseif free == 0 then "Already displayed or unowned"
 			else "Place here"
 		enabled = canAct and free > 0 and selected ~= id
 	end

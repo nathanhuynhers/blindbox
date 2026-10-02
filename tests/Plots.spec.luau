@@ -694,6 +694,7 @@ check(
 )
 local firstFigure, thirdFigure = plot.display.models["1"], plot.display.models["3"]
 local created = Engine.figureCreates
+local incomeBeforeExpansion = Rules.rate(state)
 for capacity = 3, 6 do
 	state.display.unlocked = capacity
 	if capacity > 3 then
@@ -702,7 +703,7 @@ for capacity = 3, 6 do
 	local profileBefore = Profile.encode(state)
 	Plot.render(plot, state)
 	check(same(Profile.encode(state), profileBefore), "layout never mutates persisted state")
-	check(Rules.rate(state) == 14.5, "unchanged Display income across capacity layout")
+	check(Rules.rate(state) == incomeBeforeExpansion, "unchanged Display income across capacity layout")
 	check(
 		count(plot.display.anchors) == capacity,
 		"exact unlocked figure positions at capacity " .. capacity
@@ -757,7 +758,7 @@ for capacity = 3, 6 do
 		)
 	end
 	check(
-		plot.fixture.rate.Text == "14.5 Coins/sec",
+		plot.fixture.rate.Text == string.format("%g Coins/sec", Rules.rate(state)),
 		"sign reads server-computed Display rate including fractions"
 	)
 	local sum = 0
@@ -813,7 +814,7 @@ Fixture.setRate(plot.fixture, 2)
 check(plot.fixture.rate.Text == "2 Coins/sec", "reference sign wording at matching actual income")
 Plot.render(plot, state)
 check(
-	plot.fixture.rate.Text == "14.5 Coins/sec",
+	plot.fixture.rate.Text == string.format("%g Coins/sec", Rules.rate(state)),
 	"live render restores authoritative income, not a hard-coded concept price"
 )
 for _, node in Engine.nodes do
@@ -1122,7 +1123,7 @@ check(
 	"250 owned units still render three structures and at most 27 figures"
 )
 check(
-	#other.shelves.parent:GetChildren() == 0 and otherState.coins == 450,
+	#other.shelves.parent:GetChildren() == 0 and otherState.coins == 4500,
 	"other owner's state stays isolated"
 )
 Plot.destroy(other)

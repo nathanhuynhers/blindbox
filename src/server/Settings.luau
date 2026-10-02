@@ -2,6 +2,7 @@
 return table.freeze({
 	-- Enable only in a privately published Studio test place with API services enabled.
 	studioPersistence = false,
-	studioStore = "PocketGrove_Studio_v1",
-	liveStore = "PocketGrove_Live_v1",
+	-- Authorized economy reset: old stores are never read or overwritten.
+	studioStore = "BlindBox_Economy2_Studio",
+	liveStore = "BlindBox_Economy2_Live",
 })

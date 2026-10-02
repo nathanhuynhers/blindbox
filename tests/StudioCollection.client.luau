@@ -138,10 +138,9 @@ local badgeRow = detailsScroll:WaitForChild("BadgeRow") :: Frame
 local selectedDefinition = Catalog.byId[figureId]
 assert(badgeRow.Visible, "Rarity must remain visible for undiscovered figures")
 assert(string.find(figureStats.Text, "Pull chance", 1, true), "Details must show pull chance")
-local secondary = detailsScroll:WaitForChild("SecondaryActions") :: Frame
 assert(
-	secondary:FindFirstChild("Recycle") and secondary:FindFirstChild("Redeem"),
-	"Secondary actions must share one deliberate row"
+	not detailsScroll:FindFirstChild("SecondaryActions"),
+	"Retired Scrap actions must be absent"
 )
 local grid = book:WaitForChild("FigureGrid") :: ScrollingFrame
 local selected = grid:FindFirstChild(figureId) :: TextButton

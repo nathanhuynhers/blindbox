@@ -1,84 +1,26 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
-local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
-local Economy = require(script.Parent.Economy)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
-local Rules = {}
+local Economy = require(script.Parent.Economy)
+local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
-local rates: { [string]: number } = {}
-local odds: { [string]: number } = {}
-local totalWeights: { [string]: number } = {}
-for _, collection in Catalog.collections do
-	totalWeights[collection.id] = 0
-end
-for _, value in
-	{
-		Economy.startingCoins,
-		Economy.price,
-		Economy.redeemCost,
-		Economy.capacity,
-		Economy.coinLimit,
-		Economy.scrapLimit,
-		Economy.expansionCost,
-		Economy.goalReward,
-		Economy.setBonus,
-	}
-do
-	assert(value > 0 and value < math.huge and value % 1 == 0, "Invalid economy bound")
-end
-local bands: { [string]: { number } } = { Common = { 1, 2 }, Uncommon = { 3, 4 }, Rare = { 6, 8 } }
-for _, entry in Economy.entries do
-	assert(Catalog.byId[entry.id] and not rates[entry.id], "Invalid economy reference")
-	assert(
-		entry.rate > 0 and entry.rate < math.huge and entry.weight > 0 and entry.weight < math.huge,
-		"Invalid rate/weight"
-	)
-	local band = bands[Catalog.byId[entry.id].rarity]
-	assert(Rarity.isValid(Catalog.byId[entry.id].rarity), "Invalid rarity")
-	-- Existing tuned bands stay enforced. Future tiers require explicit per-figure rates,
-	-- validated below against the canonical hierarchy; no rates or weights are synthesized.
-	assert(
-		not band or (entry.rate >= band[1] and entry.rate <= band[2]),
-		"Rate outside rarity band"
-	)
-	rates[entry.id] = entry.rate
-	local collection = Catalog.byId[entry.id].collection
-	totalWeights[collection] += entry.weight
-end
-local lowerMaximum = 0
-for _, rarity in Rarity.order do
-	local minimum, maximum = math.huge, 0
-	for _, entry in Economy.entries do
-		if Catalog.byId[entry.id].rarity == rarity then
-			minimum, maximum = math.min(minimum, entry.rate), math.max(maximum, entry.rate)
-		end
-	end
-	assert(minimum > lowerMaximum, "Rate violates rarity order")
-	lowerMaximum = math.max(lowerMaximum, maximum)
-end
-for _, totalWeight in totalWeights do
-	assert(totalWeight > 0 and totalWeight < math.huge, "Invalid collection weight total")
-end
-for _, entry in Economy.entries do
-	odds[entry.id] = entry.weight / totalWeights[Catalog.byId[entry.id].collection] * 100
-end
-for _, figure in Catalog.figures do
-	assert(rates[figure.id], "Missing rate")
-end
-Rules.rates = rates
-Rules.odds = odds
+local Rules = {
+	rates = CollectionEconomy.rates,
+	odds = CollectionEconomy.odds({}),
+	prices = CollectionEconomy.prices,
+}
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 5,
+		schemaVersion = 6,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
+		pityByGroup = {},
 		lastDailyDay = -1,
 		goalDay = -1,
 		goalProgress = 0,
 		goalClaimed = false,
 		coins = Economy.startingCoins,
-		scrap = 0,
 		owned = {},
 		discovered = {},
 		revision = 0,
@@ -86,6 +28,17 @@ function Rules.new(now: number): Types.State
 		time = now,
 		step = 1,
 	}
+end
+function Rules.figureRate(state: Types.State, id: string): number
+	local base = Rules.rates[id]
+	return if base then base * CollectionEconomy.multiplier(id, state.owned[id] or 0) else 0
+end
+local function subtotal(state: Types.State): number
+	local rate = 0
+	for _, id in state.display.slots do
+		rate += Rules.figureRate(state, id)
+	end
+	return rate
 end
 function Rules.bonus(state: Types.State): number
 	local distinct: { [string]: boolean } = {}
@@ -99,16 +52,14 @@ function Rules.bonus(state: Types.State): number
 	end
 	for _, count in counts do
 		if count >= 3 then
-			return Economy.setBonus
+			return subtotal(state) * Economy.setBonus
 		end
 	end
 	return 0
 end
 function Rules.refreshDay(state: Types.State, day: number)
 	if day > state.goalDay then
-		state.goalDay = day
-		state.goalProgress = 0
-		state.goalClaimed = false
+		state.goalDay, state.goalProgress, state.goalClaimed = day, 0, false
 	end
 	local unique: { [string]: boolean } = {}
 	local count = 0
@@ -121,11 +72,7 @@ function Rules.refreshDay(state: Types.State, day: number)
 	state.goalProgress = math.max(state.goalProgress, math.min(3, count))
 end
 function Rules.rate(state: Types.State): number
-	local rate = 0
-	for _, id in state.display.slots do
-		rate += rates[id] or 0
-	end
-	return rate + Rules.bonus(state)
+	return subtotal(state) + Rules.bonus(state)
 end
 function Rules.settle(state: Types.State, now: number)
 	local elapsed = math.max(0, now - state.time)
@@ -134,33 +81,26 @@ function Rules.settle(state: Types.State, now: number)
 	local whole = math.floor(earned)
 	state.coins = math.min(Economy.coinLimit, state.coins + whole)
 	state.fraction = if state.coins == Economy.coinLimit then 0 else earned - whole
-	if state.step == 3 and state.coins >= Economy.price then
+	if state.step == 3 and state.coins >= Rules.prices[Economy.dailyCollection] then
 		state.step = 4
 	end
 end
+-- Available earning placement, not the quantity of spare copies.
 function Rules.available(state: Types.State, id: string): number
-	local count = state.owned[id] or 0
-	for _, placed in state.display.slots do
-		if placed == id then
-			count -= 1
-		end
+	if (state.owned[id] or 0) == 0 or table.find(state.display.slots, id) then
+		return 0
 	end
-	return count
+	return 1
 end
-function Rules.roll(value: number, collection: string?): string
-	assert(value >= 0 and value < 1, "Roll must be in [0, 1)")
-	local choice = collection or "grove"
-	assert(totalWeights[choice], "Unknown collection")
-	local cursor = value * totalWeights[choice]
-	for _, entry in Economy.entries do
-		if Catalog.byId[entry.id].collection == choice then
-			cursor -= entry.weight
-			if cursor < 0 then
-				return entry.id
-			end
-		end
-	end
-	error("Invalid roll weights")
+function Rules.roll(value: number, collection: string?, state: Types.State?): string
+	return CollectionEconomy.roll(
+		value,
+		collection or Economy.dailyCollection,
+		if state then state.pityByGroup else {}
+	)
+end
+function Rules.expansionCost(state: Types.State): number
+	return Economy.expansionCosts[state.display.unlocked + 1] or 0
 end
 function Rules.mutate(
 	state: Types.State,
@@ -171,66 +111,59 @@ function Rules.mutate(
 	local action, id = intent.action, intent.figure or ""
 	local today = day or 0
 	Rules.refreshDay(state, today)
-	if action == "Buy" or action == "Redeem" or action == "Daily" then
-		local count = 0
-		for _, quantity in state.owned do
-			count += quantity
+	if action == "Buy" or action == "Daily" then
+		local collection = intent.choice or Economy.dailyCollection
+		local price = Rules.prices[collection]
+		if not price then
+			return false, "Unknown collection.", nil
 		end
-		if count >= Economy.capacity then
-			return false,
-				string.format("Inventory full (%d). Recycle an extra copy.", Economy.capacity),
-				nil
-		end
-		if action == "Buy" or action == "Daily" then
-			if intent.choice and not totalWeights[intent.choice] then
-				return false, "Unknown collection.", nil
+		if action == "Daily" then
+			if collection ~= Economy.dailyCollection then
+				return false, "Your daily free box is a Starter box.", nil
 			end
-			if action == "Daily" and state.lastDailyDay >= today then
+			if state.lastDailyDay >= today then
 				return false, "Come back after the next daily reset.", nil
 			end
-			if action == "Buy" and state.coins < Economy.price then
-				return false, "Not enough Coins yet.", nil
+		elseif state.coins < price then
+			return false, "Not enough Coins yet.", nil
+		end
+		-- Validate the whole pool before rolling. Safety limits never reroll a result.
+		for _, figure in Catalog.figures do
+			if
+				figure.collection == collection
+				and (state.owned[figure.id] or 0) >= Economy.copyLimit
+			then
+				return false, "Collection quantity safety limit reached.", nil
 			end
-			id = Rules.roll(roll, intent.choice)
-			if action == "Buy" then
-				state.coins -= Economy.price
-			else
-				state.lastDailyDay = today
-			end
+		end
+		id = Rules.roll(roll, collection, state)
+		if action == "Buy" then
+			state.coins -= price
 		else
-			if not rates[id] then
-				return false, "Unknown figure.", nil
-			end
-			if state.scrap < Economy.redeemCost then
-				return false, string.format("You need %d Scrap.", Economy.redeemCost), nil
-			end
-			state.scrap -= Economy.redeemCost
+			state.lastDailyDay = today
 		end
 		local isNew = not state.discovered[id]
 		state.owned[id] = (state.owned[id] or 0) + 1
 		state.discovered[id] = true
+		CollectionEconomy.advance(state.pityByGroup, collection, id)
 		if state.step == 1 then
 			state.step = 2
 		elseif state.step == 4 and action == "Buy" then
 			state.step = 5
 		end
 		state.revision += 1
-		return true, if isNew then "New discovery!" else "Another copy for your collection!", id
+		return true, if isNew then "New discovery!" else "Duplicate bonus increased!", id
 	elseif action == "Expand" then
-		if DisplayConfig.unlockMethods[4] ~= "LegacyCoins" then
-			return false, "That Display unlock is unavailable.", nil
+		local cost = Rules.expansionCost(state)
+		if cost == 0 or state.display.unlocked >= DisplayConfig.maxSlots then
+			return false, "All Display slots are unlocked.", nil
 		end
-		if state.display.unlocked >= 4 then
-			return false, "The fourth Display slot is already unlocked.", nil
+		if state.coins < cost then
+			return false, string.format("You need %d Coins for the next slot.", cost), nil
 		end
-		if state.coins < Economy.expansionCost then
-			return false,
-				string.format("You need %d Coins for a fourth slot.", Economy.expansionCost),
-				nil
-		end
-		state.coins -= Economy.expansionCost
-		state.display.unlocked = 4
-		state.display.slots[4] = ""
+		state.coins -= cost
+		state.display.unlocked += 1
+		state.display.slots[state.display.unlocked] = ""
 	elseif action == "Goal" then
 		if state.goalClaimed or state.goalProgress < 3 then
 			return false, "Display three distinct figures to earn today's reward.", nil
@@ -240,15 +173,6 @@ function Rules.mutate(
 		end
 		state.goalClaimed = true
 		state.coins += Economy.goalReward
-	elseif action == "Recycle" then
-		if (state.owned[id] or 0) < 2 or Rules.available(state, id) < 1 then
-			return false, "Keep one copy; displayed copies cannot be recycled.", nil
-		end
-		if state.scrap >= Economy.scrapLimit then
-			return false, "Scrap safety limit reached.", nil
-		end
-		state.owned[id] -= 1
-		state.scrap += 1
 	elseif action == "Place" or action == "Remove" then
 		local slot = intent.slot
 		if
@@ -261,14 +185,11 @@ function Rules.mutate(
 			return false, "Unknown or locked Display slot.", nil
 		end
 		if action == "Place" then
-			if not rates[id] then
+			if not Rules.rates[id] then
 				return false, "Unknown figure.", nil
 			end
-			if state.display.slots[slot] == id then
-				return false, "That figure is already in this slot.", nil
-			end
-			if Rules.available(state, id) < 1 then
-				return false, "No undisplayed copy available.", nil
+			if Rules.available(state, id) == 0 then
+				return false, "Own this figure and display it only once.", nil
 			end
 			state.display.slots[slot] = id
 			if state.step == 2 then

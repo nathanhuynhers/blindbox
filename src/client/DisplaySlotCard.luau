@@ -82,7 +82,7 @@ function Card.create(parent: Instance, ctx: Context.Context, slot: number, choos
 			rate.Text = if state.locked
 				then (if state.available
 					then UI.number(snapshot.expansionCost) .. " Coins"
-					else "Coming later")
+					else "Unlock the previous slot first")
 				elseif state.id ~= "" then string.format("+%g Coins/sec", state.rate)
 				else "Choose a figure to earn Coins"
 			rate.TextColor3 = if not state.locked and state.id ~= ""

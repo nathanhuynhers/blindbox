@@ -63,7 +63,6 @@ table.insert(
 			local feedback = {
 				Place = "Figure displayed",
 				Remove = "Figure removed",
-				Recycle = "+1 Scrap",
 				Expand = "Display slot unlocked",
 				Goal = "Daily reward claimed",
 			}

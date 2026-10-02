@@ -95,12 +95,17 @@ function Goals.create(parent: Instance, ctx: Context.Context): Context.Screen
 		update = function(snapshot: Types.Snapshot)
 			goal.update(snapshot)
 			status.Text = if snapshot.dailyReady
-				then "One free box. Choose the collection you'd love to open."
+				then "One free Starter box each day."
 				else "Collected for today. Your next box arrives at 00:00 UTC."
 			status.TextColor3 = if snapshot.dailyReady then Style.ink else Style.success
 			for index, collection in Catalog.collections do
 				local choice = choices[index]
-				choice.action.set("", ctx.canAct() and snapshot.dailyReady)
+				local eligible = collection.id == snapshot.dailyCollection
+				choice.action.button.Visible = eligible
+				if eligible then
+					W.inset(choice.action.button, 136, 60)
+				end
+				choice.action.set("", ctx.canAct() and snapshot.dailyReady and eligible)
 				choice.status.Text = if snapshot.dailyReady
 					then (if ctx.canAct() then "Choose this free box" else "Please wait...")
 					else "Available tomorrow"
