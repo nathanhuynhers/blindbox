@@ -5,7 +5,7 @@ local Box = require(ReplicatedStorage.Shared.BlindBoxModel)
 local Catalog = require(ReplicatedStorage.Shared.Catalog)
 local Skin = require(script.Parent.BlindBoxSkin)
 local Scope = require(script.Parent.UIScope)
-local W = require(script.Parent.Widgets)
+local W = require(script.Parent.UIKit)
 local Preview = {}
 export type Preview = { root: Frame, set: (string) -> () }
 

@@ -1,4 +1,6 @@
 --!strict
+-- Owns the client UI tree: HUD, dock, the world dim, the five screens and gamepad routing.
+-- Screens never mutate state; they request intents through ctx.send and render snapshots.
 local Players = game:GetService("Players")
 local GuiService = game:GetService("GuiService")
 local Input = game:GetService("UserInputService")
@@ -6,14 +8,14 @@ local Actions = game:GetService("ContextActionService")
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Scope = require(script.Parent.UIScope)
 local Context = require(script.Parent.UIContext)
-local Theme = require(script.Parent.UITheme)
+local Style = require(script.Parent.UIStyle)
+local Kit = require(script.Parent.UIKit)
 local Layout = require(script.Parent.UILayout)
-local Icons = require(script.Parent.UIIcons)
-local W = require(script.Parent.Widgets)
+local State = require(script.Parent.UIState)
+local Navigation = require(script.Parent.NavigationConfig)
 local Hud = require(script.Parent.Hud)
-local Navigation = require(script.Parent.Navigation)
+local Dock = require(script.Parent.Dock)
 local Notifications = require(script.Parent.Notifications)
-local BackgroundTreatment = require(script.Parent.BackgroundTreatment)
 local Collection = require(script.Parent.CollectionScreen)
 local Shop = require(script.Parent.ShopScreen)
 local Display = require(script.Parent.DisplayScreen)
@@ -24,51 +26,74 @@ export type Interface = {
 	update: (Types.Snapshot) -> (),
 	message: (string, string?) -> (),
 	effects: () -> boolean,
-	selectAcquired: (string) -> (),
 	openingFocus: (boolean) -> (),
 	pending: (boolean) -> (),
 	destroy: () -> (),
 }
+
+local function gamepad(): boolean
+	return string.find(Input:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
+end
+
 function Interface.create(send: (string, string?, number?, string?) -> ()): Interface
 	local scope = Scope.create()
 	local snapshot: Types.Snapshot? = nil
 	local effects, focused, pending, opened, destroyed = true, false, false, false, false
 	local current = "Collection"
-	local targetSlot: number? = nil
 	local blockedStatus: string? = nil
 	local previewShown = false
+	local scale = 1
+	local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
 	local gui = Instance.new("ScreenGui")
 	gui.Name = "PocketGrove"
 	gui.ResetOnSpawn = false
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	gui.ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets
-	gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
-	local bounds = W.frame(gui, "SafeArea")
-	local background = BackgroundTreatment.create(bounds, scope)
-	local shade = background.overlay
-	local pagesRoot = W.frame(bounds, "Screens")
-	local controls = W.frame(bounds, "ScreenControls")
-	controls.ZIndex = 5
-	controls.Size = UDim2.fromOffset(154, 44)
-	local hosts: { [string]: Frame } = {}
-	for _, id in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
-		local host = W.frame(pagesRoot, id .. "Presentation")
-		host.SelectionGroup = true
-		host.Active = true
-		host:SetAttribute("Presentation", true)
-		hosts[id] = host
-		if id ~= "Collection" and id ~= "Shop" then
-			local shadow = W.frame(host, "Shadow", Theme.shadow)
-			shadow.Position = UDim2.fromOffset(0, 6)
-			shadow.BackgroundTransparency = 0.84
-			W.corner(shadow, 18)
+	-- Device-safe (notches) but under the top bar; the HUD reads TopbarInset to sit beside it.
+	gui.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
+	gui.Parent = playerGui
+	local bounds = Kit.frame(gui, "SafeArea")
+	local stage = Kit.frame(bounds, "Stage")
+	local uiScale = Instance.new("UIScale")
+	uiScale.Parent = stage
+	-- One violet ring for gamepad selection everywhere.
+	local ring = Instance.new("Frame")
+	ring.Name = "SelectionRing"
+	ring.BackgroundTransparency = 1
+	ring.Size = UDim2.fromScale(1, 1)
+	Kit.corner(ring, 16)
+	Kit.stroke(ring, Style.violet, 4)
+	local previousRing = playerGui.SelectionImageObject
+	playerGui.SelectionImageObject = ring
+	scope.add(function()
+		if playerGui.SelectionImageObject == ring then
+			playerGui.SelectionImageObject = previousRing
 		end
+		ring:Destroy()
+	end)
+	local dim = Instance.new("TextButton")
+	dim.Name = "Backdrop"
+	dim.Text = ""
+	dim.AutoButtonColor = false
+	dim.BorderSizePixel = 0
+	dim.BackgroundColor3 = Style.dim
+	dim.BackgroundTransparency = Style.dimTransparency
+	dim.Selectable = false
+	dim.Modal = true
+	dim.Visible = false
+	dim.Size = UDim2.fromScale(1, 1)
+	dim.Parent = stage
+	local screensRoot = Kit.frame(stage, "Screens")
+	screensRoot.ZIndex = 10
+	local hosts: { [string]: Frame } = {}
+	for _, id in Navigation.pages do
+		local host = Kit.frame(screensRoot, id .. "Presentation")
+		host.SelectionGroup = true
+		host.Visible = false
+		hosts[id] = host
 	end
-	local notices = Notifications.create(bounds, scope)
-	local navigate: (string) -> () = function() end
-	local inspect: (string) -> () = function() end
-	local place: (string) -> () = function() end
-	local pick: (number) -> () = function() end
+	local notices = Notifications.create(stage, scope)
+	local navigate: (string, Context.Route?) -> () = function() end
+	local close: () -> () = function() end
 	local function canAct(): boolean
 		return snapshot ~= nil and snapshot.ready and not pending and not focused and not destroyed
 	end
@@ -76,6 +101,9 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 		scope = scope,
 		effects = function()
 			return effects
+		end,
+		scale = function()
+			return scale
 		end,
 		snapshot = function()
 			return snapshot
@@ -86,217 +114,166 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 				send(action, figure, slot, choice)
 			end
 		end,
-		navigate = function(page)
-			navigate(page)
+		navigate = function(page, route)
+			navigate(page, route)
 		end,
-		inspect = function(id)
-			inspect(id)
-		end,
-		place = function(id)
-			place(id)
-		end,
-		pick = function(slot)
-			pick(slot)
+		close = function()
+			close()
 		end,
 		message = function(text)
 			notices.show(text, "info")
 		end,
 	}
-	local collection = Collection.create(hosts.Collection, ctx)
-	local display = Display.create(hosts.Display, ctx)
-	local pages: { [string]: Context.Screen } = {
-		Collection = { root = collection.root, update = collection.update, back = collection.back },
-		Display = { root = display.root, update = display.update },
+	local now = function()
+		return workspace:GetServerTimeNow()
+	end
+	local screens: { [string]: Context.Screen } = {
+		Collection = Collection.create(hosts.Collection, ctx),
+		Display = Display.create(hosts.Display, ctx),
 		Shop = Shop.create(hosts.Shop, ctx),
-		Goals = Goals.create(hosts.Goals, ctx),
+		Goals = Goals.create(hosts.Goals, ctx, now),
 		Shelves = Shelves.create(hosts.Shelves, ctx),
 	}
-	local hud = Hud.create(bounds, ctx)
-	local refresh: () -> () = function() end
-	local resize: () -> () = function() end
-	local selectPage: () -> () = function() end
-	local nav = Navigation.create(bounds, ctx, function(id)
+	local hud = Hud.create(stage, ctx, function(value: boolean)
+		effects = value
+	end)
+	local dock = Dock.create(stage, ctx, function(id)
 		if opened and current == id then
-			opened = false
-			targetSlot = nil
-			resize()
-			refresh()
-			selectPage()
+			close()
 		else
-			if id == "Collection" then
-				collection.showBook()
-			end
 			navigate(id)
 		end
 	end)
-	local close = W.action(controls, "", scope, ctx.effects, function()
-		opened = false
-		targetSlot = nil
-		resize()
-		refresh()
-		selectPage()
-	end, true)
-	close.button.Name = "CloseMenu"
-	close.button.Size = UDim2.fromOffset(44, 44)
-	close.button.Position = UDim2.fromOffset(110, 0)
-	local closeIcon = Icons.create(close.button, "Close", Theme.ink)
-	closeIcon.Position = UDim2.fromOffset(10, 10)
-	local motion: W.Action? = nil
-	motion = W.action(controls, "Motion: on", scope, ctx.effects, function()
-		effects = not effects
-		if motion then
-			motion.set(if effects then "Motion: on" else "Motion: low", true, not effects)
-		end
-	end, true)
-	assert(motion, "Motion control was not created")
-	motion.button.Name = "MotionPreference"
-	motion.button.Size = UDim2.fromOffset(96, 44)
-	motion.button.Position = UDim2.fromOffset(6, 0)
-	local nextStep = W.action(bounds, "Find your first box", scope, ctx.effects, function()
-		navigate(if snapshot and snapshot.step == 2 then "Collection" else "Shop")
-	end)
-	nextStep.button.Name = "NextStep"
-	nextStep.button.AnchorPoint = Vector2.new(0.5, 1)
-	nextStep.button.Position = UDim2.new(0.5, 0, 1, -84)
-	nextStep.button.Size = UDim2.new(0.8, 0, 0, 48)
-	local stepLimit = Instance.new("UISizeConstraint")
-	stepLimit.MaxSize = Vector2.new(320, 48)
-	stepLimit.Parent = nextStep.button
-	local function gamepad(): boolean
-		return string.find(Input:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
-	end
-	selectPage = function()
-		if gamepad() then
-			GuiService.SelectedObject = if opened then close.button else nav.actions[current].button
-		end
-	end
-	resize = function()
-		local size = bounds.AbsoluteSize
-		local desktop = Layout.desktop(size.X, size.Y, Input.TouchEnabled)
-		for id, host in hosts do
-			local rect = Layout.screen(id, size.X, size.Y, desktop)
-			host.Position = UDim2.fromOffset(rect.x, rect.y)
-			host.Size = UDim2.fromOffset(rect.width, rect.height)
-			host.Visible = opened and current == id
-		end
-		pagesRoot.Visible = opened
-		controls.Visible = opened
-		local active = hosts[current]
-		-- Short/touch layouts reserve a separate top row so controls never overlap currency.
-		controls.Position = UDim2.fromOffset(size.X - 166, if size.X < 480 then 8 else 10)
-		hud.root.Visible = not opened or size.X >= 480
-		if current == "Collection" and opened then
-			controls.Size = UDim2.fromOffset(44, 44)
-			controls.Position = UDim2.fromOffset(
-				active.Position.X.Offset + active.Size.X.Offset - 44,
-				math.max(8, active.Position.Y.Offset - 22)
-			)
-			close.button.Position = UDim2.fromOffset(0, 0)
-			motion.button.Visible = false
-			hud.root.Visible = true
-		else
-			controls.Size = UDim2.fromOffset(154, 44)
-			close.button.Position = UDim2.fromOffset(110, 0)
-			motion.button.Visible = true
-		end
-		if opened and current == "Shop" then
-			background.set({
-				color = Color3.fromRGB(73, 52, 38),
-				transparency = 0.62,
-				blur = 8,
-			})
-		elseif opened and current == "Collection" then
-			background.set({ color = Theme.shadow, transparency = 0.72, blur = 0 })
-		elseif opened then
-			background.set({ color = Color3.fromRGB(53, 49, 57), transparency = 0.76, blur = 3 })
-		else
-			background.set(nil)
-		end
-		nav.layout(size, desktop)
-		nav.root.Visible = not opened or size.Y >= 420
-		nextStep.button.Position = UDim2.new(0.5, 0, 1, if desktop then -24 else -80)
-		notices.root.Position = UDim2.new(
-			0.5,
-			if desktop then 48 else 0,
-			1,
-			if opened and size.Y < 420 then -12 elseif desktop then -16 else -76
-		)
-		notices.root.Size =
-			UDim2.new(1, if desktop then -180 else -32, 0, notices.root.Size.Y.Offset)
-		active:SetAttribute("SlotPicker", if targetSlot then targetSlot else nil)
-	end
-	refresh = function()
-		for id, page in pages do
-			page.root.Visible = current == id
-		end
-		local state = snapshot
-		nav.set(if opened then current else nil, state ~= nil and state.dailyReady)
-		nextStep.button.Visible = not opened and state ~= nil and state.ready and state.step <= 2
-		if state then
-			hud.update(state)
-			if not state.ready and blockedStatus ~= state.saveStatus then
-				notices.show(state.saveStatus, "error")
-			elseif
-				state.ready
-				and not previewShown
-				and string.find(string.lower(state.saveStatus), "preview", 1, true)
-			then
-				previewShown = true
-				notices.show(state.saveStatus, "info")
-			end
-			blockedStatus = if state.ready then nil else state.saveStatus
-			nextStep.set(
-				if state.step == 2 then "Display your first figure" else "Find your first box",
-				true
-			)
-			for _, page in pages do
-				page.update(state)
-			end
-		end
-	end
-	navigate = function(id: string)
-		if focused or not pages[id] then
+	local frame: Layout.Frame? = nil
+	local laidOut: { [string]: string } = {}
+	local function layoutScreen(id: string)
+		local geometry = frame
+		if not geometry then
 			return
 		end
-		if id ~= "Collection" then
-			targetSlot = nil
+		local panel = geometry.panel
+		local key = `{panel.width}:{panel.height}:{geometry.phone}`
+		if laidOut[id] ~= key then
+			laidOut[id] = key
+			screens[id].layout(panel.width, panel.height, geometry.phone)
 		end
+	end
+	local function selectPage()
+		if not gamepad() then
+			return
+		end
+		local host = hosts[current]
+		GuiService.SelectedObject = if opened
+			then host:FindFirstChild("Close", true) :: GuiObject?
+			else dock.tiles[current]
+	end
+	local function resize()
+		local size = bounds.AbsoluteSize
+		local inset = GuiService.TopbarInset
+		local origin = bounds.AbsolutePosition
+		local right = if inset.Max.X > inset.Min.X then inset.Max.X - origin.X else size.X
+		local geometry = Layout.frame(size.X, size.Y, {
+			left = math.max(0, inset.Min.X - origin.X),
+			right = right,
+		})
+		frame = geometry
+		scale = geometry.scale
+		uiScale.Scale = scale
+		stage.Size = UDim2.fromScale(1 / scale, 1 / scale)
+		dim.Visible = opened
+		hud.layout(geometry, opened)
+		dock.layout(geometry.dock, geometry.phone)
+		dock.root.Visible = not opened or geometry.dockWhileOpen
+		local panel = geometry.panel
+		for id, host in hosts do
+			Kit.rect(host, panel.x, panel.y, panel.width, panel.height)
+			host.Visible = opened and current == id
+		end
+		if opened then
+			layoutScreen(current)
+		end
+		local toastWidth = math.min(520, geometry.width - 32)
+		local bottom = if opened and not geometry.dockWhileOpen
+			then geometry.panel.y + geometry.panel.height - 12
+			else geometry.dock.y - 12
+		notices.place(geometry.width / 2, bottom, toastWidth)
+	end
+	local function refresh()
+		local state = snapshot
+		dock.set(if opened then current else nil, if state then State.badges(state) else nil)
+		if not state then
+			return
+		end
+		hud.update(state)
+		if not state.ready and blockedStatus ~= state.saveStatus then
+			notices.show(state.saveStatus, "error")
+		elseif
+			state.ready
+			and not previewShown
+			and string.find(string.lower(state.saveStatus), "preview", 1, true)
+		then
+			previewShown = true
+			notices.show(state.saveStatus, "info")
+		end
+		blockedStatus = if state.ready then nil else state.saveStatus
+		-- Only the visible screen renders snapshots; others refresh when they open.
+		if opened then
+			screens[current].update(state)
+		end
+	end
+	local function show(id: string, value: boolean)
+		local shown = screens[id].shown
+		if shown then
+			shown(value)
+		end
+	end
+	navigate = function(id: string, route: Context.Route?)
+		if focused or not screens[id] then
+			return
+		end
+		if opened and current ~= id then
+			show(current, false)
+		end
+		local wasOpen = opened and current == id
 		current = id
 		opened = true
+		hud.menu.set(false)
+		resize()
+		local screen = screens[id]
+		if screen.route then
+			screen.route(route)
+		end
+		refresh()
+		if not wasOpen then
+			show(id, true)
+		end
+		selectPage()
+	end
+	close = function()
+		if not opened then
+			return
+		end
+		show(current, false)
+		opened = false
 		resize()
 		refresh()
 		selectPage()
-	end
-	inspect = function(id: string)
-		collection.inspect(id)
-	end
-	place = function(id: string)
-		if targetSlot then
-			ctx.send("Place", id, targetSlot, nil)
-			targetSlot = nil
-			display.select(nil)
-		else
-			display.select(id)
-		end
-		navigate("Display")
-	end
-	pick = function(slot: number)
-		targetSlot = slot
-		collection.showBook(true)
-		navigate("Collection")
 	end
 	local function back()
-		local page = pages[current]
-		if not (page.back and page.back()) then
-			opened = false
-			targetSlot = nil
+		if hud.menu.open() then
+			hud.menu.set(false)
+			return
 		end
-		resize()
-		refresh()
-		selectPage()
+		local screenBack = screens[current].back
+		if opened and screenBack and screenBack() then
+			return
+		end
+		close()
 	end
-	scope.connect(shade.Activated, back)
+	scope.connect(dim.Activated, back)
 	scope.connect(bounds:GetPropertyChangedSignal("AbsoluteSize"), resize)
+	scope.connect(GuiService:GetPropertyChangedSignal("TopbarInset"), resize)
+	-- Keep the gamepad selection inside its scroller (CanvasPosition is in design units).
 	scope.connect(GuiService:GetPropertyChangedSignal("SelectedObject"), function()
 		local selected = GuiService.SelectedObject
 		if not selected or not selected:IsDescendantOf(gui) then
@@ -304,39 +281,22 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 		end
 		local ancestor = selected.Parent
 		while ancestor and ancestor ~= gui do
-			if ancestor:IsA("ScrollingFrame") then
-				local nextX, nextY = ancestor.CanvasPosition.X, ancestor.CanvasPosition.Y
-				if ancestor.ScrollingDirection ~= Enum.ScrollingDirection.Y then
-					local left = selected.AbsolutePosition.X - ancestor.AbsolutePosition.X
-					local right = left + selected.AbsoluteSize.X
-					local shift = if left < 4
-						then left - 4
-						elseif right > ancestor.AbsoluteWindowSize.X - 4 then right
-							- ancestor.AbsoluteWindowSize.X
-							+ 4
-						else 0
-					nextX = math.clamp(
-						nextX + shift,
-						0,
-						math.max(0, ancestor.AbsoluteCanvasSize.X - ancestor.AbsoluteWindowSize.X)
-					)
-				end
-				if ancestor.ScrollingDirection ~= Enum.ScrollingDirection.X then
-					local top = selected.AbsolutePosition.Y - ancestor.AbsolutePosition.Y
-					local bottom = top + selected.AbsoluteSize.Y
-					local shift = if top < 4
-						then top - 4
-						elseif bottom > ancestor.AbsoluteWindowSize.Y - 4 then bottom
-							- ancestor.AbsoluteWindowSize.Y
-							+ 4
-						else 0
-					nextY = math.clamp(
-						nextY + shift,
-						0,
-						math.max(0, ancestor.AbsoluteCanvasSize.Y - ancestor.AbsoluteWindowSize.Y)
-					)
-				end
-				ancestor.CanvasPosition = Vector2.new(nextX, nextY)
+			if
+				ancestor:IsA("ScrollingFrame")
+				and ancestor.ScrollingDirection ~= Enum.ScrollingDirection.X
+			then
+				local top = selected.AbsolutePosition.Y - ancestor.AbsolutePosition.Y
+				local bottom = top + selected.AbsoluteSize.Y
+				local window = ancestor.AbsoluteWindowSize.Y
+				local shift = if top < 4
+					then top - 4
+					elseif bottom > window - 4 then bottom - window + 4
+					else 0
+				local limit = math.max(0, ancestor.CanvasSize.Y.Offset - window / scale)
+				ancestor.CanvasPosition = Vector2.new(
+					ancestor.CanvasPosition.X,
+					math.clamp(ancestor.CanvasPosition.Y + shift / scale, 0, limit)
+				)
 				break
 			end
 			ancestor = ancestor.Parent
@@ -348,35 +308,27 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 			if focused then
 				return Enum.ContextActionResult.Pass
 			end
-			if not opened and input.KeyCode ~= Enum.KeyCode.ButtonY then
+			local key = input.KeyCode
+			local menuOpen = hud.menu.open()
+			if not opened and not menuOpen and key ~= Enum.KeyCode.ButtonY then
 				return Enum.ContextActionResult.Pass
 			end
 			if inputState == Enum.UserInputState.Begin then
-				if input.KeyCode == Enum.KeyCode.ButtonY then
+				if key == Enum.KeyCode.ButtonY then
 					if opened then
-						back()
+						close()
 					else
 						navigate(current)
 					end
-				elseif opened and input.KeyCode == Enum.KeyCode.ButtonB then
+				elseif key == Enum.KeyCode.ButtonB then
 					back()
 				elseif opened then
 					local index = table.find(Navigation.pages, current) or 1
-					navigate(
-						Navigation.pages[(index - 1 + (if input.KeyCode
-								== Enum.KeyCode.ButtonR1
-							then 1
-							else -1)) % #Navigation.pages + 1]
-					)
-				else
-					return Enum.ContextActionResult.Pass
+					local step = if key == Enum.KeyCode.ButtonR1 then 1 else -1
+					navigate(Navigation.pages[(index - 1 + step) % #Navigation.pages + 1])
 				end
 			end
-			return if opened
-					or input.KeyCode == Enum.KeyCode.ButtonY
-					or input.KeyCode == Enum.KeyCode.ButtonB
-				then Enum.ContextActionResult.Sink
-				else Enum.ContextActionResult.Pass
+			return Enum.ContextActionResult.Sink
 		end,
 		false,
 		2000,
@@ -401,23 +353,19 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 			pending = value
 			refresh()
 		end,
-		selectAcquired = function(id: string)
-			collection.selectAcquired(id)
-			-- The opening captures/restores this selection; keep it on the visible screen.
-			selectPage()
-		end,
 		openingFocus = function(value: boolean)
 			focused = value
 			gui.Enabled = not value
-			if value then
-				background.set(nil)
-			else
+			if not value then
 				resize()
 			end
 			refresh()
 		end,
 		destroy = function()
 			destroyed = true
+			if opened then
+				show(current, false)
+			end
 			scope.destroy()
 			local selected = GuiService.SelectedObject
 			if selected and selected:IsDescendantOf(gui) then

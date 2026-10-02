@@ -1,153 +1,187 @@
 --!strict
+-- Display: total income chip, set-bonus banner, six slot cards and the picker drawer.
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
-local Config = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
+local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
+local Style = require(script.Parent.UIStyle)
+local Kit = require(script.Parent.UIKit)
+local Icons = require(script.Parent.UIIcons)
+local Badge = require(script.Parent.UIBadge)
+local State = require(script.Parent.UIState)
 local Context = require(script.Parent.UIContext)
-local Style = require(script.Parent.SystemStyle)
-local Layout = require(script.Parent.SystemLayout)
-local State = require(script.Parent.SystemState)
-local UI = require(script.Parent.UIState)
-local W = require(script.Parent.Widgets)
-local Preview = require(script.Parent.UIPreview)
-local Slot = require(script.Parent.DisplaySlotCard)
+local Shell = require(script.Parent.ScreenShell)
+local SlotCard = require(script.Parent.DisplaySlot)
+local Picker = require(script.Parent.DisplayPicker)
 local Display = {}
-function Display.create(parent: Instance, ctx: Context.Context)
-	local shell = Style.shell(parent, "Display", ctx)
-	local root, content = shell.root, shell.content
-	local header = W.frame(content, "ShowcaseHeader")
-	Style.header(
-		header,
-		"My Display",
-		"Your favorites, earning around the clock while you play.",
-		"Display"
-	)
-	local incomeCard = Style.panel(header, "IncomePlaque", Style.successWash)
-	local income = Style.text(incomeCard, "TotalIncome", "-- Coins/sec", 28, true)
-	W.inset(income, 6, 40)
-	income.TextColor3 = Style.success
-	local capacity = Style.text(incomeCard, "Capacity", "Loading your Display...", 14)
-	W.inset(capacity, 48, 26)
-	local bonusCard = Style.panel(header, "MatchingSet", Style.card)
-	local bonus = Style.text(bonusCard, "BonusStatus", "Matching set", 16, true)
-	W.inset(bonus, 6, 28)
-	local rule = Style.text(bonusCard, "BonusRule", "3 different figures from one collection", 13)
-	W.inset(rule, 34, 32)
-	local segments: { Frame } = {}
-	for index = 1, 3 do
-		local segment = Style.panel(bonusCard, "SetSegment" .. index, Style.inset, 4)
-		segment.Position = UDim2.new((index - 1) / 3, 12, 1, -12)
-		segment.Size = UDim2.new(1 / 3, -16, 0, 5)
-		segments[index] = segment
-	end
-	local selected: string? = nil
+
+function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
+	local shell = Shell.create(parent, ctx, {
+		id = "Display",
+		title = "Display",
+		subtitle = "Figures on your Display earn coins every second",
+	})
+	local root = shell.root
+	local income = Badge.create(shell.chips, "Income", "", {
+		fill = Style.mint,
+		color = Style.mintInk,
+		height = 48,
+		size = 22,
+		font = Style.display(),
+		outline = Style.mintFill,
+	})
+	income.root.LayoutOrder = 1
+	local body = Kit.canvas(shell.body, "DisplayBody")
+	local banner = Kit.frame(body, "SetBonus", Style.surface2)
+	Kit.corner(banner, 12)
+	local star = Icons.create(banner, "Star", Style.ink, 18)
+	local bannerText = Kit.text(banner, "Text", "", 14)
+	local bannerAmount = Kit.text(banner, "Amount", "", 17, Style.display())
+	bannerAmount.TextXAlignment = Enum.TextXAlignment.Right
+	local target: number? = nil
+	local placing: string? = nil
 	local refresh: () -> () = function() end
-	local placement = Style.panel(content, "PlacementBanner", Style.selection)
-	placement.Visible = false
-	local mini = Preview.create(placement, ctx.scope, true)
-	Style.rect(mini.frame, 8, 8, 52, 64)
-	local placing = Style.text(placement, "PlacingFigure", "", 15, true)
-	placing.Position = UDim2.fromOffset(68, 8)
-	placing.Size = UDim2.new(1, -158, 0, 68)
-	placing.TextTruncate = Enum.TextTruncate.AtEnd
-	local cancel = Style.action(placement, "Cancel", ctx, function()
-		selected = nil
-		refresh()
-	end, true)
-	cancel.button.Position = UDim2.new(1, -84, 0, 20)
-	cancel.button.Size = UDim2.fromOffset(76, 48)
-	local cards = {}
-	for slot = 1, Config.maxSlots do
-		cards[slot] = Slot.create(content, ctx, slot, function()
+	local slots: { SlotCard.Slot } = {}
+	for index = 1, DisplayConfig.maxSlots do
+		slots[index] = SlotCard.create(body, ctx, index, function(slot)
 			local snapshot = ctx.snapshot()
-			if not snapshot then
+			if not snapshot or slot > snapshot.unlocked then
 				return
 			end
-			local state = State.display(snapshot, slot, selected, ctx.canAct())
-			if not state.enabled then
-				return
-			end
-			if state.available then
-				ctx.send("Expand", nil, nil, nil)
-			elseif selected then
-				ctx.send("Place", selected, slot, nil)
+			if placing then
+				if ctx.canAct() then
+					ctx.send("Place", placing, slot, nil)
+					placing = nil
+				end
 			else
-				ctx.pick(slot)
+				target = if target == slot then nil else slot
 			end
+			refresh()
 		end)
 	end
-	local function resize()
-		local width = shell.width()
-		local geometry = Layout.display(width, Config.maxSlots, selected ~= nil)
-		Style.rect(header, 0, 0, width, geometry.header)
-		-- Compact headers keep full-width earning and set summaries beneath the title.
-		local narrow = width < 560
-		Style.rect(incomeCard, 0, 102, if narrow then width else (width - 16) * 0.5, 82)
-		Style.rect(
-			bonusCard,
-			if narrow then 0 else (width + 16) * 0.5,
-			if narrow then 194 else 102,
-			if narrow then width else (width - 16) * 0.5,
-			84
-		)
-		local headerHeight = geometry.header
-		local top = geometry.top
-		Style.rect(placement, 0, headerHeight + 12, width, geometry.placementHeight)
-		placing.Size = UDim2.new(1, if width < 420 then -80 else -158, 0, 68)
-		cancel.button.Position = UDim2.new(1, -84, 0, geometry.placementHeight - 56)
-		for index, card in cards do
-			Style.rect(
-				card.root,
-				(index - 1) % geometry.columns * (geometry.cell + 12),
-				top + math.floor((index - 1) / geometry.columns) * (geometry.card + 12),
-				geometry.cell,
-				geometry.card
-			)
+	local picker = Picker.create(body, ctx, {
+		pick = function(id)
+			local slot = target
+			if slot and ctx.canAct() then
+				ctx.send("Place", id, slot, nil)
+				target = nil
+				refresh()
+			end
+		end,
+		remove = function()
+			local slot = target
+			if slot and ctx.canAct() then
+				ctx.send("Remove", nil, slot, nil)
+				target = nil
+				refresh()
+			end
+		end,
+		cancel = function()
+			target, placing = nil, nil
+			refresh()
+		end,
+		browse = function()
+			ctx.navigate("Collection", { slot = target })
+		end,
+	})
+	local width, height, phone = 0, 0, false
+	local function arrange()
+		local pad = if phone then 12 else 20
+		local inner = width - pad * 2
+		local y = 12
+		Kit.rect(banner, pad, y, inner, 40)
+		Kit.rect(star, 14, 11, 18, 18)
+		Kit.rect(bannerText, 42, 0, inner - 42 - 90, 40)
+		Kit.rect(bannerAmount, inner - 100, 0, 86, 40)
+		y += 50
+		local gap = if phone then 8 else 12
+		local cell = State.cells(inner, DisplayConfig.maxSlots, gap)
+		local slotHeight = if phone then 150 else 184
+		for index, slot in slots do
+			slot.size(cell, slotHeight)
+			slot.button.Position = UDim2.fromOffset(pad + (index - 1) * (cell + gap), y)
 		end
-		shell.fit(geometry.height)
+		y += slotHeight + 10
+		local drawer = math.max(if phone then 150 else 170, height - y - 14)
+		picker.size(inner, drawer, phone)
+		Kit.rect(picker.root, pad, y, inner, drawer)
+		body.CanvasSize = UDim2.fromOffset(0, y + drawer + 14)
 	end
 	local function update(snapshot: Types.Snapshot)
-		income.Text = string.format("%g Coins/sec", snapshot.rate)
-		capacity.Text = string.format("%d of %d Display slots", snapshot.unlocked, Config.maxSlots)
-		local progress = UI.bonusProgress(snapshot)
-		bonus.Text = if snapshot.bonus > 0
-			then string.format("Set bonus  +%g/sec", snapshot.bonus)
-			else string.format("Matching set  %d / 3", progress)
-		bonus.TextColor3 = if snapshot.bonus > 0 then Style.success else Style.ink
-		for index, segment in segments do
-			segment.BackgroundColor3 = if index <= progress then Style.success else Style.inset
+		shell.update(snapshot)
+		if target and target > snapshot.unlocked then
+			target = nil
 		end
-		placement.Visible = selected ~= nil
-		mini.figure(selected, true)
-		if selected then
-			local _, free = UI.copies(snapshot, selected)
-			placing.Text = "Placing "
-				.. Catalog.byId[selected].name
-				.. (
-					if free > 0
-						then "\nChoose a highlighted slot"
-						else "\nNo spare copies available"
+		if placing then
+			-- Placement finished (or the copy went away): leave placing mode.
+			local _, free = State.copies(snapshot, placing)
+			if free < 1 or State.displayed(snapshot, placing) then
+				placing = nil
+			end
+		end
+		income.set("+" .. State.amount(State.totalRate(snapshot)) .. " coins/s")
+		local bonus = State.setBonus(snapshot)
+		local name = if bonus.collection then State.collectionName(bonus.collection) else nil
+		local accent = Style.collection(bonus.collection or "")
+		if bonus.active and name then
+			banner.BackgroundColor3 = accent.wash
+			bannerText.TextColor3 = accent.ink
+			bannerAmount.TextColor3 = accent.ink
+			bannerText.Text =
+				string.format("%s set bonus is on: 3 different %s figures on Display", name, name)
+			bannerAmount.Text = State.rate(bonus.amount)
+		else
+			banner.BackgroundColor3 = Style.surface2
+			bannerText.TextColor3 = Style.ink
+			bannerAmount.TextColor3 = Style.muted
+			bannerText.Text = if name and bonus.best > 0
+				then string.format(
+					"Set bonus: show 3 different figures from one collection. %s: %d of 3",
+					name,
+					bonus.best
 				)
+				else "Set bonus: show 3 different figures from one collection to earn extra coins"
+			bannerAmount.Text = string.format("%d / 3", bonus.best)
 		end
-		for _, card in cards do
-			card.update(snapshot, selected)
+		root:SetAttribute("Target", target)
+		root:SetAttribute("Placing", placing)
+		for _, slot in slots do
+			slot.update(snapshot, { target = target, placing = placing })
 		end
+		picker.update(snapshot, target, placing)
 	end
 	refresh = function()
 		local snapshot = ctx.snapshot()
 		if snapshot then
 			update(snapshot)
 		end
-		resize()
 	end
-	ctx.scope.connect(root:GetPropertyChangedSignal("AbsoluteSize"), resize)
-	resize()
 	return {
 		root = root,
 		update = update,
-		select = function(id: string?)
-			selected = id
+		layout = function(nextWidth: number, nextHeight: number, nextPhone: boolean)
+			phone = nextPhone
+			width, height = shell.layout(nextWidth, nextHeight, nextPhone)
+			arrange()
 			refresh()
+		end,
+		route = function(route: Context.Route?)
+			placing = if route
+					and route.placing
+					and Catalog.byId[route.placing]
+				then route.placing
+				else nil
+			target = if route and route.slot then route.slot else nil
+			refresh()
+		end,
+		back = function()
+			if target or placing then
+				target, placing = nil, nil
+				refresh()
+				return true
+			end
+			return false
 		end,
 	}
 end
+
 return Display

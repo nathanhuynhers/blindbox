@@ -4,9 +4,11 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local Types = require(ReplicatedStorage.Shared.Types)
 local ShelfConfig = require(ReplicatedStorage.Shared.ShelfConfig)
+local Catalog = require(ReplicatedStorage.Shared.Catalog)
 local Interface = require(script.Interface)
 local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
+local UIState = require(script.UIState)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
@@ -15,10 +17,12 @@ local current: Types.Snapshot? = nil
 local pending: Types.Intent? = nil
 local beforeRequest: Types.Snapshot? = nil
 local opening: OpeningController.Controller? = nil
+local reveal: OpeningResult.Result? = nil
 local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
-ui = Interface.create(function(action: string, figure: string?, slot: number?, choice: string?)
+-- The only way the client asks for a change. One request at a time; the server decides.
+local function request(action: string, figure: string?, slot: number?, choice: string?)
 	local state = current
 	if not state or not state.ready or pending or (opening and opening.isActive()) then
 		return
@@ -43,8 +47,30 @@ ui = Interface.create(function(action: string, figure: string?, slot: number?, c
 	ui.pending(true)
 	sentAt = os.clock()
 	intentRemote:FireServer(intent)
-end)
-opening = OpeningController.create(ui.openingFocus, ui.message)
+end
+ui = Interface.create(request)
+-- Reveal choices run after the opening has fully closed and released UI focus.
+local function choose(choice: string, result: OpeningResult.Result)
+	local state = current
+	if not state then
+		return
+	end
+	if choice == "display" then
+		local placement = UIState.placement(state, result.figureId)
+		if placement then
+			request("Place", result.figureId, placement.slot, nil)
+		end
+	elseif choice == "another" then
+		local figure = Catalog.byId[result.figureId]
+		if figure then
+			request("Buy", nil, nil, figure.collection)
+		end
+	end
+end
+opening = OpeningController.create(ui.openingFocus, ui.message, choose)
+local function revealModel(state: Types.Snapshot, result: OpeningResult.Result): UIState.Reveal
+	return UIState.reveal(state, result.figureId, result.isNew, result.quantity)
+end
 local connections: { RBXScriptConnection } = {}
 table.insert(
 	connections,
@@ -53,9 +79,13 @@ table.insert(
 			sequence = state.sequence
 			current = state
 			ui.update(state)
+			if opening and opening.isActive() and reveal then
+				-- Live affordability and slots while the Reveal card is up.
+				opening.refresh(revealModel(state, reveal))
+			end
 		end
-		local request = pending
-		if reply and request and reply.id == request.id then
+		local intent = pending
+		if reply and intent and reply.id == intent.id then
 			local before = beforeRequest
 			pending = nil
 			beforeRequest = nil
@@ -63,19 +93,18 @@ table.insert(
 			local feedback = {
 				Place = "Figure displayed",
 				Remove = "Figure removed",
-				Recycle = "+1 Scrap",
 				Expand = "Display slot unlocked",
 				Goal = "Daily reward claimed",
 			}
 			ui.message(
-				if reply.ok then feedback[request.action] or reply.message else reply.message,
+				if reply.ok then feedback[intent.action] or reply.message else reply.message,
 				if reply.ok then "success" else "error"
 			)
 			if before then
-				local result = OpeningResult.fromReply(request, before, state, reply)
+				local result = OpeningResult.fromReply(intent, before, state, reply)
 				if result and opening then
-					ui.selectAcquired(result.figureId)
-					opening.present(result, not ui.effects())
+					reveal = result
+					opening.present(result, not ui.effects(), nil, revealModel(state, result))
 				end
 			end
 		end
