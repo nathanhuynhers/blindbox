@@ -76,26 +76,6 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 	end)
 	place.button.LayoutOrder = 6
 	place.button.Size = UDim2.new(1, 0, 0, 44)
-	local secondary = W.frame(page, "SecondaryActions")
-	secondary.LayoutOrder = 7
-	secondary.Size = UDim2.new(1, 0, 0, 44)
-	local recycle = Controls.action(secondary, "Recycle\n+1 Scrap", "secondary", ctx, function()
-		local id = root:GetAttribute("FigureId")
-		if typeof(id) == "string" then
-			ctx.send("Recycle", id, nil, nil)
-		end
-	end)
-	recycle.button.Name = "Recycle"
-	recycle.button.Size = UDim2.new(0.5, -3, 1, 0)
-	local redeem = Controls.action(secondary, "", "secondary", ctx, function()
-		local id = root:GetAttribute("FigureId")
-		if typeof(id) == "string" then
-			ctx.send("Redeem", id, nil, nil)
-		end
-	end)
-	redeem.button.Name = "Redeem"
-	redeem.button.Position = UDim2.new(0.5, 3, 0, 0)
-	redeem.button.Size = UDim2.new(0.5, -3, 1, 0)
 	local backButton = Controls.action(root, "<", "paper", ctx, back)
 	backButton.button.Name = "BackToFigures"
 	backButton.button.Position = UDim2.fromOffset(0, 0)
@@ -157,13 +137,19 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 		name.Text = if discovered then figure.name else "???"
 		badge.set(figure.rarity)
 		local chance = State.percent(snapshot.odds[id] or 0)
-		stats.Size = UDim2.new(1, 0, 0, if discovered then 64 else 24)
+		stats.Size = UDim2.fromScale(1, 0)
+		stats.AutomaticSize = Enum.AutomaticSize.Y
 		stats.Text = if discovered
 			then string.format(
-				"Pull chance    %s\nOwned          %d\nIncome         %g Coins/sec",
+				"Pull chance    %s\nOwned          %d\nBase income    %.2f/sec\nDuplicate bonus +%.2f%%\nIncome         %.2f/sec\nNext copy      %.2f/sec\nUncollected    %d Coins\nClick figure / E to collect",
 				chance,
 				owned,
-				snapshot.rates[id] or 0
+				snapshot.baseRates[id] or 0,
+				((snapshot.rates[id] or 0) / math.max(snapshot.baseRates[id] or 1, 0.000001) - 1)
+					* 100,
+				snapshot.rates[id] or 0,
+				snapshot.nextRates[id] or 0,
+				math.floor(snapshot.earnings[id] or 0)
 			)
 			else "Pull chance    " .. chance
 		local description = figure.description
@@ -173,21 +159,8 @@ function Details.create(parent: Instance, ctx: Context.Context, back: () -> ())
 		flavor.Visible = flavor.Text ~= ""
 		place.button.Visible = discovered
 		place.set(
-			if free > 0 then "Display" elseif owned > 0 then "All displayed" else "Not owned",
+			if free > 0 then "Display" elseif owned > 0 then "Already displayed" else "Not owned",
 			ctx.canAct() and free > 0
-		)
-		recycle.button.Visible = discovered
-		recycle.button.Size = UDim2.new(0.5, -3, 1, 0)
-		recycle.set("Recycle\n+1 Scrap", ctx.canAct() and State.recycle(snapshot, id))
-		redeem.button.Position = if discovered
-			then UDim2.new(0.5, 3, 0, 0)
-			else UDim2.fromOffset(0, 0)
-		redeem.button.Size = if discovered then UDim2.new(0.5, -3, 1, 0) else UDim2.fromScale(1, 1)
-		redeem.set(
-			if discovered
-				then "Redeem\n" .. snapshot.redeemCost .. " Scrap"
-				else "Redeem - " .. snapshot.redeemCost .. " Scrap",
-			ctx.canAct() and snapshot.scrap >= snapshot.redeemCost
 		)
 	end
 	ctx.scope.connect(root:GetPropertyChangedSignal("AbsoluteSize"), resize)

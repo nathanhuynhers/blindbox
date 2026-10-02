@@ -1,9 +1,10 @@
 # Standard rarity architecture
 
 The supported hierarchy is **Common < Uncommon < Rare < Legendary < Mythical**.
-Mythical is the highest standard tier. Support does not imply obtainable content: the twelve
-live figures still use Common, Uncommon and Rare. Sunbeam Sprite and Pearl Regent remain Rare.
-No figures, rates, weights, prices or live probabilities were added or changed by this integration.
+Mythical is the highest standard tier. The economy redesign now supplies explicit five-tier content,
+bucket probabilities, pity and normalized income. [ECONOMY.md](ECONOMY.md) and
+[collection onboarding](ECONOMY_COLLECTION_ONBOARDING.md) supersede the original integration
+audit's unchanged-rate statements below. The audit remains a record of that earlier integration.
 
 ## Canonical definitions and audit
 

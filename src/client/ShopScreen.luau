@@ -240,7 +240,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		strip.CanvasSize = UDim2.fromOffset(figureList.AbsoluteContentSize.X, 0)
 	end)
 	local odds = W.frame(info, "RarityOdds")
-	local oddsTitle = Style.label(odds, "Heading", "Rarity Odds", 17, true)
+	local oddsTitle = Style.label(odds, "Heading", "Current Rarity Odds", 17, true)
 	oddsTitle.Size = UDim2.new(1, 0, 0, 30)
 	type Odds = { root: Frame, value: TextLabel }
 	local rows: { [string]: Odds } = {}
@@ -254,10 +254,11 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		dot.Size = UDim2.fromOffset(10, 10)
 		local label = Style.label(row, "Name", figure.rarity, 13, true)
 		label.Position = UDim2.fromOffset(18, 0)
-		label.Size = UDim2.new(0.60, -18, 1, 0)
+		label.Size = UDim2.new(0.40, -18, 1, 0)
 		local value = Style.label(row, "Chance", "", 13)
-		value.Position = UDim2.fromScale(0.60, 0)
-		value.Size = UDim2.fromScale(0.40, 1)
+		value.Position = UDim2.fromScale(0.40, 0)
+		value.Size = UDim2.fromScale(0.60, 1)
+		value.TextSize = 12
 		value.TextXAlignment = Enum.TextXAlignment.Right
 		rows[figure.rarity] = { root = row, value = value }
 	end
@@ -397,22 +398,29 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			visual.root.Visible = true
 			visual.root.Position = UDim2.fromOffset(0, 36 + (order - 1) * 29)
 			visual.root.Size = UDim2.new(1, 0, 0, 29)
-			visual.value.Text = if row.minimum == row.maximum
-				then State.percent(row.minimum) .. (if row.count > 1 then " each" else "")
-				else State.percent(row.minimum) .. " - " .. State.percent(row.maximum)
+			visual.value.Text = State.percent(row.total)
+				.. (
+					if row.total > row.baseTotal + 0.00001
+						then " (base " .. State.percent(row.baseTotal) .. ")"
+						else ""
+				)
 		end
-		price.Text = State.number(state.price) .. " Coins"
+		local boxPrice = state.prices[selected]
+		price.Text = State.number(boxPrice) .. " Coins"
 		buy.button:SetAttribute("Accent", theme.primary)
 		buy.set(
 			if not ctx.canAct()
 				then "Please wait..."
-				elseif state.coins >= state.price then "Buy 1 Box"
-				else "Need " .. State.number(state.price - state.coins) .. " more Coins",
-			ctx.canAct() and state.coins >= state.price
+				elseif state.coins >= boxPrice then "Buy 1 Box"
+				else "Need " .. State.number(boxPrice - state.coins) .. " more Coins",
+			ctx.canAct() and state.coins >= boxPrice
 		)
 		daily.set(
-			if state.dailyReady then "Claim Daily Free Box" else "Daily Box Claimed",
-			ctx.canAct() and state.dailyReady
+			if selected ~= state.dailyCollection
+				then "Daily box: Starter collection"
+				elseif state.dailyReady then "Claim Daily Free Box"
+				else "Daily Box Claimed",
+			ctx.canAct() and state.dailyReady and selected == state.dailyCollection
 		)
 		if root:GetAttribute("SelectedCollection") ~= selected then
 			strip.CanvasPosition = Vector2.zero

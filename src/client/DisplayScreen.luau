@@ -18,7 +18,7 @@ function Display.create(parent: Instance, ctx: Context.Context)
 	Style.header(
 		header,
 		"My Display",
-		"Your favorites, earning around the clock while you play.",
+		"Click each displayed figure or press E nearby to collect its Coins.",
 		"Display"
 	)
 	local incomeCard = Style.panel(header, "IncomePlaque", Style.successWash)
@@ -106,11 +106,15 @@ function Display.create(parent: Instance, ctx: Context.Context)
 		shell.fit(geometry.height)
 	end
 	local function update(snapshot: Types.Snapshot)
-		income.Text = string.format("%g Coins/sec", snapshot.rate)
+		income.Text = (
+			if snapshot.rate < 10000
+				then string.format("%g", math.floor(snapshot.rate * 100 + 0.5) / 100)
+				else UI.compact(snapshot.rate)
+		) .. " Coins/sec"
 		capacity.Text = string.format("%d of %d Display slots", snapshot.unlocked, Config.maxSlots)
 		local progress = UI.bonusProgress(snapshot)
 		bonus.Text = if snapshot.bonus > 0
-			then string.format("Set bonus  +%g/sec", snapshot.bonus)
+			then string.format("Set bonus +10%% (+%.2f/sec)", snapshot.bonus)
 			else string.format("Matching set  %d / 3", progress)
 		bonus.TextColor3 = if snapshot.bonus > 0 then Style.success else Style.ink
 		for index, segment in segments do

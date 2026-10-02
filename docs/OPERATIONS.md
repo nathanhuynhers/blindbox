@@ -1,5 +1,11 @@
 # Full-game testing and release
 
+The economy redesign uses schema 6 and fresh `BlindBox_Economy2_Studio` /
+`BlindBox_Economy2_Live` stores. Run the
+[current economy acceptance checklist](ECONOMY_REDESIGN_VERIFICATION.md) for variable prices,
+duplicates, soft pity and the authorized progression reset. The older schema migrations,
+Scrap/recycling and redemption checks below describe pre-redesign behavior and are superseded.
+
 The user accepted the MVP. The expanded game is a **closed-test candidate**, not published or
 verified in live Roblox servers. The agent has no Studio control connector and has not run the
 new engine, mobile, multiplayer or real DataStore tests. Existing MVP playtesting is not proof

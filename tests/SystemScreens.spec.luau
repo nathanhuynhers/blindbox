@@ -29,7 +29,7 @@ local snapshot: Types.Snapshot = {
 		},
 	},
 	coins = 0,
-	scrap = 0,
+	earnings = {},
 	owned = {},
 	discovered = {},
 	slots = { "", "", "" },
@@ -39,10 +39,13 @@ local snapshot: Types.Snapshot = {
 	step = 1,
 	rates = Rules.rates,
 	odds = Rules.odds,
-	price = Economy.price,
-	redeemCost = Economy.redeemCost,
+	prices = Rules.prices,
+	baseRates = Rules.rates,
+	nextRates = Rules.rates,
+	baseOdds = Rules.odds,
+	dailyCollection = "grove",
 	unlocked = 3,
-	expansionCost = Economy.expansionCost,
+	expansionCost = Economy.expansionCosts[4],
 	dailyReady = true,
 	goalProgress = 0,
 	goalClaimed = false,
@@ -250,8 +253,8 @@ for _, collection in Catalog.collections do
 	goals.update(snapshot)
 	Engine.click(goals.root, "Daily_" .. collection.id)
 	check(
-		requests[#requests].choice == collection.id and requests[#requests].action == "Daily",
-		"free box options derive from Catalog"
+		requests[#requests].choice == "grove" and requests[#requests].action == "Daily",
+		"only the Starter collection permits a daily grant"
 	)
 end
 for _, entry in Catalog.figures do

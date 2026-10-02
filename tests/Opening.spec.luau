@@ -215,7 +215,7 @@ local daily = Result.fromReply(request, before, after, reply)
 check(daily ~= nil and not daily.direct, "daily uses box")
 request.action = "Redeem"
 local redeemed = Result.fromReply(request, before, after, reply)
-check(redeemed ~= nil and redeemed.direct, "redemption uses direct spotlight")
+check(redeemed == nil, "retired redemption cannot reveal a result")
 request.action = "Place"
 check(Result.fromReply(request, before, after, reply) == nil, "non-acquisition cannot reveal")
 request.action = "Buy"

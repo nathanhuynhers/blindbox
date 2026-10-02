@@ -4,7 +4,14 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 
 local ShopState = {}
-export type OddsRow = { rarity: Rarity.Id, minimum: number, maximum: number, count: number }
+export type OddsRow = {
+	rarity: Rarity.Id,
+	minimum: number,
+	maximum: number,
+	count: number,
+	total: number,
+	baseTotal: number,
+}
 
 function ShopState.figures(collectionId: string): { Types.Figure }
 	local result: { Types.Figure } = {}
@@ -50,8 +57,17 @@ function ShopState.rarityOdds(snapshot: Types.Snapshot, collectionId: string): {
 				row.minimum = math.min(row.minimum, chance)
 				row.maximum = math.max(row.maximum, chance)
 				row.count += 1
+				row.total += chance
+				row.baseTotal += snapshot.baseOdds[figure.id] or 0
 			else
-				row = { rarity = figure.rarity, minimum = chance, maximum = chance, count = 1 }
+				row = {
+					rarity = figure.rarity,
+					minimum = chance,
+					maximum = chance,
+					count = 1,
+					total = chance,
+					baseTotal = snapshot.baseOdds[figure.id] or 0,
+				}
 				byRarity[figure.rarity] = row
 			end
 		end

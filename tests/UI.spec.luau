@@ -7,6 +7,7 @@ local Catalog = require("./Catalog")
 local Types = require("./Types")
 local ShopLayout = require("./ShopLayout")
 local ShopState = require("./ShopState")
+local CollectionEconomy = require("./CollectionEconomy")
 local ShopTheme = require("./ShopTheme")
 local BlindBoxSpec = require("./BlindBoxSpec")
 local checks = 0
@@ -15,12 +16,18 @@ local function check(condition: boolean, message: string)
 	assert(condition, message)
 end
 local state = Rules.new(0)
+local boostedRows = ShopState.rarityOdds({
+	odds = CollectionEconomy.odds({ echo = { legendaryDryRolls = 100, mythicalDryRolls = 500 } }),
+	baseOdds = Rules.odds,
+}, "echo")
+check(math.abs(boostedRows[4].total - 4) < 1e-9 and boostedRows[4].baseTotal == 1, "Shop shows Legendary bucket total and base rather than per-figure odds")
+check(math.abs(boostedRows[5].total - 0.4) < 1e-9 and boostedRows[5].baseTotal == 0.1, "Shop shows current Mythical luck")
 local snapshot: Types.Snapshot = {
 	shelves = { ownedCount = 3, visible = {
 		{id="shelf:1",index=1,placements={}}, {id="shelf:2",index=2,placements={}}, {id="shelf:3",index=3,placements={}},
 	}, carouselRevision = 0, canNavigate = false },
 	coins = state.coins,
-	scrap = state.scrap,
+	earnings = {},
 	owned = state.owned,
 	discovered = state.discovered,
 	slots = state.display.slots,
@@ -30,10 +37,13 @@ local snapshot: Types.Snapshot = {
 	step = 1,
 	rates = Rules.rates,
 	odds = Rules.odds,
-	price = Economy.price,
-	redeemCost = Economy.redeemCost,
+	prices = Rules.prices,
+	baseRates = Rules.rates,
+	nextRates = Rules.rates,
+	baseOdds = Rules.odds,
+	dailyCollection = "grove",
 	unlocked = 3,
-	expansionCost = Economy.expansionCost,
+	expansionCost = Economy.expansionCosts[4],
 	dailyReady = true,
 	goalProgress = 0,
 	goalClaimed = false,
@@ -54,15 +64,15 @@ snapshot.discovered[id] = true
 snapshot.slots[1] = id
 snapshot.slots[2] = id
 local owned, free = UI.copies(snapshot, id)
-check(owned == 3 and free == 1 and UI.recycle(snapshot, id), "only free duplicate can recycle")
+check(owned == 3 and free == 0, "duplicates enhance one placement")
 check(UI.matches(snapshot, id, "grove", true), "owned filter shows duplicates")
 snapshot.slots[3] = id
-check(not UI.recycle(snapshot, id), "all reserved copies disable recycle")
+check(UI.copies(snapshot, id) >= 1, "owned quantities retained")
 snapshot.slots[1] = ""
 snapshot.slots[2] = ""
 snapshot.slots[3] = ""
 snapshot.owned[id] = 1
-check(not UI.recycle(snapshot, id), "last copy protected in presentation")
+check(UI.copies(snapshot, id) >= 1, "owned quantities retained")
 snapshot.owned[id] = nil
 found, total = UI.completion(snapshot, "grove")
 check(found == 1 and total == 6, "discovery survives zero copies")
@@ -71,22 +81,15 @@ check(UI.ownedCollection(snapshot, 1) == 2, "slot picker opens a populated colle
 snapshot.owned[id] = 2
 check(UI.ownedCollection(snapshot, 1) == 1, "slot picker keeps current populated collection")
 snapshot.ready = false
-check(not UI.recycle(snapshot, id), "paused storage disables mutation affordance")
+check(UI.copies(snapshot, id) >= 1, "owned quantities retained")
 snapshot.ready = true
 
-local totalWeights: { [string]: number } = {}
-for _, entry in Economy.entries do
-	local collection = Catalog.byId[entry.id].collection
-	totalWeights[collection] = (totalWeights[collection] or 0) + entry.weight
-end
-for _, entry in Economy.entries do
-	local collection = Catalog.byId[entry.id].collection
-	local expected = entry.weight / totalWeights[collection] * 100
-	check(snapshot.odds[entry.id] == expected, "snapshot odds derive from configured roll weights")
-	check(
-		UI.percent(snapshot.odds[entry.id]) == UI.percent(expected),
-		"Collection odds format derived values"
-	)
+for _, collection in Catalog.collections do
+ local totalOdds = 0
+ for _, figure in Catalog.figures do
+  if figure.collection == collection.id then totalOdds += snapshot.odds[figure.id] end
+ end
+ check(math.abs(totalOdds - 100) < 1e-8, "base odds total 100 per collection")
 end
 check(UI.percent(20) == "20%", "whole pull chances omit decimal noise")
 check(UI.percent(12.345) == "12.35%", "fractional pull chances keep useful precision")
@@ -235,6 +238,7 @@ check(
 	"HUD abbreviations never round up available money"
 )
 check(UI.compact(1000000000) == "1B" and UI.compact(150) == "150", "HUD cap and everyday balance")
+check(UI.compact(1000000000000) == "1T", "trillion Coin ceiling remains readable")
 
 table.freeze(snapshot.owned)
 table.freeze(snapshot.discovered)
@@ -242,7 +246,6 @@ table.freeze(snapshot.slots)
 table.freeze(snapshot)
 for _, figure in Catalog.figures do
 	UI.copies(snapshot, figure.id)
-	UI.recycle(snapshot, figure.id)
 end
 UI.completion(snapshot, "tide")
 UI.bonusProgress(snapshot)

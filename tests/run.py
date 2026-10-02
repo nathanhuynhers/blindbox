@@ -16,7 +16,7 @@ modules = {
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "CollectionAssets": "client",
     "Types": "shared", "Catalog": "shared", "Economy": "server",
-    "Rules": "server", "Protocol": "server", "Transactions": "server",
+    "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
     "OpeningAudioConfig": "client", "OpeningAudioSequence": "client",
@@ -140,9 +140,17 @@ if result.returncode:
     raise SystemExit(result.returncode)
 fixtures = [
     ('id = "grove.pebble"', 'id = "unknown"', "Invalid economy reference"),
-    ('weight = 20', 'weight = 0', "Invalid rate/weight"),
-    ('rate = 1,', 'rate = 8,', "Rate outside rarity band"),
-    ('price = 150', 'price = -1', "Invalid economy bound"),
+    ('weight = 1', 'weight = 0', "Invalid income units/weight"),
+    ('units = 0.55,', 'units = 8,', "Duplicate ceiling violates rarity order"),
+    ('price = 1500', 'price = -1', "Invalid tier price"),
+    ('paybackSeconds = 180', 'paybackSeconds = 0', "Invalid tier pacing"),
+    ('Common = 60, Uncommon = 30', 'Common = 61, Uncommon = 30', "Bucket probabilities must total 100"),
+    ('maximum = 0.6, curve = 5', 'maximum = 0.6, curve = 0', "Invalid duplicate curve"),
+    ('base = 1, start = 40', 'base = 2, start = 40', "Pity base differs from bucket"),
+    ('start = 40', 'start = -1', "Invalid pity start"),
+    ('group = "star"', 'group = "concept"', "Shared pity must use identical profiles"),
+    ('pity = "standard"', 'pity = "missing"', "Unknown pity profile"),
+    ('units = 0.55', 'units = 0/0', "Invalid income units/weight"),
 ]
 for index, (old, new, expected) in enumerate(fixtures):
     fixture = out / f"invalid-{index}"
@@ -158,4 +166,4 @@ for index, (old, new, expected) in enumerate(fixtures):
     (fixture / "load.luau").write_text('require("./Rules")\n', encoding="utf-8")
     result = subprocess.run([sys.argv[1], str(fixture / "load.luau")], cwd=root, capture_output=True, text=True)
     assert result.returncode != 0 and expected in result.stderr, result.stderr
-print("PASS: 4 invalid-configuration startup fixtures")
+print(f"PASS: {len(fixtures)} invalid-configuration startup fixtures")

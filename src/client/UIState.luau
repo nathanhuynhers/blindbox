@@ -10,7 +10,7 @@ function State.copies(snapshot: Types.Snapshot, id: string): (number, number)
 			displayed += 1
 		end
 	end
-	return owned, math.max(0, owned - displayed)
+	return owned, if owned > 0 and displayed == 0 then 1 else 0
 end
 function State.completion(snapshot: Types.Snapshot, collection: string): (number, number)
 	local found, total = 0, 0
@@ -32,10 +32,6 @@ function State.matches(
 ): boolean
 	return Catalog.byId[id].collection == collection
 		and (not ownedOnly or (snapshot.owned[id] or 0) > 0)
-end
-function State.recycle(snapshot: Types.Snapshot, id: string): boolean
-	local owned, free = State.copies(snapshot, id)
-	return snapshot.ready and owned > 1 and free > 0
 end
 function State.grid(width: number, minimum: number, maximum: number): (number, number)
 	local available = math.max(1, width - 32) -- padding and scroll bar gutter
@@ -76,11 +72,16 @@ function State.compact(value: number): string
 	if value < 10000 then
 		return State.number(value)
 	end
-	local unit = if value >= 1000000000
-		then 1000000000
+	local unit = if value >= 1000000000000
+		then 1000000000000
+		elseif value >= 1000000000 then 1000000000
 		elseif value >= 1000000 then 1000000
 		else 1000
-	local suffix = if unit == 1000000000 then "B" elseif unit == 1000000 then "M" else "K"
+	local suffix = if unit == 1000000000000
+		then "T"
+		elseif unit == 1000000000 then "B"
+		elseif unit == 1000000 then "M"
+		else "K"
 	return string.format("%g%s", math.floor(value / unit * 10) / 10, suffix)
 end
 function State.ownedCollection(snapshot: Types.Snapshot, preferred: number): number

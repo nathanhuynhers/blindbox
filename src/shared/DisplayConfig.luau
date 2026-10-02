@@ -1,8 +1,8 @@
 --!strict
 -- Capacity is sequential for now; each extra slot has its own acquisition policy.
--- Only slot 4 has an implemented legacy purchase. No price is inferred for 5/6.
+-- Coin prices stay server-only; slots unlock in order.
 return table.freeze({
 	defaultSlots = 3,
 	maxSlots = 6,
-	unlockMethods = table.freeze({ [4] = "LegacyCoins", [5] = "Unassigned", [6] = "Unassigned" }),
+	unlockMethods = table.freeze({ [4] = "Coins", [5] = "Coins", [6] = "Coins" }),
 })
