@@ -76,14 +76,11 @@ original icon shapes and static asset slots. `UIState` derives read-only present
 
 `Scroll.bind` accepts both list and grid layouts and measures content plus padding explicitly.
 Nested tile groups report their measured height to the outer list. Filtering and safe-area
-resize preserve access to every figure. Independent presentation hosts replace the common menu shell: desktop rail, themed book spread,
-package-led shop, compact Goals/Shelves sheets and bottom Display controls. Narrow/touch windows use
-bottom navigation; short landscape gives its space to the active screen until close. `UILayout`
-owns bounds, while `CollectionStyle`/`CollectionArt` isolate collection identity from neutral
-`UITheme` controls. Details replace the book grid on narrow screens. `CollectionSelection`, `CollectionLayout`,
-`CollectionSkin`, `CollectionTabs`, `CollectionControls` and `CollectionAssets` separate state,
-physical presentation and uploaded/native artwork; see [Collection](COLLECTION_UI.md). See the
-[UI behavior, module boundaries and Studio checklist](UI_UX.md).
+resize preserve access to every figure. The client UI is one visual system: `Interface` routes five screens built from shared
+components (`ScreenShell`, `Dock`, `Hud`, `CollectionList`, `FigureTile`, `UIButton`) over a
+`UIScale` stage. `UIState` is the single projection of snapshot economy fields; `UILayout` owns
+geometry; `UIStyle` owns tokens and collection accents. See
+[ui-redesign/IMPLEMENTATION.md](ui-redesign/IMPLEMENTATION.md).
 
 Opening presentation is separate: `OpeningResult` derives immutable presentation metadata from
 the pre-request and confirmed reply snapshots; `OpeningController` owns one opening session,

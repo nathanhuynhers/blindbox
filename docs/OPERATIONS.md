@@ -76,7 +76,7 @@ all rarities, both cartons, NEW/duplicates and reduced motion without changing R
 items. Neither these Studio checks nor the launcher's lifecycle assertions have been run by the
 agent. Real purchase/retry testing is separate from those presentation-only fixtures.
 
-The redesigned regular UI has a [dedicated device/input checklist](UI_UX.md#verification-and-studio-checklist)
+The redesigned regular UI has a [dedicated device/input checklist](ui-redesign/IMPLEMENTATION.md#studio-checklist-not-yet-run)
 and read-only `tests/StudioUI.client.luau` checks for target sizes, canvas bounds and safe areas.
 Run that script from the client Command Bar on each screen. These engine checks remain unrun.
 

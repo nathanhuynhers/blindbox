@@ -15,7 +15,8 @@ This is the current product-direction backlog after the first full-game candidat
    - The current UI is functional scaffolding and does not need to be visually preserved.
    - The second visual candidate separates neutral global controls from collection art direction
      and replaces the shared menu shell with distinct presentations. Studio visual/device
-     acceptance is pending; see [UI candidate and checklist](UI_UX.md).
+     acceptance is pending. Superseded by the one-system redesign; see
+     [ui-redesign/IMPLEMENTATION.md](ui-redesign/IMPLEMENTATION.md).
 
 3. **Production-quality collectible models**
    - Replace procedural placeholder figures with original, desirable collectible characters.
