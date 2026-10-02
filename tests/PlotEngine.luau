@@ -38,99 +38,185 @@ end
 vectorMeta.__sub = function(a, b)
 	return vector(a.X - b.X, a.Y - b.Y, a.Z - b.Z)
 end
+vectorMeta.__mul = function(a, b)
+	if type(a) == "number" then
+		return vector(a * b.X, a * b.Y, a * b.Z)
+	end
+	if type(b) == "number" then
+		return vector(a.X * b, a.Y * b, a.Z * b)
+	end
+	return vector(a.X * b.X, a.Y * b.Y, a.Z * b.Z)
+end
+vectorMeta.__div = function(a, b)
+	return vector(a.X / b, a.Y / b, a.Z / b)
+end
+vectorMeta.__unm = function(a)
+	return vector(-a.X, -a.Y, -a.Z)
+end
+local function dot(a, b)
+	return a.X * b.X + a.Y * b.Y + a.Z * b.Z
+end
+local function cross(a, b)
+	return vector(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X)
+end
 vectorMeta.__index = function(value, key)
 	if key == "Magnitude" then
 		return math.sqrt(value.X ^ 2 + value.Y ^ 2 + value.Z ^ 2)
 	end
+	if key == "Unit" then
+		local length = math.sqrt(value.X ^ 2 + value.Y ^ 2 + value.Z ^ 2)
+		return vector(value.X / length, value.Y / length, value.Z / length)
+	end
+	if key == "Dot" then
+		return dot
+	end
+	if key == "Cross" then
+		return cross
+	end
 	return nil
 end
-Engine.Vector3 = { new = vector }
+Engine.Vector3 = { new = vector, zero = vector(0, 0, 0), yAxis = vector(0, 1, 0) }
 Engine.Vector2 = {
 	new = function(x, y)
 		return { X = x, Y = y }
 	end,
 }
-Engine.Enum = {
-	Material = { Wood = "Wood", WoodPlanks = "WoodPlanks", SmoothPlastic = "SmoothPlastic" },
-	PartType = { Cylinder = "Cylinder" },
-	SurfaceType = { Smooth = "Smooth" },
-	NormalId = { Bottom = "Bottom", Front = "Front", Left = "Left" },
-	SurfaceGuiSizingMode = { FixedSize = "FixedSize" },
-	Font = { GothamBlack = "GothamBlack", GothamMedium = "GothamMedium" },
-}
--- Planar CFrame operations are sufficient for these upright plot fixtures.
+-- Enum items compare as their item names, e.g. Enum.Material.Wood == "Wood".
+Engine.Enum = setmetatable({}, {
+	__index = function(_, _enum)
+		return setmetatable({}, {
+			__index = function(_, item)
+				return item
+			end,
+		})
+	end,
+})
+-- Full rigid-transform CFrames: rotation columns are Right, Up and Back (-Look).
 local frameMeta = {}
-local function frame(position, yaw)
-	return setmetatable({ Position = position, yaw = yaw or 0 }, frameMeta)
+local function frame(position, right, up, back)
+	return setmetatable({
+		Position = position,
+		right = right or vector(1, 0, 0),
+		up = up or vector(0, 1, 0),
+		back = back or vector(0, 0, 1),
+	}, frameMeta)
 end
-local function rotate(v, yaw)
-	return vector(
-		math.cos(yaw) * v.X + math.sin(yaw) * v.Z,
-		v.Y,
-		-math.sin(yaw) * v.X + math.cos(yaw) * v.Z
-	)
+local function rotate(cf, v)
+	return cf.right * v.X + cf.up * v.Y + cf.back * v.Z
+end
+local function unrotate(cf, v)
+	return vector(dot(cf.right, v), dot(cf.up, v), dot(cf.back, v))
 end
 frameMeta.__mul = function(a, b)
-	return frame(a.Position + rotate(b.Position, a.yaw), a.yaw + b.yaw)
+	if getmetatable(b) == vectorMeta then
+		return a.Position + rotate(a, b)
+	end
+	return frame(
+		a.Position + rotate(a, b.Position),
+		rotate(a, b.right),
+		rotate(a, b.up),
+		rotate(a, b.back)
+	)
 end
 frameMeta.__add = function(a, b)
-	return frame(a.Position + b, a.yaw)
+	return frame(a.Position + b, a.right, a.up, a.back)
 end
 frameMeta.__index = function(a, key)
 	if key == "LookVector" then
-		return rotate(vector(0, 0, -1), a.yaw)
-	end
-	if key == "RightVector" then
-		return rotate(vector(1, 0, 0), a.yaw)
-	end
-	if key == "Inverse" then
+		return -a.back
+	elseif key == "RightVector" then
+		return a.right
+	elseif key == "UpVector" then
+		return a.up
+	elseif key == "X" or key == "Y" or key == "Z" then
+		return a.Position[key]
+	elseif key == "Rotation" then
+		return frame(vector(0, 0, 0), a.right, a.up, a.back)
+	elseif key == "Inverse" then
 		return function(self)
-			return frame(
-				rotate(vector(-self.Position.X, -self.Position.Y, -self.Position.Z), -self.yaw),
-				-self.yaw
-			)
+			local right = vector(self.right.X, self.up.X, self.back.X)
+			local up = vector(self.right.Y, self.up.Y, self.back.Y)
+			local back = vector(self.right.Z, self.up.Z, self.back.Z)
+			local inverse = frame(vector(0, 0, 0), right, up, back)
+			return frame(-rotate(inverse, self.Position), right, up, back)
 		end
-	end
-	if key == "PointToObjectSpace" then
+	elseif key == "PointToObjectSpace" then
 		return function(self, point)
-			return rotate(point - self.Position, -self.yaw)
+			return unrotate(self, point - self.Position)
 		end
-	end
-	if key == "PointToWorldSpace" then
+	elseif key == "PointToWorldSpace" then
 		return function(self, point)
-			return self.Position + rotate(point, self.yaw)
+			return self.Position + rotate(self, point)
+		end
+	elseif key == "VectorToWorldSpace" then
+		return function(self, v)
+			return rotate(self, v)
+		end
+	elseif key == "VectorToObjectSpace" then
+		return function(self, v)
+			return unrotate(self, v)
+		end
+	elseif key == "ToObjectSpace" then
+		return function(self, other)
+			return self:Inverse() * other
 		end
 	end
 	return nil
+end
+local function axisX(angle)
+	local c, s = math.cos(angle), math.sin(angle)
+	return frame(vector(0, 0, 0), vector(1, 0, 0), vector(0, c, s), vector(0, -s, c))
+end
+local function axisY(angle)
+	local c, s = math.cos(angle), math.sin(angle)
+	return frame(vector(0, 0, 0), vector(c, 0, -s), vector(0, 1, 0), vector(s, 0, c))
+end
+local function axisZ(angle)
+	local c, s = math.cos(angle), math.sin(angle)
+	return frame(vector(0, 0, 0), vector(c, s, 0), vector(-s, c, 0), vector(0, 0, 1))
 end
 Engine.CFrame = {
 	new = function(a, b, c)
 		return frame(if type(a) == "number" then vector(a, b, c) else a)
 	end,
-	Angles = function(_x, y, _z)
-		return frame(vector(0, 0, 0), y)
+	Angles = function(x, y, z)
+		return axisX(x) * axisY(y) * axisZ(z)
 	end,
-	lookAt = function(position, target)
-		local direction = target - position
-		return frame(position, math.atan2(-direction.X, -direction.Z))
+	fromEulerAnglesYXZ = function(x, y, z)
+		return axisY(y) * axisX(x) * axisZ(z)
+	end,
+	lookAt = function(position, target, upHint)
+		local look = (target - position).Unit
+		local right = cross(look, upHint or vector(0, 1, 0)).Unit
+		local up = cross(right, look)
+		return frame(position, right, up, -look)
+	end,
+	fromMatrix = function(position, right, up, back)
+		return frame(position, right, up, back or cross(right, up))
 	end,
 }
+local function children(object)
+	return rawget(object, "_children")
+end
+local partClasses = { Part = true, SpawnLocation = true, WedgePart = true }
 local function node(class)
 	local object = {
 		Name = class,
 		ClassName = class,
-		Parent = nil,
 		attrs = {},
 		Destroying = signal(),
 		MouseClick = signal(),
 		dead = false,
 		CanCollide = true,
 		Transparency = 0,
+		_children = {},
 	}
 	setmetatable(object, {
 		__index = function(self, key)
 			if key == "CFrame" then
 				return rawget(self, "_cframe") or frame(self.Position)
+			elseif key == "Parent" then
+				return rawget(self, "_parent")
 			end
 			return nil
 		end,
@@ -138,6 +224,22 @@ local function node(class)
 			if key == "CFrame" then
 				rawset(self, "_cframe", value)
 				rawset(self, "Position", value.Position)
+			elseif key == "Parent" then
+				local old = rawget(self, "_parent")
+				if old == value then
+					return
+				end
+				if old then
+					local siblings = children(old)
+					local index = table.find(siblings, self)
+					if index then
+						table.remove(siblings, index)
+					end
+				end
+				rawset(self, "_parent", value)
+				if value then
+					table.insert(children(value), self)
+				end
 			else
 				rawset(self, key, value)
 			end
@@ -161,16 +263,20 @@ local function node(class)
 		self.Position = cf.Position
 	end
 	function object:GetChildren()
-		local children = {}
-		for _, child in Engine.nodes do
-			if child.Parent == self then
-				table.insert(children, child)
+		return table.clone(children(self))
+	end
+	function object:GetDescendants()
+		local found = {}
+		for _, child in children(self) do
+			table.insert(found, child)
+			for _, nested in child:GetDescendants() do
+				table.insert(found, nested)
 			end
 		end
-		return children
+		return found
 	end
 	function object:FindFirstChild(name)
-		for _, child in self:GetChildren() do
+		for _, child in children(self) do
 			if child.Name == name then
 				return child
 			end
@@ -178,7 +284,7 @@ local function node(class)
 		return nil
 	end
 	function object:FindFirstChildOfClass(kind)
-		for _, child in self:GetChildren() do
+		for _, child in children(self) do
 			if child.ClassName == kind then
 				return child
 			end
@@ -186,7 +292,9 @@ local function node(class)
 		return nil
 	end
 	function object:IsA(kind)
-		return self.ClassName == kind or (kind == "BasePart" and self.ClassName == "Part")
+		return self.ClassName == kind
+			or (kind == "BasePart" and partClasses[self.ClassName] == true)
+			or (kind == "Light" and (self.ClassName == "PointLight" or self.ClassName == "SurfaceLight"))
 	end
 	function object:SetAttribute(key, value)
 		self.attrs[key] = value
@@ -212,16 +320,43 @@ local function node(class)
 	return object
 end
 Engine.Instance = { new = node }
+Engine.warnings = {}
+function Engine.warn(...)
+	table.insert(Engine.warnings, table.concat({ ... }, " "))
+end
 Engine.workspace = node("Workspace")
-Engine.Color3 = {
-	fromRGB = function(r, g, b)
-		return { r, g, b }
+local colorMeta = {}
+local function color(r, g, b)
+	return setmetatable({ r, g, b, R = r / 255, G = g / 255, B = b / 255 }, colorMeta)
+end
+colorMeta.__index = {
+	Lerp = function(a, b, t)
+		return color(a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t, a[3] + (b[3] - a[3]) * t)
 	end,
+}
+Engine.Color3 = {
+	fromRGB = color,
 	new = function(r, g, b)
-		return { r, g, b }
+		return color(r * 255, g * 255, b * 255)
+	end,
+	fromHex = function(hex)
+		local value = tonumber((string.gsub(hex, "#", "")), 16) or 0
+		return color(
+			bit32.rshift(value, 16),
+			bit32.band(bit32.rshift(value, 8), 255),
+			bit32.band(value, 255)
+		)
+	end,
+}
+Engine.UDim = {
+	new = function(scale, offset)
+		return { Scale = scale, Offset = offset }
 	end,
 }
 Engine.UDim2 = {
+	new = function(xs, xo, ys, yo)
+		return { xs, xo, ys, yo }
+	end,
 	fromOffset = function(x, y)
 		return { x, y }
 	end,
