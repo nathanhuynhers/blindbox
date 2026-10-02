@@ -1,0 +1,584 @@
+{
+  "figure": "Echo",
+  "title": "Echo Star",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    2.8163,
+    2.3281,
+    3.2168
+  ],
+  "meshes": 25,
+  "triangles": 59878,
+  "materials": [
+    "Echo_Blush",
+    "Echo_Brow",
+    "Echo_Clouds",
+    "Echo_Dress",
+    "Echo_EyeShine",
+    "Echo_EyeWhite",
+    "Echo_Hair",
+    "Echo_Iris",
+    "Echo_Jar",
+    "Echo_Lash",
+    "Echo_Lavender",
+    "Echo_Lid",
+    "Echo_Mouth",
+    "Echo_Nose",
+    "Echo_Shoes",
+    "Echo_Skin",
+    "Echo_Star",
+    "Echo_StarPrints"
+  ],
+  "components": {
+    "Echo_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.14363
+    },
+    "Echo_Hair": {
+      "tris": 9664,
+      "verts": 4824,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.46619
+    },
+    "Echo_Headband": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.13551
+    },
+    "Echo_Bow": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03624
+    },
+    "Echo_BowTails": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01111
+    },
+    "Echo_StarClip": {
+      "tris": 750,
+      "verts": 377,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00301
+    },
+    "Echo_HeadbandStars": {
+      "tris": 732,
+      "verts": 378,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00098
+    },
+    "Echo_Eyes": {
+      "tris": 798,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01557
+    },
+    "Echo_Iris": {
+      "tris": 1196,
+      "verts": 602,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01344
+    },
+    "Echo_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00077
+    },
+    "Echo_Lash": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00137
+    },
+    "Echo_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00034
+    },
+    "Echo_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "Echo_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "Echo_Blush": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00622
+    },
+    "Echo_Dress": {
+      "tris": 7998,
+      "verts": 4001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.7516
+    },
+    "Echo_DressStars": {
+      "tris": 1996,
+      "verts": 1026,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00303
+    },
+    "Echo_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01031
+    },
+    "Echo_Shoes": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04005
+    },
+    "Echo_Jar": {
+      "tris": 5000,
+      "verts": 2504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.56289
+    },
+    "Echo_Lid": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08268
+    },
+    "Echo_Clouds": {
+      "tris": 2998,
+      "verts": 1499,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06941
+    },
+    "Echo_Star": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02758
+    },
+    "Echo_JarBow": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00241
+    },
+    "Echo_Charm": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00126
+    }
+  },
+  "build": {
+    "Echo_Head": {
+      "active_blocks": 5618,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 259888,
+      "removed_faces": 0,
+      "seconds": 8.3
+    },
+    "Echo_Hair": {
+      "active_blocks": 18291,
+      "blocks": 78720,
+      "grid": [
+        385,
+        329,
+        321
+      ],
+      "raw_tris": 1118484,
+      "removed_faces": 84,
+      "seconds": 43.4
+    },
+    "Echo_Headband": {
+      "active_blocks": 7321,
+      "blocks": 43560,
+      "grid": [
+        441,
+        177,
+        289
+      ],
+      "raw_tris": 312792,
+      "removed_faces": 0,
+      "seconds": 9.4
+    },
+    "Echo_Bow": {
+      "active_blocks": 2120,
+      "blocks": 12150,
+      "grid": [
+        241,
+        121,
+        217
+      ],
+      "raw_tris": 94220,
+      "removed_faces": 0,
+      "seconds": 4.9
+    },
+    "Echo_BowTails": {
+      "active_blocks": 1726,
+      "blocks": 8806,
+      "grid": [
+        137,
+        113,
+        297
+      ],
+      "raw_tris": 87620,
+      "removed_faces": 0,
+      "seconds": 3.9
+    },
+    "Echo_StarClip": {
+      "active_blocks": 558,
+      "blocks": 3328,
+      "grid": [
+        105,
+        129,
+        129
+      ],
+      "raw_tris": 24728,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Echo_HeadbandStars": {
+      "active_blocks": 1796,
+      "blocks": 56088,
+      "grid": [
+        577,
+        153,
+        329
+      ],
+      "raw_tris": 29728,
+      "removed_faces": 18,
+      "seconds": 3.7
+    },
+    "Echo_Eyes": {
+      "active_blocks": 2929,
+      "blocks": 15466,
+      "grid": [
+        297,
+        153,
+        177
+      ],
+      "raw_tris": 100804,
+      "removed_faces": 0,
+      "seconds": 5.3
+    },
+    "Echo_Iris": {
+      "active_blocks": 2443,
+      "blocks": 15876,
+      "grid": [
+        289,
+        169,
+        169
+      ],
+      "raw_tris": 82916,
+      "removed_faces": 0,
+      "seconds": 4.7
+    },
+    "Echo_EyeShine": {
+      "active_blocks": 804,
+      "blocks": 10368,
+      "grid": [
+        289,
+        129,
+        145
+      ],
+      "raw_tris": 15288,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "Echo_Lash": {
+      "active_blocks": 1636,
+      "blocks": 19665,
+      "grid": [
+        361,
+        185,
+        153
+      ],
+      "raw_tris": 47336,
+      "removed_faces": 0,
+      "seconds": 3.3
+    },
+    "Echo_Brow": {
+      "active_blocks": 585,
+      "blocks": 5376,
+      "grid": [
+        257,
+        113,
+        97
+      ],
+      "raw_tris": 6976,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "Echo_Nose": {
+      "active_blocks": 149,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 3460,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Echo_Mouth": {
+      "active_blocks": 324,
+      "blocks": 2079,
+      "grid": [
+        89,
+        169,
+        73
+      ],
+      "raw_tris": 4160,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Echo_Blush": {
+      "active_blocks": 1224,
+      "blocks": 7140,
+      "grid": [
+        273,
+        121,
+        113
+      ],
+      "raw_tris": 44152,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "Echo_Dress": {
+      "active_blocks": 14402,
+      "blocks": 77616,
+      "grid": [
+        449,
+        337,
+        265
+      ],
+      "raw_tris": 725172,
+      "removed_faces": 0,
+      "seconds": 60.5
+    },
+    "Echo_DressStars": {
+      "active_blocks": 3359,
+      "blocks": 159182,
+      "grid": [
+        569,
+        473,
+        305
+      ],
+      "raw_tris": 87314,
+      "removed_faces": 2,
+      "seconds": 18.5
+    },
+    "Echo_Hands": {
+      "active_blocks": 932,
+      "blocks": 8400,
+      "grid": [
+        225,
+        121,
+        161
+      ],
+      "raw_tris": 38004,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "Echo_Shoes": {
+      "active_blocks": 2078,
+      "blocks": 6500,
+      "grid": [
+        201,
+        161,
+        105
+      ],
+      "raw_tris": 85616,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "Echo_Jar": {
+      "active_blocks": 14456,
+      "blocks": 36518,
+      "grid": [
+        249,
+        249,
+        305
+      ],
+      "raw_tris": 919160,
+      "removed_faces": 0,
+      "seconds": 17.1
+    },
+    "Echo_Lid": {
+      "active_blocks": 3704,
+      "blocks": 8019,
+      "grid": [
+        217,
+        217,
+        89
+      ],
+      "raw_tris": 174140,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "Echo_Clouds": {
+      "active_blocks": 3064,
+      "blocks": 8832,
+      "grid": [
+        185,
+        193,
+        129
+      ],
+      "raw_tris": 155954,
+      "removed_faces": 0,
+      "seconds": 3.4
+    },
+    "Echo_Star": {
+      "active_blocks": 1428,
+      "blocks": 5460,
+      "grid": [
+        169,
+        105,
+        161
+      ],
+      "raw_tris": 67668,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "Echo_JarBow": {
+      "active_blocks": 612,
+      "blocks": 3432,
+      "grid": [
+        97,
+        105,
+        177
+      ],
+      "raw_tris": 22612,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "Echo_Charm": {
+      "active_blocks": 345,
+      "blocks": 2028,
+      "grid": [
+        105,
+        97,
+        105
+      ],
+      "raw_tris": 13728,
+      "removed_faces": 0,
+      "seconds": 0.4
+    }
+  },
+  "glb": {
+    "bytes": 1351360,
+    "nodes": [
+      "Echo_Blush",
+      "Echo_Bow",
+      "Echo_BowTails",
+      "Echo_Brow",
+      "Echo_Charm",
+      "Echo_Clouds",
+      "Echo_Dress",
+      "Echo_DressStars",
+      "Echo_Eyes",
+      "Echo_EyeShine",
+      "Echo_Hair",
+      "Echo_Hands",
+      "Echo_Head",
+      "Echo_Headband",
+      "Echo_HeadbandStars",
+      "Echo_Iris",
+      "Echo_Jar",
+      "Echo_JarBow",
+      "Echo_Lash",
+      "Echo_Lid",
+      "Echo_Mouth",
+      "Echo_Nose",
+      "Echo_Shoes",
+      "Echo_Star",
+      "Echo_StarClip",
+      "Echo"
+    ],
+    "meshes": 25,
+    "materials": 18,
+    "images": 18,
+    "textures": 18,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.echo",
+  "root": "Echo",
+  "face": "Echo_Eyes",
+  "glass": [
+    "Echo_Jar"
+  ],
+  "reimport": {
+    "meshes": 25,
+    "triangle_mismatches": {}
+  }
+}

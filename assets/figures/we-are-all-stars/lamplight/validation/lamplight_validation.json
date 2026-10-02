@@ -1,0 +1,652 @@
+{
+  "figure": "Lamplight",
+  "title": "Lamplight Star",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.9352,
+    2.2098,
+    3.5056
+  ],
+  "meshes": 28,
+  "triangles": 72022,
+  "materials": [
+    "Lamplight_BlueCloud",
+    "Lamplight_Blush",
+    "Lamplight_Brow",
+    "Lamplight_CapStars",
+    "Lamplight_CapTrim",
+    "Lamplight_Cat",
+    "Lamplight_CatBlush",
+    "Lamplight_CatEars",
+    "Lamplight_CatEyes",
+    "Lamplight_CatNose",
+    "Lamplight_Cloud",
+    "Lamplight_Collar",
+    "Lamplight_EyeShine",
+    "Lamplight_EyeWhite",
+    "Lamplight_Hair",
+    "Lamplight_Iris",
+    "Lamplight_Lash",
+    "Lamplight_Mouth",
+    "Lamplight_Nightcap",
+    "Lamplight_Nose",
+    "Lamplight_PajamaStars",
+    "Lamplight_Pajamas",
+    "Lamplight_Skin",
+    "Lamplight_Socks",
+    "Lamplight_Stars"
+  ],
+  "components": {
+    "Lamplight_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.14362
+    },
+    "Lamplight_Hair": {
+      "tris": 9746,
+      "verts": 4875,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.84464
+    },
+    "Lamplight_Nightcap": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.6938
+    },
+    "Lamplight_CapTrim": {
+      "tris": 3998,
+      "verts": 1999,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.40249
+    },
+    "Lamplight_CapStars": {
+      "tris": 2996,
+      "verts": 1530,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00722
+    },
+    "Lamplight_Pompom": {
+      "tris": 2000,
+      "verts": 1002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02392
+    },
+    "Lamplight_Pajamas": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.51988
+    },
+    "Lamplight_PajamaStars": {
+      "tris": 1496,
+      "verts": 768,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00105
+    },
+    "Lamplight_Collar": {
+      "tris": 1498,
+      "verts": 751,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01544
+    },
+    "Lamplight_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00985
+    },
+    "Lamplight_Socks": {
+      "tris": 998,
+      "verts": 503,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02041
+    },
+    "Lamplight_Cloud": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.07158
+    },
+    "Lamplight_BlueCloud": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.14491
+    },
+    "Lamplight_Cat": {
+      "tris": 3998,
+      "verts": 2001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.11984
+    },
+    "Lamplight_Stars": {
+      "tris": 4500,
+      "verts": 2258,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04135
+    },
+    "Lamplight_CatEars": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00016
+    },
+    "Lamplight_CatEyes": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00046
+    },
+    "Lamplight_CatMouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 9e-05
+    },
+    "Lamplight_CatNose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 4e-05
+    },
+    "Lamplight_CatBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00063
+    },
+    "Lamplight_Eyes": {
+      "tris": 798,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01558
+    },
+    "Lamplight_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01373
+    },
+    "Lamplight_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00077
+    },
+    "Lamplight_Lash": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00136
+    },
+    "Lamplight_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00034
+    },
+    "Lamplight_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "Lamplight_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "Lamplight_Blush": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00623
+    }
+  },
+  "build": {
+    "Lamplight_Head": {
+      "active_blocks": 5619,
+      "blocks": 18009,
+      "grid": [
+        217,
+        185,
+        233
+      ],
+      "raw_tris": 259620,
+      "removed_faces": 0,
+      "seconds": 5.7
+    },
+    "Lamplight_Hair": {
+      "active_blocks": 16003,
+      "blocks": 67445,
+      "grid": [
+        377,
+        329,
+        281
+      ],
+      "raw_tris": 973546,
+      "removed_faces": 2,
+      "seconds": 20.9
+    },
+    "Lamplight_Nightcap": {
+      "active_blocks": 10940,
+      "blocks": 47124,
+      "grid": [
+        337,
+        273,
+        265
+      ],
+      "raw_tris": 500900,
+      "removed_faces": 0,
+      "seconds": 52.6
+    },
+    "Lamplight_CapTrim": {
+      "active_blocks": 8934,
+      "blocks": 41078,
+      "grid": [
+        377,
+        369,
+        153
+      ],
+      "raw_tris": 438388,
+      "removed_faces": 0,
+      "seconds": 15.0
+    },
+    "Lamplight_CapStars": {
+      "active_blocks": 4738,
+      "blocks": 127512,
+      "grid": [
+        529,
+        369,
+        337
+      ],
+      "raw_tris": 127804,
+      "removed_faces": 4,
+      "seconds": 26.5
+    },
+    "Lamplight_Pompom": {
+      "active_blocks": 1066,
+      "blocks": 4096,
+      "grid": [
+        129,
+        129,
+        129
+      ],
+      "raw_tris": 52540,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "Lamplight_Pajamas": {
+      "active_blocks": 5319,
+      "blocks": 14560,
+      "grid": [
+        225,
+        209,
+        161
+      ],
+      "raw_tris": 242024,
+      "removed_faces": 0,
+      "seconds": 23.4
+    },
+    "Lamplight_PajamaStars": {
+      "active_blocks": 2237,
+      "blocks": 53998,
+      "grid": [
+        393,
+        305,
+        233
+      ],
+      "raw_tris": 38416,
+      "removed_faces": 2,
+      "seconds": 10.8
+    },
+    "Lamplight_Collar": {
+      "active_blocks": 1282,
+      "blocks": 4416,
+      "grid": [
+        185,
+        129,
+        97
+      ],
+      "raw_tris": 54522,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "Lamplight_Hands": {
+      "active_blocks": 886,
+      "blocks": 3250,
+      "grid": [
+        201,
+        105,
+        81
+      ],
+      "raw_tris": 36866,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "Lamplight_Socks": {
+      "active_blocks": 1288,
+      "blocks": 4500,
+      "grid": [
+        201,
+        97,
+        121
+      ],
+      "raw_tris": 55420,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Lamplight_Cloud": {
+      "active_blocks": 9395,
+      "blocks": 18816,
+      "grid": [
+        337,
+        257,
+        113
+      ],
+      "raw_tris": 470992,
+      "removed_faces": 0,
+      "seconds": 15.6
+    },
+    "Lamplight_BlueCloud": {
+      "active_blocks": 9626,
+      "blocks": 23400,
+      "grid": [
+        401,
+        209,
+        145
+      ],
+      "raw_tris": 447036,
+      "removed_faces": 0,
+      "seconds": 16.8
+    },
+    "Lamplight_Cat": {
+      "active_blocks": 2734,
+      "blocks": 9120,
+      "grid": [
+        161,
+        193,
+        153
+      ],
+      "raw_tris": 123688,
+      "removed_faces": 0,
+      "seconds": 8.3
+    },
+    "Lamplight_Stars": {
+      "active_blocks": 2923,
+      "blocks": 34840,
+      "grid": [
+        537,
+        161,
+        209
+      ],
+      "raw_tris": 130276,
+      "removed_faces": 0,
+      "seconds": 6.1
+    },
+    "Lamplight_CatEars": {
+      "active_blocks": 362,
+      "blocks": 2508,
+      "grid": [
+        153,
+        89,
+        97
+      ],
+      "raw_tris": 5232,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Lamplight_CatEyes": {
+      "active_blocks": 578,
+      "blocks": 4488,
+      "grid": [
+        177,
+        137,
+        97
+      ],
+      "raw_tris": 13468,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "Lamplight_CatMouth": {
+      "active_blocks": 272,
+      "blocks": 2720,
+      "grid": [
+        129,
+        137,
+        81
+      ],
+      "raw_tris": 5536,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "Lamplight_CatNose": {
+      "active_blocks": 102,
+      "blocks": 1440,
+      "grid": [
+        97,
+        97,
+        81
+      ],
+      "raw_tris": 1908,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Lamplight_CatBlush": {
+      "active_blocks": 561,
+      "blocks": 3680,
+      "grid": [
+        185,
+        129,
+        81
+      ],
+      "raw_tris": 13436,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "Lamplight_Eyes": {
+      "active_blocks": 2909,
+      "blocks": 14364,
+      "grid": [
+        305,
+        169,
+        145
+      ],
+      "raw_tris": 100784,
+      "removed_faces": 0,
+      "seconds": 4.5
+    },
+    "Lamplight_Iris": {
+      "active_blocks": 2482,
+      "blocks": 13986,
+      "grid": [
+        297,
+        169,
+        145
+      ],
+      "raw_tris": 84584,
+      "removed_faces": 0,
+      "seconds": 4.6
+    },
+    "Lamplight_EyeShine": {
+      "active_blocks": 814,
+      "blocks": 7488,
+      "grid": [
+        289,
+        129,
+        105
+      ],
+      "raw_tris": 15372,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "Lamplight_Lash": {
+      "active_blocks": 1549,
+      "blocks": 15136,
+      "grid": [
+        345,
+        177,
+        129
+      ],
+      "raw_tris": 48544,
+      "removed_faces": 0,
+      "seconds": 3.0
+    },
+    "Lamplight_Brow": {
+      "active_blocks": 584,
+      "blocks": 3224,
+      "grid": [
+        249,
+        105,
+        65
+      ],
+      "raw_tris": 6904,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "Lamplight_Nose": {
+      "active_blocks": 136,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3396,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Lamplight_Mouth": {
+      "active_blocks": 303,
+      "blocks": 2772,
+      "grid": [
+        97,
+        169,
+        89
+      ],
+      "raw_tris": 4024,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Lamplight_Blush": {
+      "active_blocks": 1230,
+      "blocks": 5775,
+      "grid": [
+        281,
+        121,
+        89
+      ],
+      "raw_tris": 44376,
+      "removed_faces": 0,
+      "seconds": 2.4
+    }
+  },
+  "glb": {
+    "bytes": 1626704,
+    "nodes": [
+      "Lamplight_BlueCloud",
+      "Lamplight_Blush",
+      "Lamplight_Brow",
+      "Lamplight_CapStars",
+      "Lamplight_CapTrim",
+      "Lamplight_Cat",
+      "Lamplight_CatBlush",
+      "Lamplight_CatEars",
+      "Lamplight_CatEyes",
+      "Lamplight_CatMouth",
+      "Lamplight_CatNose",
+      "Lamplight_Cloud",
+      "Lamplight_Collar",
+      "Lamplight_Eyes",
+      "Lamplight_EyeShine",
+      "Lamplight_Hair",
+      "Lamplight_Hands",
+      "Lamplight_Head",
+      "Lamplight_Iris",
+      "Lamplight_Lash",
+      "Lamplight_Mouth",
+      "Lamplight_Nightcap",
+      "Lamplight_Nose",
+      "Lamplight_Pajamas",
+      "Lamplight_PajamaStars",
+      "Lamplight_Pompom",
+      "Lamplight_Socks",
+      "Lamplight_Stars",
+      "Lamplight"
+    ],
+    "meshes": 28,
+    "materials": 25,
+    "images": 25,
+    "textures": 25,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.lamplight",
+  "root": "Lamplight",
+  "face": "Lamplight_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 28,
+    "triangle_mismatches": {}
+  }
+}

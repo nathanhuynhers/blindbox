@@ -1,0 +1,607 @@
+{
+  "figure": "CloudRest",
+  "title": "Cloud Rest Star",
+  "rarity": "Legendary",
+  "size_xyz_studs": [
+    2.9594,
+    2.0295,
+    3.3377
+  ],
+  "meshes": 26,
+  "triangles": 59558,
+  "materials": [
+    "CloudRest_BlueStars",
+    "CloudRest_Blush",
+    "CloudRest_Brow",
+    "CloudRest_Cat",
+    "CloudRest_CatBlush",
+    "CloudRest_CatEars",
+    "CloudRest_CatEyes",
+    "CloudRest_CatNose",
+    "CloudRest_CatStar",
+    "CloudRest_Cloud",
+    "CloudRest_Hair",
+    "CloudRest_Lash",
+    "CloudRest_Mobile",
+    "CloudRest_MobileCloud",
+    "CloudRest_Mouth",
+    "CloudRest_Nose",
+    "CloudRest_PajamaStars",
+    "CloudRest_Pajamas",
+    "CloudRest_Skin",
+    "CloudRest_Socks",
+    "CloudRest_StarPillow",
+    "CloudRest_YellowStars"
+  ],
+  "components": {
+    "CloudRest_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.83367
+    },
+    "CloudRest_Hair": {
+      "tris": 9622,
+      "verts": 4803,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.02062
+    },
+    "CloudRest_Eyes": {
+      "tris": 598,
+      "verts": 303,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00128
+    },
+    "CloudRest_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0002
+    },
+    "CloudRest_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00016
+    },
+    "CloudRest_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 9e-05
+    },
+    "CloudRest_Blush": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00453
+    },
+    "CloudRest_Pajamas": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.39657
+    },
+    "CloudRest_PajamaStars": {
+      "tris": 998,
+      "verts": 511,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0006
+    },
+    "CloudRest_Hands": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0046
+    },
+    "CloudRest_Socks": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0151
+    },
+    "CloudRest_Cloud": {
+      "tris": 9500,
+      "verts": 4748,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.67729
+    },
+    "CloudRest_Cat": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08647
+    },
+    "CloudRest_CatStar": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00019
+    },
+    "CloudRest_StarPillow": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.13143
+    },
+    "CloudRest_Mobile": {
+      "tris": 4000,
+      "verts": 2006,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04488
+    },
+    "CloudRest_MobileCloud": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02547
+    },
+    "CloudRest_YellowStars": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00589
+    },
+    "CloudRest_BlueStar": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00362
+    },
+    "CloudRest_BlueFlowers": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08036
+    },
+    "CloudRest_FlowerStars": {
+      "tris": 744,
+      "verts": 380,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00069
+    },
+    "CloudRest_CatEars": {
+      "tris": 396,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "CloudRest_CatEyes": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "CloudRest_CatMouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 8e-05
+    },
+    "CloudRest_CatNose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3e-05
+    },
+    "CloudRest_CatBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00051
+    }
+  },
+  "build": {
+    "CloudRest_Head": {
+      "active_blocks": 4571,
+      "blocks": 13104,
+      "grid": [
+        193,
+        169,
+        209
+      ],
+      "raw_tris": 210552,
+      "removed_faces": 0,
+      "seconds": 10.3
+    },
+    "CloudRest_Hair": {
+      "active_blocks": 12910,
+      "blocks": 49896,
+      "grid": [
+        337,
+        289,
+        265
+      ],
+      "raw_tris": 749856,
+      "removed_faces": 126,
+      "seconds": 36.3
+    },
+    "CloudRest_Eyes": {
+      "active_blocks": 1418,
+      "blocks": 16632,
+      "grid": [
+        337,
+        177,
+        145
+      ],
+      "raw_tris": 33576,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "CloudRest_Brow": {
+      "active_blocks": 566,
+      "blocks": 4524,
+      "grid": [
+        233,
+        105,
+        97
+      ],
+      "raw_tris": 4920,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "CloudRest_Nose": {
+      "active_blocks": 129,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 2780,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "CloudRest_Mouth": {
+      "active_blocks": 252,
+      "blocks": 2079,
+      "grid": [
+        89,
+        169,
+        73
+      ],
+      "raw_tris": 3364,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "CloudRest_Blush": {
+      "active_blocks": 1076,
+      "blocks": 6510,
+      "grid": [
+        249,
+        121,
+        113
+      ],
+      "raw_tris": 35800,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "CloudRest_Pajamas": {
+      "active_blocks": 4457,
+      "blocks": 12750,
+      "grid": [
+        241,
+        201,
+        137
+      ],
+      "raw_tris": 211288,
+      "removed_faces": 0,
+      "seconds": 21.3
+    },
+    "CloudRest_PajamaStars": {
+      "active_blocks": 1290,
+      "blocks": 48298,
+      "grid": [
+        305,
+        329,
+        249
+      ],
+      "raw_tris": 23298,
+      "removed_faces": 0,
+      "seconds": 9.8
+    },
+    "CloudRest_Hands": {
+      "active_blocks": 547,
+      "blocks": 2704,
+      "grid": [
+        129,
+        105,
+        105
+      ],
+      "raw_tris": 20580,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "CloudRest_Socks": {
+      "active_blocks": 983,
+      "blocks": 3276,
+      "grid": [
+        145,
+        113,
+        105
+      ],
+      "raw_tris": 45324,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "CloudRest_Cloud": {
+      "active_blocks": 16050,
+      "blocks": 43200,
+      "grid": [
+        401,
+        289,
+        193
+      ],
+      "raw_tris": 736696,
+      "removed_faces": 0,
+      "seconds": 31.6
+    },
+    "CloudRest_Cat": {
+      "active_blocks": 3004,
+      "blocks": 11592,
+      "grid": [
+        169,
+        193,
+        185
+      ],
+      "raw_tris": 136816,
+      "removed_faces": 0,
+      "seconds": 3.6
+    },
+    "CloudRest_CatStar": {
+      "active_blocks": 217,
+      "blocks": 2016,
+      "grid": [
+        113,
+        97,
+        97
+      ],
+      "raw_tris": 6928,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "CloudRest_StarPillow": {
+      "active_blocks": 2729,
+      "blocks": 9600,
+      "grid": [
+        201,
+        129,
+        193
+      ],
+      "raw_tris": 135576,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "CloudRest_Mobile": {
+      "active_blocks": 4237,
+      "blocks": 44280,
+      "grid": [
+        329,
+        121,
+        577
+      ],
+      "raw_tris": 176280,
+      "removed_faces": 0,
+      "seconds": 22.1
+    },
+    "CloudRest_MobileCloud": {
+      "active_blocks": 1284,
+      "blocks": 3705,
+      "grid": [
+        153,
+        105,
+        121
+      ],
+      "raw_tris": 56328,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "CloudRest_YellowStars": {
+      "active_blocks": 1109,
+      "blocks": 39312,
+      "grid": [
+        289,
+        169,
+        417
+      ],
+      "raw_tris": 47720,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "CloudRest_BlueStar": {
+      "active_blocks": 633,
+      "blocks": 3179,
+      "grid": [
+        137,
+        89,
+        137
+      ],
+      "raw_tris": 27452,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "CloudRest_BlueFlowers": {
+      "active_blocks": 3134,
+      "blocks": 10080,
+      "grid": [
+        169,
+        161,
+        193
+      ],
+      "raw_tris": 152772,
+      "removed_faces": 0,
+      "seconds": 6.3
+    },
+    "CloudRest_FlowerStars": {
+      "active_blocks": 1125,
+      "blocks": 8464,
+      "grid": [
+        185,
+        129,
+        185
+      ],
+      "raw_tris": 23200,
+      "removed_faces": 6,
+      "seconds": 3.3
+    },
+    "CloudRest_CatEars": {
+      "active_blocks": 337,
+      "blocks": 2223,
+      "grid": [
+        153,
+        73,
+        105
+      ],
+      "raw_tris": 4476,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "CloudRest_CatEyes": {
+      "active_blocks": 499,
+      "blocks": 4032,
+      "grid": [
+        169,
+        129,
+        97
+      ],
+      "raw_tris": 10720,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "CloudRest_CatMouth": {
+      "active_blocks": 259,
+      "blocks": 2240,
+      "grid": [
+        113,
+        129,
+        81
+      ],
+      "raw_tris": 4664,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "CloudRest_CatNose": {
+      "active_blocks": 105,
+      "blocks": 1452,
+      "grid": [
+        89,
+        89,
+        97
+      ],
+      "raw_tris": 1700,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "CloudRest_CatBlush": {
+      "active_blocks": 505,
+      "blocks": 2990,
+      "grid": [
+        185,
+        105,
+        81
+      ],
+      "raw_tris": 11532,
+      "removed_faces": 0,
+      "seconds": 0.8
+    }
+  },
+  "glb": {
+    "bytes": 1347112,
+    "nodes": [
+      "CloudRest_BlueFlowers",
+      "CloudRest_BlueStar",
+      "CloudRest_Blush",
+      "CloudRest_Brow",
+      "CloudRest_Cat",
+      "CloudRest_CatBlush",
+      "CloudRest_CatEars",
+      "CloudRest_CatEyes",
+      "CloudRest_CatMouth",
+      "CloudRest_CatNose",
+      "CloudRest_CatStar",
+      "CloudRest_Cloud",
+      "CloudRest_Eyes",
+      "CloudRest_FlowerStars",
+      "CloudRest_Hair",
+      "CloudRest_Hands",
+      "CloudRest_Head",
+      "CloudRest_Mobile",
+      "CloudRest_MobileCloud",
+      "CloudRest_Mouth",
+      "CloudRest_Nose",
+      "CloudRest_Pajamas",
+      "CloudRest_PajamaStars",
+      "CloudRest_Socks",
+      "CloudRest_StarPillow",
+      "CloudRest_YellowStars",
+      "CloudRest"
+    ],
+    "meshes": 26,
+    "materials": 22,
+    "images": 22,
+    "textures": 22,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.cloud-rest",
+  "root": "CloudRest",
+  "face": "CloudRest_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 26,
+    "triangle_mismatches": {}
+  }
+}

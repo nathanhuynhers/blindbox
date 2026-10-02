@@ -107,7 +107,7 @@ do
 	reach(phase)
 	local revealCount = 0
 	for _, cue in Engine.cues do
-		if cue == "reveal" then
+		if cue == Config.profile("Rare").cues.reveal then
 			revealCount += 1
 		end
 	end
@@ -128,7 +128,7 @@ do
 	)
 	local afterCount = 0
 	for _, cue in Engine.cues do
-		if cue == "reveal" then
+		if cue == Config.profile("Rare").cues.reveal then
 			afterCount += 1
 		end
 	end
@@ -226,6 +226,12 @@ for _, rarity in { "Legendary", "Mythical" } do
 			"profile override preserves authoritative result"
 		)
 		reach("RarityTease")
+		if rarity == "Legendary" then
+			Engine.render:Fire(
+				Config.profile(rarity).signature.pulses[1].at
+					* Config.profile(rarity).flight.transition
+			)
+		end
 		if rarity == "Mythical" then
 			for _, cue in Engine.cues do
 				check(
@@ -305,7 +311,7 @@ do
 	check(countCue("dive") == 1, "dive audio begins after apex")
 	reach("Impact")
 	check(
-		countCue("impact") == 1 and countCue("postImpactShimmer") == 0,
+		countCue(profile.cues.impact) == 1 and countCue("postImpactShimmer") == 0,
 		"contact precedes quiet shimmer"
 	)
 	Engine.render:Fire(Config.flight.impactCalmAt + 0.01)
@@ -313,7 +319,9 @@ do
 	controller.skip()
 	Engine.render:Fire(0.1)
 	check(
-		countCue("dive") == 1 and countCue("impact") == 1 and countCue("postImpactShimmer") == 1,
+		countCue("dive") == 1
+			and countCue(profile.cues.impact) == 1
+			and countCue("postImpactShimmer") == 1,
 		"skip cannot replay flight audio"
 	)
 	controller.cancel()

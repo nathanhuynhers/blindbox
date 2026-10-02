@@ -4,9 +4,11 @@ Five standard rarities are supported: **Common < Uncommon < Rare < Legendary < M
 The five-tier integration preserves the preceding flight polish and cinematic lifecycle
 correction. Automated checks execute the actual cinematic,
 box, skin, figure appearance, effects and audio against engine primitives.
-**Native Studio visual, input, performance and multiplayer acceptance is still pending.**
-Live figure assignments, rates, weights, inventory, persistence, purchase contract and generated
-asset IDs are unchanged. Shared rarity validation and server rate validation now support future
+**Native Studio audiovisual, input, performance and multiplayer acceptance is still pending.**
+The dedicated audio systems pass now has 48 original, uploaded and wired sound assets;
+see [audio architecture](#audio-architecture) and the [delivery checklist](OPENING_AUDIO_ASSETS.md).
+The audio delivery changes no figure assignments, rates, weights, inventory, persistence or purchase
+contract. Shared rarity validation and server rate validation now support future
 high-tier content. See [rarity architecture, audit and future-content procedure](RARITY.md).
 
 ## Ownership and architecture
@@ -21,7 +23,7 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 | Shared Rarity | Canonical identities, order, strict validation and public color palette; no economic state |
 | OpeningController | One session, bounded replay cache, inputs, phase/audio coordination, errors, UI/movement focus and teardown |
 | OpeningState | Deterministic clock, phase transitions, Await activation, Skip, Continue guard, cancellation |
-| OpeningConfig | Rarity timings/intensity, collection presentation, camera/effect limits, sound slots and future tease beats |
+| OpeningConfig | Rarity timings/intensity, collection presentation, shared break markers, camera/effect limits and future tease beats |
 | OpeningCinematic | Local stage, model placement, curved flight, camera choreography and figure presentation |
 | OpeningFlight | Pure deterministic path, timed rarity transformation, hold/apex/dive and layered color samples |
 | OpeningFlightEffects | Preallocated layered comet, curved taper, trailing glints and three depths of atmospheric emitters; owned by FlightEffects |
@@ -31,7 +33,9 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 | OpeningFallbackBox | Existing procedural emergency carton |
 | OpeningFigure | Existing FigureModel factory, normalized awarded model and reversible silhouette treatment on its own instance |
 | OpeningView | Safe-area UI only: transition curtain, Tap to Open, Skip, result name/rarity/NEW/quantity, Continue |
-| OpeningAudio | Bounded local cues/loops, charge pitch, expiry and stopping |
+| OpeningAudioConfig | Approved asset slots, seven logical groups, cue gains/priorities/fades, modulation curves and explicit fallbacks |
+| OpeningAudioSequence | Phase/marker cue decisions, rarity rhythms, ducking, intentional silence and once-only reveal/NEW |
+| OpeningAudio | Session-owned non-positional Sound layers, mix envelopes, load deadlines, bounded voices and teardown |
 | OpeningScope | Idempotent reverse-order cleanup; one cleanup failure cannot prevent the rest |
 
 The main presentation is no longer a ViewportFrame. Every stage object is made by the local
@@ -65,7 +69,10 @@ property mutation is introduced.
 | Closing / Done | 0.22s dark transition; camera restores at opaque midpoint, then the session releases everything |
 
 The lid cap, top panel and top trim travel together; the lid is not immediately destroyed.
-Crack/lid/launch audio markers start at 0.00/0.08/0.18s after activation. No full-screen white flash,
+Click is immediate; compression/crack/lid/launch markers are 0.03/0.10/0.12/0.18s after activation.
+The seam crack burst now shares the 0.10s audio marker; lid audio shares the actual 0.12s motion
+start. These are the only small visual timing corrections in the audio pass. Reduced Break
+scales all markers and lid movement by its duration (0.5 at current settings). No full-screen white flash,
 giant rarity lettering or rainbow burst is used.
 
 | Profile | Timed opening, excluding Await/Result/Closing | Silhouette | Peak flight FOV | Impact rings |
@@ -98,7 +105,7 @@ transition/hold, trail width/length, aura scale, sparkle rate and pulse intensit
 signature parameters own compression, quiet fraction, pulse waves, trail/ring structure,
 highlights and camera response. Mythical's optional `signature.spectralTiming` owns pearl,
 bloom, sweep, ring and calm markers in seconds. Profile cue keys allow unique transformation, impact and reveal
-sounds; the Legendary/Mythical sound slots are intentionally empty and safely silent. The two
+sounds; the Legendary/Mythical slots now use their dedicated original recordings. The two
 flight helpers share those samples with the existing controller, effects and cinematic; the
 phase order and authoritative result flow are unchanged.
 
@@ -286,27 +293,139 @@ Closing. Mythical retains the pearl suspension, single bloom, cyan sweep, a comp
 (22% length, 65% width), softened transformation rings and the same spectral halo. Its camera
 and FOV stay fixed. It does not skip the reveal or discard metadata.
 
-## Audio slots
+## Audio architecture
 
-All sound IDs currently remain empty. Insert original/licensed `rbxassetid://` IDs into
-`OpeningConfig.sounds`:
+**All 48 audio slots are populated with original project-specific synthesis.** The
+[Porcelain & Starlight pack](../assets/audio/opening/README.md) includes the source WAVs,
+reproducible generator, upload receipts, approved moderation results, measured headroom and
+ten full-sequence previews. Native Studio/device listening and rarity prestige acceptance
+remain unverified. The per-key brief is in [OPENING_AUDIO_ASSETS.md](OPENING_AUDIO_ASSETS.md).
 
-- entrance; ambience / ambienceGrove / ambienceTide
-- charge; shake; click; crack; lid; launch; flight; acceleration
-- rarityTransformation; rarityCommon; rarityUncommon; rarityRare; dive
-- rarityLegendary; rarityMythical; transformLegendary; transformMythical
-- impactLegendary; impactMythical; revealLegendary; revealMythical
-- impact; postImpactShimmer; silhouette; reveal; discovery; close
+`OpeningAudioConfig` resolves uploaded IDs from `Shared.AssetIds` and owns mix tuning. Its `sounds` table is also exposed as
+`OpeningConfig.sounds`. Each cue declares group, volume, PlaybackSpeed, loop, fade-in/out,
+one-shot ceiling, priority and optional fallback/progress curve. `OpeningAudioSequence` reads
+the existing State/Flight clocks; the controller still owns the session, visuals, inputs and
+cancellation. No cue uses task.delay. No dependency or general-purpose audio engine was added.
 
-Collection ambience, charge and flight can loop only while their phase group is active.
-Await, Break, Impact, Silhouette, Skip and teardown stop temporary layers. Charge pitch rises
-with progress; flight volume/pitch follow energy and ease during the recognition hold. Dive
-fires after the apex; impact stops flight audio; postImpactShimmer fires at the profile's calm
-boundary (0.17s Mythical, otherwise 0.22s). Mythical stops remaining flight/acceleration cues
-during suspense and defers its transformation/rarity sting until 0.145s. Skip discards that
-pending cue without creating a delayed task. Playback is capped at eight concurrent sounds with an eight-second hard lifetime.
-The controller emits the reveal/NEW cues at most once per session, including Skip during Reveal.
-Sound loading never drives or blocks the clock.
+The seven logical groups are **Ambience, Box, Energy, Rarity, Impact, Reveal and UI**. They are
+local gain buses, not global SoundService changes. Sounds belong to the session's
+`SoundService.OpeningSounds` folder. They remain non-positional cinematic sounds so camera
+motion cannot change critical cue loudness. Stereo sources may preserve modest depth without
+hard panning; critical information must work in mono. This follows Roblox's documented
+[Sound placement behavior](https://create.roblox.com/docs/sound/objects).
+No listener, global reverb, other gameplay sound or audio setting changes.
+
+Master gain is 0.45. Relative gains include crack 0.85, impact 0.82, reveal 0.60, launch 0.62,
+lid 0.42, flight tone 0.28, air 0.18 and ambience 0.10. Ambience ducks to 25% for Break;
+energy ducks to 42% for transformation, 60% for recognition and 42% at apex, then builds on dive.
+High-tier identity cues have comparable gains to lower tiers: composition carries prestige.
+At the eight-Sound cap, an equal/higher-priority cue may replace the oldest lowest-priority
+voice. Summed linear output gains are capped at 0.8. This is headroom, not a waveform limiter:
+actual source mastering and comfortable device loudness still need listening verification.
+
+| Phase / marker | Audio decision |
+| --- | --- |
+| Enter | Fade in subtle neutral/collection ambience |
+| Arrival | Small movement whoosh in normal motion; settle at 58% of the back-ease |
+| Anticipation | Mostly ambience; quiet interior tonal tension |
+| Charge | Power-curve build: volume 0.25-1 of cue gain; speed 0.86-1.16; tension rises most near the end |
+| Shake | Hold charge; ticks follow visual sine extrema, minimum 0.12s apart with deterministic modest pitch/volume variation |
+| Await | Fade out charge, stop rattle, sustain quiet pressure/ambience indefinitely |
+| Input / Break | Click at 0; compression 0.03s; crack 0.10s; lid 0.12s; launch 0.18s; reduced Break scales all markers |
+| Flight | Tonal bed plus softer air, with distinct short acceleration onset |
+| Transformation | Unique rarity identity plus shared/dedicated body, with competing energy ducked |
+| Recognition / apex | Softer stable flight and another breath at apex; no new aggressive cue |
+| Dive | Phase-owned texture follows actual descent progress, ends exactly at contact |
+| Impact | Immediately retire every previous voice; compact rarity contact owns the mix |
+| Hush | Fade contact from 0.11 to 0.135s, then silence until the calm boundary |
+| Calm | Delicate postImpactShimmer at 0.22s, or 0.17s for Mythical |
+| Silhouette | Quiet unresolved sustain; optional pearlescent Mythical variant |
+| Reveal | Fade silhouette residue; one rarity-specific resolving reward sting as figure colors return |
+| NEW | Small discovery accent at 55% reveal, after overlay begins appearing; omitted for duplicates |
+| Result | Calm indefinite ambience; short reveal/discovery tails finish within their ceilings |
+| Continue | Soft close cue plus 0.10s fade inside the existing 0.22s curtain; no delayed control return |
+
+**Rarity identities.** Common has a pleasant small confirmation and short resolve. Uncommon
+adds harmonic richness. Rare uses a warm premium gold-like cue. Each has distinct `rarityX`
+and `revealX` slots, not a shared sample transposed. They share a transformation body by
+default. All five have optional `impactX` slots with explicit shared fallback.
+
+Legendary's first body/identity cue starts at the first visual pulse onset
+(`0.14 * 0.30 = 0.042s`); a separate accented `legendaryPulse` starts at the second
+(`0.65 * 0.30 = 0.195s`). Its direction is bold low-mid power, controlled harmonic sparkle
+and an elegant final resolve, without fanfare. Timings derive from the visual signature.
+
+Mythical clears flight, acceleration and ambience at transformation entry. A short inward
+gesture ends by 0.045s; the suspended pearl sounds at 0.08s. Spectral body/identity and
+transformed flight return at 0.145s, using the existing `spectralTiming` and `quietUntil`
+markers in both motion modes. Its flight/silhouette may use dedicated spectral loops.
+Recognition leaves space for the existing cyan sweep. The resolve is a different identity
+from Legendary, with prestige from silence, unfamiliar harmony and beauty. Whether it actually
+feels superior remains a human listening acceptance item for the delivered pack.
+
+**Lifetimes and loading.** Loops are phase/session-owned with no eight-second expiry.
+One-shots end naturally or at individual ceilings. Unloaded one-shots stay muted and are
+discarded after 75ms; failed loop loads after two seconds. A cancellable session preload warms
+valid configured IDs, but never blocks the clock or schedules a late cue. Empty/invalid IDs
+allocate no Sound. Fallback chains are explicit and bounded; ID syntax establishes neither
+rights nor playback permissions. The Studio warm button helps compare cold/warm playback.
+
+One audio Heartbeat exists only while Sounds exist and ages at most eight voices. This clock
+is independent of reduced-motion render sleep, so fades, one-shot expiry and failed loads
+still clean up during Await/Result. Stable loops survive indefinite holds. No per-frame Sound
+allocation; repeated play of an active loop is idempotent. Default loop fades are 0.10s in,
+0.07s out. Intentional hush/contact cuts override fades; cancellation is immediate.
+
+**Skip and cancellation.** Skip clears old voices before Result. Reveal and NEW fire at most
+once per session; direct-to-Result Skip may pair them with a secondary low NEW gain.
+No old transformation/dive/impact marker can fire afterwards. Death, reset, character
+removal/addition, GUI removal/disable/destruction, camera interruption, stage destruction,
+controller destroy and successor sessions use existing scope teardown. Sound folder,
+Heartbeat and preload task all belong to that scope; no independent cue timers survive.
+
+**Reduced motion/mobile.** Reduced motion omits entrance travel, repeated shake and acceleration
+transients. Shared crack/lid/launch markers scale with shortened Break; flight/dive stop at their
+shortened boundaries. Mythical pearl/bloom and recognition retain their visual timings.
+Sources must carry midrange information for phone speakers and avoid harsh high sparkle.
+No hard stereo/pan dependency or sub-bass-only critical cue is specified.
+
+### Audio review procedure
+
+1. Sync the delivered audio IDs and code through Rojo, using provenance from
+   [the checklist](OPENING_AUDIO_ASSETS.md). Restart Play after edits so cached modules reload.
+   Start a fresh Play session; the controller preloads the configured assets automatically.
+2. Sync with the pinned Rojo setup or open the rebuilt `RobloxWorkspace.rbxlx`. Start **Play**,
+   switch the Command Bar to **Client**, and paste `tests/StudioOpening.client.luau`.
+   The fixture sends no remotes, spends nothing and grants no figures.
+3. Leave **Skip test: Manual**, **Reduced motion: OFF**, **Result: NEW**, and **Audio diagnostics:
+   ON**. Click **Warm configured approved audio (see Output)**; inspect unavailable/permission
+   messages. The overlay shows phase, active cue/loop keys, sound/loading counts and summed
+   gain. Configured-slot count is not proof of rights or audibility.
+4. Click **Compare all five tiers: manually Open / Continue each**. Common, Uncommon, Rare,
+   Legendary and Mythical queue with the same existing Pebble Pip model. Manually Open and
+   Continue each; compare at fixed device volume and verify the displayed rarity.
+5. Hold Await and Result for at least 30 seconds each. No escalating pressure, repeated reward,
+   flight/charge residue or loop expiry. Result should settle to only `result` ambience
+   (or zero Sounds with missing assets). Continue removes OpeningSounds.
+6. Repeat **Compare Rare / Legendary / Mythical**. Match Legendary's two pulses and Mythical's
+   inward cut, 0.08s pearl and 0.145s bloom to the visuals. Hear the recognition space, dive,
+   contact, actual short hush, shimmer, quiet silhouette and separate identity resolve.
+   Common must remain satisfying and NEW must remain secondary.
+7. Toggle **Result: duplicate**, then **Reduced motion: ON**, and repeat all five. Duplicates
+   omit NEW. Removed motion has no lingering rattle/acceleration; compressed cues remain aligned.
+8. Cycle Skip through all phases and Pearl suspension / Spectral sweep / Rarity hold / Dive /
+   Impact peak. Repeat Skip inputs. Run **10-opening regression** and **Lifecycle check:
+   20 interruptions**; inspect Output and sound counts. Also reset/die, remove the GUI/stage,
+   interrupt the camera and restart while sounds are active. Session sounds must disappear.
+9. Listen on headphones, speakers, Studio phone emulation and an actual phone. Check mono
+   clarity, comfortable sparkle, limited bass/hiss and consistent high-tier peaks. Compare cold
+   cache behavior: no obsolete late transients.
+10. Exit preview and record approval or targeted source/mix/timing corrections. The next step
+    is final human audiovisual review, not another opening-animation system.
+
+These diagnostics/preload controls are fixture-only and never Rojo-mapped. Automated engine
+doubles validate sequencing, gain/lifetime bounds and teardown, not Roblox audio delivery,
+waveform quality, device loudness or audiovisual perception.
 
 ## Extending the presentation
 
@@ -559,4 +678,51 @@ Five-tier implementation files (some also contain the preceding flight-polish ch
 Existing figure rarities, rates and weights are protected by golden assertions. No high-tier
 content, fake production grant, live odds or sound asset was added. Studio recordings, subjective
 hierarchy/contrast review, mobile performance and two-client acceptance remain manual checks;
-none was claimed as run. The separate final comprehensive cinematic polish pass is deferred.
+none was claimed as run. The dedicated audio systems pass is documented above; final human audiovisual review remains.
+
+## Dedicated audio pass verification (2026-10-01)
+
+The new audio suite executes the real mixer, cue sequence, controller and cinematic against
+engine primitives with simulated loaded assets. It covers invalid/empty IDs, silent late
+loads, loop survival and fades, nonlinear charge, voice/gain limits, fallback selection,
+all five rarity cues, Legendary pulses, Mythical hush/pearl/bloom/resume, exact scaled crack
+and seam markers, post-impact silence, once-only reveal, NEW/duplicate behavior, Skip,
+30-second reduced-motion holds, interruptions, stale callbacks and ten complete openings
+per rarity. It does not fetch or approve the test-only dummy asset ID.
+
+The full `python tests/run.py build/tools/luau/luau.exe` suite passed, including opening,
+resources, flight, lifecycle, rarity, MVP, full-game/persistence and UI/plot regressions.
+Pinned StyLua source/changed-test checks and Selene source/changed-test checks passed with
+zero lint diagnostics. Luau Language Server 1.70.1 source analysis passed with Roblox definitions;
+the Studio fixture also passed via an ignored analysis copy using static equivalent module
+paths (its actual runtime modules live in PlayerScripts). The standalone LSP watcher-registration
+notice is not a source diagnostic. Rojo 7.7.0 sourcemap and place build passed, as did Git
+whitespace checking and a key-for-key audit of all 48 checklist rows.
+
+`rokit install --no-trust-check` and pinned Wally install completed under approved execution
+after sandbox bootstrap/cache access failed. Validation used the existing exact pinned binaries
+directly because sandbox Rokit shims could not resolve their storage path. No dependency, tool
+version, Rojo property or generated lockfile content changed.
+
+Native Studio playback, device listening, multi-client acceptance and subjective
+Legendary/Mythical ranking were **not run**. The subsequent original sound-pack delivery
+below completes the previously missing source and upload work.
+
+## Original sound-pack delivery (2026-10-01)
+
+Created and uploaded 48 original stereo PCM WAVs under the configured creator `103346374`;
+all 48 are Approved according to Roblox's asset metadata API. Source hashes, owner and asset
+IDs are recorded in the existing uploader's receipts. Runtime mappings are populated, and
+preloading now starts when the opening controller is created instead of waiting for a box.
+Controller teardown cancels pending warmup. Playback still follows the existing phase clock.
+
+The ten offline previews execute the production mix/sequence for every rarity in normal and
+reduced motion. They have no clipped samples, a maximum peak of -10.74 dBFS, and at most
+0.06 dB mono loss. All 48 masters passed headroom, DC, mono and endpoint/seam checks.
+See [pack details and listening previews](../assets/audio/opening/README.md). API moderation
+approval is separate from a native Studio playtest and experience permission verification.
+
+Final delivery checks passed: the full Luau regression suite (including 660 audio checks
+and every production cue ID), 23 asset-pipeline tests, the 48-key checklist audit,
+StyLua, Selene with the cached Roblox API, Luau Language Server source/fixture analysis,
+Wally resolution, Rojo 7.7.0 sourcemap/place build, and Git whitespace checking.

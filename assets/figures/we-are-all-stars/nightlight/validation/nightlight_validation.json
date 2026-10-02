@@ -1,0 +1,587 @@
+{
+  "figure": "Nightlight",
+  "title": "Nightlight Star",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.1666,
+    2.0162,
+    3.4263
+  ],
+  "meshes": 25,
+  "triangles": 64820,
+  "materials": [
+    "Nightlight_Base",
+    "Nightlight_BlueBook",
+    "Nightlight_Blush",
+    "Nightlight_Brow",
+    "Nightlight_Cardigan",
+    "Nightlight_Cord",
+    "Nightlight_CreamBook",
+    "Nightlight_Dress",
+    "Nightlight_EyeShine",
+    "Nightlight_EyeWhite",
+    "Nightlight_Gold",
+    "Nightlight_Hair",
+    "Nightlight_Iris",
+    "Nightlight_Lampshade",
+    "Nightlight_Lash",
+    "Nightlight_Mouth",
+    "Nightlight_Nose",
+    "Nightlight_Pages",
+    "Nightlight_RedBook",
+    "Nightlight_ShadeStars",
+    "Nightlight_Shoes",
+    "Nightlight_Skin",
+    "Nightlight_Socks"
+  ],
+  "components": {
+    "Nightlight_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.63051
+    },
+    "Nightlight_Hair": {
+      "tris": 9748,
+      "verts": 4874,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.96647
+    },
+    "Nightlight_Lampshade": {
+      "tris": 7000,
+      "verts": 3500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.39394
+    },
+    "Nightlight_ShadeStars": {
+      "tris": 3892,
+      "verts": 2022,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01993
+    },
+    "Nightlight_Cord": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0156
+    },
+    "Nightlight_Cardigan": {
+      "tris": 6988,
+      "verts": 3488,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.68096
+    },
+    "Nightlight_Hands": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00575
+    },
+    "Nightlight_Dress": {
+      "tris": 4498,
+      "verts": 2251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.67138
+    },
+    "Nightlight_Legs": {
+      "tris": 750,
+      "verts": 379,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00937
+    },
+    "Nightlight_Socks": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01001
+    },
+    "Nightlight_Shoes": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01754
+    },
+    "Nightlight_Base": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.45489
+    },
+    "Nightlight_BlueBook": {
+      "tris": 2000,
+      "verts": 1002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02482
+    },
+    "Nightlight_CreamBook": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02166
+    },
+    "Nightlight_RedBook": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02782
+    },
+    "Nightlight_Pages": {
+      "tris": 4998,
+      "verts": 2505,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.14162
+    },
+    "Nightlight_BookStar": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00019
+    },
+    "Nightlight_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00858
+    },
+    "Nightlight_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00767
+    },
+    "Nightlight_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00042
+    },
+    "Nightlight_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00075
+    },
+    "Nightlight_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00018
+    },
+    "Nightlight_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "Nightlight_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 7e-05
+    },
+    "Nightlight_Blush": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00342
+    }
+  },
+  "build": {
+    "Nightlight_Head": {
+      "active_blocks": 3806,
+      "blocks": 10560,
+      "grid": [
+        177,
+        161,
+        193
+      ],
+      "raw_tris": 174512,
+      "removed_faces": 0,
+      "seconds": 3.3
+    },
+    "Nightlight_Hair": {
+      "active_blocks": 12650,
+      "blocks": 51084,
+      "grid": [
+        345,
+        289,
+        265
+      ],
+      "raw_tris": 816828,
+      "removed_faces": 0,
+      "seconds": 25.2
+    },
+    "Nightlight_Lampshade": {
+      "active_blocks": 10606,
+      "blocks": 43680,
+      "grid": [
+        321,
+        313,
+        225
+      ],
+      "raw_tris": 703112,
+      "removed_faces": 0,
+      "seconds": 18.9
+    },
+    "Nightlight_ShadeStars": {
+      "active_blocks": 8212,
+      "blocks": 154752,
+      "grid": [
+        513,
+        497,
+        313
+      ],
+      "raw_tris": 388174,
+      "removed_faces": 106,
+      "seconds": 35.9
+    },
+    "Nightlight_Cord": {
+      "active_blocks": 1368,
+      "blocks": 6660,
+      "grid": [
+        121,
+        97,
+        297
+      ],
+      "raw_tris": 62784,
+      "removed_faces": 0,
+      "seconds": 4.7
+    },
+    "Nightlight_Cardigan": {
+      "active_blocks": 6337,
+      "blocks": 17280,
+      "grid": [
+        289,
+        193,
+        161
+      ],
+      "raw_tris": 345452,
+      "removed_faces": 12,
+      "seconds": 19.7
+    },
+    "Nightlight_Hands": {
+      "active_blocks": 676,
+      "blocks": 4440,
+      "grid": [
+        297,
+        97,
+        81
+      ],
+      "raw_tris": 25488,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Nightlight_Dress": {
+      "active_blocks": 6553,
+      "blocks": 20956,
+      "grid": [
+        209,
+        209,
+        249
+      ],
+      "raw_tris": 343244,
+      "removed_faces": 0,
+      "seconds": 5.4
+    },
+    "Nightlight_Legs": {
+      "active_blocks": 836,
+      "blocks": 2040,
+      "grid": [
+        137,
+        81,
+        97
+      ],
+      "raw_tris": 32528,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Nightlight_Socks": {
+      "active_blocks": 830,
+      "blocks": 2376,
+      "grid": [
+        145,
+        89,
+        97
+      ],
+      "raw_tris": 33704,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Nightlight_Shoes": {
+      "active_blocks": 1158,
+      "blocks": 3300,
+      "grid": [
+        161,
+        121,
+        89
+      ],
+      "raw_tris": 50208,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Nightlight_Base": {
+      "active_blocks": 3874,
+      "blocks": 4800,
+      "grid": [
+        193,
+        161,
+        81
+      ],
+      "raw_tris": 151720,
+      "removed_faces": 0,
+      "seconds": 3.3
+    },
+    "Nightlight_BlueBook": {
+      "active_blocks": 3568,
+      "blocks": 6600,
+      "grid": [
+        241,
+        161,
+        89
+      ],
+      "raw_tris": 172572,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "Nightlight_CreamBook": {
+      "active_blocks": 2639,
+      "blocks": 4959,
+      "grid": [
+        233,
+        153,
+        73
+      ],
+      "raw_tris": 151228,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "Nightlight_RedBook": {
+      "active_blocks": 4020,
+      "blocks": 7392,
+      "grid": [
+        257,
+        169,
+        89
+      ],
+      "raw_tris": 193132,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "Nightlight_Pages": {
+      "active_blocks": 10027,
+      "blocks": 18722,
+      "grid": [
+        297,
+        185,
+        177
+      ],
+      "raw_tris": 461572,
+      "removed_faces": 0,
+      "seconds": 14.6
+    },
+    "Nightlight_BookStar": {
+      "active_blocks": 368,
+      "blocks": 2744,
+      "grid": [
+        113,
+        113,
+        113
+      ],
+      "raw_tris": 6420,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "Nightlight_Eyes": {
+      "active_blocks": 2171,
+      "blocks": 9792,
+      "grid": [
+        257,
+        145,
+        137
+      ],
+      "raw_tris": 67504,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "Nightlight_Iris": {
+      "active_blocks": 1928,
+      "blocks": 8928,
+      "grid": [
+        249,
+        145,
+        129
+      ],
+      "raw_tris": 57296,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "Nightlight_EyeShine": {
+      "active_blocks": 632,
+      "blocks": 6045,
+      "grid": [
+        249,
+        121,
+        105
+      ],
+      "raw_tris": 10212,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Nightlight_Lash": {
+      "active_blocks": 1271,
+      "blocks": 10374,
+      "grid": [
+        305,
+        169,
+        105
+      ],
+      "raw_tris": 31484,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "Nightlight_Brow": {
+      "active_blocks": 498,
+      "blocks": 3136,
+      "grid": [
+        225,
+        113,
+        65
+      ],
+      "raw_tris": 4656,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Nightlight_Nose": {
+      "active_blocks": 115,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 2348,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "Nightlight_Mouth": {
+      "active_blocks": 272,
+      "blocks": 1782,
+      "grid": [
+        89,
+        145,
+        73
+      ],
+      "raw_tris": 2720,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "Nightlight_Blush": {
+      "active_blocks": 944,
+      "blocks": 4060,
+      "grid": [
+        233,
+        113,
+        81
+      ],
+      "raw_tris": 29712,
+      "removed_faces": 0,
+      "seconds": 1.7
+    }
+  },
+  "glb": {
+    "bytes": 1464840,
+    "nodes": [
+      "Nightlight_Base",
+      "Nightlight_BlueBook",
+      "Nightlight_Blush",
+      "Nightlight_BookStar",
+      "Nightlight_Brow",
+      "Nightlight_Cardigan",
+      "Nightlight_Cord",
+      "Nightlight_CreamBook",
+      "Nightlight_Dress",
+      "Nightlight_Eyes",
+      "Nightlight_EyeShine",
+      "Nightlight_Hair",
+      "Nightlight_Hands",
+      "Nightlight_Head",
+      "Nightlight_Iris",
+      "Nightlight_Lampshade",
+      "Nightlight_Lash",
+      "Nightlight_Legs",
+      "Nightlight_Mouth",
+      "Nightlight_Nose",
+      "Nightlight_Pages",
+      "Nightlight_RedBook",
+      "Nightlight_ShadeStars",
+      "Nightlight_Shoes",
+      "Nightlight_Socks",
+      "Nightlight"
+    ],
+    "meshes": 25,
+    "materials": 23,
+    "images": 23,
+    "textures": 23,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.nightlight",
+  "root": "Nightlight",
+  "face": "Nightlight_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 25,
+    "triangle_mismatches": {}
+  }
+}

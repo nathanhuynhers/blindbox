@@ -1,6 +1,6 @@
 # Asset pipeline
 
-The pipeline registers artwork and reviewed GLB models; individual UI adoptions are explicit. Both Collection
+The pipeline registers artwork, reviewed GLB models and PCM WAV audio; individual runtime adoptions are explicit. Both Collection
 screens now use production corners and tab emblems; see the [batch receipt](COLLECTION_ASSET_BATCH.md). Python 3.10+ and Git
 are required; there are no added packages. Run commands from the repository root.
 
@@ -14,7 +14,7 @@ retired and has no active runtime consumer. Current plots and shelves use generi
 geometry; final shelf art is future work. See [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 If an export needs processing elsewhere, keep the reviewed output in `assets/processed`
 and point the manifest at that file. The uploader never resizes, re-encodes or transforms source
-content; transparent PNG and GLB bytes are sent unchanged.
+content; transparent PNG, GLB and WAV bytes are sent unchanged.
 
 Use lowercase snake_case filenames, such as `collection_book_open.png`,
 `pocket_grove_emblem.png`, `tidepool_corner_bottom_right.png`, and `icon_collection.png`.
@@ -25,6 +25,13 @@ Replacing a file does not require renaming its key or editing UI references.
 Reviewed reusable models live under `assets/models/<model-slug>/`. Model entries use
 `assetType: Model`, a lowercase snake_case `.glb` source, and may declare `requiredNodes`.
 Dry-run validation checks the GLB 2.0 container and every declared semantic node before upload.
+
+Audio entries use `assetType: Audio` and a lowercase snake_case `.wav` source. Validation
+accepts mono/stereo 16/24-bit PCM at 8-48 kHz, below 20 MB and seven minutes, with complete
+frame data. Audio uses the same owner checks, pending-operation journal, hash deduplication
+and generated ID module as other assets. The original opening pack has its own explicit
+48-cue [manifest and upload entry point](../assets/audio/opening/README.md); no batch scans
+or uploads unrelated audio. See Roblox's [audio requirements](https://create.roblox.com/docs/audio/assets).
 
 All six Tidepool Tales figures are uploaded (`Models.TidepoolTales.*`, aliases `bubble_bean`,
 `coral_cuddle`, `shell_scribe`, `jelly_jive`, `ripple_ray`, `pearl_regent`) and adopted at runtime
@@ -56,6 +63,15 @@ adopted at runtime the same way. Its collection artwork (aliases `tender_echoes_
 keys `Collection.TenderEchoes.*`) is rendered from the production models by
 [ui_art.py](../assets/figures/tender-echoes/ui_art.py); see the
 [Tender Echoes receipt](../assets/figures/tender-echoes/PRODUCTION.md).
+
+All thirteen We Are All Stars figures are uploaded (`Models.WeAreAllStars.*`, aliases `reminiscence`,
+`mirrorlight`, `wishing`, `page_turner`, `nightlight`, `lamplight`, `garden`, `sanctuary`, `echo`,
+`radiant`, `cloud_rest`, `meteor_shower`, `dreamcatcher`) and adopted at runtime the same way. Its
+collection artwork (aliases `we_are_all_stars_emblem`, `we_are_all_stars_shop_pattern`,
+`we_are_all_stars_corner_{top_left,top_right,bottom_left,bottom_right}`, keys
+`Collection.WeAreAllStars.*`) is rendered from the production models by
+[ui_art.py](../assets/figures/we-are-all-stars/ui_art.py); see the
+[We Are All Stars receipt](../assets/figures/we-are-all-stars/PRODUCTION.md).
 
 ### Flat-color collectible materials
 

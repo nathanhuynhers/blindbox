@@ -1,0 +1,609 @@
+{
+  "figure": "Mirrorlight",
+  "title": "Mirrorlight Star",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.2043,
+    2.0771,
+    3.2732
+  ],
+  "meshes": 26,
+  "triangles": 56202,
+  "materials": [
+    "Mirrorlight_Blush",
+    "Mirrorlight_Brow",
+    "Mirrorlight_Cat",
+    "Mirrorlight_CatBlush",
+    "Mirrorlight_CatEars",
+    "Mirrorlight_CatEyes",
+    "Mirrorlight_CatNose",
+    "Mirrorlight_Cuffs",
+    "Mirrorlight_Dots",
+    "Mirrorlight_EyeShine",
+    "Mirrorlight_EyeWhite",
+    "Mirrorlight_Hair",
+    "Mirrorlight_Hoodie",
+    "Mirrorlight_Iris",
+    "Mirrorlight_Lash",
+    "Mirrorlight_Mouth",
+    "Mirrorlight_Nose",
+    "Mirrorlight_Pants",
+    "Mirrorlight_Shoes",
+    "Mirrorlight_Skin",
+    "Mirrorlight_Socks",
+    "Mirrorlight_Sole",
+    "Mirrorlight_Star",
+    "Mirrorlight_Stool"
+  ],
+  "components": {
+    "Mirrorlight_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.14362
+    },
+    "Mirrorlight_Hair": {
+      "tris": 9662,
+      "verts": 4829,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.54665
+    },
+    "Mirrorlight_Cat": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.19514
+    },
+    "Mirrorlight_Hoodie": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.6061
+    },
+    "Mirrorlight_Dots": {
+      "tris": 1998,
+      "verts": 1023,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02043
+    },
+    "Mirrorlight_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00995
+    },
+    "Mirrorlight_Star": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03514
+    },
+    "Mirrorlight_Pants": {
+      "tris": 4998,
+      "verts": 2501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.25119
+    },
+    "Mirrorlight_Cuffs": {
+      "tris": 2000,
+      "verts": 1000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01781
+    },
+    "Mirrorlight_Socks": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02796
+    },
+    "Mirrorlight_Shoes": {
+      "tris": 2500,
+      "verts": 1254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03938
+    },
+    "Mirrorlight_Soles": {
+      "tris": 1250,
+      "verts": 629,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0081
+    },
+    "Mirrorlight_Stool": {
+      "tris": 4500,
+      "verts": 2244,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09824
+    },
+    "Mirrorlight_CatEars": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00025
+    },
+    "Mirrorlight_CatEyes": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00043
+    },
+    "Mirrorlight_CatMouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00015
+    },
+    "Mirrorlight_CatNose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 6e-05
+    },
+    "Mirrorlight_CatBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00105
+    },
+    "Mirrorlight_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01557
+    },
+    "Mirrorlight_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01359
+    },
+    "Mirrorlight_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00077
+    },
+    "Mirrorlight_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00136
+    },
+    "Mirrorlight_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00034
+    },
+    "Mirrorlight_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "Mirrorlight_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "Mirrorlight_Blush": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00622
+    }
+  },
+  "build": {
+    "Mirrorlight_Head": {
+      "active_blocks": 5645,
+      "blocks": 17342,
+      "grid": [
+        209,
+        185,
+        233
+      ],
+      "raw_tris": 259632,
+      "removed_faces": 0,
+      "seconds": 8.5
+    },
+    "Mirrorlight_Hair": {
+      "active_blocks": 15504,
+      "blocks": 56628,
+      "grid": [
+        353,
+        313,
+        265
+      ],
+      "raw_tris": 846918,
+      "removed_faces": 86,
+      "seconds": 21.9
+    },
+    "Mirrorlight_Cat": {
+      "active_blocks": 4796,
+      "blocks": 24012,
+      "grid": [
+        145,
+        369,
+        233
+      ],
+      "raw_tris": 215776,
+      "removed_faces": 0,
+      "seconds": 23.1
+    },
+    "Mirrorlight_Hoodie": {
+      "active_blocks": 6135,
+      "blocks": 17940,
+      "grid": [
+        241,
+        209,
+        185
+      ],
+      "raw_tris": 296748,
+      "removed_faces": 0,
+      "seconds": 33.5
+    },
+    "Mirrorlight_Dots": {
+      "active_blocks": 6552,
+      "blocks": 56784,
+      "grid": [
+        417,
+        313,
+        225
+      ],
+      "raw_tris": 226708,
+      "removed_faces": 2,
+      "seconds": 39.3
+    },
+    "Mirrorlight_Hands": {
+      "active_blocks": 876,
+      "blocks": 2880,
+      "grid": [
+        193,
+        97,
+        81
+      ],
+      "raw_tris": 35994,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "Mirrorlight_Star": {
+      "active_blocks": 1723,
+      "blocks": 6006,
+      "grid": [
+        177,
+        105,
+        169
+      ],
+      "raw_tris": 81332,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "Mirrorlight_Pants": {
+      "active_blocks": 4587,
+      "blocks": 11178,
+      "grid": [
+        185,
+        217,
+        145
+      ],
+      "raw_tris": 220668,
+      "removed_faces": 0,
+      "seconds": 7.4
+    },
+    "Mirrorlight_Cuffs": {
+      "active_blocks": 1558,
+      "blocks": 3808,
+      "grid": [
+        225,
+        137,
+        65
+      ],
+      "raw_tris": 76340,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "Mirrorlight_Socks": {
+      "active_blocks": 1636,
+      "blocks": 4896,
+      "grid": [
+        193,
+        97,
+        137
+      ],
+      "raw_tris": 73944,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "Mirrorlight_Shoes": {
+      "active_blocks": 2057,
+      "blocks": 5616,
+      "grid": [
+        209,
+        145,
+        97
+      ],
+      "raw_tris": 84352,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "Mirrorlight_Soles": {
+      "active_blocks": 1960,
+      "blocks": 6336,
+      "grid": [
+        257,
+        177,
+        73
+      ],
+      "raw_tris": 67232,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "Mirrorlight_Stool": {
+      "active_blocks": 3575,
+      "blocks": 6800,
+      "grid": [
+        161,
+        161,
+        137
+      ],
+      "raw_tris": 141976,
+      "removed_faces": 0,
+      "seconds": 5.0
+    },
+    "Mirrorlight_CatEars": {
+      "active_blocks": 419,
+      "blocks": 2288,
+      "grid": [
+        177,
+        65,
+        105
+      ],
+      "raw_tris": 6480,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Mirrorlight_CatEyes": {
+      "active_blocks": 676,
+      "blocks": 4862,
+      "grid": [
+        209,
+        137,
+        89
+      ],
+      "raw_tris": 16384,
+      "removed_faces": 0,
+      "seconds": 4.2
+    },
+    "Mirrorlight_CatMouth": {
+      "active_blocks": 328,
+      "blocks": 3264,
+      "grid": [
+        129,
+        137,
+        97
+      ],
+      "raw_tris": 6932,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "Mirrorlight_CatNose": {
+      "active_blocks": 124,
+      "blocks": 1320,
+      "grid": [
+        97,
+        81,
+        89
+      ],
+      "raw_tris": 2580,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Mirrorlight_CatBlush": {
+      "active_blocks": 800,
+      "blocks": 5544,
+      "grid": [
+        225,
+        145,
+        89
+      ],
+      "raw_tris": 19264,
+      "removed_faces": 0,
+      "seconds": 5.1
+    },
+    "Mirrorlight_Eyes": {
+      "active_blocks": 2968,
+      "blocks": 13986,
+      "grid": [
+        297,
+        169,
+        145
+      ],
+      "raw_tris": 100336,
+      "removed_faces": 0,
+      "seconds": 4.1
+    },
+    "Mirrorlight_Iris": {
+      "active_blocks": 2518,
+      "blocks": 12852,
+      "grid": [
+        289,
+        169,
+        137
+      ],
+      "raw_tris": 83680,
+      "removed_faces": 0,
+      "seconds": 3.6
+    },
+    "Mirrorlight_EyeShine": {
+      "active_blocks": 789,
+      "blocks": 7020,
+      "grid": [
+        289,
+        121,
+        105
+      ],
+      "raw_tris": 15140,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Mirrorlight_Lash": {
+      "active_blocks": 1632,
+      "blocks": 16560,
+      "grid": [
+        361,
+        185,
+        129
+      ],
+      "raw_tris": 47388,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "Mirrorlight_Brow": {
+      "active_blocks": 607,
+      "blocks": 3584,
+      "grid": [
+        257,
+        113,
+        65
+      ],
+      "raw_tris": 6776,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Mirrorlight_Nose": {
+      "active_blocks": 144,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 3456,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Mirrorlight_Mouth": {
+      "active_blocks": 278,
+      "blocks": 2079,
+      "grid": [
+        89,
+        169,
+        73
+      ],
+      "raw_tris": 3944,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Mirrorlight_Blush": {
+      "active_blocks": 1176,
+      "blocks": 5440,
+      "grid": [
+        273,
+        129,
+        81
+      ],
+      "raw_tris": 44376,
+      "removed_faces": 0,
+      "seconds": 1.5
+    }
+  },
+  "glb": {
+    "bytes": 1275084,
+    "nodes": [
+      "Mirrorlight_Blush",
+      "Mirrorlight_Brow",
+      "Mirrorlight_Cat",
+      "Mirrorlight_CatBlush",
+      "Mirrorlight_CatEars",
+      "Mirrorlight_CatEyes",
+      "Mirrorlight_CatMouth",
+      "Mirrorlight_CatNose",
+      "Mirrorlight_Cuffs",
+      "Mirrorlight_Dots",
+      "Mirrorlight_Eyes",
+      "Mirrorlight_EyeShine",
+      "Mirrorlight_Hair",
+      "Mirrorlight_Hands",
+      "Mirrorlight_Head",
+      "Mirrorlight_Hoodie",
+      "Mirrorlight_Iris",
+      "Mirrorlight_Lash",
+      "Mirrorlight_Mouth",
+      "Mirrorlight_Nose",
+      "Mirrorlight_Pants",
+      "Mirrorlight_Shoes",
+      "Mirrorlight_Socks",
+      "Mirrorlight_Soles",
+      "Mirrorlight_Star",
+      "Mirrorlight_Stool",
+      "Mirrorlight"
+    ],
+    "meshes": 26,
+    "materials": 24,
+    "images": 24,
+    "textures": 24,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.mirrorlight",
+  "root": "Mirrorlight",
+  "face": "Mirrorlight_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 26,
+    "triangle_mismatches": {}
+  }
+}

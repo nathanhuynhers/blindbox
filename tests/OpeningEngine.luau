@@ -192,6 +192,7 @@ Engine.humanoid = node("Humanoid")
 Engine.humanoid.Parent, Engine.humanoid.Died = Engine.player.Character, signal()
 Engine.camera.CameraSubject = Engine.humanoid
 Engine.render = signal()
+Engine.heartbeat = signal()
 Engine.input = { LastInputTypeChanged = signal(), last = "MouseButton1" }
 function Engine.input:GetLastInputType()
 	return { Name = self.last }
@@ -208,6 +209,7 @@ local services = {
 	Players = { LocalPlayer = Engine.player },
 	RunService = {
 		RenderStepped = Engine.render,
+		Heartbeat = Engine.heartbeat,
 		IsStudio = function()
 			return Engine.studio == true
 		end,
@@ -255,6 +257,7 @@ Engine.View = {
 	end,
 }
 Engine.Audio = {
+	preload = function(_scope) end,
 	create = function(scope)
 		local sounds = node("Folder")
 		sounds.Name, sounds.Parent = "OpeningSounds", Engine.workspace
@@ -266,6 +269,9 @@ Engine.Audio = {
 				table.insert(Engine.cues, key)
 			end,
 			stop = function() end,
+			stopGroup = function() end,
+			mix = function() end,
+			modulate = function() end,
 			update = function() end,
 			destroy = function()
 				sounds:Destroy()

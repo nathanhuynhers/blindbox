@@ -268,12 +268,14 @@ function Cinematic.create(
 					rotation + rise * 0.35,
 					math.sin(state.elapsed * profile.shakeFrequency * 2) * shake
 				)
+			local lidAt = Config.breakTiming.lidAt
+				* (if phase == "Break" then State.duration(state) / profile.timing.opening else 1)
 			local opening = if phase == "Break"
-				then math.clamp((state.elapsed - 0.12) / (State.duration(state) - 0.12), 0, 1)
+				then math.clamp((state.elapsed - lidAt) / (State.duration(state) - lidAt), 0, 1)
 				elseif phase == "Flight" then 1 + p * 0.35
 				else 0
 			local compression = if phase == "Break"
-				then math.sin(math.clamp(state.elapsed / 0.12, 0, 1) * math.pi) * 0.03
+				then math.sin(math.clamp(state.elapsed / lidAt, 0, 1) * math.pi) * 0.03
 				else 0
 			if box and box.model.Parent == stage then
 				box.pose(

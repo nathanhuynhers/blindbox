@@ -12,6 +12,7 @@ import unittest
 from unittest.mock import patch, Mock
 import urllib.error
 import zlib
+import wave
 
 SPEC = importlib.util.spec_from_file_location("upload_assets", Path(__file__).resolve().parents[1] / "scripts/upload_assets.py")
 pipeline = importlib.util.module_from_spec(SPEC)
@@ -57,6 +58,44 @@ class PipelineTests(unittest.TestCase):
     def test_png_transparency_bytes_untouched(self):
         data, mime, width, height = pipeline.image_info(self.path)
         self.assertEqual((data, mime, width, height), (png(), "image/png", 1, 1))
+
+    def test_pcm_audio_preserved_and_metadata(self):
+        path = self.root / "assets/original_sound.wav"
+        with wave.open(str(path), "wb") as stream:
+            stream.setparams((2, 2, 48000, 0, "NONE", "not compressed"))
+            stream.writeframes(struct.pack("<hh", 1000, -1000) * 4800)
+        item = pipeline.prepare(self.root, {"key": "Audio.Opening.Click",
+            "source": "assets/original_sound.wav", "assetType": "Audio"})
+        self.assertEqual(item["data"], path.read_bytes())
+        self.assertEqual(item["mime"], "audio/wav")
+        self.assertEqual((item["channels"], item["sampleRate"], item["duration"]), (2, 48000, .1))
+        cloud = pipeline.Cloud("fixture-key")
+        with patch.object(cloud, "request", return_value={"path": "operations/audio"}) as request:
+            cloud.create(item, self.creator)
+            body = request.call_args.args[2]
+            self.assertIn(b'"assetType": "Audio"', body)
+            self.assertIn(b"Content-Type: audio/wav", body)
+            self.assertIn(item["data"], body)
+
+    def test_audio_rejects_unsupported_and_truncated_wav(self):
+        path = self.root / "assets/original_sound.wav"
+        for channels, width, rate, frames in ((3, 2, 48000, 32), (2, 1, 48000, 32),
+                                             (1, 2, 96000, 32), (1, 2, 48000, 0)):
+            with wave.open(str(path), "wb") as stream:
+                stream.setparams((channels, width, rate, 0, "NONE", "not compressed"))
+                stream.writeframes(bytes(channels * width * frames))
+            with self.subTest(channels=channels, width=width, rate=rate, frames=frames):
+                with self.assertRaises(pipeline.PipelineError):
+                    pipeline.audio_info(path)
+        with wave.open(str(path), "wb") as stream:
+            stream.setparams((2, 2, 48000, 0, "NONE", "not compressed"))
+            stream.writeframes(bytes(100))
+        path.write_bytes(path.read_bytes()[:-8])
+        with self.assertRaises(pipeline.PipelineError):
+            pipeline.audio_info(path)
+        path.write_bytes(b"not a WAV")
+        with self.assertRaises(pipeline.PipelineError):
+            pipeline.audio_info(path)
 
     def test_png_corruption_empty_and_limits(self):
         for data in (b"", b"bad", png()[:-1], png(8000), png(0), png()[:40] + b"broken" + png()[46:]):

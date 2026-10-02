@@ -12,7 +12,7 @@ local View = require(script.Parent.OpeningView)
 local Audio = require(script.Parent.OpeningAudio)
 local Scope = require(script.Parent.OpeningScope)
 local Cinematic = require(script.Parent.OpeningCinematic)
-local Flight = require(script.Parent.OpeningFlight)
+local AudioSequence = require(script.Parent.OpeningAudioSequence)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Controller = {}
 export type Controller = {
@@ -33,6 +33,8 @@ local function isGamepad(): boolean
 	return string.find(UserInputService:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
 end
 function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Controller
+	local audioCache = Scope.create()
+	Audio.preload(audioCache)
 	local active: Session? = nil
 	local destroyed = false
 	local seen: { [string]: boolean } = {}
@@ -148,6 +150,7 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				local cinematic =
 					Cinematic.create(scope, gui, result, profile, collection, reduced, closeSession)
 				local audio = Audio.create(scope)
+				local soundtrack = AudioSequence.create(audio, profile, collection, result.isNew)
 				scope.add(function()
 					if session.render then
 						session.render:Disconnect()
@@ -156,110 +159,22 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 					ContextActionService:UnbindAction(actionName)
 					ContextActionService:UnbindAction(movementName)
 				end)
-				local revealed, teaseIndex, breakIndex = false, 0, 0
-				local diving, shimmer = false, false
-				local flightResumed = false
-				local spectral = profile.signature.spectralTiming
-				local pendingCue: { beat: Config.TeaseBeat, at: number }? = nil
+				local teaseIndex = 0
 				local selectionPhase: State.Phase? = nil
 				local function enterPhase()
 					local phase: State.Phase = session.state.phase
 					cinematic.enter(phase)
-					if phase == "Arrival" then
-						audio.play("entrance")
-						audio.play(collection.ambience, true)
-					elseif phase == "Charge" then
-						audio.play("charge", true)
-					elseif phase == "Shake" then
-						audio.play("shake")
-					elseif phase == "Await" or phase == "Result" then
-						audio.stop()
-					elseif phase == "Break" then
-						audio.stop()
-						audio.play("click")
-					elseif phase == "Flight" then
-						audio.play("flight", true)
-						audio.play("acceleration")
-					elseif phase == "RarityTease" and profile.signature.quietUntil > 0 then
-						audio.stop(if spectral then nil else "flight")
-					elseif phase == "Impact" then
-						audio.stop()
-						audio.play(profile.cues.impact)
-					elseif phase == "Silhouette" then
-						audio.stop()
-						audio.play("silhouette")
-					elseif phase == "Closing" then
-						audio.stop()
-						audio.play("close")
-					end
-					if (phase == "Reveal" or phase == "Result") and not revealed then
-						revealed = true
-						audio.play(profile.cues.reveal)
-						if result.isNew then
-							audio.play("discovery")
-						end
-					end
+					soundtrack.enter(session.state)
 				end
 				local function cues()
 					local state = session.state
-					if state.phase == "Break" then
-						for i, cue in Config.breakCues do
-							-- Reduced mode scales the same synchronized crack/lid/launch beats.
-							local at = if reduced
-								then cue.at * State.duration(state) / profile.timing.opening
-								else cue.at
-							if i > breakIndex and state.elapsed >= at then
-								breakIndex = i
-								audio.play(cue.cue)
-							end
-						end
-					elseif state.phase == "RarityTease" then
+					soundtrack.update(state)
+					if state.phase == "RarityTease" then
 						local _, index = Config.teaseBeat(profile, State.progress(state))
 						for i = teaseIndex + 1, index do
-							local beat = profile.tease[i]
-							if beat.quiet then
-								audio.stop()
-							end
-							cinematic.tease(beat)
-							if spectral and not beat.quiet then
-								pendingCue = {
-									beat = beat,
-									at = beat.at * State.duration(state) + spectral.bloomAt,
-								}
-							else
-								if not beat.quiet then
-									audio.play(profile.cues.transformation)
-								end
-								audio.play(beat.cue)
-							end
+							cinematic.tease(profile.tease[i])
 						end
 						teaseIndex = index
-						if pendingCue and state.elapsed >= pendingCue.at then
-							audio.play(profile.cues.transformation)
-							audio.play(pendingCue.beat.cue)
-							pendingCue = nil
-						end
-						if
-							profile.signature.quietUntil > 0
-							and not flightResumed
-							and state.elapsed
-								>= profile.flight.transition * profile.signature.quietUntil
-						then
-							flightResumed = true
-							audio.play("flight", true)
-						end
-						if not diving and Flight.sample(state, profile).dive > 0 then
-							diving = true
-							audio.play("dive")
-						end
-					elseif
-						state.phase == "Impact"
-						and not shimmer
-						and state.elapsed >= Config.impactCalmAt(profile)
-					then
-						shimmer = true
-						audio.stop()
-						audio.play("postImpactShimmer")
 					end
 				end
 				local function draw(delta: number)
@@ -308,17 +223,6 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 						return
 					end
 					safely(function()
-						-- Audio ages by wall-clock delta; animation advances one phase at a time after stalls.
-						audio.update(
-							delta,
-							if session.state.phase == "Charge"
-								then State.progress(session.state)
-								elseif
-									session.state.phase == "Flight"
-									or session.state.phase == "RarityTease"
-								then Flight.sample(session.state, profile).energy
-								else 1
-						)
 						if State.advance(session.state, delta) then
 							enterPhase()
 						end
@@ -451,6 +355,7 @@ function Controller.create(focus: (boolean) -> (), report: (string) -> ()): Cont
 				return
 			end
 			destroyed = true
+			audioCache.destroy()
 			characterConnection:Disconnect()
 			addedConnection:Disconnect()
 			close()

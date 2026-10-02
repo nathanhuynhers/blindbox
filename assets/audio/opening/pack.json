@@ -1,0 +1,441 @@
+{
+  "name": "Porcelain & Starlight",
+  "version": 1,
+  "sampleRate": 48000,
+  "provenance": "Original deterministic synthesis authored for nathanhuynhers/blindbox at the user's request. No third-party samples or melodies.",
+  "generator": "tools/audio/build.py",
+  "assets": {
+    "acceleration": {
+      "source": "assets/audio/opening/acceleration.wav",
+      "key": "Audio.Opening.Acceleration",
+      "assetType": "Audio",
+      "displayName": "Blindbox Acceleration",
+      "duration": 0.18,
+      "looped": false,
+      "sha256": "5b23ee51223d65217b4aff026c92bd42c736bf3c87464cc433120827602391a6"
+    },
+    "ambience": {
+      "source": "assets/audio/opening/ambience.wav",
+      "key": "Audio.Opening.Ambience",
+      "assetType": "Audio",
+      "displayName": "Blindbox Ambience",
+      "duration": 6.0,
+      "looped": true,
+      "sha256": "aff59df12e5783bac095709a6485e17cf66fcd08f25d41666975cffa0aa7a1b2"
+    },
+    "ambienceGrove": {
+      "source": "assets/audio/opening/ambience_grove.wav",
+      "key": "Audio.Opening.AmbienceGrove",
+      "assetType": "Audio",
+      "displayName": "Blindbox Ambience Grove",
+      "duration": 6.0,
+      "looped": true,
+      "sha256": "f84665930ba21417bb5f99b4c648b99d917df219080ecb9fec928c7758473125"
+    },
+    "ambienceTide": {
+      "source": "assets/audio/opening/ambience_tide.wav",
+      "key": "Audio.Opening.AmbienceTide",
+      "assetType": "Audio",
+      "displayName": "Blindbox Ambience Tide",
+      "duration": 6.0,
+      "looped": true,
+      "sha256": "c4160e120c511c040cf1b954d6ba19381065b9f533f00c9aa035b20931f3aab3"
+    },
+    "await": {
+      "source": "assets/audio/opening/await.wav",
+      "key": "Audio.Opening.Await",
+      "assetType": "Audio",
+      "displayName": "Blindbox Await",
+      "duration": 4.0,
+      "looped": true,
+      "sha256": "083434c5e09c4229aecc8c6f5c51a87b7a422409682bcbd314c8b37de1d6446b"
+    },
+    "charge": {
+      "source": "assets/audio/opening/charge.wav",
+      "key": "Audio.Opening.Charge",
+      "assetType": "Audio",
+      "displayName": "Blindbox Charge",
+      "duration": 2.0,
+      "looped": true,
+      "sha256": "2b15711f7d14ced61046f10cb3e039ffa5649f6963ef3be3be337da7f9015595"
+    },
+    "click": {
+      "source": "assets/audio/opening/click.wav",
+      "key": "Audio.Opening.Click",
+      "assetType": "Audio",
+      "displayName": "Blindbox Click",
+      "duration": 0.065,
+      "looped": false,
+      "sha256": "aae9affd8046f02b809a646865a25ae963b93cc2b466636e771e67ce69e7fd86"
+    },
+    "close": {
+      "source": "assets/audio/opening/close.wav",
+      "key": "Audio.Opening.Close",
+      "assetType": "Audio",
+      "displayName": "Blindbox Close",
+      "duration": 0.09,
+      "looped": false,
+      "sha256": "6a2afdae3ecad5b6e4cbf6faeee1467ed9cc6fca398a4ddc85e93b32f7e0e7dc"
+    },
+    "compression": {
+      "source": "assets/audio/opening/compression.wav",
+      "key": "Audio.Opening.Compression",
+      "assetType": "Audio",
+      "displayName": "Blindbox Compression",
+      "duration": 0.065,
+      "looped": false,
+      "sha256": "1b3a72bcdd09ed06e8d0bd61e0685ce809cd2c6812df8a250fee31e698e2e59f"
+    },
+    "crack": {
+      "source": "assets/audio/opening/crack.wav",
+      "key": "Audio.Opening.Crack",
+      "assetType": "Audio",
+      "displayName": "Blindbox Crack",
+      "duration": 0.145,
+      "looped": false,
+      "sha256": "06674b6ca10cbaf8e4e60f4d513c066993d0e305485c32b9aa511bc05a5cf8ef"
+    },
+    "discovery": {
+      "source": "assets/audio/opening/discovery.wav",
+      "key": "Audio.Opening.Discovery",
+      "assetType": "Audio",
+      "displayName": "Blindbox Discovery",
+      "duration": 0.24,
+      "looped": false,
+      "sha256": "7e6c185cfe3663661c3a60d60d6f4cde5391dabc0c7830dcbaec6deac9eba509"
+    },
+    "dive": {
+      "source": "assets/audio/opening/dive.wav",
+      "key": "Audio.Opening.Dive",
+      "assetType": "Audio",
+      "displayName": "Blindbox Dive",
+      "duration": 1.0,
+      "looped": true,
+      "sha256": "54f0c03158ccb465bab984676a7416d3dd9a300ac35b02e4476109863738f74c"
+    },
+    "entrance": {
+      "source": "assets/audio/opening/entrance.wav",
+      "key": "Audio.Opening.Entrance",
+      "assetType": "Audio",
+      "displayName": "Blindbox Entrance",
+      "duration": 0.36,
+      "looped": false,
+      "sha256": "f73094eb3dbbf5ba024d313f20cc4521e3a6209387ebcdfe6cde916aff87c1d2"
+    },
+    "flight": {
+      "source": "assets/audio/opening/flight.wav",
+      "key": "Audio.Opening.Flight",
+      "assetType": "Audio",
+      "displayName": "Blindbox Flight",
+      "duration": 3.0,
+      "looped": true,
+      "sha256": "0d2e810c7d525852751f67f6b444211ec0bc52320a5bd4368396f137a45de63f"
+    },
+    "flightAir": {
+      "source": "assets/audio/opening/flight_air.wav",
+      "key": "Audio.Opening.FlightAir",
+      "assetType": "Audio",
+      "displayName": "Blindbox Flight Air",
+      "duration": 2.0,
+      "looped": true,
+      "sha256": "90fc83f40084c135db0111f5803ac3dc65b279f74ca0f26c11ea203a3845c71c"
+    },
+    "flightMythical": {
+      "source": "assets/audio/opening/flight_mythical.wav",
+      "key": "Audio.Opening.FlightMythical",
+      "assetType": "Audio",
+      "displayName": "Blindbox Flight Mythical",
+      "duration": 4.0,
+      "looped": true,
+      "sha256": "a39a06a9d416cd9803dd3d8dee0533d80b22ac5ec2e7dc83afbd9f292afd786d"
+    },
+    "impact": {
+      "source": "assets/audio/opening/impact.wav",
+      "key": "Audio.Opening.Impact",
+      "assetType": "Audio",
+      "displayName": "Blindbox Impact",
+      "duration": 0.2,
+      "looped": false,
+      "sha256": "418f13750f5a1634170a917e5800d222a936aaf7e77e1031b58705c0b08c7e0a"
+    },
+    "impactCommon": {
+      "source": "assets/audio/opening/impact_common.wav",
+      "key": "Audio.Opening.ImpactCommon",
+      "assetType": "Audio",
+      "displayName": "Blindbox Impact Common",
+      "duration": 0.17,
+      "looped": false,
+      "sha256": "ae8878320f829476104f0dd558b884cd4f898f207878e1d591a06b41ac69c7a5"
+    },
+    "impactLegendary": {
+      "source": "assets/audio/opening/impact_legendary.wav",
+      "key": "Audio.Opening.ImpactLegendary",
+      "assetType": "Audio",
+      "displayName": "Blindbox Impact Legendary",
+      "duration": 0.23,
+      "looped": false,
+      "sha256": "b4c8fe925cf931abaaeae3ec7a4997c3221631cb37c68e0c78c55233262780c8"
+    },
+    "impactMythical": {
+      "source": "assets/audio/opening/impact_mythical.wav",
+      "key": "Audio.Opening.ImpactMythical",
+      "assetType": "Audio",
+      "displayName": "Blindbox Impact Mythical",
+      "duration": 0.24,
+      "looped": false,
+      "sha256": "d3360c162668dcb96e6135bf9903710848c4118eb5a534a0c47833f68978a686"
+    },
+    "impactRare": {
+      "source": "assets/audio/opening/impact_rare.wav",
+      "key": "Audio.Opening.ImpactRare",
+      "assetType": "Audio",
+      "displayName": "Blindbox Impact Rare",
+      "duration": 0.21,
+      "looped": false,
+      "sha256": "21118ce09c22a8e5b3169d88936ef91599b772f9c5cb47e55cf91dc402f616d2"
+    },
+    "impactUncommon": {
+      "source": "assets/audio/opening/impact_uncommon.wav",
+      "key": "Audio.Opening.ImpactUncommon",
+      "assetType": "Audio",
+      "displayName": "Blindbox Impact Uncommon",
+      "duration": 0.19,
+      "looped": false,
+      "sha256": "193020c248053942e155fd14af1488a5910c76928180335650ac0b4faaef354c"
+    },
+    "launch": {
+      "source": "assets/audio/opening/launch.wav",
+      "key": "Audio.Opening.Launch",
+      "assetType": "Audio",
+      "displayName": "Blindbox Launch",
+      "duration": 0.275,
+      "looped": false,
+      "sha256": "be146a79c2031b2580704293f5f363102cd7bacdd56b6793da46f278617233e0"
+    },
+    "legendaryPulse": {
+      "source": "assets/audio/opening/legendary_pulse.wav",
+      "key": "Audio.Opening.LegendaryPulse",
+      "assetType": "Audio",
+      "displayName": "Blindbox Legendary Pulse",
+      "duration": 0.32,
+      "looped": false,
+      "sha256": "81105a17c312de1e2f0c0fffb588c83f5b92d6235689f468b1148e2ff9a510a5"
+    },
+    "lid": {
+      "source": "assets/audio/opening/lid.wav",
+      "key": "Audio.Opening.Lid",
+      "assetType": "Audio",
+      "displayName": "Blindbox Lid",
+      "duration": 0.145,
+      "looped": false,
+      "sha256": "58d8ad7c708e7f6ab5d3161ad8e3b84649fc890c624c393fe3652f78fd49ebcb"
+    },
+    "mythicalInward": {
+      "source": "assets/audio/opening/mythical_inward.wav",
+      "key": "Audio.Opening.MythicalInward",
+      "assetType": "Audio",
+      "displayName": "Blindbox Mythical Inward",
+      "duration": 0.04,
+      "looped": false,
+      "sha256": "2d190a047d905327a6cbadbc1c98922c45acebd5264f6469397745376df4e986"
+    },
+    "mythicalPearl": {
+      "source": "assets/audio/opening/mythical_pearl.wav",
+      "key": "Audio.Opening.MythicalPearl",
+      "assetType": "Audio",
+      "displayName": "Blindbox Mythical Pearl",
+      "duration": 0.135,
+      "looped": false,
+      "sha256": "76dd3fca24865dedd592134c5bbcd0040b233cf02220c2812095b1426f699f47"
+    },
+    "postImpactShimmer": {
+      "source": "assets/audio/opening/post_impact_shimmer.wav",
+      "key": "Audio.Opening.PostImpactShimmer",
+      "assetType": "Audio",
+      "displayName": "Blindbox Post Impact Shimmer",
+      "duration": 0.43,
+      "looped": false,
+      "sha256": "544c117a5012f1822de86fe8b353ca65ddec5256d96875cb6750e4759e5e15a3"
+    },
+    "rarityCommon": {
+      "source": "assets/audio/opening/rarity_common.wav",
+      "key": "Audio.Opening.RarityCommon",
+      "assetType": "Audio",
+      "displayName": "Blindbox Rarity Common",
+      "duration": 0.24,
+      "looped": false,
+      "sha256": "dee4eee80eea15d7a38c1f1323bbc35f77d7d4943936ad2a6ef6e38ad45b9c3f"
+    },
+    "rarityLegendary": {
+      "source": "assets/audio/opening/rarity_legendary.wav",
+      "key": "Audio.Opening.RarityLegendary",
+      "assetType": "Audio",
+      "displayName": "Blindbox Rarity Legendary",
+      "duration": 0.52,
+      "looped": false,
+      "sha256": "7295798bbaf356af29fb37ac5834b2d3bc01831f4f0d2600192bd501f4f684a7"
+    },
+    "rarityMythical": {
+      "source": "assets/audio/opening/rarity_mythical.wav",
+      "key": "Audio.Opening.RarityMythical",
+      "assetType": "Audio",
+      "displayName": "Blindbox Rarity Mythical",
+      "duration": 0.76,
+      "looped": false,
+      "sha256": "a7b9811ea7f8307efc2c3af91b2511fc0b73e8d29ada46b5cb8ec83cc0c7cede"
+    },
+    "rarityRare": {
+      "source": "assets/audio/opening/rarity_rare.wav",
+      "key": "Audio.Opening.RarityRare",
+      "assetType": "Audio",
+      "displayName": "Blindbox Rarity Rare",
+      "duration": 0.5,
+      "looped": false,
+      "sha256": "d3144cc02ccae9e1a8f4015dc4f8eb999261841ad4c004971f2ed48604d7321a"
+    },
+    "rarityTransformation": {
+      "source": "assets/audio/opening/rarity_transformation.wav",
+      "key": "Audio.Opening.RarityTransformation",
+      "assetType": "Audio",
+      "displayName": "Blindbox Rarity Transformation",
+      "duration": 0.25,
+      "looped": false,
+      "sha256": "22e28db9e3d2822c1d5480350fb651db7bdec84f15c12f3db17ec29329ff267d"
+    },
+    "rarityUncommon": {
+      "source": "assets/audio/opening/rarity_uncommon.wav",
+      "key": "Audio.Opening.RarityUncommon",
+      "assetType": "Audio",
+      "displayName": "Blindbox Rarity Uncommon",
+      "duration": 0.38,
+      "looped": false,
+      "sha256": "6e51b4c90431118f454ba4370dc333c521ef3d81ab478d25a1a324381e812823"
+    },
+    "result": {
+      "source": "assets/audio/opening/result.wav",
+      "key": "Audio.Opening.Result",
+      "assetType": "Audio",
+      "displayName": "Blindbox Result",
+      "duration": 6.0,
+      "looped": true,
+      "sha256": "fe205e25452ebc89a909dfe69044e3c6c34d859009200563862f4ce1987c609e"
+    },
+    "reveal": {
+      "source": "assets/audio/opening/reveal.wav",
+      "key": "Audio.Opening.Reveal",
+      "assetType": "Audio",
+      "displayName": "Blindbox Reveal",
+      "duration": 0.6,
+      "looped": false,
+      "sha256": "874fe87f825877e8d6da6eb5535c7719083256ecb776ee7428b479d0e8c61836"
+    },
+    "revealCommon": {
+      "source": "assets/audio/opening/reveal_common.wav",
+      "key": "Audio.Opening.RevealCommon",
+      "assetType": "Audio",
+      "displayName": "Blindbox Reveal Common",
+      "duration": 0.34,
+      "looped": false,
+      "sha256": "ef12b213e99fe4cd83b2edf0f9a8883dcbb452aaf51b904365b3a69ae308d264"
+    },
+    "revealLegendary": {
+      "source": "assets/audio/opening/reveal_legendary.wav",
+      "key": "Audio.Opening.RevealLegendary",
+      "assetType": "Audio",
+      "displayName": "Blindbox Reveal Legendary",
+      "duration": 0.7,
+      "looped": false,
+      "sha256": "3c912efb6f21a91b2c0fbc1266f2707c5e3d0f4e4dbdce6be587145d7d7fd142"
+    },
+    "revealMythical": {
+      "source": "assets/audio/opening/reveal_mythical.wav",
+      "key": "Audio.Opening.RevealMythical",
+      "assetType": "Audio",
+      "displayName": "Blindbox Reveal Mythical",
+      "duration": 0.76,
+      "looped": false,
+      "sha256": "fbdcf5ccaebb28fd1ecea5fb8bb42872fc5b005dbf006be1f2221f8d942a5710"
+    },
+    "revealRare": {
+      "source": "assets/audio/opening/reveal_rare.wav",
+      "key": "Audio.Opening.RevealRare",
+      "assetType": "Audio",
+      "displayName": "Blindbox Reveal Rare",
+      "duration": 0.58,
+      "looped": false,
+      "sha256": "aa5f07d1c0dbf16f89ec247c6100bd5e6405b7f0c5e7ece639aaa0fc7b133e42"
+    },
+    "revealUncommon": {
+      "source": "assets/audio/opening/reveal_uncommon.wav",
+      "key": "Audio.Opening.RevealUncommon",
+      "assetType": "Audio",
+      "displayName": "Blindbox Reveal Uncommon",
+      "duration": 0.44,
+      "looped": false,
+      "sha256": "47e74e2aa1b393e7cacf9c9a1f50e620b69c9a6dae191613d623d918e9b0334b"
+    },
+    "settle": {
+      "source": "assets/audio/opening/settle.wav",
+      "key": "Audio.Opening.Settle",
+      "assetType": "Audio",
+      "displayName": "Blindbox Settle",
+      "duration": 0.17,
+      "looped": false,
+      "sha256": "79fe5a7fb62b249de07552bb6d935e1cb3d2c48131aeaf128bea64804fff36bd"
+    },
+    "shake": {
+      "source": "assets/audio/opening/shake.wav",
+      "key": "Audio.Opening.Shake",
+      "assetType": "Audio",
+      "displayName": "Blindbox Shake",
+      "duration": 0.095,
+      "looped": false,
+      "sha256": "1217eaa95cd48e4b582c9bfe3cf85caaaee8a53cccbf14022824419509994598"
+    },
+    "silhouette": {
+      "source": "assets/audio/opening/silhouette.wav",
+      "key": "Audio.Opening.Silhouette",
+      "assetType": "Audio",
+      "displayName": "Blindbox Silhouette",
+      "duration": 4.0,
+      "looped": true,
+      "sha256": "8c550ef08ed940cb33a373c7d132da570acad62873a5f8ca924afc80fb25d890"
+    },
+    "silhouetteMythical": {
+      "source": "assets/audio/opening/silhouette_mythical.wav",
+      "key": "Audio.Opening.SilhouetteMythical",
+      "assetType": "Audio",
+      "displayName": "Blindbox Silhouette Mythical",
+      "duration": 4.0,
+      "looped": true,
+      "sha256": "58d5cabd72ae2e818b27155bc9ee73d593815d6b92648491a027e3f8ab76d948"
+    },
+    "tension": {
+      "source": "assets/audio/opening/tension.wav",
+      "key": "Audio.Opening.Tension",
+      "assetType": "Audio",
+      "displayName": "Blindbox Tension",
+      "duration": 3.0,
+      "looped": true,
+      "sha256": "5d8f5d399f695b7788065924535ac21a0928761a8d27e60e8c4f33ca9c108dfe"
+    },
+    "transformLegendary": {
+      "source": "assets/audio/opening/transform_legendary.wav",
+      "key": "Audio.Opening.TransformLegendary",
+      "assetType": "Audio",
+      "displayName": "Blindbox Transform Legendary",
+      "duration": 0.145,
+      "looped": false,
+      "sha256": "a4b371867ca2de9d88e6c934cc4b19bb0d15cbb6db225e307da5eb5ccaa0aeb1"
+    },
+    "transformMythical": {
+      "source": "assets/audio/opening/transform_mythical.wav",
+      "key": "Audio.Opening.TransformMythical",
+      "assetType": "Audio",
+      "displayName": "Blindbox Transform Mythical",
+      "duration": 0.6,
+      "looped": false,
+      "sha256": "7673059b4b2702d263a86740df3014fc6b2161845cc3a2a99d9ae64b8422a8d6"
+    }
+  }
+}

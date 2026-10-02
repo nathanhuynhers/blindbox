@@ -1,0 +1,608 @@
+{
+  "figure": "Wishing",
+  "title": "Wishing Star",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.2591,
+    2.2301,
+    3.4607
+  ],
+  "meshes": 26,
+  "triangles": 52754,
+  "materials": [
+    "Wishing_Blush",
+    "Wishing_Brow",
+    "Wishing_Doodles",
+    "Wishing_EyeShine",
+    "Wishing_EyeWhite",
+    "Wishing_Gingham",
+    "Wishing_Hair",
+    "Wishing_Iris",
+    "Wishing_Lash",
+    "Wishing_Mouth",
+    "Wishing_Nose",
+    "Wishing_Notebook",
+    "Wishing_Pencil",
+    "Wishing_PencilLead",
+    "Wishing_PencilWood",
+    "Wishing_Shirt",
+    "Wishing_Shoes",
+    "Wishing_Skin",
+    "Wishing_Skirt",
+    "Wishing_SockStripes",
+    "Wishing_Socks",
+    "Wishing_Sole",
+    "Wishing_StarSeat"
+  ],
+  "components": {
+    "Wishing_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.14361
+    },
+    "Wishing_Hair": {
+      "tris": 9680,
+      "verts": 4838,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.50563
+    },
+    "Wishing_Shirt": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.46393
+    },
+    "Wishing_Gingham": {
+      "tris": 6998,
+      "verts": 3257,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07176
+    },
+    "Wishing_Collar": {
+      "tris": 1498,
+      "verts": 751,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01012
+    },
+    "Wishing_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00946
+    },
+    "Wishing_Skirt": {
+      "tris": 4498,
+      "verts": 2251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.49678
+    },
+    "Wishing_Legs": {
+      "tris": 998,
+      "verts": 503,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01718
+    },
+    "Wishing_Socks": {
+      "tris": 1248,
+      "verts": 628,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01839
+    },
+    "Wishing_SockStripes": {
+      "tris": 1248,
+      "verts": 632,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00553
+    },
+    "Wishing_Shoes": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0243
+    },
+    "Wishing_Soles": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00535
+    },
+    "Wishing_StarSeat": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.11202
+    },
+    "Wishing_Notebook": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01417
+    },
+    "Wishing_NotebookDoodles": {
+      "tris": 1246,
+      "verts": 623,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00073
+    },
+    "Wishing_Pencil": {
+      "tris": 998,
+      "verts": 501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00229
+    },
+    "Wishing_PencilWood": {
+      "tris": 400,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0003
+    },
+    "Wishing_PencilLead": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1e-05
+    },
+    "Wishing_Eyes": {
+      "tris": 798,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01558
+    },
+    "Wishing_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01373
+    },
+    "Wishing_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00077
+    },
+    "Wishing_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00136
+    },
+    "Wishing_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00034
+    },
+    "Wishing_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "Wishing_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "Wishing_Blush": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00622
+    }
+  },
+  "build": {
+    "Wishing_Head": {
+      "active_blocks": 5612,
+      "blocks": 18009,
+      "grid": [
+        217,
+        185,
+        233
+      ],
+      "raw_tris": 259596,
+      "removed_faces": 0,
+      "seconds": 8.0
+    },
+    "Wishing_Hair": {
+      "active_blocks": 15565,
+      "blocks": 55800,
+      "grid": [
+        361,
+        321,
+        249
+      ],
+      "raw_tris": 849728,
+      "removed_faces": 68,
+      "seconds": 34.1
+    },
+    "Wishing_Shirt": {
+      "active_blocks": 4995,
+      "blocks": 14112,
+      "grid": [
+        225,
+        193,
+        169
+      ],
+      "raw_tris": 239220,
+      "removed_faces": 0,
+      "seconds": 19.5
+    },
+    "Wishing_Gingham": {
+      "active_blocks": 19165,
+      "blocks": 80066,
+      "grid": [
+        393,
+        345,
+        305
+      ],
+      "raw_tris": 1034296,
+      "removed_faces": 0,
+      "seconds": 79.9
+    },
+    "Wishing_Collar": {
+      "active_blocks": 1018,
+      "blocks": 3450,
+      "grid": [
+        185,
+        121,
+        81
+      ],
+      "raw_tris": 41678,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "Wishing_Hands": {
+      "active_blocks": 873,
+      "blocks": 9100,
+      "grid": [
+        209,
+        113,
+        201
+      ],
+      "raw_tris": 35800,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "Wishing_Skirt": {
+      "active_blocks": 6196,
+      "blocks": 17577,
+      "grid": [
+        217,
+        249,
+        169
+      ],
+      "raw_tris": 303158,
+      "removed_faces": 0,
+      "seconds": 9.5
+    },
+    "Wishing_Legs": {
+      "active_blocks": 1154,
+      "blocks": 3864,
+      "grid": [
+        185,
+        113,
+        97
+      ],
+      "raw_tris": 50020,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "Wishing_Socks": {
+      "active_blocks": 1196,
+      "blocks": 3864,
+      "grid": [
+        185,
+        113,
+        97
+      ],
+      "raw_tris": 51180,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "Wishing_SockStripes": {
+      "active_blocks": 2090,
+      "blocks": 7616,
+      "grid": [
+        225,
+        137,
+        129
+      ],
+      "raw_tris": 104908,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "Wishing_Shoes": {
+      "active_blocks": 1480,
+      "blocks": 4416,
+      "grid": [
+        185,
+        129,
+        97
+      ],
+      "raw_tris": 61384,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "Wishing_Soles": {
+      "active_blocks": 1364,
+      "blocks": 4256,
+      "grid": [
+        225,
+        153,
+        65
+      ],
+      "raw_tris": 52536,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "Wishing_StarSeat": {
+      "active_blocks": 6720,
+      "blocks": 27417,
+      "grid": [
+        313,
+        297,
+        153
+      ],
+      "raw_tris": 341510,
+      "removed_faces": 0,
+      "seconds": 9.3
+    },
+    "Wishing_Notebook": {
+      "active_blocks": 1513,
+      "blocks": 6384,
+      "grid": [
+        193,
+        153,
+        113
+      ],
+      "raw_tris": 85988,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "Wishing_NotebookDoodles": {
+      "active_blocks": 1231,
+      "blocks": 10752,
+      "grid": [
+        257,
+        169,
+        129
+      ],
+      "raw_tris": 57320,
+      "removed_faces": 2,
+      "seconds": 1.7
+    },
+    "Wishing_Pencil": {
+      "active_blocks": 622,
+      "blocks": 4032,
+      "grid": [
+        193,
+        97,
+        113
+      ],
+      "raw_tris": 24014,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Wishing_PencilWood": {
+      "active_blocks": 173,
+      "blocks": 972,
+      "grid": [
+        97,
+        73,
+        73
+      ],
+      "raw_tris": 4664,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Wishing_PencilLead": {
+      "active_blocks": 70,
+      "blocks": 1200,
+      "grid": [
+        81,
+        97,
+        81
+      ],
+      "raw_tris": 828,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "Wishing_Eyes": {
+      "active_blocks": 2926,
+      "blocks": 12996,
+      "grid": [
+        305,
+        153,
+        145
+      ],
+      "raw_tris": 100784,
+      "removed_faces": 0,
+      "seconds": 4.0
+    },
+    "Wishing_Iris": {
+      "active_blocks": 2530,
+      "blocks": 13209,
+      "grid": [
+        297,
+        169,
+        137
+      ],
+      "raw_tris": 84584,
+      "removed_faces": 0,
+      "seconds": 3.8
+    },
+    "Wishing_EyeShine": {
+      "active_blocks": 824,
+      "blocks": 7488,
+      "grid": [
+        289,
+        129,
+        105
+      ],
+      "raw_tris": 15136,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "Wishing_Lash": {
+      "active_blocks": 1589,
+      "blocks": 14190,
+      "grid": [
+        345,
+        177,
+        121
+      ],
+      "raw_tris": 48148,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "Wishing_Brow": {
+      "active_blocks": 626,
+      "blocks": 4158,
+      "grid": [
+        265,
+        113,
+        73
+      ],
+      "raw_tris": 6904,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Wishing_Nose": {
+      "active_blocks": 140,
+      "blocks": 1089,
+      "grid": [
+        89,
+        73,
+        89
+      ],
+      "raw_tris": 3396,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "Wishing_Mouth": {
+      "active_blocks": 272,
+      "blocks": 1944,
+      "grid": [
+        97,
+        145,
+        73
+      ],
+      "raw_tris": 4004,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Wishing_Blush": {
+      "active_blocks": 1160,
+      "blocks": 5250,
+      "grid": [
+        281,
+        121,
+        81
+      ],
+      "raw_tris": 44308,
+      "removed_faces": 0,
+      "seconds": 1.6
+    }
+  },
+  "glb": {
+    "bytes": 1190064,
+    "nodes": [
+      "Wishing_Blush",
+      "Wishing_Brow",
+      "Wishing_Collar",
+      "Wishing_Eyes",
+      "Wishing_EyeShine",
+      "Wishing_Gingham",
+      "Wishing_Hair",
+      "Wishing_Hands",
+      "Wishing_Head",
+      "Wishing_Iris",
+      "Wishing_Lash",
+      "Wishing_Legs",
+      "Wishing_Mouth",
+      "Wishing_Nose",
+      "Wishing_Notebook",
+      "Wishing_NotebookDoodles",
+      "Wishing_Pencil",
+      "Wishing_PencilLead",
+      "Wishing_PencilWood",
+      "Wishing_Shirt",
+      "Wishing_Shoes",
+      "Wishing_Skirt",
+      "Wishing_Socks",
+      "Wishing_SockStripes",
+      "Wishing_Soles",
+      "Wishing_StarSeat",
+      "Wishing"
+    ],
+    "meshes": 26,
+    "materials": 23,
+    "images": 23,
+    "textures": 23,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.wishing",
+  "root": "Wishing",
+  "face": "Wishing_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 26,
+    "triangle_mismatches": {}
+  }
+}

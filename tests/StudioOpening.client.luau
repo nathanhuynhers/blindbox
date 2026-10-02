@@ -14,6 +14,7 @@ local Controller = require(source:WaitForChild("OpeningController") :: ModuleScr
 local Config = require(source:WaitForChild("OpeningConfig") :: ModuleScript)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
+local AudioConfig = require(source:WaitForChild("OpeningAudioConfig") :: ModuleScript)
 local main = playerGui:WaitForChild("PocketGrove") :: ScreenGui
 local wasEnabled = main.Enabled
 main.Enabled = false
@@ -36,6 +37,67 @@ padding.PaddingLeft, padding.PaddingRight, padding.PaddingTop, padding.PaddingBo
 padding.Parent = panel
 local connections: { RBXScriptConnection } = {}
 local jobs: { thread } = {}
+local diagnostics = Instance.new("ScreenGui")
+diagnostics.Name, diagnostics.ResetOnSpawn, diagnostics.DisplayOrder =
+	"OpeningAudioReview", false, 110
+diagnostics.Parent = playerGui
+local audioLabel = Instance.new("TextLabel")
+audioLabel.Position, audioLabel.Size = UDim2.fromOffset(16, 60), UDim2.new(1, -32, 0, 88)
+audioLabel.BackgroundColor3, audioLabel.BackgroundTransparency = Color3.fromRGB(20, 26, 32), 0.15
+audioLabel.TextColor3, audioLabel.TextSize, audioLabel.Font =
+	Color3.fromRGB(225, 237, 241), 13, Enum.Font.Code
+audioLabel.TextWrapped, audioLabel.TextXAlignment = true, Enum.TextXAlignment.Left
+audioLabel.Visible, audioLabel.Parent = false, diagnostics
+local showAudio, diagnosticAge = true, 0
+table.insert(
+	connections,
+	RunService.Heartbeat:Connect(function(delta)
+		diagnosticAge += delta
+		if diagnosticAge < 0.1 then
+			return
+		end
+		diagnosticAge = 0
+		local opening = playerGui:FindFirstChild("BlindboxOpening")
+		audioLabel.Visible = showAudio and opening ~= nil
+		if not audioLabel.Visible or not opening then
+			return
+		end
+		local cues, loops = {}, {}
+		local count, loading, totalGain, populated = 0, 0, 0, 0
+		for _, id in AudioConfig.sounds do
+			if string.match(id, "^rbxassetid://[1-9]%d*$") then
+				populated += 1
+			end
+		end
+		local sounds = game:GetService("SoundService"):FindFirstChild("OpeningSounds")
+		if sounds then
+			for _, sound in sounds:GetChildren() do
+				if sound:IsA("Sound") then
+					count += 1
+					totalGain += sound.Volume
+					if not sound.IsLoaded then
+						loading += 1
+					end
+					table.insert(if sound.Looped then loops else cues, sound.Name)
+				end
+			end
+		end
+		table.sort(cues)
+		table.sort(loops)
+		audioLabel.Text = string.format(
+			"%s | Sounds %d/%d | loading %d | gain %.2f/%.2f | configured slots %d\nCues: %s\nLoops: %s",
+			tostring(opening:GetAttribute("Phase")),
+			count,
+			AudioConfig.limit,
+			loading,
+			totalGain,
+			AudioConfig.gainBudget,
+			populated,
+			table.concat(cues, ", "),
+			table.concat(loops, ", ")
+		)
+	end)
+)
 local reduced, fresh, closed, runningLoop = false, true, false, false
 local previewRarity: Rarity.Id? = nil
 local rarityIndex = 0
@@ -88,7 +150,7 @@ local function present(id: string, direct: boolean?, override: Rarity.Id?)
 		quantity = if fresh then 1 else 5,
 		direct = direct == true,
 	}
-	local presentation = override or previewRarity
+	local presentation: Rarity.Id? = override or previewRarity
 	assert(controller.present(result, reduced, presentation), "Opening should start")
 	assert(not controller.present(result, reduced), "Concurrent/replayed opening must be rejected")
 	local opening = playerGui:FindFirstChild("BlindboxOpening")
@@ -107,7 +169,7 @@ local function present(id: string, direct: boolean?, override: Rarity.Id?)
 			elseif selected == "Pearl suspension" then 0.11
 			elseif selected == "Spectral sweep" then 0.44
 			elseif selected == "Dive" then (if reduced
-				then profile.timing.rarityReduced
+				then profile.timing.rarityReduced or profile.timing.rarityTease
 				else profile.timing.rarityTease) * 0.9
 			elseif selected == "Impact peak" then Config.flight.impactPeakAt
 			else 0
@@ -167,15 +229,15 @@ local function compare(tiers: { Rarity.Id })
 	table.insert(
 		jobs,
 		task.spawn(function()
-			local ok, reason = pcall(function()
+			local ok, reason = pcall(function(): boolean
 				for _, rarity in tiers do
 					if closed then
-						return
+						return true
 					end
 					print(
 						"Presentation-only comparison: " .. rarity .. " / existing Pebble Pip model"
 					)
-					present("grove.pebble", false, rarity)
+					present("grove.pebble", false, rarity :: Rarity.Id)
 					local seenResult, deadline = false, os.clock() + 180
 					while controller.isActive() and not closed do
 						assert(os.clock() < deadline, "Timed out waiting for Open/Continue")
@@ -193,11 +255,12 @@ local function compare(tiers: { Rarity.Id })
 						task.wait(0.05)
 					end
 					if closed then
-						return
+						return true
 					end
 					assert(seenResult, "Comparison interrupted before Result")
 				end
 				print("PASS: presentation comparison; no catalog edits, purchases or grants")
+				return true
 			end)
 			controller.cancel()
 			runningLoop = false
@@ -215,6 +278,49 @@ button("Compare Rare / Legendary / Mythical: Open / Continue each", function()
 end)
 button("Compare all five tiers: manually Open / Continue each", function()
 	compare(Rarity.order)
+end)
+local audioButton: TextButton? = nil
+audioButton = button("Audio diagnostics: ON (fixture only)", function()
+	showAudio = not showAudio
+	if audioButton then
+		audioButton.Text = "Audio diagnostics: "
+			.. (if showAudio then "ON" else "OFF")
+			.. " (fixture only)"
+	end
+end)
+button("Warm configured approved audio (see Output)", function()
+	local ids: { string } = {}
+	for _, id in AudioConfig.sounds do
+		if string.match(id, "^rbxassetid://[1-9]%d*$") then
+			table.insert(ids, id)
+		end
+	end
+	if #ids == 0 then
+		warn(
+			"No approved IDs populated. Review the asset checklist; this preview is intentionally silent."
+		)
+		return
+	end
+	table.insert(
+		jobs,
+		task.spawn(function()
+			local ok, reason = pcall(function()
+				game:GetService("ContentProvider")
+					:PreloadAsync(ids, function(id: string, status: Enum.AssetFetchStatus)
+						if status ~= Enum.AssetFetchStatus.Success then
+							warn("Audio unavailable: " .. id .. " / " .. status.Name)
+						end
+					end)
+			end)
+			if ok then
+				print(
+					"Audio preload finished. Verify availability messages and listen in the five-tier comparison."
+				)
+			else
+				warn(reason)
+			end
+		end)
+	)
 end)
 local motionButton: TextButton? = nil
 motionButton = button("Reduced motion: OFF", function()
@@ -338,6 +444,7 @@ local function inspect(camera: Camera): { [string]: number }
 		renderConnections = 0,
 		tweens = 0,
 		stages = 0,
+		sounds = 0,
 	}
 	for _, child in workspace:GetChildren() do
 		if child.Name == "BlindboxCinematic" then
@@ -378,6 +485,14 @@ local function inspect(camera: Camera): { [string]: number }
 		end
 	end
 	local opening = playerGui:FindFirstChild("BlindboxOpening")
+	local sounds = game:GetService("SoundService"):FindFirstChild("OpeningSounds")
+	if sounds then
+		for _, child in sounds:GetChildren() do
+			if child:IsA("Sound") then
+				counts.sounds += 1
+			end
+		end
+	end
 	if opening then
 		counts.renderConnections = (opening:GetAttribute("RenderConnections") :: number?) or 0
 	end
@@ -550,6 +665,7 @@ local function cleanup()
 		end
 	end
 	gui:Destroy()
+	diagnostics:Destroy()
 	main.Enabled = wasEnabled
 	print("Opening fixture exited. No purchases or grants were made.")
 end

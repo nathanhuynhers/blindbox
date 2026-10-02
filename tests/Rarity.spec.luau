@@ -169,6 +169,20 @@ local expected = {
 	{ "echo.feather-hush", "Legendary", 12, 8 / 173 * 100, 8 },
 	{ "echo.mumble-beast", "Legendary", 14, 8 / 173 * 100, 8 },
 	{ "echo.moon-doze", "Mythical", 20, 2 / 173 * 100, 2 },
+	-- We Are All Stars weights are relative within a 173-weight collection, so odds are weight / 173.
+	{ "star.reminiscence", "Common", 1, 20 / 173 * 100, 20 },
+	{ "star.mirrorlight", "Common", 1.2, 20 / 173 * 100, 20 },
+	{ "star.wishing", "Common", 1.4, 20 / 173 * 100, 20 },
+	{ "star.page-turner", "Common", 1.6, 20 / 173 * 100, 20 },
+	{ "star.nightlight", "Uncommon", 3, 15 / 173 * 100, 15 },
+	{ "star.lamplight", "Uncommon", 3.5, 15 / 173 * 100, 15 },
+	{ "star.garden", "Uncommon", 4, 15 / 173 * 100, 15 },
+	{ "star.sanctuary", "Rare", 6, 10 / 173 * 100, 10 },
+	{ "star.echo", "Rare", 7, 10 / 173 * 100, 10 },
+	{ "star.radiant", "Rare", 8, 10 / 173 * 100, 10 },
+	{ "star.cloud-rest", "Legendary", 12, 8 / 173 * 100, 8 },
+	{ "star.meteor-shower", "Legendary", 14, 8 / 173 * 100, 8 },
+	{ "star.dreamcatcher", "Mythical", 20, 2 / 173 * 100, 2 },
 }
 check(#Catalog.figures == #expected and #Economy.entries == #expected, "no invented live content")
 for _, entry in expected do
@@ -187,8 +201,8 @@ for _, entry in expected do
 	end
 	check(found, "explicit weights unchanged")
 end
-local tiers = { grove = 3, tide = 3, concept = 5, echo = 5 }
-local sizes = { grove = 6, tide = 6, concept = 5, echo = 13 }
+local tiers = { grove = 3, tide = 3, concept = 5, echo = 5, star = 5 }
+local sizes = { grove = 6, tide = 6, concept = 5, echo = 13, star = 13 }
 for _, collection in Catalog.collections do
 	local rows = Shop.rarityOdds({ odds = Rules.odds }, collection.id)
 	local tierCount = tiers[collection.id]

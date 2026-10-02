@@ -1,0 +1,759 @@
+{
+  "figure": "PageTurner",
+  "title": "Page Turner Star",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.5528,
+    2.1687,
+    3.4015
+  ],
+  "meshes": 33,
+  "triangles": 65220,
+  "materials": [
+    "PageTurner_BlueBook",
+    "PageTurner_Blush",
+    "PageTurner_BookCover",
+    "PageTurner_Brow",
+    "PageTurner_Cat",
+    "PageTurner_CatBlush",
+    "PageTurner_CatEars",
+    "PageTurner_CatEyes",
+    "PageTurner_CatNose",
+    "PageTurner_CatStar",
+    "PageTurner_EyeShine",
+    "PageTurner_EyeWhite",
+    "PageTurner_Gold",
+    "PageTurner_Hair",
+    "PageTurner_Iris",
+    "PageTurner_Lash",
+    "PageTurner_Mouth",
+    "PageTurner_Nose",
+    "PageTurner_Pages",
+    "PageTurner_Pants",
+    "PageTurner_PinkBook",
+    "PageTurner_Skin",
+    "PageTurner_SockGrey",
+    "PageTurner_SockPeach",
+    "PageTurner_Sweater",
+    "PageTurner_TopBook",
+    "PageTurner_TopBookEdge"
+  ],
+  "components": {
+    "PageTurner_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.14362
+    },
+    "PageTurner_Hair": {
+      "tris": 9748,
+      "verts": 4874,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.78402
+    },
+    "PageTurner_Cat": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.16571
+    },
+    "PageTurner_CatStar": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00043
+    },
+    "PageTurner_Sweater": {
+      "tris": 5500,
+      "verts": 2752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.45687
+    },
+    "PageTurner_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00917
+    },
+    "PageTurner_Pants": {
+      "tris": 4500,
+      "verts": 2250,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.26376
+    },
+    "PageTurner_SockLeft": {
+      "tris": 748,
+      "verts": 376,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00973
+    },
+    "PageTurner_SockRight": {
+      "tris": 748,
+      "verts": 376,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00973
+    },
+    "PageTurner_BookCover": {
+      "tris": 2498,
+      "verts": 1251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0464
+    },
+    "PageTurner_BookPages": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04869
+    },
+    "PageTurner_Constellations": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00074
+    },
+    "PageTurner_TopBook": {
+      "tris": 2498,
+      "verts": 1251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.13937
+    },
+    "PageTurner_TopBookEdge": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.14938
+    },
+    "PageTurner_TopBookPages": {
+      "tris": 3998,
+      "verts": 2001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.36071
+    },
+    "PageTurner_BottomBookPink": {
+      "tris": 2498,
+      "verts": 1251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.12132
+    },
+    "PageTurner_BottomBookBlue": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0613
+    },
+    "PageTurner_BottomBookPages": {
+      "tris": 3998,
+      "verts": 2001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.81331
+    },
+    "PageTurner_BookBands": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01074
+    },
+    "PageTurner_BookStars": {
+      "tris": 398,
+      "verts": 203,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00039
+    },
+    "PageTurner_CatEars": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00018
+    },
+    "PageTurner_CatEyes": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "PageTurner_CatMouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00011
+    },
+    "PageTurner_CatNose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 4e-05
+    },
+    "PageTurner_CatBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00071
+    },
+    "PageTurner_Eyes": {
+      "tris": 798,
+      "verts": 403,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01558
+    },
+    "PageTurner_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01392
+    },
+    "PageTurner_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00077
+    },
+    "PageTurner_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00137
+    },
+    "PageTurner_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00034
+    },
+    "PageTurner_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "PageTurner_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "PageTurner_Blush": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00622
+    }
+  },
+  "build": {
+    "PageTurner_Head": {
+      "active_blocks": 5612,
+      "blocks": 18009,
+      "grid": [
+        217,
+        185,
+        233
+      ],
+      "raw_tris": 259596,
+      "removed_faces": 0,
+      "seconds": 9.7
+    },
+    "PageTurner_Hair": {
+      "active_blocks": 19579,
+      "blocks": 92106,
+      "grid": [
+        409,
+        345,
+        337
+      ],
+      "raw_tris": 1229896,
+      "removed_faces": 0,
+      "seconds": 33.6
+    },
+    "PageTurner_Cat": {
+      "active_blocks": 4069,
+      "blocks": 17820,
+      "grid": [
+        217,
+        241,
+        177
+      ],
+      "raw_tris": 182880,
+      "removed_faces": 0,
+      "seconds": 14.0
+    },
+    "PageTurner_CatStar": {
+      "active_blocks": 316,
+      "blocks": 3072,
+      "grid": [
+        129,
+        97,
+        129
+      ],
+      "raw_tris": 11872,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "PageTurner_Sweater": {
+      "active_blocks": 4840,
+      "blocks": 14880,
+      "grid": [
+        249,
+        193,
+        161
+      ],
+      "raw_tris": 228996,
+      "removed_faces": 0,
+      "seconds": 15.2
+    },
+    "PageTurner_Hands": {
+      "active_blocks": 860,
+      "blocks": 5460,
+      "grid": [
+        281,
+        105,
+        97
+      ],
+      "raw_tris": 34418,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "PageTurner_Pants": {
+      "active_blocks": 5156,
+      "blocks": 12240,
+      "grid": [
+        273,
+        241,
+        97
+      ],
+      "raw_tris": 229192,
+      "removed_faces": 0,
+      "seconds": 7.1
+    },
+    "PageTurner_SockLeft": {
+      "active_blocks": 616,
+      "blocks": 2197,
+      "grid": [
+        105,
+        105,
+        105
+      ],
+      "raw_tris": 26558,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "PageTurner_SockRight": {
+      "active_blocks": 626,
+      "blocks": 1872,
+      "grid": [
+        105,
+        97,
+        97
+      ],
+      "raw_tris": 26558,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "PageTurner_BookCover": {
+      "active_blocks": 3788,
+      "blocks": 13200,
+      "grid": [
+        265,
+        129,
+        201
+      ],
+      "raw_tris": 218398,
+      "removed_faces": 0,
+      "seconds": 4.9
+    },
+    "PageTurner_BookPages": {
+      "active_blocks": 3818,
+      "blocks": 11904,
+      "grid": [
+        249,
+        129,
+        193
+      ],
+      "raw_tris": 180000,
+      "removed_faces": 0,
+      "seconds": 4.7
+    },
+    "PageTurner_Constellations": {
+      "active_blocks": 2295,
+      "blocks": 25897,
+      "grid": [
+        377,
+        153,
+        233
+      ],
+      "raw_tris": 56168,
+      "removed_faces": 2,
+      "seconds": 3.5
+    },
+    "PageTurner_TopBook": {
+      "active_blocks": 10522,
+      "blocks": 13020,
+      "grid": [
+        337,
+        249,
+        81
+      ],
+      "raw_tris": 533928,
+      "removed_faces": 0,
+      "seconds": 12.6
+    },
+    "PageTurner_TopBookEdge": {
+      "active_blocks": 25101,
+      "blocks": 40572,
+      "grid": [
+        505,
+        369,
+        113
+      ],
+      "raw_tris": 1156316,
+      "removed_faces": 0,
+      "seconds": 31.3
+    },
+    "PageTurner_TopBookPages": {
+      "active_blocks": 12640,
+      "blocks": 15435,
+      "grid": [
+        393,
+        281,
+        73
+      ],
+      "raw_tris": 401050,
+      "removed_faces": 0,
+      "seconds": 6.1
+    },
+    "PageTurner_BottomBookPink": {
+      "active_blocks": 8876,
+      "blocks": 14144,
+      "grid": [
+        257,
+        273,
+        105
+      ],
+      "raw_tris": 463564,
+      "removed_faces": 0,
+      "seconds": 6.2
+    },
+    "PageTurner_BottomBookBlue": {
+      "active_blocks": 5214,
+      "blocks": 8398,
+      "grid": [
+        153,
+        273,
+        105
+      ],
+      "raw_tris": 239688,
+      "removed_faces": 0,
+      "seconds": 3.6
+    },
+    "PageTurner_BottomBookPages": {
+      "active_blocks": 17840,
+      "blocks": 26871,
+      "grid": [
+        425,
+        313,
+        105
+      ],
+      "raw_tris": 569594,
+      "removed_faces": 0,
+      "seconds": 8.1
+    },
+    "PageTurner_BookBands": {
+      "active_blocks": 5074,
+      "blocks": 11628,
+      "grid": [
+        97,
+        409,
+        153
+      ],
+      "raw_tris": 132844,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "PageTurner_BookStars": {
+      "active_blocks": 576,
+      "blocks": 9660,
+      "grid": [
+        553,
+        81,
+        113
+      ],
+      "raw_tris": 12904,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "PageTurner_CatEars": {
+      "active_blocks": 373,
+      "blocks": 2457,
+      "grid": [
+        169,
+        73,
+        105
+      ],
+      "raw_tris": 5560,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "PageTurner_CatEyes": {
+      "active_blocks": 620,
+      "blocks": 5852,
+      "grid": [
+        177,
+        153,
+        113
+      ],
+      "raw_tris": 14236,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "PageTurner_CatMouth": {
+      "active_blocks": 322,
+      "blocks": 3696,
+      "grid": [
+        129,
+        169,
+        89
+      ],
+      "raw_tris": 5752,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "PageTurner_CatNose": {
+      "active_blocks": 110,
+      "blocks": 1320,
+      "grid": [
+        97,
+        81,
+        89
+      ],
+      "raw_tris": 2112,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "PageTurner_CatBlush": {
+      "active_blocks": 653,
+      "blocks": 4950,
+      "grid": [
+        201,
+        145,
+        89
+      ],
+      "raw_tris": 14340,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "PageTurner_Eyes": {
+      "active_blocks": 2926,
+      "blocks": 12996,
+      "grid": [
+        305,
+        153,
+        145
+      ],
+      "raw_tris": 100784,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "PageTurner_Iris": {
+      "active_blocks": 2553,
+      "blocks": 12852,
+      "grid": [
+        289,
+        169,
+        137
+      ],
+      "raw_tris": 85616,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "PageTurner_EyeShine": {
+      "active_blocks": 873,
+      "blocks": 6825,
+      "grid": [
+        281,
+        121,
+        105
+      ],
+      "raw_tris": 15152,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "PageTurner_Lash": {
+      "active_blocks": 1589,
+      "blocks": 14190,
+      "grid": [
+        345,
+        177,
+        121
+      ],
+      "raw_tris": 48148,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "PageTurner_Brow": {
+      "active_blocks": 626,
+      "blocks": 4158,
+      "grid": [
+        265,
+        113,
+        73
+      ],
+      "raw_tris": 6904,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "PageTurner_Nose": {
+      "active_blocks": 140,
+      "blocks": 1089,
+      "grid": [
+        89,
+        73,
+        89
+      ],
+      "raw_tris": 3396,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "PageTurner_Mouth": {
+      "active_blocks": 272,
+      "blocks": 1944,
+      "grid": [
+        97,
+        145,
+        73
+      ],
+      "raw_tris": 4004,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "PageTurner_Blush": {
+      "active_blocks": 1160,
+      "blocks": 5250,
+      "grid": [
+        281,
+        121,
+        81
+      ],
+      "raw_tris": 44376,
+      "removed_faces": 0,
+      "seconds": 0.9
+    }
+  },
+  "glb": {
+    "bytes": 1481292,
+    "nodes": [
+      "PageTurner_Blush",
+      "PageTurner_BookBands",
+      "PageTurner_BookCover",
+      "PageTurner_BookPages",
+      "PageTurner_BookStars",
+      "PageTurner_BottomBookBlue",
+      "PageTurner_BottomBookPages",
+      "PageTurner_BottomBookPink",
+      "PageTurner_Brow",
+      "PageTurner_Cat",
+      "PageTurner_CatBlush",
+      "PageTurner_CatEars",
+      "PageTurner_CatEyes",
+      "PageTurner_CatMouth",
+      "PageTurner_CatNose",
+      "PageTurner_CatStar",
+      "PageTurner_Constellations",
+      "PageTurner_Eyes",
+      "PageTurner_EyeShine",
+      "PageTurner_Hair",
+      "PageTurner_Hands",
+      "PageTurner_Head",
+      "PageTurner_Iris",
+      "PageTurner_Lash",
+      "PageTurner_Mouth",
+      "PageTurner_Nose",
+      "PageTurner_Pants",
+      "PageTurner_SockLeft",
+      "PageTurner_SockRight",
+      "PageTurner_Sweater",
+      "PageTurner_TopBook",
+      "PageTurner_TopBookEdge",
+      "PageTurner_TopBookPages",
+      "PageTurner"
+    ],
+    "meshes": 33,
+    "materials": 27,
+    "images": 27,
+    "textures": 27,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.page-turner",
+  "root": "PageTurner",
+  "face": "PageTurner_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 33,
+    "triangle_mismatches": {}
+  }
+}

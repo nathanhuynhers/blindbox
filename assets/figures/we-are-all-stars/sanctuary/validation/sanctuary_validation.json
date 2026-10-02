@@ -1,0 +1,698 @@
+{
+  "figure": "Sanctuary",
+  "title": "Sanctuary Star",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    2.7974,
+    2.813,
+    3.5898
+  ],
+  "meshes": 30,
+  "triangles": 77712,
+  "materials": [
+    "Sanctuary_Blush",
+    "Sanctuary_Boots",
+    "Sanctuary_Brow",
+    "Sanctuary_Canopy",
+    "Sanctuary_CanopyStars",
+    "Sanctuary_Cat",
+    "Sanctuary_CatBlush",
+    "Sanctuary_CatEars",
+    "Sanctuary_CatEyes",
+    "Sanctuary_CatNose",
+    "Sanctuary_EyeShine",
+    "Sanctuary_EyeWhite",
+    "Sanctuary_FlowerCentres",
+    "Sanctuary_Grass",
+    "Sanctuary_Hair",
+    "Sanctuary_Handle",
+    "Sanctuary_Iris",
+    "Sanctuary_Lash",
+    "Sanctuary_Leaves",
+    "Sanctuary_Mouth",
+    "Sanctuary_Nose",
+    "Sanctuary_Petals",
+    "Sanctuary_Ribs",
+    "Sanctuary_Shorts",
+    "Sanctuary_Skin",
+    "Sanctuary_Stripes",
+    "Sanctuary_Sweater"
+  ],
+  "components": {
+    "Sanctuary_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.98049
+    },
+    "Sanctuary_Hair": {
+      "tris": 9678,
+      "verts": 4837,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.27811
+    },
+    "Sanctuary_Sweater": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.35618
+    },
+    "Sanctuary_Stripes": {
+      "tris": 5998,
+      "verts": 2991,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06209
+    },
+    "Sanctuary_Hands": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00891
+    },
+    "Sanctuary_Shorts": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.23326
+    },
+    "Sanctuary_Legs": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02963
+    },
+    "Sanctuary_Boots": {
+      "tris": 3500,
+      "verts": 1752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08619
+    },
+    "Sanctuary_Canopy": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.3584
+    },
+    "Sanctuary_Ribs": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02893
+    },
+    "Sanctuary_CanopyStars": {
+      "tris": 2996,
+      "verts": 1520,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00988
+    },
+    "Sanctuary_Handle": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01736
+    },
+    "Sanctuary_Cat": {
+      "tris": 5000,
+      "verts": 2500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.28663
+    },
+    "Sanctuary_Grass": {
+      "tris": 6994,
+      "verts": 3497,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.88836
+    },
+    "Sanctuary_Petals": {
+      "tris": 2998,
+      "verts": 1515,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00202
+    },
+    "Sanctuary_FlowerCentres": {
+      "tris": 750,
+      "verts": 391,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00018
+    },
+    "Sanctuary_Leaves": {
+      "tris": 3000,
+      "verts": 1512,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01252
+    },
+    "Sanctuary_CatEars": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00038
+    },
+    "Sanctuary_CatEyes": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00108
+    },
+    "Sanctuary_CatMouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00022
+    },
+    "Sanctuary_CatNose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 9e-05
+    },
+    "Sanctuary_CatBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00148
+    },
+    "Sanctuary_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01334
+    },
+    "Sanctuary_Iris": {
+      "tris": 1198,
+      "verts": 603,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01177
+    },
+    "Sanctuary_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00066
+    },
+    "Sanctuary_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00117
+    },
+    "Sanctuary_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00029
+    },
+    "Sanctuary_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00019
+    },
+    "Sanctuary_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00011
+    },
+    "Sanctuary_Blush": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00534
+    }
+  },
+  "build": {
+    "Sanctuary_Head": {
+      "active_blocks": 5122,
+      "blocks": 15444,
+      "grid": [
+        209,
+        177,
+        217
+      ],
+      "raw_tris": 234284,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "Sanctuary_Hair": {
+      "active_blocks": 14388,
+      "blocks": 51072,
+      "grid": [
+        337,
+        305,
+        257
+      ],
+      "raw_tris": 784342,
+      "removed_faces": 70,
+      "seconds": 6.8
+    },
+    "Sanctuary_Sweater": {
+      "active_blocks": 5353,
+      "blocks": 18216,
+      "grid": [
+        289,
+        185,
+        177
+      ],
+      "raw_tris": 255096,
+      "removed_faces": 0,
+      "seconds": 5.5
+    },
+    "Sanctuary_Stripes": {
+      "active_blocks": 11216,
+      "blocks": 40176,
+      "grid": [
+        385,
+        249,
+        217
+      ],
+      "raw_tris": 569640,
+      "removed_faces": 0,
+      "seconds": 12.2
+    },
+    "Sanctuary_Hands": {
+      "active_blocks": 825,
+      "blocks": 16320,
+      "grid": [
+        321,
+        137,
+        193
+      ],
+      "raw_tris": 33216,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Sanctuary_Shorts": {
+      "active_blocks": 3573,
+      "blocks": 8316,
+      "grid": [
+        177,
+        169,
+        145
+      ],
+      "raw_tris": 149432,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "Sanctuary_Legs": {
+      "active_blocks": 1824,
+      "blocks": 4788,
+      "grid": [
+        169,
+        97,
+        153
+      ],
+      "raw_tris": 74856,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Sanctuary_Boots": {
+      "active_blocks": 3252,
+      "blocks": 8211,
+      "grid": [
+        185,
+        137,
+        169
+      ],
+      "raw_tris": 157136,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "Sanctuary_Canopy": {
+      "active_blocks": 14422,
+      "blocks": 96746,
+      "grid": [
+        489,
+        489,
+        209
+      ],
+      "raw_tris": 1072776,
+      "removed_faces": 0,
+      "seconds": 7.8
+    },
+    "Sanctuary_Ribs": {
+      "active_blocks": 6444,
+      "blocks": 179968,
+      "grid": [
+        609,
+        593,
+        257
+      ],
+      "raw_tris": 262884,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "Sanctuary_CanopyStars": {
+      "active_blocks": 4110,
+      "blocks": 177536,
+      "grid": [
+        609,
+        585,
+        257
+      ],
+      "raw_tris": 137546,
+      "removed_faces": 2,
+      "seconds": 2.4
+    },
+    "Sanctuary_Handle": {
+      "active_blocks": 2291,
+      "blocks": 51450,
+      "grid": [
+        281,
+        169,
+        561
+      ],
+      "raw_tris": 94448,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "Sanctuary_Cat": {
+      "active_blocks": 5359,
+      "blocks": 17050,
+      "grid": [
+        177,
+        201,
+        249
+      ],
+      "raw_tris": 246696,
+      "removed_faces": 0,
+      "seconds": 5.6
+    },
+    "Sanctuary_Grass": {
+      "active_blocks": 10879,
+      "blocks": 18490,
+      "grid": [
+        345,
+        345,
+        81
+      ],
+      "raw_tris": 584924,
+      "removed_faces": 6,
+      "seconds": 4.9
+    },
+    "Sanctuary_Petals": {
+      "active_blocks": 2291,
+      "blocks": 109564,
+      "grid": [
+        729,
+        689,
+        113
+      ],
+      "raw_tris": 93276,
+      "removed_faces": 2,
+      "seconds": 1.7
+    },
+    "Sanctuary_FlowerCentres": {
+      "active_blocks": 829,
+      "blocks": 78474,
+      "grid": [
+        697,
+        657,
+        89
+      ],
+      "raw_tris": 11416,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Sanctuary_Leaves": {
+      "active_blocks": 3542,
+      "blocks": 50778,
+      "grid": [
+        505,
+        497,
+        105
+      ],
+      "raw_tris": 169192,
+      "removed_faces": 0,
+      "seconds": 7.0
+    },
+    "Sanctuary_CatEars": {
+      "active_blocks": 509,
+      "blocks": 3542,
+      "grid": [
+        185,
+        89,
+        113
+      ],
+      "raw_tris": 9320,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "Sanctuary_CatEyes": {
+      "active_blocks": 782,
+      "blocks": 6916,
+      "grid": [
+        209,
+        153,
+        113
+      ],
+      "raw_tris": 23468,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "Sanctuary_CatMouth": {
+      "active_blocks": 388,
+      "blocks": 2720,
+      "grid": [
+        129,
+        137,
+        81
+      ],
+      "raw_tris": 9464,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Sanctuary_CatNose": {
+      "active_blocks": 140,
+      "blocks": 1680,
+      "grid": [
+        113,
+        81,
+        97
+      ],
+      "raw_tris": 3384,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "Sanctuary_CatBlush": {
+      "active_blocks": 784,
+      "blocks": 6264,
+      "grid": [
+        233,
+        145,
+        97
+      ],
+      "raw_tris": 23532,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "Sanctuary_Eyes": {
+      "active_blocks": 2704,
+      "blocks": 12312,
+      "grid": [
+        289,
+        153,
+        145
+      ],
+      "raw_tris": 90600,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Sanctuary_Iris": {
+      "active_blocks": 2364,
+      "blocks": 10982,
+      "grid": [
+        273,
+        153,
+        137
+      ],
+      "raw_tris": 76332,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "Sanctuary_EyeShine": {
+      "active_blocks": 797,
+      "blocks": 6825,
+      "grid": [
+        281,
+        121,
+        105
+      ],
+      "raw_tris": 13684,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "Sanctuary_Lash": {
+      "active_blocks": 1494,
+      "blocks": 14190,
+      "grid": [
+        345,
+        177,
+        121
+      ],
+      "raw_tris": 43276,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "Sanctuary_Brow": {
+      "active_blocks": 562,
+      "blocks": 3472,
+      "grid": [
+        249,
+        113,
+        65
+      ],
+      "raw_tris": 6224,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Sanctuary_Nose": {
+      "active_blocks": 130,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "raw_tris": 3148,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "Sanctuary_Mouth": {
+      "active_blocks": 268,
+      "blocks": 2052,
+      "grid": [
+        97,
+        153,
+        73
+      ],
+      "raw_tris": 3656,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "Sanctuary_Blush": {
+      "active_blocks": 1132,
+      "blocks": 4950,
+      "grid": [
+        265,
+        121,
+        81
+      ],
+      "raw_tris": 40336,
+      "removed_faces": 0,
+      "seconds": 0.4
+    }
+  },
+  "glb": {
+    "bytes": 1754376,
+    "nodes": [
+      "Sanctuary_Blush",
+      "Sanctuary_Boots",
+      "Sanctuary_Brow",
+      "Sanctuary_Canopy",
+      "Sanctuary_CanopyStars",
+      "Sanctuary_Cat",
+      "Sanctuary_CatBlush",
+      "Sanctuary_CatEars",
+      "Sanctuary_CatEyes",
+      "Sanctuary_CatMouth",
+      "Sanctuary_CatNose",
+      "Sanctuary_Eyes",
+      "Sanctuary_EyeShine",
+      "Sanctuary_FlowerCentres",
+      "Sanctuary_Grass",
+      "Sanctuary_Hair",
+      "Sanctuary_Handle",
+      "Sanctuary_Hands",
+      "Sanctuary_Head",
+      "Sanctuary_Iris",
+      "Sanctuary_Lash",
+      "Sanctuary_Leaves",
+      "Sanctuary_Legs",
+      "Sanctuary_Mouth",
+      "Sanctuary_Nose",
+      "Sanctuary_Petals",
+      "Sanctuary_Ribs",
+      "Sanctuary_Shorts",
+      "Sanctuary_Stripes",
+      "Sanctuary_Sweater",
+      "Sanctuary"
+    ],
+    "meshes": 30,
+    "materials": 27,
+    "images": 27,
+    "textures": 27,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.sanctuary",
+  "root": "Sanctuary",
+  "face": "Sanctuary_Eyes",
+  "glass": [
+    "Sanctuary_Canopy"
+  ],
+  "reimport": {
+    "meshes": 30,
+    "triangle_mismatches": {}
+  }
+}

@@ -65,6 +65,16 @@ ShopTheme.collections = {
 		ink = Color3.fromRGB(61, 61, 61),
 		trim = Color3.fromRGB(212, 168, 122),
 	},
+	star = {
+		collectionId = "star",
+		emblemKey = Manifest.Collection.WeAreAllStars.Emblem,
+		patternKey = Manifest.Collection.WeAreAllStars.ShopPattern,
+		primary = Color3.fromRGB(143, 167, 207),
+		secondary = Color3.fromRGB(232, 169, 174),
+		wash = Color3.fromRGB(247, 242, 232),
+		ink = Color3.fromRGB(74, 58, 51),
+		trim = Color3.fromRGB(242, 207, 107),
+	},
 } :: { [string]: Theme }
 
 function ShopTheme.get(collectionId: string): Theme

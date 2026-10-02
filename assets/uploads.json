@@ -1,4 +1,436 @@
 {
+  "Audio.Opening.Acceleration": {
+    "assetId": "115300269826909",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5b23ee51223d65217b4aff026c92bd42c736bf3c87464cc433120827602391a6",
+    "source": "assets/audio/opening/acceleration.wav"
+  },
+  "Audio.Opening.Ambience": {
+    "assetId": "78807818680812",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "aff59df12e5783bac095709a6485e17cf66fcd08f25d41666975cffa0aa7a1b2",
+    "source": "assets/audio/opening/ambience.wav"
+  },
+  "Audio.Opening.AmbienceGrove": {
+    "assetId": "140309969052643",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f84665930ba21417bb5f99b4c648b99d917df219080ecb9fec928c7758473125",
+    "source": "assets/audio/opening/ambience_grove.wav"
+  },
+  "Audio.Opening.AmbienceTide": {
+    "assetId": "86924082784210",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "c4160e120c511c040cf1b954d6ba19381065b9f533f00c9aa035b20931f3aab3",
+    "source": "assets/audio/opening/ambience_tide.wav"
+  },
+  "Audio.Opening.Await": {
+    "assetId": "139625217583694",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "083434c5e09c4229aecc8c6f5c51a87b7a422409682bcbd314c8b37de1d6446b",
+    "source": "assets/audio/opening/await.wav"
+  },
+  "Audio.Opening.Charge": {
+    "assetId": "111469087332980",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "2b15711f7d14ced61046f10cb3e039ffa5649f6963ef3be3be337da7f9015595",
+    "source": "assets/audio/opening/charge.wav"
+  },
+  "Audio.Opening.Click": {
+    "assetId": "115280567382532",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "aae9affd8046f02b809a646865a25ae963b93cc2b466636e771e67ce69e7fd86",
+    "source": "assets/audio/opening/click.wav"
+  },
+  "Audio.Opening.Close": {
+    "assetId": "140062591000768",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6a2afdae3ecad5b6e4cbf6faeee1467ed9cc6fca398a4ddc85e93b32f7e0e7dc",
+    "source": "assets/audio/opening/close.wav"
+  },
+  "Audio.Opening.Compression": {
+    "assetId": "107897994038488",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1b3a72bcdd09ed06e8d0bd61e0685ce809cd2c6812df8a250fee31e698e2e59f",
+    "source": "assets/audio/opening/compression.wav"
+  },
+  "Audio.Opening.Crack": {
+    "assetId": "98775474654544",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "06674b6ca10cbaf8e4e60f4d513c066993d0e305485c32b9aa511bc05a5cf8ef",
+    "source": "assets/audio/opening/crack.wav"
+  },
+  "Audio.Opening.Discovery": {
+    "assetId": "81731562250056",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7e6c185cfe3663661c3a60d60d6f4cde5391dabc0c7830dcbaec6deac9eba509",
+    "source": "assets/audio/opening/discovery.wav"
+  },
+  "Audio.Opening.Dive": {
+    "assetId": "139545846594396",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "54f0c03158ccb465bab984676a7416d3dd9a300ac35b02e4476109863738f74c",
+    "source": "assets/audio/opening/dive.wav"
+  },
+  "Audio.Opening.Entrance": {
+    "assetId": "85635437804554",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f73094eb3dbbf5ba024d313f20cc4521e3a6209387ebcdfe6cde916aff87c1d2",
+    "source": "assets/audio/opening/entrance.wav"
+  },
+  "Audio.Opening.Flight": {
+    "assetId": "111759342220479",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "0d2e810c7d525852751f67f6b444211ec0bc52320a5bd4368396f137a45de63f",
+    "source": "assets/audio/opening/flight.wav"
+  },
+  "Audio.Opening.FlightAir": {
+    "assetId": "104451364972661",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "90fc83f40084c135db0111f5803ac3dc65b279f74ca0f26c11ea203a3845c71c",
+    "source": "assets/audio/opening/flight_air.wav"
+  },
+  "Audio.Opening.FlightMythical": {
+    "assetId": "131949935787677",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a39a06a9d416cd9803dd3d8dee0533d80b22ac5ec2e7dc83afbd9f292afd786d",
+    "source": "assets/audio/opening/flight_mythical.wav"
+  },
+  "Audio.Opening.Impact": {
+    "assetId": "139076987156973",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "418f13750f5a1634170a917e5800d222a936aaf7e77e1031b58705c0b08c7e0a",
+    "source": "assets/audio/opening/impact.wav"
+  },
+  "Audio.Opening.ImpactCommon": {
+    "assetId": "108546656875036",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ae8878320f829476104f0dd558b884cd4f898f207878e1d591a06b41ac69c7a5",
+    "source": "assets/audio/opening/impact_common.wav"
+  },
+  "Audio.Opening.ImpactLegendary": {
+    "assetId": "91981133809450",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b4c8fe925cf931abaaeae3ec7a4997c3221631cb37c68e0c78c55233262780c8",
+    "source": "assets/audio/opening/impact_legendary.wav"
+  },
+  "Audio.Opening.ImpactMythical": {
+    "assetId": "105604155548717",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d3360c162668dcb96e6135bf9903710848c4118eb5a534a0c47833f68978a686",
+    "source": "assets/audio/opening/impact_mythical.wav"
+  },
+  "Audio.Opening.ImpactRare": {
+    "assetId": "128032080583337",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "21118ce09c22a8e5b3169d88936ef91599b772f9c5cb47e55cf91dc402f616d2",
+    "source": "assets/audio/opening/impact_rare.wav"
+  },
+  "Audio.Opening.ImpactUncommon": {
+    "assetId": "87295072758556",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "193020c248053942e155fd14af1488a5910c76928180335650ac0b4faaef354c",
+    "source": "assets/audio/opening/impact_uncommon.wav"
+  },
+  "Audio.Opening.Launch": {
+    "assetId": "87591121772664",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "be146a79c2031b2580704293f5f363102cd7bacdd56b6793da46f278617233e0",
+    "source": "assets/audio/opening/launch.wav"
+  },
+  "Audio.Opening.LegendaryPulse": {
+    "assetId": "90960455261220",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "81105a17c312de1e2f0c0fffb588c83f5b92d6235689f468b1148e2ff9a510a5",
+    "source": "assets/audio/opening/legendary_pulse.wav"
+  },
+  "Audio.Opening.Lid": {
+    "assetId": "79665384625617",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "58d8ad7c708e7f6ab5d3161ad8e3b84649fc890c624c393fe3652f78fd49ebcb",
+    "source": "assets/audio/opening/lid.wav"
+  },
+  "Audio.Opening.MythicalInward": {
+    "assetId": "107061608290119",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "2d190a047d905327a6cbadbc1c98922c45acebd5264f6469397745376df4e986",
+    "source": "assets/audio/opening/mythical_inward.wav"
+  },
+  "Audio.Opening.MythicalPearl": {
+    "assetId": "111306304834036",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "76dd3fca24865dedd592134c5bbcd0040b233cf02220c2812095b1426f699f47",
+    "source": "assets/audio/opening/mythical_pearl.wav"
+  },
+  "Audio.Opening.PostImpactShimmer": {
+    "assetId": "126651229659989",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "544c117a5012f1822de86fe8b353ca65ddec5256d96875cb6750e4759e5e15a3",
+    "source": "assets/audio/opening/post_impact_shimmer.wav"
+  },
+  "Audio.Opening.RarityCommon": {
+    "assetId": "129653887357234",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "dee4eee80eea15d7a38c1f1323bbc35f77d7d4943936ad2a6ef6e38ad45b9c3f",
+    "source": "assets/audio/opening/rarity_common.wav"
+  },
+  "Audio.Opening.RarityLegendary": {
+    "assetId": "82581041242005",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7295798bbaf356af29fb37ac5834b2d3bc01831f4f0d2600192bd501f4f684a7",
+    "source": "assets/audio/opening/rarity_legendary.wav"
+  },
+  "Audio.Opening.RarityMythical": {
+    "assetId": "84369962398905",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a7b9811ea7f8307efc2c3af91b2511fc0b73e8d29ada46b5cb8ec83cc0c7cede",
+    "source": "assets/audio/opening/rarity_mythical.wav"
+  },
+  "Audio.Opening.RarityRare": {
+    "assetId": "105945714750587",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d3144cc02ccae9e1a8f4015dc4f8eb999261841ad4c004971f2ed48604d7321a",
+    "source": "assets/audio/opening/rarity_rare.wav"
+  },
+  "Audio.Opening.RarityTransformation": {
+    "assetId": "100050941162347",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "22e28db9e3d2822c1d5480350fb651db7bdec84f15c12f3db17ec29329ff267d",
+    "source": "assets/audio/opening/rarity_transformation.wav"
+  },
+  "Audio.Opening.RarityUncommon": {
+    "assetId": "135082433477421",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6e51b4c90431118f454ba4370dc333c521ef3d81ab478d25a1a324381e812823",
+    "source": "assets/audio/opening/rarity_uncommon.wav"
+  },
+  "Audio.Opening.Result": {
+    "assetId": "92745978198963",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fe205e25452ebc89a909dfe69044e3c6c34d859009200563862f4ce1987c609e",
+    "source": "assets/audio/opening/result.wav"
+  },
+  "Audio.Opening.Reveal": {
+    "assetId": "76826774602788",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "874fe87f825877e8d6da6eb5535c7719083256ecb776ee7428b479d0e8c61836",
+    "source": "assets/audio/opening/reveal.wav"
+  },
+  "Audio.Opening.RevealCommon": {
+    "assetId": "78766604005068",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ef12b213e99fe4cd83b2edf0f9a8883dcbb452aaf51b904365b3a69ae308d264",
+    "source": "assets/audio/opening/reveal_common.wav"
+  },
+  "Audio.Opening.RevealLegendary": {
+    "assetId": "100981475080719",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3c912efb6f21a91b2c0fbc1266f2707c5e3d0f4e4dbdce6be587145d7d7fd142",
+    "source": "assets/audio/opening/reveal_legendary.wav"
+  },
+  "Audio.Opening.RevealMythical": {
+    "assetId": "83715562639549",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fbdcf5ccaebb28fd1ecea5fb8bb42872fc5b005dbf006be1f2221f8d942a5710",
+    "source": "assets/audio/opening/reveal_mythical.wav"
+  },
+  "Audio.Opening.RevealRare": {
+    "assetId": "103717545092760",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "aa5f07d1c0dbf16f89ec247c6100bd5e6405b7f0c5e7ece639aaa0fc7b133e42",
+    "source": "assets/audio/opening/reveal_rare.wav"
+  },
+  "Audio.Opening.RevealUncommon": {
+    "assetId": "80480388783086",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "47e74e2aa1b393e7cacf9c9a1f50e620b69c9a6dae191613d623d918e9b0334b",
+    "source": "assets/audio/opening/reveal_uncommon.wav"
+  },
+  "Audio.Opening.Settle": {
+    "assetId": "98616652141963",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "79fe5a7fb62b249de07552bb6d935e1cb3d2c48131aeaf128bea64804fff36bd",
+    "source": "assets/audio/opening/settle.wav"
+  },
+  "Audio.Opening.Shake": {
+    "assetId": "133948869153079",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1217eaa95cd48e4b582c9bfe3cf85caaaee8a53cccbf14022824419509994598",
+    "source": "assets/audio/opening/shake.wav"
+  },
+  "Audio.Opening.Silhouette": {
+    "assetId": "140106260609959",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8c550ef08ed940cb33a373c7d132da570acad62873a5f8ca924afc80fb25d890",
+    "source": "assets/audio/opening/silhouette.wav"
+  },
+  "Audio.Opening.SilhouetteMythical": {
+    "assetId": "131230171168617",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "58d5cabd72ae2e818b27155bc9ee73d593815d6b92648491a027e3f8ab76d948",
+    "source": "assets/audio/opening/silhouette_mythical.wav"
+  },
+  "Audio.Opening.Tension": {
+    "assetId": "109551038948994",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5d8f5d399f695b7788065924535ac21a0928761a8d27e60e8c4f33ca9c108dfe",
+    "source": "assets/audio/opening/tension.wav"
+  },
+  "Audio.Opening.TransformLegendary": {
+    "assetId": "93145582088401",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a4b371867ca2de9d88e6c934cc4b19bb0d15cbb6db225e307da5eb5ccaa0aeb1",
+    "source": "assets/audio/opening/transform_legendary.wav"
+  },
+  "Audio.Opening.TransformMythical": {
+    "assetId": "130039618358965",
+    "assetType": "Audio",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7673059b4b2702d263a86740df3014fc6b2161845cc3a2a99d9ae64b8422a8d6",
+    "source": "assets/audio/opening/transform_mythical.wav"
+  },
   "Collection.Concepts.CornerBottomLeft": {
     "assetId": "127603092899733",
     "assetType": "Image",
@@ -214,6 +646,60 @@
     },
     "sha256": "fc48dda5fe90cbe6af3980ee0b02a38217558332ebd3338f6f6d828e813c345d",
     "source": "assets/ui/shop/tidepool-tales/tidepool_tales_shop_pattern.png"
+  },
+  "Collection.WeAreAllStars.CornerBottomLeft": {
+    "assetId": "87828702597323",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6558eacf0837bb1a561462f47429943cc441aee517d5bc082448059db274b8f1",
+    "source": "assets/ui/collection/we-are-all-stars/we_are_all_stars_corner_bottom_left.png"
+  },
+  "Collection.WeAreAllStars.CornerBottomRight": {
+    "assetId": "129835011701228",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7c299cb785fb21c5bf9bb9994b278b98299da9e34fd170226e4bcbcfca087d01",
+    "source": "assets/ui/collection/we-are-all-stars/we_are_all_stars_corner_bottom_right.png"
+  },
+  "Collection.WeAreAllStars.CornerTopLeft": {
+    "assetId": "115295506558442",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a52fda9d6741105b4fe3d5d92d141f1a2532c529b6ca3b35ff0455dd1b0a8efc",
+    "source": "assets/ui/collection/we-are-all-stars/we_are_all_stars_corner_top_left.png"
+  },
+  "Collection.WeAreAllStars.CornerTopRight": {
+    "assetId": "75765151187034",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "031a703b71faf3b6596cf2e9cc475ae531b9f412390cd6fd85e30490618e5fc9",
+    "source": "assets/ui/collection/we-are-all-stars/we_are_all_stars_corner_top_right.png"
+  },
+  "Collection.WeAreAllStars.Emblem": {
+    "assetId": "137750789220313",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a273431c1aa5937ed1bdd767715f19952d4dadfe2eec6e2568ae1d7d9427b612",
+    "source": "assets/ui/collection/we-are-all-stars/we_are_all_stars_emblem.png"
+  },
+  "Collection.WeAreAllStars.ShopPattern": {
+    "assetId": "84784740115916",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b8aae0d01df7c2f5c0b166128822a1739d3038c6d28304d3bc194a86baacd7ad",
+    "source": "assets/ui/shop/we-are-all-stars/we_are_all_stars_shop_pattern.png"
   },
   "Models.BlindBoxBase": {
     "assetId": "79870100381887",
@@ -493,5 +979,122 @@
     },
     "sha256": "f2e29a1c52a9d574e0cddac82da09af0838cddaa51652a0480ec7cc5440e10e7",
     "source": "assets/figures/tidepool-tales/shell-scribe/model/shell_scribe_roblox.glb"
+  },
+  "Models.WeAreAllStars.CloudRest": {
+    "assetId": "137863487676817",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3a11a43fa260c5c2b63c3a01091e75698e28ea12f4d65e6525e92ad9e666f756",
+    "source": "assets/figures/we-are-all-stars/cloud-rest/model/cloud_rest_roblox.glb"
+  },
+  "Models.WeAreAllStars.Dreamcatcher": {
+    "assetId": "95975185997814",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "655eefce2c4c10a99c3a0c3bdfc3396912bba6c3812dd0fe53ee7ff045189fe1",
+    "source": "assets/figures/we-are-all-stars/dreamcatcher/model/dreamcatcher_roblox.glb"
+  },
+  "Models.WeAreAllStars.Echo": {
+    "assetId": "136744471215309",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8e558bfaa36366aa14ff5efc0413ce5ca6da72ee76f9e158539baf36bf0e7b20",
+    "source": "assets/figures/we-are-all-stars/echo/model/echo_roblox.glb"
+  },
+  "Models.WeAreAllStars.Garden": {
+    "assetId": "135211187065217",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3de4a84ef4f822b6ba68e5b602f19e91f9179136953aac26036ea4bd51b37861",
+    "source": "assets/figures/we-are-all-stars/garden/model/garden_roblox.glb"
+  },
+  "Models.WeAreAllStars.Lamplight": {
+    "assetId": "94070351560106",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e442d96f30abeb380d1673d12c69ad43a0f743e6d4b057743a2058f0212e6e3b",
+    "source": "assets/figures/we-are-all-stars/lamplight/model/lamplight_roblox.glb"
+  },
+  "Models.WeAreAllStars.MeteorShower": {
+    "assetId": "77397231399682",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a3fad1688675c51c73cde545e378ae64d9b788f2d2163a89a06a841b5724d677",
+    "source": "assets/figures/we-are-all-stars/meteor-shower/model/meteor_shower_roblox.glb"
+  },
+  "Models.WeAreAllStars.Mirrorlight": {
+    "assetId": "105614547598449",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4e21fe959e7812734e07fd3bb33fd5bc26b33fba1246d131c613c234471278a5",
+    "source": "assets/figures/we-are-all-stars/mirrorlight/model/mirrorlight_roblox.glb"
+  },
+  "Models.WeAreAllStars.Nightlight": {
+    "assetId": "119163583320627",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e4b64b549e07f2bb77591eb453413cf92524f8fc9c211f31ebdcdffc798043f2",
+    "source": "assets/figures/we-are-all-stars/nightlight/model/nightlight_roblox.glb"
+  },
+  "Models.WeAreAllStars.PageTurner": {
+    "assetId": "111663122828184",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "dbd3c029ea9b98a2598ca499ae708b6ebfa5ea1775562548258b2348923f20d7",
+    "source": "assets/figures/we-are-all-stars/page-turner/model/page_turner_roblox.glb"
+  },
+  "Models.WeAreAllStars.Radiant": {
+    "assetId": "98643059757696",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fea0b3df5b9f73720d5256c17d1e097034a890e6f5298e4324d586294a90f580",
+    "source": "assets/figures/we-are-all-stars/radiant/model/radiant_roblox.glb"
+  },
+  "Models.WeAreAllStars.Reminiscence": {
+    "assetId": "130504878326463",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e372fae1cdd6b6bdcd4bf7290cb81b76c840c944cf1aec298565cdbd712bdc5c",
+    "source": "assets/figures/we-are-all-stars/reminiscence/model/reminiscence_roblox.glb"
+  },
+  "Models.WeAreAllStars.Sanctuary": {
+    "assetId": "74567398331175",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a1817e45cd81a4ba83ca69dfeabb34c626ba5e57bcb9d8a26fa7146d2d9b71a6",
+    "source": "assets/figures/we-are-all-stars/sanctuary/model/sanctuary_roblox.glb"
+  },
+  "Models.WeAreAllStars.Wishing": {
+    "assetId": "112630885709193",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "33c6590252bf221905e4d794b63b891e0fd718aff935dc1e688c0c6007dc5dfc",
+    "source": "assets/figures/we-are-all-stars/wishing/model/wishing_roblox.glb"
   }
 }

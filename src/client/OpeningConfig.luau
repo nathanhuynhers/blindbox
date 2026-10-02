@@ -3,6 +3,7 @@ local State = require(script.Parent.OpeningState)
 local ShopTheme = require(script.Parent.ShopTheme)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
+local AudioConfig = require(script.Parent.OpeningAudioConfig)
 local Config = {}
 -- Shared deterministic path and choreography. All positions are local to the stage.
 Config.flight = {
@@ -184,7 +185,11 @@ local function profile(
 		highlight = identity.highlight,
 		resultText = tint,
 		glow = accent,
-		cues = { transformation = "rarityTransformation", impact = "impact", reveal = "reveal" },
+		cues = {
+			transformation = "rarityTransformation",
+			impact = "impact" .. id,
+			reveal = "reveal" .. id,
+		},
 		signature = {
 			pulses = { { at = 0.12, span = 0.62, strength = 1 } },
 			quietUntil = 0,
@@ -350,6 +355,7 @@ Config.packaging = {
 	tide = Config.collection("tide"),
 	concept = Config.collection("concept"),
 	echo = Config.collection("echo"),
+	star = Config.collection("star"),
 }
 Config.neutral = Color3.fromRGB(255, 238, 208)
 Config.stage = {
@@ -442,46 +448,13 @@ function Config.lightState(
 		bloom = bloom,
 	}
 end
--- Original/licensed sound IDs only; empty slots are silent and sequencing never waits on them.
-Config.sounds = {
-	entrance = "",
-	ambience = "",
-	ambienceGrove = "",
-	ambienceTide = "",
-	charge = "",
-	shake = "",
-	click = "",
-	crack = "",
-	lid = "",
-	launch = "",
-	flight = "",
-	acceleration = "",
-	rarityTransformation = "",
-	dive = "",
-	postImpactShimmer = "",
-	rarityCommon = "",
-	rarityUncommon = "",
-	rarityRare = "",
-	rarityLegendary = "",
-	rarityMythical = "",
-	transformLegendary = "",
-	impactLegendary = "",
-	revealLegendary = "",
-	transformMythical = "",
-	impactMythical = "",
-	revealMythical = "",
-	impact = "",
-	silhouette = "",
-	reveal = "",
-	discovery = "",
-	close = "",
-} :: { [string]: string }
-Config.volume = 0.45
-Config.audioLimit = 8
-Config.audioLifetime = 8
+-- Approved audio IDs and mix tuning have a dedicated opening-only configuration.
+Config.sounds = AudioConfig.sounds
+Config.breakTiming = { compressionAt = 0.03, crackAt = 0.1, lidAt = 0.12 }
 Config.breakCues = {
-	{ at = 0.0, cue = "crack" },
-	{ at = 0.08, cue = "lid" },
+	{ at = Config.breakTiming.compressionAt, cue = "compression" },
+	{ at = Config.breakTiming.crackAt, cue = "crack" },
+	{ at = Config.breakTiming.lidAt, cue = "lid" },
 	{ at = Config.flight.launchAt, cue = "launch" },
 }
 function Config.profile(rarity: string): Profile

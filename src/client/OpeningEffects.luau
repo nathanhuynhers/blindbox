@@ -113,6 +113,7 @@ function Effects.create(
 	local impactGroup, revealGroup = group("ImpactEffects"), group("RevealEffects")
 	local resultGroup = group("ResultEffects")
 	local currentPhase: State.Phase? = nil
+	local cracked = false
 	local suspended = false
 	local function make(
 		parentObject: Instance,
@@ -352,8 +353,6 @@ function Effects.create(
 			end
 			if phase == "Arrival" then
 				burst(seam, 6)
-			elseif phase == "Break" then
-				burst(seam, 8)
 			elseif phase == "Impact" then
 				tint(profile.tint, profile.accent)
 			elseif phase == "Silhouette" or phase == "Result" then
@@ -402,6 +401,15 @@ function Effects.create(
 			)
 			dust.Enabled = boxPhase or showing
 			if boxGroup.Parent then
+				if
+					phase == "Break"
+					and not cracked
+					and state.elapsed
+						>= Config.breakTiming.crackAt * State.duration(state) / profile.timing.opening
+				then
+					cracked = true
+					burst(seam, 8)
+				end
 				motif.Enabled = boxPhase and phase ~= "Break"
 				seamAnchor.CFrame = boxAt * CFrame.new(0, 1.65, 0)
 				chargeAnchor.CFrame = boxAt

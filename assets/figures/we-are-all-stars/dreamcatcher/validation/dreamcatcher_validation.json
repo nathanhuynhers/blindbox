@@ -1,0 +1,691 @@
+{
+  "figure": "Dreamcatcher",
+  "title": "Dreamcatcher Star",
+  "rarity": "Mythical",
+  "size_xyz_studs": [
+    2.1659,
+    1.6258,
+    3.6638
+  ],
+  "meshes": 30,
+  "triangles": 70542,
+  "materials": [
+    "Dreamcatcher_Blush",
+    "Dreamcatcher_Brow",
+    "Dreamcatcher_CloudPlush",
+    "Dreamcatcher_EyeShine",
+    "Dreamcatcher_EyeWhite",
+    "Dreamcatcher_Feathers",
+    "Dreamcatcher_Hair",
+    "Dreamcatcher_Hoop",
+    "Dreamcatcher_Iris",
+    "Dreamcatcher_Jeans",
+    "Dreamcatcher_Lash",
+    "Dreamcatcher_Mouth",
+    "Dreamcatcher_Nose",
+    "Dreamcatcher_PlushBlush",
+    "Dreamcatcher_PlushFace",
+    "Dreamcatcher_Rope",
+    "Dreamcatcher_RopeGold",
+    "Dreamcatcher_Shoes",
+    "Dreamcatcher_Skin",
+    "Dreamcatcher_Stand",
+    "Dreamcatcher_Stars",
+    "Dreamcatcher_Sweater"
+  ],
+  "components": {
+    "Dreamcatcher_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.42679
+    },
+    "Dreamcatcher_Hair": {
+      "tris": 9702,
+      "verts": 4853,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.99027
+    },
+    "Dreamcatcher_Sweater": {
+      "tris": 5500,
+      "verts": 2752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.13365
+    },
+    "Dreamcatcher_Hands": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00368
+    },
+    "Dreamcatcher_Jeans": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06957
+    },
+    "Dreamcatcher_Shoes": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01111
+    },
+    "Dreamcatcher_CloudPlush": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03979
+    },
+    "Dreamcatcher_PlushFace": {
+      "tris": 400,
+      "verts": 206,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 9e-05
+    },
+    "Dreamcatcher_PlushBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00011
+    },
+    "Dreamcatcher_HeldStar": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00185
+    },
+    "Dreamcatcher_Hoop": {
+      "tris": 5000,
+      "verts": 2500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08
+    },
+    "Dreamcatcher_Grips": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00834
+    },
+    "Dreamcatcher_RopeCream": {
+      "tris": 4998,
+      "verts": 2499,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01715
+    },
+    "Dreamcatcher_RopeGold": {
+      "tris": 4000,
+      "verts": 2000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01269
+    },
+    "Dreamcatcher_Loop": {
+      "tris": 2500,
+      "verts": 1250,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00814
+    },
+    "Dreamcatcher_LoopTwist": {
+      "tris": 1994,
+      "verts": 997,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00308
+    },
+    "Dreamcatcher_Web": {
+      "tris": 1500,
+      "verts": 758,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00204
+    },
+    "Dreamcatcher_Strings": {
+      "tris": 1500,
+      "verts": 762,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00084
+    },
+    "Dreamcatcher_Beads": {
+      "tris": 1000,
+      "verts": 512,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00311
+    },
+    "Dreamcatcher_CharmStars": {
+      "tris": 3000,
+      "verts": 1506,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00941
+    },
+    "Dreamcatcher_Feathers": {
+      "tris": 3000,
+      "verts": 1506,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00576
+    },
+    "Dreamcatcher_Stand": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.18325
+    },
+    "Dreamcatcher_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0058
+    },
+    "Dreamcatcher_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00511
+    },
+    "Dreamcatcher_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00028
+    },
+    "Dreamcatcher_Lash": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0005
+    },
+    "Dreamcatcher_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "Dreamcatcher_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 8e-05
+    },
+    "Dreamcatcher_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 5e-05
+    },
+    "Dreamcatcher_Blush": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00203
+    }
+  },
+  "build": {
+    "Dreamcatcher_Head": {
+      "active_blocks": 2940,
+      "blocks": 7920,
+      "grid": [
+        161,
+        145,
+        177
+      ],
+      "raw_tris": 134580,
+      "removed_faces": 0,
+      "seconds": 5.4
+    },
+    "Dreamcatcher_Hair": {
+      "active_blocks": 8216,
+      "blocks": 26598,
+      "grid": [
+        265,
+        249,
+        209
+      ],
+      "raw_tris": 449272,
+      "removed_faces": 44,
+      "seconds": 17.5
+    },
+    "Dreamcatcher_Sweater": {
+      "active_blocks": 2120,
+      "blocks": 5355,
+      "grid": [
+        169,
+        137,
+        121
+      ],
+      "raw_tris": 101100,
+      "removed_faces": 0,
+      "seconds": 9.0
+    },
+    "Dreamcatcher_Hands": {
+      "active_blocks": 531,
+      "blocks": 2200,
+      "grid": [
+        161,
+        89,
+        81
+      ],
+      "raw_tris": 19240,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Dreamcatcher_Jeans": {
+      "active_blocks": 2030,
+      "blocks": 4641,
+      "grid": [
+        137,
+        169,
+        105
+      ],
+      "raw_tris": 89480,
+      "removed_faces": 0,
+      "seconds": 2.8
+    },
+    "Dreamcatcher_Shoes": {
+      "active_blocks": 935,
+      "blocks": 3080,
+      "grid": [
+        161,
+        113,
+        89
+      ],
+      "raw_tris": 36104,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Dreamcatcher_CloudPlush": {
+      "active_blocks": 1666,
+      "blocks": 5100,
+      "grid": [
+        161,
+        121,
+        137
+      ],
+      "raw_tris": 73296,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "Dreamcatcher_PlushFace": {
+      "active_blocks": 356,
+      "blocks": 2688,
+      "grid": [
+        129,
+        113,
+        97
+      ],
+      "raw_tris": 5552,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Dreamcatcher_PlushBlush": {
+      "active_blocks": 305,
+      "blocks": 2052,
+      "grid": [
+        153,
+        97,
+        73
+      ],
+      "raw_tris": 3904,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Dreamcatcher_HeldStar": {
+      "active_blocks": 435,
+      "blocks": 2156,
+      "grid": [
+        113,
+        89,
+        113
+      ],
+      "raw_tris": 17732,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Dreamcatcher_Hoop": {
+      "active_blocks": 4469,
+      "blocks": 16464,
+      "grid": [
+        385,
+        57,
+        393
+      ],
+      "raw_tris": 200880,
+      "removed_faces": 0,
+      "seconds": 5.5
+    },
+    "Dreamcatcher_Grips": {
+      "active_blocks": 784,
+      "blocks": 6600,
+      "grid": [
+        401,
+        89,
+        97
+      ],
+      "raw_tris": 32140,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "Dreamcatcher_RopeCream": {
+      "active_blocks": 5572,
+      "blocks": 72520,
+      "grid": [
+        593,
+        113,
+        561
+      ],
+      "raw_tris": 286624,
+      "removed_faces": 0,
+      "seconds": 12.6
+    },
+    "Dreamcatcher_RopeGold": {
+      "active_blocks": 4350,
+      "blocks": 71484,
+      "grid": [
+        593,
+        113,
+        553
+      ],
+      "raw_tris": 211384,
+      "removed_faces": 0,
+      "seconds": 6.5
+    },
+    "Dreamcatcher_Loop": {
+      "active_blocks": 1152,
+      "blocks": 4807,
+      "grid": [
+        153,
+        89,
+        185
+      ],
+      "raw_tris": 46144,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Dreamcatcher_LoopTwist": {
+      "active_blocks": 1786,
+      "blocks": 8736,
+      "grid": [
+        193,
+        105,
+        225
+      ],
+      "raw_tris": 81892,
+      "removed_faces": 4,
+      "seconds": 1.2
+    },
+    "Dreamcatcher_Web": {
+      "active_blocks": 1528,
+      "blocks": 21312,
+      "grid": [
+        513,
+        73,
+        297
+      ],
+      "raw_tris": 44672,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "Dreamcatcher_Strings": {
+      "active_blocks": 852,
+      "blocks": 11368,
+      "grid": [
+        393,
+        65,
+        233
+      ],
+      "raw_tris": 17000,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Dreamcatcher_Beads": {
+      "active_blocks": 1138,
+      "blocks": 14586,
+      "grid": [
+        409,
+        89,
+        209
+      ],
+      "raw_tris": 35864,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Dreamcatcher_CharmStars": {
+      "active_blocks": 1224,
+      "blocks": 7038,
+      "grid": [
+        369,
+        73,
+        137
+      ],
+      "raw_tris": 46900,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "Dreamcatcher_Feathers": {
+      "active_blocks": 1337,
+      "blocks": 10494,
+      "grid": [
+        425,
+        73,
+        177
+      ],
+      "raw_tris": 55204,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "Dreamcatcher_Stand": {
+      "active_blocks": 7712,
+      "blocks": 82863,
+      "grid": [
+        265,
+        249,
+        649
+      ],
+      "raw_tris": 274336,
+      "removed_faces": 0,
+      "seconds": 24.3
+    },
+    "Dreamcatcher_Eyes": {
+      "active_blocks": 1658,
+      "blocks": 7424,
+      "grid": [
+        233,
+        129,
+        129
+      ],
+      "raw_tris": 52008,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "Dreamcatcher_Iris": {
+      "active_blocks": 1455,
+      "blocks": 6272,
+      "grid": [
+        225,
+        129,
+        113
+      ],
+      "raw_tris": 43784,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "Dreamcatcher_EyeShine": {
+      "active_blocks": 589,
+      "blocks": 4368,
+      "grid": [
+        225,
+        105,
+        97
+      ],
+      "raw_tris": 7972,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Dreamcatcher_Lash": {
+      "active_blocks": 1095,
+      "blocks": 7722,
+      "grid": [
+        265,
+        145,
+        105
+      ],
+      "raw_tris": 24448,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Dreamcatcher_Brow": {
+      "active_blocks": 492,
+      "blocks": 2912,
+      "grid": [
+        209,
+        113,
+        65
+      ],
+      "raw_tris": 3552,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "Dreamcatcher_Nose": {
+      "active_blocks": 99,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 1796,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "Dreamcatcher_Mouth": {
+      "active_blocks": 202,
+      "blocks": 1584,
+      "grid": [
+        89,
+        129,
+        73
+      ],
+      "raw_tris": 2060,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Dreamcatcher_Blush": {
+      "active_blocks": 705,
+      "blocks": 2808,
+      "grid": [
+        209,
+        97,
+        73
+      ],
+      "raw_tris": 20652,
+      "removed_faces": 0,
+      "seconds": 0.7
+    }
+  },
+  "glb": {
+    "bytes": 1593744,
+    "nodes": [
+      "Dreamcatcher_Beads",
+      "Dreamcatcher_Blush",
+      "Dreamcatcher_Brow",
+      "Dreamcatcher_CharmStars",
+      "Dreamcatcher_CloudPlush",
+      "Dreamcatcher_Eyes",
+      "Dreamcatcher_EyeShine",
+      "Dreamcatcher_Feathers",
+      "Dreamcatcher_Grips",
+      "Dreamcatcher_Hair",
+      "Dreamcatcher_Hands",
+      "Dreamcatcher_Head",
+      "Dreamcatcher_HeldStar",
+      "Dreamcatcher_Hoop",
+      "Dreamcatcher_Iris",
+      "Dreamcatcher_Jeans",
+      "Dreamcatcher_Lash",
+      "Dreamcatcher_Loop",
+      "Dreamcatcher_LoopTwist",
+      "Dreamcatcher_Mouth",
+      "Dreamcatcher_Nose",
+      "Dreamcatcher_PlushBlush",
+      "Dreamcatcher_PlushFace",
+      "Dreamcatcher_RopeCream",
+      "Dreamcatcher_RopeGold",
+      "Dreamcatcher_Shoes",
+      "Dreamcatcher_Stand",
+      "Dreamcatcher_Strings",
+      "Dreamcatcher_Sweater",
+      "Dreamcatcher_Web",
+      "Dreamcatcher"
+    ],
+    "meshes": 30,
+    "materials": 22,
+    "images": 22,
+    "textures": 22,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.dreamcatcher",
+  "root": "Dreamcatcher",
+  "face": "Dreamcatcher_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 30,
+    "triangle_mismatches": {}
+  }
+}

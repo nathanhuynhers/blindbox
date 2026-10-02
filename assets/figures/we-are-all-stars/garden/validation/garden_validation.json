@@ -1,0 +1,716 @@
+{
+  "figure": "Garden",
+  "title": "Garden Star",
+  "rarity": "Uncommon",
+  "size_xyz_studs": [
+    2.6125,
+    2.2172,
+    3.5137
+  ],
+  "meshes": 31,
+  "triangles": 89380,
+  "materials": [
+    "Garden_Backpack",
+    "Garden_Blush",
+    "Garden_Brow",
+    "Garden_EyeShine",
+    "Garden_EyeWhite",
+    "Garden_FlowerCentres",
+    "Garden_Friend",
+    "Garden_FriendFace",
+    "Garden_Ground",
+    "Garden_Hair",
+    "Garden_Hat",
+    "Garden_HatVeins",
+    "Garden_Iris",
+    "Garden_Jacket",
+    "Garden_Lash",
+    "Garden_Leaves",
+    "Garden_Moss",
+    "Garden_Mouth",
+    "Garden_Nose",
+    "Garden_Petals",
+    "Garden_Pot",
+    "Garden_Shoes",
+    "Garden_Shorts",
+    "Garden_Skin",
+    "Garden_Socks",
+    "Garden_Soil"
+  ],
+  "components": {
+    "Garden_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.72737
+    },
+    "Garden_Hair": {
+      "tris": 9748,
+      "verts": 4874,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.99368
+    },
+    "Garden_Hat": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.52418
+    },
+    "Garden_HatVeins": {
+      "tris": 3538,
+      "verts": 1771,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00606
+    },
+    "Garden_HatLeaves": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01428
+    },
+    "Garden_Petals": {
+      "tris": 7958,
+      "verts": 3997,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08083
+    },
+    "Garden_FlowerCentres": {
+      "tris": 2000,
+      "verts": 1030,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00633
+    },
+    "Garden_Jacket": {
+      "tris": 6998,
+      "verts": 3501,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.39781
+    },
+    "Garden_Hands": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00616
+    },
+    "Garden_Shorts": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.17386
+    },
+    "Garden_Legs": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02495
+    },
+    "Garden_Socks": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02405
+    },
+    "Garden_Shoes": {
+      "tris": 3000,
+      "verts": 1508,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03527
+    },
+    "Garden_Pot": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05767
+    },
+    "Garden_Soil": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00863
+    },
+    "Garden_Sprout": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00823
+    },
+    "Garden_Backpack": {
+      "tris": 2000,
+      "verts": 1002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04789
+    },
+    "Garden_Straps": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00617
+    },
+    "Garden_Friend": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.16071
+    },
+    "Garden_FriendFace": {
+      "tris": 400,
+      "verts": 206,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00012
+    },
+    "Garden_Ground": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.92277
+    },
+    "Garden_Moss": {
+      "tris": 5998,
+      "verts": 3003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.12147
+    },
+    "Garden_Clover": {
+      "tris": 7000,
+      "verts": 3516,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.11438
+    },
+    "Garden_Eyes": {
+      "tris": 792,
+      "verts": 400,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00989
+    },
+    "Garden_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0088
+    },
+    "Garden_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00049
+    },
+    "Garden_Lash": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00086
+    },
+    "Garden_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00021
+    },
+    "Garden_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00014
+    },
+    "Garden_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 8e-05
+    },
+    "Garden_Blush": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00395
+    }
+  },
+  "build": {
+    "Garden_Head": {
+      "active_blocks": 4192,
+      "blocks": 12600,
+      "grid": [
+        193,
+        169,
+        201
+      ],
+      "raw_tris": 192012,
+      "removed_faces": 0,
+      "seconds": 3.3
+    },
+    "Garden_Hair": {
+      "active_blocks": 12752,
+      "blocks": 49896,
+      "grid": [
+        337,
+        289,
+        265
+      ],
+      "raw_tris": 768704,
+      "removed_faces": 0,
+      "seconds": 16.4
+    },
+    "Garden_Hat": {
+      "active_blocks": 12951,
+      "blocks": 48400,
+      "grid": [
+        353,
+        353,
+        201
+      ],
+      "raw_tris": 627648,
+      "removed_faces": 0,
+      "seconds": 15.2
+    },
+    "Garden_HatVeins": {
+      "active_blocks": 13343,
+      "blocks": 245014,
+      "grid": [
+        617,
+        593,
+        345
+      ],
+      "raw_tris": 437546,
+      "removed_faces": 456,
+      "seconds": 18.8
+    },
+    "Garden_HatLeaves": {
+      "active_blocks": 1361,
+      "blocks": 6080,
+      "grid": [
+        161,
+        153,
+        129
+      ],
+      "raw_tris": 74380,
+      "removed_faces": 0,
+      "seconds": 4.0
+    },
+    "Garden_Petals": {
+      "active_blocks": 15766,
+      "blocks": 665992,
+      "grid": [
+        665,
+        545,
+        945
+      ],
+      "raw_tris": 920714,
+      "removed_faces": 40,
+      "seconds": 65.3
+    },
+    "Garden_FlowerCentres": {
+      "active_blocks": 3092,
+      "blocks": 595660,
+      "grid": [
+        633,
+        521,
+        929
+      ],
+      "raw_tris": 93664,
+      "removed_faces": 0,
+      "seconds": 10.9
+    },
+    "Garden_Jacket": {
+      "active_blocks": 4418,
+      "blocks": 11088,
+      "grid": [
+        225,
+        177,
+        145
+      ],
+      "raw_tris": 209564,
+      "removed_faces": 0,
+      "seconds": 20.4
+    },
+    "Garden_Hands": {
+      "active_blocks": 668,
+      "blocks": 2760,
+      "grid": [
+        185,
+        97,
+        81
+      ],
+      "raw_tris": 26060,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "Garden_Shorts": {
+      "active_blocks": 2869,
+      "blocks": 6720,
+      "grid": [
+        161,
+        169,
+        129
+      ],
+      "raw_tris": 122464,
+      "removed_faces": 0,
+      "seconds": 3.7
+    },
+    "Garden_Legs": {
+      "active_blocks": 1573,
+      "blocks": 3960,
+      "grid": [
+        161,
+        89,
+        145
+      ],
+      "raw_tris": 65248,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "Garden_Socks": {
+      "active_blocks": 1465,
+      "blocks": 4620,
+      "grid": [
+        177,
+        113,
+        121
+      ],
+      "raw_tris": 68308,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "Garden_Shoes": {
+      "active_blocks": 1961,
+      "blocks": 4356,
+      "grid": [
+        177,
+        145,
+        89
+      ],
+      "raw_tris": 84256,
+      "removed_faces": 0,
+      "seconds": 3.2
+    },
+    "Garden_Pot": {
+      "active_blocks": 2638,
+      "blocks": 6720,
+      "grid": [
+        161,
+        169,
+        129
+      ],
+      "raw_tris": 109908,
+      "removed_faces": 0,
+      "seconds": 3.0
+    },
+    "Garden_Soil": {
+      "active_blocks": 879,
+      "blocks": 2592,
+      "grid": [
+        145,
+        145,
+        65
+      ],
+      "raw_tris": 35188,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Garden_Sprout": {
+      "active_blocks": 1366,
+      "blocks": 7392,
+      "grid": [
+        177,
+        129,
+        169
+      ],
+      "raw_tris": 73796,
+      "removed_faces": 0,
+      "seconds": 2.1
+    },
+    "Garden_Backpack": {
+      "active_blocks": 1375,
+      "blocks": 2304,
+      "grid": [
+        129,
+        73,
+        129
+      ],
+      "raw_tris": 50952,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "Garden_Straps": {
+      "active_blocks": 1414,
+      "blocks": 11400,
+      "grid": [
+        193,
+        201,
+        153
+      ],
+      "raw_tris": 48876,
+      "removed_faces": 0,
+      "seconds": 3.7
+    },
+    "Garden_Friend": {
+      "active_blocks": 2525,
+      "blocks": 6840,
+      "grid": [
+        161,
+        153,
+        145
+      ],
+      "raw_tris": 118988,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "Garden_FriendFace": {
+      "active_blocks": 409,
+      "blocks": 3724,
+      "grid": [
+        153,
+        113,
+        113
+      ],
+      "raw_tris": 6800,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Garden_Ground": {
+      "active_blocks": 8946,
+      "blocks": 12852,
+      "grid": [
+        337,
+        273,
+        73
+      ],
+      "raw_tris": 315676,
+      "removed_faces": 0,
+      "seconds": 9.0
+    },
+    "Garden_Moss": {
+      "active_blocks": 7559,
+      "blocks": 19360,
+      "grid": [
+        441,
+        353,
+        65
+      ],
+      "raw_tris": 337400,
+      "removed_faces": 2,
+      "seconds": 13.7
+    },
+    "Garden_Clover": {
+      "active_blocks": 19339,
+      "blocks": 187968,
+      "grid": [
+        713,
+        513,
+        265
+      ],
+      "raw_tris": 1036276,
+      "removed_faces": 0,
+      "seconds": 212.3
+    },
+    "Garden_Eyes": {
+      "active_blocks": 2284,
+      "blocks": 10944,
+      "grid": [
+        257,
+        153,
+        145
+      ],
+      "raw_tris": 74376,
+      "removed_faces": 0,
+      "seconds": 3.5
+    },
+    "Garden_Iris": {
+      "active_blocks": 2000,
+      "blocks": 9728,
+      "grid": [
+        257,
+        153,
+        129
+      ],
+      "raw_tris": 62872,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "Garden_EyeShine": {
+      "active_blocks": 715,
+      "blocks": 6240,
+      "grid": [
+        257,
+        121,
+        105
+      ],
+      "raw_tris": 11424,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "Garden_Lash": {
+      "active_blocks": 1390,
+      "blocks": 12870,
+      "grid": [
+        313,
+        177,
+        121
+      ],
+      "raw_tris": 35056,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "Garden_Brow": {
+      "active_blocks": 563,
+      "blocks": 3248,
+      "grid": [
+        233,
+        113,
+        65
+      ],
+      "raw_tris": 5064,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Garden_Nose": {
+      "active_blocks": 121,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 2520,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "Garden_Mouth": {
+      "active_blocks": 240,
+      "blocks": 1881,
+      "grid": [
+        89,
+        153,
+        73
+      ],
+      "raw_tris": 3032,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Garden_Blush": {
+      "active_blocks": 973,
+      "blocks": 4500,
+      "grid": [
+        241,
+        121,
+        81
+      ],
+      "raw_tris": 32640,
+      "removed_faces": 0,
+      "seconds": 1.5
+    }
+  },
+  "glb": {
+    "bytes": 2011952,
+    "nodes": [
+      "Garden_Backpack",
+      "Garden_Blush",
+      "Garden_Brow",
+      "Garden_Clover",
+      "Garden_Eyes",
+      "Garden_EyeShine",
+      "Garden_FlowerCentres",
+      "Garden_Friend",
+      "Garden_FriendFace",
+      "Garden_Ground",
+      "Garden_Hair",
+      "Garden_Hands",
+      "Garden_Hat",
+      "Garden_HatLeaves",
+      "Garden_HatVeins",
+      "Garden_Head",
+      "Garden_Iris",
+      "Garden_Jacket",
+      "Garden_Lash",
+      "Garden_Legs",
+      "Garden_Moss",
+      "Garden_Mouth",
+      "Garden_Nose",
+      "Garden_Petals",
+      "Garden_Pot",
+      "Garden_Shoes",
+      "Garden_Shorts",
+      "Garden_Socks",
+      "Garden_Soil",
+      "Garden_Sprout",
+      "Garden_Straps",
+      "Garden"
+    ],
+    "meshes": 31,
+    "materials": 26,
+    "images": 26,
+    "textures": 26,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.garden",
+  "root": "Garden",
+  "face": "Garden_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 31,
+    "triangle_mismatches": {}
+  }
+}

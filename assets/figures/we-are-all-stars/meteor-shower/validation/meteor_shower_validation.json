@@ -1,0 +1,567 @@
+{
+  "figure": "MeteorShower",
+  "title": "Meteor Shower",
+  "rarity": "Legendary",
+  "size_xyz_studs": [
+    2.8817,
+    1.4983,
+    3.4338
+  ],
+  "meshes": 24,
+  "triangles": 75126,
+  "materials": [
+    "MeteorShower_AntennaStar",
+    "MeteorShower_Blush",
+    "MeteorShower_BootCuffs",
+    "MeteorShower_Boots",
+    "MeteorShower_Brow",
+    "MeteorShower_Cloud",
+    "MeteorShower_EyeShine",
+    "MeteorShower_EyeWhite",
+    "MeteorShower_Hair",
+    "MeteorShower_Hood",
+    "MeteorShower_HoodTrim",
+    "MeteorShower_Iris",
+    "MeteorShower_Lash",
+    "MeteorShower_Mouth",
+    "MeteorShower_Nose",
+    "MeteorShower_Skin",
+    "MeteorShower_Skirt",
+    "MeteorShower_SkirtPrints",
+    "MeteorShower_Spring",
+    "MeteorShower_Stars",
+    "MeteorShower_Top",
+    "MeteorShower_Trails"
+  ],
+  "components": {
+    "MeteorShower_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.2859
+    },
+    "MeteorShower_Hair": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.65388
+    },
+    "MeteorShower_Hood": {
+      "tris": 8000,
+      "verts": 4000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.2578
+    },
+    "MeteorShower_HoodTrim": {
+      "tris": 4000,
+      "verts": 2010,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00764
+    },
+    "MeteorShower_Spring": {
+      "tris": 3000,
+      "verts": 1500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00079
+    },
+    "MeteorShower_AntennaStar": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00276
+    },
+    "MeteorShower_Top": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.11386
+    },
+    "MeteorShower_Hands": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00323
+    },
+    "MeteorShower_Skirt": {
+      "tris": 9490,
+      "verts": 4745,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.12015
+    },
+    "MeteorShower_SkirtPrints": {
+      "tris": 2998,
+      "verts": 1533,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00089
+    },
+    "MeteorShower_Legs": {
+      "tris": 1998,
+      "verts": 1001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02722
+    },
+    "MeteorShower_Boots": {
+      "tris": 3000,
+      "verts": 1504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02809
+    },
+    "MeteorShower_BootCuffs": {
+      "tris": 1500,
+      "verts": 750,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00364
+    },
+    "MeteorShower_Cloud": {
+      "tris": 7000,
+      "verts": 3490,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.63264
+    },
+    "MeteorShower_Stars": {
+      "tris": 6998,
+      "verts": 3527,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03673
+    },
+    "MeteorShower_Trails": {
+      "tris": 2500,
+      "verts": 1260,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01903
+    },
+    "MeteorShower_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00388
+    },
+    "MeteorShower_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00345
+    },
+    "MeteorShower_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00019
+    },
+    "MeteorShower_Lash": {
+      "tris": 444,
+      "verts": 226,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00033
+    },
+    "MeteorShower_Brow": {
+      "tris": 348,
+      "verts": 178,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 8e-05
+    },
+    "MeteorShower_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 6e-05
+    },
+    "MeteorShower_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3e-05
+    },
+    "MeteorShower_Blush": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00154
+    }
+  },
+  "build": {
+    "MeteorShower_Head": {
+      "active_blocks": 2281,
+      "blocks": 5472,
+      "grid": [
+        145,
+        129,
+        153
+      ],
+      "raw_tris": 102992,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "MeteorShower_Hair": {
+      "active_blocks": 6237,
+      "blocks": 20625,
+      "grid": [
+        265,
+        201,
+        201
+      ],
+      "raw_tris": 340556,
+      "removed_faces": 0,
+      "seconds": 7.1
+    },
+    "MeteorShower_Hood": {
+      "active_blocks": 8155,
+      "blocks": 26588,
+      "grid": [
+        273,
+        185,
+        273
+      ],
+      "raw_tris": 363968,
+      "removed_faces": 0,
+      "seconds": 8.7
+    },
+    "MeteorShower_HoodTrim": {
+      "active_blocks": 5325,
+      "blocks": 23782,
+      "grid": [
+        377,
+        89,
+        369
+      ],
+      "raw_tris": 81228,
+      "removed_faces": 0,
+      "seconds": 2.5
+    },
+    "MeteorShower_Spring": {
+      "active_blocks": 291,
+      "blocks": 1200,
+      "grid": [
+        81,
+        81,
+        97
+      ],
+      "raw_tris": 14108,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MeteorShower_AntennaStar": {
+      "active_blocks": 366,
+      "blocks": 1287,
+      "grid": [
+        105,
+        73,
+        89
+      ],
+      "raw_tris": 14088,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MeteorShower_Top": {
+      "active_blocks": 2126,
+      "blocks": 7956,
+      "grid": [
+        289,
+        105,
+        137
+      ],
+      "raw_tris": 95668,
+      "removed_faces": 0,
+      "seconds": 4.1
+    },
+    "MeteorShower_Hands": {
+      "active_blocks": 402,
+      "blocks": 4186,
+      "grid": [
+        369,
+        57,
+        105
+      ],
+      "raw_tris": 12220,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "MeteorShower_Skirt": {
+      "active_blocks": 4176,
+      "blocks": 14896,
+      "grid": [
+        225,
+        225,
+        153
+      ],
+      "raw_tris": 270636,
+      "removed_faces": 10,
+      "seconds": 34.0
+    },
+    "MeteorShower_SkirtPrints": {
+      "active_blocks": 2177,
+      "blocks": 16384,
+      "grid": [
+        257,
+        257,
+        129
+      ],
+      "raw_tris": 24036,
+      "removed_faces": 2,
+      "seconds": 19.9
+    },
+    "MeteorShower_Legs": {
+      "active_blocks": 1317,
+      "blocks": 7497,
+      "grid": [
+        169,
+        137,
+        169
+      ],
+      "raw_tris": 58468,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "MeteorShower_Boots": {
+      "active_blocks": 1232,
+      "blocks": 13750,
+      "grid": [
+        201,
+        201,
+        177
+      ],
+      "raw_tris": 51440,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "MeteorShower_BootCuffs": {
+      "active_blocks": 703,
+      "blocks": 16800,
+      "grid": [
+        241,
+        225,
+        161
+      ],
+      "raw_tris": 28144,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MeteorShower_Cloud": {
+      "active_blocks": 4556,
+      "blocks": 7656,
+      "grid": [
+        233,
+        193,
+        89
+      ],
+      "raw_tris": 248832,
+      "removed_faces": 0,
+      "seconds": 10.1
+    },
+    "MeteorShower_Stars": {
+      "active_blocks": 3654,
+      "blocks": 81200,
+      "grid": [
+        465,
+        201,
+        449
+      ],
+      "raw_tris": 134028,
+      "removed_faces": 0,
+      "seconds": 12.3
+    },
+    "MeteorShower_Trails": {
+      "active_blocks": 1782,
+      "blocks": 52479,
+      "grid": [
+        505,
+        137,
+        393
+      ],
+      "raw_tris": 65440,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "MeteorShower_Eyes": {
+      "active_blocks": 1440,
+      "blocks": 6048,
+      "grid": [
+        217,
+        129,
+        113
+      ],
+      "raw_tris": 39904,
+      "removed_faces": 0,
+      "seconds": 1.9
+    },
+    "MeteorShower_Iris": {
+      "active_blocks": 1241,
+      "blocks": 5408,
+      "grid": [
+        209,
+        129,
+        105
+      ],
+      "raw_tris": 33728,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "MeteorShower_EyeShine": {
+      "active_blocks": 538,
+      "blocks": 5616,
+      "grid": [
+        209,
+        145,
+        97
+      ],
+      "raw_tris": 6156,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "MeteorShower_Lash": {
+      "active_blocks": 981,
+      "blocks": 7254,
+      "grid": [
+        249,
+        145,
+        105
+      ],
+      "raw_tris": 18768,
+      "removed_faces": 6,
+      "seconds": 1.5
+    },
+    "MeteorShower_Brow": {
+      "active_blocks": 468,
+      "blocks": 2688,
+      "grid": [
+        193,
+        113,
+        65
+      ],
+      "raw_tris": 2640,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "MeteorShower_Nose": {
+      "active_blocks": 90,
+      "blocks": 648,
+      "grid": [
+        73,
+        73,
+        65
+      ],
+      "raw_tris": 1376,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "MeteorShower_Mouth": {
+      "active_blocks": 185,
+      "blocks": 1584,
+      "grid": [
+        89,
+        129,
+        73
+      ],
+      "raw_tris": 1504,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "MeteorShower_Blush": {
+      "active_blocks": 681,
+      "blocks": 2304,
+      "grid": [
+        193,
+        97,
+        65
+      ],
+      "raw_tris": 17628,
+      "removed_faces": 0,
+      "seconds": 0.9
+    }
+  },
+  "glb": {
+    "bytes": 1689864,
+    "nodes": [
+      "MeteorShower_AntennaStar",
+      "MeteorShower_Blush",
+      "MeteorShower_BootCuffs",
+      "MeteorShower_Boots",
+      "MeteorShower_Brow",
+      "MeteorShower_Cloud",
+      "MeteorShower_Eyes",
+      "MeteorShower_EyeShine",
+      "MeteorShower_Hair",
+      "MeteorShower_Hands",
+      "MeteorShower_Head",
+      "MeteorShower_Hood",
+      "MeteorShower_HoodTrim",
+      "MeteorShower_Iris",
+      "MeteorShower_Lash",
+      "MeteorShower_Legs",
+      "MeteorShower_Mouth",
+      "MeteorShower_Nose",
+      "MeteorShower_Skirt",
+      "MeteorShower_SkirtPrints",
+      "MeteorShower_Spring",
+      "MeteorShower_Stars",
+      "MeteorShower_Top",
+      "MeteorShower_Trails",
+      "MeteorShower"
+    ],
+    "meshes": 24,
+    "materials": 22,
+    "images": 22,
+    "textures": 22,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.meteor-shower",
+  "root": "MeteorShower",
+  "face": "MeteorShower_Eyes",
+  "glass": [
+    "MeteorShower_Trails"
+  ],
+  "reimport": {
+    "meshes": 24,
+    "triangle_mismatches": {}
+  }
+}

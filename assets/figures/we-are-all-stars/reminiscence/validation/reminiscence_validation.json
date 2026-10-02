@@ -1,0 +1,565 @@
+{
+  "figure": "Reminiscence",
+  "title": "Reminiscence Star",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.1638,
+    2.0272,
+    2.5011
+  ],
+  "meshes": 24,
+  "triangles": 49988,
+  "materials": [
+    "Reminiscence_Blush",
+    "Reminiscence_Board",
+    "Reminiscence_Brow",
+    "Reminiscence_Cat",
+    "Reminiscence_CatBlush",
+    "Reminiscence_CatEars",
+    "Reminiscence_CatEyes",
+    "Reminiscence_CatNose",
+    "Reminiscence_Crayon",
+    "Reminiscence_Doodles",
+    "Reminiscence_EyeShine",
+    "Reminiscence_EyeWhite",
+    "Reminiscence_Hair",
+    "Reminiscence_Iris",
+    "Reminiscence_Lash",
+    "Reminiscence_Mouth",
+    "Reminiscence_Nose",
+    "Reminiscence_Pants",
+    "Reminiscence_Shoes",
+    "Reminiscence_Skin",
+    "Reminiscence_Sweater",
+    "Reminiscence_Vest"
+  ],
+  "components": {
+    "Reminiscence_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.14361
+    },
+    "Reminiscence_Hair": {
+      "tris": 9602,
+      "verts": 4801,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.9684
+    },
+    "Reminiscence_Cat": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.1637
+    },
+    "Reminiscence_CatEars": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00018
+    },
+    "Reminiscence_CatEyes": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00052
+    },
+    "Reminiscence_CatMouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00011
+    },
+    "Reminiscence_CatNose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 4e-05
+    },
+    "Reminiscence_CatBlush": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00083
+    },
+    "Reminiscence_Eyes": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01558
+    },
+    "Reminiscence_Iris": {
+      "tris": 1198,
+      "verts": 603,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01384
+    },
+    "Reminiscence_EyeShine": {
+      "tris": 300,
+      "verts": 158,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00077
+    },
+    "Reminiscence_Lash": {
+      "tris": 448,
+      "verts": 228,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00137
+    },
+    "Reminiscence_Brow": {
+      "tris": 350,
+      "verts": 179,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00034
+    },
+    "Reminiscence_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00023
+    },
+    "Reminiscence_Mouth": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00013
+    },
+    "Reminiscence_Blush": {
+      "tris": 450,
+      "verts": 229,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00623
+    },
+    "Reminiscence_Vest": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.24145
+    },
+    "Reminiscence_Sweater": {
+      "tris": 4500,
+      "verts": 2252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.32896
+    },
+    "Reminiscence_Hands": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00996
+    },
+    "Reminiscence_Pants": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.18891
+    },
+    "Reminiscence_Shoes": {
+      "tris": 1498,
+      "verts": 753,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02961
+    },
+    "Reminiscence_Board": {
+      "tris": 3998,
+      "verts": 1999,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.28384
+    },
+    "Reminiscence_Doodles": {
+      "tris": 1998,
+      "verts": 1003,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00093
+    },
+    "Reminiscence_Crayon": {
+      "tris": 598,
+      "verts": 301,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00128
+    }
+  },
+  "build": {
+    "Reminiscence_Head": {
+      "active_blocks": 5637,
+      "blocks": 17472,
+      "grid": [
+        209,
+        193,
+        225
+      ],
+      "raw_tris": 261048,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "Reminiscence_Hair": {
+      "active_blocks": 11898,
+      "blocks": 43624,
+      "grid": [
+        329,
+        305,
+        225
+      ],
+      "raw_tris": 674624,
+      "removed_faces": 148,
+      "seconds": 6.2
+    },
+    "Reminiscence_Cat": {
+      "active_blocks": 4260,
+      "blocks": 22680,
+      "grid": [
+        289,
+        281,
+        145
+      ],
+      "raw_tris": 195580,
+      "removed_faces": 0,
+      "seconds": 4.9
+    },
+    "Reminiscence_CatEars": {
+      "active_blocks": 378,
+      "blocks": 3003,
+      "grid": [
+        169,
+        89,
+        105
+      ],
+      "raw_tris": 5940,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Reminiscence_CatEyes": {
+      "active_blocks": 602,
+      "blocks": 6270,
+      "grid": [
+        177,
+        153,
+        121
+      ],
+      "raw_tris": 14344,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Reminiscence_CatMouth": {
+      "active_blocks": 303,
+      "blocks": 2856,
+      "grid": [
+        113,
+        137,
+        97
+      ],
+      "raw_tris": 6652,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "Reminiscence_CatNose": {
+      "active_blocks": 111,
+      "blocks": 1320,
+      "grid": [
+        97,
+        89,
+        81
+      ],
+      "raw_tris": 2052,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "Reminiscence_CatBlush": {
+      "active_blocks": 655,
+      "blocks": 6750,
+      "grid": [
+        201,
+        145,
+        121
+      ],
+      "raw_tris": 17160,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "Reminiscence_Eyes": {
+      "active_blocks": 2932,
+      "blocks": 15318,
+      "grid": [
+        297,
+        185,
+        145
+      ],
+      "raw_tris": 105296,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "Reminiscence_Iris": {
+      "active_blocks": 2552,
+      "blocks": 14904,
+      "grid": [
+        289,
+        185,
+        145
+      ],
+      "raw_tris": 90482,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Reminiscence_EyeShine": {
+      "active_blocks": 823,
+      "blocks": 9720,
+      "grid": [
+        289,
+        145,
+        121
+      ],
+      "raw_tris": 17100,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "Reminiscence_Lash": {
+      "active_blocks": 1657,
+      "blocks": 20250,
+      "grid": [
+        361,
+        201,
+        145
+      ],
+      "raw_tris": 51996,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "Reminiscence_Brow": {
+      "active_blocks": 583,
+      "blocks": 4576,
+      "grid": [
+        257,
+        105,
+        89
+      ],
+      "raw_tris": 7616,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "Reminiscence_Nose": {
+      "active_blocks": 148,
+      "blocks": 729,
+      "grid": [
+        73,
+        73,
+        73
+      ],
+      "raw_tris": 3464,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "Reminiscence_Mouth": {
+      "active_blocks": 282,
+      "blocks": 2420,
+      "grid": [
+        89,
+        177,
+        81
+      ],
+      "raw_tris": 4428,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "Reminiscence_Blush": {
+      "active_blocks": 1184,
+      "blocks": 6936,
+      "grid": [
+        273,
+        137,
+        97
+      ],
+      "raw_tris": 45104,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Reminiscence_Vest": {
+      "active_blocks": 3316,
+      "blocks": 10143,
+      "grid": [
+        185,
+        169,
+        169
+      ],
+      "raw_tris": 165544,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Reminiscence_Sweater": {
+      "active_blocks": 5719,
+      "blocks": 21114,
+      "grid": [
+        273,
+        217,
+        185
+      ],
+      "raw_tris": 279056,
+      "removed_faces": 0,
+      "seconds": 5.8
+    },
+    "Reminiscence_Hands": {
+      "active_blocks": 913,
+      "blocks": 6370,
+      "grid": [
+        281,
+        113,
+        105
+      ],
+      "raw_tris": 36852,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Reminiscence_Pants": {
+      "active_blocks": 3597,
+      "blocks": 7497,
+      "grid": [
+        169,
+        169,
+        137
+      ],
+      "raw_tris": 160316,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "Reminiscence_Shoes": {
+      "active_blocks": 1584,
+      "blocks": 5460,
+      "grid": [
+        209,
+        121,
+        113
+      ],
+      "raw_tris": 70156,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "Reminiscence_Board": {
+      "active_blocks": 7993,
+      "blocks": 11600,
+      "grid": [
+        401,
+        233,
+        65
+      ],
+      "raw_tris": 334504,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "Reminiscence_Doodles": {
+      "active_blocks": 2565,
+      "blocks": 17864,
+      "grid": [
+        449,
+        233,
+        89
+      ],
+      "raw_tris": 55198,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "Reminiscence_Crayon": {
+      "active_blocks": 409,
+      "blocks": 2926,
+      "grid": [
+        89,
+        113,
+        153
+      ],
+      "raw_tris": 15382,
+      "removed_faces": 0,
+      "seconds": 0.1
+    }
+  },
+  "glb": {
+    "bytes": 1135048,
+    "nodes": [
+      "Reminiscence_Blush",
+      "Reminiscence_Board",
+      "Reminiscence_Brow",
+      "Reminiscence_Cat",
+      "Reminiscence_CatBlush",
+      "Reminiscence_CatEars",
+      "Reminiscence_CatEyes",
+      "Reminiscence_CatMouth",
+      "Reminiscence_CatNose",
+      "Reminiscence_Crayon",
+      "Reminiscence_Doodles",
+      "Reminiscence_Eyes",
+      "Reminiscence_EyeShine",
+      "Reminiscence_Hair",
+      "Reminiscence_Hands",
+      "Reminiscence_Head",
+      "Reminiscence_Iris",
+      "Reminiscence_Lash",
+      "Reminiscence_Mouth",
+      "Reminiscence_Nose",
+      "Reminiscence_Pants",
+      "Reminiscence_Shoes",
+      "Reminiscence_Sweater",
+      "Reminiscence_Vest",
+      "Reminiscence"
+    ],
+    "meshes": 24,
+    "materials": 22,
+    "images": 22,
+    "textures": 22,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": "star.reminiscence",
+  "root": "Reminiscence",
+  "face": "Reminiscence_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 24,
+    "triangle_mismatches": {}
+  }
+}

@@ -217,6 +217,9 @@ end
 local originalNew = E.Instance.new
 E.Instance.new = function(class)
 	local object = originalNew(class)
+	if class == "Sound" then
+		object.IsLoaded, object.IsPlaying = true, false
+	end
 	if object:IsA("BasePart") then
 		object.CFrame, object.Position, object.Size = cf(), v(), v(1, 1, 1)
 		object.Color, object.Material = E.Color3.new(1, 1, 1), "SmoothPlastic"

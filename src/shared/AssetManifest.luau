@@ -50,6 +50,14 @@ Manifest.Collection = {
 		CornerBottomLeft = "Collection.TenderEchoes.CornerBottomLeft",
 		CornerBottomRight = "Collection.TenderEchoes.CornerBottomRight",
 	},
+	WeAreAllStars = {
+		Emblem = "Collection.WeAreAllStars.Emblem",
+		ShopPattern = "Collection.WeAreAllStars.ShopPattern",
+		CornerTopLeft = "Collection.WeAreAllStars.CornerTopLeft",
+		CornerTopRight = "Collection.WeAreAllStars.CornerTopRight",
+		CornerBottomLeft = "Collection.WeAreAllStars.CornerBottomLeft",
+		CornerBottomRight = "Collection.WeAreAllStars.CornerBottomRight",
+	},
 }
 Manifest.Global = { IconCollection = "Global.IconCollection" }
 Manifest.Navigation = {

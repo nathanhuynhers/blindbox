@@ -1,0 +1,398 @@
+{
+  "method": "48 kHz PCM; production Luau mixer traced at 240 Hz; linear resampling. No Roblox playback tested.",
+  "masters": {
+    "acceleration": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.46,
+      "monoLossDb": 0.0,
+      "dc": 6.7e-06
+    },
+    "ambience": {
+      "peakDbFS": -12.66,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": 4e-07,
+      "seamStepRatio": 0.322
+    },
+    "ambienceGrove": {
+      "peakDbFS": -13.32,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": 9.04e-05,
+      "seamStepRatio": 0.309
+    },
+    "ambienceTide": {
+      "peakDbFS": -12.67,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": 8e-07,
+      "seamStepRatio": 0.198
+    },
+    "await": {
+      "peakDbFS": -12.96,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": -0.0002258,
+      "seamStepRatio": 0.354
+    },
+    "charge": {
+      "peakDbFS": -8.31,
+      "rmsDbFS": -17.72,
+      "monoLossDb": -0.07,
+      "dc": -6.87e-05,
+      "seamStepRatio": 0.076
+    },
+    "click": {
+      "peakDbFS": -3.82,
+      "rmsDbFS": -16.48,
+      "monoLossDb": 0.0,
+      "dc": -0.0004233
+    },
+    "close": {
+      "peakDbFS": -5.44,
+      "rmsDbFS": -16.48,
+      "monoLossDb": 0.0,
+      "dc": -0.0003931
+    },
+    "compression": {
+      "peakDbFS": -5.43,
+      "rmsDbFS": -16.48,
+      "monoLossDb": 0.0,
+      "dc": -0.0001241
+    },
+    "crack": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.83,
+      "monoLossDb": 0.0,
+      "dc": -0.0007123
+    },
+    "discovery": {
+      "peakDbFS": -5.44,
+      "rmsDbFS": -18.42,
+      "monoLossDb": -0.03,
+      "dc": 7.2e-06
+    },
+    "dive": {
+      "peakDbFS": -7.93,
+      "rmsDbFS": -17.72,
+      "monoLossDb": -0.05,
+      "dc": -0.0001692,
+      "seamStepRatio": 0.022
+    },
+    "entrance": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.33,
+      "monoLossDb": 0.0,
+      "dc": -1.83e-05
+    },
+    "flight": {
+      "peakDbFS": -8.29,
+      "rmsDbFS": -17.72,
+      "monoLossDb": -0.07,
+      "dc": -1.99e-05,
+      "seamStepRatio": 0.387
+    },
+    "flightAir": {
+      "peakDbFS": -9.75,
+      "rmsDbFS": -20.45,
+      "monoLossDb": 0.0,
+      "dc": -2.3e-06,
+      "seamStepRatio": 0.498
+    },
+    "flightMythical": {
+      "peakDbFS": -12.06,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": -4.32e-05,
+      "seamStepRatio": 0.158
+    },
+    "impact": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.81,
+      "monoLossDb": 0.0,
+      "dc": -0.0001625
+    },
+    "impactCommon": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.07,
+      "monoLossDb": 0.0,
+      "dc": -0.0002805
+    },
+    "impactLegendary": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -18.9,
+      "monoLossDb": 0.0,
+      "dc": -4.67e-05
+    },
+    "impactMythical": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -19.37,
+      "monoLossDb": 0.0,
+      "dc": 8.85e-05
+    },
+    "impactRare": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -18.24,
+      "monoLossDb": 0.0,
+      "dc": -2.21e-05
+    },
+    "impactUncommon": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.37,
+      "monoLossDb": 0.0,
+      "dc": -4.13e-05
+    },
+    "launch": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.27,
+      "monoLossDb": -0.0,
+      "dc": 3.37e-05
+    },
+    "legendaryPulse": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -18.95,
+      "monoLossDb": 0.0,
+      "dc": -0.0002211
+    },
+    "lid": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -16.72,
+      "monoLossDb": 0.0,
+      "dc": -1.6e-05
+    },
+    "mythicalInward": {
+      "peakDbFS": -5.7,
+      "rmsDbFS": -16.48,
+      "monoLossDb": 0.0,
+      "dc": -0.0001516
+    },
+    "mythicalPearl": {
+      "peakDbFS": -5.08,
+      "rmsDbFS": -16.48,
+      "monoLossDb": -0.0,
+      "dc": -0.0001126
+    },
+    "postImpactShimmer": {
+      "peakDbFS": -6.17,
+      "rmsDbFS": -18.42,
+      "monoLossDb": -0.09,
+      "dc": 6.44e-05
+    },
+    "rarityCommon": {
+      "peakDbFS": -3.64,
+      "rmsDbFS": -15.39,
+      "monoLossDb": -0.07,
+      "dc": 0.0003448
+    },
+    "rarityLegendary": {
+      "peakDbFS": -3.93,
+      "rmsDbFS": -15.39,
+      "monoLossDb": -0.08,
+      "dc": 0.0001289
+    },
+    "rarityMythical": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -16.12,
+      "monoLossDb": -0.16,
+      "dc": 2.7e-06
+    },
+    "rarityRare": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -16.85,
+      "monoLossDb": -0.05,
+      "dc": -0.0005224
+    },
+    "rarityTransformation": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -18.46,
+      "monoLossDb": 0.0,
+      "dc": -0.0004901
+    },
+    "rarityUncommon": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -16.96,
+      "monoLossDb": -0.03,
+      "dc": -0.0001252
+    },
+    "result": {
+      "peakDbFS": -11.88,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": 0.0001231,
+      "seamStepRatio": 0.164
+    },
+    "reveal": {
+      "peakDbFS": -3.83,
+      "rmsDbFS": -15.39,
+      "monoLossDb": -0.05,
+      "dc": -0.0002926
+    },
+    "revealCommon": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -15.62,
+      "monoLossDb": -0.07,
+      "dc": 0.000328
+    },
+    "revealLegendary": {
+      "peakDbFS": -3.62,
+      "rmsDbFS": -15.39,
+      "monoLossDb": -0.09,
+      "dc": -0.000357
+    },
+    "revealMythical": {
+      "peakDbFS": -3.55,
+      "rmsDbFS": -15.39,
+      "monoLossDb": -0.03,
+      "dc": -0.000277
+    },
+    "revealRare": {
+      "peakDbFS": -3.96,
+      "rmsDbFS": -15.39,
+      "monoLossDb": -0.05,
+      "dc": -0.0002974
+    },
+    "revealUncommon": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -15.49,
+      "monoLossDb": -0.02,
+      "dc": 0.0001935
+    },
+    "settle": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -18.08,
+      "monoLossDb": 0.0,
+      "dc": 0.0001414
+    },
+    "shake": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.07,
+      "monoLossDb": 0.0,
+      "dc": -0.0002245
+    },
+    "silhouette": {
+      "peakDbFS": -12.25,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": -2.3e-06,
+      "seamStepRatio": 0.155
+    },
+    "silhouetteMythical": {
+      "peakDbFS": -12.54,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": 1.16e-05,
+      "seamStepRatio": 0.128
+    },
+    "tension": {
+      "peakDbFS": -12.56,
+      "rmsDbFS": -20.45,
+      "monoLossDb": -0.07,
+      "dc": -8.7e-06,
+      "seamStepRatio": 0.179
+    },
+    "transformLegendary": {
+      "peakDbFS": -3.35,
+      "rmsDbFS": -17.14,
+      "monoLossDb": 0.0,
+      "dc": -0.0006285
+    },
+    "transformMythical": {
+      "peakDbFS": -3.49,
+      "rmsDbFS": -15.39,
+      "monoLossDb": -0.14,
+      "dc": -0.0003428
+    }
+  },
+  "previews": {
+    "common": {
+      "peakDbFS": -11.68,
+      "rmsDbFS": -33.31,
+      "monoLossDb": -0.03,
+      "dc": -4.5e-06,
+      "duration": 7.633,
+      "voices": 27,
+      "maxConcurrent": 5
+    },
+    "uncommon": {
+      "peakDbFS": -11.68,
+      "rmsDbFS": -33.24,
+      "monoLossDb": -0.02,
+      "dc": -7e-06,
+      "duration": 8.133,
+      "voices": 27,
+      "maxConcurrent": 5
+    },
+    "rare": {
+      "peakDbFS": -11.74,
+      "rmsDbFS": -32.89,
+      "monoLossDb": -0.03,
+      "dc": -1.91e-05,
+      "duration": 8.771,
+      "voices": 28,
+      "maxConcurrent": 5
+    },
+    "legendary": {
+      "peakDbFS": -11.74,
+      "rmsDbFS": -32.75,
+      "monoLossDb": -0.05,
+      "dc": -1.38e-05,
+      "duration": 9.121,
+      "voices": 29,
+      "maxConcurrent": 6
+    },
+    "mythical": {
+      "peakDbFS": -11.74,
+      "rmsDbFS": -31.94,
+      "monoLossDb": -0.06,
+      "dc": -1.67e-05,
+      "duration": 9.55,
+      "voices": 33,
+      "maxConcurrent": 6
+    },
+    "common_reduced": {
+      "peakDbFS": -10.74,
+      "rmsDbFS": -32.63,
+      "monoLossDb": -0.03,
+      "dc": -6.6e-06,
+      "duration": 5.138,
+      "voices": 22,
+      "maxConcurrent": 6
+    },
+    "uncommon_reduced": {
+      "peakDbFS": -10.74,
+      "rmsDbFS": -32.5,
+      "monoLossDb": -0.02,
+      "dc": -1.26e-05,
+      "duration": 5.4,
+      "voices": 22,
+      "maxConcurrent": 6
+    },
+    "rare_reduced": {
+      "peakDbFS": -10.74,
+      "rmsDbFS": -32.13,
+      "monoLossDb": -0.03,
+      "dc": -3.37e-05,
+      "duration": 5.8,
+      "voices": 22,
+      "maxConcurrent": 6
+    },
+    "legendary_reduced": {
+      "peakDbFS": -10.74,
+      "rmsDbFS": -31.94,
+      "monoLossDb": -0.05,
+      "dc": -2.41e-05,
+      "duration": 6.15,
+      "voices": 23,
+      "maxConcurrent": 6
+    },
+    "mythical_reduced": {
+      "peakDbFS": -10.74,
+      "rmsDbFS": -31.04,
+      "monoLossDb": -0.06,
+      "dc": -2.96e-05,
+      "duration": 6.579,
+      "voices": 27,
+      "maxConcurrent": 6
+    }
+  }
+}

@@ -19,6 +19,7 @@ modules = {
     "Rules": "server", "Protocol": "server", "Transactions": "server",
     "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
+    "OpeningAudioConfig": "client", "OpeningAudioSequence": "client",
     "OpeningScope": "client", "OpeningBoxSource": "client", "OpeningCamera": "client", "OpeningController": "client",
     "OpeningCinematic": "client", "OpeningEffects": "client", "OpeningBox": "client",
     "OpeningFlight": "client", "OpeningFlightEffects": "client",
@@ -73,8 +74,11 @@ for name, folder in modules.items():
             source = source.replace(f'require(script.Parent.{module})', f'Engine.{field}')
         source = source.replace('game:GetService("TweenService")', 'Engine.TweenService')
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
-for name in ("OpeningEngine", "OpeningVisualEngine", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec", "AssetMountEngine"):
+for name in ("OpeningEngine", "OpeningVisualEngine", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec", "AssetMountEngine"):
     (out / f"{name}.luau").write_text((root / "tests" / f"{name}.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "OpeningAudio.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
 result = subprocess.run([sys.argv[1], str(out / "OpeningLifecycle.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)

@@ -1,10 +1,11 @@
-"""Explicit Open Cloud image uploads. Python 3.10+, standard library only."""
+"""Explicit Open Cloud image, model and PCM WAV uploads. Standard library only."""
 from __future__ import annotations
 
 import argparse
 from contextlib import contextmanager
 import hashlib
 import http.client
+import io
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,7 @@ import time
 import urllib.error
 import urllib.request
 import uuid
+import wave
 import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +29,7 @@ ID = re.compile(r"[1-9][0-9]*")
 OPERATION = re.compile(r"operations/[A-Za-z0-9_-]+")
 IMAGE_FORMATS = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
 MODEL_FORMATS = {".glb": "model/gltf-binary"}
+AUDIO_FORMATS = {".wav": "audio/wav"}
 
 
 class PipelineError(Exception):
@@ -191,6 +194,32 @@ def model_info(path: Path, required_nodes: object) -> tuple[bytes, str, list[str
     return data, MODEL_FORMATS[path.suffix.lower()], names
 
 
+def audio_info(path: Path) -> tuple[bytes, str, dict]:
+    """Conservative lossless subset of Roblox's documented audio formats."""
+    if path.suffix.lower() not in AUDIO_FORMATS or not path.is_file():
+        raise PipelineError("Audio source must be an existing PCM WAV file.")
+    if not 0 < path.stat().st_size < MAX_BYTES:
+        raise PipelineError("Audio source must be non-empty and smaller than 20 MB.")
+    data = path.read_bytes()
+    if not 0 < len(data) < MAX_BYTES:
+        raise PipelineError("Audio changed size while reading.")
+    try:
+        with wave.open(io.BytesIO(data), "rb") as stream:
+            channels, width, rate, frames = (stream.getnchannels(), stream.getsampwidth(),
+                                            stream.getframerate(), stream.getnframes())
+            if (stream.getcomptype() != "NONE" or channels not in (1, 2)
+                    or width not in (2, 3) or not 8000 <= rate <= 48000
+                    or not 0 < frames / rate < 420):
+                raise PipelineError("Use mono/stereo 16/24-bit PCM WAV at 8-48 kHz under seven minutes.")
+            pcm = stream.readframes(frames)
+            if len(pcm) != frames * channels * width:
+                raise PipelineError("WAV audio is truncated.")
+    except (wave.Error, EOFError):
+        raise PipelineError("Invalid PCM WAV container.") from None
+    return data, AUDIO_FORMATS[path.suffix.lower()], {"channels": channels, "sampleRate": rate,
+                                                     "duration": frames / rate}
+
+
 def creator_value(value: object) -> dict:
     if not isinstance(value, dict) or len(value) != 1:
         raise PipelineError('Set manifest creator to {"userId":"YOUR_ID"} or {"groupId":"YOUR_ID"}.')
@@ -210,17 +239,19 @@ def prepare(root: Path, entry: dict) -> dict:
     if not path.is_relative_to((root / "assets").resolve()):
         raise PipelineError("Source paths must remain inside assets/ (including symlink targets).")
     asset_type = entry.get("assetType", "Image")
-    extension = "png|jpe?g" if asset_type == "Image" else "glb"
+    extension = {"Image": "png|jpe?g", "Model": "glb", "Audio": "wav"}.get(asset_type, "")
     if not re.fullmatch(rf"[a-z0-9]+(?:_[a-z0-9]+)*\.({extension})", path.name):
         raise PipelineError("Use a lowercase snake_case filename supported by its asset type.")
-    if asset_type not in ("Image", "Model"):
-        raise PipelineError("This pipeline supports Image and GLB Model assets only.")
+    if asset_type not in ("Image", "Model", "Audio"):
+        raise PipelineError("This pipeline supports Image, GLB Model and PCM WAV Audio assets only.")
     display = entry.get("displayName", path.stem)
     if not isinstance(display, str) or not 1 <= len(display) <= 50 or any(ord(c) < 32 for c in display):
         raise PipelineError("Display name must be 1-50 characters without control characters.")
     if asset_type == "Image":
         data, mime, width, height = image_info(path)
         detail = {"width": width, "height": height}
+    elif asset_type == "Audio":
+        data, mime, detail = audio_info(path)
     else:
         data, mime, nodes = model_info(path, entry.get("requiredNodes"))
         detail = {"nodes": nodes}
@@ -445,8 +476,8 @@ def main(argv: list[str] | None = None) -> int:
             if value is not None:
                 creator_value(value)
             for item in items:
-                detail = (f"{item['width']}x{item['height']}"
-                          if item["assetType"] == "Image"
+                detail = (f"{item['width']}x{item['height']}" if item["assetType"] == "Image"
+                          else f"{item['duration']:.3f}s PCM audio" if item["assetType"] == "Audio"
                           else f"{len(item['nodes'])} semantic nodes")
                 print(f"Valid {item['key']}: {detail}, {len(item['data'])} bytes")
             if value is None:
