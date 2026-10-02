@@ -12,7 +12,7 @@ that feature set; real storage, device and multi-client acceptance are still pen
 [scope](FULL_GAME.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
 
 The active world uses fixed open Player Plots, earning Display and cosmetic Shelf Units.
-See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-v5 migration](DATA_MODEL.md).
+See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-v6 migration](DATA_MODEL.md).
 The former separate Gallery/room runtime has been removed, not retained as an alternate path.
 
 ## Server ownership
@@ -20,11 +20,24 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `init.server.luau`: reserves fixed plot slots before profile load, owns player lifecycle and
   remotes, validates ready sessions, sends private owner snapshots and runs the existing income clock.
 - `PlotConfig`/`PlotSlots`: eight finite locations; unique pending/active allocation and explicit release.
-- `World`/`PlotGeometry`/`PlotFixture`: a recessed circular warm-neutral foundation, two-layer
-  100-stud ivory/oak plaza, eight trimmed radial paths with 32 bounded bollard lights and eight
-  layered open platforms on a 170-stud-radius ring. Deliberately separated top planes prevent
-  path/plaza z-fighting. One plot-local `CFrame` rotates each complete fixture inward. Static
-  world geometry persists; owner identity remains session-owned and is destroyed with `PlayerPlot`.
+- `World`: builds Blindbox Town once per server and returns its root, leaderboard board, plaza
+  spawn and light entries: grass island, eight paths with bollards, Market Street with lanterns,
+  gap gift-box stacks/statue gardens, the hedge/tree edge and invisible boundary walls.
+  `PlazaFixture` owns the plaza, giant blind box, benches, planters, board placement and the
+  pre-assignment `SpawnLocation`. `TownLayout` holds every radius/angle and the part/light
+  budgets, `TownStyle` the pastel palette, and `TownProps` the reusable native-part prop builders.
+- `PlotGeometry`/`PlotFixture`/`PlotStyle`/`Awning`: one plot-local `CFrame` per plot; layered
+  platforms with potted plants; the session-owned walk-through entrance arch and flush spawn pad;
+  striped awnings for Display/Collection. `PlotStyle.accent(ownerId)` is the single accent accessor.
+- `PlayerSpawn`: binds a loaded player to their plot's server-computed spawn `CFrame` for the
+  current character, respawns and reloads; unbound on leave.
+- `DayNight`/`NightLights`: a 1-second server loop sets `Lighting.ClockTime` and interpolated
+  lighting looks over a 20-minute cycle; `NightLights` is a 64-light budgeted registry that
+  switches lights and lens glows only when crossing dusk/dawn.
+- `Leaderboard`/`LeaderboardStore`/`LeaderboardStats`/`LeaderboardBoard`: presentation-only global
+  leaderboard. The service runs background loops for writes (throttled per player, on leave, budget
+  checked, backoff), reads (top 5 per stat every 90 s, last good page kept) and the 8-second page
+  cycle; the store is pure and injected with DataStore I/O; the board is the two-sided physical sign.
 - `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
   proximity checks, runtime carousel start index and connection/content teardown.
 - `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent COLLECTION
@@ -35,10 +48,11 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `Shelves`: discovered-reference rules, visible owned-unit validation, stable slot IDs, runtime carousel
   revision/wraparound/cooldown and bounded three-unit projections. Zero economy/inventory reservations.
 - `Rules`/`Economy`: unchanged Display rate/bonus/reservations, purchases, inventory and daily logic.
+  Buy and Daily also increment the persistent `boxesOpened` counter in the same atomic grant.
 - `Protocol`/`Transactions`: allowlisted typed fields/actions, token bucket, profile revision and
   exact retry receipts. Shelf edits additionally require visible persistent Shelf Unit ID and carousel revision and owner access.
-- `Profile`/`LegacyCosmetics`/`LegacyShelfPages`: schema-v5 validation/deep copies and decode-only
-  v1-v4 conversion. Legacy modules contain no runtime rooms, browsing or completion grants.
+- `Profile`/`LegacyCosmetics`/`LegacyShelfPages`: schema-v6 validation/deep copies and decode-only
+  v1-v5 conversion. Legacy modules contain no runtime rooms, browsing or completion grants.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
 
@@ -98,9 +112,9 @@ show a box, Redeem goes directly to the figure spotlight. Skipping or interrupti
 cannot affect the already-granted item. See [opening behavior and Studio checks](OPENING.md).
 No opening-specific remotes or server logic were introduced.
 
-There are no simulated visitor actors. Real players walk into open plots. Character respawn
-returns only that character to its assigned plot; it does not reset shelves or require visit
-sessions. Leaving destroys owner content and connections and releases the slot. Visitors remain
+There are no simulated visitor actors. Real players walk into open plots. Players without a plot
+spawn on the plaza `SpawnLocation`; once their plot is assigned, every spawn and respawn lands on
+their own plot's spawn pad. It does not reset shelves or require visit sessions. Leaving destroys owner content and connections and releases the slot. Visitors remain
 on the shared ground safely. Plot allocation/coordinates and carousel visibility are not saved.
 
 Shared Catalog/Types/FigureModel contain only public definitions, contracts and original
@@ -134,7 +148,7 @@ are public. Owner state events never go to guests. Each owner gets only three vi
 owned count, carousel revision and navigation availability. The server sends no private balances, inventory, discovery or progression
 to visitors. Visitors may turn physical shelf arrows but cannot mutate the owner's saved state.
 
-No per-frame plot work is added. Static geometry persists for the session. Rendering compares
+No per-frame plot or world work is added; the day/night and leaderboard loops are 1-8 second intervals. Static geometry persists for the session. Rendering compares
 slot figure IDs on successful mutations/carousel changes; one changed figure creates one replacement,
 and unchanged IDs can be reused between viewport positions. The visible load is bounded at 27 cosmetic figures
 plus at most six Display figures per player. Native eight-player/mobile performance is unmeasured.

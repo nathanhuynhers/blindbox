@@ -115,7 +115,7 @@ validation. Visitors receive replicated geometry, never private inventory/discov
 Coins (Buy) or records the daily claim (Daily) and grants the rolled figure. Rejected requests,
 Scrap redemptions and replayed request IDs never count. It is clamped at its numeric guard and
 grants nothing; it exists for the global leaderboard. The global leaderboard OrderedDataStores
-(`Settings.leaderboardStores`) are a separate, rebuildable presentation index keyed by UserId
+(`Settings.liveLeaderboard` / `Settings.studioLeaderboard`, scope = stat key) are a separate, rebuildable presentation index keyed by UserId
 string. They are never read back into a profile, so they cannot corrupt or roll back progress.
 
 Deploy v6 with coordinated server replacement. Older code cannot read v6 saves; rollback must

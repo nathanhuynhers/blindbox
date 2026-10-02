@@ -5,6 +5,36 @@ individually persistent Shelf Units and a three-shelf viewport. It supersedes th
 Shelf Page implementation report. Native Studio acceptance has **not** been run by the agent.
 See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.md).
 
+## Blindbox Town world redesign (current, October 2, 2026)
+
+This pass replaces the recessed foundation, ivory plaza, plaque entrance and fixed entrance spawn
+described in the older sections below; those sections remain as history. Plot slots, the 170-stud
+ring, plot dimensions, ownership, Display/Collection layout and Shelf behavior are unchanged.
+Current schema is **6** (adds `boxesOpened`; see [data model](DATA_MODEL.md)).
+
+| Area | Implementation |
+| --- | --- |
+| Static world | `World`, `PlazaFixture`, `TownProps`, `TownLayout`, `TownStyle`; 945 of 1,100 budgeted parts |
+| Plots | `PlotFixture` arch + spawn pad + potted plants, `Awning`, `PlotStyle`; 137 of 150 runtime parts per active plot at six Display slots |
+| Spawning | `PlayerSpawn` (own plot), plaza `SpawnLocation` before assignment |
+| Lighting | `DayNight` (20-minute cycle), `NightLights` (49 static + 1 per active plot, budget 64) |
+| Leaderboard | `Leaderboard`, `LeaderboardStore`, `LeaderboardStats`, `LeaderboardBoard`; `Settings.liveLeaderboard`/`studioLeaderboard` |
+
+Key measurements: grass top Y=0.5 (plot platforms rest on it); path tops Y=0.99 (0.01 under the
+plot floor to avoid overlap z-fighting); plaza 1.01/1.03; Market Street curb 1.02 and cobbles
+1.04 with alternate segments 0.005 higher. The arch sign's underside is 9.5 studs above the plot
+floor and its posts' inner faces are 10.5 studs from the path axis. The Display awning's valance
+bottom is local Y=13.6 (sign top 13.3); the Collection valance clears the header by 0.35 studs.
+
+Automated coverage (`tests/Plots.spec.luau`, `tests/Leaderboard.spec.luau`,
+`tests/BoxesOpened.spec.luau`) asserts the world/plot part budgets; that every part is anchored and
+non-touch; that noncollidable decor is non-queryable; that no plaza prop, lantern or gap/edge prop
+corner enters any path corridor, plot footprint or the street; that the street and hedge rings
+have no gaps; the walls; the arch clearance and post placement; the flush noncolliding spawn pad
+and spawn `CFrame`; the awning sizes and stripes; the night-light budget, switching and release;
+leaderboard write throttling/coalescing/backoff/budget handling and last-good reads; the stat
+formulas; the clock mapping; and the v6 counter's increments and migration.
+
 ## Eight-plot radial world pass
 
 The current world replaces the rectangular 24-plot grid with eight 100-by-96 plots at 45-degree

@@ -14,28 +14,86 @@ release it. Loaded players receive one large open 100-by-96-stud plot, identifie
 becomes available for another player. Assignment, world transforms and carousel position are
 never saved. The experience player cap must match the configured eight-plot limit.
 
-The shared world is one 100-stud-diameter circular ivory plaza and eight direct 16-stud-wide
-paths. Each path has two narrow pale-oak edge strips and two pairs of small warm-light bollards,
-and runs from beneath the plaza perimeter to beneath one centered plot entrance. Paths and plot
-walking surfaces meet at Y=1; the plaza trim/surface sit only 0.01/0.03 studs above that plane to
-prevent coplanar rendering artifacts without creating a traversal obstacle. A visible circular
-warm-neutral foundation is recessed 1.75 studs beneath the walking plane; there is no rectangular
-baseplate. Each plot's local `-Z` entrance faces the plaza and local `+Z` rear Display faces
-outward. A single `CFrame` placement rotates the platform, floor details, entrance, Display,
-Collection, figure anchors and interaction hitboxes together.
+### Blindbox Town (shared world)
 
+The shared world is **Blindbox Town**, a cozy blind-box shopping town built from native Parts
+(no stores, townhouses, shop buildings or box machines). `World`, `PlazaFixture`, `TownProps`,
+`TownLayout` and `TownStyle` build it once per server; one plot-local `CFrame` still places each plot.
+
+- **Ground:** a grass island (top Y=0.5, radius 276) with a stone curb edge and soil skirt.
+  Plot platforms rest on the grass; paths, plaza and street fill down to it.
+- **Plaza (radius 50):** paved surface, oak-stone trim and an inlay ring. In the center is the
+  giant blind-box landmark: a pastel pink 18-by-16-by-18 box with "?" on all four sides on a round
+  wooden base, its ribboned, bowed lid hinged at the back, tipped 24 degrees open and lifted, with
+  a soft inner glow and four neon sparkles. Three benches, four planters and the leaderboard sit
+  at radius 44-45 in the gaps between path mouths; tests assert that every plaza prop stays
+  outside every path's walking corridor. A flush neutral `SpawnLocation` (no force field) sits on
+  open paving beside the leaderboard for players who do not have a plot yet.
+- **Paths:** eight 16-stud paths from the plaza to each plot entrance, 0.01 studs below the plot
+  floor so their overlap never z-fights, each with oak edge strips and four bollards (at radius 62
+  and 116, clear of the street).
+- **Market Street:** a 14-stud cobbled ring centered at radius 99 over a 16-stud stone curb ring,
+  crossing all eight paths. Two lanterns stand in each gap between paths, one on each side of the
+  street (radius 88.5 and 109.5).
+- **Between plots:** each gap has a tree near the street, a flower bed, two framing trees and,
+  alternating, a giant gift-box stack (three oversized ribboned pastel boxes plus one tumbled box)
+  or a statue garden (a giant stylized blind-box figure on a two-tier pedestal).
+- **Edge:** a small gift-box stack behind every plot, a 24-tree line, a continuous 48-segment
+  hedge ring (radius 264) and 32 invisible, 60-stud-tall boundary walls just behind it.
+
+Budgets: at most 1,100 static world parts (945 used, including the eight platforms) and 64
+dusk-to-dawn lights (49 static plus one arch glow per active plot, 57 at eight players).
+
+### Day and night
+
+`DayNight` advances `Lighting.ClockTime` on the server once per second over a 20-minute cycle:
+11 minutes of day, 3 of golden hour into dusk, 5 of night and 2 of dawn. Ambient, outdoor
+ambient, brightness, sun tint and an owned `Atmosphere` interpolate between day, golden-hour,
+dusk, night and dawn looks. At dusk (18.6) and dawn (5.6) `NightLights` switches every registered
+lantern, bollard, giant-box and arch light and swaps lens parts to Neon or back. Switching only
+happens when that state changes; nothing runs per frame.
+
+### Plot platforms and entrances
+
+Each plot's local `-Z` entrance faces the plaza and local `+Z` rear Display faces outward.
 Each logical plot is a gently raised showroom platform: a rounded warm-white base, inset pale-oak
-perimeter trim, quiet pale WoodPlanks walking surface and four thin warm-colored inner-edge
-accents. The accent uses noncolliding SmoothPlastic rather than Neon or per-plot lights. Players
-walk directly onto other players' plots: no permission prompt, browser, visit session or teleport
-is needed. There are no perimeter walls, rails or separate interior spaces.
+perimeter trim, quiet pale WoodPlanks walking surface and four thin inner-edge accents in the plot
+accent color. Static potted plants flank every entrance outside the arch posts. Players walk
+directly onto other players' plots: no permission prompt, browser, visit session or teleport is
+needed. There are no perimeter walls, rails or separate interior spaces.
 
-The front-center entrance uses a shallow 22-by-4.2-stud oak deck and understated framed physical
-plaque reading `<DisplayName>'s Showroom`. The cream SurfaceGui face uses charcoal text and small
-warm-colored cap pieces; it is not a floating billboard and uses no actual light. Entrance pieces
-remain inside the front edge. No props sit beside the left Collection or rear Display, preserving
-their horizontal expansion zones and the large open center/right area for circulation and future
-systems. `PlotFixture` centralizes all platform/entrance dimensions, colors and materials.
+**One accent color.** Every plot uses pastel pink `#F08FB0`, stored once as
+`PlotStyle.DefaultAccent` and always read through `PlotStyle.accent(ownerId)`. A future
+per-player customization system can override that accessor per plot; no customization exists.
+
+An active plot adds a **walk-through entrance arch**: two oak posts at local X=+-11.2 (outside the
+16-stud path), a pink accent beam, two lamp lenses and an oak-framed sign reading
+`<DisplayName>'s Showroom` on both faces. The sign's underside is 9.5 studs above the walking
+surface; the only thing in the doorway is a flush 0.12-stud oak deck. It also adds a flush,
+noncolliding three-ring **spawn pad** on the open right floor (local X=-18, Z=-28) and striped
+**awnings**: one above the Display sign that resizes with Display capacity, and one above the
+COLLECTION header. Neither awning enters the horizontal expansion zones or the open center/right.
+An active plot uses at most 150 runtime parts (137 at six Display slots).
+
+### Spawning
+
+Players spawn on **their own plot**. When a profile loads and a plot is assigned, `PlayerSpawn`
+moves the current character and every later respawn or character reload to that plot's spawn pad,
+facing into the plot. The target is a server-computed `CFrame`; no client position is trusted.
+Before assignment (or if loading fails and the player is kicked), Roblox spawns the character on
+the plaza `SpawnLocation`. Leaving unbinds the spawn handler, destroys the plot and releases its
+light from the budget.
+
+### Global leaderboard
+
+A physical two-sided board between two plaza path mouths shows the top five for one stat at a
+time, cycling every 8 seconds with page dots: **Most Figures** (permanently discovered figures),
+**Top Coins/sec** (current Display rate) and **Most Boxes Opened** (persistent `boxesOpened`).
+It is global across servers through one OrderedDataStore per stat, presentation only, and grants
+no rewards. Scores are written at most once a minute per player (only changed values) and on
+leave; the top five are read every 90 seconds. Request budgets are checked, failures back off,
+and the last good page stays visible. Names come from a cached UserService lookup. The board
+shows "Loading..." placeholders until the first read succeeds.
 
 ## Display
 
@@ -152,7 +210,7 @@ collection styling need separate definitions and authorization.
 ## Scope and placeholder structure
 
 ```text
-Open plot — owner name at front; no enclosing walls
+Open plot — walk-through name arch at front; no enclosing walls
 
                     BACK
            Display [1] [2] [3]
@@ -164,13 +222,15 @@ Open plot — owner name at front; no enclosing walls
    < [ Shelf A ]             walking / future space
    3 x 3 each; faces inward; arrows at installation ends
 
-                    Owner's Plot
-                  shared walkway
+          (o) spawn pad          Owner's Plot
+              [ arch: <Name>'s Showroom ]
+                  path to Market Street
 ```
 
 Display and Collection now follow the supplied collectible-store fixture concepts, pending
 native visual acceptance. Shared ground, existing figure art and Shelf editor remain provisional;
-the layered plot platform and Showroom entrance now follow the supplied floor concept. Pocket Grove
+the layered plot platform follows the supplied floor concept, and the town, arch, awnings, spawn pad
+and leaderboard follow the approved Blindbox Town mockup. Pocket Grove
 remains a collection, not a core world API/theme dependency. No themed
 forest environment, Game Pass kiosk, shelf pricing, final art, extra Display capacity, likes,
 ratings, trading, cross-server travel or free placement is part of this implementation.

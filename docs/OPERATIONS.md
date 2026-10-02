@@ -29,6 +29,20 @@ affects Studio. Studio uses `PocketGrove_Studio_v1`; live servers always use `Po
 To return to preview, clear the attribute and leave the source setting false. A failed persistent
 load never falls back to preview. No game setting or secret needs to be supplied by a client.
 
+## Leaderboard and world in Studio
+
+The global leaderboard uses OrderedDataStores `BlindboxTown_Live_Leaderboard_v1` (live) and
+`BlindboxTown_Studio_Leaderboard_v1` (Studio), one scope per stat (`figures`, `rate`, `boxes`).
+In Studio it writes even during the unsaved preview, but only to the Studio store, so testers can
+see the board fill. Without Studio API access (or in an unpublished local file) every request
+fails: the board keeps showing "Loading..." / "Leaderboard unavailable, retrying" placeholders,
+a single warning is logged and gameplay is unaffected. These stores are a presentation index;
+deleting them only empties the board until players are rewritten (at most once a minute while
+online and on leave). They are never read back into profiles.
+
+The day/night cycle starts at 10:00 on each server and reaches dusk about 8 minutes later. Plaza
+spawn is only used until a player's plot is assigned.
+
 ## Automated verification
 
 Use the unchanged pinned tools and no Wally dependencies:
@@ -118,6 +132,19 @@ Run that script from the client Command Bar on each screen. These engine checks 
 10. **Pacing:** observe returning sessions, weak/common-only luck, duplicates and completion.
     Record time to next box, fourth slot; ensure twelve-figure content is enjoyable
     without adding artificial grind. Hand notes and server Output are sufficient for this build.
+
+11. **Blindbox Town:** spawn on your own plot (spawn pad, facing in), respawn and reset, walk
+    under the arch from the path, cross Market Street and reach the plaza. Walk the hedge to
+    confirm the invisible walls stop you. Check the giant box, board readability on both faces,
+    awnings at Display capacities 3-6, night lights after dusk and their switch-off at dawn.
+    With two or more clients, confirm every arch shows its owner's name and plots release cleanly.
+12. **Global leaderboard:** in a private published test experience with API access, open boxes and
+    place figures on two accounts in different servers; within about 2.5 minutes both should
+    appear on each server's board. Leave and confirm the final score is written. Disable API
+    access and confirm the board stays on its last page or placeholders without errors in play.
+13. **Schema 6 migration:** load a saved v5 test profile; it must keep all progress with
+    `boxesOpened = 0`, then count Buy and Daily boxes only. Confirm a v6 save never loads on an
+    older (v5-only) server build.
 
 ## Persistence guarantees and limits
 

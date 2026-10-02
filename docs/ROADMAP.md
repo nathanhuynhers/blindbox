@@ -20,6 +20,11 @@ Visitors walk directly between plots. Schema v5 migrates legacy placements; comp
 remains but completion rewards are TBD. See [canonical design](PLAYER_PLOTS_AND_SHELVES.md)
 and [implementation and verification](PLOT_SHELF_IMPLEMENTATION.md).
 
+The world is now **Blindbox Town** (plaza giant blind box, Market Street, gap gift-box stacks and
+statue gardens, hedge edge), with walk-through plot arches, awnings, own-plot spawning, a
+server-driven day/night cycle and a presentation-only global leaderboard (schema 6 adds
+`boxesOpened`). The leaderboard grants no rewards. See [canonical design](PLAYER_PLOTS_AND_SHELVES.md).
+
 Remaining gate: native Studio multi-client, input, rendering, persistence and performance
 acceptance. Final art, shelf customization, individual Shelf Unit acquisition/pricing and Display slots 5/6
 acquisition need later authorization. The existing slot-4 Coin unlock remains.
