@@ -1,4 +1,5 @@
 --!strict
+local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -14,8 +15,12 @@ local Storage = require(script.Storage)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
 local PlayerSpawn = require(script.PlayerSpawn)
+local Leaderboard = require(script.Leaderboard)
+local DayNight = require(script.DayNight)
 local world = World.create()
 local productionModels = ModelAssets.publish()
+local dayNight = DayNight.start(Lighting)
+Leaderboard.start(world.board)
 type Session = {
 	transaction: Transactions.Session,
 	plot: PlayerPlot.Plot,
@@ -92,6 +97,8 @@ local function remove(player: Player)
 	if session.spawn then
 		PlayerSpawn.unbind(session.spawn)
 	end
+	-- Queued before the final save yields; the leaderboard flushes it in the background.
+	Leaderboard.final(player.UserId, session.transaction.state)
 	PlayerPlot.destroy(session.plot)
 	PlotSlots.release(plots, player.UserId)
 	closeStorage(session.storage)
@@ -230,10 +237,11 @@ table.insert(
 		end
 		elapsed = 0
 		local now = os.clock()
-		for _, session in sessions do
+		for player, session in sessions do
 			Storage.step(session.storage, now)
 			if session.storage.ready then
 				Rules.settle(session.transaction.state, now)
+				Leaderboard.observe(player.UserId, session.transaction.state, now)
 			end
 		end
 		for player, session in sessions do
@@ -246,11 +254,17 @@ game:BindToClose(function()
 	for _, connection in connections do
 		connection:Disconnect()
 	end
+	DayNight.stop(dayNight)
 	for player in sessions do
 		task.spawn(remove, player)
 	end
 	local deadline = os.clock() + 25
-	while (next(sessions) or next(loading) or closing > 0) and os.clock() < deadline do
+	local flushing = true
+	task.spawn(function()
+		Leaderboard.stop(os.clock() + 20)
+		flushing = false
+	end)
+	while (next(sessions) or next(loading) or closing > 0 or flushing) and os.clock() < deadline do
 		task.wait(0.1)
 	end
 	folder:Destroy()

@@ -12,7 +12,7 @@ out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
     "Rarity": "shared", "UITheme": "client",
-    "PlotFixture": "server", "PlotStyle": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "FigureSlots": "server", "World": "server",
+    "PlotFixture": "server", "PlotStyle": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "CollectionAssets": "client",
     "Types": "shared", "Catalog": "shared", "Economy": "server",
@@ -60,7 +60,7 @@ for name, folder in modules.items():
                 source = source.replace(expression, f"Engine.{dependency}")
     if name == "Scroll":
         source = source.replace("--!strict", "--!strict\nlocal Enum = {AutomaticSize={None=0},ScrollingDirection={Y=1},ScrollBarInset={ScrollBar=1}}\nlocal UDim2 = {fromOffset=function(x,y) return {X={Offset=x},Y={Offset=y}} end}")
-    if name in ("PlotFixture", "CollectionFixture", "DisplayFixture", "PlotGeometry", "PlayerPlot", "World", "FigureSlots", "PlotStyle", "Awning", "NightLights", "TownStyle", "TownLayout", "TownProps", "PlazaFixture", "LeaderboardBoard"):
+    if name in ("PlotFixture", "CollectionFixture", "DisplayFixture", "PlotGeometry", "PlayerPlot", "World", "FigureSlots", "PlotStyle", "Awning", "NightLights", "TownStyle", "TownLayout", "TownProps", "PlazaFixture", "LeaderboardBoard", "DayNight"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./PlotEngine")\nlocal Instance, Vector3, Color3, CFrame, UDim2, workspace = Engine.Instance, Engine.Vector3, Engine.Color3, Engine.CFrame, Engine.UDim2, Engine.workspace\nlocal Enum, Vector2, UDim, warn = Engine.Enum, Engine.Vector2, Engine.UDim, Engine.warn')
         source = source.replace('local FigureModel = require(game:GetService("ReplicatedStorage").Shared.FigureModel)', 'local FigureModel = Engine.FigureModel')
     if name == "CollectionAssets":
@@ -133,6 +133,10 @@ result = subprocess.run([sys.argv[1], str(out / "BlindBox.spec.luau")], cwd=root
 if result.returncode:
     raise SystemExit(result.returncode)
 result = subprocess.run([sys.argv[1], str(out / "Shelves.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
+(out / "Leaderboard.spec.luau").write_text((root / "tests" / "Leaderboard.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "Leaderboard.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
 (out / "BoxesOpened.spec.luau").write_text((root / "tests" / "BoxesOpened.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
