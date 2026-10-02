@@ -1,211 +1,88 @@
 --!strict
--- Read-only: run in Studio's CLIENT Command Bar with Shop open.
+-- Run in the CLIENT Command Bar during Play with the Shop open. Read-only: no purchases.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Assets = require(game:GetService("ReplicatedStorage").Shared.AssetManifest)
 local Box = require(game:GetService("ReplicatedStorage").Shared.BlindBoxModel)
-local Theme = require(Players.LocalPlayer.PlayerScripts.Client.ShopTheme)
-
+local Client = Players.LocalPlayer.PlayerScripts.Client
+local Theme = require(Client.ShopTheme)
+local UI = require(Client.UIState)
 assert(RunService:IsStudio(), "Studio-only Shop check")
 local gui = Players.LocalPlayer.PlayerGui:WaitForChild("PocketGrove") :: ScreenGui
-local shop = gui:WaitForChild("SafeArea")
-	:WaitForChild("Screens")
-	:WaitForChild("ShopPresentation")
-	:WaitForChild("Shop") :: Frame
-assert(shop.Visible, "Open Shop before running this check")
-RunService.Heartbeat:Wait()
-RunService.Heartbeat:Wait()
-
-local content = shop:WaitForChild("ShopContent") :: ScrollingFrame
-local carousel = content
-	:WaitForChild("CollectionCarouselSection")
-	:WaitForChild("CollectionCarousel") :: ScrollingFrame
-local cards = 0
-for _, collection in Catalog.collections do
-	local card = carousel:WaitForChild("CollectionCard_" .. collection.id) :: TextButton
-	assert(card.Visible, "Every catalog collection needs one carousel card")
-	cards += 1
+local host = gui:WaitForChild("SafeArea"):WaitForChild("Stage"):WaitForChild("Screens"):WaitForChild("ShopPresentation") :: Frame
+assert(host.Visible, "Open the Shop first")
+local shop = host:WaitForChild("Shop") :: Frame
+local function find(name: string): Instance
+	return assert(shop:FindFirstChild(name, true), "Missing " .. name)
 end
-assert(cards == #Catalog.collections, "Carousel must derive its count from Catalog.collections")
-
 local selected = shop:GetAttribute("SelectedCollection")
-assert(
-	typeof(selected) == "string" and Catalog.collectionIds[selected],
-	"Selected collection invalid"
-)
-local theme = Theme.get(selected :: string)
-local details = content:WaitForChild("ProductDetails") :: Frame
-local progressGroup = details:WaitForChild("DiscoveryProgress") :: Frame
-local progressLabel = progressGroup:WaitForChild("Discovery") :: TextLabel
-local progressTrack = progressGroup:WaitForChild("DiscoveryTrack") :: Frame
-assert(progressLabel.Text ~= "", "Discovery progress label missing")
-assert(
-	progressTrack.Position.Y.Offset
-			- (progressLabel.Position.Y.Offset + progressLabel.Size.Y.Offset)
-		<= 8,
-	"Discovery label and progress bar must read as one compact component"
-)
-local emblem = details:WaitForChild("CollectionEmblem")
-local emblemArt = emblem:WaitForChild("Artwork") :: ImageLabel
-assert(emblemArt.Image == Assets.resolve(theme.emblemKey), "Shop emblem semantic asset mismatch")
-assert(emblemArt.ScaleType == Enum.ScaleType.Fit, "Shop emblem must preserve aspect ratio")
-assert(
-	emblemArt.Visible ~= (emblem:WaitForChild("Native") :: Frame).Visible,
-	"Emblem fallback must be exclusive"
-)
-
-local stage = content:WaitForChild("ProductStage") :: Frame
-local preview = stage:WaitForChild("BlindBoxPreview") :: Frame
+assert(typeof(selected) == "string" and Catalog.collectionIds[selected], "No selected collection")
+local collectionName = ""
+for _, collection in Catalog.collections do
+	local item = find("Collection_" .. collection.id) :: TextButton
+	assert(item:GetAttribute("Selected") == (collection.id == selected), "List selection is stale")
+	local emblem = item:FindFirstChild("Emblem", true) :: ImageLabel
+	local mono = item:FindFirstChild("Monogram", true) :: TextLabel
+	assert(emblem.Visible ~= mono.Visible, "Emblem art and monogram must be exclusive")
+	if collection.id == selected then
+		collectionName = collection.name
+	end
+end
+assert((find("BoxTitle") :: TextLabel).Text == collectionName .. " box", "Box title is stale")
+local buy = find("BuyBox") :: TextButton
+local price = find("PriceGroup")
+assert(price:FindFirstChild("CoinsIcon"), "Coins glyph must accompany the price")
+local detail = buy:FindFirstChild("Detail", true) :: TextLabel
+if buy:GetAttribute("Enabled") == false and detail.Visible then
+	assert(string.find(detail.Text, "^Need "), "Disabled buy must explain the shortfall")
+end
+-- What's inside: one tile per collection member.
+local members = UI.members(selected)
+local tiles = 0
+local contents = find("Contents")
+for _, child in contents:GetChildren() do
+	if child:IsA("TextButton") and child.Visible then
+		tiles += 1
+		local id = child:GetAttribute("FigureId")
+		assert(typeof(id) == "string" and table.find(members, id), "Tile from another collection")
+	end
+end
+assert(tiles == #members, "What's inside shows every figure exactly once")
+local total = 0
+for _, child in contents:GetChildren() do
+	if string.match(child.Name, "^OddsRow%d$") and (child :: GuiObject).Visible then
+		local text = (child:FindFirstChild("Chance") :: TextLabel).Text
+		total += tonumber(string.match(text, "^([%d%.]+)%%")) or 0
+	end
+end
+assert(math.abs(total - 100) <= 0.6, "Drop odds rows should total ~100%: " .. total)
+-- 3D box preview (kept BlindBoxPreview).
+local preview = find("BlindBoxPreview") :: Frame
 local viewport = preview:WaitForChild("ProductViewport") :: ViewportFrame
 local fallback = preview:WaitForChild("Fallback") :: Frame
 local timeout = os.clock() + 35
 while preview:GetAttribute("PreviewStatus") == "Loading" and os.clock() < timeout do
 	task.wait(0.25)
 end
-local templates = game:GetService("ReplicatedStorage"):FindFirstChild("ProductionModels")
-print(
-	"Model status:",
-	if templates then templates:GetAttribute("BlindBoxBaseStatus") else "Missing",
-	"Preview:",
-	preview:GetAttribute("PreviewStatus"),
-	preview:GetAttribute("PreviewReason")
-)
-if templates then
-	for _, child in templates:GetDescendants() do
-		print(child:GetFullName(), child.ClassName)
-	end
-end
-assert(
-	preview:GetAttribute("PreviewStatus") == "Ready",
-	"Production preview failed: " .. tostring(preview:GetAttribute("PreviewReason"))
-)
-assert(
-	viewport.Visible ~= fallback.Visible,
-	"3D production model and neutral fallback must be exclusive"
-)
+print("Preview:", preview:GetAttribute("PreviewStatus"), preview:GetAttribute("PreviewReason"))
+assert(preview:GetAttribute("PreviewStatus") == "Ready", "Production preview failed")
+assert(viewport.Visible ~= fallback.Visible, "3D model and fallback must be exclusive")
 if viewport.Visible then
 	local product = viewport:WaitForChild("Scene"):WaitForChild("ProductModel") :: Model
 	local bound, reason = Box.surfaces(product)
 	assert(bound, reason)
 	assert(product:GetAttribute("CollectionId") == selected, "Product theme is stale")
-	for _, name in
-		{
-			"BoxBody",
-			"FrontPatternPanel",
-			"SidePatternPanel",
-			"TopPatternPanel",
-			"EmblemBadge",
-			"CollectionNamePlate",
-		}
-	do
-		assert(product:FindFirstChild(name, true), "3D product is missing semantic part " .. name)
-	end
-	for _, name in { "FrontPatternPanel", "SidePatternPanel", "TopPatternPanel" } do
-		for _, surface in bound[name] do
-			local pattern = surface:FindFirstChild("CollectionPattern") :: Texture?
-			assert(
-				pattern and pattern.Texture == Assets.resolve(theme.patternKey),
-				"3D pattern mismatch"
-			)
-		end
-	end
-	local emblemFound = product:FindFirstChild("CollectionEmblem", true)
-	assert(emblemFound and emblemFound:IsA("Decal"), "Viewport-compatible emblem missing")
-	assert((emblemFound :: Decal).Texture == Assets.resolve(theme.emblemKey), "3D emblem mismatch")
-	local title = preview:WaitForChild("ProjectedCollectionName") :: TextLabel
-	assert(title.Visible and title.Text ~= "", "Projected plate name missing")
-	for _, child in product:GetDescendants() do
-		assert(not child:IsA("SurfaceGui"), "Unsupported viewport branding surface")
-	end
+	local theme = Theme.get(selected)
+	local emblem = product:FindFirstChild("CollectionEmblem", true)
+	assert(emblem and emblem:IsA("Decal"), "Viewport-compatible emblem missing")
+	assert((emblem :: Decal).Texture == Assets.resolve(theme.emblemKey), "3D emblem mismatch")
 	local right, up, front = Box.axes(bound)
 	local camera = viewport.CurrentCamera :: Camera
-	local bounds = product:GetBoundingBox()
-	local direction = (camera.CFrame.Position - bounds.Position).Unit
+	local direction = (camera.CFrame.Position - product:GetBoundingBox().Position).Unit
 	assert(
 		direction:Dot(right) > 0 and direction:Dot(up) > 0 and direction:Dot(front) > 0,
 		"Camera must show front, right and top"
 	)
 end
-
-local possible =
-	details:WaitForChild("PossibleFigures"):WaitForChild("FigureStrip") :: ScrollingFrame
-local visibleFigures = 0
-local rowY: number? = nil
-for _, child in possible:GetChildren() do
-	if child:IsA("Frame") and Catalog.byId[child.Name] and child.Visible then
-		visibleFigures += 1
-		if details.AbsoluteSize.X >= 480 then
-			assert(
-				math.abs(child.AbsolutePosition.Y - (rowY or child.AbsolutePosition.Y)) < 1,
-				"Figures must share one desktop row"
-			)
-			rowY = child.AbsolutePosition.Y
-			assert(
-				child.AbsolutePosition.X >= possible.AbsolutePosition.X - 1,
-				"Figure clipped at left"
-			)
-			assert(
-				child.AbsolutePosition.X + child.AbsoluteSize.X
-					<= possible.AbsolutePosition.X + possible.AbsoluteWindowSize.X + 1,
-				"Figure clipped at right"
-			)
-		end
-		assert(
-			Catalog.byId[child.Name].collection == selected,
-			"Possible figure crossed collections"
-		)
-	end
-end
-local expectedFigures = 0
-for _, figure in Catalog.figures do
-	if figure.collection == selected then
-		expectedFigures += 1
-	end
-end
-assert(visibleFigures == expectedFigures, "Every selected catalog figure must render")
-local purchase = details:WaitForChild("Purchase") :: Frame
-assert(
-	purchase.Position.Y.Offset + purchase.AbsoluteSize.Y <= details.AbsoluteSize.Y + 1,
-	"Purchase exceeds details surface"
-)
-for _, name in { "PedestalBase", "PedestalTop" } do
-	assert(stage:FindFirstChild(name), "Neutral pedestal layer missing")
-end
-assert(
-	(details:WaitForChild("Purchase"):WaitForChild("BuyBox") :: TextButton).Visible,
-	"Buy action missing"
-)
-local priceGroup = purchase:WaitForChild("PriceGroup") :: Frame
-assert(priceGroup:FindFirstChild("CoinsIcon"), "Existing Coins icon must accompany price")
-local daily = purchase:WaitForChild("DailyBox") :: TextButton
-assert(
-	daily:GetAttribute("Surface") ~= nil and daily:GetAttribute("RestingStrokeTransparency") == 0.55,
-	"Daily claim must retain its secondary button treatment"
-)
-local blur = game:GetService("Lighting"):FindFirstChild("InterfaceBackgroundBlur")
-assert(
-	blur and blur:IsA("BlurEffect") and blur.Enabled and blur.Size == 8,
-	"Shop world blur missing"
-)
-local safeArea = gui:WaitForChild("SafeArea")
-local backdrop = safeArea:WaitForChild("Backdrop") :: TextButton
-assert(backdrop.Visible and backdrop.BackgroundTransparency == 0.62, "Shop world dimming missing")
-
-for _, collection in Catalog.collections do
-	local card = carousel:WaitForChild("CollectionCard_" .. collection.id) :: TextButton
-	assert(
-		card:GetAttribute("Selected") == (collection.id == selected),
-		"Collection card selected state is stale"
-	)
-	local collectionTheme = Theme.get(collection.id)
-	assert(
-		collectionTheme.collectionId == collection.id
-			and Assets.resolve(collectionTheme.emblemKey) ~= ""
-			and Assets.resolve(collectionTheme.patternKey) ~= "",
-		"Production collection presentation is incomplete"
-	)
-end
-print(
-	"PASS: current collection skin, both collection definitions, compact progress, price icon, daily action and world treatment are wired. Repeat after switching collections."
-)
+print("PASS: Shop list, box, price, contents, odds and 3D preview for " .. selected)

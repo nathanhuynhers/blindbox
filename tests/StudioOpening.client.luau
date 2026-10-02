@@ -303,11 +303,12 @@ local function compare(tiers: { Rarity.Id })
 						assert(os.clock() < deadline, "Timed out waiting for Open/Continue")
 						local opening = playerGui:FindFirstChild("BlindboxOpening")
 						if opening and opening:GetAttribute("Phase") == "Result" then
-							local label = opening:FindFirstChild("RarityAndQuantity", true)
+							local pill = opening:FindFirstChild("RarityPill", true)
+							local label = if pill then pill:FindFirstChild("Text") else nil
 							assert(
 								label
 									and label:IsA("TextLabel")
-									and string.find(label.Text, rarity, 1, true),
+									and label.Text == string.upper(rarity),
 								"Preview result rarity mismatch"
 							)
 							seenResult = true

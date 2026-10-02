@@ -1,84 +1,68 @@
 --!strict
 -- Read-only CLIENT Command Bar check during Studio Play; no requests or fixture grants.
+-- Open Display, Goals or Shelves first; the script checks whichever is visible.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
 local DisplayConfig = require(Shared:WaitForChild("DisplayConfig"))
 local ShelfConfig = require(Shared:WaitForChild("ShelfConfig"))
 assert(RunService:IsStudio(), "Run only in Studio")
-local player = Players.LocalPlayer
-assert(player, "Use the client Command Bar")
-local gui = player.PlayerGui:WaitForChild("PocketGrove")
-local screens = gui:WaitForChild("SafeArea"):WaitForChild("Screens")
-RunService.Heartbeat:Wait()
+local gui = Players.LocalPlayer.PlayerGui:WaitForChild("PocketGrove")
+local screens = gui:WaitForChild("SafeArea"):WaitForChild("Stage"):WaitForChild("Screens")
 RunService.Heartbeat:Wait()
 local function find(parent: Instance, name: string): Instance
-	local result = parent:FindFirstChild(name, true)
-	assert(result, "Missing " .. name)
-	return result
+	return assert(parent:FindFirstChild(name, true), "Missing " .. name)
 end
 local function portrait(card: Instance, occupied: boolean)
-	local preview = find(card, "Portrait")
-	assert(preview:IsA("ViewportFrame"), "Portrait must be a ViewportFrame")
-	assert(preview.AbsoluteSize.X > 30 and preview.AbsoluteSize.Y > 30, "Preview collapsed")
-	assert(preview.CurrentCamera, "Preview camera missing")
-	local model = preview:FindFirstChildOfClass("Model")
-	assert((model ~= nil) == occupied, "Preview model disagrees with figure identity")
+	local preview = card:FindFirstChild("Portrait", true)
+	assert(preview, "Portrait slot missing")
+	local viewport = if preview:IsA("ViewportFrame") then preview else preview:FindFirstChildOfClass("ViewportFrame")
+	assert(viewport, "Portrait must hold a ViewportFrame")
+	local model = viewport:FindFirstChildOfClass("Model")
+	assert((model ~= nil) == occupied, "Preview model disagrees with figure identity: " .. card.Name)
 end
 local checked = 0
-for _, name in { "Display", "Shelves", "Goals" } do
-	local host = screens:WaitForChild(name .. "Presentation")
-	if host:IsA("Frame") and host.Visible then
+for _, name in { "Display", "Goals", "Shelves" } do
+	local host = screens:WaitForChild(name .. "Presentation") :: Frame
+	if host.Visible then
+		checked += 1
 		local root = host:WaitForChild(name)
-		local scroll = find(root, "ContentScroll")
-		assert(scroll:IsA("ScrollingFrame"), "Measured scroll missing")
-		local content = find(scroll, "Content")
-		assert(content:IsA("Frame"), "Content root missing")
-		assert(scroll.CanvasSize.Y.Offset >= content.Size.Y.Offset + 20, "Canvas truncates content")
-		assert(content.AbsoluteSize.X <= scroll.AbsoluteSize.X - 16, "Horizontal content overflow")
 		if name == "Display" then
 			for slot = 1, DisplayConfig.maxSlots do
 				local card = find(root, "DisplaySlot" .. slot)
-				assert(card:GetAttribute("Slot") == slot, "Snapshot has not populated Display")
-				portrait(
-					card,
-					card:GetAttribute("FigureId") ~= "" and not card:GetAttribute("Locked")
-				)
-			end
-		elseif name == "Shelves" then
-			assert(
-				typeof(root:GetAttribute("SelectedShelfId")) == "string",
-				"Shelf identity missing"
-			)
-			for _, slotId in ShelfConfig.slots() do
-				local card = find(root, slotId)
-				assert(card:GetAttribute("ShelfSlotId") == slotId, "Shelf position mapping differs")
-				portrait(card, card:GetAttribute("FigureId") ~= nil)
-			end
-			local count = 0
-			for _, item in root:GetDescendants() do
-				if item:IsA("ViewportFrame") then
-					count += 1
+				local locked = card:GetAttribute("Locked") == true
+				portrait(card, card:GetAttribute("FigureId") ~= "" and not locked)
+				if slot > 4 then
+					assert(locked, "Slots 5-6 stay Coming later")
+					assert(not (find(card, "Unlock") :: GuiObject).Visible, "No unlock for 5-6")
 				end
 			end
-			assert(count == #ShelfConfig.slots() + 6, "Shelf preview pool unexpectedly grew")
+			local income = find(root, "Income"):FindFirstChild("Text") :: TextLabel
+			assert(string.match(income.Text, "^%+.+ coins/s$"), "Header income chip")
+			assert(find(root, "SetBonus"), "Set-bonus banner")
+		elseif name == "Goals" then
+			local countdown = find(root, "Countdown"):FindFirstChild("Text") :: TextLabel
+			assert(
+				string.match(countdown.Text, "^New goals in %d+h %d+m$")
+					or string.match(countdown.Text, "^New goals in %d+m$")
+					or countdown.Text == "New goals in any moment",
+				"Countdown from nextDay: " .. countdown.Text
+			)
+			print("Countdown now: " .. countdown.Text .. " (should change once a minute while open)")
+			assert(find(root, "ClaimGoal") and find(root, "OpenFreeBox"), "Goal and free box actions")
 		else
-			local card = find(root, "DailyDisplayGoal")
-			local state = card:GetAttribute("GoalState")
-			assert(
-				state == "progress" or state == "ready" or state == "claimed",
-				"Goal state missing"
-			)
-			local claim = find(card, "Claim reward")
-			assert(
-				claim:IsA("GuiButton") and claim.Visible == (state == "ready"),
-				"Claim visibility differs from goal state"
-			)
+			assert(typeof(root:GetAttribute("SelectedShelfId")) == "string", "Shelf selected")
+			assert(ShelfConfig.visible(tostring(root:GetAttribute("SelectedSlotId"))), "Spot selected")
+			for index = 1, #ShelfConfig.slots() do
+				local spot = find(root, "Spot" .. index)
+				assert(ShelfConfig.visible(tostring(spot:GetAttribute("ShelfSlotId"))), "Spot id")
+				local viewport = spot:FindFirstChildOfClass("ViewportFrame")
+				assert(viewport, "Spot portrait")
+				local add = spot:FindFirstChild("Add") :: TextLabel
+				assert((viewport:FindFirstChildOfClass("Model") ~= nil) ~= add.Visible, "Spot shows a figure or + Add")
+			end
 		end
-		checked += 1
 	end
 end
-assert(checked == 1, "Open Display, Shelves or Goals before running")
-print(
-	"PASS: active system-screen structure, canvas and preview models. Visual/input acceptance still requires manual review."
-)
+assert(checked == 1, "Open exactly one of Display, Goals or Shelves first")
+print("PASS: system screen hierarchy, portraits and state")

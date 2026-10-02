@@ -1,0 +1,341 @@
+--!nocheck
+-- Real Interface, screens and components on the UIEngine double: routing, sends, pending
+-- locks, countdown timer lifetime, instance reuse and teardown. No rendering is simulated.
+local Engine = require("./UIEngine")
+local Interface = require("./Interface")
+local RevealCard = require("./RevealCard")
+local Scope = require("./UIScope")
+local UI = require("./UIState")
+local Rules = require("./Rules")
+local Economy = require("./Economy")
+local Catalog = require("./Catalog")
+local checks = 0
+local function check(condition: boolean, message: string)
+	checks += 1
+	assert(condition, message)
+end
+local function snapshot()
+	return {
+		shelves = {
+			ownedCount = 3,
+			canNavigate = false,
+			carouselRevision = 4,
+			visible = {
+				{ id = "shelf:1", index = 1, placements = {} },
+				{ id = "shelf:2", index = 2, placements = {} },
+				{ id = "shelf:3", index = 3, placements = {} },
+			},
+		},
+		coins = 450,
+		scrap = 0,
+		owned = {},
+		discovered = {},
+		slots = { "", "", "" },
+		revision = 0,
+		sequence = 1,
+		rate = 0,
+		step = 1,
+		rates = Rules.rates,
+		odds = Rules.odds,
+		price = Economy.price,
+		redeemCost = Economy.redeemCost,
+		unlocked = 3,
+		expansionCost = Economy.expansionCost,
+		dailyReady = true,
+		goalProgress = 0,
+		goalClaimed = false,
+		goalReward = Economy.goalReward,
+		nextDay = 86400 * 2,
+		saveStatus = "Ready",
+		ready = true,
+		bonus = 0,
+	}
+end
+local requests = {}
+local ui = Interface.create(function(action, figure, slot, choice)
+	table.insert(requests, { action = action, figure = figure, slot = slot, choice = choice })
+end)
+local gui = Engine.playerGui:FindFirstChild("PocketGrove")
+check(gui ~= nil and gui.ResetOnSpawn == false, "one persistent ScreenGui")
+local state = snapshot()
+ui.update(state)
+local function last()
+	return requests[#requests]
+end
+local function find(name)
+	return Engine.find(gui, name)
+end
+local function host(id)
+	return find(id .. "Presentation")
+end
+local function within(root, name)
+	return Engine.find(root, name)
+end
+
+-- HUD and dock
+check(within(find("Hud"), "Balance").Text == "450", "HUD shows the snapshot balance")
+check(within(find("Hud"), "Rate"):FindFirstChild("Text").Text == "+0/s", "HUD income chip")
+check(find("Hud"):FindFirstChild("Scrap", true) == nil, "no Scrap pill")
+for _, id in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
+	check(find("Dock" .. id) ~= nil, "dock tile " .. id)
+end
+local displayBadge = within(find("DockDisplay"), "Badge")
+check(displayBadge.Visible and within(displayBadge, "Text").Text == "3 empty", "Display badge")
+check(within(find("DockShop"), "Badge").Visible, "Shop FREE badge while the daily box is ready")
+check(not within(find("DockGoals"), "Badge").Visible, "no Goals badge without a claim")
+check(not find("Backdrop").Visible, "world is not dimmed with no screen open")
+
+-- Settings popover holds Motion.
+Engine.click(find("SettingsButton"))
+check(find("Settings").Visible, "gear opens settings")
+Engine.click(find("MotionReduced"))
+check(find("MotionReduced"):GetAttribute("Selected") == true, "Motion preference toggles")
+Engine.click(find("SettingsCatcher"))
+check(not find("Settings").Visible, "outside tap closes settings")
+Engine.click(find("SettingsButton"))
+Engine.click(find("MotionFull"))
+Engine.click(find("SettingsCatcher"))
+
+-- Shop
+Engine.click(find("DockShop"))
+check(host("Shop").Visible and find("Backdrop").Visible, "dock opens Shop over the dim")
+check(find("DockShop"):GetAttribute("Active") == true, "active dock tile")
+check(find("Dock").Visible, "dock stays visible on desktop while a screen is open")
+local shop = host("Shop")
+check(within(shop, "BoxTitle").Text == "Pocket Grove box", "first collection selected")
+check(within(shop, "Discovery").Text == "0 of 6 found · 6 left to discover", "box progress")
+check(within(within(shop, "BuyBox"), "Price").Text == "150", "price from UIState")
+Engine.click(within(shop, "Collection_echo"))
+check(within(shop, "BoxTitle").Text == "Tender Echoes box", "list selects a collection")
+Engine.click(within(shop, "BuyBox"))
+check(last().action == "Buy" and last().choice == "echo", "Open 1 box buys the selected collection")
+check(within(shop, "DailyBox").Visible, "free box offered when ready")
+Engine.click(within(shop, "DailyBox"))
+check(last().action == "Daily" and last().choice == "echo", "free box claims the selected collection")
+local rows = 0
+for _, child in shop:GetDescendants() do
+	if string.match(child.Name, "^OddsRow%d$") and child.Visible then
+		rows += 1
+	end
+end
+check(rows == #UI.rarityOdds(state, "echo"), "one odds row per rarity present")
+state = snapshot()
+state.coins = 20
+state.dailyReady = false
+state.sequence += 1
+ui.update(state)
+check(not within(shop, "DailyBox").Visible, "free box hidden once claimed")
+local before = #requests
+Engine.click(within(shop, "BuyBox"))
+check(#requests == before, "unaffordable box cannot be bought")
+check(within(within(shop, "BuyBox"), "Detail").Text == "Need 130 more", "shortfall explains why")
+state.coins = 450
+ui.update(state)
+ui.pending(true)
+Engine.click(within(shop, "BuyBox"))
+check(#requests == before, "pending request disables mutations")
+ui.pending(false)
+
+-- Collection
+Engine.click(find("DockCollection"))
+local collection = host("Collection")
+local collectionRoot = collection:FindFirstChild("Collection")
+check(collection.Visible, "Collection opened")
+check(not host("Shop").Visible, "one screen at a time")
+check(collection:FindFirstChild("PhysicalBook", true) == nil, "the physical book is gone")
+check(collection:FindFirstChild("Recycle", true) == nil, "no Recycle control")
+check(within(collection, "FigureName").Text == "???", "undiscovered detail is anonymous")
+check(within(collection, "FigureAction"):FindFirstChild("Label", true).Text == "Find it in Pocket Grove boxes", "missing figure routes to Shop")
+Engine.click(within(collection, "FigureAction"))
+check(host("Shop").Visible and within(shop, "BoxTitle").Text == "Pocket Grove box", "Find it opens that Shop box")
+state = snapshot()
+state.owned["grove.star"] = 2
+state.discovered["grove.star"] = true
+state.owned["grove.moth"] = 1
+state.discovered["grove.moth"] = true
+state.sequence += 1
+ui.update(state)
+Engine.click(find("DockCollection"))
+Engine.click(within(collection, "Filter_found"))
+check(collectionRoot:GetAttribute("Filter") == "found", "Found filter")
+check(collectionRoot:GetAttribute("FigureId") == "grove.moth", "first found figure selected")
+Engine.click(within(collection, "grove.star"))
+check(collectionRoot:GetAttribute("FigureId") == "grove.star", "card selects its figure")
+check(within(within(collection, "grove.star"), "Owned").Visible, "owned count badge for duplicates")
+Engine.click(within(collection, "FigureAction"))
+check(last().action == "Place" and last().figure == "grove.star" and last().slot == 1, "Put on Display uses the first empty slot")
+
+-- Display
+state.slots = { "grove.star", "", "" }
+state.rate = 7
+state.sequence += 1
+ui.update(state)
+Engine.click(find("DockDisplay"))
+local display = host("Display")
+local displayRoot = display:FindFirstChild("Display")
+check(within(display, "Income"):FindFirstChild("Text").Text == "+7 coins/s", "header income chip")
+check(within(within(collection, "grove.star"), "OnDisplay") ~= nil, "ON DISPLAY tag exists")
+Engine.click(within(display, "DisplaySlot2"))
+check(displayRoot:GetAttribute("Target") == 2, "tapping a slot opens the picker")
+local picker = within(display, "Picker")
+check(within(picker, "Title").Text == "Choose a figure for slot 2", "picker title")
+local choices = within(picker, "Choices")
+local shown = {}
+for _, child in choices:GetChildren() do
+	if child:IsA("TextButton") and child.Visible then
+		table.insert(shown, child)
+	end
+end
+check(#shown == 1 and shown[1].Name == "grove.moth", "picker lists owned figures not already displayed")
+check(within(shown[1], "Best").Visible, "top pick tagged BEST")
+Engine.click(shown[1])
+check(last().action == "Place" and last().figure == "grove.moth" and last().slot == 2, "pick places into the target slot")
+check(displayRoot:GetAttribute("Target") == nil, "picker closes after placing")
+Engine.click(within(display, "DisplaySlot1"))
+Engine.click(within(picker, "Remove"))
+check(last().action == "Remove" and last().slot == 1, "filled slot offers Remove")
+Engine.click(within(display, "DisplaySlot3"))
+Engine.click(within(picker, "Browse"))
+check(collection.Visible, "Browse Collection opens Collection for the slot")
+check(within(collection, "FigureAction"):FindFirstChild("Label", true).Text ~= "", "slot route keeps an action")
+Engine.click(find("DockDisplay"))
+check(displayRoot:GetAttribute("Target") == nil, "dock navigation clears the picker")
+state.coins = 5000
+state.sequence += 1
+ui.update(state)
+check(within(display, "DisplaySlot4"):FindFirstChild("Unlock").Visible, "slot 4 shows its unlock price")
+check(not within(display, "DisplaySlot5"):FindFirstChild("Unlock").Visible, "slot 5 is Coming later")
+Engine.click(within(within(display, "DisplaySlot4"), "Unlock"))
+check(last().action == "Expand", "unlock sends Expand")
+Engine.click(within(display, "DisplaySlot2"))
+check(displayRoot:GetAttribute("Target") == 2, "target set before back")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonB })
+check(display.Visible and displayRoot:GetAttribute("Target") == nil, "B closes the picker first")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonB })
+check(not display.Visible and not find("Backdrop").Visible, "B then closes the screen")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonY })
+check(display.Visible, "Y reopens the last screen")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonR1 })
+check(host("Shop").Visible, "R1 cycles to the next screen")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonL1 })
+check(display.Visible, "L1 cycles back")
+
+-- Goals: countdown from nextDay, at most once a minute, only while visible.
+Engine.now = 86400 * 2 - (5 * 3600 + 11 * 60 + 30)
+local timersBefore = Engine.pending()
+Engine.click(find("DockGoals"))
+local goals = host("Goals")
+local countdown = within(within(goals, "Countdown"), "Text")
+check(countdown.Text == "New goals in 5h 12m", "countdown from the server's nextDay")
+check(Engine.pending() == timersBefore + 1, "one countdown timer while visible")
+Engine.advance(30.1)
+check(countdown.Text == "New goals in 5h 11m", "countdown advances on the minute")
+Engine.advance(59)
+check(countdown.Text == "New goals in 5h 11m", "no update before the next minute")
+Engine.advance(1.1)
+check(countdown.Text == "New goals in 5h 10m", "updates once per minute")
+check(not within(goals, "ClaimGoal"):GetAttribute("Enabled"), "goal not claimable yet")
+state.goalProgress = 3
+state.sequence += 1
+ui.update(state)
+check(within(find("DockGoals"), "Badge").Visible, "Goals badge when the reward is claimable")
+Engine.click(within(goals, "ClaimGoal"))
+check(last().action == "Goal", "Claim sends Goal")
+state.dailyReady = true
+ui.update(state)
+Engine.click(within(goals, "Daily_tide"))
+Engine.click(within(goals, "OpenFreeBox"))
+check(last().action == "Daily" and last().choice == "tide", "free box of the chosen collection")
+Engine.click(within(goals, "Progress_star"))
+check(collection.Visible and collectionRoot:GetAttribute("CollectionId") == "star", "progress rows open Collection")
+check(Engine.pending() == timersBefore, "countdown timer stops when Goals is hidden")
+
+-- Shelves
+Engine.click(find("DockShelves"))
+local shelves = host("Shelves")
+local shelvesRoot = shelves:FindFirstChild("Shelves")
+check(shelvesRoot:GetAttribute("SelectedShelfId") == "shelf:1", "first visible shelf selected")
+Engine.click(within(shelves, "Spot5"))
+check(shelvesRoot:GetAttribute("SelectedSlotId") == "row:2/slot:2", "spot selection")
+Engine.click(within(within(shelves, "Figures"), "grove.star"))
+check(
+	last().action == "ShelfPlace" and last().figure == "grove.star" and last().slot == 5 and last().choice == "shelf:1",
+	"placing on a shelf sends the spot and shelf"
+)
+check(not within(shelves, "PreviousShelves"):GetAttribute("Enabled"), "prev disabled with exactly three shelves")
+state.shelves.visible[1].placements["row:2/slot:2"] = "grove.star"
+state.sequence += 1
+ui.update(state)
+Engine.click(within(shelves, "ClearSpot"))
+check(last().action == "ShelfRemove" and last().slot == 5, "Clear spot")
+
+-- Never Scrap, never stale actions.
+for _, request in requests do
+	check(request.action ~= "Recycle" and request.action ~= "Redeem", "client never sends Recycle/Redeem")
+end
+
+-- Instance reuse: repeated switching and snapshots create nothing new.
+local function cycle()
+	for _, id in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
+		Engine.click(find("Dock" .. id))
+		state.sequence += 1
+		ui.update(state)
+	end
+	Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonB })
+end
+cycle()
+local count, connections = Engine.alive(gui), Engine.connections
+for _ = 1, 25 do
+	cycle()
+end
+check(Engine.alive(gui) == count, "no instance growth across repeated screen switching")
+check(Engine.connections == connections, "no connection growth across repeated screen switching")
+
+-- Phone landscape: sheet, dock hidden while open, coins in the sheet header.
+Engine.screen.X, Engine.screen.Y = 844, 390
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+Engine.click(find("DockShop"))
+check(not find("Dock").Visible, "phone hides the dock while a sheet is open")
+check(within(shop, "Coins").Visible, "phone sheet header shows coins")
+check(not find("Coins").Visible or find("Coins").Parent ~= find("Hud"), "HUD coins hide under the sheet")
+Engine.click(within(shop, "Close"))
+check(find("Dock").Visible and not shop.Visible, "Close restores the dock")
+Engine.screen.X, Engine.screen.Y = 1280, 720
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+
+-- Reveal card
+local scope = Scope.create()
+local root = Engine.Instance.new("Frame")
+local reveal = snapshot()
+reveal.owned["echo.feather-hush"] = 1
+reveal.discovered["echo.feather-hush"] = true
+local card = RevealCard.create(root, scope, "echo.feather-hush", true, 1, function()
+	return false
+end)
+card.set(UI.reveal(reveal, "echo.feather-hush", true, 1))
+check(within(root, "NewBadge").Visible, "NEW only for a first discovery")
+check(card.choices.display.Visible and card.first() == card.choices.display, "Put on Display leads")
+check(within(card.choices.display, "Detail").Text == "You have 3 empty slots · +12/s", "slot detail")
+reveal.slots = { "grove.star", "grove.moth", "tide.ray" }
+reveal.owned["grove.star"], reveal.owned["grove.moth"], reveal.owned["tide.ray"] = 1, 1, 1
+reveal.coins = 0
+card.set(UI.reveal(reveal, "echo.feather-hush", true, 1))
+check(within(card.choices.display, "Label").Text == "Swap for Moon Moth", "swap replaces the lowest earner")
+check(card.choices.another:GetAttribute("Enabled") == false, "Open another disabled when unaffordable")
+check(within(card.choices.another, "Detail").Text == "Need 150 more", "shortfall shown")
+check(card.first() == card.choices.display, "gamepad starts on the swap")
+reveal.owned["echo.feather-hush"] = 2
+local duplicate = RevealCard.create(root, scope, "echo.feather-hush", false, 2, function()
+	return false
+end)
+duplicate.set(nil)
+check(within(duplicate.root, "Owned").Visible == true, "duplicate shows owned count")
+check(not duplicate.choices.display.Visible and not duplicate.choices.another.Visible, "no model: Continue only")
+scope.destroy()
+
+-- Teardown releases every connection, timer and instance.
+ui.destroy()
+check(Engine.playerGui:FindFirstChild("PocketGrove") == nil, "UI destroyed")
+check(Engine.bound.CollectibleMenu == nil, "gamepad binding released")
+check(Engine.pending() == 0, "no timers survive teardown")
+print("PASS: " .. checks .. " screen routing, send, pending, countdown and lifetime checks")
