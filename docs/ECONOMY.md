@@ -1,5 +1,9 @@
 # Full-game candidate economy
 
+The implemented/candidate values below remain the current game behavior. A separately authorized,
+not-yet-implemented redesign for variable collection prices, permanent duplicate income bonuses and
+increasing-chance pity is recorded in [Rarity, duplicates and collection-economy redesign](RARITY_ECONOMY_REDESIGN.md).
+
 These are tuning values for the user-authorized full-game candidate, not validated long-term
 balance. Income remains automatic and server-owned; visitors cannot affect payouts. No paid currency,
 offline income, trading or escalating multipliers are implemented.
