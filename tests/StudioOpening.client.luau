@@ -1,5 +1,6 @@
 --!strict
 -- Paste into Studio's CLIENT Command Bar during Play. Never mapped by Rojo; no remotes/grants.
+-- Choose a figure or tour a collection/all collections with Open / Continue for each figure.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
@@ -14,7 +15,6 @@ local Controller = require(source:WaitForChild("OpeningController") :: ModuleScr
 local Config = require(source:WaitForChild("OpeningConfig") :: ModuleScript)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
-local AudioConfig = require(source:WaitForChild("OpeningAudioConfig") :: ModuleScript)
 local main = playerGui:WaitForChild("PocketGrove") :: ScreenGui
 local wasEnabled = main.Enabled
 main.Enabled = false
@@ -39,65 +39,8 @@ local connections: { RBXScriptConnection } = {}
 local jobs: { thread } = {}
 local diagnostics = Instance.new("ScreenGui")
 diagnostics.Name, diagnostics.ResetOnSpawn, diagnostics.DisplayOrder =
-	"OpeningAudioReview", false, 110
+	"OpeningPreviewControls", false, 110
 diagnostics.Parent = playerGui
-local audioLabel = Instance.new("TextLabel")
-audioLabel.Position, audioLabel.Size = UDim2.fromOffset(16, 60), UDim2.new(1, -32, 0, 88)
-audioLabel.BackgroundColor3, audioLabel.BackgroundTransparency = Color3.fromRGB(20, 26, 32), 0.15
-audioLabel.TextColor3, audioLabel.TextSize, audioLabel.Font =
-	Color3.fromRGB(225, 237, 241), 13, Enum.Font.Code
-audioLabel.TextWrapped, audioLabel.TextXAlignment = true, Enum.TextXAlignment.Left
-audioLabel.Visible, audioLabel.Parent = false, diagnostics
-local showAudio, diagnosticAge = true, 0
-table.insert(
-	connections,
-	RunService.Heartbeat:Connect(function(delta)
-		diagnosticAge += delta
-		if diagnosticAge < 0.1 then
-			return
-		end
-		diagnosticAge = 0
-		local opening = playerGui:FindFirstChild("BlindboxOpening")
-		audioLabel.Visible = showAudio and opening ~= nil
-		if not audioLabel.Visible or not opening then
-			return
-		end
-		local cues, loops = {}, {}
-		local count, loading, totalGain, populated = 0, 0, 0, 0
-		for _, id in AudioConfig.sounds do
-			if string.match(id, "^rbxassetid://[1-9]%d*$") then
-				populated += 1
-			end
-		end
-		local sounds = game:GetService("SoundService"):FindFirstChild("OpeningSounds")
-		if sounds then
-			for _, sound in sounds:GetChildren() do
-				if sound:IsA("Sound") then
-					count += 1
-					totalGain += sound.Volume
-					if not sound.IsLoaded then
-						loading += 1
-					end
-					table.insert(if sound.Looped then loops else cues, sound.Name)
-				end
-			end
-		end
-		table.sort(cues)
-		table.sort(loops)
-		audioLabel.Text = string.format(
-			"%s | Sounds %d/%d | loading %d | gain %.2f/%.2f | configured slots %d\nCues: %s\nLoops: %s",
-			tostring(opening:GetAttribute("Phase")),
-			count,
-			AudioConfig.limit,
-			loading,
-			totalGain,
-			AudioConfig.gainBudget,
-			populated,
-			table.concat(cues, ", "),
-			table.concat(loops, ", ")
-		)
-	end)
-)
 local reduced, fresh, closed, runningLoop = false, true, false, false
 local previewRarity: Rarity.Id? = nil
 local rarityIndex = 0
@@ -140,7 +83,7 @@ local function button(text: string, callback: () -> ()): TextButton
 	table.insert(connections, object.Activated:Connect(callback))
 	return object
 end
-local function present(id: string, direct: boolean?, override: Rarity.Id?)
+local function present(id: string, direct: boolean?, override: Rarity.Id?, manual: boolean?)
 	disconnectPhase()
 	assert(Catalog.byId[id], "Use an existing catalog ID")
 	local result = {
@@ -154,7 +97,7 @@ local function present(id: string, direct: boolean?, override: Rarity.Id?)
 	assert(controller.present(result, reduced, presentation), "Opening should start")
 	assert(not controller.present(result, reduced), "Concurrent/replayed opening must be rejected")
 	local opening = playerGui:FindFirstChild("BlindboxOpening")
-	if opening and skipIndex > 1 then
+	if opening and skipIndex > 1 and not manual then
 		local selected = skipPhases[skipIndex]
 		local profile = Config.profile(presentation or Catalog.byId[id].rarity)
 		local target = if selected == "Rarity hold"
@@ -197,19 +140,136 @@ local function present(id: string, direct: boolean?, override: Rarity.Id?)
 		end)
 	end
 end
-for _, fixture in
-	{
-		{ "Pocket Grove / Common", "grove.pebble" },
-		{ "Pocket Grove / Uncommon", "grove.moth" },
-		{ "Pocket Grove / Rare", "grove.star" },
-		{ "Tidepool Tales / Common", "tide.bubble" },
-		{ "Tidepool Tales / Uncommon", "tide.jelly" },
-		{ "Tidepool Tales / Rare", "tide.pearl" },
-	}
-do
-	button(fixture[1], function()
-		present(fixture[2])
+local touring = false
+local tourStatus = Instance.new("TextButton")
+tourStatus.Position, tourStatus.Size = UDim2.fromOffset(16, 16), UDim2.new(1, -32, 0, 36)
+tourStatus.BackgroundColor3, tourStatus.TextColor3 =
+	Color3.fromRGB(25, 36, 42), Color3.fromRGB(225, 237, 241)
+tourStatus.TextSize, tourStatus.TextWrapped = 14, true
+tourStatus.Visible, tourStatus.Parent = false, diagnostics
+table.insert(
+	connections,
+	tourStatus.Activated:Connect(function()
+		touring = false
+		controller.cancel()
 	end)
+)
+local function tour(collectionId: string?)
+	if closed or runningLoop or controller.isActive() then
+		return
+	end
+	local queue: { { id: string, collection: string } } = {}
+	for _, collection in Catalog.collections do
+		if collectionId == nil or collection.id == collectionId then
+			for _, figure in Catalog.figures do
+				if figure.collection == collection.id then
+					table.insert(queue, { id = figure.id, collection = collection.name })
+				end
+			end
+		end
+	end
+	if #queue == 0 then
+		return
+	end
+	touring, runningLoop, panel.Visible, tourStatus.Visible = true, true, false, true
+	table.insert(
+		jobs,
+		task.spawn(function()
+			local ok, reason = pcall(function(): boolean
+				for index, entry in queue do
+					if closed or not touring then
+						return true
+					end
+					local figure = Catalog.byId[entry.id]
+					tourStatus.Text = string.format(
+						"%d/%d · %s · %s — Stop tour",
+						index,
+						#queue,
+						entry.collection,
+						figure.name
+					)
+					-- Tour actual catalog rarity and the full opening, independent of skip-test settings.
+					present(entry.id, false, figure.rarity, true)
+					local seenResult, deadline = false, os.clock() + 300
+					while controller.isActive() and not closed and touring do
+						assert(os.clock() < deadline, "Tour timed out waiting for Open / Continue")
+						local opening = playerGui:FindFirstChild("BlindboxOpening")
+						if opening and opening:GetAttribute("Phase") == "Result" then
+							seenResult = true
+						end
+						task.wait(0.05)
+					end
+					if closed or not touring then
+						return true
+					end
+					assert(seenResult, "Figure tour interrupted before Result")
+				end
+				print(
+					string.format(
+						"Figure tour complete: %d figures. No purchases or grants.",
+						#queue
+					)
+				)
+				return true
+			end)
+			disconnectPhase()
+			controller.cancel()
+			touring, runningLoop = false, false
+			if not closed then
+				tourStatus.Visible, panel.Visible = false, true
+			end
+			if not ok then
+				warn(reason)
+			end
+		end)
+	)
+end
+button("Tour ALL figures / ALL collections: Open / Continue each", function()
+	tour(nil)
+end)
+-- Build from the catalog so new collections and figures appear here automatically.
+for _, collection in Catalog.collections do
+	local figureButtons: { TextButton } = {}
+	local tourButton: TextButton? = nil
+	local expanded = false
+	local collectionButton: TextButton? = nil
+	local function heading(): string
+		return string.format(
+			"%s %s (%d figures)",
+			if expanded then "[-]" else "[+]",
+			collection.name,
+			#figureButtons
+		)
+	end
+	local headingButton = button("", function()
+		expanded = not expanded
+		if tourButton then
+			tourButton.Visible = expanded
+		end
+		for _, figureButton in figureButtons do
+			figureButton.Visible = expanded
+		end
+		if collectionButton then
+			collectionButton.Text = heading()
+		end
+	end)
+	collectionButton = headingButton
+	headingButton.BackgroundColor3 = collection.color
+	local collectionTour = button("Tour " .. collection.name .. ": Open / Continue each", function()
+		tour(collection.id)
+	end)
+	tourButton = collectionTour
+	collectionTour.Visible = false
+	for _, figure in Catalog.figures do
+		if figure.collection == collection.id then
+			local figureButton = button(figure.name .. " / " .. figure.rarity, function()
+				present(figure.id)
+			end)
+			figureButton.Visible = false
+			table.insert(figureButtons, figureButton)
+		end
+	end
+	headingButton.Text = heading()
 end
 local rarityButton: TextButton? = nil
 rarityButton = button("Presentation rarity: Catalog (click to cycle)", function()
@@ -278,49 +338,6 @@ button("Compare Rare / Legendary / Mythical: Open / Continue each", function()
 end)
 button("Compare all five tiers: manually Open / Continue each", function()
 	compare(Rarity.order)
-end)
-local audioButton: TextButton? = nil
-audioButton = button("Audio diagnostics: ON (fixture only)", function()
-	showAudio = not showAudio
-	if audioButton then
-		audioButton.Text = "Audio diagnostics: "
-			.. (if showAudio then "ON" else "OFF")
-			.. " (fixture only)"
-	end
-end)
-button("Warm configured approved audio (see Output)", function()
-	local ids: { string } = {}
-	for _, id in AudioConfig.sounds do
-		if string.match(id, "^rbxassetid://[1-9]%d*$") then
-			table.insert(ids, id)
-		end
-	end
-	if #ids == 0 then
-		warn(
-			"No approved IDs populated. Review the asset checklist; this preview is intentionally silent."
-		)
-		return
-	end
-	table.insert(
-		jobs,
-		task.spawn(function()
-			local ok, reason = pcall(function()
-				game:GetService("ContentProvider")
-					:PreloadAsync(ids, function(id: string, status: Enum.AssetFetchStatus)
-						if status ~= Enum.AssetFetchStatus.Success then
-							warn("Audio unavailable: " .. id .. " / " .. status.Name)
-						end
-					end)
-			end)
-			if ok then
-				print(
-					"Audio preload finished. Verify availability messages and listen in the five-tier comparison."
-				)
-			else
-				warn(reason)
-			end
-		end)
-	)
 end)
 local motionButton: TextButton? = nil
 motionButton = button("Reduced motion: OFF", function()
@@ -670,4 +687,14 @@ local function cleanup()
 	print("Opening fixture exited. No purchases or grants were made.")
 end
 button("Exit preview", cleanup)
+-- Keep an exit above the cinematic and outside the scrolling/hidden menu.
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "ClosePreview"
+closeButton.AnchorPoint, closeButton.Position = Vector2.new(1, 0), UDim2.new(1, -16, 0, 8)
+closeButton.Size = UDim2.fromOffset(140, 44)
+closeButton.BackgroundColor3, closeButton.TextColor3 =
+	Color3.fromRGB(25, 36, 42), Color3.fromRGB(225, 237, 241)
+closeButton.Text, closeButton.TextSize, closeButton.Font = "Close preview", 16, Enum.Font.GothamBold
+closeButton.Parent = diagnostics
+table.insert(connections, closeButton.Activated:Connect(cleanup))
 table.insert(connections, gui.Destroying:Connect(cleanup))

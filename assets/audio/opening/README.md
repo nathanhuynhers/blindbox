@@ -1,5 +1,10 @@
 # Porcelain & Starlight
 
+**Rejected by the user and disconnected from the game.** The pack sounded engine-like
+and noisy. All production opening sound slots are now empty. Keep these files and upload
+receipts as history; passing technical checks and Roblox moderation did not establish
+acceptable sound quality. The delivery description below records the earlier attempt.
+
 An original 48-cue sound pack created for `nathanhuynhers/blindbox` at the user's
 explicit request on 2026-10-01. All sounds were synthesized for this project;
 no third-party recordings, samples, melodies, instrument libraries or audio
@@ -48,7 +53,7 @@ credential-safe, resumable asset pipeline and skips unchanged uploads. It refuse
 to replace changed assets implicitly. `python tools/audio/status.py` performs an
 authenticated read-only moderation check. Never put credentials in this folder.
 
-For playback, sync the current source through Rojo and start a fresh Studio Play
-session. No manual recording, upload or ID entry is needed. Keep these restricted
+To stop the rejected audio, sync the current source through Rojo and start a fresh Studio
+Play session. The existing uploaded assets are no longer referenced for playback. Keep these restricted
 assets under their existing owner; a differently owned experience needs an explicit
 experience permission grant. See the [Studio listening procedure](../../../docs/OPENING.md#audio-review-procedure).

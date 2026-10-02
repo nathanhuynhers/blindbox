@@ -5,7 +5,8 @@ The five-tier integration preserves the preceding flight polish and cinematic li
 correction. Automated checks execute the actual cinematic,
 box, skin, figure appearance, effects and audio against engine primitives.
 **Native Studio audiovisual, input, performance and multiplayer acceptance is still pending.**
-The dedicated audio systems pass now has 48 original, uploaded and wired sound assets;
+The synthesized sound pack was rejected after listening and has been disconnected.
+All 48 production audio slots are empty, so opening audio is silent;
 see [audio architecture](#audio-architecture) and the [delivery checklist](OPENING_AUDIO_ASSETS.md).
 The audio delivery changes no figure assignments, rates, weights, inventory, persistence or purchase
 contract. Shared rarity validation and server rate validation now support future
@@ -105,7 +106,7 @@ transition/hold, trail width/length, aura scale, sparkle rate and pulse intensit
 signature parameters own compression, quiet fraction, pulse waves, trail/ring structure,
 highlights and camera response. Mythical's optional `signature.spectralTiming` owns pearl,
 bloom, sweep, ring and calm markers in seconds. Profile cue keys allow unique transformation, impact and reveal
-sounds; the Legendary/Mythical slots now use their dedicated original recordings. The two
+sounds; all slots are currently empty after rejection of the synthesized pack. The two
 flight helpers share those samples with the existing controller, effects and cinematic; the
 phase order and authoritative result flow are unchanged.
 
@@ -295,13 +296,15 @@ and FOV stay fixed. It does not skip the reveal or discard metadata.
 
 ## Audio architecture
 
-**All 48 audio slots are populated with original project-specific synthesis.** The
+**Opening audio is disabled: all 48 production slots are empty.** The user rejected the
+synthesized pack as engine-like and noisy. The files and upload receipts remain as history;
+none of those IDs is loaded or played by the opening. The
 [Porcelain & Starlight pack](../assets/audio/opening/README.md) includes the source WAVs,
 reproducible generator, upload receipts, approved moderation results, measured headroom and
 ten full-sequence previews. Native Studio/device listening and rarity prestige acceptance
 remain unverified. The per-key brief is in [OPENING_AUDIO_ASSETS.md](OPENING_AUDIO_ASSETS.md).
 
-`OpeningAudioConfig` resolves uploaded IDs from `Shared.AssetIds` and owns mix tuning. Its `sounds` table is also exposed as
+`OpeningAudioConfig` owns empty asset slots and mix tuning. Its `sounds` table is also exposed as
 `OpeningConfig.sounds`. Each cue declares group, volume, PlaybackSpeed, loop, fade-in/out,
 one-shot ceiling, priority and optional fallback/progress curve. `OpeningAudioSequence` reads
 the existing State/Flight clocks; the controller still owns the session, visuals, inputs and
@@ -709,6 +712,9 @@ Legendary/Mythical ranking were **not run**. The subsequent original sound-pack 
 below completes the previously missing source and upload work.
 
 ## Original sound-pack delivery (2026-10-01)
+
+**Rejected and disconnected after user listening.** The delivery details below are historical.
+Technical validation and Roblox moderation did not establish acceptable sound quality.
 
 Created and uploaded 48 original stereo PCM WAVs under the configured creator `103346374`;
 all 48 are Approved according to Roblox's asset metadata API. Source hashes, owner and asset

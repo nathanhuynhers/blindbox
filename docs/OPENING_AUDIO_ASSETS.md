@@ -1,16 +1,18 @@
 # Opening audio delivery checklist
 
-Status: **all 48 slots are delivered and wired** with the original
-[Porcelain & Starlight pack](../assets/audio/opening/README.md). The user explicitly authorized
+Status: **rejected pack disconnected; all 48 production slots are empty and silent**.
+The user found the synthesized audio engine-like and noisy. The rejected
+[Porcelain & Starlight pack](../assets/audio/opening/README.md) remains archived locally.
+The user previously authorized
 original sound creation and upload. All sources were synthesized for this project without
 third-party samples; Roblox reports all 48 uploads Approved under creator `103346374`.
 Source/master paths, hashes and provenance are in the pack manifest; IDs and owner receipts are
 in `assets/uploads.json`, with moderation results in the pack's `roblox_status.json`.
 
-`src/client/OpeningAudioConfig.luau` resolves semantic keys from generated `Shared.AssetIds`.
-`OpeningConfig.sounds` aliases that same table for existing tools. The first load begins when
-the controller is created. No manual asset ID entry or recording is needed. Native Studio
-playback, experience access and subjective five-tier listening acceptance remain unverified.
+`src/client/OpeningAudioConfig.luau` no longer resolves this pack from `Shared.AssetIds`.
+`OpeningConfig.sounds` aliases its empty slots for existing tools. With no configured IDs,
+the controller does not preload or play any of these sounds. Native Studio
+playback was not tested by the agent; user listening rejected the pack's quality.
 Test-only dummy IDs never leave the standalone engine double.
 
 Deliver consistent headroom, no leading silence on transients, no baked hard pan, no clipped
@@ -24,8 +26,8 @@ Durations below describe source material, not an extension of the cinematic. One
 configured safety ceilings; phase cuts win over source tails. Loop lengths are suggested source
 cycle lengths; all loops must be seamless, without a repeating attack. Intensity is relative to
 the crack/impact, not a request for mastering gain. All unspecified collection/rarity columns
-mean shared. All 48 semantic slots below have original material; these rows preserve the
-design brief. Exact delivered durations and files are in `assets/audio/opening/pack.json`.
+mean shared. These rows preserve the design brief, not approval of the rejected sources.
+Historical source durations and files are in `assets/audio/opening/pack.json`.
 
 | Semantic key | Event and desired character | Source duration | Playback / seamless | Intensity | Rarity / collection | Tail / reverb and delivery constraints |
 | --- | --- | --- | --- | --- | --- | --- |

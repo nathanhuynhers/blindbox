@@ -13,19 +13,16 @@ local function check(ok, message)
 	assert(ok, message)
 end
 local baseline = E.connections
--- Real IDs are validated separately. Playback here uses only isolated engine doubles.
+-- The rejected source pack must remain disconnected, including every fallback.
 local configured = 0
 for key in Mix.cues do
 	check(
-		string.match(Mix.sounds[key], "^rbxassetid://[1-9]%d*$") ~= nil,
-		"delivered cue is mapped: " .. key
+		Mix.sounds[key] == "" and Audio.asset(key) == nil,
+		"rejected cue and fallback are disconnected: " .. key
 	)
 	configured += 1
 end
-check(configured == 48, "complete original pack is wired")
-for key in Mix.sounds do
-	Mix.sounds[key] = ""
-end
+check(configured == 48, "all original pack slots are silent")
 local scope = Scope.create()
 local audio = Audio.create(scope)
 local function folder()

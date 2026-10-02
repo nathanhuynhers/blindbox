@@ -291,20 +291,32 @@ class Leaf:
 class Head:
     """Porcelain chibi head: broad round skull, full low cheeks, small chin, neck stub."""
 
-    def __init__(self, c=(0.0, -0.07, 2.1), r=(0.62, 0.62, 0.6), ears=True):
+    def __init__(self, c=(0.0, -0.07, 2.1), r=(0.62, 0.62, 0.6), ears=True, tilt_z=0.0):
         self.c = np.asarray(c, float)
         self.r = r
         self.ears = ears
+        # Rotation around Z axis (left-right tilt); tilt_z in degrees
+        a = math.radians(tilt_z)
+        self.cos_a, self.sin_a = math.cos(a), math.sin(a)
+
+    def _rotate(self, p):
+        """Rotate point around head center (Z axis) by inverse tilt to align with unrotated SDF."""
+        x, y, z = p[0] - self.c[0], p[1] - self.c[1], p[2] - self.c[2]
+        x_rot = x * self.cos_a + y * self.sin_a
+        y_rot = -x * self.sin_a + y * self.cos_a
+        return (x_rot + self.c[0], y_rot + self.c[1], z + self.c[2])
 
     def __call__(self, p):
+        # Apply inverse rotation to point before evaluating SDF
+        p_rot = self._rotate(p)
         c, (rx, ry, rz) = self.c, self.r
-        d = ellipsoid(p, c, (rx, ry, rz))
+        d = ellipsoid(p_rot, c, (rx, ry, rz))
         for sx in (-1, 1):
-            d = smin(d, ellipsoid(p, c + (sx * 0.3 * rx / 0.62, -0.27, -0.27), (0.28, 0.3, 0.26)), 0.14)
+            d = smin(d, ellipsoid(p_rot, c + (sx * 0.3 * rx / 0.62, -0.27, -0.27), (0.28, 0.3, 0.26)), 0.14)
             if self.ears:
-                d = smin(d, ellipsoid(p, c + (sx * rx * 0.97, 0.04, -0.12), (0.08, 0.12, 0.15)), 0.04)
-        d = smin(d, ellipsoid(p, c + (0, -0.24, -0.4), (0.3, 0.3, 0.2)), 0.12)
-        d = smin(d, round_cone(p, c + (0, 0.06, -0.42), c + (0, 0.06, -0.8), 0.17, 0.18), 0.08)
+                d = smin(d, ellipsoid(p_rot, c + (sx * rx * 0.97, 0.04, -0.12), (0.08, 0.12, 0.15)), 0.04)
+        d = smin(d, ellipsoid(p_rot, c + (0, -0.24, -0.4), (0.3, 0.3, 0.2)), 0.12)
+        d = smin(d, round_cone(p_rot, c + (0, 0.06, -0.42), c + (0, 0.06, -0.8), 0.17, 0.18), 0.08)
         return d
 
 
@@ -786,9 +798,9 @@ HAIR = "#8A5A45"
 GLOW = ["#FFF6CF", "#FFE89A", "#F9D774"]  # glowing star albedo, bright centre to warm rim
 
 
-def star_head(H, x=0.0, y=-0.05):
-    """The series head: a little broader than Tender Echoes', chin at H - 0.6."""
-    return Head(c=(x, y, H), r=(0.66, 0.62, 0.6))
+def star_head(H, x=0.0, y=-0.05, tilt_z=8.0):
+    """The series head: a little broader than Tender Echoes', chin at H - 0.6. Tilted left by default."""
+    return Head(c=(x, y, H), r=(0.66, 0.62, 0.6), tilt_z=tilt_z)
 
 
 def star_face(N, head, fm, H, look=0.14, closed=False, cx=0.0, **kw):
