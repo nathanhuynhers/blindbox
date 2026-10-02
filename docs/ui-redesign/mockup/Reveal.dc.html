@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Box reveal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#4B32C3}a:hover{color:#2B1F4A}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; position: relative; overflow: hidden; background: #221839; font-family: 'Nunito', sans-serif; color: #2B1F4A">
+<div style="position: absolute; left: 340px; top: -240px; width: 600px; height: 1200px; border-radius: 50%; background: #2E2150"></div>
+<div style="position: absolute; left: 440px; top: 40px; width: 400px; height: 400px; border-radius: 50%; background: {{glow}}; opacity: 0.35"></div>
+
+<div style="position: absolute; left: 0; top: 34px; width: 1280px; display: flex; justify-content: center">
+<span style="height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 18px; border-radius: 20px; background: #FFC83D; border: 3px solid #FFFFFF; font-family: 'Fredoka', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.04em; color: #2B1F4A">NEW FIGURE!</span>
+</div>
+
+<div style="position: absolute; left: 470px; top: 92px; width: 340px; height: 340px; border-radius: 50%; background: #FFFFFF; border: 6px solid {{glow}}; box-sizing: border-box; display: flex; align-items: center; justify-content: center; overflow: hidden">
+<img src="/_blob/d8168813d27b67585b0bda349a877444" alt="Feather Hush" style="width: 300px; height: 300px; object-fit: contain">
+</div>
+
+<div style="position: absolute; left: 0; top: 444px; width: 1280px; display: flex; flex-direction: column; align-items: center; gap: 10px">
+<div style="display: flex; align-items: center; gap: 12px">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 44px; font-weight: 600; line-height: 1; color: #FFFFFF">Feather Hush</h1>
+<span style="height: 30px; display: flex; align-items: center; padding: 0 12px; border-radius: 15px; background: #A9374C; border: 2px solid #FFFFFF; color: #FFF1D5; font-size: 14px; font-weight: 900; letter-spacing: 0.04em">LEGENDARY</span>
+</div>
+<div style="display: flex; gap: 10px; font-size: 15px; font-weight: 800">
+<span style="height: 34px; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: 17px; background: #DDF3E6; color: #174F36">Earns 12 coins/s on Display</span>
+<span style="height: 34px; display: flex; align-items: center; padding: 0 12px; border-radius: 17px; background: #3A2C5E; color: #E9E2FA">4.6% chance</span>
+<span style="height: 34px; display: flex; align-items: center; padding: 0 12px; border-radius: 17px; background: #3A2C5E; color: #E9E2FA">Tender Echoes · 9 of 13 found</span>
+</div>
+<div style="display: flex; gap: 14px; margin-top: 14px">
+<a href="Display.dc.html" style="width: 300px; height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #6B4EE6; border: 3px solid #FFFFFF; border-radius: 20px; box-shadow: 0 5px 0 #120C22; text-decoration: none; color: #FFFFFF; box-sizing: border-box">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.1">Put on Display</span>
+<span style="font-size: 13px; font-weight: 800; color: #E9E2FA">You have 1 empty slot · +12/s</span>
+</a>
+<a href="Shop.dc.html" style="width: 260px; height: 66px; display: flex; align-items: center; justify-content: center; gap: 10px; background: #FFC83D; border: 3px solid #FFFFFF; border-radius: 20px; box-shadow: 0 5px 0 #120C22; text-decoration: none; color: #2B1F4A; font-family: 'Fredoka', sans-serif; font-size: 22px; font-weight: 600; box-sizing: border-box">
+Open another
+<span style="display: flex; align-items: center; gap: 5px; font-size: 18px">
+<svg width="20" height="20" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"></circle><circle cx="14" cy="14" r="6.5" fill="none" stroke="#C98A00" stroke-width="2.2"></circle></svg>150</span>
+</a>
+</div>
+<a href="Main.dc.html" style="margin-top: 6px; height: 44px; display: flex; align-items: center; padding: 0 16px; color: #E9E2FA; font-size: 16px; font-weight: 800">Keep it in my Collection</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"glow":{"editor":"color","default":"#A9374C","options":["#A9374C","#A44DB4","#E7B656","#B9DECC"]},"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { glow: this.props.glow ?? '#A9374C' };
+  }
+}
+</script>
+</body>
+</html>

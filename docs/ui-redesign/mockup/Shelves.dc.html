@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shelves</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#4B32C3}a:hover{color:#2B1F4A}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; position: relative; overflow: hidden; background: #CBE5F3; font-family: 'Nunito', sans-serif; color: #2B1F4A">
+<div style="position: absolute; left: 0; top: 430px; width: 1280px; height: 290px; background: #A6CE86"></div>
+<div style="position: absolute; left: 290px; top: 360px; width: 700px; height: 210px; border-radius: 50%; background: #EFDDBD; border-bottom: 16px solid #D2B488; box-sizing: border-box"></div>
+<div style="position: absolute; inset: 0; background: rgba(35, 24, 61, 0.55)"></div>
+
+<div style="position: absolute; left: 112px; top: 14px; display: flex; gap: 10px; align-items: center">
+<button aria-label="12,480 coins, earning 35 per second" style="height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 10px; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 26px; box-shadow: 0 4px 0 #2B1F4A; cursor: pointer; font-family: 'Fredoka', sans-serif">
+<svg width="30" height="30" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"></circle><circle cx="14" cy="14" r="6.5" fill="none" stroke="#C98A00" stroke-width="2.2"></circle></svg>
+<span style="font-size: 24px; font-weight: 600; color: #2B1F4A">12,480</span>
+<span style="font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; color: #1E6B47; background: #DDF3E6; border-radius: 12px; padding: 4px 9px">+35/s</span>
+</button>
+</div>
+
+<section aria-label="Shelves" style="position: absolute; left: 64px; top: 84px; width: 1152px; height: 508px; background: #FFFDF9; border: 3px solid #2B1F4A; border-radius: 28px; box-shadow: 0 8px 0 #2B1F4A; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden">
+<div style="height: 76px; flex-shrink: 0; display: flex; align-items: center; gap: 14px; padding: 0 16px 0 18px; border-bottom: 2px solid #ECE5F6">
+<img src="/_blob/6e56e5cac9cca9fe71f359997d9fbce1" alt="" style="width: 56px; height: 56px; object-fit: contain">
+<div style="display: flex; flex-direction: column; flex-grow: 1">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 30px; font-weight: 600; line-height: 1.1">Shelves</h1>
+<p style="margin: 0; font-size: 14px; font-weight: 700; color: #5C5276">Show off any figure you've discovered. Just for looks: no coins, no copies used.</p>
+</div>
+<a href="Main.dc.html" aria-label="Close Shelves" style="width: 48px; height: 48px; border-radius: 24px; background: #2B1F4A; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"></path></svg>
+</a>
+</div>
+
+<div style="flex-grow: 1; display: grid; grid-template-columns: 560px minmax(0, 1fr); min-height: 0">
+
+<div style="padding: 14px 20px 16px; display: flex; flex-direction: column; gap: 10px; border-right: 2px solid #ECE5F6">
+<div style="display: flex; align-items: center; gap: 8px">
+<button disabled aria-label="Previous shelf" style="width: 44px; height: 44px; border-radius: 14px; background: #F3F1F6; border: 2px solid #D6D0E0; color: #A39BB6; display: flex; align-items: center; justify-content: center; cursor: not-allowed">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<div role="tablist" aria-label="Shelf" style="flex-grow: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{units}}" as="u" hint-placeholder-count="3">
+<button role="tab" aria-selected="{{u.current}}" onClick="{{u.pick}}" style="height: 44px; border-radius: 14px; background: {{u.bg}}; border: 2px solid {{u.border}}; font: inherit; font-size: 15px; font-weight: 800; color: {{u.fg}}; cursor: pointer">{{u.label}}</button>
+</sc-for>
+</div>
+<button disabled aria-label="Next shelf" style="width: 44px; height: 44px; border-radius: 14px; background: #F3F1F6; border: 2px solid #D6D0E0; color: #A39BB6; display: flex; align-items: center; justify-content: center; cursor: not-allowed">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+</button>
+</div>
+
+<div style="flex-grow: 1; border-radius: 20px; background: #C9965A; border: 4px solid #8A5A32; padding: 10px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+<div style="flex-grow: 1; display: flex; flex-direction: column">
+<div style="flex-grow: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; background: #F7E7CC; border-radius: 10px 10px 0 0; padding: 4px 8px 0">
+<sc-for list="{{r.slots}}" as="s" hint-placeholder-count="3">
+<button onClick="{{s.pick}}" aria-label="{{s.label}}" aria-pressed="{{s.current}}" style="height: 80px; border-radius: 12px 12px 0 0; background: {{s.bg}}; border: 3px {{s.borderStyle}} {{s.border}}; border-bottom: none; display: flex; align-items: flex-end; justify-content: center; padding: 0; cursor: pointer; overflow: hidden; color: #8A5A32; box-sizing: border-box">
+<sc-if value="{{s.filled}}" hint-placeholder-val="{{true}}"><img src="{{s.img}}" alt="" style="width: 78px; height: 78px; object-fit: contain; mix-blend-mode: multiply"></sc-if>
+<sc-if value="{{s.empty}}" hint-placeholder-val="{{false}}"><span style="align-self: center; font-size: 13px; font-weight: 800">+ Add</span></sc-if>
+</button>
+</sc-for>
+</div>
+<div style="height: 12px; background: #A7713F; border-radius: 0 0 6px 6px; border-top: 3px solid #8A5A32"></div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="padding: 14px 20px 16px; display: flex; flex-direction: column; gap: 10px; background: #F6F2FC; min-height: 0">
+<div style="display: flex; align-items: center; gap: 10px">
+<div style="flex-grow: 1; display: flex; flex-direction: column">
+<span style="font-size: 12px; font-weight: 900; letter-spacing: 0.08em; color: #5C5276">{{spotLabel}}</span>
+<h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-size: 22px; font-weight: 600">{{spotTitle}}</h2>
+</div>
+<sc-if value="{{spotFilled}}" hint-placeholder-val="{{true}}">
+<button style="height: 44px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; border: 2px solid #2B1F4A; font: inherit; font-size: 14px; font-weight: 800; color: #2B1F4A; cursor: pointer">Clear spot</button>
+</sc-if>
+</div>
+<div role="group" aria-label="Filter by collection" style="display: flex; gap: 6px; flex-wrap: wrap">
+<span style="height: 34px; display: flex; align-items: center; padding: 0 12px; border-radius: 17px; background: #2B1F4A; color: #FFFFFF; font-size: 13px; font-weight: 800">All 20</span>
+<span style="height: 34px; display: flex; align-items: center; padding: 0 12px; border-radius: 17px; background: #FFFFFF; border: 2px solid #E2DAEF; font-size: 13px; font-weight: 800; box-sizing: border-box">Pocket Grove</span>
+<span style="height: 34px; display: flex; align-items: center; padding: 0 12px; border-radius: 17px; background: #FFFFFF; border: 2px solid #E2DAEF; font-size: 13px; font-weight: 800; box-sizing: border-box">Tender Echoes</span>
+<span style="height: 34px; display: flex; align-items: center; padding: 0 12px; border-radius: 17px; background: #FFFFFF; border: 2px solid #E2DAEF; font-size: 13px; font-weight: 800; box-sizing: border-box">Concepts</span>
+<span style="height: 34px; display: flex; align-items: center; padding: 0 12px; border-radius: 17px; background: #FFFFFF; border: 2px solid #E2DAEF; font-size: 13px; font-weight: 800; box-sizing: border-box">More…</span>
+</div>
+<div style="flex-grow: 1; overflow-y: auto; min-height: 0">
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{picker}}" as="p" hint-placeholder-count="10">
+<button onClick="{{p.place}}" style="height: 112px; padding: 0; display: flex; flex-direction: column; align-items: center; border-radius: 14px; background: #FFFFFF; border: 2px solid #2B1F4A; overflow: hidden; font: inherit; color: #2B1F4A; cursor: pointer">
+<img src="{{p.img}}" alt="" style="width: 100%; height: 80px; object-fit: contain">
+<span style="font-size: 12px; font-weight: 800; line-height: 1.15; padding: 2px 4px 0; text-align: center">{{p.name}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<nav aria-label="Main" style="position: absolute; left: 366px; top: 606px; display: flex; gap: 12px">
+<a href="Collection.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/9c1a7ac2fc725a1e7e0e267a09accf10" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Collection</span>
+</a>
+<a href="Display.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/5ebfd00e4ff394c1233bb0cf5c80d2f9" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Display</span>
+<span style="position: absolute; top: -10px; right: -10px; height: 24px; padding: 0 8px; display: flex; align-items: center; border-radius: 12px; background: #6B4EE6; border: 2px solid #2B1F4A; color: #FFFFFF; font-size: 12px; font-weight: 900">1 empty</span>
+</a>
+<a href="Shop.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/9ec00bb0642de8485a672e499d08477b" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Shop</span>
+<span style="position: absolute; top: -10px; right: -10px; height: 24px; padding: 0 8px; display: flex; align-items: center; border-radius: 12px; background: #FFC83D; border: 2px solid #2B1F4A; color: #2B1F4A; font-size: 12px; font-weight: 900">FREE</span>
+</a>
+<a href="Goals.dc.html" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border: 3px solid #2B1F4A; border-radius: 22px; box-shadow: 0 5px 0 #2B1F4A; box-sizing: border-box; text-decoration: none; position: relative">
+<img src="/_blob/5439db593011800f0de0a283ae5bc59d" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #2B1F4A">Goals</span>
+<span style="position: absolute; top: -10px; right: -10px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 13px; background: #D92D46; border: 2px solid #2B1F4A; color: #FFFFFF; font-size: 13px; font-weight: 900; box-sizing: border-box">1</span>
+</a>
+<a href="Shelves.dc.html" aria-current="page" style="width: 100px; height: 94px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #EFE8FF; border: 3px solid #6B4EE6; border-radius: 22px; box-shadow: 0 5px 0 #4B32C3; box-sizing: border-box; text-decoration: none; position: relative; transform: translateY(-6px)">
+<img src="/_blob/6e56e5cac9cca9fe71f359997d9fbce1" alt="" style="width: 58px; height: 58px; object-fit: contain">
+<span style="font-family: 'Fredoka', sans-serif; font-size: 15px; font-weight: 600; color: #4B32C3">Shelves</span>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+const FIGS = {
+  pebble: ['Pebble Pip', '/_blob/e0b6f4069400f5913936f2c3dceb5938'],
+  sprout: ['Sprout Scout', '/_blob/c7e7dfe8275bb249474386d1cc28569a'],
+  acorn: ['Acorn Dot', '/_blob/1fa3c9a9173b0080eadd1954f54f5d03'],
+  mallow: ['Mallow Cap', '/_blob/84735026d0940d80dfaaffe2b44ae905'],
+  moth: ['Moon Moth', '/_blob/cddbb280f0771b030531fcf8182780fb'],
+  sunbeam: ['Sunbeam Sprite', '/_blob/ee8ea0a3d4b825245ff52b7f3ae494b8'],
+  verity: ['Verity', '/_blob/8ccface322384c38b64f84acfb586c92'],
+  lovity: ['Lovity', '/_blob/6b41a9caf327c2a8f1039ec174b3ffae'],
+  thread: ['Thread Parade', '/_blob/505e8ae450947202a2b2a5007eca8a39'],
+  wander: ['Wander Knit', '/_blob/44343135f06c2e37975a1600c113e79a'],
+  dino: ['Dino Drift', '/_blob/a6143754a82ce134b1f00beffeaaff1d'],
+  hearth: ['Hearth Helm', '/_blob/abce08ed4d5633e1c5892467c075f73d'],
+  crown: ['Paper Crown', '/_blob/7c8986ccf31fc3a99f909eec3e8d87ee'],
+  mask: ['Mask Nuzzle', '/_blob/5c8bd2b2b4094b4e0b2a1db381408e19'],
+  crate: ['Crate Spark', '/_blob/07b8f8d111ef6eb718a69dc0b552a107'],
+  moon: ['Moon Doze', '/_blob/88cf2e1b1ed896943f96c2d8cfcc5403']
+};
+const UNITS = [
+  [['pebble', 'sprout', 'acorn'], ['mallow', null, 'moth'], ['sunbeam', 'verity', 'lovity']],
+  [['thread', 'wander', 'dino'], ['hearth', 'crown', null], [null, 'moon', null]],
+  [[null, null, null], [null, 'crate', null], [null, null, null]]
+];
+const ROWS = ['Top shelf', 'Middle shelf', 'Bottom shelf'];
+const SPOTS = ['left', 'middle', 'right'];
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const unit = st.unit != null ? st.unit : 1;
+    const spot = st.spot || [1, 2];
+    const placed = st.placed || {};
+    const grid = UNITS[unit].map((row, r) => row.map((id, c) => {
+      const key = unit + ':' + r + ':' + c;
+      return placed[key] !== undefined ? placed[key] : id;
+    }));
+    const units = [0, 1, 2].map((i) => ({
+      label: 'Shelf ' + (i + 1), current: i === unit ? 'true' : 'false',
+      bg: i === unit ? '#2B1F4A' : '#FFFFFF', fg: i === unit ? '#FFFFFF' : '#2B1F4A', border: '#2B1F4A',
+      pick: () => this.setState({ unit: i, spot: [0, 0] })
+    }));
+    const rows = grid.map((row, r) => ({
+      slots: row.map((id, c) => {
+        const sel = spot[0] === r && spot[1] === c;
+        return {
+          filled: !!id, empty: !id, img: id ? FIGS[id][1] : '',
+          label: ROWS[r] + ', ' + SPOTS[c] + (id ? ': ' + FIGS[id][0] : ': empty'),
+          current: sel ? 'true' : 'false',
+          bg: sel ? '#EFE8FF' : (id ? '#FFF9EE' : 'transparent'),
+          border: sel ? '#6B4EE6' : (id ? 'transparent' : '#C9A777'),
+          borderStyle: sel || id ? 'solid' : 'dashed',
+          pick: () => this.setState({ spot: [r, c] })
+        };
+      })
+    }));
+    const cur = grid[spot[0]][spot[1]];
+    const picker = Object.keys(FIGS).map((id) => ({
+      name: FIGS[id][0], img: FIGS[id][1],
+      place: () => this.setState({ placed: Object.assign({}, placed, { [unit + ':' + spot[0] + ':' + spot[1]]: id }) })
+    }));
+    return {
+      units, rows, picker,
+      spotLabel: (ROWS[spot[0]] + ' · ' + SPOTS[spot[1]] + ' spot').toUpperCase(),
+      spotTitle: cur ? FIGS[cur][0] + ' is here. Tap a figure to swap' : 'Tap a figure to place it',
+      spotFilled: !!cur
+    };
+  }
+}
+</script>
+</body>
+</html>
