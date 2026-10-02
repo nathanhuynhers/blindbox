@@ -27,6 +27,16 @@ function Geometry.radialTransform(index: number, radius: number, y: number?): CF
 	local position = Geometry.radialPosition(index, radius, y)
 	return CFrame.lookAt(position, Vector3.new(0, position.Y, 0))
 end
+-- World CFrame at `degrees` clockwise from plot slot 1's axis, looking at the plaza center.
+function Geometry.polarTransform(degrees: number, radius: number, y: number): CFrame
+	assert(radius > 0, "Polar transforms need a positive radius")
+	local angle = math.rad(degrees)
+	local position = Vector3.new(math.sin(angle) * radius, y, -math.cos(angle) * radius)
+	return CFrame.lookAt(position, Vector3.new(0, y, 0))
+end
+function Geometry.slotDegrees(index: number): number
+	return math.deg(Geometry.angle(index))
+end
 function Geometry.shelfOffset(unit: number, row: number, slot: number): Vector3
 	return Vector3.new(
 		Geometry.shelfX,

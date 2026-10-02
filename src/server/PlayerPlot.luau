@@ -3,6 +3,7 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local DisplayFixture = require(script.Parent.DisplayFixture)
 local CollectionFixture = require(script.Parent.CollectionFixture)
 local PlotFixture = require(script.Parent.PlotFixture)
+local PlotStyle = require(script.Parent.PlotStyle)
 local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local Geometry = require(script.Parent.PlotGeometry)
 local Config = require(script.Parent.PlotConfig)
@@ -22,6 +23,7 @@ export type Plot = {
 	physicalShelves: { Model },
 	collection: CollectionFixture.Render,
 	entrance: PlotFixture.Entrance,
+	spawnPad: Model,
 	fixture: DisplayFixture.Render,
 	displayCapacity: number,
 	connections: { RBXScriptConnection },
@@ -35,6 +37,7 @@ root.Name = "PlayerPlots"
 root.Parent = workspace
 local function cleanup(plot: Plot)
 	plot.active = false
+	PlotFixture.releaseEntrance(plot.entrance)
 	for _, connection in plot.connections do
 		connection:Disconnect()
 	end
@@ -46,15 +49,17 @@ function PlayerPlot.create(player: Player, index: number): Plot
 	model.Name = tostring(player.UserId)
 	model:SetAttribute("OwnerId", player.UserId)
 	model:SetAttribute("PlotSlot", index)
-	local entrance = PlotFixture.createEntrance(model, transform, player.DisplayName)
-	local fixture = DisplayFixture.create(model, transform)
-	local collection = CollectionFixture.create(model, transform)
+	local accent = PlotStyle.accent(player.UserId)
+	local entrance = PlotFixture.createEntrance(model, transform, player.DisplayName, accent)
+	local spawnPad = PlotFixture.createSpawnPad(model, transform, accent)
+	local fixture = DisplayFixture.create(model, transform, accent)
+	local collection = CollectionFixture.create(model, transform, accent)
 	local plot: Plot = {
 		model = model,
 		ownerId = player.UserId,
 		index = index,
 		transform = transform,
-		spawn = transform * CFrame.lookAt(Vector3.new(0, 4, -33), Vector3.new(0, 4, 0)),
+		spawn = PlotFixture.spawnCFrame(transform),
 		active = true,
 		view = Shelves.newView(),
 		display = FigureSlots.new(model, "DisplayFigures", {}, DisplayFixture.style.figureScale),
@@ -69,6 +74,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		displayCapacity = 0,
 		collection = collection,
 		entrance = entrance,
+		spawnPad = spawnPad,
 		connections = {},
 		hitboxes = collection.hitboxes,
 	}

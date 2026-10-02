@@ -13,6 +13,7 @@ local PlotConfig = require(script.PlotConfig)
 local Storage = require(script.Storage)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
+local PlayerSpawn = require(script.PlayerSpawn)
 local world = World.create()
 local productionModels = ModelAssets.publish()
 type Session = {
@@ -21,8 +22,7 @@ type Session = {
 	storage: Storage.Session,
 	sequence: number,
 	syncTime: number,
-	characterConnection: RBXScriptConnection?,
-	spawnTask: thread?,
+	spawn: PlayerSpawn.Binding?,
 }
 local plots = PlotSlots.new(PlotConfig.maxPlots)
 local sessions: { [Player]: Session } = {}
@@ -75,11 +75,6 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	}
 	stateRemote:FireClient(player, snapshot, reply)
 end
-local function home(player: Player, session: Session)
-	if player.Character then
-		player.Character:PivotTo(session.plot.spawn)
-	end
-end
 local function closeStorage(storage: Storage.Session)
 	closing += 1
 	local ok = Storage.close(storage)
@@ -94,11 +89,8 @@ local function remove(player: Player)
 		return
 	end
 	sessions[player] = nil
-	if session.characterConnection then
-		session.characterConnection:Disconnect()
-	end
-	if session.spawnTask and coroutine.status(session.spawnTask) ~= "dead" then
-		task.cancel(session.spawnTask)
+	if session.spawn then
+		PlayerSpawn.unbind(session.spawn)
 	end
 	PlayerPlot.destroy(session.plot)
 	PlotSlots.release(plots, player.UserId)
@@ -136,8 +128,7 @@ local function added(player: Player)
 		storage = storage,
 		sequence = 0,
 		syncTime = -math.huge,
-		characterConnection = nil,
-		spawnTask = nil,
+		spawn = nil,
 	}
 	sessions[player] = session
 	PlayerPlot.bind(session.plot, function(actor, direction)
@@ -157,22 +148,8 @@ local function added(player: Player)
 		end
 	end)
 	PlayerPlot.render(session.plot, storage.state)
-	local function characterAdded(character: Model)
-		if session.spawnTask and coroutine.status(session.spawnTask) ~= "dead" then
-			task.cancel(session.spawnTask)
-		end
-		session.spawnTask = task.defer(function()
-			local rootPart = character:WaitForChild("HumanoidRootPart", 10)
-			if rootPart and sessions[player] == session and player.Character == character then
-				home(player, session)
-			end
-			session.spawnTask = nil
-		end)
-	end
-	session.characterConnection = player.CharacterAdded:Connect(characterAdded)
-	if player.Character then
-		characterAdded(player.Character)
-	end
+	-- Respawns and character reloads land on this player's own spawn pad until they leave.
+	session.spawn = PlayerSpawn.bind(player, session.plot.spawn)
 	send(player, session, nil)
 end
 local connections: { RBXScriptConnection } = {}
@@ -278,5 +255,5 @@ game:BindToClose(function()
 	end
 	folder:Destroy()
 	productionModels:Destroy()
-	world:Destroy()
+	world.root:Destroy()
 end)

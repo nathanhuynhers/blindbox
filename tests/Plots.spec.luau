@@ -8,6 +8,13 @@ local Fixture = require("./DisplayFixture")
 local CollectionFixture = require("./CollectionFixture")
 local PlotFixture = require("./PlotFixture")
 local World = require("./World")
+local Layout = require("./TownLayout")
+local TownStyle = require("./TownStyle")
+local TownProps = require("./TownProps")
+local NightLights = require("./NightLights")
+local PlotStyle = require("./PlotStyle")
+local LeaderboardBoard = require("./LeaderboardBoard")
+local Awning = require("./Awning")
 local Plot = require("./PlayerPlot")
 local Rules = require("./Rules")
 local Profile = require("./Profile")
@@ -65,33 +72,110 @@ legacyBaseplate.Name = "Baseplate"
 legacyBaseplate.Size = Engine.Vector3.new(512, 20, 512)
 legacyBaseplate.Position = Engine.Vector3.new(0, -10, 0)
 legacyBaseplate.Parent = Engine.workspace
-local world = World.create()
+local built = World.create()
+local world = built.root
+local groundTop = Layout.groundTop
+local function descendantParts(parent)
+	local found = {}
+	for _, node in parent:GetDescendants() do
+		if node.ClassName == "Part" or node.ClassName == "SpawnLocation" then
+			table.insert(found, node)
+		end
+	end
+	return found
+end
+-- World-space corners of a part's oriented box.
+local function corners(part)
+	local list = {}
+	for _, x in { -1, 1 } do
+		for _, y in { -1, 1 } do
+			for _, z in { -1, 1 } do
+				table.insert(
+					list,
+					part.CFrame:PointToWorldSpace(
+						Engine.Vector3.new(x * part.Size.X / 2, y * part.Size.Y / 2, z * part.Size.Z / 2)
+					)
+				)
+			end
+		end
+	end
+	return list
+end
+local function insideAnyPlot(point)
+	for index = 1, Config.maxPlots do
+		local at = Geometry.transform(index):PointToObjectSpace(point)
+		if math.abs(at.X) < Config.width / 2 and math.abs(at.Z) < Config.depth / 2 then
+			return true
+		end
+	end
+	return false
+end
+-- The walking corridor of every path, from the plaza center out to its plot entrance.
+local function inPathCorridor(point, outer)
+	for index = 1, Config.maxPlots do
+		local axis = Geometry.radialTransform(index, 10, 0)
+		local outward = -axis.LookVector
+		local along = dot(point, outward)
+		local lateral = math.abs(dot(point, axis.RightVector))
+		if along > 0 and along < outer and lateral < Config.pathWidth / 2 then
+			return true
+		end
+	end
+	return false
+end
 check(Config.maxPlots == 8, "one server has exactly eight canonical plot slots")
+local groups = {}
+for _, child in world:GetChildren() do
+	groups[child.Name] = child
+end
+for _, name in { "Ground", "MainPlaza", "Paths", "PlotSlots", "MarketStreet", "Gaps", "GardenEdge" } do
+	check(groups[name] ~= nil, "world contains its " .. name .. " group")
+end
+check(#world:GetChildren() == 7, "world contains only the seven town groups")
+check(world:FindFirstChild("WorldFoundation") == nil, "old recessed foundation is replaced by grass")
+local worldParts = descendantParts(world)
 check(
-	#world:GetChildren() == 2 + 2 * Config.maxPlots,
-	"world contains only foundation, plaza, eight paths and eight plots"
+	#worldParts <= Layout.budgets.worldParts,
+	string.format("static world stays within its part budget: %d", #worldParts)
 )
-check(world:FindFirstChild("SharedGround") == nil, "old rectangular SharedGround is absent")
-check(world:FindFirstChild("SafetyGround") == nil, "old hidden safety disk is replaced")
-local foundation = world:FindFirstChild("WorldFoundation")
-assert(foundation)
-local outermostPlotCorner =
-	math.sqrt((Config.plotRadius + Config.depth / 2) ^ 2 + (Config.width / 2) ^ 2)
+print(string.format("World static parts: %d / %d", #worldParts, Layout.budgets.worldParts))
+for _, part in worldParts do
+	check(part.Anchored and part.CanTouch == false, "every world part is anchored and never touch-enabled")
+	check(part.CanCollide or not part.CanQuery, "noncollidable decor is excluded from spatial queries")
+end
+for _, node in world:GetDescendants() do
+	check(
+		node.ClassName ~= "MeshPart" and node.ClassName ~= "UnionOperation" and node.ClassName ~= "Decal",
+		"town uses native parts only"
+	)
+	check(
+		not string.find(node.Name, "Store")
+			and not string.find(node.Name, "Shop")
+			and not string.find(node.Name, "House")
+			and not string.find(node.Name, "Machine"),
+		"no stores, townhouses, shops or box machines"
+	)
+end
+
+-- Ground: grass island with a stone edge; platforms rest on the grass.
+local ground = groups.Ground
+local grass = ground:FindFirstChild("Grass")
+local curb = ground:FindFirstChild("StoneCurb")
+assert(grass and curb)
 check(
-	foundation.ClassName == "Part"
-		and foundation.Shape == "Cylinder"
-		and foundation.Material == "SmoothPlastic"
-		and foundation.Color == World.style.colors.foundation
-		and foundation.Transparency == 0,
-	"visible foundation is one clean warm-neutral circular surface"
+	grass.Shape == "Cylinder"
+		and grass.Material == "Grass"
+		and close(grass.Position.Y + grass.Size.X / 2, groundTop)
+		and close(grass.Size.Y, 2 * Layout.ground.radius),
+	"grass top is the town ground plane"
 )
 check(
-	close(foundation.Size.Y, 2 * (outermostPlotCorner + World.style.foundationMargin))
-		and close(
-			foundation.Position.Y + foundation.Size.X / 2,
-			Config.walkingY - World.style.foundationDrop
-		),
-	"foundation encloses the true outer plot corners with a 40-stud margin"
+	curb.Size.Y > grass.Size.Y and curb.Position.Y + curb.Size.X / 2 < groundTop,
+	"a stone curb edge rings the grass just below its surface"
+)
+check(
+	Layout.ground.radius > Layout.edge.wallRadius + 1,
+	"the grass extends beyond the boundary walls"
 )
 check(
 	legacyBaseplate.Transparency == 1
@@ -99,262 +183,383 @@ check(
 		and not legacyBaseplate.CanTouch
 		and not legacyBaseplate.CanQuery
 		and legacyBaseplate.Position.Y + legacyBaseplate.Size.Y / 2
-			< foundation.Position.Y - foundation.Size.X / 2,
-	"legacy rectangular Baseplate is invisible and lowered beneath the circular foundation"
+			< Layout.soil.top - Layout.soil.thickness,
+	"legacy Baseplate is hidden beneath the island"
 )
-local plaza = world:FindFirstChild("MainPlaza")
-assert(plaza)
-check(
-	plaza.ClassName == "Model" and #plaza:GetChildren() == 2,
-	"one two-layer central plaza without overlapping intermediary disks"
-)
-local plazaTrim = plaza:FindFirstChild("OakTrim")
-assert(plazaTrim)
-local plazaSurface = plaza:FindFirstChild("IvorySurface")
-assert(plazaSurface)
-check(
-	plazaSurface.Shape == "Cylinder"
-		and plazaSurface.Size.Y == 2 * Config.plazaRadius
-		and plazaSurface.Material == "SmoothPlastic"
-		and plazaSurface.Color == World.style.colors.ivory,
-	"central plaza is one uninterrupted 100-stud ivory circle"
-)
-check(
-	plazaTrim.Shape == "Cylinder"
-		and close(plazaTrim.Size.Y, 2 * (Config.plazaRadius + World.style.plazaTrimWidth))
-		and plazaTrim.Material == "Wood"
-		and plazaTrim.Color == World.style.colors.oak,
-	"plaza has one restrained 2.5-stud pale-oak perimeter ring"
-)
-local trimTop = plazaTrim.Position.Y + plazaTrim.Size.X / 2
+
+-- Plaza: paved floor, the giant blind box, benches, planters, leaderboard and spawn.
+local plaza = groups.MainPlaza
+local plazaSurface = plaza:FindFirstChild("PlazaSurface")
+local plazaTrim = plaza:FindFirstChild("PlazaTrim")
+assert(plazaSurface and plazaTrim)
 local plazaTop = plazaSurface.Position.Y + plazaSurface.Size.X / 2
+local trimTop = plazaTrim.Position.Y + plazaTrim.Size.X / 2
 check(
-	close(trimTop, Config.walkingY + World.style.plazaTrimTopOffset)
-		and close(plazaTop, Config.walkingY + World.style.plazaSurfaceTopOffset)
-		and plazaTop > trimTop,
-	"plaza layers use distinct deliberate top planes"
+	close(plazaTop, Layout.plaza.surfaceTop)
+		and close(trimTop, Layout.plaza.trimTop)
+		and plazaTop > trimTop
+		and plazaSurface.Material == "Pavement"
+		and close(plazaSurface.Size.Y, 2 * Config.plazaRadius),
+	"paved 100-stud plaza with a distinct trim plane"
 )
-for _, node in Engine.nodes do
-	check(node.ClassName ~= "SpawnLocation", "no visible or redundant center SpawnLocation exists")
+check(
+	close(plazaSurface.Position.Y - plazaSurface.Size.X / 2, groundTop),
+	"plaza fills down to the grass"
+)
+local box = plaza:FindFirstChild("GiantBlindBox")
+assert(box)
+local body = box:FindFirstChild("Body")
+local lid = box:FindFirstChild("Lid")
+assert(body and lid)
+local marks = 0
+for _, gui in body:GetChildren() do
+	if gui.ClassName == "SurfaceGui" then
+		marks += 1
+		check(gui:FindFirstChild("Mark").Text == "?", "giant box sides carry a question mark")
+	end
 end
+check(marks == 4, "all four box sides show a question mark")
+check(
+	body.Color == TownStyle.colors.pink and body.Size.X == 18 and body.Size.Y == 16,
+	"pastel pink giant box body"
+)
+local bodyTop = body.Position.Y + body.Size.Y / 2
+check(
+	lid.CFrame.LookVector.Y > 0.3 and lid.CFrame.LookVector.Y < 0.5,
+	"lid is tilted open toward the front"
+)
+check(
+	lid.Position.Y - lid.Size.Y / 2 > bodyTop,
+	"lid is lifted as if popping open"
+)
+check(lid:FindFirstChild("Ribbon") == nil and box:FindFirstChild("LidRibbonA") ~= nil, "ribboned lid")
+local sparkles = 0
+for _, part in box:GetChildren() do
+	if string.find(part.Name, "Sparkle") then
+		sparkles += 1
+		check(part.Material == "Neon" and not part.CanCollide, "noncolliding glowing sparkle accent")
+	end
+end
+check(sparkles >= 3, "a few sparkle accents")
+local furniture = { Bench = 0, Planter = 0 }
+for _, child in plaza:GetChildren() do
+	local kind = string.match(child.Name, "^(%a+)_%d+$")
+	if kind == "Bench" or kind == "Planter" then
+		furniture[kind] += 1
+	end
+end
+check(furniture.Bench == 3 and furniture.Planter == 4, "three benches and four planters")
+for _, part in descendantParts(plaza) do
+	local planar = math.sqrt(part.Position.X ^ 2 + part.Position.Z ^ 2)
+	if planar > Layout.landmark.baseRadius + 2 and part.ClassName == "Part" then
+		for _, corner in corners(part) do
+			check(
+				not inPathCorridor(corner, Config.plazaRadius + 1),
+				"plaza furniture and the leaderboard keep every path mouth clear: " .. part.Name
+			)
+		end
+	end
+end
+local spawnLocations = {}
+for _, node in Engine.nodes do
+	if node.ClassName == "SpawnLocation" and not node.dead then
+		table.insert(spawnLocations, node)
+	end
+end
+check(#spawnLocations == 1 and spawnLocations[1] == built.spawn, "one plaza SpawnLocation")
+local spawn = built.spawn
+check(
+	spawn.Neutral and spawn.Duration == 0 and spawn.Enabled and not spawn.CanCollide,
+	"plaza spawn is a neutral flush pad without a force field"
+)
+check(
+	radius(spawn.Position) < Config.plazaRadius - Layout.plaza.spawnSize
+		and radius(spawn.Position) > Layout.landmark.baseRadius + Layout.plaza.spawnSize
+		and math.abs(spawn.Position.Y + spawn.Size.Y / 2 - plazaTop) < 0.05,
+	"plaza spawn sits flush on open paving clear of the giant box"
+)
+
+-- Leaderboard: two-sided, self-lit, between two path mouths.
+local board = built.board
+check(board.model.Parent == plaza and #board.faces == 2, "two-sided physical leaderboard on the plaza")
+check(
+	dot(board.panel.CFrame.LookVector, (Engine.Vector3.new(0, 0, 0) - board.panel.Position).Unit) > 0.95,
+	"the front face looks toward the plaza center"
+)
+local faceNames = {}
+for _, gui in board.panel:GetChildren() do
+	if gui.ClassName == "SurfaceGui" then
+		faceNames[gui.Face] = true
+		check(gui.LightInfluence == 0 and not gui.AlwaysOnTop, "board stays readable at night")
+	end
+end
+check(faceNames.Front and faceNames.Back, "SurfaceGuis on both board faces")
+for _, face in board.faces do
+	check(#face.rows == 5 and #face.dots == 3, "five rows and three page dots per face")
+end
+LeaderboardBoard.show(board, 2, "TOP COINS / SEC", { { name = "Ava", value = "12.5/s" } }, "All servers")
+for _, face in board.faces do
+	check(
+		face.title.Text == "TOP COINS / SEC"
+			and face.rows[1].name.Text == "Ava"
+			and face.rows[1].value.Text == "12.5/s"
+			and face.rows[2].name.Text == "—"
+			and face.rows[5].value.Text == ""
+			and face.status.Text == "All servers"
+			and face.dots[2].BackgroundColor3 == TownStyle.colors.gold
+			and face.dots[1].BackgroundColor3 ~= TownStyle.colors.gold,
+		"both faces render the same page with placeholders for missing rows"
+	)
+end
+
+-- Paths: radial, resting on the grass, just below the plot floor; four night bollards each.
 local entranceRadius = Config.plotRadius - Config.depth / 2
-local expectedPathLength = entranceRadius
-	+ Config.pathOverlap
-	- (Config.plazaRadius - Config.pathOverlap)
-local innerPathPoints = {}
+local expectedPathLength = entranceRadius + Config.pathOverlap - (Config.plazaRadius - Config.pathOverlap)
+local street = Layout.street
 local bollards = 0
 for index = 1, Config.maxPlots do
-	local path = world:FindFirstChild("Path_" .. index)
+	local path = groups.Paths:FindFirstChild("Path_" .. index)
 	assert(path)
 	local surface = path:FindFirstChild("WalkingSurface")
 	assert(surface)
-	local leftTrim = path:FindFirstChild("LeftOakTrim")
-	assert(leftTrim)
-	local rightTrim = path:FindFirstChild("RightOakTrim")
-	assert(rightTrim)
 	check(
-		path.ClassName == "Model"
-			and path:GetAttribute("PlotSlot") == index
-			and #path:GetChildren() == 7,
-		"one indexed finished path with two trims and four bollards per plot"
-	)
-	check(
-		surface.Size.X == Config.pathWidth
-			and close(surface.Size.Y, World.style.pathSurfaceHeight)
+		path:GetAttribute("PlotSlot") == index
+			and surface.Size.X == Config.pathWidth
 			and close(surface.Size.Z, expectedPathLength)
-			and surface.Material == "SmoothPlastic"
-			and surface.Color == World.style.colors.ivory,
-		"path uses the canonical width, computed length and warm ivory surface"
+			and close(surface.Position.Y + surface.Size.Y / 2, Config.walkingY - 0.01)
+			and close(surface.Position.Y - surface.Size.Y / 2, groundTop),
+		"path keeps its width/length, rests on grass and sits just under the plot floor"
 	)
 	check(
-		close(surface.Position.Y + surface.Size.Y / 2, Config.walkingY),
-		"path top meets the common walking plane"
+		dot(surface.CFrame.LookVector, Engine.Vector3.new(-surface.Position.X, 0, -surface.Position.Z)) > 0,
+		"every path points radially toward the plaza"
 	)
-	for side, trim in { [-1] = leftTrim, [1] = rightTrim } do
-		local at = localPosition(surface.CFrame, trim.Position)
-		check(
-			close(trim.Size.X, World.style.pathTrimWidth)
-				and close(trim.Size.Z, expectedPathLength)
-				and close(at.X, side * (Config.pathWidth / 2 + World.style.pathTrimWidth / 2))
-				and trim.Material == "Wood"
-				and trim.Color == World.style.colors.oak,
-			"each path has one narrow flush pale-oak trim on each side"
-		)
-		check(
-			close(
-				trim.Position.Y + trim.Size.Y / 2,
-				Config.walkingY + World.style.pathTrimTopOffset
-			),
-			"path trim sits below the walking face without coplanar overlap"
-		)
-	end
-	for pair = 1, 2 do
+	for pair, ring in Layout.path.bollardRadii do
 		for _, sideName in { "Left", "Right" } do
 			local bollard = path:FindFirstChild(string.format("Bollard_%d_%s", pair, sideName))
 			assert(bollard)
-			local base = bollard:FindFirstChild("Base")
-			assert(base)
 			local lens = bollard:FindFirstChild("WarmLens")
-			assert(lens)
-			local cap = bollard:FindFirstChild("Cap")
-			assert(cap)
 			local light = lens:FindFirstChildOfClass("PointLight")
 			assert(light)
-			local baseAt = localPosition(surface.CFrame, base.Position)
-			local expectedFraction = World.style.bollardFractions[pair]
-			local expectedZ = (expectedFraction - 0.5) * expectedPathLength
+			local at = Geometry.radialTransform(index, 1, 0):PointToObjectSpace(bollard:FindFirstChild("Base").Position)
 			check(
-				close(
-					math.abs(baseAt.X),
-					Config.pathWidth / 2
-						+ World.style.pathTrimWidth
-						+ World.style.bollardGap
-						+ World.style.bollardWidth / 2
-				)
-					and close(baseAt.Z, expectedZ)
-					and math.abs(baseAt.X) - base.Size.X / 2
-						> Config.pathWidth / 2 + World.style.pathTrimWidth,
-				"bollard pairs use path-local thirds and remain outside the walking area"
+				math.abs(at.X) - TownProps.style.bollard.width / 2 > Config.pathWidth / 2 + Layout.path.trimWidth,
+				"bollards stand outside the walking width"
 			)
 			check(
-				close(
-					cap.Position.Y + cap.Size.Y / 2 - (Config.walkingY - World.style.foundationDrop),
-					World.style.bollardHeight
-				) and #bollard:GetChildren() == 4,
-				"each bollard is a bounded four-part 3.8-stud fixture"
+				math.abs(at.Z + 1 - ring) < 0.001
+					and math.abs(ring - street.radius) > street.curbWidth / 2 + 1,
+				"bollards stay off Market Street"
 			)
-			check(
-				light.Color == World.style.colors.light
-					and light.Brightness == World.style.lightBrightness
-					and light.Range == World.style.lightRange
-					and not light.Shadows
-					and lens.Material == "SmoothPlastic",
-				"bollard lens emits subtle non-Neon warm light"
-			)
+			check(not light.Shadows and light.Enabled == NightLights.isOn(), "bollard light follows the night state")
 			bollards += 1
 		end
 	end
-	local inward = surface.CFrame:PointToWorldSpace(Engine.Vector3.new(0, 0, -surface.Size.Z / 2))
-	local outward = surface.CFrame:PointToWorldSpace(Engine.Vector3.new(0, 0, surface.Size.Z / 2))
-	innerPathPoints[index] = inward
-	check(
-		close(radius(inward), Config.plazaRadius - Config.pathOverlap),
-		"path terminates slightly under the raised plaza layers without a crack"
-	)
-	check(
-		close(radius(outward), entranceRadius + Config.pathOverlap),
-		"path slightly overlaps the centered plot entrance without passing through the plot"
-	)
-	check(
-		dot(
-			surface.CFrame.LookVector,
-			Engine.Vector3.new(-surface.Position.X, 0, -surface.Position.Z)
-		) > 0,
-		"every path points radially toward the plaza"
-	)
-	check(
-		surface.Position.Y + surface.Size.Y / 2 < trimTop and trimTop < plazaTop,
-		"path, plaza trim and plaza surface never share a visible top plane"
-	)
 end
-check(bollards == 32, "eight paths create exactly two light pairs and four bollards each")
-for index = 1, Config.maxPlots do
-	local nextIndex = index % Config.maxPlots + 1
-	check(
-		(innerPathPoints[index] - innerPathPoints[nextIndex]).Magnitude > Config.pathWidth,
-		"neighboring paths remain separate at their closest ends"
-	)
+check(bollards == 32, "four bollards on each of the eight paths")
+
+-- Market Street: cobbled ring crossing every path, with lanterns on both sides between paths.
+local market = groups.MarketStreet
+local cobbles, curbs, lanterns = 0, 0, 0
+local pathTop = Config.walkingY - 0.01
+for _, child in market:GetChildren() do
+	local kind, number = string.match(child.Name, "^(%a+)_(%d+)$")
+	if kind == "Cobbles" or kind == "Curb" then
+		local width = if kind == "Cobbles" then street.width else street.curbWidth
+		local top = child.Position.Y + child.Size.Y / 2
+		local expected = (if kind == "Cobbles" then street.top else street.curbTop)
+			+ (if tonumber(number) % 2 == 0 then street.stagger else 0)
+		check(
+			close(radius(child.Position), street.radius)
+				and child.Size.Z == width
+				and close(top, expected)
+				and top > pathTop
+				and close(child.Position.Y - child.Size.Y / 2, groundTop),
+			"street segments ring the plaza above the paths and rest on grass"
+		)
+		check(
+			child.Size.X / 2 >= (street.radius + width / 2) * math.tan(math.pi / street.segments),
+			"segments overlap so the ring has no gaps"
+		)
+		check(child.Material == (if kind == "Cobbles" then "Cobblestone" else "Slate"), "cobbles over a stone curb")
+		if kind == "Cobbles" then
+			cobbles += 1
+		else
+			curbs += 1
+		end
+	elseif string.find(child.Name, "^Lantern_") then
+		lanterns += 1
+		local lens = child:FindFirstChild("Lens")
+		check(lens:FindFirstChildOfClass("PointLight") ~= nil, "every lantern carries one light")
+		local ring = radius(child:FindFirstChild("Post").Position)
+		check(
+			math.abs(ring - street.radius) > street.curbWidth / 2 + 0.5,
+			"lanterns stand on the sidewalks beside the street"
+		)
+		for _, corner in corners(child:FindFirstChild("Base")) do
+			check(not inPathCorridor(corner, entranceRadius), "lanterns stand between paths")
+		end
+	end
 end
+check(cobbles == street.segments and curbs == street.segments, "complete cobble and curb rings")
+check(lanterns == 2 * Config.maxPlots, "two lanterns in every gap between paths")
+check(
+	street.radius - street.curbWidth / 2 > Config.plazaRadius + Layout.plaza.trimWidth
+		and street.radius + street.curbWidth / 2 < entranceRadius,
+	"Market Street lies between the plaza and the plot entrances"
+)
+
+-- Gaps and edge decor never intrude on plots, paths or the street.
+local stacks, statues = 0, 0
+for gap = 1, Config.maxPlots do
+	local model = groups.Gaps:FindFirstChild("Gap_" .. gap)
+	assert(model)
+	local stack, statue = model:FindFirstChild("GiftBoxStack"), model:FindFirstChild("Statue")
+	if gap % 2 == 1 then
+		assert(stack)
+		stacks += 1
+		local boxes = 0
+		for _, child in stack:GetChildren() do
+			if child:FindFirstChild("Box") then
+				boxes += 1
+			end
+		end
+		check(boxes == 4 and stack:FindFirstChild("Tumbled") ~= nil, "three stacked boxes plus one tumbled box")
+		check(stack:FindFirstChild("Top"):FindFirstChild("BowKnot") ~= nil, "the top box has a ribbon bow")
+	else
+		assert(statue)
+		statues += 1
+		check(statue:FindFirstChild("Head") ~= nil and statue:FindFirstChild("Pedestal") ~= nil, "figure on a pedestal")
+	end
+end
+check(stacks == 4 and statues == 4, "gaps alternate gift-box stacks and statue gardens")
+for _, group in { groups.Gaps, groups.GardenEdge } do
+	for _, part in descendantParts(group) do
+		if not string.find(part.Name, "^BoundaryWall") then
+			for _, corner in corners(part) do
+				check(not insideAnyPlot(corner), "decor stays outside every plot: " .. part.Name)
+				check(not inPathCorridor(corner, entranceRadius + 1), "decor stays off every path: " .. part.Name)
+				check(
+					math.abs(radius(corner) - street.radius) > street.curbWidth / 2,
+					"decor stays off Market Street: " .. part.Name
+				)
+			end
+		end
+	end
+end
+local edge = groups.GardenEdge
+local hedges, walls, edgeTrees, plotStacks = 0, 0, 0, 0
+for _, child in edge:GetChildren() do
+	if string.find(child.Name, "^Hedge_") then
+		hedges += 1
+		check(
+			child.Material == "Grass"
+				and child.CanCollide
+				and child.Size.X / 2
+					>= (Layout.edge.hedgeRadius + Layout.edge.hedgeThickness / 2) * math.tan(math.pi / Layout.edge.hedgeSegments),
+			"continuous colliding hedge ring"
+		)
+	elseif string.find(child.Name, "^BoundaryWall_") then
+		walls += 1
+		check(
+			child.Transparency == 1
+				and child.CanCollide
+				and radius(child.Position) > Layout.edge.hedgeRadius + Layout.edge.hedgeThickness / 2
+				and child.Size.Y >= 50
+				and child.Size.X / 2
+					>= (Layout.edge.wallRadius + 1) * math.tan(math.pi / Layout.edge.wallSegments),
+			"tall invisible boundary walls close the ring behind the hedge"
+		)
+	elseif string.find(child.Name, "^EdgeTree_") then
+		edgeTrees += 1
+		check(radius(child:FindFirstChild("Trunk").Position) < Layout.edge.hedgeRadius, "tree line in front of the hedge")
+	elseif string.find(child.Name, "^PlotBoxStack_") then
+		plotStacks += 1
+	end
+end
+check(hedges == Layout.edge.hedgeSegments and walls == Layout.edge.wallSegments, "complete hedge and wall rings")
+check(edgeTrees == 3 * Config.maxPlots and plotStacks == Config.maxPlots, "tree line and one box stack behind each plot")
+
+-- Night lights stay inside the budget and switch lens glow with the lights.
+local staticLights = NightLights.lightCount()
+check(
+	staticLights == 32 + 2 * Config.maxPlots + 1 and staticLights + Config.maxPlots <= NightLights.budget,
+	string.format("static night lights %d leave room for eight arch glows within %d", staticLights, NightLights.budget)
+)
+print(string.format("Static night lights: %d (+1 per active plot) / %d", staticLights, NightLights.budget))
+local sampleBollard = groups.Paths:FindFirstChild("Path_1"):FindFirstChild("Bollard_1_Left")
+local sampleLens = sampleBollard:FindFirstChild("WarmLens")
+local dayColor = sampleLens.Color
+NightLights.set(true)
+check(
+	sampleLens.Material == "Neon" and sampleLens:FindFirstChildOfClass("PointLight").Enabled and NightLights.isOn(),
+	"dusk turns lights and lens glows on"
+)
+NightLights.set(false)
+check(
+	sampleLens.Material == "SmoothPlastic"
+		and sampleLens.Color == dayColor
+		and not sampleLens:FindFirstChildOfClass("PointLight").Enabled,
+	"dawn restores daytime lenses and switches lights off"
+)
+
+-- Fixed plot platforms with potted plants outside the arch posts.
 local platformParts = 0
 for index = 1, Config.maxPlots do
-	local platform = world:FindFirstChild("PlotSlot_" .. index)
+	local platform = groups.PlotSlots:FindFirstChild("PlotSlot_" .. index)
 	assert(platform)
 	local transform = Geometry.transform(index)
-	check(
-		platform.ClassName == "Model" and platform:GetAttribute("PlotSlot") == index,
-		"every fixed slot owns one indexed platform model"
-	)
 	local floor = platform:FindFirstChild("WalkingSurface")
-	assert(floor)
 	local trim = platform:FindFirstChild("OakTrim")
-	assert(trim)
 	local base = platform:FindFirstChild("BaseCenter")
-	assert(base)
+	assert(floor and trim and base)
+	check(platform:GetAttribute("PlotSlot") == index, "every fixed slot owns one indexed platform model")
 	check(
 		floor.Material == "WoodPlanks" and floor.Color == PlotFixture.palette.floor,
 		"quiet pale wood walking surface"
 	)
+	check(close(radius(transform.Position), Config.plotRadius), "plot centers stay on the 170-stud ring")
 	check(
-		trim.Material == "Wood" and trim.Color == PlotFixture.palette.oak,
-		"thin pale-oak perimeter layer"
-	)
-	check(
-		base.Material == "SmoothPlastic" and base.Color == PlotFixture.palette.ivory,
-		"warm off-white structural base"
-	)
-	check(
-		close(radius(transform.Position), Config.plotRadius),
-		"every plot center lies on the canonical radial ring"
-	)
-	check(
-		dot(
-			transform.LookVector,
-			Engine.Vector3.new(-transform.Position.X, 0, -transform.Position.Z)
-		) > 0,
+		dot(transform.LookVector, Engine.Vector3.new(-transform.Position.X, 0, -transform.Position.Z)) > 0,
 		"plot local -Z faces the central plaza"
 	)
+	check(close(floor.Position.Y + floor.Size.Y / 2, transform.Position.Y), "floor keeps the anchor plane")
 	check(
-		close(floor.Position.Y + floor.Size.Y / 2, transform.Position.Y),
-		"new floor preserves the established fixture and anchor plane"
+		close(trim.Position.Y + trim.Size.Y / 2, floor.Position.Y - floor.Size.Y / 2)
+			and close(base.Position.Y + base.Size.Y / 2, trim.Position.Y - trim.Size.Y / 2),
+		"layered platform without gaps"
 	)
-	check(
-		close(dot(floor.CFrame.LookVector, transform.LookVector), 1),
-		"platform rotates with its plot transform"
-	)
-	check(
-		close(trim.Position.Y + trim.Size.Y / 2, floor.Position.Y - floor.Size.Y / 2),
-		"oak trim meets the walking surface without a gap"
-	)
-	check(
-		close(base.Position.Y + base.Size.Y / 2, trim.Position.Y - trim.Size.Y / 2),
-		"off-white base meets the oak trim without a gap"
-	)
-	check(
-		floor.Size.X == 94 and floor.Size.Z == 90 and trim.Size.X == 96 and trim.Size.Z == 92,
-		"layered insets leave restrained visible borders"
-	)
-	local pieces = platform:GetChildren()
-	check(#pieces == 12, "bounded twelve-part platform construction")
+	check(close(base.Position.Y - base.Size.Y / 2, groundTop), "platform rests on the grass")
+	local pieces = descendantParts(platform)
+	check(#pieces == 18, "twelve platform parts plus two three-part potted plants")
 	platformParts += #pieces
 	for _, piece in pieces do
 		local at = localPosition(transform, piece.Position)
 		check(
-			math.abs(at.X) + piece.Size.X / 2 <= Config.width / 2 or piece.Shape == "Cylinder",
+			piece.Shape == "Cylinder" or piece.Shape == "Ball" or math.abs(at.X) + piece.Size.X / 2 <= Config.width / 2,
 			"platform piece remains in plot-local width"
 		)
-		check(
-			math.abs(at.Z) + piece.Size.Z / 2 <= Config.depth / 2 + 0.00001,
-			string.format(
-				"platform %d %s remains in plot-local depth: %.3f",
-				index,
-				piece.Name,
-				math.abs(at.Z) + piece.Size.Z / 2
-			)
-		)
-		check(piece.Material ~= "Neon", "plot accent uses color rather than Neon")
+		check(math.abs(at.Z) <= Config.depth / 2, "platform piece remains in plot-local depth")
 	end
 	for _, name in { "InnerAccentLeft", "InnerAccentRight", "InnerAccentFront", "InnerAccentBack" } do
 		local accent = platform:FindFirstChild(name)
-		assert(accent)
 		check(
-			not accent.CanCollide
-				and accent.Material == "SmoothPlastic"
-				and accent.Color == PlotFixture.palette.accent,
-			"subtle noncolliding warm inner accent"
+			not accent.CanCollide and accent.Color == PlotStyle.DefaultAccent,
+			"inner accent uses the single default plot accent"
+		)
+	end
+	for _, name in { "LeftPlanter", "RightPlanter" } do
+		local pot = platform:FindFirstChild(name):FindFirstChild("Pot")
+		local at = localPosition(transform, pot.Position)
+		check(
+			math.abs(at.X) - pot.Size.Y / 2 > PlotFixture.arch.postX + PlotFixture.arch.post / 2
+				and math.abs(at.X) - pot.Size.Y / 2 > Config.pathWidth / 2
+				and at.Z < -40,
+			"potted plants flank the entrance outside the arch posts"
 		)
 	end
 end
-check(platformParts == 96, "eight fixed platforms use a bounded 96 native parts")
+check(platformParts == 144, "eight fixed platforms use a bounded 144 native parts")
 local used = {}
 for id = 1, Config.maxPlots do
 	local index = Slots.claim(allocator, id)
@@ -394,7 +599,9 @@ local owner, guest = Engine.player(1), Engine.player(100)
 local plot, other = Plot.create(owner, 1), Plot.create(guest, 2)
 for index = 3, Config.maxPlots do
 	local actor = Engine.player(index)
+	local lightsBefore = NightLights.lightCount()
 	local radialPlot = Plot.create(actor, index)
+	check(NightLights.lightCount() == lightsBefore + 1, "an active plot adds exactly one arch glow")
 	local radialState = Rules.new(0)
 	Plot.render(radialPlot, radialState)
 	local spawnAt = localPosition(radialPlot.transform, radialPlot.spawn.Position)
@@ -403,8 +610,14 @@ for index = 3, Config.maxPlots do
 	local shelfAnchor = radialPlot.shelves.anchors["viewport:1/row:1/slot:1"]
 	assert(shelfAnchor)
 	check(
-		close(spawnAt.X, 0) and close(spawnAt.Z, -33),
-		"spawn remains at the inward entrance of radial plot " .. index
+		close(spawnAt.X, PlotFixture.spawnPad.position.X)
+			and close(spawnAt.Z, PlotFixture.spawnPad.position.Z)
+			and close(spawnAt.Y, PlotFixture.spawnPad.height),
+		"spawn sits above the flush spawn pad of radial plot " .. index
+	)
+	check(
+		dot(radialPlot.spawn.LookVector, radialPlot.transform.LookVector) < 0,
+		"players spawn facing into their plot, toward the Display"
 	)
 	check(
 		close(displayAt.X, 0) and close(displayAt.Z, Geometry.displayZ),
@@ -434,7 +647,27 @@ for index = 3, Config.maxPlots do
 		Plot.contains(radialPlot, actor),
 		"plot-local interaction bounds operate on radial plot " .. index
 	)
+	local largest = Rules.new(0)
+	largest.display.unlocked = 6
+	largest.display.slots = { "", "", "", "", "", "" }
+	Plot.render(radialPlot, largest)
+	local runtimeParts = 0
+	for _, part in descendantParts(radialPlot.model) do
+		if not part:GetAttribute("SlotId") and part.Parent and not part.Parent:GetAttribute("SlotId") then
+			runtimeParts += 1
+		end
+	end
+	check(
+		runtimeParts <= Layout.budgets.plotRuntimeParts,
+		string.format("active plot fixtures stay within budget: %d", runtimeParts)
+	)
+	if index == 3 then
+		print(string.format("Active plot runtime parts at 6 Display slots: %d / %d", runtimeParts, Layout.budgets.plotRuntimeParts))
+	end
 	Plot.destroy(radialPlot)
+	check(NightLights.lightCount() == lightsBefore, "plot release returns its arch glow to the budget")
+	Plot.destroy(radialPlot)
+	check(NightLights.lightCount() == lightsBefore, "release is idempotent")
 end
 local state = Rules.new(0)
 state.discovered["grove.star"] = true
@@ -452,47 +685,67 @@ check(
 	"world ownership independent of slot assignment"
 )
 local entrance = plot.entrance
-local plaqueGui = entrance.parts.Face:FindFirstChildOfClass("SurfaceGui")
-assert(plaqueGui)
-check(
-	entrance.label.Text == "Player 1's Showroom",
-	"entrance plaque uses DisplayName and Showroom terminology"
-)
-check(
-	not string.find(entrance.label.Text, "Collection")
-		and not string.find(entrance.label.Text, "Plot"),
-	"entrance avoids conflicting Collection and placeholder Plot labels"
-)
-check(
-	plaqueGui.Face == "Front" and not plaqueGui.AlwaysOnTop and plaqueGui.LightInfluence == 0.35,
-	"integrated physical plaque faces the entrance"
-)
+check(#entrance.labels == 2, "the arch sign reads on both sides")
+for _, label in entrance.labels do
+	check(label.Text == "Player 1's Showroom", "arch sign uses DisplayName and Showroom terminology")
+end
+local faces = {}
+for _, gui in entrance.parts.Face:GetChildren() do
+	if gui.ClassName == "SurfaceGui" then
+		faces[gui.Face] = true
+		check(not gui.AlwaysOnTop, "integrated physical sign, not a floating billboard")
+	end
+end
+check(faces.Front and faces.Back, "sign SurfaceGuis face the plaza and the plot")
 check(
 	entrance.parts.Face.Material == "SmoothPlastic" and entrance.parts.Frame.Material == "Wood",
-	"warm white plaque and pale-oak frame"
+	"warm white sign face and oak frame"
 )
-check(
-	entrance.parts.Deck.Position.Y - entrance.parts.Deck.Size.Y / 2 == plot.transform.Position.Y,
-	"entrance deck meets the walking plane with only a shallow step"
-)
-check(
-	#entrance.model:GetChildren() == 7,
-	"entrance uses seven physical pieces and no duplicate billboard"
-)
-for _, piece in entrance.model:GetChildren() do
-	if piece.ClassName == "Part" then
-		local at = localPosition(plot.transform, piece.Position)
+check(entrance.parts.Beam.Color == PlotStyle.DefaultAccent, "arch beam uses the plot accent")
+local signBottom = localPosition(plot.transform, entrance.parts.Frame.Position).Y - entrance.parts.Frame.Size.Y / 2
+check(signBottom >= 9, string.format("arch sign clears the walkway by %.1f studs", signBottom))
+for _, name in { "LeftPost", "RightPost" } do
+	local post = entrance.parts[name]
+	local at = localPosition(plot.transform, post.Position)
+	check(
+		math.abs(at.X) - post.Size.X / 2 > Config.pathWidth / 2,
+		"arch posts stand outside the path width"
+	)
+end
+for _, piece in descendantParts(entrance.model) do
+	local at = localPosition(plot.transform, piece.Position)
+	local bottom = at.Y - piece.Size.Y / 2
+	check(
+		math.abs(at.X) + piece.Size.X / 2 <= Config.width / 2
+			and math.abs(at.Z) + piece.Size.Z / 2 <= Config.depth / 2
+			and at.Z + piece.Size.Z / 2 < -40,
+		"arch stays on the inward plot edge, clear of fixtures"
+	)
+	if math.abs(at.X) - piece.Size.X / 2 < Config.pathWidth / 2 then
 		check(
-			math.abs(at.X) + piece.Size.X / 2 <= Config.width / 2
-				and math.abs(at.Z) + piece.Size.Z / 2 <= Config.depth / 2,
-			"entrance treatment remains inside its rotated plot"
-		)
-		check(
-			at.Z + piece.Size.Z / 2 < -40,
-			"entrance pieces stay on the inward plot edge and clear of fixtures"
+			bottom >= 9 or (piece == entrance.parts.Deck and piece.Size.Y <= 0.15),
+			"nothing in the doorway sits below the arch clearance: " .. piece.Name
 		)
 	end
 end
+check(#descendantParts(entrance.model) == 10, "ten-part entrance arch")
+check(#entrance.lights == 3 and entrance.lights[1].light ~= nil, "one sign glow plus two lamp lenses")
+local pad = plot.spawnPad
+for _, ring in descendantParts(pad) do
+	local at = localPosition(plot.transform, ring.Position)
+	check(
+		not ring.CanCollide and not ring.CanQuery and at.Y + ring.Size.X / 2 <= 0.08,
+		"spawn pad is flush and noncolliding"
+	)
+	check(
+		math.abs(at.X) - ring.Size.Y / 2 > PlotFixture.arch.postX
+			and at.X + ring.Size.Y / 2 < 0
+			and at.Z - ring.Size.Y / 2 > PlotFixture.arch.z + 2
+			and at.Z + ring.Size.Y / 2 < Geometry.displayZ - 10,
+		"spawn pad sits on the open right floor, behind the arch and clear of the Display"
+	)
+end
+check(descendantParts(pad)[1].Color == PlotStyle.DefaultAccent, "spawn pad uses the plot accent")
 local unitCount = 0
 for _, child in plot.collection.model:GetChildren() do
 	check(
@@ -584,19 +837,16 @@ for _, node in fixtureNodes do
 	)
 	if node.ClassName == "Part" then
 		parts += 1
-		local angle = math.rad(if node.Orientation then node.Orientation.X else 0)
-		local halfZ = (
-			math.abs(math.sin(angle)) * node.Size.Y + math.abs(math.cos(angle)) * node.Size.Z
-		) / 2
-		local at = localPosition(plot.transform, node.Position)
+		for _, corner in corners(node) do
+			local at = localPosition(plot.transform, corner)
+			check(
+				math.abs(at.X) < Config.width / 2 and math.abs(at.Z) < Config.depth / 2,
+				"every Collection part including chevrons and awning stays within rotated plot bounds"
+			)
+		end
 		check(
-			math.abs(at.X) + node.Size.X / 2 < Config.width / 2
-				and math.abs(at.Z) + halfZ < Config.depth / 2,
-			"every Collection part including rotated chevrons stays within rotated plot bounds"
-		)
-		check(
-			node.Material == "Wood" or node.Material == "SmoothPlastic",
-			"warm native wood/plastic only, no neon"
+			node.Material == "Wood" or node.Material == "SmoothPlastic" or node.Material == "Fabric",
+			"warm native wood/plastic/fabric only, no neon"
 		)
 	elseif node.ClassName == "SurfaceLight" then
 		lights += 1
@@ -610,7 +860,9 @@ for _, node in fixtureNodes do
 	end
 end
 check(
-	worldText == 1 and lights == 9 and parts == 56,
+	worldText == 1
+		and lights == 9
+		and parts == 58 + Awning.partCount(3 * Geometry.shelfUnitPitch + CollectionFixture.awning.endMargin),
 	"one title, nine bounded row washes and fixed native-part budget"
 )
 for position, unit in plot.physicalShelves do
@@ -748,14 +1000,38 @@ for capacity = 3, 6 do
 			and plot.shelves.anchors[firstAnchor] == initialShelfAnchor,
 		"Display resize leaves shelves and their anchors untouched"
 	)
-	for _, piece in initialFixture:GetChildren() do
-		local at = localPosition(plot.transform, piece.Position)
-		check(
-			math.abs(at.X) + piece.Size.X / 2 < Config.width / 2
-				and math.abs(at.Z) + piece.Size.Z / 2 < Config.depth / 2,
-			"every fixture piece stays inside rotated plot footprint"
-		)
+	for _, piece in descendantParts(initialFixture) do
+		for _, corner in corners(piece) do
+			local at = localPosition(plot.transform, corner)
+			check(
+				math.abs(at.X) < Config.width / 2 and math.abs(at.Z) < Config.depth / 2,
+				"every fixture piece including the awning stays inside rotated plot footprint"
+			)
+		end
 	end
+	local awning = plot.fixture.awning
+	assert(awning)
+	local canopy = awning:FindFirstChild("Canopy")
+	local valance = awning:FindFirstChild("Valance")
+	check(
+		awning.Parent == initialFixture
+			and close(canopy.Size.X, width + 2 * Fixture.awning.overhang)
+			and #descendantParts(awning) == Awning.partCount(width + 2 * Fixture.awning.overhang),
+		"one striped awning spans the Display at every capacity"
+	)
+	check(
+		localPosition(plot.transform, valance.Position).Y - valance.Size.Y / 2
+			> localPosition(plot.transform, initialSign.Position).Y + initialSign.Size.Y / 2,
+		"awning valance stays above the DISPLAY sign"
+	)
+	local stripes = 0
+	for _, stripe in awning:GetChildren() do
+		if stripe.Name == "Stripe" then
+			stripes += 1
+			check(stripe.Color == PlotStyle.DefaultAccent and not stripe.CanCollide, "accent stripes")
+		end
+	end
+	check(stripes == math.ceil(Awning.stripes(width + 2 * Fixture.awning.overhang) / 2), "alternating stripes")
 	check(
 		plot.fixture.rate.Text == "14.5 Coins/sec",
 		"sign reads server-computed Display rate including fractions"

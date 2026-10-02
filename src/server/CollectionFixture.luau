@@ -2,6 +2,8 @@
 -- Physical presentation only. Persistent Shelf Units and carousel decisions belong to Shelves.
 local Config = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local Geometry = require(script.Parent.PlotGeometry)
+local Awning = require(script.Parent.Awning)
+local PlotStyle = require(script.Parent.PlotStyle)
 local Fixture = {}
 Fixture.palette = table.freeze({
 	ivory = Color3.fromRGB(242, 235, 220),
@@ -15,6 +17,10 @@ Fixture.palette = table.freeze({
 	muted = Color3.fromRGB(163, 146, 122),
 })
 Fixture.style = table.freeze({ depth = 5, post = 0.55, board = 0.3, figureScale = 1 })
+-- Striped awning above the COLLECTION header, overhanging toward the plot center (-X).
+-- Its valance bottom (backY - rise - 0.8 = top + 3.4) clears the header top (top + 2.85).
+Fixture.awning =
+	table.freeze({ backX = 3.2, backRise = 5.4, depth = 7.5, rise = 1.2, endMargin = 9.5 })
 local palette, style = Fixture.palette, Fixture.style
 export type Control = { panel: Part, accents: { Part } }
 export type Render = {
@@ -25,6 +31,7 @@ export type Render = {
 	controls: { Control },
 	header: TextLabel,
 	navigation: boolean?,
+	awning: Model,
 }
 local function piece(
 	parent: Instance,
@@ -149,7 +156,7 @@ function Fixture.setNavigation(render: Render, enabled: boolean)
 		end
 	end
 end
-function Fixture.create(parent: Instance, transform: CFrame): Render
+function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): Render
 	local model = Instance.new("Model")
 	model.Name = "CollectionFixture"
 	local units: { Model } = {}
@@ -297,6 +304,33 @@ function Fixture.create(parent: Instance, transform: CFrame): Render
 	header.TextScaled = true
 	header.Text = "COLLECTION"
 	header.Parent = gui
+	local awning = Fixture.awning
+	for _, side in { -1, 1 } do
+		piece(
+			model,
+			transform,
+			"AwningPost",
+			Vector3.new(0.5, awning.backRise - 0.6, 0.5),
+			Vector3.new(
+				x + awning.backX - 0.3,
+				top + 0.4 + (awning.backRise - 0.6) / 2,
+				z + side * (span / 2 + 0.2)
+			),
+			palette.oak,
+			true
+		)
+	end
+	local canopy = Awning.build(
+		model,
+		"Awning",
+		transform
+			* CFrame.new(x + awning.backX, top + awning.backRise, z)
+			* CFrame.Angles(0, math.rad(90), 0),
+		span + awning.endMargin,
+		awning.depth,
+		awning.rise,
+		accent or PlotStyle.DefaultAccent
+	)
 	local controls: { Control } = {}
 	local hitboxes: { Part } = {}
 	for _, direction in { -1, 1 } do
@@ -312,6 +346,7 @@ function Fixture.create(parent: Instance, transform: CFrame): Render
 		hitboxes = hitboxes,
 		header = header,
 		navigation = nil,
+		awning = canopy,
 	}
 	Fixture.setNavigation(render, false)
 	model.Parent = parent
