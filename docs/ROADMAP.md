@@ -21,8 +21,9 @@ remains but completion rewards are TBD. See [canonical design](PLAYER_PLOTS_AND_
 and [implementation and verification](PLOT_SHELF_IMPLEMENTATION.md).
 
 Remaining gate: native Studio multi-client, input, rendering, persistence and performance
-acceptance. Final art, shelf customization, individual Shelf Unit acquisition/pricing and Display slots 5/6
-acquisition need later authorization. The existing slot-4 Coin unlock remains.
+acceptance. Final art, shelf customization and individual Shelf Unit acquisition/pricing remain future work.
+The economy redesign is authorized and implemented on its branch: permanent duplicate income, soft pity,
+collection-tier prices, sequential Coin unlocks for slots 4-6 and a fresh-save reset. See [economy](ECONOMY.md).
 
 ## Historical milestones
 

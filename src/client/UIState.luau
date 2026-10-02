@@ -76,38 +76,58 @@ end
 
 -- Economy fields (merge surface) -----------------------------------------------------------
 
-function State.price(snapshot: Types.Snapshot, _collection: string): number
-	return snapshot.price
+-- Box price for one collection (server-published per collection).
+function State.price(snapshot: Types.Snapshot, collection: string): number
+	return snapshot.prices[collection] or 0
 end
 
+-- Effective Display rate for the copies owned now (duplicates included by the server).
 function State.figureRate(snapshot: Types.Snapshot, id: string): number
 	return snapshot.rates[id] or 0
 end
 
+-- Current chance (includes increasing-chance luck) and the published base chance.
 function State.figureOdds(snapshot: Types.Snapshot, id: string): number
 	return snapshot.odds[id] or 0
+end
+
+function State.baseOdds(snapshot: Types.Snapshot, id: string): number
+	return snapshot.baseOdds[id] or snapshot.odds[id] or 0
 end
 
 function State.totalRate(snapshot: Types.Snapshot): number
 	return snapshot.rate
 end
 
+-- Set bonus as Coins/second already included in totalRate (server computes the percentage).
 function State.bonusAmount(snapshot: Types.Snapshot): number
 	return snapshot.bonus
 end
 
-function State.freeBoxOptions(_snapshot: Types.Snapshot): { string }
-	local ids: { string } = {}
-	for _, collection in Catalog.collections do
-		table.insert(ids, collection.id)
-	end
-	return ids
+-- Uncollected Coins banked by one displayed figure (collected in the world, never here).
+function State.earnings(snapshot: Types.Snapshot, id: string): number
+	return math.floor(snapshot.earnings[id] or 0)
 end
 
+function State.freeBoxOptions(snapshot: Types.Snapshot): { string }
+	return if snapshot.dailyCollection ~= "" then { snapshot.dailyCollection } else {}
+end
+
+-- Only the next slot is purchasable; its price comes from the snapshot.
 function State.unlockPrice(snapshot: Types.Snapshot, slot: number): number?
-	return if DisplayConfig.unlockMethods[slot] == "LegacyCoins"
+	local method = DisplayConfig.unlockMethods[slot]
+	return if slot == snapshot.unlocked + 1
+			and method == "Coins"
+			and snapshot.expansionCost > 0
 		then snapshot.expansionCost
 		else nil
+end
+
+-- Locked-slot copy: a later coin slot unlocks in order; anything else is not available yet.
+function State.lockedText(_snapshot: Types.Snapshot, slot: number): string
+	return if DisplayConfig.unlockMethods[slot] == "Coins"
+		then "Unlock slot " .. math.max(1, slot - 1) .. " first"
+		else "Coming later"
 end
 
 function State.goalReward(snapshot: Types.Snapshot): number
@@ -184,17 +204,18 @@ function State.filtered(snapshot: Types.Snapshot, collection: string, filter: Fi
 	return ids
 end
 
-export type OddsRow = { rarity: string, count: number, total: number, each: number? }
+export type OddsRow = { rarity: string, count: number, total: number, base: number, each: number? }
 -- Per-rarity rows derived from server-provided odds; "each" only when the rarity is uniform.
 function State.rarityOdds(snapshot: Types.Snapshot, collection: string): { OddsRow }
 	local rows: { OddsRow } = {}
 	for _, rarity in Rarity.order do
-		local count, total, first, uniform = 0, 0, nil :: number?, true
+		local count, total, base, first, uniform = 0, 0, 0, nil :: number?, true
 		for _, id in State.members(collection) do
 			if Catalog.byId[id].rarity == rarity then
 				local odds = State.figureOdds(snapshot, id)
 				count += 1
 				total += odds
+				base += State.baseOdds(snapshot, id)
 				if first == nil then
 					first = odds
 				elseif math.abs(odds - first) > 1e-9 then
@@ -207,6 +228,7 @@ function State.rarityOdds(snapshot: Types.Snapshot, collection: string): { OddsR
 				rarity = rarity,
 				count = count,
 				total = total,
+				base = base,
 				each = if uniform and count > 1 then first else nil,
 			})
 		end
@@ -215,12 +237,18 @@ function State.rarityOdds(snapshot: Types.Snapshot, collection: string): { OddsR
 end
 
 function State.oddsLabel(row: OddsRow): string
-	if row.count == 1 then
-		return "1 figure"
-	end
-	return if row.each
-		then string.format("%d figures, %s each", row.count, State.percent(row.each))
+	local text = if row.count == 1
+		then "1 figure"
+		elseif row.each then string.format(
+			"%d figures, %s each",
+			row.count,
+			State.percent(row.each)
+		)
 		else string.format("%d figures", row.count)
+	-- Increasing-chance luck: show the base next to a raised current chance.
+	return if row.total > row.base + 1e-6
+		then text .. " · base " .. State.percent(row.base)
+		else text
 end
 
 -- Copies and Display -----------------------------------------------------------------------
@@ -232,7 +260,8 @@ function State.copies(snapshot: Types.Snapshot, id: string): (number, number)
 			displayed += 1
 		end
 	end
-	return owned, math.max(0, owned - displayed)
+	-- One Display placement per unique figure; extra copies boost its rate instead.
+	return owned, if owned > 0 and displayed == 0 then 1 else 0
 end
 
 function State.displayed(snapshot: Types.Snapshot, id: string): boolean

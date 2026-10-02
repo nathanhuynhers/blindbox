@@ -59,9 +59,9 @@ Extract from PALETTE section of mockups or provide:
 
 ### Phase 6: Economy
 1. Update `src/shared/Catalog.luau` with figures and collection if not already present
-2. Update `src/server/Economy.luau` with figure entries (rates and weights)
-   - Rates: Common 1–2, Uncommon 3–4, Rare 6–8
-   - Weights: validate they sum correctly per Rules.luau
+2. Follow `docs/ECONOMY_COLLECTION_ONBOARDING.md`: choose an economic tier, bucket/pity
+   profiles and a unique pity group; add explicit figure income units and within-rarity weights
+   to `src/server/Economy.luau`. Validate and simulate the resulting economy.
 
 ### Phase 7: Verification & Documentation
 1. Write `assets/figures/<collection>/PRODUCTION.md` receipt
@@ -176,11 +176,14 @@ Build the collection end-to-end following [COLLECTION_BUILD_PIPELINE.md](docs/CO
 
 These must follow the hierarchy (Common < Uncommon < Rare < Legendary < Mythical):
 
-- **Verity** (Common): rate = 1, weight = 20
-- **Falsity** (Uncommon): rate = 3, weight = 15
-- **Cruelty** (Rare): rate = 7, weight = 10
-- **Lovity** (Legendary): rate = 12, weight = 8
-- **Verity True Form** (Mythical): rate = 18, weight = 3
+- **Verity** (Common): units = 0.625, weight = 1
+- **Falsity** (Uncommon): units = 1.30, weight = 1
+- **Cruelty** (Rare): units = 3, weight = 1
+- **Lovity** (Legendary): units = 8, weight = 1
+- **Verity True Form** (Mythical): units = 22, weight = 1
+
+Concepts references the Niche tier and standard five-rarity bucket/pity profiles.
+These are normalized units, not literal Coins/sec; use the current economy onboarding guide.
 
 ## Notes
 

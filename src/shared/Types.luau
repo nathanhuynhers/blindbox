@@ -43,7 +43,8 @@ export type ShelfView = {
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
-	scrap: number,
+	earnings: { [string]: number },
+	pityByGroup: { [string]: Pity },
 	owned: { [string]: number },
 	discovered: { [string]: boolean },
 	display: Display,
@@ -54,11 +55,12 @@ export type Profile = {
 	goalProgress: number,
 	goalClaimed: boolean,
 }
-export type State = Profile & { revision: number, fraction: number, time: number }
+export type State = Profile & { revision: number, time: number }
+export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 export type Snapshot = {
 	shelves: ShelfView,
 	coins: number,
-	scrap: number,
+	earnings: { [string]: number },
 	owned: { [string]: number },
 	discovered: { [string]: boolean },
 	slots: { string },
@@ -68,8 +70,11 @@ export type Snapshot = {
 	step: number,
 	rates: { [string]: number },
 	odds: { [string]: number },
-	price: number,
-	redeemCost: number,
+	prices: { [string]: number },
+	baseRates: { [string]: number },
+	nextRates: { [string]: number },
+	baseOdds: { [string]: number },
+	dailyCollection: string,
 	unlocked: number,
 	expansionCost: number,
 	dailyReady: boolean,

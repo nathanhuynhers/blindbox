@@ -1,9 +1,11 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
+local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local DisplayFixture = require(script.Parent.DisplayFixture)
 local CollectionFixture = require(script.Parent.CollectionFixture)
 local PlotFixture = require(script.Parent.PlotFixture)
 local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
+local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Geometry = require(script.Parent.PlotGeometry)
 local Config = require(script.Parent.PlotConfig)
 local Shelves = require(script.Parent.Shelves)
@@ -26,6 +28,7 @@ export type Plot = {
 	displayCapacity: number,
 	connections: { RBXScriptConnection },
 	hitboxes: { Part },
+	collectors: { Part },
 }
 local PlayerPlot = {}
 local navigationMargin = 8
@@ -71,6 +74,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		entrance = entrance,
 		connections = {},
 		hitboxes = collection.hitboxes,
+		collectors = {},
 	}
 	table.insert(
 		plot.connections,
@@ -153,6 +157,24 @@ function PlayerPlot.render(plot: Plot, state: Types.State)
 		placements[tostring(slot)] = id
 	end
 	FigureSlots.render(plot.display, placements)
+	for slot, target in plot.collectors do
+		local id = state.display.slots[slot] or ""
+		local anchor = plot.display.anchors[tostring(slot)]
+		if anchor then
+			target.CFrame = anchor * CFrame.new(0, 2, 0)
+		end
+		target:SetAttribute("FigureId", id)
+		target.CanQuery = id ~= ""
+		local click = target:FindFirstChildOfClass("ClickDetector")
+		local prompt = target:FindFirstChildOfClass("ProximityPrompt")
+		if click then
+			click.MaxActivationDistance = if id ~= "" then 12 else 0
+		end
+		if prompt then
+			prompt.Enabled = id ~= ""
+			prompt.ObjectText = if Catalog.byId[id] then Catalog.byId[id].name else "Display"
+		end
+	end
 	local visible = Shelves.publicView(state.shelves, plot.view)
 	local shelfPlacements: { [string]: string } = {}
 	for viewportPosition, unit in visible.visible do
@@ -205,6 +227,60 @@ function PlayerPlot.bind(plot: Plot, onTurn: (Player, number) -> ())
 				end
 			end)
 		)
+	end
+end
+-- Both input routes share the same server-side ownership, live-character and exact-target checks.
+function PlayerPlot.bindCollectors(plot: Plot, onCollect: (Player, number, string) -> ())
+	assert(#plot.collectors == 0, "Collectors already bound")
+	local folder = Instance.new("Folder")
+	folder.Name = "FigureCollectors"
+	folder.Parent = plot.model
+	for slot = 1, DisplayConfig.maxSlots do
+		local target = Instance.new("Part")
+		target.Name = tostring(slot)
+		target.Size = Vector3.new(6, 5, 6)
+		target.Transparency = 1
+		target.Anchored = true
+		target.CanCollide = false
+		target.CanTouch = false
+		target.CanQuery = false
+		target.Parent = folder
+		table.insert(plot.collectors, target)
+		local click = Instance.new("ClickDetector")
+		click.MaxActivationDistance = 0
+		click.Parent = target
+		local prompt = Instance.new("ProximityPrompt")
+		prompt.ActionText = "Collect Coins"
+		prompt:SetAttribute("CollectorOwnerId", plot.ownerId)
+		prompt.ObjectText = "Your displayed figure"
+		prompt.KeyboardKeyCode = Enum.KeyCode.E
+		prompt.MaxActivationDistance = 12
+		prompt.HoldDuration = 0
+		prompt.RequiresLineOfSight = false
+		prompt.Enabled = false
+		prompt.Parent = target
+		local function collect(actor: Player)
+			local pos = position(actor)
+			local id = target:GetAttribute("FigureId")
+			if
+				plot.active
+				and plot.model.Parent == root
+				and folder.Parent == plot.model
+				and target.Parent == folder
+				and click.Parent == target
+				and prompt.Parent == target
+				and actor.UserId == plot.ownerId
+				and pos
+				and (pos - target.Position).Magnitude <= 12
+				and PlayerPlot.contains(plot, actor)
+				and typeof(id) == "string"
+				and id ~= ""
+			then
+				onCollect(actor, slot, id)
+			end
+		end
+		table.insert(plot.connections, click.MouseClick:Connect(collect))
+		table.insert(plot.connections, prompt.Triggered:Connect(collect))
 	end
 end
 function PlayerPlot.destroy(plot: Plot)

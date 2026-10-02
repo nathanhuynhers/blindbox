@@ -1,72 +1,136 @@
-# Full-game candidate economy
+# Collection economy
 
-The implemented/candidate values below remain the current game behavior. A separately authorized,
-not-yet-implemented redesign for variable collection prices, permanent duplicate income bonuses and
-increasing-chance pity is recorded in [Rarity, duplicates and collection-economy redesign](RARITY_ECONOMY_REDESIGN.md).
+Implemented on `codex/economy-redesign`; native Studio acceptance remains pending.
+The [redesign plan](RARITY_ECONOMY_REDESIGN.md) records the discussion. This document and the
+server configuration are the current tuning reference. All prices, grants, odds, owned quantities,
+pity and income calculations remain server-owned.
 
-These are tuning values for the user-authorized full-game candidate, not validated long-term
-balance. Income remains automatic and server-owned; visitors cannot affect payouts. No paid currency,
-offline income, trading or escalating multipliers are implemented.
+## Collection tiers and base income
 
-Supported tiers are Common < Uncommon < Rare < Legendary < Mythical. Live content and odds
-below remain unchanged. Weights belong to individual server economy entries, not rarity tiers;
-no Legendary/Mythical weights or rates are synthesized. Future figures require explicit approved
-values. Startup enforces positive finite rates/weights, existing Common/Uncommon/Rare bands and
-strictly increasing rates across all populated tiers. See [rarity architecture](RARITY.md).
+| Tier | Collections | Box price | Expected-figure payback seconds |
+| --- | --- | ---: | ---: |
+| Starter | Pocket Grove | 1,500 | 180 |
+| Near-starter | Tidepool Tales | 2,000 | 180 |
+| Niche | Concepts | 20,000 | 550 |
+| Prestige | Tender Echoes; We Are All Stars | 200,000 | 850 |
 
-| Parameter | Value |
+Expected-figure payback is a normalization parameter, not actual time per box. Strongest-figure
+selection, duplicates, themed bonuses and additional slots accelerate actual income. The user
+requested roughly 4-6 hours to the first Mythical after entering a new tier, so Niche/Prestige
+no longer use the original uniform 180-second draft.
+
+Each figure has explicit positive `units` and a within-rarity `weight` in server
+`Economy.entries`. For its collection:
+
+```text
+expectedUnits = sum(base bucket probability * within-bucket share * figure units)
+baseRate = figure units * box price / (paybackSeconds * expectedUnits)
+```
+
+The expected units are 1.065 for the two starter collections and 1.219 for the three five-tier
+collections. All figures at one tier use the same economic scale when their weighted units agree.
+Tender Echoes and We Are All Stars have matching rosters, unit values, prices and income scales.
+
+| Rarity | Explicit income units |
 | --- | --- |
-| New profile | 450 Coins once; unsaved Studio preview recreates this on join |
-| Boxes | Pocket Grove, Tidepool Tales, Concepts, Tender Echoes or We Are All Stars; 150 Coins per figure |
-| Content | Two fixed six-figure collections, each with 3 Commons, 2 Uncommons, 1 Rare; Concepts has one figure per tier (Common to Mythical); Tender Echoes and We Are All Stars each have 4 Commons, 3 Uncommons, 3 Rares, 2 Legendaries, 1 Mythical |
-| Per-figure odds | Grove/Tide: each Common 20%, each Uncommon 15%, Rare 10%; Concepts weights 20/15/10/8/3 of 56 (35.7%, 26.8%, 17.9%, 14.3%, 5.4%); Tender Echoes and We Are All Stars weights 20 each Common, 15 each Uncommon, 10 each Rare, 8 each Legendary, 2 Mythical of 173 (11.6%, 8.7%, 5.8%, 4.6%, 1.2% per figure), within selected collection |
-| Grove rates | 1, 1.5, 2, 3, 4, 7 Coins/sec |
-| Tide rates | 1.25, 1.75, 2, 3.25, 4, 7.5 Coins/sec |
-| Concepts rates | 1, 3, 7, 12, 18 Coins/sec (Verity, Falsity, Cruelty, Lovity, Verity True Form) |
-| Tender Echoes rates | Commons 1, 1.2, 1.4, 1.6; Uncommons 3, 3.5, 4; Rares 6, 7, 8; Legendaries 12, 14; Mythical 20 Coins/sec |
-| We Are All Stars rates | Same as Tender Echoes: Commons 1, 1.2, 1.4, 1.6 (Reminiscence, Mirrorlight, Wishing, Page Turner); Uncommons 3, 3.5, 4 (Nightlight, Lamplight, Garden); Rares 6, 7, 8 (Sanctuary, Echo, Radiant); Legendaries 12, 14 (Cloud Rest, Meteor Shower); Mythical 20 (Dreamcatcher) Coins/sec |
-| Rate bands | Common 1-2, Uncommon 3-4, Rare 6-8; validated at startup |
-| Display capacity | Starts at 3; supports 6; legacy fourth-slot unlock costs 4,000 Coins |
-| Themed display | +1 Coin/sec once when at least 3 distinct displayed IDs share a collection |
-| Shelf Units | Three starting units, nine cosmetic positions each; future expansion adds one unit; no price/curve or product-design maximum |
-| Duplicates | Recycle one extra undisplayed copy for 1 Scrap; keep at least one owned copy |
-| Targeted redemption | 6 Scrap for any chosen figure from any collection |
-| Daily box | One free choice of collection per UTC day, no streak |
-| Daily goal | Display 3 distinct figures simultaneously; claim 100 Coins once per UTC day |
-| Completion | Permanent discovery/index tracking; rewards TBD, no room or Shelf Unit grant |
-| Bounds | 200 total copies; 1 billion Coins; 1 million Scrap |
+| Common | 0.55-0.70 |
+| Uncommon | 1.20-1.40 |
+| Rare | 2.80-3.20 |
+| Legendary | 7.50-8.50 |
+| Mythical | 22 |
 
-Display currently supports six positions in one horizontal row. Slot 5/6 acquisition methods
-remain unresolved; the retained 4,000-Coin fourth slot is not a price for slots 5/6.
-Shelves are cosmetic permanent-discovery references. They earn zero Coins, reserve zero copies
-and never count toward themed Display bonuses or daily Display goals. Individual Shelf Unit pricing and
-customization are unimplemented. The retired room palettes have no equivalent in the new system;
-schema 5 validates old palette state before discarding it, while retaining all unrelated economic
-progress and converting saved cosmetic figures. See [migration](DATA_MODEL.md).
+See [collection onboarding](ECONOMY_COLLECTION_ONBOARDING.md) for adding new collections and tiers.
 
-`rate = sum(baseCoinsPerSecond for each occupied slot) + eligibleThemedBonus`
+## Rarity selection and increasing-chance pity
 
-Only displayed copies earn, including repeats. Inventory-only figures do not. Three weakest
-Common copies earn 3/sec, three distinct Grove Commons earn 5.5/sec including the bonus,
-three Grove Rares earn 21/sec, and four Tide Rares earn 30/sec. The small set bonus does not
-make a Common-only Display outperform a Rare-heavy Display. No multiplicative bonuses or rate cap.
+Five-tier base buckets are Common 60%, Uncommon 25%, Rare 13.9%, Legendary 1%, Mythical 0.1%.
+Three-tier starter buckets are Common 60%, Uncommon 30%, Rare 10%. Equal within-rarity weights are
+used today, so a Prestige Legendary is 0.5% per individual figure at base odds.
 
-Each server settlement uses elapsed time and retains fractions. Settle at the previous rate
-before editing a display. Credit whole Coins directly. At the numeric safety ceiling, stop and
-discard excess/fractional earnings; spending resumes from current time without hidden credit.
-The ceiling is a numeric guard, not a normal pacing target. Idle online players keep earning.
+For the next box, where dry counts mean prior successful openings without that specific rarity:
 
-Daily eligibility uses server UTC day indices. Last claimed day never moves backwards; choosing
-a different collection or reconnecting cannot repeat the same day. Full inventory leaves the
-free-box claim available. Goal progress is capped and reset on a new UTC day; a qualifying
-existing display satisfies it immediately. A failed reward action changes neither claim nor
-balance. Save markers and rewards live in the same profile aggregate.
+```text
+Legendary percent = min(8, 1 + max(0, legendaryDryRolls - 40) * 0.05)
+Mythical percent  = min(2, 0.1 + max(0, mythicalDryRolls - 300) * 0.0015)
+```
 
-A new player can open three funded boxes plus the optional daily free box. Even three weakest
-Commons fund an earned box in 50 seconds once displayed. The legacy fourth-slot cost remains a bounded sink. Individual Shelf Unit acquisition is deferred. Test 10/30-minute sessions and returning
-sessions for content exhaustion, value of both collections, idle dominance and stockpiling.
-Current content is forty-three figures; do not disguise that limit with artificial grind.
+These are percentage-point increments. No hard guarantee exists. A Legendary resets only the
+Legendary counter; a Mythical resets only the Mythical counter. Other counters advance once per
+successful box. At one million dry rolls counters saturate; odds already reached their caps much
+earlier. Common/Uncommon/Rare absorb added high-tier probability proportionally.
 
-Prices, rates, box weights, safety bounds and rewards belong to server Economy. Clients receive
-sanitized previews; they never calculate grants or authorize purchases. See [operations](OPERATIONS.md)
-for saving guarantees, private testing and pending balance observations.
+One server random value selects one figure from the final distribution. The Shop shows current
+rarity totals and base values when pity increases them; figure details show individual current odds.
+Counters remain private, persist per pity group and do not advance on failed purchases or replayed
+requests. Each current high-tier collection has its own group. Starter collections have no pity
+for absent rarities. Shared groups require identical economic tier, bucket and pity profiles.
+
+## Permanent duplicates and Display income
+
+Scrap, recycling and redemption are removed. All copies remain owned. Quantity storage is one
+integer per figure ID, with a one-billion-per-figure safety guard and no ordinary total-copy limit.
+If any figure in a requested collection is at that safety guard, opening is refused before spending
+or rolling; the server never substitutes a different result.
+
+```text
+extra = max(0, owned - 1)
+multiplier = 1 + maximumBonus * extra / (extra + curve)
+effectiveRate = baseRate * multiplier
+```
+
+| Rarity | First duplicate | Asymptotic maximum bonus | Curve |
+| --- | ---: | ---: | ---: |
+| Common | +10% | +60% | 5 |
+| Uncommon | +15% | +90% | 5 |
+| Rare | +25% | +125% | 4 |
+| Legendary | +50% | +150% | 2 |
+| Mythical | +100% | +300% | 2 |
+
+Only one instance of each figure ID may earn in Display. Three slots start unlocked; slots 4, 5
+and 6 cost 40,000, 400,000 and 4,000,000 Coins, respectively, purchased sequentially. Inventory-only
+figures earn zero. Shelves remain cosmetic, reserve zero copies and may repeat discoveries.
+
+Displaying three distinct figures from one collection grants +10% of the total effective Display
+rate, once only. This also applies to mixed-tier Displays that contain a qualifying trio.
+
+The strongest fully enhanced lower rarity remains below the weakest unenhanced next rarity
+within each collection. Cross-economic-tier comparisons intentionally differ: an earlier Mythical
+can help finance a later box and may out-earn its early pulls.
+
+Transactions settle elapsed time at the previous rate before changing inventory or placement.
+Each displayed figure banks its own income, including fractional Coins and its proportional
+share of the themed bonus. Coins enter the wallet only when the owner clicks that figure or
+presses E nearby (touch players can tap its prompt). Shelves cannot collect or generate income.
+Uncollected balances persist per figure ID even when removed or replaced; redisplay to collect.
+Each bank has a one-trillion-Coin safety ceiling. Collection transfers only whole Coins that fit
+in the wallet, retaining fractions and overflow. No ordinary bank timer/cap or offline income exists.
+Duplicate copies enhance one bank's earning rate, not multiple collection targets.
+
+The server checks exact-target proximity (12 studs), living character, ownership, session readiness
+and rate limits. Clients cannot supply collection amounts or authorize collection through remotes.
+Auto-collect is a future gamepass: the shared server transfer primitive is ready for reuse, but no
+entitlement checks, product IDs, purchase prompts or automatic collection are enabled yet.
+
+## Starting and daily progression
+
+New profiles receive 4,500 Coins once. The first three purchases use normal random odds; distinct
+starters are not guaranteed. A duplicate-only start has one enhanced earning figure rather than
+three earning copies. One free Pocket Grove box is available per UTC day. Other boxes cannot be
+claimed free. The daily goal grants 1,000 Coins for displaying three distinct figures simultaneously.
+
+Claim markers and grants are one profile aggregate. Existing clock-rollback, storage-failure and
+session-exclusion rules remain. See [data model](DATA_MODEL.md).
+
+## Fresh-save rollout and verification
+
+The user explicitly requested a full progression reset. The new stores are
+`BlindBox_Economy2_Studio` and `BlindBox_Economy2_Live`, now with schema 7. No old Coins, Scrap,
+figures, discoveries, shelves or progress are imported. Old stores are untouched rollback backups;
+no live store was deleted or published by this implementation. Unexpected old or corrupt data in
+the new namespace fails closed rather than becoming a fresh profile. Valid schema-6 Economy2
+profiles upgrade to schema 7 with empty banks and all other progress preserved; this follow-up
+does not perform another reset.
+
+[Implementation verification](ECONOMY_REDESIGN_VERIFICATION.md) records automated checks and
+simulation assumptions. Simulation measures online earning time under an optimized strategy,
+not active-play telemetry. Native Studio, real save/rejoin and multi-client playtests remain required.

@@ -1,18 +1,17 @@
 # Implemented architecture
 
-`src/shared/Rarity.luau` is the canonical public rarity identity/order/type/palette module:
-Common < Uncommon < Rare < Legendary < Mythical. Catalog validates against it; server Rules
-retains explicit per-figure weights/rates and checks rate ordering across populated tiers.
-UI colors and Shop ordering consume it, while client OpeningConfig owns presentation profiles.
-The new tiers are supported without adding obtainable content. See [the audit and extension
-procedure](RARITY.md); persistence, inventory and grants remain figure-ID based.
+`src/shared/Rarity.luau` owns public rarity identity/order/type/palette. Server
+`Economy` defines reusable economic tiers, bucket/pity/duplicate profiles, collection references
+and explicit figure income units/weights. `CollectionEconomy` validates configuration and derives
+prices, base rates, current odds, rolls and duplicate multipliers. `Rules` owns atomic mutations,
+income settlement and unique Display placement. See [economy](ECONOMY.md).
 
 The user accepted the MVP and authorized the full-game roadmap. The new candidate implements
 that feature set; real storage, device and multi-client acceptance are still pending. See
 [scope](FULL_GAME.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
 
 The active world uses fixed open Player Plots, earning Display and cosmetic Shelf Units.
-See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-v5 migration](DATA_MODEL.md).
+See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-6 reset](DATA_MODEL.md).
 The former separate Gallery/room runtime has been removed, not retained as an alternate path.
 
 ## Server ownership
@@ -34,11 +33,13 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   or a figure whose production template became ready (`FigureModel.variant`).
 - `Shelves`: discovered-reference rules, visible owned-unit validation, stable slot IDs, runtime carousel
   revision/wraparound/cooldown and bounded three-unit projections. Zero economy/inventory reservations.
-- `Rules`/`Economy`: unchanged Display rate/bonus/reservations, purchases, inventory and daily logic.
+- `Rules`/`Economy`/`CollectionEconomy`: collection prices, soft pity, permanent duplicate income,
+  unique earning placements, sequential Coin slot unlocks and Starter-only daily grants.
 - `Protocol`/`Transactions`: allowlisted typed fields/actions, token bucket, profile revision and
   exact retry receipts. Shelf edits additionally require visible persistent Shelf Unit ID and carousel revision and owner access.
-- `Profile`/`LegacyCosmetics`/`LegacyShelfPages`: schema-v5 validation/deep copies and decode-only
-  v1-v4 conversion. Legacy modules contain no runtime rooms, browsing or completion grants.
+- `Profile`: schema-7 validation/deep copies, including independent pity and per-figure earnings;
+  valid Economy2 schema-6 profiles upgrade without a second reset.
+  New save namespaces implement the authorized reset; retired legacy adapters are not invoked.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
 
@@ -50,6 +51,15 @@ Physical arrows are server-bound to a plot, validate living character/distance/s
 a shared per-plot cooldown. They change only runtime visibility, not saved progression.
 
 ## Persistence and acknowledgement
+
+Displayed figures accrue into persisted per-ID banks, never directly into the wallet. PlayerPlot
+owns six bounded collector targets with click/E/touch prompts, validates living owner/exact-target
+distance and ancestry, and disconnects input handlers on teardown. Native server callbacks mint
+collection requests through Transactions with a server-only authorization flag. Remote Collect
+requests cannot set that flag. Rate limits and receipts share the normal transaction path.
+Rules.collect transfers whole Coins atomically, retains overflow/fractions, and is the future
+auto-collect extension point; no gamepass service is implemented. Owner snapshots and local prompt
+text expose balances only to the owner. Prompt hiding is presentation, not an authorization check.
 
 See [data model](DATA_MODEL.md) for validation and [operations](OPERATIONS.md) for recovery.
 Every load/acquire, save and release uses UpdateAsync. Lease tokens are unique per join. Leases
@@ -70,9 +80,10 @@ It reconciles ordered owner snapshots and exposes pending-request state to the U
 composes dedicated HUD, navigation, book/details, shop, Display controls (`DisplayScreen`),
 goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and carousel controls and a discovered
 figure picker. There is no visit directory or teleport callback.
-`UITheme`, `Widgets`, `UIIcons` and `UIPreview` provide common tokens, touch controls, progress,
-original icon shapes and static asset slots. `UIState` derives read-only presentation metadata;
-`UIScope` owns connections/tweens/timers. A bounded `Notifications` component handles feedback.
+`UIStyle`, `UIKit`, `UIButton`, `UIBadge`, `UIProgress`, `UIIcons` and `UIPreview` provide tokens,
+primitives, controls, progress, icon shapes and 3D portraits. `UIState` derives read-only
+presentation metadata and is the only reader of snapshot economy fields; `UIScope` owns
+connections/tweens/timers. A bounded `Notifications` component handles feedback.
 
 `Scroll.bind` accepts both list and grid layouts and measures content plus padding explicitly.
 Nested tile groups report their measured height to the outer list. Filtering and safe-area
@@ -91,7 +102,7 @@ package with an independent lid pivot and emergency procedural fallback. `Openin
 real particles, comet flight, rarity tease and impact; `OpeningFigure` reuses the awarded figure
 factory for silhouette/reveal. `OpeningView` is the responsive overlay, while `OpeningConfig`
 and `OpeningAudio` own data-driven presentation and optional licensed sound cues. Buy/Daily
-show a box, Redeem goes directly to the figure spotlight. Skipping or interrupting presentation
+show a box. Retired redemption is rejected. Skipping or interrupting presentation
 cannot affect the already-granted item. See [opening behavior and Studio checks](OPENING.md).
 No opening-specific remotes or server logic were introduced.
 
@@ -118,9 +129,9 @@ stay in the local environment. Uploading does not activate UI artwork; existing 
 native fallbacks remain until explicit adoption. See [asset pipeline](ASSET_PIPELINE.md).
 
 The Shop is a neutral reusable shell composed by `ShopScreen`. `ShopTheme` contains only
-collection asset keys and palette inputs; `ShopState` derives figures, unique progress and
-rarity odds from Catalog/snapshots; `ShopLayout` owns responsive geometry; `BlindBoxPreview`,
-`BlindBoxSkin`, and `ShopArtwork` provide the standardized 3D package and exclusive native fallback. Catalog iteration
+collection asset keys and palette inputs; `UIState` derives figures, unique progress and
+current/base rarity odds from Catalog/snapshots; `UILayout` owns responsive geometry; `BlindBoxPreview`
+and `BlindBoxSkin` provide the standardized 3D package and exclusive native fallback. Catalog iteration
 creates the carousel and possible-figure entries, so another collection does not require a Shop
 layout fork. Buy still uses the existing server-authoritative intent and opening-result path.
 

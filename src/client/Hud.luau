@@ -63,7 +63,7 @@ function Hud.create(parent: Instance, ctx: Context.Context, setMotion: (boolean)
 				State.number(snapshot.coins)
 					.. " Coins · earning "
 					.. State.amount(State.totalRate(snapshot))
-					.. " per second"
+					.. " per second\nClick your displayed figures or press E nearby to collect."
 					.. (
 						if not snapshot.ready or string.find(status, "preview", 1, true)
 							then "\n" .. snapshot.saveStatus

@@ -130,76 +130,15 @@ check(
 	"spectral aura is qualitative distinction"
 )
 
--- Golden live catalog/economy contract: no promoted, inserted or reweighted figures.
-local expected = {
-	{ "grove.pebble", "Common", 1, 20 },
-	{ "grove.sprout", "Common", 1.5, 20 },
-	{ "grove.acorn", "Common", 2, 20 },
-	{ "grove.mushroom", "Uncommon", 3, 15 },
-	{ "grove.moth", "Uncommon", 4, 15 },
-	{ "grove.star", "Rare", 7, 10 },
-	{ "tide.bubble", "Common", 1.25, 20 },
-	{ "tide.coral", "Common", 1.75, 20 },
-	{ "tide.shell", "Common", 2, 20 },
-	{ "tide.jelly", "Uncommon", 3.25, 15 },
-	{ "tide.ray", "Uncommon", 4, 15 },
-	{ "tide.pearl", "Rare", 7.5, 10 },
-	-- Concepts weights are relative within a 56-weight collection, so odds are weight / 56.
-	{ "concept.verity", "Common", 1, 20 / 56 * 100, 20 },
-	{ "concept.falsity", "Uncommon", 3, 15 / 56 * 100, 15 },
-	{ "concept.cruelty", "Rare", 7, 10 / 56 * 100, 10 },
-	{ "concept.lovity", "Legendary", 12, 8 / 56 * 100, 8 },
-	{ "concept.verity-true-form", "Mythical", 18, 3 / 56 * 100, 3 },
-	-- Tender Echoes weights are relative within a 173-weight collection, so odds are weight / 173.
-	{ "echo.thread-parade", "Common", 1, 20 / 173 * 100, 20 },
-	{ "echo.wander-knit", "Common", 1.2, 20 / 173 * 100, 20 },
-	{ "echo.dino-drift", "Common", 1.4, 20 / 173 * 100, 20 },
-	{ "echo.still-pebble", "Common", 1.6, 20 / 173 * 100, 20 },
-	{ "echo.hearth-helm", "Uncommon", 3, 15 / 173 * 100, 15 },
-	{ "echo.echo-line", "Uncommon", 3.5, 15 / 173 * 100, 15 },
-	{ "echo.paper-crown", "Uncommon", 4, 15 / 173 * 100, 15 },
-	{ "echo.mask-nuzzle", "Rare", 6, 10 / 173 * 100, 10 },
-	{ "echo.hush-veil", "Rare", 7, 10 / 173 * 100, 10 },
-	{ "echo.crate-spark", "Rare", 8, 10 / 173 * 100, 10 },
-	{ "echo.feather-hush", "Legendary", 12, 8 / 173 * 100, 8 },
-	{ "echo.mumble-beast", "Legendary", 14, 8 / 173 * 100, 8 },
-	{ "echo.moon-doze", "Mythical", 20, 2 / 173 * 100, 2 },
-	-- We Are All Stars weights are relative within a 173-weight collection, so odds are weight / 173.
-	{ "star.reminiscence", "Common", 1, 20 / 173 * 100, 20 },
-	{ "star.mirrorlight", "Common", 1.2, 20 / 173 * 100, 20 },
-	{ "star.wishing", "Common", 1.4, 20 / 173 * 100, 20 },
-	{ "star.page-turner", "Common", 1.6, 20 / 173 * 100, 20 },
-	{ "star.nightlight", "Uncommon", 3, 15 / 173 * 100, 15 },
-	{ "star.lamplight", "Uncommon", 3.5, 15 / 173 * 100, 15 },
-	{ "star.garden", "Uncommon", 4, 15 / 173 * 100, 15 },
-	{ "star.sanctuary", "Rare", 6, 10 / 173 * 100, 10 },
-	{ "star.echo", "Rare", 7, 10 / 173 * 100, 10 },
-	{ "star.radiant", "Rare", 8, 10 / 173 * 100, 10 },
-	{ "star.cloud-rest", "Legendary", 12, 8 / 173 * 100, 8 },
-	{ "star.meteor-shower", "Legendary", 14, 8 / 173 * 100, 8 },
-	{ "star.dreamcatcher", "Mythical", 20, 2 / 173 * 100, 2 },
-}
-check(#Catalog.figures == #expected and #Economy.entries == #expected, "no invented live content")
-for _, entry in expected do
-	local id, rarity, rate, odds = entry[1], entry[2], entry[3], entry[4]
-	local weight = entry[5] or odds
-	check(Catalog.byId[id].rarity == rarity, "existing rarity unchanged: " .. id)
-	check(
-		Rules.rates[id] == rate and math.abs(Rules.odds[id] - odds) < 1e-9,
-		"existing rate/odds unchanged: " .. id
-	)
-	local found = false
-	for _, economic in Economy.entries do
-		if economic.id == id then
-			found = economic.weight == weight and economic.rate == rate
-		end
-	end
-	check(found, "explicit weights unchanged")
+-- Figure identities remain stable; new server probabilities are bucket-based.
+check(#Catalog.figures == #Economy.entries, "every figure has economy tuning")
+for _, figure in Catalog.figures do
+	check(Rules.rates[figure.id] > 0 and Rules.odds[figure.id] > 0, "positive published base economy")
 end
 local tiers = { grove = 3, tide = 3, concept = 5, echo = 5, star = 5 }
 local sizes = { grove = 6, tide = 6, concept = 5, echo = 13, star = 13 }
 for _, collection in Catalog.collections do
-	local rows = Shop.rarityOdds({ odds = Rules.odds } :: any, collection.id)
+	local rows = Shop.rarityOdds({ odds = Rules.odds, baseOdds = Rules.odds } :: any, collection.id)
 	local tierCount = tiers[collection.id]
 	check(#rows == tierCount, "Shop omits unavailable tiers")
 	for index, row in rows do

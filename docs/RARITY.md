@@ -1,9 +1,10 @@
 # Standard rarity architecture
 
 The supported hierarchy is **Common < Uncommon < Rare < Legendary < Mythical**.
-Mythical is the highest standard tier. Support does not imply obtainable content: the twelve
-live figures still use Common, Uncommon and Rare. Sunbeam Sprite and Pearl Regent remain Rare.
-No figures, rates, weights, prices or live probabilities were added or changed by this integration.
+Mythical is the highest standard tier. The economy redesign now supplies explicit five-tier content,
+bucket probabilities, pity and normalized income. [ECONOMY.md](ECONOMY.md) and
+[collection onboarding](ECONOMY_COLLECTION_ONBOARDING.md) supersede the original integration
+audit's unchanged-rate statements below. The audit remains a record of that earlier integration.
 
 ## Canonical definitions and audit
 
@@ -16,9 +17,9 @@ Definitions include primary, accent and highlight colors plus readable ink/on-ti
 | --- | --- |
 | Types / Catalog | Figure rarity uses `Rarity.Id`; startup validates every figure. Existing content is unchanged. |
 | Server Rules / Economy | Explicit per-figure rates and weights remain server-only. Original three numeric rate bands remain enforced; every populated higher tier must earn more than every populated lower tier. No default Legendary/Mythical rate or weight exists. |
-| ShopState / ShopLayout / ShopScreen | Odds use canonical order, show only tiers with actual figures, and size the panel to the row count. No empty or invented high-tier odds. |
-| CollectionStyle / CollectionControls / CollectionAssets | Canonical badge palette and contrast colors, optional artwork slots for every supported tier. FigureCard and FigureDetails consume these existing helpers. |
-| UITheme / OpeningView | Readable canonical ink on ordinary UI; opening result uses its configured presentation label and lighter text on the dark stage. |
+| UIState / ShopScreen | Odds use canonical order and show only tiers with actual figures, with the base chance beside a raised current chance. No empty or invented high-tier odds. |
+| UIStyle / UIBadge / FigureTile | Rarity pills and tile bars use the canonical tint/onTint for every supported tier. |
+| OpeningView / RevealCard | The Reveal card's rarity pill uses the presentation profile's tier on the dark stage. |
 | Inventory / Display / Shelves / completion | Existing paths use catalog figure IDs, rates, ownership and discovery counts, not a three-tier switch. No persistence migration or fake completion entries. |
 | OpeningConfig / State / Flight / Cinematic / Effects / Audio | All five profiles use the existing phase machine and lifecycle; optional signature data drives the new effects. No rarity-name branches in controllers. |
 | Development fixture | Studio-only presentation override; actual figure/result/catalog metadata remain unchanged. No requests or grants. |

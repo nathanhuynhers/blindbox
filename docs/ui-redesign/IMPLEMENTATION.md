@@ -5,8 +5,9 @@ is [BRIEF.md](BRIEF.md) and the [mockup](mockup/). This file maps the code and l
 checks. It replaces the implementation sections of the older UI docs (UI_UX, NAVIGATION_UI,
 SHOP_UI, COLLECTION_UI, SYSTEM_SCREENS_UI).
 
-No server, shared economy, Protocol, persistence or Types code changed. The client no longer
-sends `Recycle` or `Redeem` and shows no Scrap.
+The UI work itself changed no server, shared economy, Protocol, persistence or Types code;
+those came from the merged economy redesign. The client sends no `Recycle`, `Redeem` or
+`Collect` (collection is a world interaction) and shows no Scrap.
 
 ## Module map (`src/client`)
 
@@ -74,30 +75,33 @@ Deleted: `BackgroundTreatment`, `CollectionArt`, `CollectionAssets`, `Collection
   - The inactive set-bonus banner shows progress ("2 of 3") but no amount. Master only sends
     the bonus once it is active.
 
-## Economy merge points
+## Economy integration (merged from master)
 
-The economy branch should only need edits in **`UIState`'s "Economy fields" section**:
+The economy redesign is merged. Its snapshot fields are read only in **`UIState`'s "Economy
+fields" section**:
 
-| Function | Master reads | Economy branch |
+| Function | Reads | Shown as |
 | --- | --- | --- |
-| `price(snapshot, collection)` | `snapshot.price` | `snapshot.prices[collection]` |
-| `figureOdds(snapshot, id)` | `snapshot.odds[id]` | current/base odds (`baseOdds`); add a "current vs base" row under Drop odds later |
-| `figureRate(snapshot, id)` | `snapshot.rates[id]` | `baseRates`/effective rate incl. duplicates; `nextRates` if the Reveal should show the post-duplicate rate |
-| `totalRate`, `bonusAmount` | `snapshot.rate`, `snapshot.bonus` | percentage set bonus: also change the banner copy in `DisplayScreen` (`State.rate(bonus.amount)` → a % string) |
-| `freeBoxOptions` | every collection | `{ snapshot.dailyCollection }`: Goals hides the chooser and Shop labels "Claim free <name> box" automatically when only one option exists |
-| `unlockPrice(snapshot, slot)` | `expansionCost` for slot 4 | per-slot prices (5 and 6 then show an Unlock button automatically) |
-| `goalReward` | `snapshot.goalReward` | unchanged name, larger value |
+| `price(snapshot, collection)` | `prices[collection]` | Open 1 box / Open another price and "Need N more" |
+| `figureRate(snapshot, id)` | `rates[id]` (effective, duplicates included) | Earns, picker sort, swap gain, slot rate |
+| `figureOdds` / `baseOdds` | `odds[id]` (current, with luck) / `baseOdds[id]` | Box chance; Drop odds rows add "· base X%" when luck raises a chance |
+| `totalRate`, `bonusAmount` | `rate`, `bonus` (Coins/s, server applies the %) | Header income chip, set-bonus banner amount |
+| `earnings(snapshot, id)` | `earnings[id]` | Display slot "N ready"; world collector prompt text |
+| `freeBoxOptions` | `{ dailyCollection }` | Goals hides the chooser; Shop shows "Claim free <name> box" |
+| `unlockPrice`, `lockedText` | `expansionCost` for slot `unlocked + 1` | Unlock with price; later slots say "Unlock slot N first" |
+| `goalReward` | `goalReward` | Goal card and HUD tracker |
 
-Other places the merge will touch:
+What else the merge carried over:
 
-- `Types.Snapshot` loses `scrap`/`price`/`redeemCost`. The test snapshot builders in
-  `tests/UI.spec.luau` and `tests/Screens.spec.luau` set those fields and need the same edit.
-- "Display is one placement per unique figure": `UIState.picker`/`placement` already exclude
-  displayed figures, so no change is needed.
-- `OpeningResult` still accepts a `Redeem` reply (client never sends one). Drop that branch
-  when the server removes Redeem.
-- Number fields are sized for abbreviated values. Balances switch to `compact` at 10M in the
-  HUD; prices, rates and shortfalls always use `compact`/`amount` (2.4M).
+- `UIState.copies` follows the server's one-placement-per-figure rule, so extra copies never
+  offer a second slot.
+- `init.client.luau` keeps master's world-collector handling. It hides other players'
+  prompts, keeps each prompt's text in step with banked earnings, and shows server-initiated
+  `collect:` replies as toasts.
+- The Display subtitle and HUD toast explain collecting (click a figure on your plot, or E).
+- `OpeningResult` no longer accepts Redeem. That change came from master.
+- Number fields are sized for abbreviated values. The HUD balance switches to `compact` at
+  10M; prices, rates and shortfalls always use `compact`/`amount` (2.4M).
 
 ## Automated checks
 
@@ -146,7 +150,7 @@ Paste the scripts in `tests/Studio*.client.luau` into the client Command Bar whe
    - Put on Display with an empty slot places the figure.
    - With a full Display, Swap appears only for a better earner, and swaps out the lowest.
    - Open another starts the next opening in one tap. When unaffordable it is disabled with
-     the shortfall, and it updates live as coins tick up.
+     the shortfall, and it updates live as the balance changes.
    - Keep returns to the previous screen state.
    - Gamepad: A presses the selected choice, B keeps.
    - Reduced Motion still reaches the card.
@@ -157,6 +161,8 @@ Paste the scripts in `tests/Studio*.client.luau` into the client Command Bar whe
    - Browse Collection → Put in slot N.
    - Slot 4 Unlock is affordable, or disabled with the shortfall; slots 5–6 say Coming later.
    - Collection Put on Display with a full Display enters placing mode.
+   - Filled slots show "N ready" as earnings bank. Collecting in the world (click or E) shows a
+     toast and resets that count. Other players' collector prompts stay hidden.
    - Run `StudioSystemScreens`.
 7. **Collection:**
    - All/Found/Missing counts.

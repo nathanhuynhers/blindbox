@@ -30,7 +30,7 @@ local function fresh(): Types.Snapshot
 			canNavigate = false,
 		},
 		coins = 450,
-		scrap = 0,
+		earnings = {},
 		owned = {},
 		discovered = {},
 		slots = { "", "", "" },
@@ -39,11 +39,14 @@ local function fresh(): Types.Snapshot
 		rate = 0,
 		step = 1,
 		rates = Rules.rates,
+		baseRates = Rules.rates,
+		nextRates = Rules.rates,
 		odds = Rules.odds,
-		price = Economy.price,
-		redeemCost = Economy.redeemCost,
+		baseOdds = Rules.odds,
+		prices = Rules.prices,
+		dailyCollection = Economy.dailyCollection,
 		unlocked = 3,
-		expansionCost = Economy.expansionCost,
+		expansionCost = Economy.expansionCosts[4],
 		dailyReady = true,
 		goalProgress = 0,
 		goalClaimed = false,
@@ -70,13 +73,13 @@ check(UI.percent(0 / 0) == "0%" and UI.percent(140) == "100%", "invalid chances 
 
 -- Economy fields: price, odds and rates are read through UIState only.
 for _, collection in Catalog.collections do
-	check(UI.price(snapshot, collection.id) == Economy.price, "price comes from the snapshot")
+	check(UI.price(snapshot, collection.id) == Rules.prices[collection.id], "price per collection")
 	local rows = UI.rarityOdds(snapshot, collection.id)
 	local count, total = 0, 0
 	for _, row in rows do
 		count += row.count
 		total += row.total
-		check(row.total > 0, "rarity rows derive from server odds")
+		check(row.total > 0 and math.abs(row.base - row.total) < 1e-9, "rows derive from server odds")
 		if row.count > 1 and row.each then
 			check(math.abs(row.each * row.count - row.total) < 1e-6, "uniform each sums to total")
 		end
@@ -84,24 +87,37 @@ for _, collection in Catalog.collections do
 	check(count == #UI.members(collection.id), "odds rows cover every figure")
 	check(math.abs(total - 100) < 1e-6, "collection odds total 100%")
 end
-local totals: { [string]: number } = {}
-for _, entry in Economy.entries do
-	local id = Catalog.byId[entry.id].collection
-	totals[id] = (totals[id] or 0) + entry.weight
+for _, figure in Catalog.figures do
+	check(UI.figureOdds(snapshot, figure.id) == Rules.odds[figure.id], "current odds from snapshot")
+	check(UI.baseOdds(snapshot, figure.id) == Rules.odds[figure.id], "base odds from snapshot")
+	check(UI.figureRate(snapshot, figure.id) == Rules.rates[figure.id], "figure rate from snapshot")
 end
-for _, entry in Economy.entries do
-	local expected = entry.weight / totals[Catalog.byId[entry.id].collection] * 100
-	check(UI.figureOdds(snapshot, entry.id) == expected, "figure odds match configured weights")
-	check(UI.figureRate(snapshot, entry.id) == entry.rate, "figure rate from snapshot")
+-- Increasing-chance luck shows the base beside the raised current chance.
+local lucky = fresh()
+local luckyOdds = table.clone(Rules.odds)
+luckyOdds["grove.star"] *= 2
+lucky.odds = luckyOdds
+local sawLuck = false
+for _, row in UI.rarityOdds(lucky, "grove") do
+	if row.rarity == "Rare" then
+		sawLuck = string.find(UI.oddsLabel(row), "base " .. UI.percent(row.base), 1, true) ~= nil
+	end
 end
+check(sawLuck, "raised chance shows its base")
 local altered = fresh()
-altered.price = 2400000
+altered.prices = { grove = 2400000 }
 check(UI.need(altered, UI.price(altered, "grove")) == "Need 2.3M more", "shortfall abbreviates")
 check(UI.need(snapshot, 150) == nil, "affordable has no shortfall")
-check(#UI.freeBoxOptions(snapshot) == #Catalog.collections, "master free box: any collection")
-check(UI.unlockPrice(snapshot, 4) == Economy.expansionCost, "slot 4 price from snapshot")
-check(UI.unlockPrice(snapshot, 5) == nil and UI.unlockPrice(snapshot, 6) == nil, "no inferred 5/6 price")
+local options = UI.freeBoxOptions(snapshot)
+check(#options == 1 and options[1] == Economy.dailyCollection, "free box: the daily collection")
+check(UI.unlockPrice(snapshot, 4) == Economy.expansionCosts[4], "next slot price from snapshot")
+check(UI.unlockPrice(snapshot, 5) == nil and UI.unlockPrice(snapshot, 6) == nil, "only the next slot")
+check(UI.lockedText(snapshot, 6) == "Unlock slot 5 first", "later coin slots unlock in order")
 check(UI.goalReward(snapshot) == Economy.goalReward, "goal reward from snapshot")
+snapshot.earnings = { ["grove.pebble"] = 12.9 }
+check(UI.earnings(snapshot, "grove.pebble") == 12, "banked earnings round down")
+check(UI.earnings(snapshot, "grove.star") == 0, "no earnings without a bank")
+snapshot.earnings = {}
 
 -- Collections and filters.
 local found, total = UI.completion(snapshot, "grove")
@@ -120,38 +136,69 @@ local function own(id: string, count: number)
 	snapshot.owned[id] = count
 	snapshot.discovered[id] = true
 end
-own("grove.star", 1) -- 7/s
-own("grove.moth", 1) -- 4/s
-own("tide.bubble", 1) -- 1.25/s
+local function rate(id: string): number
+	return UI.figureRate(snapshot, id)
+end
+own("grove.star", 1)
+own("grove.moth", 1)
+own("tide.bubble", 1)
 local picks = UI.picker(snapshot)
-check(picks[1].id == "grove.star" and picks[2].id == "grove.moth", "picker sorts best earners first")
-check(picks[#picks].rate <= picks[1].rate, "picker descending")
+for index = 2, #picks do
+	check(picks[index - 1].rate >= picks[index].rate, "picker sorts best earners first")
+end
+local best = math.max(rate("grove.star"), rate("grove.moth"), rate("tide.bubble"), rate("grove.pebble"))
+check(picks[1].rate == best, "BEST is the top earner")
 local place = UI.placement(snapshot, "grove.star")
 check(place ~= nil and place.kind == "empty" and place.slot == 1, "empty slot placement")
+-- One placement per unique figure: extra copies never free a second slot.
+snapshot.slots = { "grove.pebble", "", "" }
+local owned, free = UI.copies(snapshot, "grove.pebble")
+check(owned == 3 and free == 0, "a displayed figure has no free copy")
+owned, free = UI.copies(snapshot, "grove.star")
+check(owned == 1 and free == 1, "an undisplayed owned figure has one placement")
 snapshot.slots = { "grove.pebble", "tide.bubble", "grove.moth" }
 check(#UI.emptySlots(snapshot) == 0, "full Display")
+local lowestSlot, lowestRate = 1, math.huge
+for slot, id in snapshot.slots do
+	if rate(id) < lowestRate then
+		lowestSlot, lowestRate = slot, rate(id)
+	end
+end
 place = UI.placement(snapshot, "grove.star")
+check(rate("grove.star") > lowestRate, "fixture: a Rare out-earns the lowest displayed figure")
 check(
-	place ~= nil and place.kind == "swap" and place.slot == 1 and place.replaces == "grove.pebble",
+	place ~= nil
+		and place.kind == "swap"
+		and place.slot == lowestSlot
+		and place.replaces == snapshot.slots[lowestSlot],
 	"swap replaces the lowest earner"
 )
-check(place ~= nil and place.gain == 6, "swap gain is the rate difference")
-own("grove.acorn", 1) -- 2/s, beats only Pebble Pip (1/s)
-place = UI.placement(snapshot, "grove.acorn")
-check(place ~= nil and place.slot == 1, "swap only when it earns more than the lowest")
-snapshot.slots = { "grove.star", "grove.moth", "grove.acorn" }
-own("tide.bubble", 1)
-check(UI.placement(snapshot, "tide.bubble") == nil, "weaker figure hides Put on Display")
+check(
+	place ~= nil and math.abs(place.gain - (rate("grove.star") - lowestRate)) < 1e-9,
+	"swap gain is the rate difference"
+)
+own("grove.mushroom", 1)
+snapshot.slots = { "grove.star", "grove.moth", "grove.mushroom" }
+check(
+	rate("grove.pebble") < rate("grove.moth") and rate("grove.pebble") < rate("grove.mushroom"),
+	"fixture: Common under Uncommon"
+)
+check(UI.placement(snapshot, "grove.pebble") == nil, "weaker figure hides Put on Display")
 check(UI.placement(snapshot, "grove.star") == nil, "already displayed figure is not offered")
 for _, pick in UI.picker(snapshot) do
 	check(not UI.displayed(snapshot, pick.id), "picker excludes displayed figures")
 end
 local bonus = UI.setBonus(snapshot)
 check(bonus.collection == "grove" and bonus.best == 3 and not bonus.active, "set progress")
-snapshot.bonus = 1
-check(UI.setBonus(snapshot).active and UI.setBonus(snapshot).amount == 1, "active set bonus")
+snapshot.bonus = 1.5
+check(UI.setBonus(snapshot).active and UI.setBonus(snapshot).amount == 1.5, "active set bonus")
 -- Set progress agrees with the actual domain rule for mixed sets and repeats.
 local choices = { "grove.pebble", "grove.sprout", "grove.acorn", "tide.bubble", "" }
+for _, id in choices do
+	if id ~= "" then
+		state.owned[id] = 1
+	end
+end
 for _, first in choices do
 	for _, second in choices do
 		for _, third in choices do
@@ -169,21 +216,35 @@ end
 -- Reveal card model.
 snapshot = fresh()
 own("echo.feather-hush", 1)
+local hush = rate("echo.feather-hush")
 local reveal = UI.reveal(snapshot, "echo.feather-hush", true, 1)
 check(reveal.place ~= nil and reveal.place.kind == "empty", "reveal places into an empty slot")
-check(reveal.placeDetail == "You have 3 empty slots · +12/s", "reveal empty-slot detail")
-check(reveal.earns == "Earns 12 coins/s on Display", "reveal earning chip")
+check(reveal.placeDetail == "You have 3 empty slots · " .. UI.rate(hush), "reveal empty-slot detail")
+check(reveal.earns == "Earns " .. UI.amount(hush) .. " coins/s on Display", "reveal earning chip")
 check(reveal.progress == "Tender Echoes · 1 of 13 found", "reveal collection progress")
-check(reveal.another.collection == "echo" and reveal.another.need == nil, "open another is affordable")
 snapshot.coins = 10
+local echoPrice = UI.price(snapshot, "echo")
 reveal = UI.reveal(snapshot, "echo.feather-hush", false, 2)
-check(reveal.another.need == "Need 140 more", "open another shows the shortfall")
+check(reveal.another.collection == "echo" and reveal.another.price == echoPrice, "same box again")
+check(
+	reveal.another.need == "Need " .. UI.compact(echoPrice - 10) .. " more",
+	"open another shows the shortfall"
+)
+snapshot.coins = echoPrice
+check(UI.reveal(snapshot, "echo.feather-hush", false, 2).another.need == nil, "affordable")
 own("grove.pebble", 1)
 own("grove.sprout", 1)
 own("grove.acorn", 1)
 snapshot.slots = { "grove.pebble", "grove.sprout", "grove.acorn" }
+local weakest, weakestRate = "", math.huge
+for _, id in snapshot.slots do
+	if rate(id) < weakestRate then
+		weakest, weakestRate = id, rate(id)
+	end
+end
 reveal = UI.reveal(snapshot, "echo.feather-hush", false, 2)
-check(reveal.placeLabel == "Swap for Pebble Pip" and reveal.placeDetail == "+11/s more", "swap copy")
+check(reveal.placeLabel == "Swap for " .. Catalog.byId[weakest].name, "swap names the lowest earner")
+check(reveal.placeDetail == UI.rate(hush - weakestRate) .. " more", "swap shows the gain")
 
 -- Badges, goals and countdown.
 snapshot = fresh()

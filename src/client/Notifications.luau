@@ -45,10 +45,12 @@ function Notifications.create(parent: Instance, scope: Scope.Scope): Notificatio
 			cancel()
 			last = message
 			text.Text = message
-			-- Two lines for status text or long replies; the toast never clips its message.
-			local wraps = string.find(message, "\n", 1, true) ~= nil or #message * 8.5 > width - 32
-			local lines = if wraps then 2 else 1
-			root.Size = UDim2.fromOffset(width, if lines == 2 then 72 else 52)
+			-- One row per line (plus wrapping estimate); the toast never clips its message.
+			local lines = 0
+			for line in string.gmatch(message .. "\n", "([^\n]*)\n") do
+				lines += math.max(1, math.ceil(#line * 8.5 / math.max(1, width - 32)))
+			end
+			root.Size = UDim2.fromOffset(width, 32 + 20 * math.clamp(lines, 1, 5))
 			text.TextColor3 = if kind == "error" then Style.alert else Style.ink
 			card.face.BackgroundColor3 = if kind == "success" then Style.mint else Style.white
 			card.stroke.Color = if kind == "error" then Style.alert else Style.ink

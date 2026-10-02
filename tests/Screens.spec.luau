@@ -26,8 +26,8 @@ local function snapshot()
 				{ id = "shelf:3", index = 3, placements = {} },
 			},
 		},
-		coins = 450,
-		scrap = 0,
+		coins = 5000000,
+		earnings = {},
 		owned = {},
 		discovered = {},
 		slots = { "", "", "" },
@@ -36,11 +36,14 @@ local function snapshot()
 		rate = 0,
 		step = 1,
 		rates = Rules.rates,
+		baseRates = Rules.rates,
+		nextRates = Rules.rates,
 		odds = Rules.odds,
-		price = Economy.price,
-		redeemCost = Economy.redeemCost,
+		baseOdds = Rules.odds,
+		prices = Rules.prices,
+		dailyCollection = Economy.dailyCollection,
 		unlocked = 3,
-		expansionCost = Economy.expansionCost,
+		expansionCost = Economy.expansionCosts[4],
 		dailyReady = true,
 		goalProgress = 0,
 		goalClaimed = false,
@@ -73,7 +76,7 @@ local function within(root, name)
 end
 
 -- HUD and dock
-check(within(find("Hud"), "Balance").Text == "450", "HUD shows the snapshot balance")
+check(within(find("Hud"), "Balance").Text == "5,000,000", "HUD shows the snapshot balance")
 check(within(find("Hud"), "Rate"):FindFirstChild("Text").Text == "+0/s", "HUD income chip")
 check(find("Hud"):FindFirstChild("Scrap", true) == nil, "no Scrap pill")
 for _, id in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
@@ -104,14 +107,21 @@ check(find("Dock").Visible, "dock stays visible on desktop while a screen is ope
 local shop = host("Shop")
 check(within(shop, "BoxTitle").Text == "Pocket Grove box", "first collection selected")
 check(within(shop, "Discovery").Text == "0 of 6 found · 6 left to discover", "box progress")
-check(within(within(shop, "BuyBox"), "Price").Text == "150", "price from UIState")
+check(
+	within(within(shop, "BuyBox"), "Price").Text == UI.compact(Rules.prices.grove),
+	"price from UIState"
+)
 Engine.click(within(shop, "Collection_echo"))
 check(within(shop, "BoxTitle").Text == "Tender Echoes box", "list selects a collection")
 Engine.click(within(shop, "BuyBox"))
 check(last().action == "Buy" and last().choice == "echo", "Open 1 box buys the selected collection")
 check(within(shop, "DailyBox").Visible, "free box offered when ready")
+check(
+	within(within(shop, "DailyBox"), "Label").Text == "Claim free Pocket Grove box",
+	"free box names the server's daily collection"
+)
 Engine.click(within(shop, "DailyBox"))
-check(last().action == "Daily" and last().choice == "echo", "free box claims the selected collection")
+check(last().action == "Daily" and last().choice == "grove", "free box claims the daily collection")
 local rows = 0
 for _, child in shop:GetDescendants() do
 	if string.match(child.Name, "^OddsRow%d$") and child.Visible then
@@ -128,8 +138,11 @@ check(not within(shop, "DailyBox").Visible, "free box hidden once claimed")
 local before = #requests
 Engine.click(within(shop, "BuyBox"))
 check(#requests == before, "unaffordable box cannot be bought")
-check(within(within(shop, "BuyBox"), "Detail").Text == "Need 130 more", "shortfall explains why")
-state.coins = 450
+check(
+	within(within(shop, "BuyBox"), "Detail").Text == "Need " .. UI.compact(Rules.prices.echo - 20) .. " more",
+	"shortfall explains why"
+)
+state.coins = 5000000
 ui.update(state)
 ui.pending(true)
 Engine.click(within(shop, "BuyBox"))
@@ -200,11 +213,15 @@ check(collection.Visible, "Browse Collection opens Collection for the slot")
 check(within(collection, "FigureAction"):FindFirstChild("Label", true).Text ~= "", "slot route keeps an action")
 Engine.click(find("DockDisplay"))
 check(displayRoot:GetAttribute("Target") == nil, "dock navigation clears the picker")
-state.coins = 5000
+state.coins = Economy.expansionCosts[4]
 state.sequence += 1
 ui.update(state)
 check(within(display, "DisplaySlot4"):FindFirstChild("Unlock").Visible, "slot 4 shows its unlock price")
-check(not within(display, "DisplaySlot5"):FindFirstChild("Unlock").Visible, "slot 5 is Coming later")
+check(not within(display, "DisplaySlot5"):FindFirstChild("Unlock").Visible, "slot 5 waits for slot 4")
+check(
+	within(within(display, "DisplaySlot5"), "Hint").Text == "Unlock slot 4 first",
+	"later coin slots unlock in order"
+)
 Engine.click(within(within(display, "DisplaySlot4"), "Unlock"))
 check(last().action == "Expand", "unlock sends Expand")
 Engine.click(within(display, "DisplaySlot2"))
@@ -243,9 +260,10 @@ Engine.click(within(goals, "ClaimGoal"))
 check(last().action == "Goal", "Claim sends Goal")
 state.dailyReady = true
 ui.update(state)
-Engine.click(within(goals, "Daily_tide"))
+check(not within(goals, "Daily_tide").Visible, "one allowed collection: no chooser")
+check(within(goals, "FreeTitle").Text == "Pocket Grove box", "free box names its collection")
 Engine.click(within(goals, "OpenFreeBox"))
-check(last().action == "Daily" and last().choice == "tide", "free box of the chosen collection")
+check(last().action == "Daily" and last().choice == "grove", "free box of the daily collection")
 Engine.click(within(goals, "Progress_star"))
 check(collection.Visible and collectionRoot:GetAttribute("CollectionId") == "star", "progress rows open Collection")
 check(Engine.pending() == timersBefore, "countdown timer stops when Goals is hidden")
@@ -315,14 +333,30 @@ end)
 card.set(UI.reveal(reveal, "echo.feather-hush", true, 1))
 check(within(root, "NewBadge").Visible, "NEW only for a first discovery")
 check(card.choices.display.Visible and card.first() == card.choices.display, "Put on Display leads")
-check(within(card.choices.display, "Detail").Text == "You have 3 empty slots · +12/s", "slot detail")
+check(
+	within(card.choices.display, "Detail").Text
+		== "You have 3 empty slots · " .. UI.rate(UI.figureRate(reveal, "echo.feather-hush")),
+	"slot detail"
+)
 reveal.slots = { "grove.star", "grove.moth", "tide.ray" }
 reveal.owned["grove.star"], reveal.owned["grove.moth"], reveal.owned["tide.ray"] = 1, 1, 1
 reveal.coins = 0
 card.set(UI.reveal(reveal, "echo.feather-hush", true, 1))
-check(within(card.choices.display, "Label").Text == "Swap for Moon Moth", "swap replaces the lowest earner")
+local lowest, lowestRate = "", math.huge
+for _, id in reveal.slots do
+	if UI.figureRate(reveal, id) < lowestRate then
+		lowest, lowestRate = id, UI.figureRate(reveal, id)
+	end
+end
+check(
+	within(card.choices.display, "Label").Text == "Swap for " .. Catalog.byId[lowest].name,
+	"swap replaces the lowest earner"
+)
 check(card.choices.another:GetAttribute("Enabled") == false, "Open another disabled when unaffordable")
-check(within(card.choices.another, "Detail").Text == "Need 150 more", "shortfall shown")
+check(
+	within(card.choices.another, "Detail").Text == "Need " .. UI.compact(Rules.prices.echo) .. " more",
+	"shortfall shown"
+)
 check(card.first() == card.choices.display, "gamepad starts on the swap")
 reveal.owned["echo.feather-hush"] = 2
 local duplicate = RevealCard.create(root, scope, "echo.feather-hush", false, 2, function()

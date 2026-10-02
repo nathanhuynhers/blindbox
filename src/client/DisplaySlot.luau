@@ -141,7 +141,12 @@ function Slot.create(
 			rate.root.Visible = filled
 			if filled and figure then
 				name.Text = figure.name
-				rate.set(State.rate(State.figureRate(snapshot, id)))
+				-- Banked Coins are collected in the world (click the figure or press E).
+				local ready = State.earnings(snapshot, id)
+				rate.set(
+					State.rate(State.figureRate(snapshot, id))
+						.. (if ready > 0 then " · " .. State.compact(ready) .. " ready" else "")
+				)
 			end
 			plus.Visible = not locked and not filled
 			lock.Visible = locked
@@ -151,7 +156,7 @@ function Slot.create(
 			if locked then
 				title.Visible = false
 				hint.Visible = not buyable
-				hint.Text = "Coming later"
+				hint.Text = State.lockedText(snapshot, index)
 				if buyable and price then
 					unlock.setPrice(State.compact(price))
 					local need = State.need(snapshot, price)
@@ -179,7 +184,9 @@ function Slot.create(
 					.. ": "
 					.. (
 						if locked
-							then (if buyable then "locked, unlock available" else "coming later")
+							then (if buyable
+								then "locked, unlock available"
+								else string.lower(State.lockedText(snapshot, index)))
 							elseif figure then figure.name
 							else "empty"
 					)
