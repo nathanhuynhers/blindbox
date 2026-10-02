@@ -1,6 +1,6 @@
 # Persistent data model
 
-Current schema: **5**. Stable `grove.*` and `tide.*` figure IDs and discovery are unchanged.
+Current schema: **6**. Stable `grove.*` and `tide.*` figure IDs and discovery are unchanged.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
@@ -10,7 +10,7 @@ are unchanged. See [rarity architecture and future content](RARITY.md).
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 5; unsupported versions block loading/writing |
+| schemaVersion | 6; unsupported versions block loading/writing |
 | coins / scrap | Integers in 0..1,000,000,000 / 0..1,000,000 |
 | owned | Known figure IDs to positive copy counts; total at most 200 |
 | discovered | Known figure IDs to true; permanent; includes every owned ID |
@@ -19,6 +19,7 @@ are unchanged. See [rarity architecture and future content](RARITY.md).
 | step | Onboarding stage 1..5 |
 | lastDailyDay | Last claimed free-box UTC day or -1 |
 | goalDay / goalProgress / goalClaimed | Daily Display goal day, highest distinct count 0..3, claim marker |
+| boxesOpened | Lifetime boxes opened, integer 0..1,000,000,000 (`Rules.boxesOpenedLimit`); presentation only |
 
 Each unit is `{id, placements, customization}`. IDs such as `shelf:1` are stable and unique
 within the ordered array. `placements` maps local `row:R/slot:S` keys to known permanently
@@ -47,8 +48,8 @@ default reset or truncated save. Legacy inputs are also bounded before allocatio
 
 ## Deterministic migrations
 
-`Profile.decode` validates v1-v5 into canonical Shelf Units without mutating the input. Encoding
-always writes v5. All valid unrelated fields retain their existing validation and values.
+`Profile.decode` validates v1-v6 into canonical Shelf Units without mutating the input. Encoding
+always writes v6. All valid unrelated fields retain their existing validation and values.
 
 - **v1:** preserve Coins, Scrap, ownership/discovery, three Display placements and onboarding;
   add the existing unclaimed daily defaults and three empty Shelf Units.
@@ -68,6 +69,11 @@ always writes v5. All valid unrelated fields retain their existing validation an
   No repacking, deduplication, new purchase entitlement or loss of empty capacity occurs.
 - **v5:** validate and deep-copy the ordered units and optional dormant records. Repeated
   decode/encode round trips preserve IDs, contents, customization hooks and unrelated progress.
+  v5 has no `boxesOpened` field; it decodes with `boxesOpened = 0` (a v5 record that already
+  contains the field is invalid and blocks loading).
+- **v6:** v5 plus the required `boxesOpened` counter. A missing, negative, fractional,
+  non-number or over-limit value fails closed; it is never reset to zero. Every v1-v5 player
+  starts at 0 because earlier boxes were never counted; no history is reconstructed.
 
 The retired v4 decoder allowed logical unit numbers above 3, which had no visible furniture.
 Per the user's migration choice, these references survive as optional dormant records:
@@ -103,5 +109,15 @@ Only three units and their configured local slots are projected. Edits require t
 persistent `shelfId`, local `shelfSlotId`, profile revision, carousel revision and owner/proximity
 validation. Visitors receive replicated geometry, never private inventory/discoveries/balances.
 
-Deploy v5 with coordinated server replacement. Older code cannot read v5 saves; rollback must
-retain v5 decoding or use an explicitly reviewed recovery process.
+## Box counter and leaderboards
+
+`boxesOpened` increments only inside `Rules.mutate`, in the same non-yielding step that spends
+Coins (Buy) or records the daily claim (Daily) and grants the rolled figure. Rejected requests,
+Scrap redemptions and replayed request IDs never count. It is clamped at its numeric guard and
+grants nothing; it exists for the global leaderboard. The global leaderboard OrderedDataStores
+(`Settings.leaderboardStores`) are a separate, rebuildable presentation index keyed by UserId
+string. They are never read back into a profile, so they cannot corrupt or roll back progress.
+
+Deploy v6 with coordinated server replacement. Older code cannot read v6 saves; rollback must
+retain v6 decoding or use an explicitly reviewed recovery process. A parallel economy redesign
+that also bumps the schema must be merged onto v6 (as v7), not renumbered.

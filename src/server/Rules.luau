@@ -68,15 +68,18 @@ for _, figure in Catalog.figures do
 end
 Rules.rates = rates
 Rules.odds = odds
+-- Numeric guard for the lifetime box counter; presentation-only (leaderboard), never a reward.
+Rules.boxesOpenedLimit = 1000000000
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 5,
+		schemaVersion = 6,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		lastDailyDay = -1,
 		goalDay = -1,
 		goalProgress = 0,
 		goalClaimed = false,
+		boxesOpened = 0,
 		coins = Economy.startingCoins,
 		scrap = 0,
 		owned = {},
@@ -197,6 +200,8 @@ function Rules.mutate(
 			else
 				state.lastDailyDay = today
 			end
+			-- Counted in the same atomic grant as the box's figure; Redeem is not a box.
+			state.boxesOpened = math.min(Rules.boxesOpenedLimit, state.boxesOpened + 1)
 		else
 			if not rates[id] then
 				return false, "Unknown figure.", nil

@@ -21,7 +21,7 @@ local function fields(value: { [string]: unknown }, allowed: { string }): boolea
 end
 function Profile.encode(state: Types.State): Types.Profile
 	return {
-		schemaVersion = 5,
+		schemaVersion = 6,
 		coins = state.coins,
 		scrap = state.scrap,
 		owned = table.clone(state.owned),
@@ -33,6 +33,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		goalDay = state.goalDay,
 		goalProgress = state.goalProgress,
 		goalClaimed = state.goalClaimed,
+		boxesOpened = state.boxesOpened,
 	}
 end
 function Profile.decode(raw: unknown, now: number): Types.State?
@@ -43,7 +44,14 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	local version = data.schemaVersion
 	if
 		typeof(version) ~= "number"
-		or (version ~= 1 and version ~= 2 and version ~= 3 and version ~= 4 and version ~= 5)
+		or (
+			version ~= 1
+			and version ~= 2
+			and version ~= 3
+			and version ~= 4
+			and version ~= 5
+			and version ~= 6
+		)
 	then
 		return nil
 	end
@@ -63,6 +71,9 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		for _, key in { "lastDailyDay", "goalDay", "goalProgress", "goalClaimed" } do
 			table.insert(allowed, key)
 		end
+	end
+	if version >= 6 then
+		table.insert(allowed, "boxesOpened")
 	end
 	if
 		not fields(data, allowed)
@@ -153,7 +164,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			return nil
 		end
 	end
-	local shelves = if version == 5
+	local shelves = if version >= 5
 		then Shelves.decode(data.shelves, state.discovered)
 		elseif version == 4 then LegacyShelfPages.migrate(data.shelves, state.discovered)
 		elseif version == 3 then Legacy.migrate(data.showrooms, state.discovered)
@@ -178,6 +189,13 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		if state.goalClaimed and state.goalProgress < 3 then
 			return nil
 		end
+	end
+	-- v1-v5 predate the counter: migrated players start at 0 (Rules.new default).
+	if version >= 6 then
+		if not integer(data.boxesOpened, 0, Rules.boxesOpenedLimit) then
+			return nil
+		end
+		state.boxesOpened = data.boxesOpened :: number
 	end
 	return state
 end

@@ -53,6 +53,7 @@ export type Profile = {
 	goalDay: number,
 	goalProgress: number,
 	goalClaimed: boolean,
+	boxesOpened: number,
 }
 export type State = Profile & { revision: number, fraction: number, time: number }
 export type Snapshot = {

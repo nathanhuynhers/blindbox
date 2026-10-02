@@ -135,6 +135,10 @@ if result.returncode:
 result = subprocess.run([sys.argv[1], str(out / "Shelves.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
+(out / "BoxesOpened.spec.luau").write_text((root / "tests" / "BoxesOpened.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+result = subprocess.run([sys.argv[1], str(out / "BoxesOpened.spec.luau")], cwd=root)
+if result.returncode:
+    raise SystemExit(result.returncode)
 result = subprocess.run([sys.argv[1], str(out / "Plots.spec.luau")], cwd=root)
 if result.returncode:
     raise SystemExit(result.returncode)
