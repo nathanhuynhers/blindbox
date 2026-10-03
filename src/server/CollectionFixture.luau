@@ -17,6 +17,7 @@ Fixture.palette = table.freeze({
 	muted = Color3.fromRGB(163, 146, 122),
 })
 Fixture.style = table.freeze({ depth = 5, post = 0.55, board = 0.3, figureScale = 1 })
+Fixture.lighting = table.freeze({ dayBrightness = 0.35, nightBrightness = 0.9 })
 -- Striped awning above the Shelves header, overhanging toward the plot center (-X).
 -- Its valance bottom (backY - rise - 1.4 = top + 3.2) clears the header top (top + 2.85).
 Fixture.awning =
@@ -32,6 +33,7 @@ export type Render = {
 	header: TextLabel,
 	navigation: boolean?,
 	awning: Model,
+	lights: { SurfaceLight },
 }
 local function piece(
 	parent: Instance,
@@ -161,6 +163,7 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	model.Name = "CollectionFixture"
 	local units: { Model } = {}
 	local anchors: { [string]: CFrame } = {}
+	local lights: { SurfaceLight } = {}
 	local pitch = Geometry.shelfUnitPitch
 	local span = Config.visibleShelfUnits * pitch
 	local top = Geometry.shelfBaseY + Config.rowsPerShelfUnit * Geometry.shelfRowSpacing
@@ -233,11 +236,12 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 			light.Name = "WarmWash"
 			light.Face = Enum.NormalId.Bottom
 			light.Color = palette.light
-			light.Brightness = 0.35
+			light.Brightness = Fixture.lighting.dayBrightness
 			light.Range = 5
 			light.Angle = 110
 			light.Shadows = false
 			light.Parent = diffuser
+			table.insert(lights, light)
 			for slot = 1, Config.slotsPerRow do
 				anchors[Config.renderSlot(position, Config.slotId(row, slot))] =
 					Geometry.shelfAnchor(transform, position, row, slot)
@@ -347,9 +351,18 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 		header = header,
 		navigation = nil,
 		awning = canopy,
+		lights = lights,
 	}
 	Fixture.setNavigation(render, false)
 	model.Parent = parent
 	return render
+end
+function Fixture.setNight(render: Render, enabled: boolean)
+	local brightness = if enabled
+		then Fixture.lighting.nightBrightness
+		else Fixture.lighting.dayBrightness
+	for _, light in render.lights do
+		light.Brightness = brightness
+	end
 end
 return Fixture

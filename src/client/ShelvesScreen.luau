@@ -1,6 +1,6 @@
 --!strict
 -- Shelves: shelf tabs + prev/next, a 3x3 wooden cabinet of selectable spots, and a picker of
--- discovered figures with collection filter chips. Cosmetic only: no coins, no copies used.
+-- owned figures with collection filter chips. Shelf placements are cosmetic but use owned copies.
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Config = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
@@ -58,7 +58,7 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 	local shell = Shell.create(parent, ctx, {
 		id = "Shelves",
 		title = "Shelves",
-		subtitle = "Show off any figure you've discovered. Just for looks: no coins, no copies used.",
+		subtitle = "Arrange the figures you own. Shelf figures are cosmetic and earn no Coins.",
 	})
 	local root, body = shell.root, shell.body
 	local slotIds = Config.slots()
@@ -204,8 +204,14 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 	local gridLayout = Kit.grid(side, 8)
 	local grid = Kit.scroll(side, "Figures", ctx.scope, gridLayout, 5, ctx.scale)
 	local picks: { Tile.Tile } = {}
-	local empty =
-		Kit.text(side, "NoDiscoveries", "Your first discovery belongs here.", 16, nil, Style.muted)
+	local empty = Kit.text(
+		side,
+		"NoDiscoveries",
+		"Open boxes to get figures for your Shelves.",
+		16,
+		nil,
+		Style.muted
+	)
 	empty.TextXAlignment = Enum.TextXAlignment.Center
 	empty.TextWrapped = true
 	local shop = Button.create(
@@ -367,13 +373,13 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 			else "Tap a figure to place it"
 		clear.button.Visible = current ~= nil
 		clear.set("Clear spot", canAct)
-		local discovered: { string } = {}
+		local owned: { string } = {}
 		local counts: { [string]: number } = {}
 		for _, figure in Catalog.figures do
-			if snapshot.discovered[figure.id] then
+			if (snapshot.owned[figure.id] or 0) > 0 then
 				counts[figure.collection] = (counts[figure.collection] or 0) + 1
 				if filter == nil or figure.collection == filter then
-					table.insert(discovered, figure.id)
+					table.insert(owned, figure.id)
 				end
 			end
 		end
@@ -395,13 +401,15 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 			button.variant(if on then "selected" else "white")
 			button.button:SetAttribute("Selected", on)
 		end
-		for index = 1, math.max(#discovered, #picks) do
-			local id = discovered[index]
+		for index = 1, math.max(#owned, #picks) do
+			local id = owned[index]
 			if id then
-				pick(index).set(
-					id,
-					{ discovered = true, selected = id == current, enabled = canAct }
-				)
+				pick(index).set(id, {
+					discovered = true,
+					selected = id == current,
+					count = snapshot.owned[id] or 0,
+					enabled = canAct and State.shelfAvailable(snapshot, id) > 0,
+				})
 			elseif picks[index] then
 				picks[index].set(nil, { discovered = false })
 			end

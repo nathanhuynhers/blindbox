@@ -268,6 +268,10 @@ function State.displayed(snapshot: Types.Snapshot, id: string): boolean
 	return id ~= "" and table.find(snapshot.slots, id) ~= nil
 end
 
+function State.shelfAvailable(snapshot: Types.Snapshot, id: string): number
+	return math.max(0, snapshot.shelfAvailable[id] or 0)
+end
+
 function State.emptySlots(snapshot: Types.Snapshot): { number }
 	local slots: { number } = {}
 	for slot = 1, math.min(snapshot.unlocked, DisplayConfig.maxSlots) do

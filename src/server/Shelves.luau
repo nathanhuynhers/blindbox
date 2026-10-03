@@ -78,7 +78,77 @@ function Shelves.arrayCount(raw: unknown, minimum: number, maximum: number): num
 	end
 	return count
 end
-function Shelves.decode(raw: unknown, discovered: { [string]: boolean }): Types.Shelves?
+
+local function orderedSlots(placements: { [string]: string }): { string }
+	local slots: { string } = {}
+	for slot in placements do
+		table.insert(slots, slot)
+	end
+	table.sort(slots, function(a, b)
+		local aRow, aSlot = Config.parseSlot(a)
+		local bRow, bSlot = Config.parseSlot(b)
+		if aRow ~= bRow then
+			return (aRow or math.huge) < (bRow or math.huge)
+		end
+		if aSlot ~= bSlot then
+			return (aSlot or math.huge) < (bSlot or math.huge)
+		end
+		return a < b
+	end)
+	return slots
+end
+
+function Shelves.placementCounts(shelves: Types.Shelves): { [string]: number }
+	local counts: { [string]: number } = {}
+	for _, unit in shelves.units do
+		for _, figure in unit.placements do
+			counts[figure] = (counts[figure] or 0) + 1
+		end
+	end
+	return counts
+end
+
+function Shelves.availability(
+	shelves: Types.Shelves,
+	owned: { [string]: number }
+): { [string]: number }
+	local counts = Shelves.placementCounts(shelves)
+	local available: { [string]: number } = {}
+	for _, figure in Catalog.figures do
+		available[figure.id] = math.max(0, (owned[figure.id] or 0) - (counts[figure.id] or 0))
+	end
+	return available
+end
+
+-- Canonical repair order is unit order, then numeric row/slot order. Earliest copies survive.
+function Shelves.reconcile(
+	shelves: Types.Shelves,
+	owned: { [string]: number },
+	discovered: { [string]: boolean }?
+): boolean
+	local kept: { [string]: number } = {}
+	local changed = false
+	for _, unit in shelves.units do
+		for _, slot in orderedSlots(unit.placements) do
+			local figure = unit.placements[slot]
+			local limit = owned[figure] or 0
+			local count = kept[figure] or 0
+			if limit <= count or (discovered ~= nil and not discovered[figure]) then
+				unit.placements[slot] = nil
+				changed = true
+			else
+				kept[figure] = count + 1
+			end
+		end
+	end
+	return changed
+end
+
+function Shelves.decode(
+	raw: unknown,
+	discovered: { [string]: boolean },
+	owned: { [string]: number }
+): Types.Shelves?
 	if not Shelves.fields(raw, { "units", "legacyOverflow" }) then
 		return nil
 	end
@@ -104,7 +174,6 @@ function Shelves.decode(raw: unknown, discovered: { [string]: boolean }): Types.
 				or not Config.parseSlot(slot)
 				or typeof(figure) ~= "string"
 				or not Catalog.byId[figure]
-				or not discovered[figure]
 			then
 				return nil
 			end
@@ -176,6 +245,7 @@ function Shelves.decode(raw: unknown, discovered: { [string]: boolean }): Types.
 		end
 		result.legacyOverflow = overflow
 	end
+	Shelves.reconcile(result, owned, discovered)
 	return result
 end
 function Shelves.visibleIndices(shelves: Types.Shelves, view: View): { number }
@@ -257,6 +327,15 @@ function Shelves.mutate(
 		local figure = intent.figure or ""
 		if not Catalog.byId[figure] or not state.discovered[figure] then
 			return false, "Discover that figure first.", nil
+		end
+		if (state.owned[figure] or 0) <= 0 then
+			return false, "You do not own that figure.", nil
+		end
+		if target.placements[slot] ~= figure then
+			local available = Shelves.availability(state.shelves, state.owned)
+			if (available[figure] or 0) <= 0 then
+				return false, "All owned copies are already on your Shelves.", nil
+			end
 		end
 		target.placements[slot] = figure
 	elseif intent.action == "ShelfRemove" then

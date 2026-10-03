@@ -170,7 +170,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	if keys ~= state.display.unlocked then
 		return nil
 	end
-	local shelves = Shelves.decode(data.shelves, state.discovered)
+	local shelves = Shelves.decode(data.shelves, state.discovered, state.owned)
 	if not shelves then
 		return nil
 	end

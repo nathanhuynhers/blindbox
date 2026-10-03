@@ -7,6 +7,7 @@ local PlotStyle = require(script.Parent.PlotStyle)
 local Fixture = {}
 Fixture.style =
 	table.freeze({ spacing = 8, sideMargin = 6, counterY = 3, figureScale = 2, title = "DISPLAY" })
+Fixture.lighting = table.freeze({ dayBrightness = 0.65, nightBrightness = 1.25 })
 -- Striped awning above the sign: raised back edge behind the panel, lower front over the counter.
 -- The valance bottom (frontY - 1.4) stays above the sign top (Y=13.3) so the sign stays readable.
 Fixture.awning =
@@ -164,6 +165,7 @@ export type Render = {
 	capacity: number,
 	accent: Color3,
 	awning: Model?,
+	light: SurfaceLight,
 }
 function Fixture.width(capacity: number): number
 	assert(
@@ -237,7 +239,7 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	light.Name = "WarmWash"
 	light.Face = Enum.NormalId.Bottom
 	light.Color = Color3.fromRGB(255, 227, 180)
-	light.Brightness = 0.65
+	light.Brightness = Fixture.lighting.dayBrightness
 	light.Range = 12
 	light.Angle = 110
 	light.Shadows = false
@@ -328,10 +330,16 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 		capacity = 0,
 		accent = accent or PlotStyle.DefaultAccent,
 		awning = nil,
+		light = light,
 	}
 	Fixture.resize(render, Display.defaultSlots)
 	model.Parent = parent
 	return render
+end
+function Fixture.setNight(render: Render, enabled: boolean)
+	render.light.Brightness = if enabled
+		then Fixture.lighting.nightBrightness
+		else Fixture.lighting.dayBrightness
 end
 function Fixture.setRate(render: Render, rate: number)
 	local text = string.format("%g Coins/sec", rate)

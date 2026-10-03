@@ -1,8 +1,8 @@
 # Display, Shelves and Daily Goal follow-up
 
-Implemented October 2, 2026. Automated verification passes. Native Studio acceptance is pending:
-the Studio connector returned no connected instances, so no Studio playtest was run.
-Backlog items 3, 6 and 11 are marked completed, with this remaining gate explicitly recorded.
+Implemented October 2, 2026. Automated verification passes. The user subsequently inspected the
+result in Roblox Studio and reported that everything looked and worked correctly. Backlog items
+3, 6 and 11 are fully completed and manually accepted.
 
 ## Behavior and boundaries
 
@@ -67,32 +67,8 @@ these changes do not alter crash recovery or storage guarantees.
 These harnesses execute real modules with engine boundaries shimmed. They do not simulate native
 mouse/touch delivery, prompt rendering, physics, network replication or real DataStore sessions.
 
-## Remaining Studio acceptance
+## Manual acceptance
 
-Use the built place or sync the repository into an isolated Studio test. Watch Output throughout.
-
-1. **Management:** on a fresh empty Display and a populated three/six-slot Display, approach the
-   counter and press E. Only management opens; the wallet and banks do not collect. Close it,
-   move more than 12 studs from the management target and confirm E no longer opens it. Test
-   death/respawn and repeat during an opening cinematic and a pending request.
-2. **Mouse and touch:** let at least two displayed figures bank Coins, then click one and tap one
-   with Studio device emulation. Only the selected bank transfers. Check every slot, zero/fractional
-   earnings, and rapid repeated input. Newly accrued Coins may legitimately be collected again;
-   the same banked amount must not pay twice. A tap on management must not also collect a figure.
-3. **Presentation:** inspect the counter plaque and physical Shelves header on desktop and phone
-   portrait/landscape, day and night. Switch mouse/touch on a hybrid device. Check that prompts,
-   figures, camera controls and plaque do not obscure or intercept each other.
-4. **Two clients:** try clicking/tapping another owner's figures, triggering their management
-   prompt, forged remote Collect requests and collection from outside the 12-stud target range.
-   Confirm no unauthorized wallet/bank changes. Walk away and return; normal owner input recovers.
-5. **Lifecycle and persistence:** replace/remove/expand Display slots, respawn, then leave/rejoin
-   after a confirmed save. Confirm saved banks/placement survive, no offline income appears,
-   departed plots disappear and replacement plots have exactly one management prompt and one
-   collection handler per figure target. Test storage pause using the existing isolated workflow.
-6. **Daily Goal:** check incomplete, complete/unclaimed, delayed/failed claim, successful claim,
-   reopening, device resize and respawn. On success neither HUD variant leaves a claimed card;
-   Goals shows the empty state while the free box and collection links work. Rejoin after a saved
-   claim and attempt it again; no second reward. The next UTC day should restore the goal normally.
-
-No known failing automated cases remain. Native device usability, visual fit, multi-client delivery
-and real save/rejoin behavior remain unverified until the above Studio checks are recorded.
+On October 2, 2026, the user manually checked the integrated result in Roblox Studio and reported
+that everything appeared correct. This closes the remaining visual and interaction acceptance gate
+for backlog items 3, 6 and 11. No known issues remain for these tasks.

@@ -5,6 +5,38 @@ individually persistent Shelf Units and a three-shelf viewport. It supersedes th
 Shelf Page implementation report. Native Studio acceptance has **not** been run by the agent.
 See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.md).
 
+**October 2 owned-copy/lighting update:** Current Shelf placement is limited to owned copies
+across every persistent unit; older discovery-only statements below are superseded. Profile
+decode keeps the earliest allowed unit/slot placements and clears only unowned/excess entries.
+The existing one-Display and nine-Shelf wash lights per plot now increase brightness at dusk and
+restore their original values at dawn through one plot-owned `NightLights` controller. No actual
+lights, listeners or per-frame work were added. Automated and native Studio property checks pass;
+subjective 3D lighting quality, mobile and multiplayer acceptance remain pending.
+
+### Native Studio MCP verification (October 3, 2026)
+
+The freshly generated `RobloxWorkspace.rbxlx` was opened in a separate Studio instance and
+verified in Play mode through the Roblox Studio MCP. Fifty-one server-side checks over real
+Roblox Instances passed: the active plot contained one Display wash and nine Shelf washes;
+dusk/day values changed to 1.25/0.9 and returned to 0.65/0.35; the transition created no lights;
+the registry remained at 50 actual dusk lights and one controller for one active plot; a plot
+created during night initialized correctly; six-slot Display resizing and four-unit carousel
+rendering reused every light; and temporary plot destruction returned both registry counts and
+removed all temporary washes.
+
+Twenty-eight native server-domain checks also passed for zero/one/two copies, an offscreen fourth
+unit, removal, atomic swap, failed-swap immutability, non-owner/distance/hidden/stale/forged
+requests, deterministic profile repair, idempotent encode/decode and receipt replay. In the real
+Shelf screen, a temporary client-only snapshot rendered an exhausted owned figure as
+`Selectable=false` and an available figure as `Selectable=true`; the normal empty-inventory
+screen retained the existing layout and Shop route. The temporary snapshot did not mutate or
+save the player's profile.
+
+Before test-runner injection, Studio Output contained no gameplay error; the only message was the
+existing leaderboard DataStore fallback warning. MCP property checks do not establish subjective
+3D lighting quality, representative mobile performance, two-client isolation or an isolated
+DataStore autosave/rejoin. Those acceptance checks remain pending.
+
 ## Blindbox Town world redesign (current, October 2, 2026)
 
 This pass replaces the recessed foundation, ivory plaza, plaque entrance and fixed entrance spawn
@@ -220,19 +252,20 @@ remain provisional; the Collection furniture/sign/control visual pass itself is 
   P renders owned index `(startIndex + P - 2) % ownedCount + 1`. Their `ShelfId` attributes expose
   the currently rendered persistent IDs. Local placements map to runtime-only FigureSlots keys
   `viewport:P/row:R/slot:S`; these are never saved. No furniture is added when capacity grows.
-- The world and owner snapshots share the same visible trio. Owner snapshots contain only
-  `{ownedCount, visible = {{id, index, placements}, ...}, carouselRevision, canNavigate}`.
+- The world and owner snapshots share the same visible trio. Owner snapshots contain that
+  bounded projection plus `shelfAvailable`, derived on the server across all persistent units.
   Hidden units and dormant migration data are excluded. Existing FigureSlots caching replaces
   only changed figures at physical anchors; rendering remains at most 27 shelf figures per plot.
 - The minimal Shelf editor selects one of three visible units, then one of nine local slots and
   a discovered figure. It labels wrapped indexes explicitly, e.g. “Viewing shelves 4, 5, 1 of 5”.
   Requests target `shelfId` plus `shelfSlotId` and require current profile/carousel revisions,
-  visible ownership, discovery and proximity. A-B-A browsing invalidates stale edits.
+  visible ownership, discovery, owned-copy capacity and proximity. A-B-A browsing invalidates stale edits.
 - Visitors can click/tap the same world controls and see the same trio; they cannot edit or
   receive private profile state. Existing 160-stud detector reach, server plot-area/living-actor
   checks, independent close-range editor validation and cleanup remain in place.
-- Shelves reserve/consume zero copies, generate zero Coins and do not affect Display bonuses,
-  recycling or daily goals. Repeated discoveries and simultaneous Display/shelf use still work.
+- Shelves do not decrement inventory, generate Coins or affect Display bonuses or daily goals.
+  Their placement references are capped by owned quantity across all units. Display placement
+  counts independently, so simultaneous Display/Shelf use still works.
 
 | Owned count | Successive Next viewports |
 | --- | --- |
@@ -249,8 +282,9 @@ The decode-only `LegacyShelfPages` module validates the retired v4 representatio
 each source page into exactly three units in source array order. Old page P, logical unit U
 maps to index `(P-1)*3+U`, ID `shelf:<index>`; `unit:U/row:R/slot:S` becomes `row:R/slot:S`.
 One old page becomes three units; two become six, including empty units and empty positions.
-Duplicates, zero-copy discoveries, Display capacity/placements, currency, inventory, discovery,
-onboarding and daily state survive. The decoder does not mutate input; v5 round trips are stable.
+Display capacity/placements, currency, inventory, discovery, onboarding and daily state survive.
+The active schema-8 decoder additionally reconciles Shelf placements against owned counts in
+stable unit and numeric row/slot order; repeated decode/save round trips are idempotent.
 
 Per the user's explicit choice, valid old logical units above 3 remain as dormant
 `legacyOverflow` records `{sourceId, logicalUnit, placements}`. They retain retired source IDs
