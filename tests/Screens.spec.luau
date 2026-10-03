@@ -56,8 +56,11 @@ local function snapshot()
 	}
 end
 local requests = {}
+local homeRequests = 0
 local ui = Interface.create(function(action, figure, slot, choice)
 	table.insert(requests, { action = action, figure = figure, slot = slot, choice = choice })
+end, function()
+	homeRequests += 1
 end)
 local gui = Engine.playerGui:FindFirstChild("PocketGrove")
 check(gui ~= nil and gui.ResetOnSpawn == false, "one persistent ScreenGui")
@@ -102,6 +105,14 @@ check(displayBadge.Visible and within(displayBadge, "Text").Text == "3 empty", "
 check(within(find("DockShop"), "Badge").Visible, "Shop FREE badge while the daily box is ready")
 check(not within(find("DockGoals"), "Badge").Visible, "no Goals badge without a claim")
 check(not find("Backdrop").Visible, "world is not dimmed with no screen open")
+local homeButton = find("HomeButton")
+check(homeButton.Text == "Home", "temporary Home button is labeled")
+check(
+	homeButton:GetAttribute("AccessibleName") == "Return Home to your plot",
+	"Home has an accessible name"
+)
+Engine.click(homeButton)
+check(homeRequests == 1, "Home activation sends one request")
 
 -- Settings popover holds Motion.
 Engine.click(find("SettingsButton"))
@@ -430,6 +441,8 @@ scope.destroy()
 
 -- Teardown releases every connection, timer and instance.
 ui.destroy()
+Engine.click(homeButton)
+check(homeRequests == 1, "Home activation connection released on teardown")
 check(Engine.playerGui:FindFirstChild("PocketGrove") == nil, "UI destroyed")
 check(Engine.bound.CollectibleMenu == nil, "gamepad binding released")
 check(Engine.pending() == 0, "no timers survive teardown")

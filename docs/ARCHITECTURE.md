@@ -65,7 +65,11 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
 
-Only `Intent`, `State` and `RequestState` remotes remain. No owner/plot identity comes from a
+`Intent`, `State` and `RequestState` retain their profile transaction roles. The parameterless
+`Home` event is separate because returning to a plot is non-persistent and needs no revision,
+receipt or state reply. Its server callback ignores client payloads, resolves the callback Player's
+active session and server-owned plot spawn, validates the live character and ownership, and applies
+a one-second per-session cooldown. No owner/plot identity comes from a
 mutation request. Requests resolve to the callback Player's session. Display placement checks
 that the living player owns and is physically inside the active plot. Shelf edits use the same
 own-plot boundary and require a visible owned unit ID, configured local slot,

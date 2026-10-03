@@ -15,6 +15,7 @@ local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
 local syncRemote = remotes:WaitForChild("RequestState") :: RemoteEvent
+local homeRemote = remotes:WaitForChild("Home") :: RemoteEvent
 local current: Types.Snapshot? = nil
 local pending: Types.Intent? = nil
 local beforeRequest: Types.Snapshot? = nil
@@ -50,7 +51,9 @@ local function request(action: string, figure: string?, slot: number?, choice: s
 	sentAt = os.clock()
 	intentRemote:FireServer(intent)
 end
-ui = Interface.create(request)
+ui = Interface.create(request, function()
+	homeRemote:FireServer()
+end)
 -- Reveal choices run after the opening has fully closed and released UI focus.
 local function choose(choice: string, result: OpeningResult.Result)
 	local state = current

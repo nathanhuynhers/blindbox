@@ -17,6 +17,7 @@ local Storage = require(script.Storage)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
 local PlayerSpawn = require(script.PlayerSpawn)
+local HomeTeleport = require(script.HomeTeleport)
 local Leaderboard = require(script.Leaderboard)
 local DayNight = require(script.DayNight)
 local TownModels = require(script.TownModels)
@@ -37,6 +38,7 @@ type Session = {
 	storage: Storage.Session,
 	sequence: number,
 	syncTime: number,
+	homeTime: number,
 	spawn: PlayerSpawn.Binding?,
 }
 local plots = PlotSlots.new(PlotConfig.maxPlots)
@@ -56,6 +58,7 @@ end
 local intentRemote = remote("Intent")
 local stateRemote = remote("State")
 local syncRemote = remote("RequestState")
+local homeRemote = remote("Home")
 folder.Parent = ReplicatedStorage
 local function send(player: Player, session: Session, reply: Types.Reply?)
 	session.sequence += 1
@@ -149,6 +152,7 @@ local function added(player: Player)
 		storage = storage,
 		sequence = 0,
 		syncTime = -math.huge,
+		homeTime = -math.huge,
 		spawn = nil,
 	}
 	sessions[player] = session
@@ -226,6 +230,18 @@ table.insert(
 			Rules.settle(session.transaction.state, now)
 		end
 		send(player, session, nil)
+	end)
+)
+table.insert(
+	connections,
+	homeRemote.OnServerEvent:Connect(function(player: Player)
+		local session = sessions[player]
+		if not session or shuttingDown then
+			return
+		end
+		local _, nextRequest =
+			HomeTeleport.request(player, session.plot, session.homeTime, os.clock())
+		session.homeTime = nextRequest
 	end)
 )
 table.insert(
