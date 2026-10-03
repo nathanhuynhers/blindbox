@@ -107,6 +107,10 @@ An active plot uses at most 150 runtime parts (140 at six Display slots).
 Players spawn on **their own plot**. When a profile loads and a plot is assigned, `PlayerSpawn`
 moves the current character and every later respawn or character reload to that plot's spawn pad,
 facing into the plot. The target is a server-computed `CFrame`; no client position is trusted.
+The temporary `Home` HUD button requests the same plot spawn through a parameterless remote. The
+server resolves the caller's active session, validates its live owned plot and character, rate
+limits requests to once per second, clears character velocity and performs the move. Missing,
+released, dead or detached state is ignored safely.
 Before assignment (or if loading fails and the player is kicked), Roblox spawns the character on
 the plaza `SpawnLocation`. Leaving unbinds the spawn handler, destroys the plot and releases its
 light from the budget.

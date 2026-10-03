@@ -36,7 +36,10 @@ local function gamepad(): boolean
 	return string.find(Input:GetLastInputType().Name, "Gamepad", 1, true) ~= nil
 end
 
-function Interface.create(send: (string, string?, number?, string?) -> ()): Interface
+function Interface.create(
+	send: (string, string?, number?, string?) -> (),
+	home: (() -> ())?
+): Interface
 	local scope = Scope.create()
 	local snapshot: Types.Snapshot? = nil
 	local effects, focused, pending, opened, destroyed = true, false, false, false, false
@@ -137,6 +140,10 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 	}
 	local hud = Hud.create(stage, ctx, function(value: boolean)
 		effects = value
+	end, function()
+		if canAct() and home then
+			home()
+		end
 	end)
 	local dock = Dock.create(stage, ctx, function(id)
 		if opened and current == id then

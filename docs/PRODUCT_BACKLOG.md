@@ -73,7 +73,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Players with the Gamepass should not need to manually click or tap each figure to collect online earnings.
     - This is separate from the offline earnings system.
 
-15. **Add Jump to Plot / Home button**
+15. [x] **Add Jump to Plot / Home button** — implementation, automated checks, native Studio single-client behavior and mobile layout checks complete; multi-client and true-touch acceptance pending.
     - Add a button that teleports the player back to their own plot.
     - Player-facing naming/iconography can use "Home" if that fits the UI better than "Jump to Plot."
     - Teleport the character to a safe, consistent location within their own plot.

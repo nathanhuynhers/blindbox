@@ -16,13 +16,19 @@ local Hud = {}
 export type Hud = {
 	root: Frame,
 	coins: TextButton,
+	home: TextButton,
 	gear: TextButton,
 	menu: Menu.Menu,
 	layout: (Layout.Frame, opened: boolean) -> (),
 	update: (Types.Snapshot) -> (),
 }
 
-function Hud.create(parent: Instance, ctx: Context.Context, setMotion: (boolean) -> ()): Hud
+function Hud.create(
+	parent: Instance,
+	ctx: Context.Context,
+	setMotion: (boolean) -> (),
+	goHome: () -> ()
+): Hud
 	local root = Kit.frame(parent, "Hud")
 	root.ZIndex = 30
 	-- Coins pill sizes to its content; its hard shadow follows the measured size.
@@ -72,6 +78,21 @@ function Hud.create(parent: Instance, ctx: Context.Context, setMotion: (boolean)
 			)
 		end
 	end)
+	-- Functional placeholder only. Final iconography and positioning remain future UI work.
+	local home = Instance.new("TextButton")
+	home.Name = "HomeButton"
+	home.Text = "Home"
+	home.TextSize = 18
+	home.FontFace = Style.display()
+	home.TextColor3 = Style.ink
+	home.AutoButtonColor = true
+	home.BackgroundColor3 = Style.white
+	home.ZIndex = 2
+	home.Parent = root
+	home:SetAttribute("AccessibleName", "Return Home to your plot")
+	Kit.round(home)
+	Kit.stroke(home, Style.ink)
+	ctx.scope.connect(home.Activated, goHome)
 	local right = Kit.frame(root, "Right")
 	local gearShadow = Kit.frame(right, "GearShadow", Style.ink)
 	gearShadow.ZIndex = 1
@@ -113,6 +134,7 @@ function Hud.create(parent: Instance, ctx: Context.Context, setMotion: (boolean)
 	return {
 		root = root,
 		coins = coins,
+		home = home,
 		gear = gear,
 		menu = menu,
 		layout = function(geometry: Layout.Frame, opened: boolean)
@@ -125,6 +147,8 @@ function Hud.create(parent: Instance, ctx: Context.Context, setMotion: (boolean)
 			-- Phone sheets carry their own coins chip; the HUD hides under an open sheet.
 			coins.Visible = not (phone and opened)
 			coinShadow.Visible = coins.Visible
+			Kit.rect(home, math.max(12, geometry.hud.x), geometry.dock.y - 54, 96, 44)
+			home.Visible = not opened
 			Kit.rect(
 				gear,
 				geometry.gear.x,
