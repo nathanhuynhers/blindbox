@@ -92,7 +92,7 @@ function Slot.create(
 	local width, height = 160, 184
 	local function place()
 		local compact = height < 170
-		local image = if compact then 78 else 112
+		local image = if compact then 78 else 104
 		Kit.rect(stage, (width - image) / 2, if compact then 14 else 18, image, image)
 		local nameY = (if compact then 14 else 18) + image
 		Kit.rect(name, 6, nameY, width - 12, 20)

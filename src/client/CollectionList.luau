@@ -59,7 +59,7 @@ function List.icon(
 end
 
 function List.create(parent: Instance, ctx: Context.Context, choose: (string) -> ()): List
-	local root = Kit.frame(parent, "CollectionList", Style.surface2)
+	local root = Kit.column(parent, "CollectionList", Style.surface2, "left", 28)
 	local heading =
 		Kit.text(root, "Heading", "COLLECTIONS", 12, Style.body(Enum.FontWeight.Heavy), Style.muted)
 	local layout = Kit.list(root, Enum.FillDirection.Vertical, 6)

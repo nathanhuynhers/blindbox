@@ -94,6 +94,15 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 	})
 	freeChip.root.AnchorPoint = Vector2.new(1, 0)
 	local freeTitle = Kit.text(free.face, "FreeTitle", "", 22, Style.display())
+	-- Single allowed collection: its emblem and progress fill the card instead of a chooser.
+	local feature = Kit.frame(free.face, "FreeFeature", Style.surface2)
+	Kit.corner(feature, 16)
+	local featureIcon, featureEmblem, featureMono = List.icon(feature, "", "", 88)
+	featureIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+	local featureText =
+		Kit.text(feature, "Detail", "", 14, Style.body(Enum.FontWeight.Bold), Style.muted)
+	featureText.TextXAlignment = Enum.TextXAlignment.Center
+	featureText.TextWrapped = true
 	local chosen: string? = nil
 	local refresh: () -> () = function() end
 	local choices: { Choice } = {}
@@ -201,6 +210,10 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 			Kit.rect(choice.button, 18 + col * (half + 8), 94 + line * 52, half, 44)
 		end
 		Kit.rect(open.button, 18, cardHeight - 18 - 64, inner, 64)
+		local featureHeight = math.max(120, cardHeight - 18 - 64 - 12 - 94)
+		Kit.rect(feature, 18, 94, inner, featureHeight)
+		featureIcon.Position = UDim2.new(0.5, 0, 0, math.floor(featureHeight / 2) - 18)
+		Kit.rect(featureText, 12, math.floor(featureHeight / 2) + 34, inner - 24, 40)
 		-- Progress list
 		local pinner = column - 32
 		Kit.rect(progressTitle, 16, 16, pinner - 60, 26)
@@ -212,7 +225,7 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 			Kit.rect(row.status, pinner - 100, 8, 88, 20)
 			Kit.rect(row.bar.root, 60, 34, pinner - 72, 8)
 		end
-		body.CanvasSize = UDim2.fromOffset(0, top + cardHeight + 22)
+		Kit.fit(body, top + cardHeight + 22, height)
 	end
 	local timer: thread? = nil
 	local visible = false
@@ -283,6 +296,22 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 			choice.button.BackgroundColor3 = if on then Style.violetWash else Style.white
 			choice.stroke.Color = if on then Style.violet else Style.track
 			choice.button:SetAttribute("Selected", on)
+		end
+		feature.Visible = single
+		if single then
+			local id = options[1]
+			local accent = Style.collection(id)
+			local name = State.collectionName(id)
+			feature.BackgroundColor3 = accent.wash
+			featureIcon.BackgroundColor3 = Style.white
+			featureEmblem.Image = Style.emblem(id)
+			featureEmblem.Visible = featureEmblem.Image ~= ""
+			featureMono.Text = Style.mono(id, name)
+			featureMono.TextColor3 = accent.color
+			featureMono.Visible = not featureEmblem.Visible
+			local found, total = State.completion(snapshot, id)
+			featureText.Text =
+				string.format("One free %s box every day · %d of %d found", name, found, total)
 		end
 		freeChip.set(if snapshot.dailyReady then "Ready" else "Claimed")
 		freeChip.paint(

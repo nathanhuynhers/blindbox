@@ -101,6 +101,11 @@ function Shell.create(parent: Instance, ctx: Context.Context, options: Options):
 		Kit.rect(body, 0, h + 2, width, math.max(0, height - h - 2))
 	end
 	ctx.scope.connect(chips:GetPropertyChangedSignal("AbsoluteSize"), place)
+	ctx.scope.connect(subtitle:GetPropertyChangedSignal("Text"), function()
+		if width > 0 and subtitle.Visible ~= (not phone and subtitle.Text ~= "") then
+			place()
+		end
+	end)
 	return {
 		root = root,
 		body = body,

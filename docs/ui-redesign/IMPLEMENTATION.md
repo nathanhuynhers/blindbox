@@ -117,6 +117,41 @@ What else the merge carried over:
 
 The engine double does not render, measure text, resolve fonts or images, or run layouts.
 
+## Studio visual review (2026-10-02)
+
+The first Studio pass used the MCP on mainline at 1529×770 (UIScale 1.07), plus a phone-landscape
+preview made by shrinking `SafeArea` to 844×390. It confirmed that Fredoka and Nunito both
+resolve. The Reveal flow worked end to end (Put on Display, Open another, Keep). Fixes from that
+pass:
+
+- **Panel height:** the desktop panel now ends 26px above the dock (496px tall at the
+  reference), so its shadow clears the raised active tile and its badges.
+- **Side columns** (`UIKit.column`): only the outer bottom corner is rounded, so the fill no
+  longer pokes past the panel corner. A divider marks the inner edge.
+- **Rarity edge:** the rarity colour is now the well's rounded bottom edge (cards, contents
+  tiles, Collection detail), matching the mockup's border-bottom.
+- **Grid outlines:** grids pad their canvas by 5px so card outlines and shadows aren't clipped.
+- **Scrollbars:** manual canvases only scroll on real overflow (`Kit.fit`).
+- **Screen-specific fixes:**
+  - The shell subtitle appears once a screen sets its text.
+  - Display uses 176px slots. With no slot chosen, the picker lists your figures: tapping one
+    fills the next empty slot, or enters placing mode when the Display is full.
+  - Goals' single daily collection fills the free-box card with its emblem and progress.
+  - Shelves hides the filter chips until something is discovered.
+  - Collection opens on the first found figure. Its "Find it in … boxes" action uses the
+    quieter body type so long names fit, and compact (phone) cards keep both text lines.
+  - On phone, the Shop box title wraps.
+- **Reveal:** the NEW badge sits above the name, clear of the figure, with the rarity pill
+  right beside the name.
+- **Toasts:** with a screen open on desktop, toasts show above the panel rather than over its
+  buttons.
+- **Gear icon:** it now reads as a gear.
+
+Open question for design: the server only accepts Place/Remove within ~15 studs of your own
+Display (`PlayerPlot.nearDisplay`). The Reveal card's Put on Display, the Display picker and
+Collection's Put on Display therefore fail with "Walk closer to your own Display" when used
+elsewhere, for example at the Shop stall right after opening a box.
+
 ## Studio checklist (not yet run)
 
 Sync with `rojo serve --port 34873` (not the other checkout's port). Run at **1280×720**,

@@ -60,12 +60,24 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 	end
 	local picker = Picker.create(body, ctx, {
 		pick = function(id)
+			local snapshot = ctx.snapshot()
+			if not snapshot or not ctx.canAct() then
+				return
+			end
 			local slot = target
-			if slot and ctx.canAct() then
+			if slot then
 				ctx.send("Place", id, slot, nil)
 				target = nil
-				refresh()
+			else
+				-- No slot chosen: fill the next empty slot, or pick which slot to swap.
+				local empty = State.emptySlots(snapshot)
+				if #empty > 0 then
+					ctx.send("Place", id, empty[1], nil)
+				else
+					placing = id
+				end
 			end
+			refresh()
 		end,
 		remove = function()
 			local slot = target
@@ -92,19 +104,19 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 		Kit.rect(star, 14, 11, 18, 18)
 		Kit.rect(bannerText, 42, 0, inner - 42 - 90, 40)
 		Kit.rect(bannerAmount, inner - 100, 0, 86, 40)
-		y += 50
+		y += 48
 		local gap = if phone then 8 else 12
 		local cell = State.cells(inner, DisplayConfig.maxSlots, gap)
-		local slotHeight = if phone then 150 else 184
+		local slotHeight = if phone then 150 else 176
 		for index, slot in slots do
 			slot.size(cell, slotHeight)
 			slot.button.Position = UDim2.fromOffset(pad + (index - 1) * (cell + gap), y)
 		end
-		y += slotHeight + 10
-		local drawer = math.max(if phone then 150 else 170, height - y - 14)
+		y += slotHeight + 8
+		local drawer = math.max(if phone then 140 else 150, height - y - 12)
 		picker.size(inner, drawer, phone)
 		Kit.rect(picker.root, pad, y, inner, drawer)
-		body.CanvasSize = UDim2.fromOffset(0, y + drawer + 14)
+		Kit.fit(body, y + drawer + 12, height)
 	end
 	local function update(snapshot: Types.Snapshot)
 		shell.update(snapshot)
@@ -135,9 +147,8 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 			bannerAmount.TextColor3 = Style.muted
 			bannerText.Text = if name and bonus.best > 0
 				then string.format(
-					"Set bonus: show 3 different figures from one collection. %s: %d of 3",
-					name,
-					bonus.best
+					"Set bonus: show 3 different %s figures at once to earn extra coins",
+					name
 				)
 				else "Set bonus: show 3 different figures from one collection to earn extra coins"
 			bannerAmount.Text = string.format("%d / 3", bonus.best)

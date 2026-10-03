@@ -53,7 +53,9 @@ function Card.create(
 	titleRow.AnchorPoint = Vector2.new(0.5, 0)
 	Kit.list(titleRow, Enum.FillDirection.Horizontal, 12, Enum.VerticalAlignment.Center)
 	local name = Kit.text(titleRow, "FigureName", figure.name, 44, Style.display(), Style.white)
+	-- Width follows the text (no scale width) so the rarity pill sits right beside the name.
 	name.AutomaticSize = Enum.AutomaticSize.X
+	name.Size = UDim2.fromScale(0, 1)
 	name.TextTruncate = Enum.TextTruncate.None
 	name.LayoutOrder = 1
 	local pill = Badge.rarity(titleRow, 30, 14, Style.white)
@@ -124,7 +126,8 @@ function Card.create(
 			block.AnchorPoint = Vector2.new(0.5, 1)
 			block.Position = UDim2.new(0.77, 0, 1, -12)
 			block.Size = UDim2.fromScale(0.44, 0)
-			new.root.Position = UDim2.new(0.77, 0, 0, 12)
+			new.root.Parent = block
+			new.root.Position = UDim2.new(0.5, 0, 0, -42)
 			new.root.Size = UDim2.fromOffset(0, 34)
 			new.label.TextSize = 16
 			name.TextSize = 28
@@ -158,7 +161,8 @@ function Card.create(
 		else
 			block.AnchorPoint = Vector2.new(0.5, 1)
 			block.Position = UDim2.new(0.5, 0, 1, -16)
-			new.root.Position = UDim2.new(0.5, 0, 0, 34)
+			new.root.Parent = block
+			new.root.Position = UDim2.new(0.5, 0, 0, -52)
 			new.root.Size = UDim2.fromOffset(0, 40)
 			new.label.TextSize = 20
 			name.TextSize = 44

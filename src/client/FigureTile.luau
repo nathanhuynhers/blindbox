@@ -53,14 +53,18 @@ function Tile.create(
 	Kit.corner(face, radius)
 	local stroke = Kit.stroke(face, Style.ink, outline)
 	stroke.Enabled = kind ~= "tile"
-	local well = Kit.frame(face, "Well", Style.disabledFill)
+	-- The rarity colour sits behind the wash and shows as the well's rounded bottom edge.
+	local edged = kind == "card" or kind == "tile"
+	local bar = Kit.frame(face, "RarityBar", Style.track)
+	Kit.corner(bar, radius - 2)
+	local well = Kit.frame(bar, "Well", Style.disabledFill)
 	well.ClipsDescendants = true
+	well.Size = UDim2.new(1, 0, 1, if edged then -5 else 0)
 	Kit.corner(well, radius - 2)
 	local preview = Preview.create(well, ctx.scope, true)
 	local unknown = Kit.text(well, "Unknown", "?", 34, Style.display(), Style.unknownInk)
 	unknown.Size = UDim2.fromScale(1, 1)
 	unknown.TextXAlignment = Enum.TextXAlignment.Center
-	local bar = Kit.frame(face, "RarityBar", Style.track)
 	local name = Kit.text(face, "Name", "", 14)
 	local sub = Kit.text(face, "Sub", "", 12, nil, Style.muted)
 	if kind == "pick" then
@@ -101,31 +105,42 @@ function Tile.create(
 		local inset = outline
 		if kind == "pick" then
 			local image = height - 18
-			Kit.rect(well, 6, 6, image, image)
-			bar.Visible = false
+			Kit.rect(bar, 6, 6, image, image)
 			Kit.rect(name, image + 14, 10, width - image - 22, 20)
 			Kit.rect(sub, image + 14, 32, width - image - 22, 22)
 			name.TextWrapped = false
 		elseif kind == "tile" then
-			Kit.rect(well, 0, 0, width, height - 5)
-			Kit.rect(bar, 0, height - 5, width, 5)
+			Kit.rect(bar, 0, 0, width, height)
 			name.Visible, sub.Visible = false, false
 		elseif kind == "shelf" then
-			Kit.rect(well, inset, inset, width - inset * 2, height - 36)
-			bar.Visible = false
+			Kit.rect(bar, inset + 2, inset + 2, width - inset * 2 - 4, height - 38)
 			Kit.rect(name, 4, height - 32, width - 8, 28)
 			name.TextSize = 12
 			name.TextWrapped = true
 			name.TextXAlignment = Enum.TextXAlignment.Center
 			sub.Visible = false
 		else
-			local wellHeight = math.floor(height * 0.66)
-			Kit.rect(well, inset, inset, width - inset * 2, wellHeight - inset)
-			Kit.rect(bar, inset, wellHeight, width - inset * 2, 5)
-			Kit.rect(name, 8, wellHeight + 8, width - 16, 18)
-			Kit.rect(sub, 8, wellHeight + 26, width - 16, 16)
+			local compact = height < 130
+			local wellHeight = height - (if compact then 38 else 50)
+			Kit.rect(bar, inset, inset, width - inset * 2, wellHeight - inset + 5)
+			name.TextSize = if compact then 12 else 14
+			sub.TextSize = if compact then 11 else 12
+			Kit.rect(
+				name,
+				8,
+				wellHeight + (if compact then 6 else 9),
+				width - 16,
+				if compact then 15 else 18
+			)
+			Kit.rect(
+				sub,
+				8,
+				wellHeight + (if compact then 21 else 27),
+				width - 16,
+				if compact then 13 else 16
+			)
 		end
-		unknown.TextSize = math.floor(math.min(well.Size.Y.Offset, well.Size.X.Offset) * 0.36)
+		unknown.TextSize = math.floor(math.min(bar.Size.Y.Offset, bar.Size.X.Offset) * 0.36)
 	end
 	return {
 		button = button,
@@ -161,7 +176,7 @@ function Tile.create(
 			if kind == "pick" or kind == "shelf" then
 				well.BackgroundColor3 = accent.wash
 			end
-			bar.BackgroundColor3 = tint
+			bar.BackgroundColor3 = if edged then tint else well.BackgroundColor3
 			preview.figure(if view.discovered then id else nil, true)
 			unknown.Visible = not view.discovered
 			name.Text = if view.discovered then figure.name else "???"

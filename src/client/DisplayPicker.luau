@@ -53,7 +53,7 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 	local remove = small(root, "Remove", "Remove", ctx, callbacks.remove)
 	local cancel = small(root, "Cancel", "Cancel", ctx, callbacks.cancel)
 	local layout = Kit.grid(root, 10)
-	local grid = Kit.scroll(root, "Choices", ctx.scope, layout, 2, ctx.scale)
+	local grid = Kit.scroll(root, "Choices", ctx.scope, layout, 5, ctx.scale)
 	local empty = Kit.text(root, "Empty", "", 15, nil, Style.muted)
 	empty.TextXAlignment = Enum.TextXAlignment.Center
 	empty.TextWrapped = true
@@ -109,10 +109,10 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		for _, item in tiles do
 			item.size(cell, tileHeight)
 		end
-		Kit.rect(empty, pad, 60, inner, 40)
+		Kit.rect(empty, pad, 50, inner, 36)
 		shop.button.AnchorPoint = Vector2.new(0.5, 0)
-		shop.button.Position = UDim2.new(0.5, 0, 0, 104)
-		shop.button.Size = UDim2.fromOffset(200, 48)
+		shop.button.Position = UDim2.new(0.5, 0, 0, 90)
+		shop.button.Size = UDim2.fromOffset(200, 46)
 	end
 	return {
 		root = root,
@@ -121,13 +121,18 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 			arrange()
 		end,
 		update = function(snapshot: Types.Snapshot, target: number?, placing: string?)
-			local picks = if target then State.picker(snapshot) else {}
+			local picks = if placing then {} else State.picker(snapshot)
 			local filled = if target then snapshot.slots[target] or "" else ""
-			sort.Visible = target ~= nil and #picks > 0
+			local empties = #State.emptySlots(snapshot)
+			sort.Visible = placing == nil and #picks > 0
+			sort.Text = if target
+				then "Best earners first"
+				elseif empties > 0 then "Best earners first · tap one to fill your next empty slot"
+				else "Best earners first · tap one, then the slot it should replace"
 			browse.button.Visible = target ~= nil
 			remove.button.Visible = target ~= nil and filled ~= ""
 			cancel.button.Visible = target ~= nil or placing ~= nil
-			grid.Visible = target ~= nil
+			grid.Visible = placing == nil
 			browse.set("Browse Collection", true)
 			remove.set("Remove", ctx.canAct())
 			cancel.set("Cancel", true)
@@ -140,9 +145,9 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 			elseif target then
 				title.Text = "Choose a figure for slot " .. target
 			else
-				title.Text = "Tap a slot to choose or change its figure"
+				title.Text = "Your figures"
 			end
-			empty.Visible = target ~= nil and #picks == 0
+			empty.Visible = placing == nil and #picks == 0
 			shop.button.Visible = empty.Visible
 			empty.Text = "No other figures to place yet. Open a box to find more."
 			for index = 1, math.max(#picks, #tiles) do

@@ -83,14 +83,20 @@ function Icons.create(parent: Instance, name: string, color: Color3, size: numbe
 		part(root, 0.58, 0.55, 0.2, bar, color, 30)
 	elseif name == "Gear" then
 		for index = 0, 7 do
-			part(root, 0.5, 0.5, bar * 1.2, 0.92, color, index * 22.5 * 2)
+			local angle = math.rad(index * 45)
+			part(
+				root,
+				0.5 + math.cos(angle) * 0.36,
+				0.5 + math.sin(angle) * 0.36,
+				0.2,
+				0.2,
+				color,
+				index * 45,
+				false
+			)
 		end
-		local hub = part(root, 0.5, 0.5, 0.62, 0.62, Style.white)
-		local stroke = Instance.new("UIStroke")
-		stroke.Color = color
-		stroke.Thickness = line
-		stroke.Parent = hub
-		ring(root, 0.5, 0.5, 0.24, color, line)
+		part(root, 0.5, 0.5, 0.7, 0.7, color)
+		part(root, 0.5, 0.5, 0.3, 0.3, Style.white)
 	elseif name == "Gift" then
 		local box = part(root, 0.5, 0.64, 0.7, 0.48, color, 0, false)
 		box.BackgroundTransparency = 1

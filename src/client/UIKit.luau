@@ -161,6 +161,37 @@ function Kit.canvas(parent: Instance, name: string): ScrollingFrame
 	return frame
 end
 
+-- Side-column background inside a rounded panel: only its outer bottom corner is rounded (so
+-- the fill never pokes past the panel corner) and a divider marks its inner edge.
+function Kit.column(
+	parent: Instance,
+	name: string,
+	color: Color3,
+	side: "left" | "right",
+	radius: number
+): Frame
+	local root = Kit.frame(parent, name)
+	local fill = Kit.frame(root, "ColumnFill", color)
+	fill.ZIndex = 0
+	Kit.corner(fill, radius)
+	local top = Kit.frame(fill, "SquareTop", color)
+	top.Size = UDim2.new(1, 0, 1, -radius)
+	local inner = Kit.frame(fill, "SquareInner", color)
+	inner.Position = UDim2.fromOffset(if side == "left" then radius else 0, 0)
+	inner.Size = UDim2.new(1, -radius, 1, 0)
+	local divider = Kit.frame(root, "ColumnDivider", Style.divider)
+	divider.ZIndex = 0
+	divider.AnchorPoint = Vector2.new(if side == "left" then 1 else 0, 0)
+	divider.Position = UDim2.fromScale(if side == "left" then 1 else 0, 0)
+	divider.Size = UDim2.new(0, 2, 1, 0)
+	return root
+end
+
+-- Size a manual canvas: scroll only when content is taller than the visible height.
+function Kit.fit(canvas: ScrollingFrame, content: number, visible: number)
+	canvas.CanvasSize = UDim2.fromOffset(0, if content > visible + 1 then math.ceil(content) else 0)
+end
+
 export type Card = {
 	root: Frame,
 	face: Frame,

@@ -80,7 +80,7 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 		}
 	end
 	local margin = math.clamp(width * 0.05, 16, 64)
-	local top, bottom = 84, bar.y - 14
+	local top, bottom = 84, bar.y - 26
 	local panelWidth = math.min(1280, width - margin * 2)
 	local panelHeight = math.min(640, bottom - top)
 	return {

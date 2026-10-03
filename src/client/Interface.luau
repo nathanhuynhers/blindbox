@@ -193,9 +193,10 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 			layoutScreen(current)
 		end
 		local toastWidth = math.min(520, geometry.width - 32)
-		local bottom = if opened and not geometry.dockWhileOpen
-			then geometry.panel.y + geometry.panel.height - 12
-			else geometry.dock.y - 12
+		local bottom = if not opened
+			then geometry.dock.y - 12
+			elseif geometry.dockWhileOpen then geometry.panel.y - 6
+			else geometry.panel.y + geometry.panel.height - 12
 		notices.place(geometry.width / 2, bottom, toastWidth)
 	end
 	local function refresh()

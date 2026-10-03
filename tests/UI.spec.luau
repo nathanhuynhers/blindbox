@@ -281,8 +281,8 @@ check(
 	reference.panel.x == 64
 		and reference.panel.y == 84
 		and reference.panel.width == 1152
-		and reference.panel.height == 508,
-	"reference panel is 1152x508 at (64, 84)"
+		and reference.panel.height == 496,
+	"reference panel is 1152x496 at (64, 84), clear of the raised dock"
 )
 check(reference.dock.x == 366 and reference.dock.y == 606, "reference dock at (366, 606)")
 check(reference.dock.width == 548 and reference.dock.itemHeight == 94, "dock tiles 100x94")

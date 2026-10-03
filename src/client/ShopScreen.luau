@@ -141,9 +141,10 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			Kit.rect(stage, 14, 10, 92, 92)
 			boxTitle.TextXAlignment = Enum.TextXAlignment.Left
 			progress.TextXAlignment = Enum.TextXAlignment.Left
-			boxTitle.TextSize = 20
-			Kit.rect(boxTitle, 118, 22, middle - 130, 26)
-			Kit.rect(progress, 118, 50, middle - 130, 40)
+			boxTitle.TextSize = 18
+			boxTitle.TextWrapped = true
+			Kit.rect(boxTitle, 118, 12, middle - 130, 44)
+			Kit.rect(progress, 118, 58, middle - 130, 36)
 			Kit.rect(buy.button, 14, 114, middle - 28, 54)
 			Kit.rect(free.button, 14, 182, middle - 28, 46)
 		else
@@ -154,6 +155,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			boxTitle.TextXAlignment = Enum.TextXAlignment.Center
 			progress.TextXAlignment = Enum.TextXAlignment.Center
 			boxTitle.TextSize = 24
+			boxTitle.TextWrapped = false
 			Kit.rect(boxTitle, 12, top + stageSize + 12, middle - 24, 30)
 			Kit.rect(progress, 12, top + stageSize + 42, middle - 24, 20)
 			Kit.rect(buy.button, (middle - buttonWidth) / 2, top + stageSize + 74, buttonWidth, 64)
@@ -219,7 +221,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		end
 		y += if phone then math.ceil(rowCount / 2) * rowHeight else rowCount * (rowHeight + 6)
 		-- Room is left under the rows for a later "current vs base chance" line.
-		info.CanvasSize = UDim2.fromOffset(0, y + 24)
+		Kit.fit(info, y + 24, height)
 	end
 	local function update(snapshot: Types.Snapshot)
 		shell.update(snapshot)

@@ -74,7 +74,7 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		filters[id] = chip
 	end
 	local gridLayout = Kit.grid(body, 10)
-	local grid = Kit.scroll(body, "FigureGrid", ctx.scope, gridLayout, 0, ctx.scale)
+	local grid = Kit.scroll(body, "FigureGrid", ctx.scope, gridLayout, 5, ctx.scale)
 	local cards: { Tile.Tile } = {}
 	for index = 1, largest do
 		local card = Tile.create(grid, ctx, "card", function(id)
@@ -86,14 +86,15 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 	end
 	-- Detail
 	local detail = Kit.frame(body, "FigureDetails")
-	local well = Kit.frame(detail, "Portrait", Style.disabledFill)
+	local rarityBar = Kit.frame(detail, "RarityBar", Style.track)
+	Kit.corner(rarityBar, 18)
+	local well = Kit.frame(rarityBar, "Portrait", Style.disabledFill)
 	well.ClipsDescendants = true
 	Kit.corner(well, 18)
 	local portrait = Preview.create(well, ctx.scope, true)
 	local unknown = Kit.text(well, "Unknown", "?", 72, Style.display(), Style.unknownInk)
 	unknown.Size = UDim2.fromScale(1, 1)
 	unknown.TextXAlignment = Enum.TextXAlignment.Center
-	local rarityBar = Kit.frame(detail, "RarityBar", Style.track)
 	local name = Kit.text(detail, "FigureName", "", 26, Style.display())
 	name.AutomaticSize = Enum.AutomaticSize.X
 	name.TextTruncate = Enum.TextTruncate.None
@@ -170,7 +171,7 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		for _, chip in filters do
 			chip.button.Size = UDim2.fromOffset(if phone then 76 else 112, 44)
 		end
-		local cell = State.cells(middle - pad * 2 - 10, columns, if phone then 8 else 10)
+		local cell = State.cells(middle - pad * 2 - 16, columns, if phone then 8 else 10)
 		gridLayout.CellPadding = UDim2.fromOffset(if phone then 8 else 10, if phone then 8 else 10)
 		gridLayout.CellSize = UDim2.fromOffset(cell, cardHeight)
 		for _, card in cards do
@@ -181,15 +182,10 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		local dpad = if phone then 12 else 18
 		local inner = side - dpad * 2
 		local wellHeight = if phone then 84 else 150
-		Kit.rect(well, dpad, if phone then 10 else 16, inner, wellHeight)
-		Kit.rect(
-			rarityBar,
-			dpad + 6,
-			(if phone then 10 else 16) + wellHeight,
-			inner - 12,
-			if phone then 5 else 6
-		)
-		local y = (if phone then 10 else 16) + wellHeight + (if phone then 12 else 16)
+		local edge = if phone then 5 else 6
+		Kit.rect(rarityBar, dpad, if phone then 10 else 16, inner, wellHeight + edge)
+		Kit.rect(well, 0, 0, inner, wellHeight)
+		local y = (if phone then 10 else 16) + wellHeight + edge + (if phone then 10 else 14)
 		name.TextSize = if phone then 19 else 26
 		name.Position = UDim2.fromOffset(dpad, y)
 		name.Size = UDim2.fromOffset(0, if phone then 24 else 32)
@@ -236,6 +232,14 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		if figure and (not table.find(ids, figure)) then
 			figure = nil
 		end
+		if not figure then
+			for _, id in ids do
+				if snapshot.discovered[id] then
+					figure = id
+					break
+				end
+			end
+		end
 		figure = figure or ids[1]
 		root:SetAttribute("FigureId", figure)
 		for index, card in cards do
@@ -281,12 +285,18 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		local _, free = State.copies(snapshot, id)
 		if displayed then
 			action.variant("mint")
+			action.label.FontFace = Style.display()
+			action.label.TextSize = if phone then 16 else 19
 			action.set("On your Display · View", true)
 		elseif not discovered or owned < 1 or free < 1 then
 			action.variant("white")
+			action.label.FontFace = Style.body(Enum.FontWeight.ExtraBold)
+			action.label.TextSize = if phone then 14 else 16
 			action.set("Find it in " .. State.collectionName(data.collection) .. " boxes", true)
 		else
 			action.variant("violet")
+			action.label.FontFace = Style.display()
+			action.label.TextSize = if phone then 17 else 21
 			action.set(
 				if targetSlot then "Put in slot " .. targetSlot else "Put on Display",
 				ctx.canAct()

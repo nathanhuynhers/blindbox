@@ -134,7 +134,7 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		spots[index] = { button = spot, stroke = stroke, preview = preview, add = add }
 	end
 	-- Picker side
-	local side = Kit.frame(body, "Picker", Style.surface2)
+	local side = Kit.column(body, "Picker", Style.surface2, "right", 28)
 	local spotLabel =
 		Kit.text(side, "SpotLabel", "", 12, Style.body(Enum.FontWeight.Heavy), Style.muted)
 	local spotTitle = Kit.text(side, "SpotTitle", "", 22, Style.display())
@@ -201,7 +201,7 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		chip(collection.id, index)
 	end
 	local gridLayout = Kit.grid(side, 8)
-	local grid = Kit.scroll(side, "Figures", ctx.scope, gridLayout, 2, ctx.scale)
+	local grid = Kit.scroll(side, "Figures", ctx.scope, gridLayout, 5, ctx.scale)
 	local picks: { Tile.Tile } = {}
 	local empty =
 		Kit.text(side, "NoDiscoveries", "Your first discovery belongs here.", 16, nil, Style.muted)
@@ -406,6 +406,7 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 			end
 		end
 		empty.Visible = total == 0
+		chipRow.Visible = total > 0
 		shop.button.Visible = total == 0
 		grid.Visible = total > 0
 	end
