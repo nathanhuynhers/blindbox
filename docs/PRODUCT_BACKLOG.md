@@ -16,6 +16,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 
 3. [x] **Rework Display interaction** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
    - E opens the Display UI only when the player is nearby.
+   - The E prompt follows the front-left edge of every Display width so it does not cover a figure or intercept the middle figure's collection click. Native Studio MCP verification passes; final user visual confirmation of the relocation is pending.
    - E no longer collects coins.
    - Desktop players click individual figures to collect.
    - Mobile players tap individual figures to collect.
@@ -61,7 +62,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Day 7 gives a particularly strong reward.
     - Missing a day resets the streak back to Day 1.
 
-13. **Remove proximity requirement for Display and Shelf editing inside own plot**
+13. [x] **Remove proximity requirement for Display and Shelf editing inside own plot** — implementation, automated checks and native Studio authority checks complete. See [verification](PLAYTEST_INTERACTIONS.md).
     - Remove the "Walk Closer" requirement for placing/editing figures on the Display.
     - Remove the equivalent proximity requirement for editing Shelves.
     - As long as the player is physically inside their own plot, they should be able to manage both.

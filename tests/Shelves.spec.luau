@@ -40,7 +40,7 @@ check(
 )
 check(#Config.slots() == 9 and Config.visibleShelfUnits == 3, "nine configured local positions")
 local view = Shelves.newView()
-local access = { actorId = 1, ownerId = 1, near = true, view = view }
+local access = { actorId = 1, ownerId = 1, insidePlot = true, view = view }
 local function visible(shelves, current)
 	local ids = {}
 	for _, unit in Shelves.publicView(shelves, current).visible do
@@ -147,12 +147,12 @@ check(
 	not Shelves.mutate(state, request("ShelfRemove", nil, first), access, 0),
 	"visitor cannot edit"
 )
-access.actorId, access.near = 1, false
+access.actorId, access.insidePlot = 1, false
 check(
 	not Shelves.mutate(state, request("ShelfRemove", nil, first), access, 0),
-	"distant owner cannot edit"
+	"owner outside their plot cannot edit"
 )
-access.near = true
+access.insidePlot = true
 for _, shelfId in { "shelf:foreign", "PhysicalCenter", "viewport:1" } do
 	check(
 		not Shelves.mutate(state, request("ShelfRemove", nil, first, shelfId), access, 0),

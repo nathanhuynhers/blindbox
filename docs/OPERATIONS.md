@@ -147,6 +147,10 @@ Run that script from the client Command Bar on each screen. These engine checks 
     At dusk, inspect all three Shelf structures and Display capacities 3 and 6; figures should be
     easier to read while furniture stays controlled. At dawn, confirm the original daytime washes
     return. Repeated carousel turns, expansion, respawn and owner leave/rejoin must not add lights.
+    Open Display and Shelves from the dock, then edit at the rear, center and far corners of the
+    owner's plot. Both must work everywhere inside the footprint and reject immediately beyond
+    either horizontal edge or the 20-stud vertical bound. Repeat inside the plot with a visitor;
+    the visitor must remain unable to edit.
 12. **Global leaderboard:** in a private published test experience with API access, open boxes and
     place figures on two accounts in different servers; within about 2.5 minutes both should
     appear on each server's board. Leave and confirm the final score is written. Disable API

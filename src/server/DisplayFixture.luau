@@ -8,6 +8,7 @@ local Fixture = {}
 Fixture.style =
 	table.freeze({ spacing = 8, sideMargin = 6, counterY = 3, figureScale = 2, title = "DISPLAY" })
 Fixture.lighting = table.freeze({ dayBrightness = 0.65, nightBrightness = 1.25 })
+Fixture.management = table.freeze({ sideGap = 4.5, y = 2, frontOffset = -5 })
 -- Striped awning above the sign: raised back edge behind the panel, lower front over the counter.
 -- The valance bottom (frontY - 1.4) stays above the sign top (Y=13.3) so the sign stays readable.
 Fixture.awning =
@@ -221,6 +222,13 @@ function Fixture.resize(render: Render, capacity: number)
 		awning.rise,
 		render.accent
 	)
+	local manage = render.parts.ManageDisplay
+	manage.CFrame = render.transform
+		* CFrame.new(
+			-width / 2 - Fixture.management.sideGap,
+			Fixture.management.y,
+			Geometry.displayZ + Fixture.management.frontOffset
+		)
 	render.capacity = capacity
 end
 function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): Render
@@ -301,18 +309,14 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	instruction.TextScaled = true
 	instruction.Text = "Click or Tap Each Figure to Collect"
 	instruction.Parent = instructions
-	-- One native proximity interaction opens management; collectors have no keyboard prompt.
-	local manage = Geometry.partAt(
-		model,
-		"ManageDisplay",
-		Vector3.new(1, 1, 1),
-		transform * CFrame.new(0, 4, Geometry.displayZ - 5),
-		ivory
-	)
+	-- Keep the native management prompt beside the fixture so its large card never covers a figure.
+	-- resize() moves it with the left edge at every supported Display capacity.
+	local manage = Geometry.partAt(model, "ManageDisplay", Vector3.new(1, 1, 1), transform, ivory)
 	manage.Transparency = 1
 	manage.CanCollide = false
 	manage.CanTouch = false
 	manage.CanQuery = false
+	parts.ManageDisplay = manage
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "ManageDisplayPrompt"
 	prompt.ActionText = "Manage Display"

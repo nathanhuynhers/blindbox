@@ -98,8 +98,9 @@ rates, private per-figure uncollected earnings and `shelfAvailable`, a server-de
 Shelf-copy map that includes hidden units. They include only this public Shelf projection:
 `shelves = {ownedCount, visible = {{id, index, placements}, ...}, carouselRevision, canNavigate}`.
 Only three units and their configured local slots are projected. Edits require the visible
-persistent `shelfId`, local `shelfSlotId`, profile revision, carousel revision and owner/proximity
-validation. Visitors receive replicated geometry, never private inventory/discoveries/balances.
+persistent `shelfId`, local `shelfSlotId`, profile revision, carousel revision and validation that
+the living owner is inside their own plot. Visitors receive replicated geometry, never private
+inventory/discoveries/balances.
 
 ## Box counter and leaderboards
 

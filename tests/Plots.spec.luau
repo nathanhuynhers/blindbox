@@ -922,6 +922,7 @@ local initialFixture = plot.fixture.model
 local initialCounter = plot.fixture.parts.Counter
 local initialBack = plot.fixture.parts.BackPanel
 local initialSign = plot.fixture.parts.SignFace
+local manageDisplay = plot.fixture.parts.ManageDisplay
 local initialShelves = plot.physicalShelves[1]
 local initialShelfAnchor = plot.shelves.anchors[firstAnchor]
 local fixtureCount = #initialFixture:GetChildren()
@@ -1016,6 +1017,7 @@ for capacity = 3, 6 do
 	)
 	local counterAt = localPosition(plot.transform, initialCounter.Position)
 	local signAt = localPosition(plot.transform, initialSign.Position)
+	local manageAt = localPosition(plot.transform, manageDisplay.Position)
 	check(
 		close(counterAt.X, 0) and close(counterAt.Z, 36),
 		"fixture stays centered at the plot-local rear"
@@ -1025,6 +1027,14 @@ for capacity = 3, 6 do
 			and close(signAt.X, 0)
 			and initialSign.Size.X == 12.65,
 		"physical sign stays centered with fixed readable proportions"
+	)
+	local leftmostAnchor = localPosition(plot.transform, plot.display.anchors["1"].Position)
+	check(
+		close(manageAt.X, -width / 2 - Fixture.management.sideGap)
+			and close(manageAt.Y, Fixture.management.y)
+			and close(manageAt.Z, Geometry.displayZ + Fixture.management.frontOffset)
+			and manageAt.X < leftmostAnchor.X - 10,
+		"management prompt follows the front-left edge and stays clear of every figure"
 	)
 	check(
 		#initialFixture:GetChildren() == fixtureCount,
@@ -1136,12 +1146,34 @@ for _, node in Engine.nodes do
 	end
 end
 move(owner, plot, 0, 4, 28)
-check(Plot.nearDisplay(plot, owner), "Display edit proximity follows back focal structure")
+check(Plot.canManage(plot, owner), "owner can manage from the rear of their plot")
 move(owner, plot, 0, 4, -14)
 check(
-	not Plot.nearDisplay(plot, owner),
-	"old front Display location no longer grants editing proximity"
+	Plot.canManage(plot, owner) and Plot.access(plot, owner).insidePlot,
+	"owner can manage Display and Shelves from the open center of their plot"
 )
+for _, coordinates in { { 50.01, 4, 0 }, { 0, 4, 48.01 }, { 0, 20.01, 0 } } do
+	move(owner, plot, coordinates[1], coordinates[2], coordinates[3])
+	check(
+		not Plot.canManage(plot, owner) and not Plot.access(plot, owner).insidePlot,
+		"owner outside the plot footprint cannot manage Display or Shelves"
+	)
+end
+move(owner, plot, 0, 4, -14)
+local ownerHumanoid = owner.Character:FindFirstChildOfClass("Humanoid")
+ownerHumanoid.Health = 0
+check(
+	not Plot.canManage(plot, owner) and not Plot.access(plot, owner).insidePlot,
+	"dead owner cannot manage Display or Shelves"
+)
+ownerHumanoid.Health = 100
+local ownerCharacter = owner.Character
+owner.Character = nil
+check(
+	not Plot.canManage(plot, owner) and not Plot.access(plot, owner).insidePlot,
+	"owner without a character cannot manage Display or Shelves"
+)
+owner.Character = ownerCharacter
 for _, unit in state.shelves.units do
 	for _, slot in shelfSlots do
 		unit.placements[slot] = "grove.star"
@@ -1222,24 +1254,25 @@ check(not Shelves.mutate(state, {
 	carouselRevision = 0,
 	shelfSlotId = shelfSlots[1],
 }, guestAccess, 0), "visitor cannot edit owner shelves")
-check(not Plot.nearDisplay(plot, guest), "visitor cannot edit host Display")
+check(not Plot.canManage(plot, guest), "visitor cannot edit host Display")
 move(guest, plot, 0, 4, 36)
-check(not Plot.nearDisplay(plot, guest), "visitor remains denied even beside host Display")
+check(not Plot.canManage(plot, guest), "visitor remains denied even beside host Display")
 move(owner, plot, -45, 4, -40)
 check(
-	not Plot.access(plot, owner).near and Plot.canNavigate(plot, owner),
-	"across-plot viewing range does not grant edit access"
+	Plot.access(plot, owner).insidePlot and Plot.canNavigate(plot, owner),
+	"owner retains edit access across the interior of their own plot"
 )
-check(not Shelves.mutate(state, {
-	action = "ShelfRemove",
+check(Shelves.mutate(state, {
+	action = "ShelfPlace",
 	id = "far",
 	revision = state.revision,
 	shelfId = "shelf:1",
 	carouselRevision = 0,
 	shelfSlotId = shelfSlots[1],
-}, Plot.access(plot, owner), 0), "owner cannot edit shelves from long viewing distance")
+	figure = "tide.pearl",
+}, Plot.access(plot, owner), 0), "owner can edit shelves from anywhere inside their plot")
 move(owner, plot, 30, 4, -4)
-check(Plot.access(plot, owner).near, "owner can still edit close to relocated shelves")
+check(Plot.access(plot, owner).insidePlot, "owner can still edit beside the physical shelves")
 Plot.bind(plot, function(actor, direction)
 	Plot.turn(plot, actor, state, direction, Engine.clock)
 end)

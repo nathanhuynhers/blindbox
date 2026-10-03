@@ -122,25 +122,15 @@ function PlayerPlot.contains(plot: Plot, player: Player): boolean
 		and math.abs(delta.Z) <= Config.depth / 2
 		and math.abs(delta.Y) <= 20
 end
-function PlayerPlot.nearDisplay(plot: Plot, player: Player): boolean
-	local pos = position(player)
-	local localPosition = if pos then plot.transform:PointToObjectSpace(pos) else nil
-	return plot.ownerId == player.UserId
-		and pos ~= nil
-		and PlayerPlot.contains(plot, player)
-		and localPosition ~= nil
-		and math.abs(localPosition.Z - Geometry.displayZ) <= 15
+function PlayerPlot.canManage(plot: Plot, player: Player): boolean
+	return plot.ownerId == player.UserId and PlayerPlot.contains(plot, player)
 end
 function PlayerPlot.access(plot: Plot, player: Player): Shelves.Access
-	local pos = position(player)
-	local localPosition = if pos then plot.transform:PointToObjectSpace(pos) else nil
 	return {
 		actorId = player.UserId,
 		ownerId = plot.ownerId,
 		view = plot.view,
-		near = localPosition ~= nil and PlayerPlot.contains(plot, player) and math.abs(
-			localPosition.X - Geometry.shelfX
-		) <= 16,
+		insidePlot = PlayerPlot.canManage(plot, player),
 	}
 end
 -- Public viewing has a plot-sized range, separate from the narrow shelf editing band.

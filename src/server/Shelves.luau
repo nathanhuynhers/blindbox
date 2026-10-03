@@ -6,7 +6,7 @@ local Shelves = {}
 -- Decoder resource guards, NOT product progression limits. Review storage before raising.
 Shelves.decodeLimits = table.freeze({ units = 10000, placements = 20000 })
 export type View = { startIndex: number, revision: number, lastTurn: number }
-export type Access = { actorId: number, ownerId: number, near: boolean, view: View }
+export type Access = { actorId: number, ownerId: number, insidePlot: boolean, view: View }
 function Shelves.new(): Types.Shelves
 	local units: { Types.ShelfUnit } = {}
 	for index = 1, Config.startingShelfUnits do
@@ -293,8 +293,8 @@ function Shelves.mutate(
 	access: Access?,
 	now: number
 ): (boolean, string, string?)
-	if not access or access.actorId ~= access.ownerId or not access.near then
-		return false, "Walk to your own shelves to edit.", nil
+	if not access or access.actorId ~= access.ownerId or not access.insidePlot then
+		return false, "Return to your own plot to edit your Shelves.", nil
 	end
 	if intent.carouselRevision ~= access.view.revision or intent.revision ~= state.revision then
 		return false, "The visible shelves changed. Try again.", nil

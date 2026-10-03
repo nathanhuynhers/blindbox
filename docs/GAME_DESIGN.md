@@ -19,7 +19,8 @@ with three slots and expands sequentially to six for 40,000 / 400,000 / 4,000,00
 Three distinct displayed figures from one collection grant +10% total income once. No offline
 income or visitor payouts. Figures bank income until their owner clicks or taps each figure;
 uncollected balances survive removal and rejoining. E nearby opens Display management only.
-Future paid auto-collect is not implemented.
+Once either editor is open, a living owner can edit their Display and Shelves from anywhere
+inside their own plot; the server rejects edits from outside it. Future paid auto-collect is not implemented.
 See [economy](ECONOMY.md) for exact formulas and tuning.
 
 Shelves use owned figures cosmetically. A figure may appear across all Shelf Units no more times

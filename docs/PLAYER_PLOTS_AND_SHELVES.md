@@ -126,6 +126,12 @@ and shelf figures contribute zero. Rarity rates, odds, acquisition costs and dai
 unchanged. The legacy fourth-slot unlock still costs 4,000 Coins. Slots 5/6 have no acquisition
 method or invented price; future methods remain independently configurable.
 
+Display placement, replacement and removal are authorized while the living owner is anywhere
+inside their own 100-by-96-stud plot footprint and within 20 vertical studs of its origin. The
+server rejects visitors and owners outside that boundary. The nearby E prompt remains a local
+shortcut for opening management, and per-figure coin collection retains its separate close-range
+physical validation.
+
 ## Shelf Units and the three-shelf viewport
 
 Every plot has **three physical shelf units**, each with **three horizontal rows** and currently
@@ -168,9 +174,9 @@ indexes and owned count remain in the owner editor/runtime view, never the physi
 | 4 | 1,2,3 → 2,3,4 → 3,4,1 → 4,1,2 → 1,2,3 |
 | 5 | 1,2,3 → 2,3,4 → 3,4,5 → 4,5,1 → 5,1,2 → 1,2,3 |
 
-Previous reverses these sequences. Owner UI
-navigation/editing remains close-range: inside the own plot and within 16 studs of the shelf
-plane. Expanding physical navigation range does not expand editing range.
+Previous reverses these sequences. Owner UI navigation/editing is available anywhere inside the
+owner's plot. The same exact footprint and vertical bound used by Display editing applies; leaving
+the plot disables mutations. Public physical carousel navigation keeps its separate perimeter margin.
 
 Shelf Units use stable IDs such as `shelf:1`; placements use local keys such as
 `row:3/slot:1`. The unit ID owns the contents regardless of physical viewport position.
@@ -195,7 +201,7 @@ Only owners can place, replace or remove their shelf figures. Server callback id
 the profile and plot; no submitted owner ID or plot index is accepted. Requests require an owned
 Shelf Unit ID that is currently visible, configured local slot, known owned figure, remaining
 capacity computed across every persistent Shelf Unit, profile revision and carousel revision,
-plus a living character near their own shelves. Turning the
+plus a living owner physically inside their own plot. Turning the
 carousel away and back invalidates old edits. Existing request receipts and rate limits protect retries.
 
 Visitors can walk, look and turn the shared carousel. They cannot edit Display/shelves, unlock

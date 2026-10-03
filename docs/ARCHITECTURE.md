@@ -40,7 +40,7 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   checked, backoff), reads (top 5 per stat every 90 s, last good page kept) and the 8-second page
   cycle; the store is pure and injected with DataStore I/O; the board is the two-sided physical sign.
 - `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
-  proximity checks, runtime carousel start index and connection/content teardown.
+  owner/plot-containment checks, runtime carousel start index and connection/content teardown.
 - `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent Shelves
   SurfaceGui header, row lighting, icon-only side controls and runtime anchors. Visual construction
   is separate from shelf ownership, carousel decisions and migration; indices stay in owner UI.
@@ -64,7 +64,8 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 
 Only `Intent`, `State` and `RequestState` remotes remain. No owner/plot identity comes from a
 mutation request. Requests resolve to the callback Player's session. Display placement checks
-that player's own plot/proximity. Shelf edits require a visible owned unit ID, configured local slot,
+that the living player owns and is physically inside the active plot. Shelf edits use the same
+own-plot boundary and require a visible owned unit ID, configured local slot,
 discovery, ownership, remaining Shelf copy capacity, profile revision and carousel revision;
 A-B-A navigation invalidates stale edits.
 Physical arrows are server-bound to a plot, validate living character/distance/session, and use
@@ -82,7 +83,8 @@ auto-collect extension point; no gamepass service is implemented. Owner snapshot
 only to the owner. One native E proximity prompt at the counter
 opens Display management through `DisplayInteraction` and the existing Interface router. It never
 sends a mutation request. Local ownership, living-character and distance checks guard that route;
-server proximity and ownership checks still guard edits and collections. The client owns three
+server ownership and plot-containment checks guard edits; close physical distance still guards
+per-figure coin collection. The client owns three
 service listeners for its lifetime and refreshes the device-aware counter plaque through the
 existing snapshot updates, so late plot replication and respawn need no new listeners. Prompt
 hiding is presentation, not an authorization check.

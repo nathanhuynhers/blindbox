@@ -237,7 +237,7 @@ table.insert(
 			session.transaction,
 			raw,
 			os.clock(),
-			PlayerPlot.nearDisplay(session.plot, player),
+			PlayerPlot.canManage(session.plot, player),
 			math.min(random:NextNumber(), 0.9999999999999999),
 			math.floor(os.time() / 86400),
 			PlayerPlot.access(session.plot, player)

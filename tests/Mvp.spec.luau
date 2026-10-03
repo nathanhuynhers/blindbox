@@ -94,9 +94,9 @@ check(not Transactions.process(session,changed,1,true,0).ok,"request ID contents
 local stale=table.clone(buy);stale.id="stale"
 check(not Transactions.process(session,stale,2,true,0).ok,"stale revision rejected")
 local place=request("Place",session.state,first.figure,1)
-check(not Transactions.process(session,place,3,false,0).ok,"distance guard")
+check(not Transactions.process(session,place,3,false,0).ok,"outside-own-plot guard")
 place.id="near"
-check(Transactions.process(session,place,4,true,0).ok,"owned nearby placement")
+check(Transactions.process(session,place,4,true,0).ok,"owned placement from inside own plot")
 local oldRate=Rules.rate(session.state)
 local before=session.state.coins+(session.state.earnings[first.figure] or 0)
 local nextBuy=request("Buy",session.state,nil,nil,"echo")

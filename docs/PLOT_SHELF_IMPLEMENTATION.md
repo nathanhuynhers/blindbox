@@ -189,7 +189,8 @@ one per row, use brightness 0.35, range 5, angle 110 and no shadows. No neon or 
 Oak/ivory side wings carry two-bar solid chevrons and thin warm trim. Native Parts simplify
 the reference's curved side profiles. Each control retains a queryable, noncolliding, invisible
 5-by-10-by-7 hitbox under the plot root. Existing ClickDetector reach (160 studs), server plot
-area/living-actor validation, shared cooldown and independent editor proximity remain intact.
+area/living-actor validation and shared cooldown remain intact. Owner editor mutations use the
+exact plot footprint rather than a narrow band beside the furniture.
 Three owned units disable detection and mute the icon/trim colors; more than three enables both.
 Carousel turns retain the furniture, header and lights and use the existing targeted figure cache.
 
@@ -259,10 +260,10 @@ remain provisional; the Collection furniture/sign/control visual pass itself is 
 - The minimal Shelf editor selects one of three visible units, then one of nine local slots and
   a discovered figure. It labels wrapped indexes explicitly, e.g. “Viewing shelves 4, 5, 1 of 5”.
   Requests target `shelfId` plus `shelfSlotId` and require current profile/carousel revisions,
-  visible ownership, discovery, owned-copy capacity and proximity. A-B-A browsing invalidates stale edits.
+  visible ownership, discovery, owned-copy capacity and own-plot presence. A-B-A browsing invalidates stale edits.
 - Visitors can click/tap the same world controls and see the same trio; they cannot edit or
   receive private profile state. Existing 160-stud detector reach, server plot-area/living-actor
-  checks, independent close-range editor validation and cleanup remain in place.
+  checks, independent owner plot-containment validation and cleanup remain in place.
 - Shelves do not decrement inventory, generate Coins or affect Display bonuses or daily goals.
   Their placement references are capped by owned quantity across all units. Display placement
   counts independently, so simultaneous Display/Shelf use still works.
@@ -352,7 +353,7 @@ v1/v2 defaults, persistence acquisition, corrupt/future data and decoder resourc
 
 Plot tests exercise actual modules with engine property/signal shims: three fixed structures,
 every figure following its persistent unit across all viewport positions and wraps, targeted
-model reuse, long-range owner/visitor input, cooldown/proximity denial, rejoin and teardown.
+model reuse, long-range owner/visitor input, cooldown/plot-boundary denial, rejoin and teardown.
 The earlier Display fixture/rate/resize checks remain. Shims and injected persistence do not
 prove native input, replication, physics, rendering or real DataStore behavior.
 
@@ -363,8 +364,9 @@ prove native input, replication, physics, rendering or real DataStore behavior.
 2. Seed isolated four/five-unit test profiles. Verify every sequence above in both directions,
    shared owner/visitor visibility, wrapped labels/selection, rapid-turn cooldown and stale edits.
    Confirm each unit's contents follow its ID and hidden units create no instances.
-3. Attempt visitor, distant, malformed and stale edits; confirm privacy and owner-only changes.
-   Check physical click/tap controls retain across-plot reach without expanding edit proximity.
+3. Attempt visitor, outside-plot, malformed and stale edits; confirm privacy and owner-only changes.
+   Check owner editors work throughout the exact plot footprint, reject immediately outside it,
+   and keep physical click/tap controls' separate public navigation range.
 4. In the private Studio test store, load v1/v2/v3/v4 fixtures, including empty capacity, 42 v3
    references and v4 overflow. Save/rejoin into a different plot; compare all progress and dormant
    records, with runtime visibility reset to 1,2,3. Exercise failures/leases without live data.

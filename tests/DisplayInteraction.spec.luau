@@ -66,21 +66,22 @@ check(opened == 1, "nearby owner opens management")
 prompts.PromptTriggered:fire(prompt, guest)
 check(opened == 1, "another actor triggering the prompt cannot open the local UI")
 check(state.coins == 4500 and requests == 0, "management never invokes economy collection")
-local collector = plot.collectors[1]
+local collector = plot.collectors[2]
 local click = collector:FindFirstChildOfClass("ClickDetector")
 owner.Character:PivotTo(collector.CFrame)
 click.MouseClick:fire(owner)
 check(
-	state.coins == 4512
-		and state.earnings["grove.pebble"] == 0.75
-		and state.earnings["grove.sprout"] == 19.5,
-	"click/tap transfers only selected bank, retaining fractions"
+	state.coins == 4519
+		and state.earnings["grove.pebble"] == 12.75
+		and state.earnings["grove.sprout"] == 0.5
+		and opened == 1,
+	"middle-figure click/tap transfers only its bank and never opens Display management"
 )
 for _ = 1, 100 do
 	click.MouseClick:fire(owner)
 end
 check(
-	state.coins == 4512 and #session.receipts == 4,
+	state.coins == 4519 and #session.receipts == 4,
 	"rapid duplicate activations cannot double-pay and receipts are rate bounded"
 )
 guest.Character:PivotTo(collector.CFrame)

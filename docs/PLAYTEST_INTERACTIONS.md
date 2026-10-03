@@ -6,8 +6,10 @@ result in Roblox Studio and reported that everything looked and worked correctly
 
 ## Behavior and boundaries
 
-- A single native `ProximityPrompt` at the Display counter offers **E · Manage Display** within
-  12 studs. The client routes its own living player's activation into the existing Display screen,
+- A single native `ProximityPrompt` beside the front-left end of the Display counter offers
+  **E · Manage Display** within 12 studs. Its anchor follows the counter's left edge as capacity
+  grows from three through six slots, keeping the native prompt card away from every figure.
+  The client routes its own living player's activation into the existing Display screen,
   checks target ancestry and distance again, and respects pending requests/opening focus. The
   existing dock and Display placement validation remain intact. E cannot invoke collection.
 - Each figure retains its existing server-bound `ClickDetector`. Native mouse clicks and touch
@@ -58,7 +60,7 @@ these changes do not alter crash recovery or storage guarantees.
 - `rojo sourcemap default.project.json -o sourcemap.json` and
   `rojo build default.project.json -o RobloxWorkspace.rbxlx`: pass using pinned Rojo 7.7.0.
 - `python tests/run.py build/tools/luau/luau.exe`: every suite and all 12 invalid-configuration
-  startup fixtures pass. Relevant suites include 126 Display interaction checks, 19,049 plot checks,
+  startup fixtures pass. Relevant suites include 126 Display interaction checks, 19,101 plot checks,
   132 screen checks, 2,220 economy/transaction checks and 80 full-game/persistence checks.
   The opening cleanup fault printed by the suite is an intentional existing fault-injection case.
 - The active plot remains within its tested runtime part budget: 140 / 150 at six Display slots.
@@ -67,8 +69,31 @@ these changes do not alter crash recovery or storage guarantees.
 These harnesses execute real modules with engine boundaries shimmed. They do not simulate native
 mouse/touch delivery, prompt rendering, physics, network replication or real DataStore sessions.
 
+On October 3, 2026, a fresh Rojo build was opened through Studio MCP. The native prompt remained
+functional beside the Display, while the center collecting position was 19.49 studs from its anchor
+and pressing E there did not open management. Native fixture checks confirmed a constant 10.5-stud
+horizontal gap between the prompt anchor and the nearest figure at capacities 3, 4, 5 and 6. No
+pressure plates or collection-rule changes were added. Final user visual confirmation of this
+prompt relocation remains pending.
+
+## Own-plot management boundary (October 3, 2026)
+
+Backlog item 13 replaces the narrow Display and Shelf editor bands with one server-authoritative
+rule: a living owner may mutate either system anywhere inside their active 100-by-96-stud plot and
+within 20 vertical studs of its origin. Ownership still comes from the remote callback Player and
+active session; visitors, missing/dead characters and owners beyond any plot boundary are rejected.
+The nearby E prompt remains a physical shortcut for opening Display management, while clicking or
+tapping a figure to collect Coins retains its independent 12-stud physical range.
+
+The full harness passes with center, rear and far-corner access plus immediate X/Z/vertical outside
+denial. A fresh Rojo build was also opened through Studio MCP. Native Player/Character/CFrame checks
+accepted Display and Shelf placement from the opposite plot corner, rejected a non-owner standing
+inside the plot, and rejected the owner immediately beyond the X, Z and vertical boundaries without
+mutating state. No remote, persistent field, plot size or client-trusted authorization was added.
+
 ## Manual acceptance
 
 On October 2, 2026, the user manually checked the integrated result in Roblox Studio and reported
-that everything appeared correct. This closes the remaining visual and interaction acceptance gate
-for backlog items 3, 6 and 11. No known issues remain for these tasks.
+that everything appeared correct, closing the original visual and interaction acceptance gate for
+backlog items 3, 6 and 11. The October 3 prompt-position adjustment above was subsequently requested
+and has native Studio verification; its final visual confirmation is still pending.
