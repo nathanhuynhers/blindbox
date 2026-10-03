@@ -77,6 +77,16 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Player-facing naming/iconography can use "Home" if that fits the UI better than "Jump to Plot."
     - Teleport the character to a safe, consistent location within their own plot.
 
+16. **Add full game soundpack**
+    - Add cohesive sound effects across the game for important interactions and feedback.
+    - Cover UI clicks/navigation, box opening, rarity/reveal moments, coin collection, purchases/claims, Display/Shelf interactions, Daily Goals/Rewards, and other important gameplay actions.
+    - Keep the sound direction consistent with the game's polished blind-box collectible feel.
+
+17. **Add background music**
+    - Add looping background music for the main world/plot experience.
+    - Keep it subtle enough that gameplay sound effects remain clear.
+    - Leave room for area-specific or special-event music later if needed.
+
 ## Phase 1: Make the prototype feel like a game
 
 1. **Blind-box opening overhaul**
