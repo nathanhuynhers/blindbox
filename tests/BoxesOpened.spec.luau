@@ -121,4 +121,38 @@ local corruptRecord: unknown = {
 database = corruptRecord
 local blocked = Persistence.load(update, "Player_2", "join", 1000, 0)
 check(blocked == nil and database == corruptRecord, "a corrupt counter never becomes a fresh profile")
+-- Open 10: one all-or-nothing grant of ten server rolls.
+local tenRolls = { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.99 }
+local ten = Rules.new(0)
+ten.coins = price * 10 - 1
+check(not Rules.mutate(ten, intent("BuyTen", 0, starter), tenRolls, 10), "nine-and-a-bit boxes of Coins cannot open ten")
+check(ten.coins == price * 10 - 1 and ten.boxesOpened == 0 and next(ten.owned) == nil, "rejected Open 10 changes nothing")
+ten.coins = price * 10
+check(not Rules.mutate(ten, intent("BuyTen", 0, starter), 0.5, 10), "Open 10 without ten rolls fails closed")
+local ok, _, single, figures = Rules.mutate(ten, intent("BuyTen", 0, starter), tenRolls, 10)
+check(ok and single == nil and figures ~= nil and #figures == 10, "Open 10 returns ten figures")
+local granted = 0
+for _, count in ten.owned do
+	granted += count
+end
+check(granted == 10 and ten.coins == 0 and ten.boxesOpened == 10 and ten.revision == 1, "ten copies, one charge, one revision")
+local nearFull = Rules.new(0)
+nearFull.coins = price * 10
+for _, figure in Catalog.figures do
+	if figure.collection == starter then
+		nearFull.owned[figure.id] = Economy.copyLimit - 9
+		break
+	end
+end
+check(not Rules.mutate(nearFull, intent("BuyTen", 0, starter), tenRolls, 10), "copy limit is checked for all ten copies")
+check(nearFull.coins == price * 10 and nearFull.boxesOpened == 0, "capacity rejection is all-or-nothing")
+check(not Rules.mutate(Rules.new(0), intent("BuyTen", 0, starter), tenRolls, 10), "starting Coins cannot open ten")
+local tenSession = Transactions.new(0)
+tenSession.state.coins = price * 10
+local tenRaw = { action = "BuyTen", id = "ten-once", revision = 0, choice = starter }
+local tenReply = Transactions.process(tenSession, tenRaw, 0, false, tenRolls, 10)
+check(tenReply ~= nil and tenReply.ok and tenReply.figures ~= nil and #tenReply.figures == 10, "remote Open 10 replies with ten figures")
+local tenReplay = Transactions.process(tenSession, tenRaw, 0.1, false, tenRolls, 10)
+check(tenReplay == tenReply and tenSession.state.boxesOpened == 10, "replayed Open 10 is not recharged")
+
 print(string.format("PASS: %d box counter schema/migration/authority checks", checks))

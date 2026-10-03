@@ -200,11 +200,14 @@ function Card.create(
 		model = next
 		local reveal = model
 		display.button.Visible = reveal ~= nil and reveal.place ~= nil
-		another.button.Visible = reveal ~= nil
+		another.button.Visible = reveal ~= nil and reveal.next == nil
 		earns.root.Visible = reveal ~= nil
 		chance.root.Visible = reveal ~= nil
 		progress.root.Visible = reveal ~= nil
-		keep.Text = if reveal then "Keep it in my Collection" else "Continue"
+		keep.Text = if reveal and reveal.next
+			then reveal.next
+			elseif reveal then "Keep it in my Collection"
+			else "Continue"
 		if reveal then
 			earns.set(reveal.earns)
 			chance.set(reveal.chance)
@@ -223,7 +226,7 @@ function Card.create(
 			local reveal = model
 			if reveal and reveal.place then
 				return display.button
-			elseif reveal and reveal.another.need == nil then
+			elseif reveal and reveal.next == nil and reveal.another.need == nil then
 				return another.button
 			end
 			return keep

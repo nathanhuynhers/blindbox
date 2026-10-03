@@ -63,6 +63,25 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			ctx.send("Buy", nil, nil, selected)
 		end
 	)
+	-- Shown only while all ten are affordable; the server re-checks before rolling.
+	local ten = Button.create(
+		product,
+		"BuyTen",
+		{
+			variant = "gold",
+			text = "Open 10 boxes",
+			size = 20,
+			radius = 18,
+			drop = 4,
+			price = true,
+		},
+		ctx.scope,
+		ctx.effects,
+		function()
+			ctx.send("BuyTen", nil, nil, selected)
+		end
+	)
+	ten.button.Visible = false
 	local freeChoice: string? = nil
 	local free = Button.create(
 		product,
@@ -146,10 +165,12 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			Kit.rect(boxTitle, 118, 12, middle - 130, 44)
 			Kit.rect(progress, 118, 58, middle - 130, 36)
 			Kit.rect(buy.button, 14, 114, middle - 28, 54)
-			Kit.rect(free.button, 14, 182, middle - 28, 46)
+			Kit.rect(ten.button, 14, 182, middle - 28, 46)
+			Kit.rect(free.button, 14, if ten.button.Visible then 240 else 182, middle - 28, 46)
 		else
-			local stageSize = math.clamp(height - 230, 120, 200)
-			local total = stageSize + 12 + 30 + 20 + 12 + 64 + 14 + 52
+			local extra = if ten.button.Visible then 66 else 0
+			local stageSize = math.clamp(height - 230 - extra, 120, 200)
+			local total = stageSize + 12 + 30 + 20 + 12 + 64 + 14 + 52 + extra
 			local top = math.max(12, (height - total) / 2)
 			Kit.rect(stage, (middle - stageSize) / 2, top, stageSize, stageSize)
 			boxTitle.TextXAlignment = Enum.TextXAlignment.Center
@@ -159,10 +180,11 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			Kit.rect(boxTitle, 12, top + stageSize + 12, middle - 24, 30)
 			Kit.rect(progress, 12, top + stageSize + 42, middle - 24, 20)
 			Kit.rect(buy.button, (middle - buttonWidth) / 2, top + stageSize + 74, buttonWidth, 64)
+			Kit.rect(ten.button, (middle - buttonWidth) / 2, top + stageSize + 152, buttonWidth, 52)
 			Kit.rect(
 				free.button,
 				(middle - buttonWidth) / 2,
-				top + stageSize + 152,
+				top + stageSize + 152 + extra,
 				buttonWidth,
 				52
 			)
@@ -238,6 +260,13 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local need = State.need(snapshot, price)
 		buy.setPrice(State.compact(price))
 		buy.set("Open 1 box", ctx.canAct() and need == nil, need)
+		local affordTen = price > 0 and snapshot.coins >= price * 10
+		ten.setPrice(State.compact(price * 10))
+		ten.set("Open 10 boxes", ctx.canAct() and affordTen)
+		if ten.button.Visible ~= affordTen then
+			ten.button.Visible = affordTen
+			arrange()
+		end
 		local options = State.freeBoxOptions(snapshot)
 		freeChoice = if table.find(options, selected)
 			then selected

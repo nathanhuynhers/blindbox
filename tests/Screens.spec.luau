@@ -147,6 +147,10 @@ Engine.click(within(shop, "Collection_echo"))
 check(within(shop, "BoxTitle").Text == "Tender Echoes box", "list selects a collection")
 Engine.click(within(shop, "BuyBox"))
 check(last().action == "Buy" and last().choice == "echo", "Open 1 box buys the selected collection")
+check(within(shop, "BuyTen").Visible, "Open 10 shown when ten boxes are affordable")
+check(within(within(shop, "BuyTen"), "Price").Text == UI.compact(Rules.prices.echo * 10), "Open 10 shows the ten-box price")
+Engine.click(within(shop, "BuyTen"))
+check(last().action == "BuyTen" and last().choice == "echo", "Open 10 buys ten of the selected collection")
 check(within(shop, "DailyBox").Visible, "free box offered when ready")
 check(
 	within(within(shop, "DailyBox"), "Label").Text == "Claim free Pocket Grove box",
@@ -170,6 +174,7 @@ check(not within(shop, "DailyBox").Visible, "free box hidden once claimed")
 local before = #requests
 Engine.click(within(shop, "BuyBox"))
 check(#requests == before, "unaffordable box cannot be bought")
+check(not within(shop, "BuyTen").Visible, "Open 10 hidden when ten boxes are unaffordable")
 check(
 	within(within(shop, "BuyBox"), "Detail").Text == "Need " .. UI.compact(Rules.prices.echo - 20) .. " more",
 	"shortfall explains why"

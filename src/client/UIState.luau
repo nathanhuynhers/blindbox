@@ -382,6 +382,8 @@ export type Reveal = {
 	placeLabel: string,
 	placeDetail: string,
 	another: Another,
+	-- Set while more reveals from an Open 10 are queued; replaces Open another and Keep.
+	next: string?,
 }
 function State.reveal(
 	snapshot: Types.Snapshot,

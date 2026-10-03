@@ -47,6 +47,14 @@ local loading: { [Player]: boolean } = {}
 local closing = 0
 local shuttingDown = false
 local random = Random.new()
+-- Ten per request covers BuyTen; single-box actions use the first.
+local function rolls(): { number }
+	local values = table.create(10)
+	for index = 1, 10 do
+		values[index] = math.min(random:NextNumber(), 0.9999999999999999)
+	end
+	return values
+end
 local folder = Instance.new("Folder")
 folder.Name = "Remotes"
 local function remote(name: string): RemoteEvent
@@ -262,7 +270,7 @@ table.insert(
 			raw,
 			os.clock(),
 			PlayerPlot.canManage(session.plot, player),
-			math.min(random:NextNumber(), 0.9999999999999999),
+			rolls(),
 			math.floor(os.time() / 86400),
 			PlayerPlot.access(session.plot, player)
 		)

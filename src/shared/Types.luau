@@ -88,5 +88,11 @@ export type Snapshot = {
 	ready: boolean,
 	bonus: number,
 }
-export type Reply = { id: string, ok: boolean, message: string, figure: string? }
+export type Reply = {
+	id: string,
+	ok: boolean,
+	message: string,
+	figure: string?,
+	figures: { string }?,
+}
 return {}

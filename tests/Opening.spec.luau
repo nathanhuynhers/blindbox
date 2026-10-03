@@ -210,6 +210,14 @@ check(
 	next(before.owned) == nil and next(before.discovered) == nil and after.owned[id] == 1,
 	"presentation never grants or mutates snapshots"
 )
+local batchIds = { "grove.pebble", "grove.star", "grove.pebble" }
+local batchAfter = { owned = { ["grove.pebble"] = 2, ["grove.star"] = 1 }, discovered = { ["grove.pebble"] = true, ["grove.star"] = true } }
+local batchRequest = { id = "ten", action = "BuyTen", revision = 7 }
+local batch = Result.fromBatch(batchRequest, before, batchAfter, { id = "ten", ok = true, message = "", figures = batchIds })
+check(#batch == 3 and batch[1].figureId == "grove.star", "Open 10 reveals the rarest figure first")
+check(batch[2].isNew and not batch[3].isNew and batch[3].quantity == 2, "only a figure's first copy in a batch is new")
+check(batch[1].requestId ~= batch[2].requestId, "each batch reveal has its own presentation id")
+check(#Result.fromBatch(request, before, batchAfter, { id = request.id, ok = true, message = "", figures = batchIds }) == 0, "only BuyTen replies batch")
 request.action = "Daily"
 local daily = Result.fromReply(request, before, after, reply)
 check(daily ~= nil and not daily.direct, "daily uses box")

@@ -21,6 +21,9 @@ local pending: Types.Intent? = nil
 local beforeRequest: Types.Snapshot? = nil
 local opening: OpeningController.Controller? = nil
 local reveal: OpeningResult.Result? = nil
+-- Remaining Open 10 reveals, shown one at a time as each opening closes.
+local batch: { OpeningResult.Result } = {}
+local batchSize = 0
 local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
@@ -74,7 +77,20 @@ local function choose(choice: string, result: OpeningResult.Result)
 end
 opening = OpeningController.create(ui.openingFocus, ui.message, choose)
 local function revealModel(state: Types.Snapshot, result: OpeningResult.Result): UIState.Reveal
-	return UIState.reveal(state, result.figureId, result.isNew, result.quantity)
+	local model = UIState.reveal(state, result.figureId, result.isNew, result.quantity)
+	if #batch > 0 then
+		model.next = string.format("Next figure (%d left)", #batch)
+	end
+	return model
+end
+local function presentNext(state: Types.Snapshot)
+	local result = table.remove(batch, 1)
+	if result and opening then
+		reveal = result
+		-- Only the first (rarest) reveal plays the full opening; the rest are quick.
+		local reduced = not ui.effects() or #batch < batchSize - 1
+		opening.present(result, reduced, nil, revealModel(state, result))
+	end
 end
 local connections: { RBXScriptConnection } = {}
 local displayInteraction = DisplayInteraction.create(ui.openDisplay, ui.openShelves)
@@ -116,7 +132,11 @@ table.insert(
 				if reply.ok then feedback[intent.action] or reply.message else reply.message,
 				if reply.ok then "success" else "error"
 			)
-			if before then
+			if before and intent.action == "BuyTen" then
+				batch = OpeningResult.fromBatch(intent, before, state, reply)
+				batchSize = #batch
+				presentNext(state)
+			elseif before then
 				local result = OpeningResult.fromReply(intent, before, state, reply)
 				if result and opening then
 					reveal = result
@@ -135,6 +155,9 @@ table.insert(
 			sentAt = now
 			ui.message("Waiting for server… recovering the same request.")
 			intentRemote:FireServer(pending)
+		end
+		if #batch > 0 and current and opening and not opening.isActive() then
+			presentNext(current)
 		end
 		if not current and now - syncAt > 2 then
 			syncAt = now

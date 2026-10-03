@@ -43,6 +43,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 	end
 	if
 		action ~= "Buy"
+		and action ~= "BuyTen"
 		and action ~= "Collect"
 		and action ~= "Place"
 		and action ~= "Remove"
@@ -110,7 +111,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		return nil
 	end
 	local choice = data.choice
-	if action == "Buy" or action == "Daily" then
+	if action == "Buy" or action == "BuyTen" or action == "Daily" then
 		if choice ~= nil and (typeof(choice) ~= "string" or not Catalog.collectionIds[choice]) then
 			return nil
 		end

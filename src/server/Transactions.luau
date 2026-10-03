@@ -16,7 +16,7 @@ function Transactions.process(
 	raw: unknown,
 	now: number,
 	insideOwnPlot: boolean,
-	roll: number,
+	roll: number | { number },
 	day: number?,
 	access: Shelves.Access?,
 	collectAuthorized: boolean?
@@ -53,6 +53,7 @@ function Transactions.process(
 	local ok = false
 	local message = "State changed. Try again."
 	local figure: string? = nil
+	local figures: { string }? = nil
 	if intent.revision == session.state.revision then
 		if intent.action == "Collect" and collectAuthorized ~= true then
 			message = "Click or tap your own displayed figure nearby."
@@ -61,10 +62,11 @@ function Transactions.process(
 		elseif (intent.action == "Place" or intent.action == "Remove") and not insideOwnPlot then
 			message = "Return to your own plot to edit your Display."
 		else
-			ok, message, figure = Rules.mutate(session.state, intent, roll, day)
+			ok, message, figure, figures = Rules.mutate(session.state, intent, roll, day)
 		end
 	end
-	local reply: Types.Reply = { id = intent.id, ok = ok, message = message, figure = figure }
+	local reply: Types.Reply =
+		{ id = intent.id, ok = ok, message = message, figure = figure, figures = figures }
 	table.insert(session.receipts, { intent = intent, reply = reply, time = now })
 	if #session.receipts > 64 then
 		table.remove(session.receipts, 1)

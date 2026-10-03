@@ -128,19 +128,22 @@ end
 function Rules.expansionCost(state: Types.State): number
 	return Economy.expansionCosts[state.display.unlocked + 1] or 0
 end
+-- Buy and Daily use the first roll; BuyTen needs ten.
 function Rules.mutate(
 	state: Types.State,
 	intent: Types.Intent,
-	roll: number,
+	roll: number | { number },
 	day: number?
-): (boolean, string, string?)
+): (boolean, string, string?, { string }?)
 	local action, id = intent.action, intent.figure or ""
+	local rolls = if type(roll) == "number" then { roll } else roll
 	local today = day or 0
 	Rules.refreshDay(state, today)
 	if action == "Collect" then
 		local ok, message = Rules.collect(state, intent.slot or 0, id)
 		return ok, message, if ok then id else nil
-	elseif action == "Buy" or action == "Daily" then
+	elseif action == "Buy" or action == "Daily" or action == "BuyTen" then
+		local count = if action == "BuyTen" then 10 else 1
 		local collection = intent.choice or Economy.dailyCollection
 		local price = Rules.prices[collection]
 		if not price then
@@ -153,37 +156,60 @@ function Rules.mutate(
 			if state.lastDailyDay >= today then
 				return false, "Come back after the next daily reset.", nil
 			end
-		elseif state.coins < price then
+		elseif state.coins < price * count then
 			return false, "Not enough Coins yet.", nil
 		end
-		-- Validate the whole pool before rolling. Safety limits never reroll a result.
+		if #rolls < count then
+			return false, "Try again.", nil
+		end
+		-- Validate the whole pool for every box before rolling. Safety limits never reroll a result.
 		for _, figure in Catalog.figures do
 			if
 				figure.collection == collection
-				and (state.owned[figure.id] or 0) >= Economy.copyLimit
+				and (state.owned[figure.id] or 0) > Economy.copyLimit - count
 			then
 				return false, "Collection quantity safety limit reached.", nil
 			end
 		end
-		id = Rules.roll(roll, collection, state)
-		if action == "Buy" then
-			state.coins -= price
-		else
-			state.lastDailyDay = today
+		-- All checks are above and nothing below can fail, so a multi-box grant is all-or-nothing.
+		local figures: { string } = {}
+		local fresh = 0
+		for index = 1, count do
+			id = Rules.roll(rolls[index], collection, state)
+			if not state.discovered[id] then
+				fresh += 1
+			end
+			state.owned[id] = (state.owned[id] or 0) + 1
+			state.discovered[id] = true
+			CollectionEconomy.advance(state.pityByGroup, collection, id)
+			figures[index] = id
 		end
-		-- Counted in the same atomic grant as the box's figure.
-		state.boxesOpened = math.min(Rules.boxesOpenedLimit, state.boxesOpened + 1)
-		local isNew = not state.discovered[id]
-		state.owned[id] = (state.owned[id] or 0) + 1
-		state.discovered[id] = true
-		CollectionEconomy.advance(state.pityByGroup, collection, id)
+		if action == "Daily" then
+			state.lastDailyDay = today
+		else
+			state.coins -= price * count
+		end
+		-- Counted in the same atomic grant as the box's figures.
+		state.boxesOpened = math.min(Rules.boxesOpenedLimit, state.boxesOpened + count)
 		if state.step == 1 then
 			state.step = 2
-		elseif state.step == 4 and action == "Buy" then
+		elseif state.step == 4 and action ~= "Daily" then
 			state.step = 5
 		end
 		state.revision += 1
-		return true, if isNew then "New discovery!" else "Duplicate bonus increased!", id
+		if count > 1 then
+			return true,
+				if fresh > 0
+					then string.format(
+						"%d new discover%s!",
+						fresh,
+						if fresh == 1 then "y" else "ies"
+					)
+					else "Duplicate bonuses increased!",
+				nil,
+				figures
+		end
+		return true, if fresh > 0 then "New discovery!" else "Duplicate bonus increased!", id
 	elseif action == "Expand" then
 		local cost = Rules.expansionCost(state)
 		if cost == 0 or state.display.unlocked >= DisplayConfig.maxSlots then

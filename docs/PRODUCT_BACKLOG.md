@@ -52,7 +52,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
    - Let the player stop manually.
    - Allow stopping automatically when a chosen rarity is pulled.
 
-9. **Add x10 Open**
+9. [x] **Add x10 Open** — implementation, automated checks and native Studio single-client check complete; multi-client acceptance pending.
    - Everyone can open 10 boxes at once as long as they can afford all 10.
 
 10. **Add offline earnings + Robux double**
