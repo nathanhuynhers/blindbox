@@ -2,6 +2,62 @@
 
 This is the current product-direction backlog after the first full-game candidate. The existing backend and persistence foundation should generally be preserved while player-facing quality improves. Priorities can change after playtesting.
 
+
+## Current playtest TODO
+
+These are the current discrete follow-up tasks from playtesting. Each numbered item is intended to stay as one task rather than being split into implementation subtasks.
+
+1. **Add coin collection animation**
+   - Play a satisfying animation when coins are collected from a figure.
+
+2. **Show earnings above figures**
+   - Show how many coins each individual displayed figure has accumulated.
+   - Also show the combined earnings for the whole Display.
+
+3. **Rework Display interaction**
+   - E opens the Display UI only when the player is nearby.
+   - E no longer collects coins.
+   - Desktop players click individual figures to collect.
+   - Mobile players tap individual figures to collect.
+   - Add a nearby sign explaining how to collect, ideally device-specific wording such as "Click to Collect" or "Tap to Collect."
+
+4. **Add Shelf/Page progression**
+   - Treat a Shelf and a Page as the same progression unit.
+   - Completing a Collection for the first time unlocks a new Shelf/Page.
+   - Players can also purchase additional Shelf/Pages using coins.
+
+5. **Increase Shelf and Display brightness at night**
+   - Make figures and their furniture easier to see without making the whole plot overly bright.
+
+6. **Rename Collection to Shelves**
+   - Change the incorrect "Collection" title at the top of the Shelf interface to "Shelves."
+
+7. **Restrict Shelf placement to owned figures**
+   - Players can only place copies they actually own.
+   - If they own two copies of a figure, they can only have two copies placed across their Shelves.
+
+8. **Add Auto Open Gamepass**
+   - Automatically keep opening boxes.
+   - Let the player stop manually.
+   - Allow stopping automatically when a chosen rarity is pulled.
+
+9. **Add x10 Open**
+   - Everyone can open 10 boxes at once as long as they can afford all 10.
+
+10. **Add offline earnings + Robux double**
+    - Displayed figures continue earning while the player is offline.
+    - Offline earnings stop accumulating after a TBD number of hours.
+    - On return, show how much was earned.
+    - The player can claim normally or spend Robux to double the offline earnings.
+
+11. **Remove finished Daily Goals**
+    - After a Daily Goal is completed and claimed, remove it from the HUD instead of leaving the "Claimed" card there.
+
+12. **Add consecutive Daily Login Rewards**
+    - Rewards improve each consecutive day.
+    - Day 7 gives a particularly strong reward.
+    - Missing a day resets the streak back to Day 1.
+
 ## Phase 1: Make the prototype feel like a game
 
 1. **Blind-box opening overhaul**
