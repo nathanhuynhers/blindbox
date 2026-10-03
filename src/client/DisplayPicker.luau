@@ -53,7 +53,8 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 	local remove = small(root, "Remove", "Remove", ctx, callbacks.remove)
 	local cancel = small(root, "Cancel", "Cancel", ctx, callbacks.cancel)
 	local layout = Kit.grid(root, 10)
-	local grid = Kit.scroll(root, "Choices", ctx.scope, layout, 5, ctx.scale)
+	-- 14px padding leaves room for the BEST badge, which overhangs the top card edge.
+	local grid = Kit.scroll(root, "Choices", ctx.scope, layout, 14, ctx.scale)
 	local empty = Kit.text(root, "Empty", "", 15, nil, Style.muted)
 	empty.TextXAlignment = Enum.TextXAlignment.Center
 	empty.TextWrapped = true
@@ -101,9 +102,9 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		Kit.rect(remove.button, x, 4, 86, 44)
 		x -= 158
 		Kit.rect(browse.button, x, 4, 150, 44)
-		Kit.rect(grid, pad - 2, 56, inner + 4, height - 60)
+		Kit.rect(grid, pad - 11, 47, inner + 22, height - 49)
 		local columns = if phone then 4 else 6
-		cell = State.cells(inner - 14, columns, 10)
+		cell = State.cells(inner - 12, columns, 10)
 		local tileHeight = if phone then 64 else 72
 		layout.CellSize = UDim2.fromOffset(cell, tileHeight)
 		for _, item in tiles do

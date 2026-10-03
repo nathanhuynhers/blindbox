@@ -171,6 +171,7 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 	chipScroll.CanvasSize = UDim2.fromOffset(0, 0)
 	chipScroll.ScrollBarThickness = 0
 	chipScroll.Parent = chipRow
+	Kit.padding(chipScroll, 4, 4, 4, 4)
 	Kit.list(chipScroll, Enum.FillDirection.Horizontal, 6, Enum.VerticalAlignment.Center)
 	local chips: { [string]: Button.Button } = {}
 	local function chip(id: string, order: number)
@@ -287,7 +288,7 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		Kit.rect(spotTitle, spad, 32, sinner - 130, 28)
 		spotTitle.TextSize = if phone then 17 else 22
 		Kit.rect(clear.button, spad + sinner - 120, 14, 120, 44)
-		Kit.rect(chipRow, spad, 70, sinner, 44)
+		Kit.rect(chipRow, spad - 4, 64, sinner + 8, 52)
 		for _, button in chips do
 			button.button.Size = UDim2.fromOffset(0, 44)
 		end
