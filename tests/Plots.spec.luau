@@ -882,7 +882,28 @@ local function descendants(parent)
 	return found
 end
 local fixtureNodes = descendants(collection.model)
-local worldText, lights, parts = 0, 0, 0
+local manageShelves = collection.model:FindFirstChild("ManageShelves")
+assert(manageShelves)
+local manageShelvesAt = localPosition(plot.transform, manageShelves.Position)
+local manageShelvesPrompt = manageShelves:FindFirstChildOfClass("ProximityPrompt")
+assert(manageShelvesPrompt)
+check(
+	close(manageShelvesAt.X, Geometry.shelfX + CollectionFixture.management.frontOffset)
+		and close(manageShelvesAt.Y, CollectionFixture.management.y)
+		and close(manageShelvesAt.Z, Geometry.shelfCenterZ)
+		and manageShelvesAt.Y < Geometry.shelfBaseY - CollectionFixture.style.board,
+	"Shelves management prompt is centered near the floor below the bottom row"
+)
+check(
+	manageShelvesPrompt.KeyboardKeyCode == Engine.Enum.KeyCode.E
+		and manageShelvesPrompt.ActionText == "Manage Shelves"
+		and manageShelvesPrompt.ObjectText == "Shelves"
+		and manageShelvesPrompt.MaxActivationDistance == 12
+		and manageShelvesPrompt.HoldDuration == 0
+		and not manageShelvesPrompt.RequiresLineOfSight,
+	"Shelves has one immediate nearby E management prompt"
+)
+local worldText, lights, parts, prompts = 0, 0, 0, 0
 for _, node in fixtureNodes do
 	if node.ClassName == "TextLabel" then
 		worldText += 1
@@ -892,10 +913,8 @@ for _, node in fixtureNodes do
 		)
 	end
 	check(
-		node.ClassName ~= "BillboardGui"
-			and node.ClassName ~= "MeshPart"
-			and node.ClassName ~= "ProximityPrompt",
-		"Collection uses physical native geometry without floating labels or prompts"
+		node.ClassName ~= "BillboardGui" and node.ClassName ~= "MeshPart",
+		"Collection uses physical native geometry without floating labels or meshes"
 	)
 	if node.ClassName == "Part" then
 		parts += 1
@@ -919,13 +938,16 @@ for _, node in fixtureNodes do
 				and not node.Shadows,
 			"short subtle downward row washes have no shadows"
 		)
+	elseif node.ClassName == "ProximityPrompt" then
+		prompts += 1
 	end
 end
 check(
 	worldText == 1
 		and lights == 9
-		and parts == 58 + Awning.partCount(3 * Geometry.shelfUnitPitch + CollectionFixture.awning.endMargin),
-	"one title, nine bounded row washes and fixed native-part budget"
+		and prompts == 1
+		and parts == 59 + Awning.partCount(3 * Geometry.shelfUnitPitch + CollectionFixture.awning.endMargin),
+	"one title, one management prompt, nine bounded row washes and fixed native-part budget"
 )
 for position, unit in plot.physicalShelves do
 	local rows, anchors = 0, 0
@@ -1350,7 +1372,9 @@ for index, hitbox in plot.hitboxes do
 	)
 end
 for _, node in plot.collection.model:GetDescendants() do
-	check(node.ClassName ~= "ProximityPrompt", "shelf navigation has no proximity prompt")
+	if node.ClassName == "ProximityPrompt" then
+		check(node == manageShelvesPrompt, "only Shelf management uses a proximity prompt")
+	end
 end
 local coins, revision = state.coins, state.revision
 local savedBeforeTurns = Profile.encode(state)

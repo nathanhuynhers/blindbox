@@ -30,6 +30,7 @@ export type Interface = {
 	openingFocus: (boolean) -> (),
 	pending: (boolean) -> (),
 	openDisplay: () -> (),
+	openShelves: () -> (),
 	coinLanded: () -> (),
 	destroy: () -> (),
 }
@@ -357,6 +358,11 @@ function Interface.create(
 		openDisplay = function()
 			if canAct() and not opened then
 				navigate("Display")
+			end
+		end,
+		openShelves = function()
+			if canAct() and not opened then
+				navigate("Shelves")
 			end
 		end,
 		update = function(state: Types.Snapshot)

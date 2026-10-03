@@ -7,15 +7,34 @@ local Scope = require(script.Parent.UIScope)
 local UIState = require(script.Parent.UIState)
 local Interaction = {}
 
-local function ownFixture(): Instance?
+local function ownPlot(): Instance?
 	local plots = workspace:FindFirstChild("PlayerPlots")
 	local plot = if plots then plots:FindFirstChild(tostring(Players.LocalPlayer.UserId)) else nil
-	return if plot and plot:GetAttribute("OwnerId") == Players.LocalPlayer.UserId
-		then plot:FindFirstChild("DisplayFixture")
-		else nil
+	return if plot and plot:GetAttribute("OwnerId") == Players.LocalPlayer.UserId then plot else nil
 end
 
-function Interaction.create(open: () -> ()): { update: (number?) -> (), destroy: () -> () }
+local function promptTarget(name: string): BasePart?
+	local plot = ownPlot()
+	if not plot then
+		return nil
+	end
+	local fixtureName, targetName
+	if name == "ManageDisplayPrompt" then
+		fixtureName, targetName = "DisplayFixture", "ManageDisplay"
+	elseif name == "ManageShelvesPrompt" then
+		fixtureName, targetName = "CollectionFixture", "ManageShelves"
+	else
+		return nil
+	end
+	local fixture = plot:FindFirstChild(fixtureName)
+	local target = if fixture then fixture:FindFirstChild(targetName) else nil
+	return if target and target:IsA("BasePart") then target else nil
+end
+
+function Interaction.create(
+	openDisplay: () -> (),
+	openShelves: (() -> ())?
+): { update: (number?) -> (), destroy: () -> () }
 	local scope = Scope.create()
 	local function ownConnection(connection: RBXScriptConnection)
 		scope.add(function()
@@ -26,12 +45,15 @@ function Interaction.create(open: () -> ()): { update: (number?) -> (), destroy:
 	local total = 0
 	local function update(banked: number?)
 		total = banked or total
-		local fixture = ownFixture()
-		local manage = if fixture then fixture:FindFirstChild("ManageDisplay") else nil
-		local prompt = if manage then manage:FindFirstChild("ManageDisplayPrompt") else nil
-		if prompt and prompt:IsA("ProximityPrompt") then
-			prompt.Enabled = true -- Recover if the owner/fixture replicated after PromptShown.
+		for _, name in { "ManageDisplayPrompt", "ManageShelvesPrompt" } do
+			local target = promptTarget(name)
+			local prompt = if target then target:FindFirstChild(name) else nil
+			if prompt and prompt:IsA("ProximityPrompt") then
+				prompt.Enabled = true -- Recover if the owner/fixture replicated after PromptShown.
+			end
 		end
+		local plot = ownPlot()
+		local fixture = if plot then plot:FindFirstChild("DisplayFixture") else nil
 		local face = if fixture then fixture:FindFirstChild("CollectSignFace") else nil
 		local sign = if face then face:FindFirstChild("CollectSign") else nil
 		local label = if sign then sign:FindFirstChild("Instruction") else nil
@@ -55,9 +77,8 @@ function Interaction.create(open: () -> ()): { update: (number?) -> (), destroy:
 		update()
 	end))
 	ownConnection(Prompts.PromptShown:Connect(function(prompt: ProximityPrompt)
-		if prompt.Name == "ManageDisplayPrompt" then
-			local fixture = ownFixture()
-			if not fixture or prompt.Parent ~= fixture:FindFirstChild("ManageDisplay") then
+		if prompt.Name == "ManageDisplayPrompt" or prompt.Name == "ManageShelvesPrompt" then
+			if prompt.Parent ~= promptTarget(prompt.Name) then
 				prompt.Enabled = false
 			end
 		end
@@ -66,16 +87,13 @@ function Interaction.create(open: () -> ()): { update: (number?) -> (), destroy:
 		if actor ~= Players.LocalPlayer then
 			return
 		end
-		local fixture = ownFixture()
-		local target = if fixture then fixture:FindFirstChild("ManageDisplay") else nil
+		local target = promptTarget(prompt.Name)
 		local character = Players.LocalPlayer.Character
 		local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
 		local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
 		if
 			target
-			and target:IsA("BasePart")
 			and prompt.Parent == target
-			and prompt.Name == "ManageDisplayPrompt"
 			and prompt.Enabled
 			and root
 			and root:IsA("BasePart")
@@ -83,7 +101,11 @@ function Interaction.create(open: () -> ()): { update: (number?) -> (), destroy:
 			and humanoid.Health > 0
 			and (root.Position - target.Position).Magnitude <= prompt.MaxActivationDistance
 		then
-			open()
+			if prompt.Name == "ManageDisplayPrompt" then
+				openDisplay()
+			elseif openShelves then
+				openShelves()
+			end
 		end
 	end))
 	update()

@@ -77,7 +77,7 @@ local function revealModel(state: Types.Snapshot, result: OpeningResult.Result):
 	return UIState.reveal(state, result.figureId, result.isNew, result.quantity)
 end
 local connections: { RBXScriptConnection } = {}
-local displayInteraction = DisplayInteraction.create(ui.openDisplay)
+local displayInteraction = DisplayInteraction.create(ui.openDisplay, ui.openShelves)
 local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded)
 table.insert(
 	connections,

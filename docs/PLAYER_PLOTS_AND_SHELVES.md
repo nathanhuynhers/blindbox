@@ -185,8 +185,10 @@ There is no product-design maximum. Server decoder resource guards are documente
 
 Integrated oak/ivory side wings carry large solid left/right chevrons without text labels.
 These accept desktop clicks and mobile taps through ClickDetectors on generous transparent,
-non-colliding 5-by-10-by-7-stud hitboxes. No ProximityPrompt or E
-key is required. Owners and visitors can operate them from across the plot. Detector reach is
+non-colliding 5-by-10-by-7-stud hitboxes. These navigation controls do not use E. Owners and
+visitors can operate them from across the plot. A separate native **E · Manage Shelves** prompt is
+centered near the floor in front of the three bays and opens the existing owner editor within 12
+studs. Detector reach is
 160 studs, with an independent server check requiring a living actor inside the plot footprint
 plus an 8-stud perimeter margin and within 20 vertical studs of its origin. Other plots cannot
 be controlled from across the map. The server binds each control to its active plot and direction.

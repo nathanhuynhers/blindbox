@@ -15,8 +15,11 @@ Engine.services.Players.LocalPlayer = owner
 local prompts = Engine.services.ProximityPromptService
 local input = Engine.services.UserInputService
 local opened = 0
+local shelvesOpened = 0
 local control = Interaction.create(function()
 	opened += 1
+end, function()
+	shelvesOpened += 1
 end)
 local plot = Plot.create(owner, 1)
 local session = Transactions.new(0)
@@ -41,10 +44,17 @@ Plot.render(plot, state)
 local fixture = plot.fixture.model
 local target = fixture:FindFirstChild("ManageDisplay")
 local prompt = target:FindFirstChildOfClass("ProximityPrompt")
+local shelfTarget = plot.collection.model:FindFirstChild("ManageShelves")
+local shelfPrompt = shelfTarget:FindFirstChildOfClass("ProximityPrompt")
 control.update()
 check(
 	prompt.KeyboardKeyCode == Engine.Enum.KeyCode.E and prompt.ActionText == "Manage Display",
 	"E clearly manages Display"
+)
+check(
+	shelfPrompt.KeyboardKeyCode == Engine.Enum.KeyCode.E
+		and shelfPrompt.ActionText == "Manage Shelves",
+	"E clearly manages Shelves"
 )
 local sign = fixture:FindFirstChild("CollectSignFace"):FindFirstChild("CollectSign")
 local instruction = sign:FindFirstChild("Instruction")
@@ -72,6 +82,12 @@ prompts.PromptTriggered:fire(prompt, owner)
 check(opened == 1, "nearby owner opens management")
 prompts.PromptTriggered:fire(prompt, guest)
 check(opened == 1, "another actor triggering the prompt cannot open the local UI")
+owner.Character:PivotTo(shelfTarget.CFrame)
+prompts.PromptShown:fire(shelfPrompt)
+prompts.PromptTriggered:fire(shelfPrompt, owner)
+check(shelvesOpened == 1, "nearby owner opens Shelves management")
+prompts.PromptTriggered:fire(shelfPrompt, guest)
+check(shelvesOpened == 1, "another actor cannot open the local Shelves UI")
 check(state.coins == 4500 and requests == 0, "management never invokes economy collection")
 local collector = plot.collectors[2]
 local click = collector:FindFirstChildOfClass("ClickDetector")
@@ -125,6 +141,15 @@ owner.Character:PivotTo(otherTarget.CFrame)
 prompts.PromptShown:fire(otherPrompt)
 prompts.PromptTriggered:fire(otherPrompt, owner)
 check(not otherPrompt.Enabled and opened == 3, "guest prompt hidden and cannot route management")
+local otherShelfTarget = other.collection.model:FindFirstChild("ManageShelves")
+local otherShelfPrompt = otherShelfTarget:FindFirstChildOfClass("ProximityPrompt")
+owner.Character:PivotTo(otherShelfTarget.CFrame)
+prompts.PromptShown:fire(otherShelfPrompt)
+prompts.PromptTriggered:fire(otherShelfPrompt, owner)
+check(
+	not otherShelfPrompt.Enabled and shelvesOpened == 1,
+	"guest Shelves prompt is hidden and cannot route management"
+)
 local liveConnections = Engine.connections
 for _ = 1, 40 do
 	Plot.render(plot, Rules.new(0))
@@ -137,7 +162,7 @@ for _, instance in plot.model:GetDescendants() do
 		promptCount += 1
 	end
 end
-check(promptCount == 1, "one management prompt even with an empty display")
+check(promptCount == 2, "one Display and one Shelves management prompt remain after rerenders")
 Plot.destroy(plot)
 prompts.PromptTriggered:fire(prompt, owner)
 check(opened == 3, "destroyed plot prompt cannot reopen")
@@ -147,9 +172,15 @@ local replacementTarget = replacement.fixture.model:FindFirstChild("ManageDispla
 owner.Character:PivotTo(replacementTarget.CFrame)
 prompts.PromptTriggered:fire(replacementTarget:FindFirstChildOfClass("ProximityPrompt"), owner)
 check(opened == 4, "replacement plot uses the same one listener")
+local replacementShelfTarget = replacement.collection.model:FindFirstChild("ManageShelves")
+owner.Character:PivotTo(replacementShelfTarget.CFrame)
+prompts.PromptTriggered:fire(replacementShelfTarget:FindFirstChildOfClass("ProximityPrompt"), owner)
+check(shelvesOpened == 2, "replacement Shelves use the same one listener")
 control.destroy()
 prompts.PromptTriggered:fire(replacementTarget:FindFirstChildOfClass("ProximityPrompt"), owner)
 check(opened == 4, "client teardown disconnects prompt routing")
+prompts.PromptTriggered:fire(replacementShelfTarget:FindFirstChildOfClass("ProximityPrompt"), owner)
+check(shelvesOpened == 2, "client teardown disconnects Shelves prompt routing")
 input.TouchEnabled, input.MouseEnabled = true, false
 local mobile = Interaction.create(function() end)
 local mobileText = replacement.fixture.model

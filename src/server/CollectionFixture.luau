@@ -18,6 +18,7 @@ Fixture.palette = table.freeze({
 })
 Fixture.style = table.freeze({ depth = 5, post = 0.55, board = 0.3, figureScale = 1 })
 Fixture.lighting = table.freeze({ dayBrightness = 0.35, nightBrightness = 0.9 })
+Fixture.management = table.freeze({ frontOffset = -7, y = 0.45 })
 -- Striped awning above the Shelves header, overhanging toward the plot center (-X).
 -- Its valance bottom (backY - rise - 1.4 = top + 3.2) clears the header top (top + 2.85).
 Fixture.awning =
@@ -342,6 +343,27 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 		table.insert(controls, button)
 		table.insert(hitboxes, hitbox)
 	end
+	-- Keep the native management prompt centered near the floor so its large card stays below figures.
+	local manage = piece(
+		model,
+		transform,
+		"ManageShelves",
+		Vector3.new(1, 1, 1),
+		Vector3.new(x + Fixture.management.frontOffset, Fixture.management.y, z),
+		palette.ivory
+	)
+	manage.Transparency = 1
+	manage.CanCollide = false
+	manage.CanTouch = false
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "ManageShelvesPrompt"
+	prompt.ActionText = "Manage Shelves"
+	prompt.ObjectText = "Shelves"
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+	prompt.MaxActivationDistance = 12
+	prompt.HoldDuration = 0
+	prompt.RequiresLineOfSight = false
+	prompt.Parent = manage
 	local render: Render = {
 		model = model,
 		units = units,

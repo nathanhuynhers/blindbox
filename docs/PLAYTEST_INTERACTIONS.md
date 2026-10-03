@@ -12,6 +12,11 @@ result in Roblox Studio and reported that everything looked and worked correctly
   The client routes its own living player's activation into the existing Display screen,
   checks target ancestry and distance again, and respects pending requests/opening focus. The
   existing dock and Display placement validation remain intact. E cannot invoke collection.
+- A matching native `ProximityPrompt` centered near the floor in front of the three physical Shelf
+  bays offers **E · Manage Shelves** within 12 studs. It routes into the existing Shelves screen
+  without sending a mutation. The client checks local plot ownership, target ancestry, living
+  character state and distance; the existing server-authoritative own-plot boundary still guards
+  every Shelf edit.
 - Each figure retains its existing server-bound `ClickDetector`. Native mouse clicks and touch
   taps enter one handler, with no additional touch listener or remote. The server checks the
   living owner, exact target ancestry, 12-stud distance and plot bounds. The existing session/
@@ -37,11 +42,11 @@ these changes do not alter crash recovery or storage guarantees.
 
 ## Important source and test files
 
-- `src/client/DisplayInteraction.luau`, `init.client.luau`, `Interface.luau`: prompt routing,
+- `src/client/DisplayInteraction.luau`, `init.client.luau`, `Interface.luau`: Display/Shelves prompt routing,
   input wording, snapshot integration and lifetime management.
 - `src/server/DisplayFixture.luau`, `PlayerPlot.luau`: management prompt/plaque and removal of
   per-figure collection prompts while retaining validated click/tap targets.
-- `src/server/CollectionFixture.luau`: exact physical Shelf heading correction.
+- `src/server/CollectionFixture.luau`: physical Shelf heading and low management prompt.
 - `src/client/GoalTracker.luau`, `GoalsScreen.luau`: active-goal visibility and empty state.
 - Display screen/HUD copy and the remote-collection rejection message explain click/tap collection.
 - `tests/DisplayInteraction.spec.luau`, `Plots.spec.luau`, `Screens.spec.luau`,
@@ -74,14 +79,20 @@ the target to the Display's horizontal center near the floor. The low anchor rem
 collection plaque at capacities 3, 4, 5 and 6. No pressure plates or collection-rule changes were
 added. Final user visual confirmation of this centered low placement remains pending.
 
+Also on October 3, 2026, a fresh Rojo build verified the matching Shelves prompt at plot-local
+position `(33, 0.45, -4)`: centered across all three bays, seven studs inward from the shelf face
+and below the bottom row. The prompt was enabled with a 12-stud range, and pressing E opened the
+Shelves screen while the Display screen remained closed. Studio MCP's capture omits Roblox's native
+prompt overlay, so final user visual confirmation of the prompt card remains pending.
+
 ## Own-plot management boundary (October 3, 2026)
 
 Backlog item 13 replaces the narrow Display and Shelf editor bands with one server-authoritative
 rule: a living owner may mutate either system anywhere inside their active 100-by-96-stud plot and
 within 20 vertical studs of its origin. Ownership still comes from the remote callback Player and
 active session; visitors, missing/dead characters and owners beyond any plot boundary are rejected.
-The nearby E prompt remains a physical shortcut for opening Display management, while clicking or
-tapping a figure to collect Coins retains its independent 12-stud physical range.
+The nearby E prompts remain physical shortcuts for opening Display and Shelf management, while
+clicking or tapping a figure to collect Coins retains its independent 12-stud physical range.
 
 The full harness passes with center, rear and far-corner access plus immediate X/Z/vertical outside
 denial. A fresh Rojo build was also opened through Studio MCP. Native Player/Character/CFrame checks

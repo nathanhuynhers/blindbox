@@ -84,6 +84,12 @@ local managementRequests = #requests
 ui.openDisplay()
 check(host("Display").Visible and #requests == managementRequests, "management opens Display without collecting or sending intents")
 Engine.click(within(host("Display"), "Close"))
+ui.openShelves()
+check(
+	host("Shelves").Visible and #requests == managementRequests,
+	"management opens Shelves without sending intents"
+)
+Engine.click(within(host("Shelves"), "Close"))
 ui.pending(true)
 ui.openDisplay()
 check(not host("Display").Visible, "pending work blocks world management")

@@ -87,9 +87,9 @@ collection requests through Transactions with a server-only authorization flag. 
 requests cannot set that flag. Rate limits and receipts share the normal transaction path.
 Rules.collect transfers whole Coins atomically, retains overflow/fractions, and is the future
 auto-collect extension point; no gamepass service is implemented. Owner snapshots expose balances
-only to the owner. One native E proximity prompt at the counter
-opens Display management through `DisplayInteraction` and the existing Interface router. It never
-sends a mutation request. Local ownership, living-character and distance checks guard that route;
+only to the owner. Native E proximity prompts near the Display and Shelves open their corresponding
+management screens through `DisplayInteraction` and the existing Interface router. They never send
+mutation requests. Local ownership, living-character and distance checks guard those routes;
 server ownership and plot-containment checks guard edits; close physical distance still guards
 per-figure coin collection. The client owns three
 service listeners for its lifetime and refreshes the device-aware counter plaque through the
@@ -114,7 +114,8 @@ Leaving/shutdown attempts a bounded final save/release, with lease expiry as cra
 It reconciles ordered owner snapshots and exposes pending-request state to the UI. `Interface`
 composes dedicated HUD, navigation, book/details, shop, Display controls (`DisplayScreen`),
 goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and carousel controls
-and an owned-figure picker. Exhausted figures remain non-actionable using the existing tile state.
+and an owned-figure picker. Native nearby prompts route to the existing Display and Shelves screens;
+they do not send mutation requests. Exhausted figures remain non-actionable using the existing tile state.
 There is no visit directory or teleport callback.
 `UIStyle`, `UIKit`, `UIButton`, `UIBadge`, `UIProgress`, `UIIcons` and `UIPreview` provide tokens,
 primitives, controls, progress, icon shapes and 3D portraits. `UIState` derives read-only
