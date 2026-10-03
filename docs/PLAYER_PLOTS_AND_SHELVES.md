@@ -56,7 +56,7 @@ placeholder for a scaled, turned copy. A failed load keeps the part version.
 
 | Model | Where | Size | Triangles |
 | --- | --- | --- | --- |
-| Sakura (bonsai style, blossom clusters, coral flecks) | all 26 pink trees | canopy width 1.25x the placeholder | about 51k |
+| Sakura (bonsai style, blossom clusters, coral flecks) | all 26 pink trees | canopy width 1.25x the placeholder (2x by the street, about 1.7x on the outer line) | about 51k |
 | Puffball | 12 green trees by the street and framing gardens | height 1.5x | about 22k |
 | Poplar | 12 green trees on the outer line | height 1.5x | about 15k |
 | Topiary Ball | 2 green plaza planters | height 6 studs | about 13k |

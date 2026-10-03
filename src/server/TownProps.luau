@@ -598,6 +598,9 @@ local treeFit: { [string]: { fit: TownPlacements.Fit, factor: number } } = {
 	Topiary = { fit = "height", factor = 1.0 },
 }
 TownProps.treeFit = table.freeze(treeFit)
+-- Extra size for sakura with open ground around them. Framing sakura stay put (plot edges) and
+-- plaza planters stay small (benches).
+TownProps.sakuraBoost = table.freeze({ street = 1.6, edge = 1.35 }) :: { [string]: number }
 TownProps.statueModels = table.freeze({ "PeekaPeekaboo", "PeekaTada", "PeekaHug", "PeekaNap" })
 TownProps.statueWidth = 12
 
@@ -681,7 +684,8 @@ function TownProps.townTree(
 	local fit = TownProps.treeFit[kind]
 	local yaw, scale = TownProps.jitter(seed)
 	local at = base * CFrame.Angles(0, math.rad(yaw), 0)
-	local target = size * fit.factor * scale
+	local boost = if kind == "Sakura" then TownProps.sakuraBoost[role] or 1 else 1
+	local target = size * fit.factor * boost * scale
 	TownPlacements.add(kind, at, target, fit.fit, placeholder)
 	if kind == "Sakura" and role ~= "planter" then
 		TownProps.petalCarpet(parent, name .. "Petals", base, target * 0.7)
