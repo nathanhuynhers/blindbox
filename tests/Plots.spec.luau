@@ -1079,13 +1079,13 @@ for capacity = 3, 6 do
 			and initialSign.Size.X == 12.65,
 		"physical sign stays centered with fixed readable proportions"
 	)
-	local leftmostAnchor = localPosition(plot.transform, plot.display.anchors["1"].Position)
+	local collectSignAt = localPosition(plot.transform, plot.fixture.parts.CollectSignFace.Position)
 	check(
-		close(manageAt.X, -width / 2 - Fixture.management.sideGap)
+		close(manageAt.X, Fixture.management.x)
 			and close(manageAt.Y, Fixture.management.y)
 			and close(manageAt.Z, Geometry.displayZ + Fixture.management.frontOffset)
-			and manageAt.X < leftmostAnchor.X - 10,
-		"management prompt follows the front-left edge and stays clear of every figure"
+			and manageAt.Y < collectSignAt.Y - plot.fixture.parts.CollectSignFace.Size.Y / 2,
+		"management prompt stays centered below the collection plaque at every Display width"
 	)
 	check(
 		#initialFixture:GetChildren() == fixtureCount,

@@ -6,9 +6,9 @@ result in Roblox Studio and reported that everything looked and worked correctly
 
 ## Behavior and boundaries
 
-- A single native `ProximityPrompt` beside the front-left end of the Display counter offers
-  **E · Manage Display** within 12 studs. Its anchor follows the counter's left edge as capacity
-  grows from three through six slots, keeping the native prompt card away from every figure.
+- A single native `ProximityPrompt` centered near the floor in front of the Display counter offers
+  **E · Manage Display** within 12 studs. Its anchor stays at the same low center point as capacity
+  grows from three through six slots, keeping the native prompt card below the figures.
   The client routes its own living player's activation into the existing Display screen,
   checks target ancestry and distance again, and respects pending requests/opening focus. The
   existing dock and Display placement validation remain intact. E cannot invoke collection.
@@ -69,12 +69,10 @@ these changes do not alter crash recovery or storage guarantees.
 These harnesses execute real modules with engine boundaries shimmed. They do not simulate native
 mouse/touch delivery, prompt rendering, physics, network replication or real DataStore sessions.
 
-On October 3, 2026, a fresh Rojo build was opened through Studio MCP. The native prompt remained
-functional beside the Display, while the center collecting position was 19.49 studs from its anchor
-and pressing E there did not open management. Native fixture checks confirmed a constant 10.5-stud
-horizontal gap between the prompt anchor and the nearest figure at capacities 3, 4, 5 and 6. No
-pressure plates or collection-rule changes were added. Final user visual confirmation of this
-prompt relocation remains pending.
+On October 3, 2026, the initial side placement passed native Studio checks, then user review moved
+the target to the Display's horizontal center near the floor. The low anchor remains below the
+collection plaque at capacities 3, 4, 5 and 6. No pressure plates or collection-rule changes were
+added. Final user visual confirmation of this centered low placement remains pending.
 
 ## Own-plot management boundary (October 3, 2026)
 

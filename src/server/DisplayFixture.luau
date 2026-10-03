@@ -8,7 +8,7 @@ local Fixture = {}
 Fixture.style =
 	table.freeze({ spacing = 8, sideMargin = 6, counterY = 3, figureScale = 2, title = "DISPLAY" })
 Fixture.lighting = table.freeze({ dayBrightness = 0.65, nightBrightness = 1.25 })
-Fixture.management = table.freeze({ sideGap = 4.5, y = 2, frontOffset = -5 })
+Fixture.management = table.freeze({ x = 0, y = 0.45, frontOffset = -7 })
 -- Striped awning above the sign: raised back edge behind the panel, lower front over the counter.
 -- The valance bottom (frontY - 1.4) stays above the sign top (Y=13.3) so the sign stays readable.
 Fixture.awning =
@@ -225,7 +225,7 @@ function Fixture.resize(render: Render, capacity: number)
 	local manage = render.parts.ManageDisplay
 	manage.CFrame = render.transform
 		* CFrame.new(
-			-width / 2 - Fixture.management.sideGap,
+			Fixture.management.x,
 			Fixture.management.y,
 			Geometry.displayZ + Fixture.management.frontOffset
 		)
@@ -309,8 +309,8 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	instruction.TextScaled = true
 	instruction.Text = "Click or Tap Each Figure to Collect"
 	instruction.Parent = instructions
-	-- Keep the native management prompt beside the fixture so its large card never covers a figure.
-	-- resize() moves it with the left edge at every supported Display capacity.
+	-- Keep the native management prompt centered near the floor so its large card stays below figures.
+	-- resize() preserves that position at every supported Display capacity.
 	local manage = Geometry.partAt(model, "ManageDisplay", Vector3.new(1, 1, 1), transform, ivory)
 	manage.Transparency = 1
 	manage.CanCollide = false

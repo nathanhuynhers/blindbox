@@ -24,7 +24,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 
 3. [x] **Rework Display interaction** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
    - E opens the Display UI only when the player is nearby.
-   - The E prompt follows the front-left edge of every Display width so it does not cover a figure or intercept the middle figure's collection click. Native Studio MCP verification passes; final user visual confirmation of the relocation is pending.
+   - The E prompt stays centered near the floor at every Display width so it remains below the figures. Final user visual confirmation of the centered low placement is pending.
    - E no longer collects coins.
    - Desktop players click individual figures to collect.
    - Mobile players tap individual figures to collect.
