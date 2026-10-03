@@ -1,0 +1,127 @@
+{
+  "figure": "Topiary",
+  "title": "Topiary Ball",
+  "rarity": "Decor",
+  "size_xyz_studs": [
+    2.0646,
+    2.069,
+    3.2339
+  ],
+  "meshes": 4,
+  "triangles": 13028,
+  "materials": [
+    "Topiary_FlowerPink",
+    "Topiary_FlowerYellow",
+    "Topiary_Leaves",
+    "Topiary_Stem"
+  ],
+  "components": {
+    "Topiary_Stem": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03429
+    },
+    "Topiary_Ball": {
+      "tris": 9128,
+      "verts": 4358,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.13147
+    },
+    "Topiary_FlowersPink": {
+      "tris": 1200,
+      "verts": 608,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00693
+    },
+    "Topiary_FlowersYellow": {
+      "tris": 1200,
+      "verts": 608,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00693
+    }
+  },
+  "build": {
+    "Topiary_Stem": {
+      "active_blocks": 1065,
+      "blocks": 2800,
+      "grid": [
+        81,
+        81,
+        225
+      ],
+      "raw_tris": 37600,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "Topiary_Ball": {
+      "active_blocks": 7953,
+      "blocks": 27000,
+      "grid": [
+        241,
+        241,
+        241
+      ],
+      "raw_tris": 845732,
+      "removed_faces": 2870,
+      "seconds": 49.3
+    },
+    "Topiary_FlowersPink": {
+      "active_blocks": 965,
+      "blocks": 33800,
+      "grid": [
+        209,
+        401,
+        209
+      ],
+      "raw_tris": 33820,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "Topiary_FlowersYellow": {
+      "active_blocks": 957,
+      "blocks": 27000,
+      "grid": [
+        201,
+        321,
+        217
+      ],
+      "raw_tris": 33820,
+      "removed_faces": 0,
+      "seconds": 0.8
+    }
+  },
+  "glb": {
+    "bytes": 286520,
+    "nodes": [
+      "Topiary_Ball",
+      "Topiary_FlowersPink",
+      "Topiary_FlowersYellow",
+      "Topiary_Stem",
+      "Topiary"
+    ],
+    "meshes": 4,
+    "materials": 4,
+    "images": 4,
+    "textures": 4,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": null,
+  "root": "Topiary",
+  "face": "Topiary_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 4,
+    "triangle_mismatches": {}
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "figure": "Sakura",
+  "title": "Sakura",
+  "rarity": "Decor",
+  "size_xyz_studs": [
+    4.1716,
+    1.7917,
+    3.5849
+  ],
+  "meshes": 9,
+  "triangles": 50885,
+  "materials": [
+    "Sakura_Bark",
+    "Sakura_Blossom",
+    "Sakura_Coral",
+    "Sakura_Moss"
+  ],
+  "components": {
+    "Sakura_Trunk": {
+      "tris": 5998,
+      "verts": 3001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.4112
+    },
+    "Sakura_CanopyWest": {
+      "tris": 9088,
+      "verts": 4518,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.10875
+    },
+    "Sakura_CanopyCrown": {
+      "tris": 8778,
+      "verts": 4323,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.59531
+    },
+    "Sakura_CanopyEast": {
+      "tris": 9238,
+      "verts": 4575,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.83587
+    },
+    "Sakura_CanopyBack": {
+      "tris": 5692,
+      "verts": 2824,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.40501
+    },
+    "Sakura_CanopyLow": {
+      "tris": 5362,
+      "verts": 2613,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.36418
+    },
+    "Sakura_SpecklesHigh": {
+      "tris": 4133,
+      "verts": 1682,
+      "non_manifold_edges": 5,
+      "boundary_edges": 2,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0323
+    },
+    "Sakura_SpecklesLow": {
+      "tris": 596,
+      "verts": 246,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00459
+    },
+    "Sakura_RootMound": {
+      "tris": 2000,
+      "verts": 1002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07456
+    }
+  },
+  "build": {
+    "Sakura_Trunk": {
+      "active_blocks": 4308,
+      "blocks": 22464,
+      "grid": [
+        313,
+        129,
+        289
+      ],
+      "raw_tris": 177296,
+      "removed_faces": 0,
+      "seconds": 88.7
+    },
+    "Sakura_CanopyWest": {
+      "active_blocks": 3403,
+      "blocks": 12006,
+      "grid": [
+        233,
+        185,
+        145
+      ],
+      "raw_tris": 465662,
+      "removed_faces": 910,
+      "seconds": 21.5
+    },
+    "Sakura_CanopyCrown": {
+      "active_blocks": 4351,
+      "blocks": 16128,
+      "grid": [
+        257,
+        193,
+        169
+      ],
+      "raw_tris": 586344,
+      "removed_faces": 1220,
+      "seconds": 52.4
+    },
+    "Sakura_CanopyEast": {
+      "active_blocks": 2611,
+      "blocks": 9975,
+      "grid": [
+        201,
+        169,
+        153
+      ],
+      "raw_tris": 368252,
+      "removed_faces": 760,
+      "seconds": 45.3
+    },
+    "Sakura_CanopyBack": {
+      "active_blocks": 1441,
+      "blocks": 5100,
+      "grid": [
+        161,
+        137,
+        121
+      ],
+      "raw_tris": 216936,
+      "removed_faces": 308,
+      "seconds": 28.9
+    },
+    "Sakura_CanopyLow": {
+      "active_blocks": 1606,
+      "blocks": 11628,
+      "grid": [
+        305,
+        137,
+        145
+      ],
+      "raw_tris": 270062,
+      "removed_faces": 636,
+      "seconds": 34.4
+    },
+    "Sakura_SpecklesHigh": {
+      "active_blocks": 20740,
+      "blocks": 283400,
+      "grid": [
+        873,
+        401,
+        417
+      ],
+      "raw_tris": 4810696,
+      "removed_faces": 12906,
+      "seconds": 492.8
+    },
+    "Sakura_SpecklesLow": {
+      "active_blocks": 2416,
+      "blocks": 46872,
+      "grid": [
+        497,
+        217,
+        225
+      ],
+      "raw_tris": 592426,
+      "removed_faces": 2600,
+      "seconds": 41.1
+    },
+    "Sakura_RootMound": {
+      "active_blocks": 2503,
+      "blocks": 3864,
+      "grid": [
+        185,
+        169,
+        65
+      ],
+      "raw_tris": 158100,
+      "removed_faces": 0,
+      "seconds": 55.8
+    }
+  },
+  "glb": {
+    "bytes": 1108372,
+    "nodes": [
+      "Sakura_CanopyBack",
+      "Sakura_CanopyCrown",
+      "Sakura_CanopyEast",
+      "Sakura_CanopyLow",
+      "Sakura_CanopyWest",
+      "Sakura_RootMound",
+      "Sakura_SpecklesHigh",
+      "Sakura_SpecklesLow",
+      "Sakura_Trunk",
+      "Sakura"
+    ],
+    "meshes": 9,
+    "materials": 4,
+    "images": 4,
+    "textures": 4,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": null,
+  "root": "Sakura",
+  "face": "Sakura_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 9,
+    "triangle_mismatches": {}
+  }
+}
