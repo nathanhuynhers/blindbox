@@ -1,0 +1,83 @@
+{
+  "figure": "Poplar",
+  "title": "Poplar",
+  "rarity": "Decor",
+  "size_xyz_studs": [
+    1.4416,
+    1.3263,
+    3.9094
+  ],
+  "meshes": 2,
+  "triangles": 15108,
+  "materials": [
+    "Poplar_Bark",
+    "Poplar_Leaves"
+  ],
+  "components": {
+    "Poplar_Trunk": {
+      "tris": 2500,
+      "verts": 1252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08578
+    },
+    "Poplar_Column": {
+      "tris": 12608,
+      "verts": 6304,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.60352
+    }
+  },
+  "build": {
+    "Poplar_Trunk": {
+      "active_blocks": 1079,
+      "blocks": 2772,
+      "grid": [
+        97,
+        89,
+        169
+      ],
+      "raw_tris": 46816,
+      "removed_faces": 0,
+      "seconds": 6.0
+    },
+    "Poplar_Column": {
+      "active_blocks": 6085,
+      "blocks": 17556,
+      "grid": [
+        169,
+        153,
+        353
+      ],
+      "raw_tris": 731304,
+      "removed_faces": 1390,
+      "seconds": 40.4
+    }
+  },
+  "glb": {
+    "bytes": 335580,
+    "nodes": [
+      "Poplar_Column",
+      "Poplar_Trunk",
+      "Poplar"
+    ],
+    "meshes": 2,
+    "materials": 2,
+    "images": 2,
+    "textures": 2,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": null,
+  "root": "Poplar",
+  "face": "Poplar_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {}
+  }
+}

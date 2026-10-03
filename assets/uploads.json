@@ -980,6 +980,78 @@
     "sha256": "f2e29a1c52a9d574e0cddac82da09af0838cddaa51652a0480ec7cc5440e10e7",
     "source": "assets/figures/tidepool-tales/shell-scribe/model/shell_scribe_roblox.glb"
   },
+  "Models.Town.PeekaHug": {
+    "assetId": "71329500330456",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a28b3719a98b8cdecd687f12a7fb678c3bc1eebf23d6850bb7a5273b56a33e10",
+    "source": "assets/models/peeka-statues/hug/model/hug_roblox.glb"
+  },
+  "Models.Town.PeekaNap": {
+    "assetId": "136954192101557",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "892d7b8805ba37811cbea405555f0a0a104aa2135787a4d15bc6f39700a57f7e",
+    "source": "assets/models/peeka-statues/nap/model/nap_roblox.glb"
+  },
+  "Models.Town.PeekaPeekaboo": {
+    "assetId": "111248853942299",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "33ce9aeb925f8e89ce886ca5037599b8228c5b3c91093100dfe39fa6535fca4b",
+    "source": "assets/models/peeka-statues/peekaboo/model/peekaboo_roblox.glb"
+  },
+  "Models.Town.PeekaTada": {
+    "assetId": "95471855409752",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "240797622b59a2b1f538a20eba4b3484648f0810f6dc7f9fb7cad39d737363d5",
+    "source": "assets/models/peeka-statues/tada/model/tada_roblox.glb"
+  },
+  "Models.Town.Poplar": {
+    "assetId": "99948508677909",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "35dccde66fd6d10a456578a4af788eec72195d8096fc0e72cffbafe5d4aa0c04",
+    "source": "assets/models/town-trees/poplar/model/poplar_roblox.glb"
+  },
+  "Models.Town.Puffball": {
+    "assetId": "79069740439179",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "62271c32370420e59cf186762c298046bda8b2932e404f76fab1002f04a2d037",
+    "source": "assets/models/town-trees/puffball/model/puffball_roblox.glb"
+  },
+  "Models.Town.Sakura": {
+    "assetId": "126586441346239",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "c4a9be94378d314272bfcef1f1b0eaa16d271cbfceddd65df19809e35dfbe789",
+    "source": "assets/models/town-trees/sakura/model/sakura_roblox.glb"
+  },
+  "Models.Town.Topiary": {
+    "assetId": "106321515938129",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "173ba81087607e1178babcccaf09bddd55c00368e976f97736cc4c770fbaeff5",
+    "source": "assets/models/town-trees/topiary/model/topiary_roblox.glb"
+  },
   "Models.WeAreAllStars.CloudRest": {
     "assetId": "137863487676817",
     "assetType": "Model",
@@ -1096,5 +1168,14 @@
     },
     "sha256": "33c6590252bf221905e4d794b63b891e0fd718aff935dc1e688c0c6007dc5dfc",
     "source": "assets/figures/we-are-all-stars/wishing/model/wishing_roblox.glb"
+  },
+  "Town.SakuraPetal": {
+    "assetId": "110930105901678",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6883c13fe13a5851c2a48065dfc6b1b747e7eeec0088671e98f083880e1691a2",
+    "source": "assets/models/town-trees/sakura_petal.png"
   }
 }

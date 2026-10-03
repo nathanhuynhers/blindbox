@@ -4,7 +4,9 @@
 -- noncollidable decor is also excluded from spatial queries.
 local Geometry = require(script.Parent.PlotGeometry)
 local NightLights = require(script.Parent.NightLights)
+local TownPlacements = require(script.Parent.TownPlacements)
 local Style = require(script.Parent.TownStyle)
+local Manifest = require(game:GetService("ReplicatedStorage").Shared.AssetManifest)
 
 local colors, materials = Style.colors, Style.materials
 local TownProps = {}
@@ -425,7 +427,13 @@ function TownProps.bench(parent: Instance, name: string, base: CFrame): Model
 	return bench
 end
 
-function TownProps.planter(parent: Instance, name: string, base: CFrame, blossom: boolean): Model
+function TownProps.planter(
+	parent: Instance,
+	name: string,
+	base: CFrame,
+	blossom: boolean,
+	seed: number?
+): Model
 	local planter = model(parent, name)
 	TownProps.part(
 		planter,
@@ -444,7 +452,15 @@ function TownProps.planter(parent: Instance, name: string, base: CFrame, blossom
 		materials.foliage,
 		false
 	)
-	TownProps.tree(planter, "Tree", base * CFrame.new(0, 1.6, 0), 6, blossom)
+	TownProps.townTree(
+		planter,
+		"Tree",
+		base * CFrame.new(0, 1.6, 0),
+		6,
+		blossom,
+		"planter",
+		seed or 0
+	)
 	return planter
 end
 
@@ -563,6 +579,163 @@ function TownProps.pottedPlant(parent: Instance, name: string, base: CFrame): Mo
 		false
 	)
 	return plant
+end
+
+-- ------------------------------------------------------------------ uploaded-model spots
+
+-- Which uploaded model replaces a part tree at each kind of spot, and how it is sized from the
+-- placeholder's canopy diameter: Sakura fits its canopy width, the green trees their height.
+TownProps.treeModels = table.freeze({
+	planter = table.freeze({ blossom = "Sakura", green = "Topiary" }),
+	street = table.freeze({ blossom = "Sakura", green = "Puffball" }),
+	frame = table.freeze({ blossom = "Sakura", green = "Puffball" }),
+	edge = table.freeze({ blossom = "Sakura", green = "Poplar" }),
+}) :: { [string]: { [string]: string } }
+local treeFit: { [string]: { fit: TownPlacements.Fit, factor: number } } = {
+	Sakura = { fit = "width", factor = 1.25 },
+	Puffball = { fit = "height", factor = 2.6 },
+	Poplar = { fit = "height", factor = 2.4 },
+	Topiary = { fit = "height", factor = 1.4 },
+}
+TownProps.treeFit = table.freeze(treeFit)
+-- Extra size per spot for sakura, sized for regular avatars (about 5 studs tall).
+TownProps.sakuraBoost =
+	table.freeze({ planter = 1.5, street = 2, frame = 1.6, edge = 2.1 }) :: { [string]: number }
+TownProps.statueModels = table.freeze({ "PeekaPeekaboo", "PeekaTada", "PeekaHug", "PeekaNap" })
+TownProps.statueWidth = 12
+
+-- Deterministic turn (degrees) and size jitter (0.9-1.1) so neighbouring trees never match.
+function TownProps.jitter(seed: number): (number, number)
+	local yaw = (seed * 137.508) % 360
+	local scale = 0.9 + ((seed * 0.6180339) % 1) * 0.2
+	return yaw, scale
+end
+
+-- Soft pink disc of fallen petals on the grass under a sakura.
+function TownProps.petalCarpet(parent: Instance, name: string, base: CFrame, diameter: number): Part
+	local carpet = TownProps.cylinder(
+		parent,
+		name,
+		diameter,
+		0.04,
+		base * CFrame.new(0, 0.005, 0),
+		Color3.fromRGB(246, 201, 216),
+		materials.plastic,
+		false
+	)
+	carpet.CastShadow = false
+	return carpet
+end
+
+-- Invisible volume under a sakura canopy that drops slowly drifting petals.
+function TownProps.petalFall(
+	parent: Instance,
+	name: string,
+	at: CFrame,
+	width: number,
+	height: number
+): Part?
+	local texture = Manifest.resolve(Manifest.Town.SakuraPetal)
+	if texture == "" then
+		return nil
+	end
+	local volume = TownProps.part(
+		parent,
+		name,
+		Vector3.new(width * 0.8, height * 0.22, width * 0.36),
+		at * CFrame.new(0, height * 0.62, 0),
+		colors.blossom,
+		materials.plastic,
+		false
+	)
+	volume.Transparency = 1
+	volume.CastShadow = false
+	local petals = Instance.new("ParticleEmitter")
+	petals.Name = "Petals"
+	petals.Texture = texture
+	petals.Rate = 2
+	petals.Lifetime = NumberRange.new(5, 7)
+	petals.Speed = NumberRange.new(0.3, 0.8)
+	petals.SpreadAngle = Vector2.new(30, 30)
+	petals.EmissionDirection = Enum.NormalId.Bottom
+	petals.Acceleration = Vector3.new(0.5, -0.9, 0.2)
+	petals.Drag = 0.6
+	petals.Rotation = NumberRange.new(0, 360)
+	petals.RotSpeed = NumberRange.new(-90, 90)
+	petals.Size = NumberSequence.new(0.45)
+	petals.Shape = Enum.ParticleEmitterShape.Box
+	petals.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
+	petals.Parent = volume
+	return volume
+end
+
+-- A part-built placeholder tree that the uploaded model replaces when it loads.
+function TownProps.townTree(
+	parent: Instance,
+	name: string,
+	base: CFrame,
+	size: number,
+	blossom: boolean,
+	role: string,
+	seed: number
+): Model
+	local placeholder = TownProps.tree(parent, name, base, size, blossom)
+	local kind = TownProps.treeModels[role][if blossom then "blossom" else "green"]
+	local fit = TownProps.treeFit[kind]
+	local yaw, scale = TownProps.jitter(seed)
+	local at = base * CFrame.Angles(0, math.rad(yaw), 0)
+	local boost = if kind == "Sakura" then TownProps.sakuraBoost[role] else 1
+	local target = size * fit.factor * boost * scale
+	TownPlacements.add(kind, at, target, fit.fit, placeholder)
+	if kind == "Sakura" and role ~= "planter" then
+		TownProps.petalCarpet(parent, name .. "Petals", base, target * 0.7)
+		if role == "frame" then
+			TownProps.petalFall(parent, name .. "PetalFall", at, target, target / 1.16)
+		end
+	end
+	return placeholder
+end
+
+-- Ring of pastel blooms around a statue pedestal, hiding one warm uplight aimed at the statue.
+function TownProps.statueGarden(parent: Instance, name: string, base: CFrame, first: number): Model
+	local garden = model(parent, name)
+	local ring = TownProps.statueWidth / 2 + 1
+	for index = 1, 10 do
+		local angle = math.rad(index * 36 + 18)
+		TownProps.ball(
+			garden,
+			"Bloom",
+			1.1,
+			base * CFrame.new(math.cos(angle) * ring, 0.45, math.sin(angle) * ring),
+			TownProps.pastel(first + index),
+			materials.plastic,
+			false
+		)
+	end
+	local lamp = TownProps.part(
+		garden,
+		"Uplight",
+		Vector3.new(0.6, 0.3, 0.6),
+		CFrame.lookAt(
+			(base * CFrame.new(0, 0.3, -ring)).Position,
+			(base * CFrame.new(0, 9, 0)).Position
+		),
+		colors.iron,
+		materials.metal,
+		false
+	)
+	lamp.Transparency = 1
+	local light = Instance.new("SpotLight")
+	light.Name = "StatueUplight"
+	light.Face = Enum.NormalId.Front
+	light.Angle = 55
+	light.Range = 22
+	light.Brightness = 2
+	light.Color = colors.light
+	light.Enabled = false
+	light.Parent = lamp
+	NightLights.add(light, nil, nil)
+	return garden
 end
 
 return TownProps

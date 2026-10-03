@@ -269,6 +269,21 @@ local function node(class)
 		self.pivot = cf
 		self.Position = cf.Position
 	end
+	function object:Clone()
+		local copy = node(self.ClassName)
+		for key, value in pairs(self) do
+			if type(value) ~= "function" and key ~= "_children" and key ~= "_parent" and key ~= "attrs" and key ~= "Destroying" and key ~= "MouseClick" then
+				rawset(copy, key, value)
+			end
+		end
+		for key, value in pairs(self.attrs) do
+			copy.attrs[key] = value
+		end
+		for _, child in children(self) do
+			child:Clone().Parent = copy
+		end
+		return copy
+	end
 	function object:GetChildren()
 		return table.clone(children(self))
 	end
@@ -353,6 +368,16 @@ Engine.Color3 = {
 			bit32.band(bit32.rshift(value, 8), 255),
 			bit32.band(value, 255)
 		)
+	end,
+}
+Engine.NumberRange = {
+	new = function(a, b)
+		return { Min = a, Max = b or a }
+	end,
+}
+Engine.NumberSequence = {
+	new = function(a)
+		return { a }
 	end,
 }
 Engine.UDim = {

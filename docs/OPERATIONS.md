@@ -165,6 +165,10 @@ Run that script from the client Command Bar on each screen. These engine checks 
     rejoin and verify the repaired result remains while Coins, inventory, discoveries, Display,
     goals and collection completion are unchanged. Repeat with two clients for owner isolation.
 
+14. **Town models:** in Play, confirm all 52 trees and 4 statues swap from parts to the sculpted
+    models within a few seconds (`ServerStorage.TownModels` shows `<Kind>Status = Ready`), petals
+    drift from the 8 framing sakura, statue uplights turn on at dusk, and frame rate holds on a phone.
+
 ## Persistence guarantees and limits
 
 Native UpdateAsync callbacks validate before writing and do not yield, following [Roblox's

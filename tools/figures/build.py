@@ -10,6 +10,9 @@ Usage (from the repository root):
 mode: preview (default, fast contact sheet in build/figures/<collection>/preview/) or final
       (meshes, .blend, GLB, validation, renders). lineup renders every figure in the collection
       side by side from their production .blend files.
+
+FIG_ASSETS=<folder under assets/> builds models kept elsewhere, e.g. FIG_ASSETS=models for the
+town props in assets/models/<collection>/figures.py. The default is figures.
 """
 
 import json
@@ -450,7 +453,7 @@ def main():
         raise SystemExit("usage: build.py -- <collection> <figure|lineup> [preview|final]")
     collection, slug = argv[0], argv[1]
     mode = argv[2] if len(argv) > 2 else "preview"
-    ROOT = os.path.join(REPO, "assets", "figures", collection)
+    ROOT = os.path.join(REPO, "assets", os.environ.get("FIG_ASSETS", "figures"), collection)
     PREVIEW = os.path.join(REPO, "build", "figures", collection, "preview")
     os.makedirs(PREVIEW, exist_ok=True)
     sys.path.insert(0, ROOT)

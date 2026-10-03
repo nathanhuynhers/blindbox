@@ -41,8 +41,8 @@ schema-6 profiles without another reset. Existing lease/retry/storage-failure pr
 
 The world is **Blindbox Town**, a cozy blind-box shopping town (no stores or shop buildings):
 eight open plots ring a paved plaza with a giant opening blind box, joined by direct paths and
-crossed by the cobbled Market Street ring with lanterns. Gift-box stacks and statue gardens fill the
-gaps between plots, and a hedge and tree line wrap the island. Players spawn on their own plot;
+crossed by the cobbled Market Street ring with lanterns. Gift-box stacks and marble statues of Peeka, the town mascot, fill the
+gaps between plots, sculpted sakura and green trees line the town, and a hedge wraps the island. Players spawn on their own plot;
 each active plot has a walk-through `<DisplayName>'s Showroom` arch, potted plants, striped
 Display/Shelves awnings and a spawn pad, all in one shared pastel-pink accent. A 20-minute
 day/night cycle switches lanterns and plot lights on at dusk and strengthens the existing Display

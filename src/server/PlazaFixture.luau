@@ -266,7 +266,8 @@ function Plaza.create(parent: Instance): Built
 				model,
 				"Planter_" .. gap,
 				Geometry.polarTransform(degrees, plaza.furnitureRadius, plaza.surfaceTop),
-				gap % 4 == 0
+				gap % 4 == 0,
+				300 + gap
 			)
 		elseif kind == "Leaderboard" then
 			board = LeaderboardBoard.create(

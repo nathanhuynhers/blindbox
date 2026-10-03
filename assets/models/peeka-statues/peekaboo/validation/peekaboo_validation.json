@@ -1,0 +1,409 @@
+{
+  "figure": "PeekaPeekaboo",
+  "title": "Peeka",
+  "rarity": "Mascot",
+  "size_xyz_studs": [
+    3.0503,
+    3.0504,
+    4.0281
+  ],
+  "meshes": 17,
+  "triangles": 62190,
+  "materials": [
+    "Pedestal_Cream",
+    "PeekaPeekaboo_Carve",
+    "PeekaPeekaboo_CarveCheek",
+    "PeekaPeekaboo_CarveMouth",
+    "PeekaPeekaboo_CarveNose",
+    "PeekaPeekaboo_CarveShine",
+    "PeekaPeekaboo_Gold",
+    "PeekaPeekaboo_GoldDots",
+    "PeekaPeekaboo_GoldMark",
+    "PeekaPeekaboo_Marble",
+    "PeekaPeekaboo_MarbleBox",
+    "PeekaPeekaboo_MarbleLid",
+    "PeekaPeekaboo_MarbleShade"
+  ],
+  "components": {
+    "PeekaPeekaboo_Head": {
+      "tris": 16000,
+      "verts": 8002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.97774
+    },
+    "PeekaPeekaboo_InnerEars": {
+      "tris": 2400,
+      "verts": 1204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01103
+    },
+    "PeekaPeekaboo_Paws": {
+      "tris": 3000,
+      "verts": 1504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04248
+    },
+    "PeekaPeekaboo_Box": {
+      "tris": 9000,
+      "verts": 4502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.95286
+    },
+    "PeekaPeekaboo_BoxRibbon": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.23919
+    },
+    "PeekaPeekaboo_BoxMarks": {
+      "tris": 4000,
+      "verts": 2016,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04196
+    },
+    "PeekaPeekaboo_BoxDots": {
+      "tris": 2998,
+      "verts": 1547,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.02556
+    },
+    "PeekaPeekaboo_Lid": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09891
+    },
+    "PeekaPeekaboo_LidRibbon": {
+      "tris": 2600,
+      "verts": 1296,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03675
+    },
+    "PeekaPeekaboo_Bow": {
+      "tris": 3998,
+      "verts": 2001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01922
+    },
+    "PeekaPeekaboo_Eyes": {
+      "tris": 1398,
+      "verts": 703,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00713
+    },
+    "PeekaPeekaboo_EyeShine": {
+      "tris": 500,
+      "verts": 258,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0003
+    },
+    "PeekaPeekaboo_Cheeks": {
+      "tris": 900,
+      "verts": 454,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00263
+    },
+    "PeekaPeekaboo_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00021
+    },
+    "PeekaPeekaboo_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00032
+    },
+    "Pedestal_Stone": {
+      "tris": 4996,
+      "verts": 2500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.20347
+    },
+    "Pedestal_Band": {
+      "tris": 1600,
+      "verts": 804,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.55252
+    }
+  },
+  "build": {
+    "PeekaPeekaboo_Head": {
+      "active_blocks": 7282,
+      "blocks": 27232,
+      "grid": [
+        257,
+        185,
+        297
+      ],
+      "raw_tris": 332328,
+      "removed_faces": 0,
+      "seconds": 21.5
+    },
+    "PeekaPeekaboo_InnerEars": {
+      "active_blocks": 2035,
+      "blocks": 22550,
+      "grid": [
+        441,
+        81,
+        329
+      ],
+      "raw_tris": 64604,
+      "removed_faces": 0,
+      "seconds": 4.7
+    },
+    "PeekaPeekaboo_Paws": {
+      "active_blocks": 1466,
+      "blocks": 4290,
+      "grid": [
+        241,
+        105,
+        89
+      ],
+      "raw_tris": 63152,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "PeekaPeekaboo_Box": {
+      "active_blocks": 6762,
+      "blocks": 9196,
+      "grid": [
+        177,
+        177,
+        153
+      ],
+      "raw_tris": 262156,
+      "removed_faces": 0,
+      "seconds": 5.6
+    },
+    "PeekaPeekaboo_BoxRibbon": {
+      "active_blocks": 10091,
+      "blocks": 14400,
+      "grid": [
+        321,
+        321,
+        73
+      ],
+      "raw_tris": 386268,
+      "removed_faces": 0,
+      "seconds": 9.6
+    },
+    "PeekaPeekaboo_BoxMarks": {
+      "active_blocks": 5220,
+      "blocks": 52900,
+      "grid": [
+        369,
+        369,
+        201
+      ],
+      "raw_tris": 164220,
+      "removed_faces": 0,
+      "seconds": 8.7
+    },
+    "PeekaPeekaboo_BoxDots": {
+      "active_blocks": 5433,
+      "blocks": 71944,
+      "grid": [
+        369,
+        369,
+        273
+      ],
+      "raw_tris": 150992,
+      "removed_faces": 0,
+      "seconds": 8.1
+    },
+    "PeekaPeekaboo_Lid": {
+      "active_blocks": 1412,
+      "blocks": 3179,
+      "grid": [
+        137,
+        137,
+        89
+      ],
+      "raw_tris": 63456,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "PeekaPeekaboo_LidRibbon": {
+      "active_blocks": 2653,
+      "blocks": 10400,
+      "grid": [
+        209,
+        201,
+        129
+      ],
+      "raw_tris": 133132,
+      "removed_faces": 0,
+      "seconds": 4.5
+    },
+    "PeekaPeekaboo_Bow": {
+      "active_blocks": 1587,
+      "blocks": 6840,
+      "grid": [
+        193,
+        121,
+        153
+      ],
+      "raw_tris": 75576,
+      "removed_faces": 0,
+      "seconds": 7.6
+    },
+    "PeekaPeekaboo_Eyes": {
+      "active_blocks": 1026,
+      "blocks": 4212,
+      "grid": [
+        217,
+        97,
+        105
+      ],
+      "raw_tris": 36336,
+      "removed_faces": 0,
+      "seconds": 0.9
+    },
+    "PeekaPeekaboo_EyeShine": {
+      "active_blocks": 530,
+      "blocks": 4836,
+      "grid": [
+        249,
+        97,
+        105
+      ],
+      "raw_tris": 8840,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "PeekaPeekaboo_Cheeks": {
+      "active_blocks": 817,
+      "blocks": 5291,
+      "grid": [
+        297,
+        105,
+        89
+      ],
+      "raw_tris": 20816,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "PeekaPeekaboo_Nose": {
+      "active_blocks": 215,
+      "blocks": 1210,
+      "grid": [
+        89,
+        81,
+        89
+      ],
+      "raw_tris": 4072,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "PeekaPeekaboo_Mouth": {
+      "active_blocks": 345,
+      "blocks": 1980,
+      "grid": [
+        121,
+        97,
+        89
+      ],
+      "raw_tris": 8596,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "Pedestal_Stone": {
+      "active_blocks": 4712,
+      "blocks": 6300,
+      "grid": [
+        241,
+        241,
+        57
+      ],
+      "raw_tris": 207388,
+      "removed_faces": 0,
+      "seconds": 5.1
+    },
+    "Pedestal_Band": {
+      "active_blocks": 12924,
+      "blocks": 20412,
+      "grid": [
+        433,
+        433,
+        57
+      ],
+      "raw_tris": 976424,
+      "removed_faces": 0,
+      "seconds": 18.1
+    }
+  },
+  "glb": {
+    "bytes": 1393616,
+    "nodes": [
+      "Pedestal_Band",
+      "Pedestal_Stone",
+      "PeekaPeekaboo_Bow",
+      "PeekaPeekaboo_Box",
+      "PeekaPeekaboo_BoxDots",
+      "PeekaPeekaboo_BoxMarks",
+      "PeekaPeekaboo_BoxRibbon",
+      "PeekaPeekaboo_Cheeks",
+      "PeekaPeekaboo_Eyes",
+      "PeekaPeekaboo_EyeShine",
+      "PeekaPeekaboo_Head",
+      "PeekaPeekaboo_InnerEars",
+      "PeekaPeekaboo_Lid",
+      "PeekaPeekaboo_LidRibbon",
+      "PeekaPeekaboo_Mouth",
+      "PeekaPeekaboo_Nose",
+      "PeekaPeekaboo_Paws",
+      "PeekaPeekaboo"
+    ],
+    "meshes": 17,
+    "materials": 13,
+    "images": 13,
+    "textures": 13,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": null,
+  "root": "PeekaPeekaboo",
+  "face": "PeekaPeekaboo_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 17,
+    "triangle_mismatches": {}
+  }
+}

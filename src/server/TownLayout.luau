@@ -69,7 +69,7 @@ return table.freeze({
 		flowerBedDiameter = 8,
 		featureRadius = 196,
 		framingTreeRadius = 212,
-		framingTreeOffset = 6.5,
+		framingTreeOffset = 4.5,
 	}),
 	edge = table.freeze({
 		plotStackRadius = 238,

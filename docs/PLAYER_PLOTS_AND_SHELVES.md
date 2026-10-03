@@ -37,12 +37,36 @@ The shared world is **Blindbox Town**, a cozy blind-box shopping town built from
   street (radius 88.5 and 109.5).
 - **Between plots:** each gap has a tree near the street, a flower bed, two framing trees and,
   alternating, a giant gift-box stack (three oversized ribboned pastel boxes plus one tumbled box)
-  or a statue garden (a giant stylized blind-box figure on a two-tier pedestal).
+  or a statue garden: a marble statue of Peeka, the town's original mascot, on a ribbon pedestal
+  ringed by pastel blooms, with an uplight that turns on at dusk.
 - **Edge:** a small gift-box stack behind every plot, a 24-tree line, a continuous 48-segment
   hedge ring (radius 264) and 32 invisible, 60-stud-tall boundary walls just behind it.
 
-Budgets: at most 1,100 static world parts (945 used, including the eight platforms) and 64
-dusk-to-dawn lights (49 static plus one arch glow per active plot, 57 at eight players).
+Budgets: at most 1,100 static world parts (1,021 native parts at start, including the eight
+platforms, petal carpets and statue gardens) and 64 dusk-to-dawn lights (53 static plus one arch
+glow per active plot, 61 at eight players). Once the uploaded models load, the world holds about
+1,190 parts, most of them MeshParts.
+
+### Trees and statues (uploaded models)
+
+Trees and statues are sculpted in Blender with the figure pipeline (`assets/models/town-trees`,
+`assets/models/peeka-statues`) and uploaded as Models. Each spot is first built from native
+parts; `TownModels` loads the uploaded models on the server and `TownPlacements` swaps every
+placeholder for a scaled, turned copy. A failed load keeps the part version.
+
+| Model | Where | Size | Triangles |
+| --- | --- | --- | --- |
+| Sakura (bonsai style, blossom clusters, coral flecks) | all 26 pink trees | canopy 11-41 studs wide (planter, framing, street, outer line) | about 51k |
+| Puffball | 12 green trees by the street and framing gardens | 18-29 studs tall | about 22k |
+| Poplar | 12 green trees on the outer line | 29-36 studs tall | about 15k |
+| Topiary Ball | 2 green plaza planters | 8 studs tall | about 13k |
+| Peeka statues: Peekaboo (mint), Ta-da! (sky), Big Hug (lilac), Nap Time (butter) | the 4 statue gardens | pedestal 12 studs across | 62k-75k each |
+
+Every tree gets its own deterministic turn and a size within 10%. Sakura outside the plaza
+stand on a pink petal carpet, and the 8 sakura framing the gardens drop drifting petals (one
+uploaded petal texture). Trees are sized for regular avatars (about 5 studs tall), and each
+model is sunk slightly so its rounded base sits flush with the grass. Green trees and canopies
+never collide; trunks, stems and statues do.
 
 ### Day and night
 

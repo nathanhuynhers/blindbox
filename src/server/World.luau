@@ -8,6 +8,7 @@ local LeaderboardBoard = require(script.Parent.LeaderboardBoard)
 local NightLights = require(script.Parent.NightLights)
 local PlazaFixture = require(script.Parent.PlazaFixture)
 local PlotFixture = require(script.Parent.PlotFixture)
+local TownPlacements = require(script.Parent.TownPlacements)
 local TownProps = require(script.Parent.TownProps)
 local Style = require(script.Parent.TownStyle)
 local World = {}
@@ -192,12 +193,14 @@ local function createGaps(parent: Instance)
 		local degrees = PlazaFixture.gapDegrees(gap)
 		local model = Instance.new("Model")
 		model.Name = "Gap_" .. gap
-		TownProps.tree(
+		TownProps.townTree(
 			model,
 			"InnerTree",
 			Geometry.polarTransform(degrees, gaps.innerTreeRadius, groundTop),
 			7,
-			gap % 2 == 0
+			gap % 2 == 0,
+			"street",
+			gap
 		)
 		TownProps.flowerBed(
 			model,
@@ -210,15 +213,25 @@ local function createGaps(parent: Instance)
 		if gap % 2 == 1 then
 			TownProps.boxStack(model, "GiftBoxStack", feature, 1, gap)
 		else
-			TownProps.statue(model, "Statue", feature, TownProps.pastel(gap))
+			local statue = TownProps.statue(model, "Statue", feature, TownProps.pastel(gap))
+			TownPlacements.add(
+				TownProps.statueModels[gap // 2],
+				feature,
+				TownProps.statueWidth,
+				"width",
+				statue
+			)
+			TownProps.statueGarden(model, "StatueGarden", feature, gap)
 		end
 		for side, offset in { -gaps.framingTreeOffset, gaps.framingTreeOffset } do
-			TownProps.tree(
+			TownProps.townTree(
 				model,
 				"FramingTree_" .. side,
 				Geometry.polarTransform(degrees + offset, gaps.framingTreeRadius, groundTop),
 				11,
-				side == 1
+				side == 1,
+				"frame",
+				100 + gap * 2 + side
 			)
 		end
 		model.Parent = parent
@@ -238,12 +251,14 @@ local function createEdge(parent: Instance)
 			index + 2
 		)
 		for side, offset in edge.treeOffsets do
-			TownProps.tree(
+			TownProps.townTree(
 				model,
 				string.format("EdgeTree_%d_%d", index, side),
 				Geometry.polarTransform(degrees + offset, edge.treeRadius, groundTop),
 				if side == 3 then 15 else 12,
-				(index + side) % 2 == 0
+				(index + side) % 2 == 0,
+				"edge",
+				200 + index * 3 + side
 			)
 		end
 	end
@@ -289,6 +304,7 @@ end
 function World.create(): Built
 	local root = Instance.new("Folder")
 	root.Name = "MainWorld"
+	TownPlacements.clear()
 	hideLegacyBaseplate()
 	createGround(root)
 	local plaza = PlazaFixture.create(root)

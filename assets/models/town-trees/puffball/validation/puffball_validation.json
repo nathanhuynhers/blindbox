@@ -1,0 +1,104 @@
+{
+  "figure": "Puffball",
+  "title": "Puffball",
+  "rarity": "Decor",
+  "size_xyz_studs": [
+    3.0201,
+    2.6446,
+    3.624
+  ],
+  "meshes": 3,
+  "triangles": 22010,
+  "materials": [
+    "Puffball_Bark",
+    "Puffball_Leaves"
+  ],
+  "components": {
+    "Puffball_Trunk": {
+      "tris": 3998,
+      "verts": 2001,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.28633
+    },
+    "Puffball_CrownCore": {
+      "tris": 9090,
+      "verts": 4495,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.16551
+    },
+    "Puffball_CrownSides": {
+      "tris": 8922,
+      "verts": 4307,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.72209
+    }
+  },
+  "build": {
+    "Puffball_Trunk": {
+      "active_blocks": 2182,
+      "blocks": 6732,
+      "grid": [
+        137,
+        97,
+        265
+      ],
+      "raw_tris": 96408,
+      "removed_faces": 0,
+      "seconds": 17.8
+    },
+    "Puffball_CrownCore": {
+      "active_blocks": 5830,
+      "blocks": 18252,
+      "grid": [
+        217,
+        209,
+        209
+      ],
+      "raw_tris": 688968,
+      "removed_faces": 908,
+      "seconds": 41.7
+    },
+    "Puffball_CrownSides": {
+      "active_blocks": 7151,
+      "blocks": 22496,
+      "grid": [
+        297,
+        257,
+        153
+      ],
+      "raw_tris": 895100,
+      "removed_faces": 1078,
+      "seconds": 50.2
+    }
+  },
+  "glb": {
+    "bytes": 481752,
+    "nodes": [
+      "Puffball_CrownCore",
+      "Puffball_CrownSides",
+      "Puffball_Trunk",
+      "Puffball"
+    ],
+    "meshes": 3,
+    "materials": 2,
+    "images": 2,
+    "textures": 2,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": null,
+  "root": "Puffball",
+  "face": "Puffball_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 3,
+    "triangle_mismatches": {}
+  }
+}

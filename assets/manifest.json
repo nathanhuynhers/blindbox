@@ -1513,6 +1513,169 @@
         "Sanctuary_Mouth",
         "Sanctuary_Blush"
       ]
+    },
+    "town_sakura": {
+      "key": "Models.Town.Sakura",
+      "source": "assets/models/town-trees/sakura/model/sakura_roblox.glb",
+      "displayName": "Blindbox Town - Sakura Tree",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Sakura",
+        "Sakura_CanopyBack",
+        "Sakura_CanopyCrown",
+        "Sakura_CanopyEast",
+        "Sakura_CanopyLow",
+        "Sakura_CanopyWest",
+        "Sakura_RootMound",
+        "Sakura_SpecklesHigh",
+        "Sakura_SpecklesLow",
+        "Sakura_Trunk"
+      ]
+    },
+    "town_puffball": {
+      "key": "Models.Town.Puffball",
+      "source": "assets/models/town-trees/puffball/model/puffball_roblox.glb",
+      "displayName": "Blindbox Town - Puffball Tree",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Puffball",
+        "Puffball_CrownCore",
+        "Puffball_CrownSides",
+        "Puffball_Trunk"
+      ]
+    },
+    "town_poplar": {
+      "key": "Models.Town.Poplar",
+      "source": "assets/models/town-trees/poplar/model/poplar_roblox.glb",
+      "displayName": "Blindbox Town - Poplar Tree",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Poplar",
+        "Poplar_Column",
+        "Poplar_Trunk"
+      ]
+    },
+    "town_topiary": {
+      "key": "Models.Town.Topiary",
+      "source": "assets/models/town-trees/topiary/model/topiary_roblox.glb",
+      "displayName": "Blindbox Town - Topiary Ball",
+      "assetType": "Model",
+      "requiredNodes": [
+        "Topiary",
+        "Topiary_Ball",
+        "Topiary_FlowersPink",
+        "Topiary_FlowersYellow",
+        "Topiary_Stem"
+      ]
+    },
+    "peeka_statue_peekaboo": {
+      "key": "Models.Town.PeekaPeekaboo",
+      "source": "assets/models/peeka-statues/peekaboo/model/peekaboo_roblox.glb",
+      "displayName": "Blindbox Town - Peeka Statue Peekaboo",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PeekaPeekaboo",
+        "Pedestal_Band",
+        "Pedestal_Stone",
+        "PeekaPeekaboo_Bow",
+        "PeekaPeekaboo_Box",
+        "PeekaPeekaboo_BoxDots",
+        "PeekaPeekaboo_BoxMarks",
+        "PeekaPeekaboo_BoxRibbon",
+        "PeekaPeekaboo_Cheeks",
+        "PeekaPeekaboo_EyeShine",
+        "PeekaPeekaboo_Eyes",
+        "PeekaPeekaboo_Head",
+        "PeekaPeekaboo_InnerEars",
+        "PeekaPeekaboo_Lid",
+        "PeekaPeekaboo_LidRibbon",
+        "PeekaPeekaboo_Mouth",
+        "PeekaPeekaboo_Nose",
+        "PeekaPeekaboo_Paws"
+      ]
+    },
+    "peeka_statue_tada": {
+      "key": "Models.Town.PeekaTada",
+      "source": "assets/models/peeka-statues/tada/model/tada_roblox.glb",
+      "displayName": "Blindbox Town - Peeka Statue Ta-da",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PeekaTada",
+        "Pedestal_Band",
+        "Pedestal_Stone",
+        "PeekaTada_Body",
+        "PeekaTada_Box",
+        "PeekaTada_BoxDots",
+        "PeekaTada_BoxMarks",
+        "PeekaTada_BoxRibbon",
+        "PeekaTada_Cheeks",
+        "PeekaTada_EyeShine",
+        "PeekaTada_Eyes",
+        "PeekaTada_Head",
+        "PeekaTada_HeldBow",
+        "PeekaTada_HeldLid",
+        "PeekaTada_HeldLidRibbon",
+        "PeekaTada_InnerEars",
+        "PeekaTada_Mouth",
+        "PeekaTada_Nose"
+      ]
+    },
+    "peeka_statue_hug": {
+      "key": "Models.Town.PeekaHug",
+      "source": "assets/models/peeka-statues/hug/model/hug_roblox.glb",
+      "displayName": "Blindbox Town - Peeka Statue Big Hug",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PeekaHug",
+        "Pedestal_Band",
+        "Pedestal_Stone",
+        "PeekaHug_Body",
+        "PeekaHug_Bow",
+        "PeekaHug_Box",
+        "PeekaHug_BoxMarks",
+        "PeekaHug_BoxRibbon",
+        "PeekaHug_Cheeks",
+        "PeekaHug_EyeShine",
+        "PeekaHug_Eyes",
+        "PeekaHug_FootPads",
+        "PeekaHug_GiftBow",
+        "PeekaHug_Head",
+        "PeekaHug_InnerEars",
+        "PeekaHug_Lid",
+        "PeekaHug_LidRibbon",
+        "PeekaHug_Mouth",
+        "PeekaHug_Nose"
+      ]
+    },
+    "peeka_statue_nap": {
+      "key": "Models.Town.PeekaNap",
+      "source": "assets/models/peeka-statues/nap/model/nap_roblox.glb",
+      "displayName": "Blindbox Town - Peeka Statue Nap Time",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PeekaNap",
+        "Pedestal_Band",
+        "Pedestal_Stone",
+        "PeekaNap_Body",
+        "PeekaNap_Box",
+        "PeekaNap_BoxDots",
+        "PeekaNap_BoxMarks",
+        "PeekaNap_BoxRibbon",
+        "PeekaNap_Cheeks",
+        "PeekaNap_Eyes",
+        "PeekaNap_Head",
+        "PeekaNap_Lid",
+        "PeekaNap_LidRibbon",
+        "PeekaNap_Mouth",
+        "PeekaNap_Nose",
+        "PeekaNap_Snores"
+      ]
+    },
+    "town_sakura_petal": {
+      "key": "Town.SakuraPetal",
+      "source": "assets/models/town-trees/sakura_petal.png",
+      "displayName": "Blindbox Town - Sakura Petal",
+      "assetType": "Image"
     }
   }
 }
