@@ -1,7 +1,7 @@
 # Collection economy
 
-Implemented on `codex/economy-redesign`; native Studio acceptance remains pending.
-The [redesign plan](RARITY_ECONOMY_REDESIGN.md) records the discussion. This document and the
+Implemented and merged into `master`; native Studio acceptance remains pending. The historical
+[redesign plan](archive/RARITY_ECONOMY_REDESIGN.md) records the discussion. This document and the
 server configuration are the current tuning reference. All prices, grants, odds, owned quantities,
 pity and income calculations remain server-owned.
 
@@ -125,12 +125,12 @@ clock-rollback, storage-failure and session-exclusion rules remain. See [data mo
 ## Fresh-save rollout and verification
 
 The user explicitly requested a full progression reset. The new stores are
-`BlindBox_Economy2_Studio` and `BlindBox_Economy2_Live`, now with schema 7. No old Coins, Scrap,
+`BlindBox_Economy2_Studio` and `BlindBox_Economy2_Live`, now with schema 8. No old Coins, Scrap,
 figures, discoveries, shelves or progress are imported. Old stores are untouched rollback backups;
 no live store was deleted or published by this implementation. Unexpected old or corrupt data in
 the new namespace fails closed rather than becoming a fresh profile. Valid schema-6 Economy2
-profiles upgrade to schema 7 with empty banks and all other progress preserved; this follow-up
-does not perform another reset.
+profiles upgrade with empty earnings banks; valid schema-7 profiles retain their banks. Both
+upgrade to schema 8 with `boxesOpened = 0`; schemas 1–5 remain rejected.
 
 The verification record below captures automated checks and simulation assumptions. Native Studio,
 real save/rejoin and multi-client playtests remain required.

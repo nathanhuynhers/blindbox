@@ -4,11 +4,8 @@
 
 Terminology follows [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md): Display is the
 only Coin-generating placement system; Shelves are cosmetic exhibits on open Player Plots.
-Visitors walk between plots. Players start with three persistent Shelf Units, nine positions each.
-Exactly three structures render the viewport, shifting one owned unit per turn with wrapping.
-Future acquisition adds individual units. Acquisition and pricing remain unassigned,
-with no product-design maximum, product, price, curve or purchase UI implemented. Collection-completion
-rewards are also TBD. The existing slot-4 Coin unlock is retained; slot 5/6 acquisition is open.
+That document is the sole source for Shelf capacity, viewport behavior, future acquisition and
+unresolved collection-completion rewards. Display slots 4–6 currently unlock sequentially with Coins.
 Every paid mechanic below is an unapproved idea, not current behavior or permission to build it.
 
 ## Monetization Philosophy
@@ -21,7 +18,8 @@ The goal is not to sell players a way to skip the game. Purchases should general
 
 A purchase like an 8x coin multiplier is useful because it lets a committed player open more boxes and chase more collectibles. A purchase that instantly completes a collection would undermine the reason to keep playing.
 
-The current two collections are intentionally easy and are not representative of the eventual economy. As the game grows, later collections should contain more expensive boxes and meaningful chase items, including approximately 1%, 0.1%, and potentially rarer prestige collectibles.
+The current five collections span starter through prestige tiers. Future collections may add
+different pacing or chase goals only after separate economy and product review.
 
 ---
 
@@ -142,8 +140,8 @@ each persistent unit. Acquisition method and pricing remain unresolved; this ide
 no curve, price, product ID or product-design maximum.
 
 Potential Display cosmetics include pedestal/trim skins and subtle effects. The current cap
-is six economic slots, starting with three; retain the existing fourth-slot Coin purchase.
-Slots five and six need a later acquisition decision. Extra earning capacity requires a
+is six economic slots, starting with three; slots 4–6 use the implemented sequential Coin unlocks.
+Any extra earning capacity beyond that requires a
 separate economy/fairness review.
 
 Plot and shelf visual themes may become future expression options visible to walking visitors.
@@ -414,7 +412,7 @@ The economy must remain enjoyable for free players while giving paying players m
 - Whether Auto Open should be premium
 - How pity interacts with paid Luck
 - Whether Shiny odds can be modified by Luck
-- How duplicates are consumed or converted
+- Whether any future duplicate sink should exist without undoing permanent duplicate income
 - Whether VIP includes economic bonuses
 - What the first premium shelf theme should be
 - When Pocket Pass becomes viable
@@ -424,8 +422,8 @@ The economy must remain enjoyable for free players while giving paying players m
 
 ## Current Direction
 
-The current prototype only has two relatively easy collections. That is acceptable for development and testing.
-
-The immediate goal is **not** to make those collections artificially grindy. The long-term goal is to build scalable systems so future collections can introduce increasingly expensive boxes, meaningful 1% and 0.1% chase items, Secrets, variants, mastery, and other long-term goals.
+The current game has five collections across four economic tiers. The immediate goal is **not**
+to make existing collections artificially grindy. Future collections can add new price bands,
+chase items, variants or mastery only after their own design and balance review.
 
 Monetization should become more compelling naturally as the collection ecosystem gains depth.

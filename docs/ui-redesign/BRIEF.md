@@ -1,9 +1,8 @@
 # UI redesign brief
 
-Status: **approved direction, not implemented.** Branch `claude/ui-redesign`, worktree
-`C:\Users\natha\Documents\RobloxWorkspace-ui`. This brief plus the mockup is the spec for one
-all-at-once client UI rebuild. It does not authorize server, economy, persistence or opening-animation
-changes.
+Status: **implemented and merged into `master`.** This brief plus the mockup records the approved
+design direction for the client UI rebuild. It does not authorize unrelated server, economy,
+persistence or opening-animation changes.
 
 - Live mockup (canvas, clickable): https://claude.ai/artifact/4xaQzngCkP1ooNz6E7oyWT
 - Mockup source: [mockup/](mockup/) — one `.dc.html` per screen. Inline styles carry the exact
@@ -33,8 +32,8 @@ visible and one obvious next action on every screen.
 | Navigation | Bottom dock on desktop **and** phone; stays visible while a screen is open; active item highlighted |
 | Collection theming | Accent color + emblem/icon only. Drop book skins, corner art and shop pattern art from the UI |
 | Goals reset | Live countdown ("New goals in 5h 12m") from the server's `nextDay`, updated at most once per minute and only while visible |
-| Scrap | Removed from the UI entirely: no Scrap pill, no Recycle, no Redeem, no client sends of `Recycle`/`Redeem`. Server-side removal happens on another branch: do not touch server Scrap code here |
-| Duplicates | Show owned count (×3). Duplicate income boosting is being built on another branch: do not design numbers for it here |
+| Scrap | Removed entirely: no Scrap pill, Recycle, Redeem or related client intents |
+| Duplicates | Show owned count (×3); income boosting values come from the merged authoritative economy |
 | Phone | Landscape only |
 | Rollout | Everything in one pass, then one round of Studio testing |
 
@@ -122,19 +121,17 @@ border) and still explain why ("Need 1,240 more").
   and Close) with an icon-only collection rail; dock hidden while a sheet is open on short
   landscape, Close restores it.
 
-## Merge-readiness with the economy branch
+## Economy integration
 
-A parallel branch (`codex/economy-redesign`, see [RARITY_ECONOMY_REDESIGN.md](../RARITY_ECONOMY_REDESIGN.md))
-will change the snapshot: `scrap`/`price`/`redeemCost` go away, and `prices` (per collection),
-`baseRates`, `nextRates`, `baseOdds` and `dailyCollection` arrive. Rates scale into
-thousands/millions, the set bonus becomes a percentage, and Display becomes one placement per unique figure.
-So:
+The merged economy supplies per-collection `prices`, `baseRates`, `nextRates`, `baseOdds` and
+`dailyCollection`; Scrap, redemption and their old snapshot fields are removed. Rates scale into
+thousands/millions, the set bonus is percentage-based, and Display permits one placement per
+unique figure. Therefore:
 
 - Read price, odds, per-figure rate, set bonus and free-box options through **one** projection
   module (e.g. `UIState`), never directly from screens. The merge should then touch that module only.
 - Size every number field for large abbreviated values (`2.4M`).
-- Don't add pity/luck UI yet (no data on master). Leave room under Drop odds for a later
-  "current vs base chance" row.
+- Show current versus base odds from the authoritative snapshot without exposing private pity counters.
 
 ## Engineering constraints
 

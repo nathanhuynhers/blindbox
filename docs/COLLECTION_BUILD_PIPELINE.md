@@ -164,7 +164,7 @@ Also add collection if needed:
 | **Asset pipeline** | [ASSET_PIPELINE.md](ASSET_PIPELINE.md) |
 | **Economy & rates** | [ECONOMY.md](ECONOMY.md) |
 | **Rarity hierarchy** | [RARITY.md](RARITY.md) |
-| **Shop UI** | [SHOP_UI.md](SHOP_UI.md) |
+| **Shop UI** | [UI redesign implementation](ui-redesign/IMPLEMENTATION.md) |
 | **Runtime figure loading** | `src/server/ModelAssets.luau`, `src/shared/FigureModel.luau` |
 
 ---

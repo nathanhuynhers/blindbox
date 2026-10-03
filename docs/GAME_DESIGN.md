@@ -1,7 +1,7 @@
 # Blind Box game design
 
 Current direction is [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
-The accepted [historical MVP](MVP.md) established the core loop; the current candidate still needs
+The accepted [historical MVP](archive/MVP.md) established the core loop; the current candidate still needs
 native Studio, storage and multiplayer acceptance. Collection rewards and final art remain TBD.
 
 Open boxes, discover original collectibles, choose active Display earners, earn Coins, collect
@@ -23,21 +23,14 @@ Once either editor is open, a living owner can edit their Display and Shelves fr
 inside their own plot; the server rejects edits from outside it. Future paid auto-collect is not implemented.
 See [economy](ECONOMY.md) for exact formulas and tuning.
 
-Shelves use owned figures cosmetically. A figure may appear across all Shelf Units no more times
-than the number of copies owned; Display placement is an independent earning reference and does
-not reduce this Shelf allowance. Players start with three persistent
-Shelf Units, each with three rows of three positions (nine per unit, 27 starting positions).
-Exactly three physical structures show the viewport; each turn shifts one owned unit and wraps.
-Navigation is disabled with three owned units. Visitors may browse but cannot edit. Future
-acquisition adds individual units without growing the plot. No product-design maximum exists;
-acquisition/pricing and shelf customization are future work. Completion grants no new
-reward: rewards are unresolved.
+For canonical Shelf capacity, viewport, owned-copy placement and unresolved completion rewards,
+see [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 
 Scrap, recycling and redemption are removed. New profiles start with 4,500 Coins and fully random
 starter purchases. One free Starter box and the 1,000-Coin daily Display goal retain UTC rules.
-The authorized economy reset starts schema-6 profiles in new save namespaces; no old progress
-is imported. Manual collection advances the current schema to 7, safely upgrading valid Economy2
-schema-6 profiles without another reset. Existing lease/retry/storage-failure protection remains.
+The authorized economy reset uses the Economy2 namespaces; no old-namespace progress is imported.
+Current schema 8 safely upgrades valid Economy2 schemas 6 and 7, while schemas 1–5 are rejected.
+Existing lease/retry/storage-failure protection remains.
 
 The world is **Blindbox Town**, a cozy blind-box shopping town (no stores or shop buildings):
 eight open plots ring a paved plaza with a giant opening blind box, joined by direct paths and
@@ -50,4 +43,4 @@ and Shelf fixture washes until dawn. A global plaza leaderboard rotates
 Most Figures, Top Coins/sec and Most Boxes Opened; it is presentation only and grants nothing.
 The center/right of each plot stays open. Collections and Shop retain their existing UI/art. There
 is no active Showroom, Gallery, interior visit flow, teleport browser, paid product, trading
-system, free placement or new completion reward. See [scope](FULL_GAME.md) and [operations](OPERATIONS.md).
+system, free placement or new completion reward. See [operations](OPERATIONS.md).

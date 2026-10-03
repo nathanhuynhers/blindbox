@@ -1,9 +1,8 @@
 # UI redesign: implementation
 
-Status: **implemented on `claude/ui-redesign`; Studio acceptance not yet run.** The design source
+Status: **implemented and merged into `master`; remaining Studio acceptance is listed below.** The design source
 is [BRIEF.md](BRIEF.md) and the [mockup](mockup/). This file maps the code and lists the Studio
-checks. It replaces the implementation sections of the older UI docs (UI_UX, NAVIGATION_UI,
-SHOP_UI, COLLECTION_UI, SYSTEM_SCREENS_UI).
+checks. It consolidates the useful implementation notes from the retired screen-specific UI docs.
 
 The UI work itself changed no server, shared economy, Protocol, persistence or Types code;
 those came from the merged economy redesign. The client sends no `Recycle`, `Redeem` or

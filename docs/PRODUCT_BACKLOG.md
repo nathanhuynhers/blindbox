@@ -173,3 +173,12 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 - Avoid turning the game into a generic exponential-upgrade simulator.
 - New systems should strengthen collecting, expression, anticipation, or social pride.
 - Keep all characters, collections, packaging, and visual identity original rather than copying real blind-box IP.
+
+## Current opening and onboarding implementation notes
+
+- First-session hints guide free box → Display → collect → Shelves → buy. They are session-only,
+  snapshot-driven, non-blocking, skippable, and do not appear for players who already own a
+  figure; broader tutorial persistence remains backlog work.
+- Open 10 uses one highest-rarity tease followed by ten ordered confirmed reveals. Skip-all and
+  reset/death recovery do not reroll or regrant. A final pull summary shows all ten figures and
+  first-discovery NEW marks.

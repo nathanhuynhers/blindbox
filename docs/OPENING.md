@@ -34,6 +34,7 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 | OpeningFallbackBox | Existing procedural emergency carton |
 | OpeningFigure | Existing FigureModel factory, normalized awarded model and reversible silhouette treatment on its own instance |
 | OpeningView | Safe-area UI only: transition curtain, Tap to Open, Skip, hint; the Result panel is the `RevealCard` (see [ui-redesign/IMPLEMENTATION.md](ui-redesign/IMPLEMENTATION.md)) |
+| PullSummary | Presentation-only Open 10 results grid; shows every confirmed figure and first-discovery NEW state, owns focus/cleanup and sends no intents |
 | OpeningAudioConfig | Approved asset slots, seven logical groups, cue gains/priorities/fades, modulation curves and explicit fallbacks |
 | OpeningAudioSequence | Phase/marker cue decisions, rarity rhythms, ducking, intentional silence and once-only reveal/NEW |
 | OpeningAudio | Session-owned non-positional Sound layers, mix envelopes, load deadlines, bounded voices and teardown |
@@ -49,6 +50,24 @@ Only the purchasing player's gameplay UI is suppressed through the existing `ope
 callback. ContextActionService sinks movement/jump, clears current movement and owns opening
 inputs. No character anchoring, server teleport, PlayerModule replacement or world Lighting
 property mutation is introduced.
+
+## Open 10 and pull summary
+
+A successful `BuyTen` reply is converted from the before/after authoritative snapshots into one
+box-only opening and ten ordered figure reveals. The first step teases the highest rarity present
+without revealing an outcome; the following direct reveals use the server-confirmed roll order.
+Within the batch, only the first occurrence of a newly discovered figure receives NEW status.
+
+Each result closes fully before the next opens under the transition curtain. During a direct
+reveal, tapping outside the choices advances; the final card says **See all results**. Skip during
+the sequence clears all remaining reveals rather than granting or rerolling anything. If reset or
+death cancels a step, the client resumes the remaining confirmed sequence and still reaches the
+summary. Reveal choices never trigger another Open 10 purchase.
+
+After the last reveal—or immediately after skip-all—`PullSummary` shows all ten figures in a
+responsive grid, marks first discoveries and closes with Done. It is presentation only: the
+snapshot already owns every grant, the summary cannot navigate or send an intent, and its scope,
+focus and GUI are destroyed on close or client teardown.
 
 ## Sequence and pacing
 
@@ -467,8 +486,8 @@ After current Rojo sync or opening the rebuilt place, start Play and paste
 `tests/StudioOpening.client.luau` into the **client Command Bar**. It asserts Studio context,
 is not included in the production Rojo mapping, sends no remotes and grants/spends nothing.
 
-The scrolling launcher provides all six collection/rarity combinations, a NEW/duplicate toggle,
-reduced motion, a catalog-ID input for every existing figure, redemption, and an automatic Skip
+The scrolling launcher provides all collection/rarity combinations, a NEW/duplicate toggle,
+reduced motion, a catalog-ID input for every existing figure, direct acquisition, and an automatic Skip
 test that cycles through every skippable phase, plus **Rarity hold**, **Dive** (90% of tease)
 and **Impact peak** (0.08s into impact). Choose Skip mode before launching. Those delayed fixture
 checks are bound to that exact opening/phase and canceled on fixture exit. The native
@@ -606,7 +625,7 @@ Lifecycle correction validation: the original 532 controller/camera and 2,911 st
 still pass. `OpeningResources.spec.luau` adds real-module resource regression coverage: ten full
 normal and ten reduced openings; per-phase Skip/cancel; production nameplate and dynamic-descendant
 retirement; stale phase draws/cues; old signals/tasks forced into a successor; asset failure and
-fallback upgrade; direct redemption; GUI/respawn interruption; held Result and Continue cleanup.
+fallback upgrade; direct acquisition; GUI/respawn interruption; held Result and Continue cleanup.
 Only engine primitives and the figure asset factory are doubled; Roblox rendering is not.
 The pre-fix modules fail the nameplate-retirement assertion. Full standalone Luau suites, all 21
 Python asset tests, pinned formatting/lint, source Luau LSP analysis, Rojo sourcemap/build and the
@@ -675,8 +694,8 @@ Five-tier implementation files (some also contain the preceding flight-polish ch
 - Tests: added `tests/Rarity.spec.luau`; updated `Opening.spec.luau`, `OpeningEngine.luau`,
   `OpeningLifecycle.spec.luau`, `OpeningResources.spec.luau`, `StudioOpening.client.luau` and
   `run.py`. Prior `OpeningFlight.spec.luau` and `OpeningVisualEngine.luau` regressions remain.
-- Documentation: added `docs/RARITY.md`; updated this file, `ARCHITECTURE.md`, `DATA_MODEL.md`,
-  `ECONOMY.md`, `GAME_DESIGN.md`, `MVP.md`, `COLLECTION_UI.md` and `SHOP_UI.md`.
+- Documentation: added `docs/RARITY.md`; the current architecture, economy, game-design and
+  archived historical-scope documents carry the supporting rarity notes.
 
 Existing figure rarities, rates and weights are protected by golden assertions. No high-tier
 content, fake production grant, live odds or sound asset was added. Studio recordings, subjective

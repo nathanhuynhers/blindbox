@@ -83,7 +83,7 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names change as described above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-7 snapshots enter the acquisition/save path (valid schema 6 is upgraded first).
+schema-8 snapshots enter the acquisition/save path (valid schemas 6 and 7 are upgraded first).
 Wallet and banks save atomically in one aggregate. Acknowledgements mean in-memory success; crash rollback affects the
 entire last saved aggregate. No offline income. See [operations](OPERATIONS.md).
 

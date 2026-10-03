@@ -1,428 +1,89 @@
 # Player Plot, Shelf Units and Collection implementation
 
-Implemented September 27, 2026. Current schema is **5**. This report covers the correction to
-individually persistent Shelf Units and a three-shelf viewport. It supersedes the earlier v4
-Shelf Page implementation report. Native Studio acceptance has **not** been run by the agent.
-See [canonical design](PLAYER_PLOTS_AND_SHELVES.md) and [data model](DATA_MODEL.md).
-
-**October 2 owned-copy/lighting update:** Current Shelf placement is limited to owned copies
-across every persistent unit; older discovery-only statements below are superseded. Profile
-decode keeps the earliest allowed unit/slot placements and clears only unowned/excess entries.
-The existing one-Display and nine-Shelf wash lights per plot now increase brightness at dusk and
-restore their original values at dawn through one plot-owned `NightLights` controller. No actual
-lights, listeners or per-frame work were added. Automated and native Studio property checks pass;
-subjective 3D lighting quality, mobile and multiplayer acceptance remain pending.
-
-### Native Studio MCP verification (October 3, 2026)
-
-The freshly generated `RobloxWorkspace.rbxlx` was opened in a separate Studio instance and
-verified in Play mode through the Roblox Studio MCP. Fifty-one server-side checks over real
-Roblox Instances passed: the active plot contained one Display wash and nine Shelf washes;
-dusk/day values changed to 1.25/0.9 and returned to 0.65/0.35; the transition created no lights;
-the registry remained at 50 actual dusk lights and one controller for one active plot; a plot
-created during night initialized correctly; six-slot Display resizing and four-unit carousel
-rendering reused every light; and temporary plot destruction returned both registry counts and
-removed all temporary washes.
-
-Twenty-eight native server-domain checks also passed for zero/one/two copies, an offscreen fourth
-unit, removal, atomic swap, failed-swap immutability, non-owner/distance/hidden/stale/forged
-requests, deterministic profile repair, idempotent encode/decode and receipt replay. In the real
-Shelf screen, a temporary client-only snapshot rendered an exhausted owned figure as
-`Selectable=false` and an available figure as `Selectable=true`; the normal empty-inventory
-screen retained the existing layout and Shop route. The temporary snapshot did not mutate or
-save the player's profile.
-
-Before test-runner injection, Studio Output contained no gameplay error; the only message was the
-existing leaderboard DataStore fallback warning. MCP property checks do not establish subjective
-3D lighting quality, representative mobile performance, two-client isolation or an isolated
-DataStore autosave/rejoin. Those acceptance checks remain pending.
-
-## Blindbox Town world redesign (current, October 2, 2026)
-
-This pass replaces the recessed foundation, ivory plaza, plaque entrance and fixed entrance spawn
-described in the older sections below; those sections remain as history. Plot slots, the 170-stud
-ring, plot dimensions, ownership, Display/Collection layout and Shelf behavior are unchanged.
-Current schema is **8** (schema 7 plus `boxesOpened`; see [data model](DATA_MODEL.md)).
-
-| Area | Implementation |
-| --- | --- |
-| Static world | `World`, `PlazaFixture`, `TownProps`, `TownLayout`, `TownStyle`; 945 of 1,100 budgeted parts |
-| Plots | `PlotFixture` arch + spawn pad + potted plants, `Awning`, `PlotStyle`; 137 of 150 runtime parts per active plot at six Display slots |
-| Spawning | `PlayerSpawn` (own plot), plaza `SpawnLocation` before assignment |
-| Lighting | `DayNight` (20-minute cycle), `NightLights` (49 static + 1 per active plot, budget 64) |
-| Leaderboard | `Leaderboard`, `LeaderboardStore`, `LeaderboardStats`, `LeaderboardBoard`; `Settings.liveLeaderboard`/`studioLeaderboard` |
-
-Key measurements: grass top Y=0.5 (plot platforms rest on it); path tops Y=0.99 (0.01 under the
-plot floor to avoid overlap z-fighting); plaza 1.01/1.03; Market Street curb 1.02 and cobbles
-1.04 with alternate segments 0.005 higher. The arch sign's underside is 9.5 studs above the plot
-floor and its posts' inner faces are 10.5 studs from the path axis. The Display awning's valance
-bottom is local Y=13.6 (sign top 13.3); the Collection valance clears the header by 0.35 studs.
-
-Automated coverage (`tests/Plots.spec.luau`, `tests/Leaderboard.spec.luau`,
-`tests/BoxesOpened.spec.luau`) asserts the world/plot part budgets; that every part is anchored and
-non-touch; that noncollidable decor is non-queryable; that no plaza prop, lantern or gap/edge prop
-corner enters any path corridor, plot footprint or the street; that the street and hedge rings
-have no gaps; the walls; the arch clearance and post placement; the flush noncolliding spawn pad
-and spawn `CFrame`; the awning sizes and stripes; the night-light budget, switching and release;
-leaderboard write throttling/coalescing/backoff/budget handling and last-good reads; the stat
-formulas; the clock mapping; and the v8 counter's increments and migration.
-
-## Eight-plot radial world pass
-
-The current world replaces the rectangular 24-plot grid with eight 100-by-96 plots at 45-degree
-intervals on a 170-stud-radius ring. A 100-stud-diameter circular plaza sits at the origin and one
-16-stud-wide, 73.5-stud-long radial path joins its edge to each centered entrance. Paths and plot
-surfaces meet at Y=1; the plaza top is 0.03 studs higher for clean rendering. The former visible
-rectangular ground/baseplate is absent; a circular warm-neutral foundation sits 1.75 studs below.
-
-`PlotGeometry.transform` is the canonical local-to-world `CFrame`. Local `-Z` faces the origin,
-so the entrance is inward and the rear Display is outward. Platform layers, entrance, Display,
-Collection, figure anchors, carousel controls, hitboxes, interaction bounds and spawn all use the
-same transform. Automated coverage verifies all eight orientations and fixture initializations,
-path endpoints and separation, rotated footprint separation, eighth-slot allocation and ninth-slot
-rejection. Native Studio visual, physics and multi-client acceptance remains pending.
-
-### World finishing pass
-
-The visible foundation is a 527.3-stud-diameter SmoothPlastic cylinder with RGB (190,183,170).
-Its radius is the true rotated outer plot-corner distance plus a 40-stud margin. A legacy
-workspace part named `Baseplate`, when present in an existing Studio place, is made invisible and
-lowered four studs beneath the foundation while retaining failsafe collision.
-The plaza now has only two full disks: a 52.5-stud-radius oak trim with top Y=1.01 and a
-50-stud-radius ivory surface with top Y=1.03. The earlier three disks shared top Y=1, causing
-their overlapping full top faces to z-fight into apparent radial wedges. Paths now pass beneath
-both plaza layers and the entrance decks rather than sharing a visible plane.
-
-Each path has a 16-by-73.5-stud ivory surface at top Y=1 and separate 0.55-stud oak side strips at
-top Y=0.98. Four bollards are derived from each path transform at one-third and two-thirds length,
-9.625 studs to either side of center. Each is 3.8 studs high from the recessed foundation and uses
-four native parts. Its SmoothPlastic lens owns one shadowless RGB (255,225,180) PointLight at
-brightness 0.65 and range 11. No SpawnLocation or center fixture exists in the source/build; the
-former center mark came from the competing plaza/path surfaces.
-
-## Showroom plot platform visual pass
-
-The current floor pass implements the supplied 100-by-96 showroom concept through the dedicated
-`src/server/PlotFixture.luau` builder. It does not alter plot dimensions,
-Display/Collection architecture, progression or persistence. `World` builds one rotated static platform
-for each of eight configured locations. An active `PlayerPlot` creates only its session-owned entrance
-and `<DisplayName>'s Showroom` plaque, which is cleaned up with the player's other runtime content.
-
-The platform keeps its walking surface top exactly at plot-origin Y=1, preserving every existing
-fixture base, figure anchor, character spawn and distance check. From bottom to top it uses a
-0.22-stud warm-white SmoothPlastic base (underside Y=0.5), 0.18-stud
-pale Wood trim and 0.10-stud pale WoodPlanks surface. The outer 100-by-96 silhouette uses two
-overlapping rectangles and four native vertical Cylinder corners with 6-stud radius. The oak
-layer is 96-by-92 and the walking surface 94-by-90, producing quiet off-white and oak borders.
-Four noncolliding 0.07-stud SmoothPlastic strips create the inset warm line without Neon, Bloom or
-actual lights. Each fixed platform uses 12 native Parts: 96 total for all eight plot locations.
-
-The entrance has a 22-by-4.2-by-0.15 oak deck, oak frame/posts, cream SmoothPlastic plaque face and
-two warm-colored noncolliding caps. Its seven physical parts remain entirely inside the front edge
-and below Z=-40 relative to plot center, far from the rear Display and left Collection expansion
-areas. The Front-facing fixed-size SurfaceGui is not always-on-top and uses medium charcoal type.
-The old floating `<DisplayName>'s Plot` billboard was removed rather than duplicated. Colored caps
-and perimeter accents intentionally simulate warm architectural highlights without adding 48
-per-plot lights or a simulator-style emissive boundary.
-
-Exact palette: structural ivory RGB (239,236,228), pale oak (198,165,120), floor (226,203,169),
-warm accent (255,226,174), plaque cream (255,246,222) and charcoal text (48,46,43). The large
-center/right remains empty. No plants, benches, walls, railings, props, external assets, meshes,
-unions, decoration system or per-frame work were added.
-
-Files for this pass: added `src/server/PlotFixture.luau`; modified `src/server/World.luau`,
-`src/server/PlayerPlot.luau`, `tests/PlotEngine.luau`, `tests/Plots.spec.luau`, `tests/run.py`,
-`docs/PLAYER_PLOTS_AND_SHELVES.md`, `docs/ARCHITECTURE.md`, `docs/GAME_DESIGN.md` and this report.
-No files were removed. Schema v5/types/profile/migrations, Shelf domain/configuration/editor,
-Display/Collection fixture construction, economy and plot allocation constants are unchanged.
-
-Automated checks assert all eight indexed platform models, exact layer contact and top plane, bounded
-12-part platform construction, 96-part server floor budget, materials/colors, noncolliding
-non-Neon accents, plot bounds, seven-piece entrance budget, dynamic Showroom copy, physical
-SurfaceGui settings and clear Display/Collection expansion zones. The complete existing domain,
-migration, carousel, Display and Collection regression suites remain active.
-
-Native Studio checks remain required for wood-grain direction/scale, apparent corner seams,
-comfortable 0.5-stud approach and 0.15-stud entrance step, plaque readability with long or filtered
-DisplayNames, camera views, mobile/desktop graphics quality and eight-plot rendering cost. Walk the
-full perimeter and enter from front/sides with multiple clients; verify no snagging at overlapping
-base parts or the plaque posts. Inspect Display capacities 3-6 and all Collection controls/figures
-to confirm they meet the unchanged Y=1 surface and retain unobstructed growth. No native Studio
-playtest is claimed by this report.
-
-## Collection visual pass (current physical presentation)
-
-The subsequent visual pass implements the supplied Collection concept board with the dedicated
-`src/server/CollectionFixture.luau` builder. **Collection** is the physical presentation name;
-persistent Shelf Units and schema v5 remain unchanged. The builder creates three adjoining bays,
-each with oak uprights, a recessed warm back panel, three ivory shelf boards and a charcoal
-plinth. A continuous ivory canopy and pale oak crown join the installation. Construction uses
-56 native Parts plus two invisible hitbox Parts; no mesh, uploaded texture, per-frame loop or
-new dependency is involved. Native visual acceptance remains pending.
-
-The fixture stays at plot-relative X=40 and faces inward along -X. Bay centers are Z=-16/-4/8,
-12 studs apart, with 10.9-stud clear boards and 5-stud depth. The full installation, including
-side wings, spans 44.4 studs along Z and reaches Y=17.05. The center/right and rear Display
-remain undisturbed. Each bay contains nine anchors: three at 3.6-stud spacing on each board,
-with row 1/2/3 surfaces at Y=10/5.8/1.6 above plot origin. Figure scale remains 1; the existing
-renderer now applies its bottom-alignment option to shelves so all figures stand on the boards.
-Display scale, construction and rendering behavior are unchanged.
-
-| Use | Material / exact RGB |
-| --- | --- |
-| Uprights, control panels, crown and sign frame | Wood; oak (198,165,120) |
-| Boards, canopy, bases and control wings | SmoothPlastic; ivory (242,235,220) |
-| Recessed backs | SmoothPlastic; warm panel (235,225,204) |
-| Plinths / sign lettering | SmoothPlastic / text; charcoal (48,46,43) |
-| Header inset | SmoothPlastic; recess (171,143,106) |
-| Header face | SmoothPlastic; cream (255,246,222) |
-| Diffusers / enabled arrow accents | SmoothPlastic; warm ivory (255,237,199) |
-| Disabled arrow accents | SmoothPlastic; muted oak-gray (163,146,122) |
-| Light color | Warm (255,227,180) |
-
-The layered header has a Left-facing SurfaceGui on its physical cream face, dark GothamBlack
-lettering, `AlwaysOnTop=false` and `LightInfluence=0.35`. Its only text is **COLLECTION**. No
-visible shelf numbers, zero-Coin copy or Previous/Next labels remain in the world. Detailed
-indices still appear in the unchanged owner Shelf editor. Nine short downward SurfaceLights,
-one per row, use brightness 0.35, range 5, angle 110 and no shadows. No neon or arrow lights.
-
-Oak/ivory side wings carry two-bar solid chevrons and thin warm trim. Native Parts simplify
-the reference's curved side profiles. Each control retains a queryable, noncolliding, invisible
-5-by-10-by-7 hitbox under the plot root. Existing ClickDetector reach (160 studs), server plot
-area/living-actor validation and shared cooldown remain intact. Owner editor mutations use the
-exact plot footprint rather than a narrow band beside the furniture.
-Three owned units disable detection and mute the icon/trim colors; more than three enables both.
-Carousel turns retain the furniture, header and lights and use the existing targeted figure cache.
-
-### Visual-pass file manifest
-
-Added `src/server/CollectionFixture.luau`. No files removed. Modified:
-
-- `src/server/PlayerPlot.luau` — delegate construction; remove world status text; set visual availability.
-- `src/server/PlotGeometry.luau` — coordinated bay spacing and board-top anchor heights.
-- `src/server/FigureSlots.luau` — clarify the existing optional alignment comment; algorithm unchanged.
-- `tests/Plots.spec.luau` — retain architecture/Display checks; add physical fixture assertions.
-- `tests/PlotEngine.luau` — add the Left surface enum to the engine shim.
-- `tests/run.py` — load the new builder in the standalone harness.
-- `docs/PLAYER_PLOTS_AND_SHELVES.md`, `docs/ARCHITECTURE.md`, `docs/UI_UX.md` and this report.
-
-Compared with the pre-visual-pass baseline, `DisplayFixture`, Shelf configuration/types/domain,
-profile/schema/migration modules, economy/rules, plot allocation/dimensions, protocol, owner editor
-and every Shelf architecture test remain byte-for-byte unchanged. No purchasing, customization,
-completion rewards or new persistent fields were added.
-
-### Visual-pass verification and manual acceptance
-
-Rokit provisioning, Wally resolution, `stylua src`, `stylua --check src`, `selene src`, Rojo
-sourcemap/build, Luau Language Server analysis and `git diff --check` pass. Selene uses the
-cached Roblox API definitions because its network refresh is unavailable; no lint diagnostics.
-Luau analysis has no source diagnostics (only the standalone watcher-registration notice).
-All automated suites pass, including the unchanged **222 Shelf Unit checks** and expanded
-**1,369 plot checks**. Other suite counts remain listed below. New checks cover three bays,
-nine anchors per bay, board contact, scale, widest-figure clearance, all physical part bounds,
-single constant COLLECTION text, lighting/material budgets, icon availability and static reuse.
-Existing tests still cover long-range input, wraparound, visitors, stale edits and cleanup.
-
-**Manual Studio checks still required:** inspect front/side/three-quarter views against the
-concept; check wood grain, header readability, chevron direction and muted/enabled states.
-Populate all 27 positions with the twelve current figures and check contact/clearance. Test
-mouse/touch controls from across the plot with two clients and four/five owned shelves; confirm
-shared one-unit movement, both wraps, visitor edit denial and unchanged owner editor targets.
-Regress Display appearance/rates, save/rejoin, and measure nine row lights per plot at low/high
-graphics quality and a full eight-player server. No native Studio playtest or visual approval is
-claimed. Existing collectible art, ground/plot surfaces, owner signage and Shelf editor styling
-remain provisional; the Collection furniture/sign/control visual pass itself is implemented.
-
-## Earlier architecture correction (schema and migration unchanged by visual pass)
-
-## Persistent model and runtime behavior
-
-- `shelves.units[]` is an ordered array of `{id, placements, customization}`. Fresh players own
-  exactly three units with stable IDs `shelf:1` through `shelf:3`. Placements use local
-  `row:R/slot:S` keys; each unit currently has three rows of three positions. Customization is
-  validated as empty and belongs to the persistent unit.
-- `ShelfConfig` defines starting/visible unit counts, rows and slots. Future acquisition adds
-  individual units, currently nine positions at a time. Policy is `Unassigned`; no prices,
-  products, purchase flow or product-design maximum were introduced. Server decoder guards
-  (10,000 units, 20,000 placements, 10,000 dormant records) prevent excessive allocation and
-  are documented separately from progression design.
-- `Shelves.View = {startIndex, revision, lastTurn}` is runtime-only. It starts at 1 each join.
-  Next increments and Previous decrements by **one**, with wrapping and the shared 0.5-second
-  cooldown. At most three owned units fixes the initial order and disables world/editor arrows.
-- Three permanent physical structures (`ShelfPosition_1..3`) act as viewport positions. Position
-  P renders owned index `(startIndex + P - 2) % ownedCount + 1`. Their `ShelfId` attributes expose
-  the currently rendered persistent IDs. Local placements map to runtime-only FigureSlots keys
-  `viewport:P/row:R/slot:S`; these are never saved. No furniture is added when capacity grows.
-- The world and owner snapshots share the same visible trio. Owner snapshots contain that
-  bounded projection plus `shelfAvailable`, derived on the server across all persistent units.
-  Hidden units and dormant migration data are excluded. Existing FigureSlots caching replaces
-  only changed figures at physical anchors; rendering remains at most 27 shelf figures per plot.
-- The minimal Shelf editor selects one of three visible units, then one of nine local slots and
-  a discovered figure. It labels wrapped indexes explicitly, e.g. “Viewing shelves 4, 5, 1 of 5”.
-  Requests target `shelfId` plus `shelfSlotId` and require current profile/carousel revisions,
-  visible ownership, discovery, owned-copy capacity and own-plot presence. A-B-A browsing invalidates stale edits.
-- Visitors can click/tap the same world controls and see the same trio; they cannot edit or
-  receive private profile state. Existing 160-stud detector reach, server plot-area/living-actor
-  checks, independent owner plot-containment validation and cleanup remain in place.
-- Shelves do not decrement inventory, generate Coins or affect Display bonuses or daily goals.
-  Their placement references are capped by owned quantity across all units. Display placement
-  counts independently, so simultaneous Display/Shelf use still works.
-
-| Owned count | Successive Next viewports |
-| --- | --- |
-| 3 | 1,2,3; navigation disabled |
-| 4 | 1,2,3 → 2,3,4 → 3,4,1 → 4,1,2 → 1,2,3 |
-| 5 | 1,2,3 → 2,3,4 → 3,4,5 → 4,5,1 → 5,1,2 → 1,2,3 |
-
-Previous traverses the same sequence in reverse. Contents follow the persistent unit ID through
-all three physical positions. Browsing changes no saved content, balance or profile revision.
-
-## Migration and data preservation
-
-The decode-only `LegacyShelfPages` module validates the retired v4 representation and converts
-each source page into exactly three units in source array order. Old page P, logical unit U
-maps to index `(P-1)*3+U`, ID `shelf:<index>`; `unit:U/row:R/slot:S` becomes `row:R/slot:S`.
-One old page becomes three units; two become six, including empty units and empty positions.
-Display capacity/placements, currency, inventory, discovery, onboarding and daily state survive.
-The active schema-8 decoder additionally reconciles Shelf placements against owned counts in
-stable unit and numeric row/slot order; repeated decode/save round trips are idempotent.
-
-Per the user's explicit choice, valid old logical units above 3 remain as dormant
-`legacyOverflow` records `{sourceId, logicalUnit, placements}`. They retain retired source IDs
-and all references without granting extra shelves. Records are sorted deterministically,
-validated, deep-copied through saves and excluded from rendering, editing and client projections.
-Valid hidden row/slot coordinates within units 1..3 remain attached to their new Shelf Unit.
-
-The v3 adapter retains its deterministic room-ID/numeric-anchor order and frozen packing into
-the retired v4 intermediate representation, then immediately converts to units. For example,
-42 references become six units, including trailing empty capacity. No old room runtime or
-completion grant returns. v1/v2 profiles receive three empty units and retain their existing
-progress/defaults. Unknown fields/customization, corrupt or future schemas and excessive data
-fail closed without resetting profiles. Storage leases, save generations and failure behavior
-are unchanged; v5 deployment requires compatible decoding across replacement servers.
-
-## Preserved Display and physical design
-
-The earlier concept-board Display is unchanged by this correction: one continuous off-white
-counter, oak base, recessed charcoal plinth, broad warm back panel, end supports, canopy,
-warm diffuser and integrated DISPLAY/rate sign. The existing 14 native Parts resize for
-capacities 3/4/5/6 to counter widths 28/36/44/52 studs, centered at X=0/Z=36, top Y=3 and
-8-stud figure spacing. Display figures retain 2x scale and bounding-box bottom alignment;
-shelf figures remain at their existing scale. The sign still uses the actual server rate.
-
-During the preceding architecture correction, `DisplayFixture`, `FigureSlots`, Display UI,
-economy, plot allocation/configuration and the engine shim matched its pre-correction baseline.
-The visual pass above now replaces shelf/control geometry while preserving the open 100-by-96
-plot, left-side installation, persistent identities and Display rendering. Completion
-rewards, shelf acquisition/customization, final art and carousel animation remain unresolved.
-
-## Verification actually run
-
-- Provisioned exact pinned tools with Rokit and resolved the empty Wally dependency set.
-- `stylua src` and `stylua --check src`: pass.
-- `selene src`: zero errors, warnings or parse errors. Roblox API refresh was unavailable;
-  Selene used the existing cached Roblox definitions successfully.
-- `rojo sourcemap default.project.json -o sourcemap.json`: pass.
-- `rojo build default.project.json -o RobloxWorkspace.rbxlx`: pass with pinned Rojo 7.7.0.
-- Luau Language Server analysis of all `src`, with the Rojo sourcemap and Roblox definitions:
-  zero source diagnostics. Its standalone watcher-registration warning is informational.
-- `git diff --check`: pass.
-- `python tests/run.py build/tools/luau/luau.exe`: all suites pass:
-
-| Suite | Checks |
-| --- | ---: |
-| MVP | 8,878 |
-| Full game / persistence faults | 81 (19 storage calls) |
-| Scrolling | 4 |
-| Opening | 1,732 |
-| UI projections/layout/lifecycle | 1,839 |
-| Collection layout/selection | 72 |
-| Asset manifest | 26 |
-| Asset mount/fallback | 25 |
-| Model binding | 4 |
-| Shelf Unit schema/migration/carousel/domain | 222 |
-| Plot allocation/geometry/render/lifecycle | 3,093 |
-| Invalid startup configuration | 4 |
-
-Shelf coverage includes fresh capacity, exact four/five-unit sequences, both directions,
-disabled three-unit navigation, all visible owner targets, wrapped edits, visitor rejection,
-stale profile and A-B-A carousel revisions, local ID/payload validation, zero economy/copy
-effects, retry receipts, 250 owned units with bounded projection/rendering, every v4 placement,
-empty capacity, deterministic/idempotent migration, dormant overflow, all 42 v3 references,
-v1/v2 defaults, persistence acquisition, corrupt/future data and decoder resource guards.
-
-Plot tests exercise actual modules with engine property/signal shims: three fixed structures,
-every figure following its persistent unit across all viewport positions and wraps, targeted
-model reuse, long-range owner/visitor input, cooldown/plot-boundary denial, rejoin and teardown.
-The earlier Display fixture/rate/resize checks remain. Shims and injected persistence do not
-prove native input, replication, physics, rendering or real DataStore behavior.
-
-## Required manual Studio acceptance
-
-1. Run two clients with fresh three-unit profiles; confirm fixed 1,2,3 order and disabled world
-   and editor navigation. Select/edit all three units with mouse/touch and zero-copy discoveries.
-2. Seed isolated four/five-unit test profiles. Verify every sequence above in both directions,
-   shared owner/visitor visibility, wrapped labels/selection, rapid-turn cooldown and stale edits.
-   Confirm each unit's contents follow its ID and hidden units create no instances.
-3. Attempt visitor, outside-plot, malformed and stale edits; confirm privacy and owner-only changes.
-   Check owner editors work throughout the exact plot footprint, reject immediately outside it,
-   and keep physical click/tap controls' separate public navigation range.
-4. In the private Studio test store, load v1/v2/v3/v4 fixtures, including empty capacity, 42 v3
-   references and v4 overflow. Save/rejoin into a different plot; compare all progress and dormant
-   records, with runtime visibility reset to 1,2,3. Exercise failures/leases without live data.
-5. Check phone/tablet/desktop editor sizing, scroll/selection, gamepad navigation, respawn and
-   owner departure/replacement. Regress Display capacities/rates, Collection, Shop and opening.
-6. Populate all eight plots with 27 shelf and six Display figures each. Measure replication,
-   frame rate/memory and repeated carousel/joins/leaves; confirm stable instance/connection counts.
-
-See [operations](OPERATIONS.md) for isolated storage and release procedures. These Studio tests
-remain pending and are not implied by passing automated checks.
-
-## Files changed by this correction
-
-The manifest below is relative to the snapshot taken immediately before this task. It excludes
-prior uncommitted Display implementation work and ignored generated tools/build/cache files.
-The documentation list also covers the two historical Showroom pointers, whose current links
-now describe Shelf Units. Shelf Page terminology appears only in explicitly retired
-schema migration code/fixtures/notes; unrelated Collection Book page terminology is unchanged.
-
-### Added
-
-- `src/server/LegacyShelfPages.luau`
-
-### Removed
-
-None.
-
-### Modified
-
-- `README.md`
-- `docs/ARCHITECTURE.md`
-- `docs/DATA_MODEL.md`
-- `docs/DISPLAY_AND_SHOWROOMS.md`
-- `docs/DISPLAY_SHOWROOM_IMPLEMENTATION.md`
-- `docs/ECONOMY.md`
-- `docs/FULL_GAME.md`
-- `docs/GAME_DESIGN.md`
-- `docs/MONETIZATION.md`
-- `docs/OPERATIONS.md`
-- `docs/PLAYER_PLOTS_AND_SHELVES.md`
-- `docs/PLOT_SHELF_IMPLEMENTATION.md`
-- `docs/PRODUCT_BACKLOG.md`
-- `docs/ROADMAP.md`
-- `docs/UI_UX.md`
-- `src/client/ShelvesScreen.luau`
-- `src/client/init.client.luau`
-- `src/server/LegacyCosmetics.luau`
-- `src/server/PlayerPlot.luau`
-- `src/server/PlotGeometry.luau`
-- `src/server/Profile.luau`
-- `src/server/Protocol.luau`
-- `src/server/Rules.luau`
-- `src/server/Shelves.luau`
-- `src/shared/ShelfConfig.luau`
-- `src/shared/Types.luau`
-- `tests/Plots.spec.luau`
-- `tests/Shelves.spec.luau`
-- `tests/UI.spec.luau`
-- `tests/run.py`
+Status: implemented on `master`. The current persistent schema is **8**; valid Economy2 schemas
+6 and 7 upgrade, while schemas 1–5 are rejected. This report describes current behavior and its
+verification boundaries. See the canonical
+[Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md) direction and
+[data model](DATA_MODEL.md).
+
+## Current world and plot behavior
+
+**Blindbox Town** places eight open plots around the plaza and Market Street. Direct paths lead
+from the plaza to walk-through owner arches and flush spawn pads. Gift-box stacks, Peeka statues,
+trees, hedges, lanterns and invisible island boundaries fill the shared world. A server-driven
+20-minute day/night cycle switches town lights at dusk and retunes each active plot's existing
+Display and Shelf wash lights without adding per-frame work.
+
+The presentation-only global leaderboard rotates Most Figures, Top Coins/sec and Most Boxes
+Opened. It grants no rewards and never feeds leaderboard data back into a player profile.
+Schema 8 persists `boxesOpened`; valid schema 6 and 7 upgrades initialize it to zero.
+
+Plot ownership, allocation and cleanup remain server-owned. Players spawn on their assigned plot
+and visitors walk between plots without a teleport or room session. The owner may open Display or
+Shelves management anywhere inside their own plot while alive; visitors and out-of-bounds edits
+are rejected. Physical Shelf carousel controls are public browsing controls and do not grant edit
+authority.
+
+## Display and Shelf behavior
+
+The Display is the only earning placement system. It begins with three slots and expands
+sequentially to six through the current Coin unlocks. A figure ID may earn in only one slot.
+Each figure banks its own income until the owner clicks or taps it; the nearby E prompt opens
+management rather than collecting. Uncollected banks survive removal and rejoining.
+
+Shelf Units are persistent cosmetic exhibits. The authoritative capacity, viewport, owned-copy
+placement rule, navigation and unresolved reward decisions are defined only in
+[Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md). Display placement is independent
+of Shelf placement and does not consume a Shelf copy allowance.
+
+The server projects only the visible Shelf Units into the owner snapshot and world. Runtime
+carousel state starts from the first unit on join and is not persisted. `FigureSlots` caches
+physical figures and replaces only changed IDs or figures whose production model becomes ready.
+Plot teardown disconnects owned connections, destroys content and releases the slot.
+
+The Collection installation is a three-bay oak-and-ivory fixture with bounded native parts,
+row lighting, a permanent Shelves header and shared physical navigation controls. It is visual
+presentation only; Shelf ownership, placement limits and carousel decisions remain server-owned.
+
+## Authority and lifecycle checks
+
+Current implementation and regression coverage verify:
+
+- unique pending and active allocation across eight fixed plot slots, explicit release, spawn
+  rebinding on respawn and cleanup when an owner leaves;
+- server-computed plot containment, owner-only Display/Shelf mutation and visitor rejection;
+- Shelf placement bounded by owned copies across visible and offscreen units, including stable
+  repair of over-placed schema-8 records without granting inventory;
+- carousel wrapping, disabled navigation at the starting capacity, stale revision rejection and
+  bounded snapshot/world projection;
+- Display capacities, figure caching, targeted updates and teardown without unbounded tasks,
+  connections, lights or instances;
+- exact world part/light budgets, dusk/dawn switching, plot fixture geometry and leaderboard
+  throttling, backoff and last-good reads; and
+- malformed payloads, replayed requests, rate limits, persistence failures and profile isolation.
+
+Recorded native Studio MCP property checks covered real Instances for plot containment, Shelf
+ownership rejection, carousel revision behavior, Display expansion, fixture lighting transitions
+and cleanup. Those checks are evidence for those specific properties only; they do not replace
+subjective rendering, true-touch, device-performance, DataStore rejoin or multi-client acceptance.
+
+## Remaining manual acceptance
+
+1. In a private multi-client Studio session, confirm unique plots, correct spawns and owner signs.
+   Walk between plots, browse another player's Shelves and attempt every Display/Shelf edit as a
+   visitor and from just outside the owner boundary.
+2. Check mouse, touch and gamepad management from the rear, center and corners of the owner's plot.
+   Verify edits reject immediately outside the horizontal footprint or vertical bound.
+3. Exercise Display capacities 3–6 and repeated Shelf turns through day and night. Confirm figures
+   remain readable, navigation wraps correctly, and respawn/leave/rejoin does not add lights,
+   figures, connections or stale owner content.
+4. In an isolated persistent test experience, save/rejoin current schema-8 Shelf placements,
+   carousel-independent state, Display placements, earnings banks and `boxesOpened`. Load valid
+   schema-6 and schema-7 Economy2 fixtures and confirm both upgrade with `boxesOpened = 0`.
+5. Load an intentionally over-placed schema-8 Shelf record. Confirm the earliest allowed placements
+   survive, unrelated progress is unchanged, and the repaired state remains after autosave/rejoin.
+6. Check the Collection fixture, awnings, arches, trees, statues, leaderboard and day/night lighting
+   on representative desktop and mobile devices, including an eight-player populated-server soak.
+
+No build, lint, type analysis or Studio playtest was performed as part of this documentation-only
+cleanup.

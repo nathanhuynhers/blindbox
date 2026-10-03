@@ -8,7 +8,7 @@ income settlement and unique Display placement. See [economy](ECONOMY.md).
 
 The user accepted the MVP and authorized the full-game roadmap. The new candidate implements
 that feature set; real storage, device and multi-client acceptance are still pending. See
-[scope](FULL_GAME.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
+[roadmap](ROADMAP.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
 
 The active world uses fixed open Player Plots, earning Display and cosmetic Shelf Units.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-8 data model](DATA_MODEL.md).

@@ -2,18 +2,15 @@
 
 The economy redesign uses fresh `BlindBox_Economy2_Studio` /
 `BlindBox_Economy2_Live` stores; the current profile schema is 8 (6 and 7 upgrade). Run the
-[current economy acceptance checklist](ECONOMY_REDESIGN_VERIFICATION.md) for variable prices,
-duplicates, soft pity and the authorized progression reset. The older schema migrations,
-Scrap/recycling and redemption checks below describe pre-redesign behavior and are superseded.
+[current economy acceptance checklist](ECONOMY.md#verification-record-and-acceptance-checklist) for
+variable prices, duplicates, soft pity and the authorized progression reset.
 
 The user accepted the MVP. The expanded game is a **closed-test candidate**, not published or
-verified in live Roblox servers. The agent has no Studio control connector and has not run the
-new engine, mobile, multiplayer or real DataStore tests. Existing MVP playtesting is not proof
-that newly added features pass those tests.
+verified in live Roblox servers. Existing recorded checks and MVP playtesting are not proof that
+the current engine, mobile, multiplayer or real DataStore release gates pass.
 
-This checklist covers the economy/storage candidate and the schema-v5 open Plot/Shelf
-redirection. Also run the [plot, migration and multiplayer checklist](PLOT_SHELF_IMPLEMENTATION.md).
-Replace older server writers when deploying v4; code that supports only v3 cannot read new saves.
+This checklist covers the current economy/storage candidate and open Plot/Shelf architecture.
+Also run the [plot and multiplayer checklist](PLOT_SHELF_IMPLEMENTATION.md).
 
 ## Run now
 
@@ -105,23 +102,23 @@ Run that script from the client Command Bar on each screen. These engine checks 
 1. **Collection regression:** reach the last figure of each collection with wheel, touch and
    scrollbar; change filters, resize the viewport, hide/show the menu and reopen after respawn.
    Check the last card is clear of the lower feedback bar. Run the client regression above.
-2. **Core loop:** buy both box types, skip reveals, reserve/replace/remove copies, recycle only
-   extras, redeem missing discoveries, and verify individual plus themed total rates. At the
-   inventory cap, a daily box must remain claimable after space is made.
-3. **Progression:** buy the fourth slot once; try again and confirm no charge. Finish each
-   collection and verify completion tracking without granting a room, Shelf Unit or new reward.
+2. **Core loop:** buy from all five collections, exercise Open 1 and Open 10, skip reveals,
+   place/replace/remove unique earners, collect individual banks and verify duplicate-enhanced
+   plus themed total rates. Failed or replayed purchases must not spend or grant twice.
+3. **Progression:** buy slots 4, 5 and 6 sequentially; retry each and confirm no duplicate charge.
+   Finish each collection and verify completion tracking without granting a new reward.
 4. **Persistence:** in the isolated test store, open/place, unlock, edit shelves and claim rewards.
    Wait for a successful autosave, stop/rejoin and compare balances/counts/Display/Shelf Units/claims.
-   Verify v1/v2/v3/v4 fixtures migrate to v5, including every v3 reference and exactly three
-   units per retired v4 page. Confirm dormant legacy overflow survives save/reload.
-   A different physical plot must show the same saved exhibit. The viewport resets to units 1,2,3. Reset
+   Verify valid Economy2 schema-6 and schema-7 fixtures upgrade to schema 8 with
+   `boxesOpened = 0`; schemas 1–5 and malformed/future records must fail closed. A different
+   physical plot must show the same saved exhibit. The runtime viewport resets on join. Reset
    character without resetting the profile. Verify no repeated starter grant or offline earnings.
    Disable API access for a fresh persistent join: play must be blocked, not reset.
 5. **Failures:** use the deterministic injected failures first, then test interruption/shutdown
    with expendable private test profiles. Confirm failures pause economic actions and a later
    successful save resumes. An unconfirmed final save may leave the key locked until its lease
    expires; retry joining after two minutes. Never fault-inject against real player profiles.
-6. **Daily rules:** one free chosen box and one display-goal claim per UTC day, including rejoin.
+6. **Daily rules:** one free Pocket Grove box and one display-goal claim per UTC day, including rejoin.
    Both markers survive saves. Use the injected-day tests for boundaries rather than changing
    production server time. Inspect invalid-state fixtures before any schema change.
 7. **Walk-in visitors:** two or more clients, distinct private inventories. Walk onto another
@@ -136,8 +133,8 @@ Run that script from the client Command Bar on each screen. These engine checks 
    reading sizes, reduced motion, respawn, repeated join/leave and a 30-minute soak. Measure eight populated plots with up to 27 visible shelf figures plus six Display figures each;
    verify targeted updates and no growth across repeated joins, leaves and carousel turns.
 10. **Pacing:** observe returning sessions, weak/common-only luck, duplicates and completion.
-    Record time to next box, fourth slot; ensure twelve-figure content is enjoyable
-    without adding artificial grind. Hand notes and server Output are sufficient for this build.
+    Record time to the next box and sequential slot unlocks across all five collections and 43
+    figures without adding artificial grind. Hand notes and server Output are sufficient.
 
 11. **Blindbox Town:** spawn on your own plot (spawn pad, facing in), respawn and reset, walk
     under the arch from the path, cross Market Street and reach the plaza. Walk the hedge to
@@ -165,7 +162,7 @@ Run that script from the client Command Bar on each screen. These engine checks 
     rejoin and verify the repaired result remains while Coins, inventory, discoveries, Display,
     goals and collection completion are unchanged. Repeat with two clients for owner isolation.
 
-14. **Town models:** in Play, confirm all 52 trees and 4 statues swap from parts to the sculpted
+15. **Town models:** in Play, confirm all 52 trees and 4 statues swap from parts to the sculpted
     models within a few seconds (`ServerStorage.TownModels` shows `<Kind>Status = Ready`), petals
     drift from the 8 framing sakura, statue uplights turn on at dusk, and frame rate holds on a phone.
 
