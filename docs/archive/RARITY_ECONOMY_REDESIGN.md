@@ -1,9 +1,9 @@
 # Rarity, duplicates and collection-economy redesign
 
 Status: **implemented candidate on `codex/economy-redesign`; Studio acceptance pending**.
-The discussion below is the original design record. [ECONOMY.md](ECONOMY.md) owns current tuning,
-[DATA_MODEL.md](DATA_MODEL.md) owns schema 7 (including valid schema-6 upgrades), and
-[verification](ECONOMY_REDESIGN_VERIFICATION.md) records checks and simulation assumptions.
+The discussion below is the original design record. [ECONOMY.md](../ECONOMY.md) owns current tuning,
+[DATA_MODEL.md](../DATA_MODEL.md) owns current schema behavior, and the
+[verification record](../ECONOMY.md#verification-record-and-acceptance-checklist) captures checks and simulation assumptions.
 
 Implementation decisions superseding the original candidate sections below:
 
@@ -14,7 +14,7 @@ Implementation decisions superseding the original candidate sections below:
   The uniform 180-second higher-tier normalization and its illustrative rate tables are superseded.
 - Tender Echoes and We Are All Stars remain equal-price Prestige peers with independent pity.
 - Slots 4/5/6 use the proposed sequential Coin prices; the daily free box is Pocket Grove only.
-- Adding a collection follows [the onboarding guide](ECONOMY_COLLECTION_ONBOARDING.md).
+- Adding a collection follows [the onboarding guide](../ECONOMY_COLLECTION_ONBOARDING.md).
 
 ## Confirmed direction
 

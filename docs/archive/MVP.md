@@ -1,15 +1,15 @@
 # Historical MVP scope
 
 Status: user playtested and accepted the MVP, reporting collection scroll truncation.
-The new candidate fixes scrolling and expands beyond this historical scope; see [full-game scope](FULL_GAME.md).
+The current candidate expands beyond this historical scope; see the active [roadmap](../ROADMAP.md).
 The acceptance criteria below document the original MVP, not the current larger feature set.
 Current rarity capability supports five tiers, while live figures retain their original three
-tiers; see [rarity architecture](RARITY.md). The historical table below is unchanged.
+tiers; see [rarity architecture](../RARITY.md). The historical table below is unchanged.
 Its use of "showroom" means the passive-income **Display** in current terminology. The current
-architecture is [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
+architecture is [Player Plots, Display and Shelves](../PLAYER_PLOTS_AND_SHELVES.md).
 See [the verification and playtest checklist](STUDIO_TESTS.md).
-[Game design](GAME_DESIGN.md) describes the vision; this document limits scope.
-Milestone 1 in [the roadmap](ROADMAP.md) is the entire MVP, delivered in small playable steps.
+[Game design](../GAME_DESIGN.md) describes the vision; this document limits scope.
+Milestone 1 in the [archived roadmap](ROADMAP_MILESTONES.md) is the entire MVP.
 
 ## What ships in the prototype
 
@@ -58,7 +58,7 @@ label that clearly. It is not ready for public progression testing.
    place/replace/remove/recycle/redeem operations. A copy cannot occupy two slots.
 5. Each higher-tier figure earns more than every lower-tier figure. Three copies of the rare
    figure earn 21 Coins/second; the three distinct commons earn 4.5. Inventory-only copies earn
-   nothing. Figure and total rates are visible. See [the canonical formula](ECONOMY.md).
+   nothing. Figure and total rates are visible. See [the canonical formula](../ECONOMY.md).
 6. Elapsed-time income credits whole Coins automatically and retains fractional earnings.
    Display edits settle the old rate first; idle play keeps earning. Leaving/rejoining grants
    no offline rewards. The session reset is expected in this build.

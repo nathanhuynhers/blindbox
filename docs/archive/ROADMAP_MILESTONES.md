@@ -136,4 +136,3 @@ transfers, duplication/replay protection, recovery and economy effects before im
 - **Automatic checks:** full regression and migration suites, configuration validation, pinned
   formatting/lint/build/type checks, and release diff review. Tests do not prove policy compliance
   or replace live device evaluation.
-

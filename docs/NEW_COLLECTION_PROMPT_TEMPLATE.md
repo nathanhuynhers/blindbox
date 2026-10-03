@@ -10,7 +10,7 @@ Use this prompt template when starting a fresh Claude session to build a new col
 I'm building a new blind box collection. Here are the 2D mockups:
 [PASTE IMAGES HERE]
 
-Build the collection end-to-end following [COLLECTION_BUILD_PIPELINE.md](docs/COLLECTION_BUILD_PIPELINE.md).
+Build the collection end-to-end following [COLLECTION_BUILD_PIPELINE.md](COLLECTION_BUILD_PIPELINE.md).
 
 ## Required Information
 
@@ -90,8 +90,8 @@ At the end:
 
 ## References
 
-- [COLLECTION_BUILD_PIPELINE.md](docs/COLLECTION_BUILD_PIPELINE.md) — Full workflow reference
-- [FIGURE_COLLECTION_RUNBOOK.md](docs/FIGURE_COLLECTION_RUNBOOK.md) — Detailed SDF modeling, building, publishing
+- [COLLECTION_BUILD_PIPELINE.md](COLLECTION_BUILD_PIPELINE.md) — Full workflow reference
+- [FIGURE_COLLECTION_RUNBOOK.md](FIGURE_COLLECTION_RUNBOOK.md) — Detailed SDF modeling, building, publishing
 - [Catalog.luau](src/shared/Catalog.luau) — Figure registry
 - [Economy.luau](src/server/Economy.luau) — Blind box pool
 - [ShopTheme.luau](src/client/ShopTheme.luau) — Shop theming
@@ -145,7 +145,7 @@ Make sure to provide:
 I'm building a new blind box collection. Here are the 2D mockups for the Concepts collection:
 [PASTE IMAGES HERE]
 
-Build the collection end-to-end following [COLLECTION_BUILD_PIPELINE.md](docs/COLLECTION_BUILD_PIPELINE.md).
+Build the collection end-to-end following [COLLECTION_BUILD_PIPELINE.md](COLLECTION_BUILD_PIPELINE.md).
 
 ## Collection Info
 

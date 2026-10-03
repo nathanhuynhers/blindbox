@@ -2,7 +2,7 @@
 
 ## Game planning and task scope
 
-- Read [the game design](docs/GAME_DESIGN.md) and [MVP scope](docs/MVP.md) before gameplay work.
+- Read [the game design](docs/GAME_DESIGN.md) and [historical MVP scope](docs/archive/MVP.md) before gameplay work.
   Use [architecture](docs/ARCHITECTURE.md), [data model](docs/DATA_MODEL.md), and
   [economy](docs/ECONOMY.md) for the relevant system boundaries and provisional tuning.
 - Follow [the roadmap](docs/ROADMAP.md) for scoped tasks, verification, and review gates.

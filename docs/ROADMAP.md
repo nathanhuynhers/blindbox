@@ -27,4 +27,3 @@ required. Public deployment, paid mechanics and trading remain outside the autho
 
 Final art, shelf customization, individual Shelf Unit acquisition/pricing and collection-completion
 rewards remain unresolved. Implement future work only when the user authorizes that specific task.
-

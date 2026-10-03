@@ -2,7 +2,7 @@
 
 The user subsequently playtested and accepted the MVP, with a collection-scrolling bug.
 That report does not establish every checklist item below as passed. Current candidate tests
-and persistent setup are in [operations](OPERATIONS.md).
+and persistent setup are in [operations](../OPERATIONS.md).
 
 Implementation: Pocket Grove session-only prototype, 2026-09-23. No persistence or public
 release. Milestone 1's evaluation gate remains open until the Studio checks below are run.
