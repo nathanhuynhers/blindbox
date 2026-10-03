@@ -593,14 +593,14 @@ TownProps.treeModels = table.freeze({
 }) :: { [string]: { [string]: string } }
 local treeFit: { [string]: { fit: TownPlacements.Fit, factor: number } } = {
 	Sakura = { fit = "width", factor = 1.25 },
-	Puffball = { fit = "height", factor = 1.5 },
-	Poplar = { fit = "height", factor = 1.5 },
-	Topiary = { fit = "height", factor = 1.0 },
+	Puffball = { fit = "height", factor = 2.6 },
+	Poplar = { fit = "height", factor = 2.4 },
+	Topiary = { fit = "height", factor = 1.4 },
 }
 TownProps.treeFit = table.freeze(treeFit)
--- Extra size for sakura with open ground around them. Framing sakura stay put (plot edges) and
--- plaza planters stay small (benches).
-TownProps.sakuraBoost = table.freeze({ street = 2, edge = 1.8 }) :: { [string]: number }
+-- Extra size per spot for sakura, sized for regular avatars (about 5 studs tall).
+TownProps.sakuraBoost =
+	table.freeze({ planter = 1.5, street = 2, frame = 1.6, edge = 2.1 }) :: { [string]: number }
 TownProps.statueModels = table.freeze({ "PeekaPeekaboo", "PeekaTada", "PeekaHug", "PeekaNap" })
 TownProps.statueWidth = 12
 
@@ -684,7 +684,7 @@ function TownProps.townTree(
 	local fit = TownProps.treeFit[kind]
 	local yaw, scale = TownProps.jitter(seed)
 	local at = base * CFrame.Angles(0, math.rad(yaw), 0)
-	local boost = if kind == "Sakura" then TownProps.sakuraBoost[role] or 1 else 1
+	local boost = if kind == "Sakura" then TownProps.sakuraBoost[role] else 1
 	local target = size * fit.factor * boost * scale
 	TownPlacements.add(kind, at, target, fit.fit, placeholder)
 	if kind == "Sakura" and role ~= "planter" then

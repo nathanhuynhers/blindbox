@@ -13,8 +13,8 @@ export type Kind = {
 	solid: { string } | "all",
 	-- Part whose offset from the centre gives the model's front (statues); trees face anywhere.
 	face: string?,
-	-- Part whose centre sits at grass level, sinking a rounded base into the ground.
-	ground: string?,
+	-- Fraction of the model's height buried in the grass, so a rounded base sits flush.
+	sink: number?,
 }
 
 local TownModels = {}
@@ -24,11 +24,16 @@ local kinds: { [string]: Kind } = {
 		key = Manifest.Town.Sakura,
 		parts = 9,
 		solid = { "Sakura_Trunk", "Sakura_RootMound" },
-		ground = "Sakura_RootMound",
+		sink = 0.04,
 	},
-	Puffball = { key = Manifest.Town.Puffball, parts = 3, solid = { "Puffball_Trunk" } },
-	Poplar = { key = Manifest.Town.Poplar, parts = 2, solid = { "Poplar_Trunk" } },
-	Topiary = { key = Manifest.Town.Topiary, parts = 4, solid = { "Topiary_Stem" } },
+	Puffball = {
+		key = Manifest.Town.Puffball,
+		parts = 3,
+		solid = { "Puffball_Trunk" },
+		sink = 0.077,
+	},
+	Poplar = { key = Manifest.Town.Poplar, parts = 2, solid = { "Poplar_Trunk" }, sink = 0.051 },
+	Topiary = { key = Manifest.Town.Topiary, parts = 4, solid = { "Topiary_Stem" }, sink = 0.031 },
 	PeekaPeekaboo = {
 		key = Manifest.Town.PeekaPeekaboo,
 		parts = 17,
@@ -59,8 +64,8 @@ local function isSolid(kind: Kind, name: string): boolean
 	return table.find(solid :: { string }, name) ~= nil
 end
 
--- Anchors and strips the import, then sets the pivot to the centre of the model's base (or its
--- ground part's centre),
+-- Anchors and strips the import, then sets the pivot to the centre of the model's base (raised by
+-- its sink),
 -- turned so a statue's face points along the pivot's -Z.
 function TownModels.prepare(loaded: Model, kind: Kind): string?
 	local count = 0
@@ -97,14 +102,7 @@ function TownModels.prepare(loaded: Model, kind: Kind): string?
 		end
 		facing = CFrame.lookAt(Vector3.zero, look.Unit)
 	end
-	local base = bounds.Position - Vector3.new(0, size.Y / 2, 0)
-	if kind.ground then
-		local ground = loaded:FindFirstChild(kind.ground, true)
-		if not ground or not ground:IsA("BasePart") then
-			return "missing " .. kind.ground
-		end
-		base = Vector3.new(base.X, ground.Position.Y, base.Z)
-	end
+	local base = bounds.Position - Vector3.new(0, size.Y * (0.5 - (kind.sink or 0)), 0)
 	loaded.WorldPivot = CFrame.new(base) * facing
 	loaded:PivotTo(CFrame.new())
 	loaded:SetAttribute("NaturalWidth", math.max(size.X, size.Z))

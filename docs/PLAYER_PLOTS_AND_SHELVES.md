@@ -56,15 +56,17 @@ placeholder for a scaled, turned copy. A failed load keeps the part version.
 
 | Model | Where | Size | Triangles |
 | --- | --- | --- | --- |
-| Sakura (bonsai style, blossom clusters, coral flecks) | all 26 pink trees | canopy width 1.25x the placeholder (2.5x by the street, about 2.25x on the outer line; the root mound is half sunk into the grass) | about 51k |
-| Puffball | 12 green trees by the street and framing gardens | height 1.5x | about 22k |
-| Poplar | 12 green trees on the outer line | height 1.5x | about 15k |
-| Topiary Ball | 2 green plaza planters | height 6 studs | about 13k |
+| Sakura (bonsai style, blossom clusters, coral flecks) | all 26 pink trees | canopy 11-41 studs wide (planter, framing, street, outer line) | about 51k |
+| Puffball | 12 green trees by the street and framing gardens | 18-29 studs tall | about 22k |
+| Poplar | 12 green trees on the outer line | 29-36 studs tall | about 15k |
+| Topiary Ball | 2 green plaza planters | 8 studs tall | about 13k |
 | Peeka statues: Peekaboo (mint), Ta-da! (sky), Big Hug (lilac), Nap Time (butter) | the 4 statue gardens | pedestal 12 studs across | 62k-75k each |
 
 Every tree gets its own deterministic turn and a size within 10%. Sakura outside the plaza
 stand on a pink petal carpet, and the 8 sakura framing the gardens drop drifting petals (one
-uploaded petal texture). Green trees and canopies never collide; trunks, stems and statues do.
+uploaded petal texture). Trees are sized for regular avatars (about 5 studs tall), and each
+model is sunk slightly so its rounded base sits flush with the grass. Green trees and canopies
+never collide; trunks, stems and statues do.
 
 ### Day and night
 
