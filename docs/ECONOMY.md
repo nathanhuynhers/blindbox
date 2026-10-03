@@ -132,6 +132,52 @@ the new namespace fails closed rather than becoming a fresh profile. Valid schem
 profiles upgrade to schema 7 with empty banks and all other progress preserved; this follow-up
 does not perform another reset.
 
-[Implementation verification](ECONOMY_REDESIGN_VERIFICATION.md) records automated checks and
-simulation assumptions. Simulation measures online earning time under an optimized strategy,
-not active-play telemetry. Native Studio, real save/rejoin and multi-client playtests remain required.
+The verification record below captures automated checks and simulation assumptions. Native Studio,
+real save/rejoin and multi-client playtests remain required.
+
+## Verification record and acceptance checklist
+
+The implementation checks covered weighted income, total probabilities, pity increments, caps and
+independent resets, collection isolation, retry/failure atomicity, duplicate-only starts, numeric
+guards, income settlement, unique placement, daily restrictions, malformed payloads and mixed
+transactions. Persistence checks covered quantity/pity/bank round trips, deep copies, unsupported
+schemas, corrupt values, competing sessions, leases, failed saves, lost replies and starter-grant
+idempotency. Manual-collection checks covered bank/wallet conservation, proportional bonuses,
+fractions, schema upgrades, full-wallet transfers, removed/redisplayed figures, remote rejection,
+distance, character state, empty slots and teardown. These checks ran in the Luau engine shim, not
+Roblox Studio.
+
+The reproducible pacing simulation runs after the domain harness has generated its isolated modules:
+
+```powershell
+build/tools/luau/luau.exe tests/EconomySimulation.luau
+```
+
+Its 300 seeded runs use the actual Rules and CollectionEconomy modules, select the strongest Display,
+consider themed trios and buy useful sequential slots. The simulation assumes instant collection and
+excludes daily rewards, reveal/menu time, offline time and activity rewards, so it is an idealized
+online earning baseline rather than engagement evidence or a guaranteed player outcome.
+
+Remaining native Studio acceptance:
+
+1. Start fresh with 4,500 Coins, three slots and no Scrap; buy three fully random Starter boxes.
+   Include a duplicate-heavy run and confirm one enhanced figure can fund continued play.
+2. Verify all five collection prices, matching Tender Echoes/We Are All Stars rates, boosted Shop
+   odds, and details showing count, base/effective income, duplicate percentage and next-copy income.
+3. Confirm no figure occupies two earning slots; cosmetic Shelves may repeat it within owned-copy
+   limits. Buy slots 4, 5 and 6 in order and check layout, affordability and refreshed price.
+4. Confirm duplicate grants settle prior income first, update income promptly and preserve quantity.
+   Skip and retry reveals without extra grants.
+5. Click or tap each occupied slot, including slots 4-6, and test the E management prompt. The wallet
+   must remain unchanged while idle; only the selected figure's bank transfers. Cover feedback,
+   visitors, dead characters, distance rejection, respawn, teardown and concurrent interactions.
+6. Remove or replace an earning figure, save/rejoin, then redisplay it and confirm its bank remains.
+   In isolated persistent Studio testing, verify schema-6 and schema-7 upgrades, Economy2 store
+   identity, pity/duplicate round trips, UTC claims and pause-on-storage-failure without offline income.
+7. In two-client testing, verify private snapshot isolation and reject malformed, repeated, stale and
+   cross-owner actions. Visitors may see public Display totals but never private pity data.
+8. Check narrow/mobile details, current/base odds, large-Coin abbreviations, exact values and the
+   single Starter daily action. Observe both normal and unlucky pacing.
+
+Coordinate server replacement for rollout. Old namespaces remain rollback backups, but they do not
+contain Economy2 progress.

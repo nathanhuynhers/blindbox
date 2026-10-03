@@ -104,6 +104,35 @@ What else the merge carried over:
 - Number fields are sized for abbreviated values. The HUD balance switches to `compact` at
   10M; prices, rates and shortfalls always use `compact`/`amount` (2.4M).
 
+## 3D box preview
+
+The Shop keeps one reusable 3D preview cloned from the sanitized
+`ReplicatedStorage.ProductionModels.BlindBoxBase` template. The generated asset manifest resolves
+the source asset, the server validates and publishes the template, and the client waits for its
+complete replicated geometry before showing it. Collection changes reskin the same preview; stale
+asynchronous results, timers, connections and owned clones are cleaned up through `UIScope`.
+
+`BlindBoxSkin` binds semantic parts even when the importer inserts Model wrappers. It applies the
+approved panel textures and emblem Decal, removes layers that can mask tint, and derives the fixed
+camera from the model bounds and semantic faces. Loading and unavailable states are mutually
+exclusive with the viewport. Failures expose `PreviewStatus`/`PreviewReason`, with the server-side
+reason on `BlindBoxBaseReason`. The currently configured source asset is `79870100381887`, owned by
+creator user `103346374`.
+
+## Navigation image import and missing images
+
+Rojo does not upload the five PNG files under `assets/ui/navigation/`. If a navigation semantic
+key has no generated asset ID and no valid entry in `src/shared/NavigationAssetIds.luau`,
+`AssetManifest.resolve()` returns an empty string and the icon intentionally does not render. The
+runtime icon hierarchy, sizing and transparency are not a substitute for a Roblox-hosted image.
+
+Import the Collection, Display, Shop, Goals and Shelves PNGs as **Image** assets in the experience's
+Asset Manager, wait for moderation, then paste each numeric asset ID (without `rbxassetid://`) into
+the matching field in `NavigationAssetIds.luau`. The module validates and prefixes IDs centrally;
+the generated asset pipeline remains a fallback. Restart Play after syncing, verify all five icons
+on desktop and phone-landscape layouts, and check Studio Output for ownership, permission or
+moderation failures. Construction emits one warning per missing ID.
+
 ## Automated checks
 
 `python tests/run.py <abs path>/build/tools/luau/luau.exe` runs:
