@@ -152,6 +152,10 @@ Run that script from the client Command Bar on each screen. These engine checks 
     progress with `boxesOpened = 0`, then count Buy and Daily boxes only. Confirm a v8 save never
     loads on an older (schema-7) server build.
 
+14. **Town models:** in Play, confirm all 52 trees and 4 statues swap from parts to the sculpted
+    models within a few seconds (`ServerStorage.TownModels` shows `<Kind>Status = Ready`), petals
+    drift from the 8 framing sakura, statue uplights turn on at dusk, and frame rate holds on a phone.
+
 ## Persistence guarantees and limits
 
 Native UpdateAsync callbacks validate before writing and do not yield, following [Roblox's
