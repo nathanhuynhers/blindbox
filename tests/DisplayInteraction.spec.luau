@@ -59,6 +59,13 @@ check(
 	string.find(instruction.Text, "Click to Collect", 1, true),
 	"hybrid device returns to mouse wording"
 )
+control.update(12345)
+input.LastInputTypeChanged:fire(Engine.Enum.UserInputType.Touch)
+check(
+	string.find(instruction.Text, "Tap to Collect · 12.3K Coins Ready", 1, true),
+	"plaque keeps the owner's Display total across input changes"
+)
+input.LastInputTypeChanged:fire(Engine.Enum.UserInputType.MouseMovement)
 owner.Character:PivotTo(target.CFrame)
 prompts.PromptShown:fire(prompt)
 prompts.PromptTriggered:fire(prompt, owner)

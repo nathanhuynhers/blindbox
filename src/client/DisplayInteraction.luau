@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local Input = game:GetService("UserInputService")
 local Prompts = game:GetService("ProximityPromptService")
 local Scope = require(script.Parent.UIScope)
+local UIState = require(script.Parent.UIState)
 local Interaction = {}
 
 local function ownFixture(): Instance?
@@ -14,7 +15,7 @@ local function ownFixture(): Instance?
 		else nil
 end
 
-function Interaction.create(open: () -> ()): { update: () -> (), destroy: () -> () }
+function Interaction.create(open: () -> ()): { update: (number?) -> (), destroy: () -> () }
 	local scope = Scope.create()
 	local function ownConnection(connection: RBXScriptConnection)
 		scope.add(function()
@@ -22,7 +23,9 @@ function Interaction.create(open: () -> ()): { update: () -> (), destroy: () -> 
 		end)
 	end
 	local touch = Input.TouchEnabled and not Input.MouseEnabled
-	local function update()
+	local total = 0
+	local function update(banked: number?)
+		total = banked or total
 		local fixture = ownFixture()
 		local manage = if fixture then fixture:FindFirstChild("ManageDisplay") else nil
 		local prompt = if manage then manage:FindFirstChild("ManageDisplayPrompt") else nil
@@ -33,9 +36,12 @@ function Interaction.create(open: () -> ()): { update: () -> (), destroy: () -> 
 		local sign = if face then face:FindFirstChild("CollectSign") else nil
 		local label = if sign then sign:FindFirstChild("Instruction") else nil
 		if label and label:IsA("TextLabel") then
-			label.Text = if touch
-				then "Tap to Collect · Each Figure"
-				else "Click to Collect · Each Figure"
+			-- The owner's Display total shares the plaque instead of adding another sign.
+			label.Text = string.format(
+				"%s to Collect · %s Coins Ready",
+				if touch then "Tap" else "Click",
+				UIState.compact(total)
+			)
 		end
 	end
 	ownConnection(Input.LastInputTypeChanged:Connect(function(input: Enum.UserInputType)

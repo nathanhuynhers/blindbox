@@ -7,12 +7,20 @@ This is the current product-direction backlog after the first full-game candidat
 
 These are the current discrete follow-up tasks from playtesting. Each numbered item is intended to stay as one task rather than being split into implementation subtasks.
 
-1. **Add coin collection animation**
+1. [x] **Add coin collection animation** — implemented; user Studio acceptance pending.
    - Play a satisfying animation when coins are collected from a figure.
+   - Client-only `CoinBurst`: shockwave, sparkles and a soft flash at the figure, then spinning
+     gold coins with trails fountain out and home into the player, kicking the HUD Coins pill
+     as each lands. A local click/tap predicts it; the server's collect reply (now naming the
+     figure) confirms the "+N" from the wallet delta. Respects the effects setting. No sound
+     yet: no approved coin audio asset exists.
 
-2. **Show earnings above figures**
+2. [x] **Show earnings above figures** — implemented; user Studio acceptance pending.
    - Show how many coins each individual displayed figure has accumulated.
    - Also show the combined earnings for the whole Display.
+   - `DisplayEarnings`: owner-only billboards (coin icon + whole Coins, unlit for night) from
+     the existing private snapshot; the Display total shares the counter plaque
+     ("Click/Tap to Collect · N Coins Ready") instead of adding a sign. No new remotes or data.
 
 3. [x] **Rework Display interaction** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
    - E opens the Display UI only when the player is nearby.

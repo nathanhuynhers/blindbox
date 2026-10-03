@@ -7,6 +7,7 @@ local ShelfConfig = require(ReplicatedStorage.Shared.ShelfConfig)
 local Catalog = require(ReplicatedStorage.Shared.Catalog)
 local Interface = require(script.Interface)
 local DisplayInteraction = require(script.DisplayInteraction)
+local DisplayEarnings = require(script.DisplayEarnings)
 local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
 local UIState = require(script.UIState)
@@ -74,14 +75,16 @@ local function revealModel(state: Types.Snapshot, result: OpeningResult.Result):
 end
 local connections: { RBXScriptConnection } = {}
 local displayInteraction = DisplayInteraction.create(ui.openDisplay)
+local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded)
 table.insert(
 	connections,
 	stateRemote.OnClientEvent:Connect(function(state: Types.Snapshot, reply: Types.Reply?)
+		local previous = current
 		if state.sequence > sequence then
 			sequence = state.sequence
 			current = state
 			ui.update(state)
-			displayInteraction.update()
+			displayInteraction.update(displayEarnings.update(state))
 			if opening and opening.isActive() and reveal then
 				-- Live affordability and slots while the Reveal card is up.
 				opening.refresh(revealModel(state, reveal))
@@ -91,6 +94,9 @@ table.insert(
 		-- Server-initiated collections (world click or tap) reply with a "collect:" id.
 		if reply and string.sub(reply.id, 1, 8) == "collect:" then
 			ui.message(reply.message, if reply.ok then "success" else "error")
+			if previous and current then
+				displayEarnings.collected(previous, current, reply)
+			end
 		end
 		if reply and intent and reply.id == intent.id then
 			local before = beforeRequest
@@ -142,5 +148,6 @@ script.Destroying:Connect(function()
 		opening.destroy()
 	end
 	displayInteraction.destroy()
+	displayEarnings.destroy()
 	ui.destroy()
 end)

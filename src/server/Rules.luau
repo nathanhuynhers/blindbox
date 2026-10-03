@@ -139,7 +139,7 @@ function Rules.mutate(
 	Rules.refreshDay(state, today)
 	if action == "Collect" then
 		local ok, message = Rules.collect(state, intent.slot or 0, id)
-		return ok, message, nil
+		return ok, message, if ok then id else nil
 	elseif action == "Buy" or action == "Daily" then
 		local collection = intent.choice or Economy.dailyCollection
 		local price = Rules.prices[collection]

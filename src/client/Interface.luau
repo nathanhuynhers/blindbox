@@ -5,6 +5,7 @@ local Players = game:GetService("Players")
 local GuiService = game:GetService("GuiService")
 local Input = game:GetService("UserInputService")
 local Actions = game:GetService("ContextActionService")
+local Tweens = game:GetService("TweenService")
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Scope = require(script.Parent.UIScope)
 local Context = require(script.Parent.UIContext)
@@ -29,6 +30,7 @@ export type Interface = {
 	openingFocus: (boolean) -> (),
 	pending: (boolean) -> (),
 	openDisplay: () -> (),
+	coinLanded: () -> (),
 	destroy: () -> (),
 }
 
@@ -353,6 +355,13 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 		update = function(state: Types.Snapshot)
 			snapshot = state
 			refresh()
+		end,
+		-- Each flying coin that reaches the player kicks the Coins pill.
+		coinLanded = function()
+			local pop = hud.coins:FindFirstChildOfClass("UIScale") or Instance.new("UIScale")
+			pop.Parent = hud.coins
+			pop.Scale = 1.16
+			Tweens:Create(pop, TweenInfo.new(0.2, Enum.EasingStyle.Back), { Scale = 1 }):Play()
 		end,
 		message = notices.show,
 		effects = ctx.effects,
