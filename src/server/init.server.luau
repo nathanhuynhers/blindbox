@@ -19,10 +19,18 @@ local ModelAssets = require(script.ModelAssets)
 local PlayerSpawn = require(script.PlayerSpawn)
 local Leaderboard = require(script.Leaderboard)
 local DayNight = require(script.DayNight)
+local TownModels = require(script.TownModels)
+local TownPlacements = require(script.TownPlacements)
 local world = World.create()
 local productionModels = ModelAssets.publish()
 local dayNight = DayNight.start(Lighting)
 Leaderboard.start(world.board)
+-- Uploaded trees and statues replace their part placeholders as each model loads.
+local townModels = TownModels.start(function(kind: string, template: Model)
+	if world.root.Parent then
+		TownPlacements.swap(kind, template)
+	end
+end)
 type Session = {
 	transaction: Transactions.Session,
 	plot: PlayerPlot.Plot,
@@ -299,5 +307,6 @@ game:BindToClose(function()
 	end
 	folder:Destroy()
 	productionModels:Destroy()
+	townModels:Destroy()
 	world.root:Destroy()
 end)

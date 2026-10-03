@@ -11,6 +11,7 @@ local World = require("./World")
 local Layout = require("./TownLayout")
 local TownStyle = require("./TownStyle")
 local TownProps = require("./TownProps")
+local TownPlacements = require("./TownPlacements")
 local NightLights = require("./NightLights")
 local PlotStyle = require("./PlotStyle")
 local LeaderboardBoard = require("./LeaderboardBoard")
@@ -470,7 +471,7 @@ for _, child in edge:GetChildren() do
 					>= (Layout.edge.wallRadius + 1) * math.tan(math.pi / Layout.edge.wallSegments),
 			"tall invisible boundary walls close the ring behind the hedge"
 		)
-	elseif string.find(child.Name, "^EdgeTree_") then
+	elseif string.find(child.Name, "^EdgeTree_%d+_%d+$") then
 		edgeTrees += 1
 		check(radius(child:FindFirstChild("Trunk").Position) < Layout.edge.hedgeRadius, "tree line in front of the hedge")
 	elseif string.find(child.Name, "^PlotBoxStack_") then
@@ -483,7 +484,7 @@ check(edgeTrees == 3 * Config.maxPlots and plotStacks == Config.maxPlots, "tree 
 -- Night lights stay inside the budget and switch lens glow with the lights.
 local staticLights = NightLights.lightCount()
 check(
-	staticLights == 32 + 2 * Config.maxPlots + 1 and staticLights + Config.maxPlots <= NightLights.budget,
+	staticLights == 32 + 2 * Config.maxPlots + 1 + 4 and staticLights + Config.maxPlots <= NightLights.budget,
 	string.format("static night lights %d leave room for eight arch glows within %d", staticLights, NightLights.budget)
 )
 print(string.format("Static night lights: %d (+1 per active plot) / %d", staticLights, NightLights.budget))
@@ -560,6 +561,56 @@ for index = 1, Config.maxPlots do
 	end
 end
 check(platformParts == 144, "eight fixed platforms use a bounded 144 native parts")
+
+-- Uploaded-model spots: every tree and statue registers one placement with a placeholder.
+local expectedKinds = {
+	Sakura = 26,
+	Puffball = 12,
+	Poplar = 12,
+	Topiary = 2,
+	PeekaPeekaboo = 1,
+	PeekaTada = 1,
+	PeekaHug = 1,
+	PeekaNap = 1,
+}
+for kind, expected in expectedKinds do
+	local spots = TownPlacements.list(kind)
+	check(#spots == expected, string.format("%s has %d model spots (got %d)", kind, expected, #spots))
+	for _, spot in spots do
+		check(spot.placeholder ~= nil and spot.placeholder.Parent ~= nil, "each spot keeps a live part placeholder")
+		check(spot.size > 0 and (spot.fit == "width" or spot.fit == "height"), "each spot has a target size")
+	end
+end
+check(#TownPlacements.list() == 56, "52 trees and 4 statues wait for uploaded models")
+for _, spot in TownPlacements.list("PeekaHug") do
+	check(spot.fit == "width" and spot.size == TownProps.statueWidth, "statues fit the 12-stud pedestal footprint")
+end
+local yawA, scaleA = TownProps.jitter(101)
+local yawB, scaleB = TownProps.jitter(102)
+check(yawA ~= yawB and scaleA >= 0.9 and scaleA <= 1.1 and scaleB >= 0.9 and scaleB <= 1.1, "neighbouring trees get their own turn and size")
+local carpets = 0
+for _, node in world:GetDescendants() do
+	if node.ClassName == "Part" and string.find(node.Name, ".Petals$") then
+		carpets += 1
+		check(not node.CanCollide and not node.CanQuery, "petal carpets are flat decoration")
+	end
+end
+check(carpets == 24, "every sakura outside the plaza planters has a petal carpet")
+
+-- A ready template replaces every placeholder of its kind, scaled to each spot.
+local template = Engine.Instance.new("Model")
+template.Name = "Sakura"
+template:SetAttribute("NaturalWidth", 4)
+template:SetAttribute("NaturalHeight", 3.5)
+local sample = TownPlacements.list("Sakura")[1]
+local sampleParent = sample.placeholder.Parent
+local sampleName = sample.placeholder.Name
+check(TownPlacements.swap("Sakura", template) == 26, "all 26 sakura spots swap to the model")
+check(sample.placeholder == nil and sample.model ~= nil and sample.model.Parent == sampleParent, "the model takes the placeholder's place")
+check(sample.model.Name == sampleName and close(sample.model:GetScale(), sample.size / 4), "the model is scaled to the spot's width")
+check(TownPlacements.swap("Sakura", template) == 0, "a second load never duplicates trees")
+local broken = Engine.Instance.new("Model")
+check(TownPlacements.swap("Poplar", broken) == 0 and TownPlacements.list("Poplar")[1].placeholder ~= nil, "a template without its size keeps the placeholders")
 local used = {}
 for id = 1, Config.maxPlots do
 	local index = Slots.claim(allocator, id)
