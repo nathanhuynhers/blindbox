@@ -647,12 +647,21 @@ for a = 1, Config.maxPlots do
 	end
 end
 local owner, guest = Engine.player(1), Engine.player(100)
+local controllersBeforePlots = NightLights.controllerCount()
 local plot, other = Plot.create(owner, 1), Plot.create(guest, 2)
+check(NightLights.controllerCount() == controllersBeforePlots + 2, "each active plot registers one night-light controller")
 for index = 3, Config.maxPlots do
 	local actor = Engine.player(index)
 	local lightsBefore = NightLights.lightCount()
+	local controllersBefore = NightLights.controllerCount()
+	if index == 3 then NightLights.set(true) end
 	local radialPlot = Plot.create(actor, index)
 	check(NightLights.lightCount() == lightsBefore + 1, "an active plot adds exactly one arch glow")
+	check(NightLights.controllerCount() == controllersBefore + 1, "an active plot adds one fixture lighting controller")
+	if index == 3 then
+		check(radialPlot.fixture.light.Brightness == Fixture.lighting.nightBrightness, "plot created at night immediately uses night fixture lighting")
+		NightLights.set(false)
+	end
 	local radialState = Rules.new(0)
 	Plot.render(radialPlot, radialState)
 	local spawnAt = localPosition(radialPlot.transform, radialPlot.spawn.Position)
@@ -717,8 +726,10 @@ for index = 3, Config.maxPlots do
 	end
 	Plot.destroy(radialPlot)
 	check(NightLights.lightCount() == lightsBefore, "plot release returns its arch glow to the budget")
+	check(NightLights.controllerCount() == controllersBefore, "plot release removes its fixture lighting controller")
 	Plot.destroy(radialPlot)
 	check(NightLights.lightCount() == lightsBefore, "release is idempotent")
+	check(NightLights.controllerCount() == controllersBefore, "controller release is idempotent")
 end
 local state = Rules.new(0)
 state.discovered["grove.star"] = true
@@ -975,11 +986,34 @@ local light = plot.fixture.parts.WarmDiffuser:FindFirstChildOfClass("SurfaceLigh
 assert(light)
 check(
 	light.Face == "Bottom"
-		and light.Brightness == 0.65
+		and light.Brightness == Fixture.lighting.dayBrightness
 		and light.Color[1] > light.Color[3]
 		and not light.Shadows,
 	"one subtle downward warm wash, no shadow-heavy effect"
 )
+local boundedLights = NightLights.lightCount()
+local boundedControllers = NightLights.controllerCount()
+NightLights.set(true)
+check(light.Brightness == Fixture.lighting.nightBrightness, "Display wash intensifies at night")
+for _, shelfLight in plot.collection.lights do
+	check(shelfLight.Brightness == CollectionFixture.lighting.nightBrightness, "each existing Shelf wash intensifies at night")
+end
+check(
+	NightLights.lightCount() == boundedLights and NightLights.controllerCount() == boundedControllers,
+	"night transition adds no lights or controllers"
+)
+local dayCapacity, daySlots = state.display.unlocked, table.clone(state.display.slots)
+state.display.unlocked = 6
+for slot = 4, 6 do state.display.slots[slot] = "" end
+Plot.render(plot, state)
+check(light.Brightness == Fixture.lighting.nightBrightness and plot.fixture.light == light, "six-slot resize and render retain the same night-lit Display wash")
+state.display.unlocked, state.display.slots = dayCapacity, daySlots
+Plot.render(plot, state)
+NightLights.set(false)
+check(light.Brightness == Fixture.lighting.dayBrightness, "Display wash restores its original daytime brightness")
+for _, shelfLight in plot.collection.lights do
+	check(shelfLight.Brightness == CollectionFixture.lighting.dayBrightness, "Shelf washes restore daytime brightness")
+end
 check(
 	plot.fixture.parts.OakBase.Material == "Wood" and initialCounter.Material == "SmoothPlastic",
 	"light wood base and smooth ivory counter"
@@ -1446,7 +1480,7 @@ Plot.render(replacement, restored)
 check(
 	#replacement.model:GetChildren() == structureCount
 		and #descendants(replacement.collection.model) == #fixtureNodes
-		and #replacement.shelves.parent:GetChildren() == 27,
+		and #replacement.shelves.parent:GetChildren() <= 27,
 	"250 owned units still render three structures and at most 27 figures"
 )
 check(
@@ -1489,6 +1523,7 @@ detector.MouseClick:fire(guest)
 check(collects == 2, "destroyed collector disconnected")
 Plot.destroy(replacement)
 world:Destroy()
+check(NightLights.controllerCount() == controllersBeforePlots, "all plot lighting controllers are cleaned up")
 check(Engine.connections == 0, "no owned connections remain")
 print(
 	string.format("PASS: %d plot allocation/geometry/render/lifecycle checks (engine shim)", checks)

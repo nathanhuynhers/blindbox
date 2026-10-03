@@ -80,7 +80,7 @@ The regression suite runs actual domain, request, schema and storage-transform c
 - 1,839 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
 - 1,732 opening-state/result checks: timing, all-phase skip/cancel, rapid inputs, reduced motion,
   confirmed NEW/duplicate metadata, delayed snapshots and unsupported/failed replies.
-- Shelf schema/migration, discovery-only placement, intent abuse, shared carousel and fixed
+- Shelf schema/reconciliation, owned-copy placement limits, intent abuse, shared carousel and fixed
   plot lifecycle/rendering suites; see the exact current counts and limits in
   [the implementation report](PLOT_SHELF_IMPLEMENTATION.md).
 
@@ -144,6 +144,9 @@ Run that script from the client Command Bar on each screen. These engine checks 
     confirm the invisible walls stop you. Check the giant box, board readability on both faces,
     awnings at Display capacities 3-6, night lights after dusk and their switch-off at dawn.
     With two or more clients, confirm every arch shows its owner's name and plots release cleanly.
+    At dusk, inspect all three Shelf structures and Display capacities 3 and 6; figures should be
+    easier to read while furniture stays controlled. At dawn, confirm the original daytime washes
+    return. Repeated carousel turns, expansion, respawn and owner leave/rejoin must not add lights.
 12. **Global leaderboard:** in a private published test experience with API access, open boxes and
     place figures on two accounts in different servers; within about 2.5 minutes both should
     appear on each server's board. Leave and confirm the final score is written. Disable API
@@ -151,6 +154,12 @@ Run that script from the client Command Bar on each screen. These engine checks 
 13. **Schema 8 migration:** load saved v6 and v7 Economy2 test profiles; they must keep all
     progress with `boxesOpened = 0`, then count Buy and Daily boxes only. Confirm a v8 save never
     loads on an older (schema-7) server build.
+14. **Shelf owned-copy rule:** with isolated test profiles, try zero, one and two owned copies
+    across visible and offscreen units. Confirm a third placement is rejected, removal restores
+    one choice immediately, and a failed swap changes neither figure. Load an intentionally
+    over-placed schema-8 record, verify earliest unit/slot placements survive, wait for autosave,
+    rejoin and verify the repaired result remains while Coins, inventory, discoveries, Display,
+    goals and collection completion are unchanged. Repeat with two clients for owner isolation.
 
 14. **Town models:** in Play, confirm all 52 trees and 4 statues swap from parts to the sculpted
     models within a few seconds (`ServerStorage.TownModels` shows `<Kind>Status = Ready`), petals

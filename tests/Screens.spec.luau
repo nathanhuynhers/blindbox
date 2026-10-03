@@ -26,6 +26,7 @@ local function snapshot()
 				{ id = "shelf:3", index = 3, placements = {} },
 			},
 		},
+		shelfAvailable = {},
 		coins = 5000000,
 		earnings = {},
 		owned = {},
@@ -296,6 +297,8 @@ check(collection.Visible and collectionRoot:GetAttribute("CollectionId") == "sta
 check(Engine.pending() == timersBefore, "countdown timer stops when Goals is hidden")
 
 -- Shelves
+state.shelfAvailable["grove.star"] = 1
+state.shelfAvailable["grove.moth"] = 0
 Engine.click(find("DockShelves"))
 local shelves = host("Shelves")
 local shelvesRoot = shelves:FindFirstChild("Shelves")
@@ -308,8 +311,12 @@ check(
 	last().action == "ShelfPlace" and last().figure == "grove.star" and last().slot == 5 and last().choice == "shelf:1",
 	"placing on a shelf sends the spot and shelf"
 )
+local shelfRequests = #requests
+Engine.click(within(within(shelves, "Figures"), "grove.moth"))
+check(#requests == shelfRequests, "exhausted owned figure cannot send ShelfPlace")
 check(not within(shelves, "PreviousShelves"):GetAttribute("Enabled"), "prev disabled with exactly three shelves")
 state.shelves.visible[1].placements["row:2/slot:2"] = "grove.star"
+state.shelfAvailable["grove.star"] = 0
 state.sequence += 1
 ui.update(state)
 Engine.click(within(shelves, "ClearSpot"))

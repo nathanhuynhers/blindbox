@@ -22,7 +22,9 @@ uncollected balances survive removal and rejoining. E nearby opens Display manag
 Future paid auto-collect is not implemented.
 See [economy](ECONOMY.md) for exact formulas and tuning.
 
-Shelves use discovered figures cosmetically and reserve zero copies. Players start with three persistent
+Shelves use owned figures cosmetically. A figure may appear across all Shelf Units no more times
+than the number of copies owned; Display placement is an independent earning reference and does
+not reduce this Shelf allowance. Players start with three persistent
 Shelf Units, each with three rows of three positions (nine per unit, 27 starting positions).
 Exactly three physical structures show the viewport; each turn shifts one owned unit and wraps.
 Navigation is disabled with three owned units. Visitors may browse but cannot edit. Future
@@ -42,7 +44,8 @@ crossed by the cobbled Market Street ring with lanterns. Gift-box stacks and mar
 gaps between plots, sculpted sakura and green trees line the town, and a hedge wraps the island. Players spawn on their own plot;
 each active plot has a walk-through `<DisplayName>'s Showroom` arch, potted plants, striped
 Display/Shelves awnings and a spawn pad, all in one shared pastel-pink accent. A 20-minute
-day/night cycle switches lanterns and plot lights on at dusk. A global plaza leaderboard rotates
+day/night cycle switches lanterns and plot lights on at dusk and strengthens the existing Display
+and Shelf fixture washes until dawn. A global plaza leaderboard rotates
 Most Figures, Top Coins/sec and Most Boxes Opened; it is presentation only and grants nothing.
 The center/right of each plot stays open. Collections and Shop retain their existing UI/art. There
 is no active Showroom, Gallery, interior visit flow, teleport browser, paid product, trading

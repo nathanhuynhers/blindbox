@@ -75,7 +75,10 @@ never collide; trunks, stems and statues do.
 ambient, brightness, sun tint and an owned `Atmosphere` interpolate between day, golden-hour,
 dusk, night and dawn looks. At dusk (17.8, as the default sky sets) and dawn (6.2) `NightLights` switches every registered
 lantern, bollard, giant-box and arch light and swaps lens parts to Neon or back. Switching only
-happens when that state changes; nothing runs per frame.
+happens when that state changes; nothing runs per frame. Each active plot registers one teardown-owned
+controller that changes only the brightness of the Display's existing wash (0.65 day, 1.25 night)
+and the nine existing Shelf row washes (0.35 day, 0.9 night). It creates no extra lights, keeps
+the 64-light budget unchanged, and continues to cover Display widths 3-6 and all carousel views.
 
 ### Plot platforms and entrances
 
@@ -201,22 +204,30 @@ outside the current visible layout remain stored and are not silently deleted or
 
 ## Cosmetic eligibility and permissions
 
-Shelves reference **permanently discovered** figure IDs. They consume/reserve zero physical copies,
-produce zero Coins, and never count toward Display bonuses or daily Display goals. Repeated shelf
-figures and simultaneous Display/shelf use are allowed. Discovery remains usable even when no
-physical inventory copy remains. Recycling rules are unchanged.
+Shelves reference figure IDs the player currently owns. Across every persistent Shelf Unit,
+including hidden/offscreen units and valid hidden local slots, placements of one figure cannot
+exceed its owned quantity. These references do not consume inventory, produce Coins, or count
+toward Display bonuses or daily Display goals. Display placement is independent, so the same
+owned figure may simultaneously earn on Display and appear once per owned copy on Shelves.
+
+During profile decode, structurally valid saved Shelf data is reconciled in Shelf Unit order and
+numeric row/slot order. The earliest placements up to the owned count remain; later excess and
+wholly unowned placements are cleared. The process grants no copies, changes no unrelated state,
+is idempotent, and saves normally without a schema or namespace change.
 
 Only owners can place, replace or remove their shelf figures. Server callback identity resolves
 the profile and plot; no submitted owner ID or plot index is accepted. Requests require an owned
-Shelf Unit ID that is currently visible, configured local slot, known discovered figure, profile
-revision and carousel revision, plus a living character near their own shelves. Turning the
+Shelf Unit ID that is currently visible, configured local slot, known owned figure, remaining
+capacity computed across every persistent Shelf Unit, profile revision and carousel revision,
+plus a living character near their own shelves. Turning the
 carousel away and back invalidates old edits. Existing request receipts and rate limits protect retries.
 
 Visitors can walk, look and turn the shared carousel. They cannot edit Display/shelves, unlock
 slots, acquire shelves or change another player's progression. Rendered figures and owner/carousel
 signage are public. The Collection header stays constant during browsing. Owner snapshots go
-only to that owner and project only the three visible
-units, owned count and navigation availability; inventories, balances, discoveries and other
+only to that owner and project only the three visible units, owned count and navigation
+availability; the owner also receives a derived remaining-copy map for picker behavior.
+Inventories, balances, discoveries and other
 progression are never sent to visitors to render a plot.
 
 ## Completion and customization

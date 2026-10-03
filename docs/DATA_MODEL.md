@@ -34,9 +34,10 @@ Rows/slots are configured independently of identity. Positive logical coordinate
 current geometry survive and remain hidden. `customization` belongs to each persistent unit
 and must currently be empty; unknown future state fails closed rather than being erased.
 
-Only Display earns Coins; one earning placement per unique owned figure is permitted. Shelf references reserve zero copies and
-may repeat across units, even while the same figure earns in Display or has zero owned copies.
-They do not affect duplicate bonuses, inventory or daily goals. Unknown fields, duplicate unit
+Only Display earns Coins; one earning placement per unique owned figure is permitted. Across all
+persistent Shelf Units, the count of a figure's placements may not exceed its owned quantity.
+Display placement counts independently and does not reduce that Shelf allowance. Shelf references
+do not consume inventory or affect duplicate bonuses, income or daily goals. Unknown fields, duplicate unit
 IDs, invalid reservations, undiscovered/unknown figures and inconsistent daily state fail closed.
 
 ## Decoder resource guards
@@ -71,6 +72,10 @@ counter record. Schema 7 also validates and deep-copies earnings; fractions now 
 each figure's bank. Runtime time/revision/receipts are not persisted. No offline accrual is awarded.
 
 The shelf decoder retains its existing safety guards and optional dormant-reference representation.
+After structural validation it reconciles active Shelf Units in array order and numeric row/slot
+order. It keeps the earliest placements allowed by `owned`, removes later excess and wholly
+unowned placements, and grants nothing. The repair is idempotent and the decoded state is saved
+through the ordinary autosave/final-save path; no schema or namespace reset is involved.
 The retired legacy adapters are no longer used by the active Profile decoder.
 
 ## Storage and runtime boundaries
@@ -89,7 +94,8 @@ at 1 and disables navigation. Mutation revision, timing, receipts, plot assignme
 carousel state and instances are **not persisted**.
 
 Owner snapshots add per-collection prices, current/base figure odds and effective/base/next-copy
-rates and private per-figure uncollected earnings. They include only this Shelf projection:
+rates, private per-figure uncollected earnings and `shelfAvailable`, a server-derived remaining
+Shelf-copy map that includes hidden units. They include only this public Shelf projection:
 `shelves = {ownedCount, visible = {{id, index, placements}, ...}, carouselRevision, canNavigate}`.
 Only three units and their configured local slots are projected. Edits require the visible
 persistent `shelfId`, local `shelfSlotId`, profile revision, carousel revision and owner/proximity

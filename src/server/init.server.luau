@@ -64,6 +64,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	Rules.refreshDay(state, day)
 	local snapshot: Types.Snapshot = {
 		shelves = Shelves.publicView(state.shelves, session.plot.view),
+		shelfAvailable = Shelves.availability(state.shelves, state.owned),
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		owned = table.clone(state.owned),

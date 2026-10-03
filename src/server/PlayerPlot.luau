@@ -11,6 +11,7 @@ local Config = require(script.Parent.PlotConfig)
 local Shelves = require(script.Parent.Shelves)
 local FigureSlots = require(script.Parent.FigureSlots)
 local Rules = require(script.Parent.Rules)
+local NightLights = require(script.Parent.NightLights)
 export type Plot = {
 	model: Model,
 	ownerId: number,
@@ -30,6 +31,7 @@ export type Plot = {
 	connections: { RBXScriptConnection },
 	hitboxes: { Part },
 	collectors: { Part },
+	nightLighting: NightLights.Entry?,
 }
 local PlayerPlot = {}
 local navigationMargin = 8
@@ -39,6 +41,10 @@ root.Name = "PlayerPlots"
 root.Parent = workspace
 local function cleanup(plot: Plot)
 	plot.active = false
+	if plot.nightLighting then
+		NightLights.release(plot.nightLighting)
+		plot.nightLighting = nil
+	end
 	PlotFixture.releaseEntrance(plot.entrance)
 	for _, connection in plot.connections do
 		connection:Disconnect()
@@ -80,7 +86,12 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		connections = {},
 		hitboxes = collection.hitboxes,
 		collectors = {},
+		nightLighting = nil,
 	}
+	plot.nightLighting = NightLights.watch(function(enabled)
+		DisplayFixture.setNight(fixture, enabled)
+		CollectionFixture.setNight(collection, enabled)
+	end)
 	table.insert(
 		plot.connections,
 		model.Destroying:Connect(function()

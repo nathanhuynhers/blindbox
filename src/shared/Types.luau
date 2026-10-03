@@ -60,6 +60,7 @@ export type State = Profile & { revision: number, time: number }
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 export type Snapshot = {
 	shelves: ShelfView,
+	shelfAvailable: { [string]: number },
 	coins: number,
 	earnings: { [string]: number },
 	owned: { [string]: number },

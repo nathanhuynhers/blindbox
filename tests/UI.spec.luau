@@ -29,6 +29,7 @@ local function fresh(): Types.Snapshot
 			carouselRevision = 0,
 			canNavigate = false,
 		},
+		shelfAvailable = {},
 		coins = 450,
 		earnings = {},
 		owned = {},
@@ -58,6 +59,9 @@ local function fresh(): Types.Snapshot
 	}
 end
 local snapshot = fresh()
+snapshot.shelfAvailable["grove.star"] = 2
+check(UI.shelfAvailable(snapshot, "grove.star") == 2, "Shelf availability comes from server projection")
+check(UI.shelfAvailable(snapshot, "grove.moth") == 0, "missing Shelf availability fails closed")
 
 -- Formatting: exact, abbreviated (never rounds up), rates and percentages.
 check(UI.number(1000000000) == "1,000,000,000" and UI.number(0) == "0", "exact currency")

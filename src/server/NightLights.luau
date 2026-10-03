@@ -6,6 +6,7 @@ local Layout = require(script.Parent.TownLayout)
 export type Entry = {
 	light: Light?,
 	lens: BasePart?,
+	change: ((boolean) -> ())?,
 	dayColor: Color3,
 	nightColor: Color3,
 	dayMaterial: Enum.Material,
@@ -16,9 +17,13 @@ NightLights.budget = Layout.budgets.nightLights
 
 local entries: { [Entry]: true } = {}
 local lights = 0
+local controllers = 0
 local on = false
 
 local function apply(entry: Entry)
+	if entry.change then
+		entry.change(on)
+	end
 	if entry.light then
 		entry.light.Enabled = on
 	end
@@ -45,11 +50,28 @@ function NightLights.add(light: Light?, lens: BasePart?, nightColor: Color3?): E
 	local entry: Entry = {
 		light = kept,
 		lens = lens,
+		change = nil,
 		dayColor = if lens then lens.Color else Color3.new(1, 1, 1),
 		nightColor = nightColor or (if lens then lens.Color else Color3.new(1, 1, 1)),
 		dayMaterial = if lens then lens.Material else Enum.Material.SmoothPlastic,
 	}
 	entries[entry] = true
+	apply(entry)
+	return entry
+end
+
+-- Registers fixture-level night tuning without consuming the bounded actual-light budget.
+function NightLights.watch(change: (boolean) -> ()): Entry
+	local entry: Entry = {
+		light = nil,
+		lens = nil,
+		change = change,
+		dayColor = Color3.new(1, 1, 1),
+		nightColor = Color3.new(1, 1, 1),
+		dayMaterial = Enum.Material.SmoothPlastic,
+	}
+	entries[entry] = true
+	controllers += 1
 	apply(entry)
 	return entry
 end
@@ -60,6 +82,9 @@ function NightLights.release(entry: Entry)
 		entries[entry] = nil
 		if entry.light then
 			lights -= 1
+		end
+		if entry.change then
+			controllers -= 1
 		end
 	end
 end
@@ -80,6 +105,10 @@ end
 
 function NightLights.lightCount(): number
 	return lights
+end
+
+function NightLights.controllerCount(): number
+	return controllers
 end
 
 return NightLights

@@ -35,7 +35,9 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   current character, respawns and reloads; unbound on leave.
 - `DayNight`/`NightLights`: a 1-second server loop sets `Lighting.ClockTime` and interpolated
   lighting looks over a 20-minute cycle; `NightLights` is a 64-light budgeted registry that
-  switches lights and lens glows only when crossing dusk/dawn.
+  switches lights and lens glows only when crossing dusk/dawn. One lifecycle-owned controller
+  per active plot also retunes its existing Display and Shelf wash lights at those transitions;
+  controllers consume no actual-light budget and add no per-frame work.
 - `Leaderboard`/`LeaderboardStore`/`LeaderboardStats`/`LeaderboardBoard`: presentation-only global
   leaderboard. The service runs background loops for writes (throttled per player, on leave, budget
   checked, backoff), reads (top 5 per stat every 90 s, last good page kept) and the 8-second page
@@ -47,8 +49,9 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   is separate from shelf ownership, carousel decisions and migration; indices stay in owner UI.
 - `FigureSlots`: per-slot figure cache using existing FigureModel assets; replace only changed IDs,
   or a figure whose production template became ready (`FigureModel.variant`).
-- `Shelves`: discovered-reference rules, visible owned-unit validation, stable slot IDs, runtime carousel
-  revision/wraparound/cooldown and bounded three-unit projections. Zero economy/inventory reservations.
+- `Shelves`: owned-copy placement limits across all persistent units, visible owned-unit validation,
+  stable slot IDs, deterministic load repair, runtime carousel revision/wraparound/cooldown and
+  bounded three-unit projections. Display placement and Shelf allowance remain independent.
 - `Rules`/`Economy`/`CollectionEconomy`: collection prices, soft pity, permanent duplicate income,
   unique earning placements, sequential Coin slot unlocks and Starter-only daily grants. Buy and
   Daily also increment the persistent `boxesOpened` counter in the same atomic grant.
@@ -57,14 +60,16 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `Profile`: schema-8 validation/deep copies, including independent pity, per-figure earnings and
   the `boxesOpened` counter; valid Economy2 schema-6/7 profiles upgrade (counter starts at 0)
   without a second reset. New save namespaces implement the authorized reset; retired legacy
-  adapters are not invoked.
+  adapters are not invoked. Shelf decode removes unowned/excess placements in stable unit and
+  numeric row/slot order so repaired state follows the normal save path.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
 
 Only `Intent`, `State` and `RequestState` remotes remain. No owner/plot identity comes from a
 mutation request. Requests resolve to the callback Player's session. Display placement checks
 that player's own plot/proximity. Shelf edits require a visible owned unit ID, configured local slot,
-discovery, profile revision and carousel revision; A-B-A navigation invalidates stale edits.
+discovery, ownership, remaining Shelf copy capacity, profile revision and carousel revision;
+A-B-A navigation invalidates stale edits.
 Physical arrows are server-bound to a plot, validate living character/distance/session, and use
 a shared per-plot cooldown. They change only runtime visibility, not saved progression.
 
@@ -102,8 +107,9 @@ Leaving/shutdown attempts a bounded final save/release, with lease expiry as cra
 `init.client.luau` queues one mutation at a time and retries the same ID after delayed replies.
 It reconciles ordered owner snapshots and exposes pending-request state to the UI. `Interface`
 composes dedicated HUD, navigation, book/details, shop, Display controls (`DisplayScreen`),
-goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and carousel controls and a discovered
-figure picker. There is no visit directory or teleport callback.
+goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and carousel controls
+and an owned-figure picker. Exhausted figures remain non-actionable using the existing tile state.
+There is no visit directory or teleport callback.
 `UIStyle`, `UIKit`, `UIButton`, `UIBadge`, `UIProgress`, `UIIcons` and `UIPreview` provide tokens,
 primitives, controls, progress, icon shapes and 3D portraits. `UIState` derives read-only
 presentation metadata and is the only reader of snapshot economy fields; `UIScope` owns

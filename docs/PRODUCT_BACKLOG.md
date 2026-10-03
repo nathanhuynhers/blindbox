@@ -14,7 +14,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
    - Show how many coins each individual displayed figure has accumulated.
    - Also show the combined earnings for the whole Display.
 
-3. [x] **Rework Display interaction** — completed. Automated checks pass; Studio acceptance remains pending. See [verification](PLAYTEST_INTERACTIONS.md).
+3. [x] **Rework Display interaction** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
    - E opens the Display UI only when the player is nearby.
    - E no longer collects coins.
    - Desktop players click individual figures to collect.
@@ -26,15 +26,17 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
    - Completing a Collection for the first time unlocks a new Shelf/Page.
    - Players can also purchase additional Shelf/Pages using coins.
 
-5. **Increase Shelf and Display brightness at night**
+5. [x] **Increase Shelf and Display brightness at night** â€” implementation and automated checks complete; Studio visual/mobile acceptance pending.
    - Make figures and their furniture easier to see without making the whole plot overly bright.
+   - Native Studio MCP instance, transition, expansion, carousel and cleanup checks pass; subjective 3D visual/mobile acceptance remains pending.
 
-6. [x] **Rename Collection to Shelves** — completed. Automated checks pass; Studio acceptance remains pending. See [verification](PLAYTEST_INTERACTIONS.md).
+6. [x] **Rename Collection to Shelves** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
    - Change the incorrect "Collection" title at the top of the Shelf interface to "Shelves."
 
-7. **Restrict Shelf placement to owned figures**
+7. [x] **Restrict Shelf placement to owned figures** â€” implementation and automated checks complete; Studio persistence/multiplayer acceptance pending.
    - Players can only place copies they actually own.
    - If they own two copies of a figure, they can only have two copies placed across their Shelves.
+   - Native Studio MCP authority, repair and picker-state checks pass; isolated DataStore rejoin and two-client acceptance remain pending.
 
 8. **Add Auto Open Gamepass**
    - Automatically keep opening boxes.
@@ -51,7 +53,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - On return, show how much was earned.
     - The player can claim normally or spend Robux to double the offline earnings.
 
-11. [x] **Remove finished Daily Goals** — completed. Automated checks pass; Studio acceptance remains pending. See [verification](PLAYTEST_INTERACTIONS.md).
+11. [x] **Remove finished Daily Goals** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
     - After a Daily Goal is completed and claimed, remove it from the HUD instead of leaving the "Claimed" card there.
 
 12. **Add consecutive Daily Login Rewards**
@@ -74,6 +76,16 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Add a button that teleports the player back to their own plot.
     - Player-facing naming/iconography can use "Home" if that fits the UI better than "Jump to Plot."
     - Teleport the character to a safe, consistent location within their own plot.
+
+16. **Add full game soundpack**
+    - Add cohesive sound effects across the game for important interactions and feedback.
+    - Cover UI clicks/navigation, box opening, rarity/reveal moments, coin collection, purchases/claims, Display/Shelf interactions, Daily Goals/Rewards, and other important gameplay actions.
+    - Keep the sound direction consistent with the game's polished blind-box collectible feel.
+
+17. **Add background music**
+    - Add looping background music for the main world/plot experience.
+    - Keep it subtle enough that gameplay sound effects remain clear.
+    - Leave room for area-specific or special-event music later if needed.
 
 ## Phase 1: Make the prototype feel like a game
 
