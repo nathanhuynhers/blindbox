@@ -46,6 +46,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 
 10. **Add offline earnings + Robux double**
     - Displayed figures continue earning while the player is offline.
+    - Offline earnings should generate at a reduced rate of about 0.5x normal online earnings to prevent abuse; exact tuning can be adjusted during economy balancing.
     - Offline earnings stop accumulating after a TBD number of hours.
     - On return, show how much was earned.
     - The player can claim normally or spend Robux to double the offline earnings.
@@ -57,6 +58,22 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Rewards improve each consecutive day.
     - Day 7 gives a particularly strong reward.
     - Missing a day resets the streak back to Day 1.
+
+13. **Remove proximity requirement for Display and Shelf editing inside own plot**
+    - Remove the "Walk Closer" requirement for placing/editing figures on the Display.
+    - Remove the equivalent proximity requirement for editing Shelves.
+    - As long as the player is physically inside their own plot, they should be able to manage both.
+    - Players should not be able to manage these systems from outside their own plot.
+
+14. **Add Auto Collect Gamepass**
+    - While the player is online, automatically collect earnings from all displayed figures once per second.
+    - Players with the Gamepass should not need to manually click or tap each figure to collect online earnings.
+    - This is separate from the offline earnings system.
+
+15. **Add Jump to Plot / Home button**
+    - Add a button that teleports the player back to their own plot.
+    - Player-facing naming/iconography can use "Home" if that fits the UI better than "Jump to Plot."
+    - Teleport the character to a safe, consistent location within their own plot.
 
 ## Phase 1: Make the prototype feel like a game
 
