@@ -68,5 +68,16 @@ Manifest.Navigation = {
 	Shelves = "Navigation.Shelves",
 }
 Manifest.Models = { BlindBoxBase = "Models.BlindBoxBase" }
+Manifest.Town = {
+	Sakura = "Models.Town.Sakura",
+	Puffball = "Models.Town.Puffball",
+	Poplar = "Models.Town.Poplar",
+	Topiary = "Models.Town.Topiary",
+	PeekaPeekaboo = "Models.Town.PeekaPeekaboo",
+	PeekaTada = "Models.Town.PeekaTada",
+	PeekaHug = "Models.Town.PeekaHug",
+	PeekaNap = "Models.Town.PeekaNap",
+	SakuraPetal = "Town.SakuraPetal",
+}
 
 return Manifest
