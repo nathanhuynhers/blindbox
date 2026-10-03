@@ -600,7 +600,7 @@ local treeFit: { [string]: { fit: TownPlacements.Fit, factor: number } } = {
 TownProps.treeFit = table.freeze(treeFit)
 -- Extra size for sakura with open ground around them. Framing sakura stay put (plot edges) and
 -- plaza planters stay small (benches).
-TownProps.sakuraBoost = table.freeze({ street = 1.6, edge = 1.35 }) :: { [string]: number }
+TownProps.sakuraBoost = table.freeze({ street = 2, edge = 1.8 }) :: { [string]: number }
 TownProps.statueModels = table.freeze({ "PeekaPeekaboo", "PeekaTada", "PeekaHug", "PeekaNap" })
 TownProps.statueWidth = 12
 
