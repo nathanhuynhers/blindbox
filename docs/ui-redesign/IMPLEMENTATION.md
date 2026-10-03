@@ -28,7 +28,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `ShopScreen` | List, kept `BlindBoxPreview`, Open 1 box, free box, What's inside, Drop odds |
 | `CollectionScreen` | List, All/Found/Missing, 4-column grid, detail with Put on Display / On your Display · View / Find it in … boxes |
 | `DisplayScreen`, `DisplaySlot`, `DisplayPicker` | Income chip, set-bonus banner, 6 slots (slot 4 unlock, 5–6 Coming later), picker drawer sorted by earnings with BEST, Remove, Browse Collection, placing mode |
-| `GoalsScreen` | Daily goal, free box chooser, collection progress, minute countdown from `nextDay` |
+| `GoalsScreen` | Unclaimed daily goal (empty state after claim), free box chooser, collection progress, minute countdown from `nextDay` |
 | `ShelvesScreen` | Shelf tabs + prev/next, 3×3 cabinet, discovered-figure picker with collection chips, Clear spot |
 | `RevealCard` | End-of-opening card: NEW (first discovery only), name + rarity pill, chips, owned count, Put on Display / Swap, Open another (price or shortfall), Keep |
 | `OpeningView` | Kept Tap to Open, Skip, hint and curtain; the Result panel is now `RevealCard` |
@@ -86,7 +86,7 @@ fields" section**:
 | `figureRate(snapshot, id)` | `rates[id]` (effective, duplicates included) | Earns, picker sort, swap gain, slot rate |
 | `figureOdds` / `baseOdds` | `odds[id]` (current, with luck) / `baseOdds[id]` | Box chance; Drop odds rows add "· base X%" when luck raises a chance |
 | `totalRate`, `bonusAmount` | `rate`, `bonus` (Coins/s, server applies the %) | Header income chip, set-bonus banner amount |
-| `earnings(snapshot, id)` | `earnings[id]` | Display slot "N ready"; world collector prompt text |
+| `earnings(snapshot, id)` | `earnings[id]` | Display slot "N ready" |
 | `freeBoxOptions` | `{ dailyCollection }` | Goals hides the chooser; Shop shows "Claim free <name> box" |
 | `unlockPrice`, `lockedText` | `expansionCost` for slot `unlocked + 1` | Unlock with price; later slots say "Unlock slot N first" |
 | `goalReward` | `goalReward` | Goal card and HUD tracker |
@@ -95,10 +95,11 @@ What else the merge carried over:
 
 - `UIState.copies` follows the server's one-placement-per-figure rule, so extra copies never
   offer a second slot.
-- `init.client.luau` keeps master's world-collector handling. It hides other players'
-  prompts, keeps each prompt's text in step with banked earnings, and shows server-initiated
-  `collect:` replies as toasts.
-- The Display subtitle and HUD toast explain collecting (click a figure on your plot, or E).
+- `init.client.luau` shows server-initiated `collect:` replies as toasts. `DisplayInteraction`
+  routes the nearby owner-only management prompt into Display and updates the collection plaque
+  for mouse/touch input. Per-figure ClickDetectors handle collection on the server.
+- The Display subtitle and HUD toast explain collecting (click or tap each figure on your plot);
+  E nearby manages Display.
 - `OpeningResult` no longer accepts Redeem. That change came from master.
 - Number fields are sized for abbreviated values. The HUD balance switches to `compact` at
   10M; prices, rates and shortfalls always use `compact`/`amount` (2.4M).
@@ -196,8 +197,8 @@ Paste the scripts in `tests/Studio*.client.luau` into the client Command Bar whe
    - Browse Collection → Put in slot N.
    - Slot 4 Unlock is affordable, or disabled with the shortfall; slots 5–6 say Coming later.
    - Collection Put on Display with a full Display enters placing mode.
-   - Filled slots show "N ready" as earnings bank. Collecting in the world (click or E) shows a
-     toast and resets that count. Other players' collector prompts stay hidden.
+   - Filled slots show "N ready" as earnings bank. Collecting in the world (click or tap) shows a
+     toast and resets only that figure's count. Other players' management prompts stay hidden.
    - Run `StudioSystemScreens`.
 7. **Collection:**
    - All/Found/Missing counts.

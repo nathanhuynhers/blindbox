@@ -72,8 +72,8 @@ An active plot adds a **walk-through entrance arch**: two oak posts at local X=+
 surface; the only thing in the doorway is a flush 0.12-stud oak deck. It also adds a flush,
 noncolliding three-ring **spawn pad** on the open right floor (local X=-18, Z=-28) and striped
 **awnings**: one above the Display sign that resizes with Display capacity, and one above the
-COLLECTION header. Neither awning enters the horizontal expansion zones or the open center/right.
-An active plot uses at most 150 runtime parts (137 at six Display slots).
+Shelves header. Neither awning enters the horizontal expansion zones or the open center/right.
+An active plot uses at most 150 runtime parts (140 at six Display slots).
 
 ### Spawning
 
@@ -127,9 +127,9 @@ method or invented price; future methods remain independently configurable.
 
 Every plot has **three physical shelf units**, each with **three horizontal rows** and currently
 **three figure positions per row**: 27 visible cosmetic positions. `ShelfConfig` owns these
-provisional counts. **Collection** is the physical presentation name: three adjoining oak-framed
+provisional counts. **Shelves** is the physical presentation name: three adjoining oak-framed
 bays, ivory boards, recessed warm back panels, charcoal plinths and a continuous ivory canopy.
-One integrated physical SurfaceGui header says only **COLLECTION**. Each row has a short, subtle
+One integrated physical SurfaceGui header says only **Shelves**. Each row has a short, subtle
 downward warm light. No customization UI is implemented.
 
 The installation remains on the left **when looking in from the entrance**: X=40, bay centers
@@ -216,7 +216,7 @@ Open plot — walk-through name arch at front; no enclosing walls
            Display [1] [2] [3]
        (only unlocked slots; stays centered)
 
-   [ COLLECTION ]
+   [ Shelves ]
    > [ Shelf C ]
      [ Shelf B ]              open center/right
    < [ Shelf A ]             walking / future space

@@ -99,8 +99,8 @@ can help finance a later box and may out-earn its early pulls.
 
 Transactions settle elapsed time at the previous rate before changing inventory or placement.
 Each displayed figure banks its own income, including fractional Coins and its proportional
-share of the themed bonus. Coins enter the wallet only when the owner clicks that figure or
-presses E nearby (touch players can tap its prompt). Shelves cannot collect or generate income.
+share of the themed bonus. Coins enter the wallet only when the owner clicks or taps that
+individual figure. E nearby opens Display management only. Shelves cannot collect or generate income.
 Uncollected balances persist per figure ID even when removed or replaced; redisplay to collect.
 Each bank has a one-trillion-Coin safety ceiling. Collection transfers only whole Coins that fit
 in the wallet, retaining fractions and overflow. No ordinary bank timer/cap or offline income exists.
@@ -118,8 +118,9 @@ starters are not guaranteed. A duplicate-only start has one enhanced earning fig
 three earning copies. One free Pocket Grove box is available per UTC day. Other boxes cannot be
 claimed free. The daily goal grants 1,000 Coins for displaying three distinct figures simultaneously.
 
-Claim markers and grants are one profile aggregate. Existing clock-rollback, storage-failure and
-session-exclusion rules remain. See [data model](DATA_MODEL.md).
+After a successful claim, the daily goal disappears from the active HUD; the Goals screen shows
+that no daily goals remain. Claim markers and grants are one profile aggregate. Existing
+clock-rollback, storage-failure and session-exclusion rules remain. See [data model](DATA_MODEL.md).
 
 ## Fresh-save rollout and verification
 

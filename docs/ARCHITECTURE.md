@@ -27,7 +27,7 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   budgets, `TownStyle` the pastel palette, and `TownProps` the reusable native-part prop builders.
 - `PlotGeometry`/`PlotFixture`/`PlotStyle`/`Awning`: one plot-local `CFrame` per plot; layered
   platforms with potted plants; the session-owned walk-through entrance arch and flush spawn pad;
-  striped awnings for Display/Collection. `PlotStyle.accent(ownerId)` is the single accent accessor.
+  striped awnings for Display/Shelves. `PlotStyle.accent(ownerId)` is the single accent accessor.
 - `PlayerSpawn`: binds a loaded player to their plot's server-computed spawn `CFrame` for the
   current character, respawns and reloads; unbound on leave.
 - `DayNight`/`NightLights`: a 1-second server loop sets `Lighting.ClockTime` and interpolated
@@ -39,7 +39,7 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   cycle; the store is pure and injected with DataStore I/O; the board is the two-sided physical sign.
 - `PlayerPlot`: owner sign, horizontal growing Display, three shelf units, shared physical arrows,
   proximity checks, runtime carousel start index and connection/content teardown.
-- `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent COLLECTION
+- `CollectionFixture`: native oak/ivory three-bay Collection installation, permanent Shelves
   SurfaceGui header, row lighting, icon-only side controls and runtime anchors. Visual construction
   is separate from shelf ownership, carousel decisions and migration; indices stay in owner UI.
 - `FigureSlots`: per-slot figure cache using existing FigureModel assets; replace only changed IDs,
@@ -68,13 +68,19 @@ a shared per-plot cooldown. They change only runtime visibility, not saved progr
 ## Persistence and acknowledgement
 
 Displayed figures accrue into persisted per-ID banks, never directly into the wallet. PlayerPlot
-owns six bounded collector targets with click/E/touch prompts, validates living owner/exact-target
+owns six bounded ClickDetector targets for clicks/taps, validates living owner/exact-target
 distance and ancestry, and disconnects input handlers on teardown. Native server callbacks mint
 collection requests through Transactions with a server-only authorization flag. Remote Collect
 requests cannot set that flag. Rate limits and receipts share the normal transaction path.
 Rules.collect transfers whole Coins atomically, retains overflow/fractions, and is the future
-auto-collect extension point; no gamepass service is implemented. Owner snapshots and local prompt
-text expose balances only to the owner. Prompt hiding is presentation, not an authorization check.
+auto-collect extension point; no gamepass service is implemented. Owner snapshots expose balances
+only to the owner. One native E proximity prompt at the counter
+opens Display management through `DisplayInteraction` and the existing Interface router. It never
+sends a mutation request. Local ownership, living-character and distance checks guard that route;
+server proximity and ownership checks still guard edits and collections. The client owns three
+service listeners for its lifetime and refreshes the device-aware counter plaque through the
+existing snapshot updates, so late plot replication and respawn need no new listeners. Prompt
+hiding is presentation, not an authorization check.
 
 See [data model](DATA_MODEL.md) for validation and [operations](OPERATIONS.md) for recovery.
 Every load/acquire, save and release uses UpdateAsync. Lease tokens are unique per join. Leases
@@ -98,7 +104,8 @@ figure picker. There is no visit directory or teleport callback.
 `UIStyle`, `UIKit`, `UIButton`, `UIBadge`, `UIProgress`, `UIIcons` and `UIPreview` provide tokens,
 primitives, controls, progress, icon shapes and 3D portraits. `UIState` derives read-only
 presentation metadata and is the only reader of snapshot economy fields; `UIScope` owns
-connections/tweens/timers. A bounded `Notifications` component handles feedback.
+connections/tweens/timers. A bounded `Notifications` component handles feedback. Claimed daily
+goals hide from both HUD variants and show an empty state in Goals; saved claim markers and UTC rollover remain unchanged.
 
 `Scroll.bind` accepts both list and grid layouts and measures content plus padding explicitly.
 Nested tile groups report their measured height to the outer list. Filtering and safe-area

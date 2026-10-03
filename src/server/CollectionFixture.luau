@@ -17,7 +17,7 @@ Fixture.palette = table.freeze({
 	muted = Color3.fromRGB(163, 146, 122),
 })
 Fixture.style = table.freeze({ depth = 5, post = 0.55, board = 0.3, figureScale = 1 })
--- Striped awning above the COLLECTION header, overhanging toward the plot center (-X).
+-- Striped awning above the Shelves header, overhanging toward the plot center (-X).
 -- Its valance bottom (backY - rise - 1.4 = top + 3.2) clears the header top (top + 2.85).
 Fixture.awning =
 	table.freeze({ backX = 3.2, backRise = 7.2, depth = 7.5, rise = 2.6, endMargin = 9.5 })
@@ -302,7 +302,7 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	header.Font = Enum.Font.GothamBlack
 	header.TextColor3 = palette.charcoal
 	header.TextScaled = true
-	header.Text = "COLLECTION"
+	header.Text = "Shelves"
 	header.Parent = gui
 	local awning = Fixture.awning
 	for _, side in { -1, 1 } do

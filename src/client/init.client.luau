@@ -2,12 +2,11 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local ProximityPromptService = game:GetService("ProximityPromptService")
 local Types = require(ReplicatedStorage.Shared.Types)
 local ShelfConfig = require(ReplicatedStorage.Shared.ShelfConfig)
 local Catalog = require(ReplicatedStorage.Shared.Catalog)
 local Interface = require(script.Interface)
+local DisplayInteraction = require(script.DisplayInteraction)
 local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
 local UIState = require(script.UIState)
@@ -74,32 +73,7 @@ local function revealModel(state: Types.Snapshot, result: OpeningResult.Result):
 	return UIState.reveal(state, result.figureId, result.isNew, result.quantity)
 end
 local connections: { RBXScriptConnection } = {}
--- World collectors (server-owned prompts on each plot): hide other players' prompts and keep
--- the local ones' text in step with banked earnings. The server validates every collection.
-table.insert(
-	connections,
-	ProximityPromptService.PromptShown:Connect(function(prompt: ProximityPrompt)
-		local owner = prompt:GetAttribute("CollectorOwnerId")
-		if typeof(owner) == "number" and owner ~= Players.LocalPlayer.UserId then
-			prompt.Enabled = false -- Presentation only; the server independently checks ownership.
-		end
-	end)
-)
-local function updateCollectors(state: Types.Snapshot)
-	local plots = workspace:FindFirstChild("PlayerPlots")
-	local plot = if plots then plots:FindFirstChild(tostring(Players.LocalPlayer.UserId)) else nil
-	local targets = if plot then plot:FindFirstChild("FigureCollectors") else nil
-	if not targets then
-		return
-	end
-	for slot, id in state.slots do
-		local target = targets:FindFirstChild(tostring(slot))
-		local prompt = if target then target:FindFirstChildOfClass("ProximityPrompt") else nil
-		if prompt then
-			prompt.ActionText = string.format("Collect %d Coins", UIState.earnings(state, id))
-		end
-	end
-end
+local displayInteraction = DisplayInteraction.create(ui.openDisplay)
 table.insert(
 	connections,
 	stateRemote.OnClientEvent:Connect(function(state: Types.Snapshot, reply: Types.Reply?)
@@ -107,14 +81,14 @@ table.insert(
 			sequence = state.sequence
 			current = state
 			ui.update(state)
-			updateCollectors(state)
+			displayInteraction.update()
 			if opening and opening.isActive() and reveal then
 				-- Live affordability and slots while the Reveal card is up.
 				opening.refresh(revealModel(state, reveal))
 			end
 		end
 		local intent = pending
-		-- Server-initiated collections (world click or E) reply with a "collect:" id.
+		-- Server-initiated collections (world click or tap) reply with a "collect:" id.
 		if reply and string.sub(reply.id, 1, 8) == "collect:" then
 			ui.message(reply.message, if reply.ok then "success" else "error")
 		end
@@ -167,5 +141,6 @@ script.Destroying:Connect(function()
 	if opening then
 		opening.destroy()
 	end
+	displayInteraction.destroy()
 	ui.destroy()
 end)

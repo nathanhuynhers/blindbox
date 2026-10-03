@@ -17,8 +17,9 @@ Duplicate copies are permanently retained and automatically enhance their figure
 rarity-scaled diminishing returns. Each figure ID can earn in only one Display slot. Display starts
 with three slots and expands sequentially to six for 40,000 / 400,000 / 4,000,000 Coins.
 Three distinct displayed figures from one collection grant +10% total income once. No offline
-income or visitor payouts. Figures bank income until their owner clicks them or presses E nearby;
-uncollected balances survive removal and rejoining. Future paid auto-collect is not implemented.
+income or visitor payouts. Figures bank income until their owner clicks or taps each figure;
+uncollected balances survive removal and rejoining. E nearby opens Display management only.
+Future paid auto-collect is not implemented.
 See [economy](ECONOMY.md) for exact formulas and tuning.
 
 Shelves use discovered figures cosmetically and reserve zero copies. Players start with three persistent
@@ -40,7 +41,7 @@ eight open plots ring a paved plaza with a giant opening blind box, joined by di
 crossed by the cobbled Market Street ring with lanterns. Gift-box stacks and statue gardens fill the
 gaps between plots, and a hedge and tree line wrap the island. Players spawn on their own plot;
 each active plot has a walk-through `<DisplayName>'s Showroom` arch, potted plants, striped
-Display/Collection awnings and a spawn pad, all in one shared pastel-pink accent. A 20-minute
+Display/Shelves awnings and a spawn pad, all in one shared pastel-pink accent. A 20-minute
 day/night cycle switches lanterns and plot lights on at dusk. A global plaza leaderboard rotates
 Most Figures, Top Coins/sec and Most Boxes Opened; it is presentation only and grants nothing.
 The center/right of each plot stays open. Collections and Shop retain their existing UI/art. There

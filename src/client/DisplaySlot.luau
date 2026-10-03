@@ -141,7 +141,7 @@ function Slot.create(
 			rate.root.Visible = filled
 			if filled and figure then
 				name.Text = figure.name
-				-- Banked Coins are collected in the world (click the figure or press E).
+				-- Banked Coins are collected in the world (click or tap the figure).
 				local ready = State.earnings(snapshot, id)
 				rate.set(
 					State.rate(State.figureRate(snapshot, id))

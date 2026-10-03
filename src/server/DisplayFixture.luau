@@ -142,6 +142,19 @@ local pieces: { Piece } = {
 		offset = Vector3.new(0, 11.5, -2.81),
 		color = Color3.fromRGB(255, 246, 222),
 	},
+	{
+		name = "CollectSignFrame",
+		size = Vector3.new(16, 1.5, 0.24),
+		offset = Vector3.new(0, 1.25, -4.05),
+		color = oak,
+		wood = true,
+	},
+	{
+		name = "CollectSignFace",
+		size = Vector3.new(15.5, 1.1, 0.12),
+		offset = Vector3.new(0, 1.25, -4.24),
+		color = ivory,
+	},
 }
 export type Render = {
 	model: Model,
@@ -266,6 +279,47 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	coin.TextScaled = true
 	coin.TextColor3 = Color3.fromRGB(220, 162, 44)
 	coin.Parent = gui
+	-- A non-interactive plaque on the counter front, away from the figure click targets.
+	local instructions = Instance.new("SurfaceGui")
+	instructions.Name = "CollectSign"
+	instructions.Face = Enum.NormalId.Front
+	instructions.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	instructions.CanvasSize = Vector2.new(1000, 72)
+	instructions.AlwaysOnTop = false
+	instructions.LightInfluence = 0.35
+	instructions.Active = false
+	instructions.Parent = parts.CollectSignFace
+	local instruction = Instance.new("TextLabel")
+	instruction.Name = "Instruction"
+	instruction.BackgroundTransparency = 1
+	instruction.Size = UDim2.fromScale(0.94, 0.88)
+	instruction.Position = UDim2.fromScale(0.03, 0.06)
+	instruction.Font = Enum.Font.GothamBold
+	instruction.TextColor3 = charcoal
+	instruction.TextScaled = true
+	instruction.Text = "Click or Tap Each Figure to Collect"
+	instruction.Parent = instructions
+	-- One native proximity interaction opens management; collectors have no keyboard prompt.
+	local manage = Geometry.partAt(
+		model,
+		"ManageDisplay",
+		Vector3.new(1, 1, 1),
+		transform * CFrame.new(0, 4, Geometry.displayZ - 5),
+		ivory
+	)
+	manage.Transparency = 1
+	manage.CanCollide = false
+	manage.CanTouch = false
+	manage.CanQuery = false
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "ManageDisplayPrompt"
+	prompt.ActionText = "Manage Display"
+	prompt.ObjectText = "Display"
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+	prompt.MaxActivationDistance = 12
+	prompt.HoldDuration = 0
+	prompt.RequiresLineOfSight = false
+	prompt.Parent = manage
 	local render: Render = {
 		model = model,
 		transform = transform,

@@ -40,6 +40,17 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 	local body = Kit.canvas(shell.body, "GoalsBody")
 	-- Daily goal
 	local goal = Kit.card(body, "DailyGoal", Style.white, 22, 4)
+	local empty = Kit.text(
+		body,
+		"NoActiveGoals",
+		"All daily goals finished!\nNew goals at 00:00 UTC.",
+		20,
+		Style.display(),
+		Style.muted
+	)
+	empty.TextWrapped = true
+	empty.TextXAlignment = Enum.TextXAlignment.Center
+	empty.Visible = false
 	local goalHeading = heading(goal.face, "DAILY GOAL")
 	local goalChip = Badge.create(goal.face, "Status", "", {
 		fill = Style.mint,
@@ -184,6 +195,7 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 		local cardHeight = math.max(if phone then 330 else 360, height - 38)
 		local top = 16
 		Kit.rect(goal.root, pad, top, column, cardHeight)
+		Kit.rect(empty, pad + 18, top + 24, column - 36, 120)
 		Kit.rect(free.root, pad + column + gap, top, column, cardHeight)
 		Kit.rect(progress, pad + (column + gap) * 2, top, column, cardHeight)
 		local inner = column - 36
@@ -258,6 +270,8 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 		end
 		local state = State.goal(snapshot)
 		local done = math.clamp(snapshot.goalProgress, 0, 3)
+		goal.root.Visible = state ~= "claimed"
+		empty.Visible = state == "claimed"
 		local amount = State.compact(State.goalReward(snapshot))
 		goalChip.set(
 			if state == "progress"

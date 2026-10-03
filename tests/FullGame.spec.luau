@@ -64,9 +64,22 @@ for slot,id in {"grove.pebble","grove.sprout","grove.acorn"} do
  restored.owned[id]=1;restored.discovered[id]=true;restored.display.slots[slot]=id
 end
 Rules.refreshDay(restored,20)
+local cappedGoal=Profile.decode(Profile.encode(restored),0)
+assert(cappedGoal)
+cappedGoal.coins=Economy.coinLimit
+check(not Rules.mutate(cappedGoal,request("Goal",cappedGoal.revision),0,20)
+ and not cappedGoal.goalClaimed and cappedGoal.goalProgress==3,"failed claim preserves active unclaimed goal")
 local before=restored.coins
 check(Rules.mutate(restored,request("Goal",0),0,20) and restored.coins==before+Economy.goalReward,"daily goal")
 check(not Rules.mutate(restored,request("Goal",0),0,20),"goal once")
+local goalReload=Profile.decode(Profile.encode(restored),200)
+assert(goalReload)
+check(goalReload.goalClaimed and goalReload.goalProgress==3 and goalReload.goalDay==20,"claimed goal and progress survive save/rejoin")
+local claimedCoins=goalReload.coins
+check(not Rules.mutate(goalReload,request("Goal",goalReload.revision),0,20) and goalReload.coins==claimedCoins,"rejoin cannot reclaim goal")
+check(not Rules.mutate(goalReload,request("Goal",goalReload.revision),0,19),"clock rollback cannot reclaim goal")
+Rules.refreshDay(goalReload,21)
+check(not goalReload.goalClaimed and goalReload.goalProgress==3,"next UTC day legitimately restores goal")
 local database: { [string]: unknown }={}
 local calls=0
 local function update(key: string,transform: (unknown)->unknown): unknown

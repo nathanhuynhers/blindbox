@@ -798,8 +798,8 @@ assert(collectionSign)
 check(
 	collectionSign.Face == "Left"
 		and not collectionSign.AlwaysOnTop
-		and collection.header.Text == "COLLECTION",
-	"permanent physical COLLECTION sign faces the central plot"
+		and collection.header.Text == "Shelves",
+	"permanent physical Shelves sign faces the central plot"
 )
 check(
 	collection.header.Font == "GothamBlack" and collectionSign.LightInfluence == 0.35,
@@ -825,7 +825,7 @@ for _, node in fixtureNodes do
 	if node.ClassName == "TextLabel" then
 		worldText += 1
 		check(
-			node.Text == "COLLECTION",
+			node.Text == "Shelves",
 			"no physical index, zero-Coin copy or Previous/Next text remains"
 		)
 	end
@@ -1231,8 +1231,8 @@ for index, hitbox in plot.hitboxes do
 		"mouse/touch activation spans a whole plot"
 	)
 end
-for _, node in Engine.nodes do
-	check(node.ClassName ~= "ProximityPrompt", "no proximity prompt exists")
+for _, node in plot.collection.model:GetDescendants() do
+	check(node.ClassName ~= "ProximityPrompt", "shelf navigation has no proximity prompt")
 end
 local coins, revision = state.coins, state.revision
 local savedBeforeTurns = Profile.encode(state)
@@ -1276,7 +1276,7 @@ check(
 	"clicking only changes runtime visibility, not shelf persistence or progression"
 )
 check(
-	collection.header.Text == "COLLECTION" and #descendants(collection.model) == #fixtureNodes,
+	collection.header.Text == "Shelves" and #descendants(collection.model) == #fixtureNodes,
 	"turning retains static header, furniture, trim and lighting"
 )
 local beforeRejected = plot.view.revision
@@ -1416,25 +1416,25 @@ local detector = target:FindFirstChildOfClass("ClickDetector")
 local prompt = target:FindFirstChildOfClass("ProximityPrompt")
 guest.Character:PivotTo(target.CFrame)
 detector.MouseClick:fire(guest)
-prompt.Triggered:fire(guest)
-check(collects == 2 and prompt.Enabled and prompt.KeyboardKeyCode == Engine.Enum.KeyCode.E, "click and E route to collection")
+detector.MouseClick:fire(guest)
+check(collects == 2 and prompt == nil, "click/tap share one route; no per-figure E prompt")
 owner.Character:PivotTo(target.CFrame)
-prompt.Triggered:fire(owner)
+detector.MouseClick:fire(owner)
 check(collects == 2, "visitor cannot collect")
 move(guest, other, 0, 4, -33)
-prompt.Triggered:fire(guest)
+detector.MouseClick:fire(guest)
 check(collects == 2, "out-of-range collection rejected")
 guest.Character:PivotTo(target.CFrame)
 guest.Character:FindFirstChildOfClass("Humanoid").Health = 0
-prompt.Triggered:fire(guest)
+detector.MouseClick:fire(guest)
 check(collects == 2, "dead character cannot collect")
 guest.Character:FindFirstChildOfClass("Humanoid").Health = 100
 otherState.display.slots[1] = ""
 Plot.render(other, otherState)
-prompt.Triggered:fire(guest)
-check(collects == 2 and not prompt.Enabled and detector.MaxActivationDistance == 0, "empty slots disable collection")
+detector.MouseClick:fire(guest)
+check(collects == 2 and prompt == nil and detector.MaxActivationDistance == 0, "empty slots disable collection")
 Plot.destroy(other)
-prompt.Triggered:fire(guest)
+detector.MouseClick:fire(guest)
 check(collects == 2, "destroyed collector disconnected")
 Plot.destroy(replacement)
 world:Destroy()

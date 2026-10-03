@@ -83,6 +83,10 @@ Engine.Vector2 = {
 }
 -- Enum items compare as their item names, e.g. Enum.Material.Wood == "Wood".
 local enumOverrides = { KeyCode = { E = 1 } }
+enumOverrides.UserInputType = {}
+for _, name in { "Touch", "MouseButton1", "MouseMovement", "Keyboard", "Gamepad1" } do
+	enumOverrides.UserInputType[name] = { Name = name }
+end
 Engine.Enum = setmetatable({}, {
 	__index = function(_, enum)
 		return enumOverrides[enum]
@@ -404,4 +408,14 @@ Engine.FigureModel = {
 	end,
 }
 Engine.figureVariants = {}
+Engine.services = {
+	Players = {},
+	UserInputService = { TouchEnabled = false, MouseEnabled = true, LastInputTypeChanged = signal() },
+	ProximityPromptService = { PromptShown = signal(), PromptTriggered = signal() },
+}
+Engine.game = {
+	GetService = function(_, name)
+		return assert(Engine.services[name], "Unexpected service " .. name)
+	end,
+}
 return Engine

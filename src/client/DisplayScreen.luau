@@ -18,7 +18,7 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 	local shell = Shell.create(parent, ctx, {
 		id = "Display",
 		title = "Display",
-		subtitle = "Figures earn coins every second. Click one on your plot or press E to collect",
+		subtitle = "Figures earn coins every second. Click or tap each figure on your plot to collect",
 	})
 	local root = shell.root
 	local income = Badge.create(shell.chips, "Income", "", {

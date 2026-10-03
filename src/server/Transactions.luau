@@ -55,7 +55,7 @@ function Transactions.process(
 	local figure: string? = nil
 	if intent.revision == session.state.revision then
 		if intent.action == "Collect" and collectAuthorized ~= true then
-			message = "Click or press E near your own displayed figure."
+			message = "Click or tap your own displayed figure nearby."
 		elseif string.sub(intent.action, 1, 5) == "Shelf" then
 			ok, message, figure = Shelves.mutate(session.state, intent, access, now)
 		elseif (intent.action == "Place" or intent.action == "Remove") and not nearDisplay then

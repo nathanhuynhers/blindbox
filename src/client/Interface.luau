@@ -28,6 +28,7 @@ export type Interface = {
 	effects: () -> boolean,
 	openingFocus: (boolean) -> (),
 	pending: (boolean) -> (),
+	openDisplay: () -> (),
 	destroy: () -> (),
 }
 
@@ -344,6 +345,11 @@ function Interface.create(send: (string, string?, number?, string?) -> ()): Inte
 	resize()
 	refresh()
 	return {
+		openDisplay = function()
+			if canAct() and not opened then
+				navigate("Display")
+			end
+		end,
 		update = function(state: Types.Snapshot)
 			snapshot = state
 			refresh()

@@ -14,7 +14,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
    - Show how many coins each individual displayed figure has accumulated.
    - Also show the combined earnings for the whole Display.
 
-3. **Rework Display interaction**
+3. [x] **Rework Display interaction** — completed. Automated checks pass; Studio acceptance remains pending. See [verification](PLAYTEST_INTERACTIONS.md).
    - E opens the Display UI only when the player is nearby.
    - E no longer collects coins.
    - Desktop players click individual figures to collect.
@@ -29,7 +29,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 5. **Increase Shelf and Display brightness at night**
    - Make figures and their furniture easier to see without making the whole plot overly bright.
 
-6. **Rename Collection to Shelves**
+6. [x] **Rename Collection to Shelves** — completed. Automated checks pass; Studio acceptance remains pending. See [verification](PLAYTEST_INTERACTIONS.md).
    - Change the incorrect "Collection" title at the top of the Shelf interface to "Shelves."
 
 7. **Restrict Shelf placement to owned figures**
@@ -50,7 +50,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - On return, show how much was earned.
     - The player can claim normally or spend Robux to double the offline earnings.
 
-11. **Remove finished Daily Goals**
+11. [x] **Remove finished Daily Goals** — completed. Automated checks pass; Studio acceptance remains pending. See [verification](PLAYTEST_INTERACTIONS.md).
     - After a Daily Goal is completed and claimed, remove it from the HUD instead of leaving the "Claimed" card there.
 
 12. **Add consecutive Daily Login Rewards**

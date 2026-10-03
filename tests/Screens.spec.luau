@@ -75,6 +75,20 @@ local function within(root, name)
 	return Engine.find(root, name)
 end
 
+-- Native management routes into the existing screen, without a mutation intent.
+local managementRequests = #requests
+ui.openDisplay()
+check(host("Display").Visible and #requests == managementRequests, "management opens Display without collecting or sending intents")
+Engine.click(within(host("Display"), "Close"))
+ui.pending(true)
+ui.openDisplay()
+check(not host("Display").Visible, "pending work blocks world management")
+ui.pending(false)
+ui.openingFocus(true)
+ui.openDisplay()
+check(not host("Display").Visible, "opening focus blocks world management")
+ui.openingFocus(false)
+
 -- HUD and dock
 check(within(find("Hud"), "Balance").Text == "5,000,000", "HUD shows the snapshot balance")
 check(within(find("Hud"), "Rate"):FindFirstChild("Text").Text == "+0/s", "HUD income chip")
@@ -258,6 +272,19 @@ ui.update(state)
 check(within(find("DockGoals"), "Badge").Visible, "Goals badge when the reward is claimable")
 Engine.click(within(goals, "ClaimGoal"))
 check(last().action == "Goal", "Claim sends Goal")
+check(find("GoalTracker").Visible and within(goals, "DailyGoal").Visible, "unconfirmed claim remains visible")
+ui.pending(true)
+check(find("GoalTracker").Visible, "pending claim keeps active goal")
+ui.pending(false)
+state.goalClaimed = true
+ui.update(state)
+check(not find("GoalTracker").Visible and not find("GoalChip").Visible, "confirmed claim clears both HUD variants")
+check(not within(goals, "DailyGoal").Visible and within(goals, "NoActiveGoals").Visible, "Goals shows clean empty state")
+check(not within(find("DockGoals"), "Badge").Visible, "claimed goal badge cleared")
+Engine.click(within(goals, "Close"))
+Engine.click(find("DockGoals"))
+check(not within(goals, "DailyGoal").Visible and not find("GoalTracker").Visible, "reopening never restores claimed goal")
+
 state.dailyReady = true
 ui.update(state)
 check(not within(goals, "Daily_tide").Visible, "one allowed collection: no chooser")
@@ -272,6 +299,7 @@ check(Engine.pending() == timersBefore, "countdown timer stops when Goals is hid
 Engine.click(find("DockShelves"))
 local shelves = host("Shelves")
 local shelvesRoot = shelves:FindFirstChild("Shelves")
+check(within(shelves, "Title").Text == "Shelves", "Shelf menu title stays Shelves")
 check(shelvesRoot:GetAttribute("SelectedShelfId") == "shelf:1", "first visible shelf selected")
 Engine.click(within(shelves, "Spot5"))
 check(shelvesRoot:GetAttribute("SelectedSlotId") == "row:2/slot:2", "spot selection")
@@ -320,6 +348,32 @@ Engine.click(within(shop, "Close"))
 check(find("Dock").Visible and not shop.Visible, "Close restores the dock")
 Engine.screen.X, Engine.screen.Y = 1280, 720
 find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+
+-- Rotate between phone and desktop after claim, with no new snapshot.
+Engine.screen.X, Engine.screen.Y = 844, 390
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+check(not find("GoalTracker").Visible and not find("GoalChip").Visible, "claimed goal stays hidden on phone resize")
+state.goalClaimed = false
+state.goalProgress = 1
+ui.update(state)
+Engine.click(find("DockGoals"))
+check(within(goals, "DailyGoal").Visible and not within(goals, "NoActiveGoals").Visible, "next day incomplete goal returns")
+Engine.click(within(goals, "Close"))
+state.goalProgress = 3
+ui.update(state)
+check(find("GoalChip").Visible and not find("GoalTracker").Visible, "phone unclaimed goal chip remains claimable")
+Engine.click(find("GoalChip"))
+check(last().action == "Goal", "phone chip preserves claim action")
+state.goalClaimed = true
+ui.update(state)
+check(not find("GoalChip").Visible, "phone claim clears chip")
+Engine.screen.X, Engine.screen.Y = 1280, 720
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+check(not find("GoalTracker").Visible, "desktop resize cannot restore claimed goal")
+state.goalProgress = 0
+state.goalClaimed = false
+ui.update(state)
+check(find("GoalTracker").Visible, "incomplete next-day goal appears on desktop")
 
 -- Reveal card
 local scope = Scope.create()
@@ -372,4 +426,18 @@ ui.destroy()
 check(Engine.playerGui:FindFirstChild("PocketGrove") == nil, "UI destroyed")
 check(Engine.bound.CollectibleMenu == nil, "gamepad binding released")
 check(Engine.pending() == 0, "no timers survive teardown")
+-- A new client tree receives the persisted claim marker, as on rejoin.
+local rejoined = Interface.create(function()
+	error("A claimed goal must not send a new request")
+end)
+local savedSnapshot = snapshot()
+savedSnapshot.goalClaimed, savedSnapshot.goalProgress = true, 3
+rejoined.update(savedSnapshot)
+local rejoinedGui = Engine.playerGui:FindFirstChild("PocketGrove")
+check(not Engine.find(rejoinedGui, "GoalTracker").Visible and not Engine.find(rejoinedGui, "GoalChip").Visible, "claimed snapshot hides goal on new client tree")
+Engine.click(Engine.find(rejoinedGui, "DockGoals"))
+check(Engine.find(rejoinedGui, "NoActiveGoals").Visible, "rejoin opens empty goal state")
+Engine.click(Engine.find(rejoinedGui, "ClaimGoal"))
+rejoined.destroy()
+check(Engine.pending() == 0, "recreated UI releases countdown")
 print("PASS: " .. checks .. " screen routing, send, pending, countdown and lifetime checks")

@@ -86,8 +86,14 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 	)
 	chip.button.AnchorPoint = Vector2.new(1, 0)
 	local phone = false
-	local function size(ready: boolean)
-		card.root.Size = UDim2.fromOffset(CARD_WIDTH, if ready then 136 else 82)
+	local active, ready = false, false
+	local function visibility()
+		card.root.Visible = active and not phone
+		chip.button.Visible = phone and ready
+	end
+	visibility()
+	local function size(claimable: boolean)
+		card.root.Size = UDim2.fromOffset(CARD_WIDTH, if claimable then 136 else 82)
 	end
 	return {
 		card = card.root,
@@ -96,9 +102,11 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 			phone = nextPhone
 			card.root.Position = UDim2.fromOffset(x, y)
 			chip.button.Position = UDim2.fromOffset(x, y)
+			visibility()
 		end,
 		update = function(snapshot: Types.Snapshot)
 			local goal = State.goal(snapshot)
+			active, ready = goal ~= "claimed", goal == "ready"
 			local reward = State.compact(State.goalReward(snapshot))
 			local progress = math.clamp(snapshot.goalProgress, 0, 3)
 			status.Text = if goal == "claimed"
@@ -115,8 +123,7 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 			size(goal == "ready")
 			chip.set("Goal done · Claim " .. reward, ctx.canAct())
 			chip.button.Size = UDim2.fromOffset(170 + #reward * 10, 44)
-			card.root.Visible = not phone
-			chip.button.Visible = phone and goal == "ready"
+			visibility()
 		end,
 	}
 end

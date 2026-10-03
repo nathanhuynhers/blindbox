@@ -16,7 +16,7 @@ modules = {
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "Types": "shared", "Catalog": "shared", "Economy": "server",
     "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
-    "Profile": "server", "Persistence": "server", "Scroll": "client",
+    "DisplayInteraction": "client", "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
     "OpeningAudioConfig": "client", "OpeningAudioSequence": "client",
     "OpeningScope": "client", "OpeningBoxSource": "client", "OpeningCamera": "client", "OpeningController": "client",
@@ -72,6 +72,8 @@ for name, folder in modules.items():
         for dependency in ("View", "Audio", "Cinematic"):
             for expression in (f"require(script.Parent.Opening{dependency})", f'require("./Opening{dependency}")'):
                 source = source.replace(expression, f"Engine.{dependency}")
+    if name == "DisplayInteraction":
+        source = source.replace("--!strict", '--!strict\nlocal Engine = require("./PlotEngine")\nlocal game, workspace, Enum = Engine.game, Engine.workspace, Engine.Enum')
     if name == "Scroll":
         source = source.replace("--!strict", "--!strict\nlocal Enum = {AutomaticSize={None=0},ScrollingDirection={Y=1},ScrollBarInset={ScrollBar=1}}\nlocal UDim2 = {fromOffset=function(x,y) return {X={Offset=x},Y={Offset=y}} end}")
     if name in ("PlotFixture", "CollectionFixture", "DisplayFixture", "PlotGeometry", "PlayerPlot", "World", "FigureSlots", "PlotStyle", "Awning", "NightLights", "TownStyle", "TownLayout", "TownProps", "PlazaFixture", "LeaderboardBoard", "DayNight"):
@@ -96,7 +98,7 @@ def run(*names: str) -> None:
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("UIEngine", "Screens.spec")
 run("Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
-run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "PlotEngine", "Plots.spec")
+run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 fixtures = [
     ('id = "grove.pebble"', 'id = "unknown"', "Invalid economy reference"),
     ('weight = 1', 'weight = 0', "Invalid income units/weight"),
