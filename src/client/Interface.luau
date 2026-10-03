@@ -22,6 +22,7 @@ local Shop = require(script.Parent.ShopScreen)
 local Display = require(script.Parent.DisplayScreen)
 local Goals = require(script.Parent.GoalsScreen)
 local Shelves = require(script.Parent.ShelvesScreen)
+local Onboarding = require(script.Parent.Onboarding)
 local Interface = {}
 export type Interface = {
 	update: (Types.Snapshot) -> (),
@@ -155,6 +156,7 @@ function Interface.create(
 			navigate(id)
 		end
 	end)
+	local tutorial = Onboarding.create(stage, scope, dock.tiles, hosts)
 	local frame: Layout.Frame? = nil
 	local laidOut: { [string]: string } = {}
 	local function layoutScreen(id: string)
@@ -193,6 +195,7 @@ function Interface.create(
 		stage.Size = UDim2.fromScale(1 / scale, 1 / scale)
 		dim.Visible = opened
 		hud.layout(geometry, opened)
+		tutorial.layout(geometry, opened)
 		dock.layout(geometry.dock, geometry.phone)
 		dock.root.Visible = not opened or geometry.dockWhileOpen
 		local panel = geometry.panel
@@ -217,6 +220,7 @@ function Interface.create(
 			return
 		end
 		hud.update(state)
+		tutorial.update(state, if opened then current else nil)
 		if not state.ready and blockedStatus ~= state.saveStatus then
 			notices.show(state.saveStatus, "error")
 		elseif

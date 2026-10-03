@@ -244,6 +244,7 @@ Engine.Rect = {
 	end,
 }
 Engine.Color3 = Visual.Color3
+Engine.Vector3 = Visual.Vector3
 Engine.NumberSequence = Visual.NumberSequence
 Engine.NumberSequenceKeypoint = Visual.NumberSequenceKeypoint
 Engine.Font = {
@@ -375,6 +376,9 @@ Engine.game = {
 Engine.workspace = {
 	GetServerTimeNow = function()
 		return Engine.now
+	end,
+	FindFirstChild = function()
+		return nil
 	end,
 }
 

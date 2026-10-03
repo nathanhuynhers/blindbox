@@ -117,6 +117,10 @@ goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and 
 and an owned-figure picker. Native nearby prompts route to the existing Display and Shelves screens;
 they do not send mutation requests. Exhausted figures remain non-actionable using the existing tile state.
 There is no visit directory or teleport callback.
+`Onboarding` shows session-only first-session hints (free box, Display, collect, Shelves, buy
+again) to players whose first ready snapshot owns no figures. It rings dock tiles/the free-box
+button and points at the first displayed figure, never blocks input or sends intents, and Skip
+ends it for the session. No profile field records it.
 `UIStyle`, `UIKit`, `UIButton`, `UIBadge`, `UIProgress`, `UIIcons` and `UIPreview` provide tokens,
 primitives, controls, progress, icon shapes and 3D portraits. `UIState` derives read-only
 presentation metadata and is the only reader of snapshot economy fields; `UIScope` owns

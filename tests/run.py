@@ -32,7 +32,7 @@ ui = [
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
     "ShopScreen", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker",
-    "GoalsScreen", "ShelvesScreen", "RevealCard", "Interface",
+    "GoalsScreen", "ShelvesScreen", "RevealCard", "Onboarding", "Interface",
 ]
 for name in ui:
     modules[name] = "client"
@@ -41,7 +41,7 @@ UI_PRELUDE = "\n".join([
     'local Engine = require("./UIEngine")',
     "local game, workspace, Instance, Enum, task = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task",
     "local Color3, UDim2, UDim, Vector2, Rect = Engine.Color3, Engine.UDim2, Engine.UDim, Engine.Vector2, Engine.Rect",
-    "local Font, TweenInfo = Engine.Font, Engine.TweenInfo",
+    "local Font, TweenInfo, Vector3 = Engine.Font, Engine.TweenInfo, Engine.Vector3",
     "local NumberSequence, NumberSequenceKeypoint = Engine.NumberSequence, Engine.NumberSequenceKeypoint",
 ])
 for name, folder in modules.items():
@@ -96,7 +96,7 @@ def run(*names: str) -> None:
 
 
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
-run("UIEngine", "Screens.spec")
+run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
 run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 run("PlotEngine", "HomeTeleport.spec")
