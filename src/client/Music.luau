@@ -72,6 +72,11 @@ function Music.play(name: string)
 	sound.Name = "Music_" .. name
 	sound.SoundId = id
 	sound.Looped = track.looped ~= false
+	local loopEnd = track.loopEnd
+	if loopEnd then
+		sound.PlaybackRegionsEnabled = true
+		sound.LoopRegion = NumberRange.new(0, loopEnd)
+	end
 	sound.Volume = 0
 	sound.SoundGroup = group
 	sound.Parent = group

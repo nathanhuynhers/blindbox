@@ -24,6 +24,7 @@ export type Track = {
 	source: string,
 	volume: number, -- the track's own level; the Music group sets the overall music mix
 	looped: boolean?, -- default true
+	loopEnd: number?, -- seconds; loop back to 0 here instead of at the file's end
 	fadeIn: number?, -- seconds
 	fadeOut: number?, -- seconds, when another track takes over or music stops
 }
@@ -200,20 +201,24 @@ Manifest.opening = {
 
 -- Background music, keyed by area or context. Only "world" exists today. Area or special-event
 -- music later is one more entry here plus a `Music.play(name)` call where that context starts.
--- Checked in Studio on 2026-10-03 (Audio, owner Roblox, preload Success, 95.5 s) and measured
--- across its loop point with Looped = true: the level stays continuous through the wrap (no
--- silent gap). Not yet listened to. Effective level = volume x Music group x Master (~0.19).
--- Backups (APM Music, verified to load, all end in about 1.5-2 s of silence, so they gap when
--- looped as-is; a LoopRegion would need a listening pass to pick bar-aligned points):
---   9046598930 "Watching the Garden Grow (a)" 163 s
---   9046598509 "Tiny Twinkle Toes (a)" 141 s
---   1848268110 "Whimsical Reverie - Alt3, NoDrums" 132 s (ukulele and sparkling bells)
---   9047880640 "Morning Spirit (Underscore)" 106 s
+-- Library cues end in a few seconds of silence, so `loopEnd` (measured in Studio where the final
+-- note has decayed) loops back to the start before that silence. Checked 2026-10-04: Audio,
+-- owner APMOfficial, preload Success; a LoopRegion wrap at loopEnd measured with no silent gap.
+-- Not yet listened to. Effective level = volume x Music group x player Music setting x Master.
+-- Other verified "Bouncing Mallets"/sunshine-pop picks, with their measured loop ends:
+--   9042946821 "Let It Shine" (sun-drenched bouncy marimba + vibraphone), loopEnd 143.3
+--   9042947041 "Happy Whistle" (mallets, whistling, laid-back groove), loopEnd 101.0
+--   9038721033 "Easy Island" (ukulele, marimba, celesta, gentle ska beat), loopEnd 135.2
+--   9042948177 "Summer Breakfast (Light version)", loopEnd 107.6
+--   15675069601 "Roblox_UI_Loop_Calm_Music" (the first pick; a true loop, no loopEnd needed)
 Manifest.music = {
 	world = {
-		id = "15675069601",
-		source = "Roblox_UI_Loop_Calm_Music",
+		-- "Light, tropical and laid-back pop melody, marimba, piano, pizzicati, drums played
+		-- with brushes and handclaps." (APM Music, Stereoscopic: Bouncing Mallets)
+		id = "9042946814",
+		source = "Summer Breakfast (APM Music)",
 		volume = 0.8,
+		loopEnd = 107.8,
 		fadeIn = 3,
 		fadeOut = 1.5,
 	},

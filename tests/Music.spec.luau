@@ -42,6 +42,7 @@ for name, track in Manifest.music do
 	check(track.id == "" or Sfx.asset(track.id) ~= nil, "valid ID or placeholder: " .. name)
 	check(track.volume > 0 and track.volume <= 1, "track volume in (0, 1]: " .. name)
 	check((track.fadeIn or 0) >= 0 and (track.fadeOut or 0) >= 0, "non-negative fades: " .. name)
+	check(track.loopEnd == nil or track.loopEnd > 10, "loop end is a real point: " .. name)
 end
 check(Manifest.music.world ~= nil, "a world track exists")
 -- Mix: music sits under the effects, inside the requested 0.15-0.3 effective range.
@@ -61,6 +62,10 @@ Music.play("world")
 local sound = tracks()[1]
 check(#tracks() == 1 and Music.playing() == "world", "world starts")
 check(sound.Looped and sound.IsPlaying and sound.Volume == 0, "looping, playing, starts silent")
+check(
+	sound.PlaybackRegionsEnabled and sound.LoopRegion.Max == Manifest.music.world.loopEnd,
+	"loops before the cue's silent tail"
+)
 check(sound.SoundGroup.Name == "Music" and sound.SoundGroup.Parent.Name == "Master", "Music group")
 local fadeIn = tweens[#tweens]
 check(fadeIn.goal.Volume == Manifest.music.world.volume, "fades to the track level")
