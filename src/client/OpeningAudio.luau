@@ -4,6 +4,7 @@ local RunService = game:GetService("RunService")
 local ContentProvider = game:GetService("ContentProvider")
 local Config = require(script.Parent.OpeningAudioConfig)
 local Scope = require(script.Parent.OpeningScope)
+local Sfx = require(script.Parent.Sfx)
 local Audio = {}
 type Gain = { value: number, target: number, from: number, age: number, duration: number }
 type Playing = {
@@ -255,6 +256,7 @@ function Audio.create(scope: Scope.Scope): Audio
 			local sound = Instance.new("Sound")
 			sound.Name, sound.SoundId, sound.Looped, sound.Volume = key, id, cue.looped, 0
 			sound:SetAttribute("AudioGroup", cue.group)
+			sound.SoundGroup = Sfx.group("Reveal") -- Shares the game mix and the Sound setting.
 			sound.Parent = folder -- Non-positional: consistent across camera/device layouts.
 			local envelope = gain(if cue.fadeIn > 0 then 0 else 1)
 			target(envelope, 1, cue.fadeIn)

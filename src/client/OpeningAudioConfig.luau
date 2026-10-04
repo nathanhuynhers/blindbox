@@ -1,5 +1,6 @@
 --!strict
--- Opening-only mix. The synthesized pack was rejected; keep all production cues silent.
+-- Opening-only mix. Cue IDs come from SoundManifest.opening; unlisted slots stay silent.
+local Manifest = require(script.Parent.SoundManifest)
 local Config = {}
 export type Group = "Ambience" | "Box" | "Energy" | "Rarity" | "Impact" | "Reveal" | "UI"
 export type Curve =
@@ -52,7 +53,8 @@ local function cue(
 	looped: boolean?,
 	fallback: string?
 )
-	Config.sounds[key] = ""
+	local source = Manifest.opening[key]
+	Config.sounds[key] = if source and source.id ~= "" then "rbxassetid://" .. source.id else ""
 	Config.cues[key] = {
 		group = group,
 		volume = volume,
@@ -113,4 +115,19 @@ Config.cues.flightAir.curve =
 Config.cues.dive.curve =
 	{ volume = { 0.2, 1 }, speed = { 0.88, 1.16 }, volumePower = 1.7, speedPower = 1.8 }
 Config.cues.dive.fadeIn = 0.025
+-- The library stings run longer than the original brief, and the ladder climbs in level.
+-- Phase cuts (Closing, Skip) still end them early.
+local tuning: { [string]: { number } } = {
+	revealCommon = { 0.8, 0.5 },
+	revealUncommon = { 1.2, 0.55 },
+	revealRare = { 2, 0.6 },
+	revealLegendary = { 2.6, 0.7 },
+	revealMythical = { 5, 0.75 },
+	rarityLegendary = { 1.2, 0.48 },
+	rarityMythical = { 1.6, 0.48 },
+	discovery = { 1.6, 0.3 },
+}
+for key, tune in tuning do
+	Config.cues[key].lifetime, Config.cues[key].volume = tune[1], tune[2]
+end
 return Config
