@@ -226,7 +226,13 @@ table.insert(
 				results = nil
 			end
 		end
-		if shelfNotice and not (opening and opening.isActive()) and #batch == 0 then
+		-- Also after the Open 10 grid closes, so the toast and its sting aren't buried under it.
+		if
+			shelfNotice
+			and not (opening and opening.isActive())
+			and #batch == 0
+			and not summary.isOpen()
+		then
 			ui.message(shelfNotice, "success")
 			Sfx.play("complete")
 			shelfNotice = nil
