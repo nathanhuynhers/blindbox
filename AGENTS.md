@@ -52,3 +52,17 @@
 - Keep generated packages, sourcemaps, Selene API cache, and build output out of version control.
 - Formatting, linting, and building do not prove type correctness or runtime behavior. Check Luau Language Server diagnostics and use Studio playtests for behavioral changes, including multi-client tests for replication/remotes.
 - Report what changed, checks actually run, and any remaining manual checks. Never claim a Studio playtest was run unless it was.
+
+## Working style and session hygiene
+
+- Work autonomously and keep intermediate updates concise. Do not repeatedly summarize files, restate the plan, or narrate routine actions.
+- Start with the smallest set of files relevant to the task. Expand to related files, dependencies, or broader architecture when needed to understand behavior, avoid regressions, or verify correctness.
+- Use Roblox Studio MCP only when it materially helps implementation, inspection, runtime testing, or verification. Do not use it for work that can be completed reliably from the repository alone.
+- Preserve important long-term discoveries, architectural decisions, workflow changes, and non-obvious project knowledge in the appropriate project documentation. Do not update documentation for routine implementation details that can be understood directly from the code.
+- Record notable artifacts and references with `add_artifact_or_reference` when they are useful to surface next to the chat input. Registration is optional and should not become an inventory of everything created.
+- Treat issues or pull requests created or attempted during the task as artifacts. Other artifacts should generally be deliverables explicitly requested by the user or standalone results they are clearly likely to reopen, download, or reuse.
+- Do not record routine source files, scratch files, caches, logs, intermediate results, generated temporary files, or configuration snapshots unless specifically requested as deliverables. Never create, copy, or relocate a file solely so it can be registered as an artifact.
+- When needed, use `list_artifacts_and_references` and `remove_artifact_or_reference` to manage relevant session artifacts.
+- Keep the workflow efficient: prefer targeted reads, targeted searches, and direct implementation over broad exploration.
+- Avoid redundant re-reading and repeated validation of unchanged behavior, but perform appropriate verification after implementation. Run broader tests or inspect additional systems when the change has meaningful cross-system risk.
+- If the current approach is becoming context-heavy, prefer summarizing the important state and continuing efficiently rather than repeatedly rereading large amounts of unchanged context.
