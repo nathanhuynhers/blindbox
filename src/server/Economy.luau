@@ -52,6 +52,9 @@ return table.freeze({
 	offlineMinSeconds = 60,
 	startingCoins = 4500,
 	dailyCollection = "grove",
+	-- One-time Welcome Quest rewards: a free box of at least `box` rarity, then a free x10 whose
+	-- last roll is raised to at least `ten` only when the first nine missed it.
+	welcome = { collection = "grove", box = "Uncommon", ten = "Rare" },
 	coinLimit = 1000000000000,
 	copyLimit = 1000000000,
 	counterLimit = 1000000,

@@ -19,7 +19,7 @@ local starter = Economy.dailyCollection
 local price = Rules.prices[starter]
 
 local state = Rules.new(0)
-check(state.schemaVersion == 12 and state.boxesOpened == 0, "fresh profiles start at schema 12 with zero boxes")
+check(state.schemaVersion == 13 and state.boxesOpened == 0, "fresh profiles start at schema 13 with zero boxes")
 check(Rules.mutate(state, intent("Buy", 0, starter), 0, 10), "funded purchase succeeds")
 check(state.boxesOpened == 1, "a successful purchase counts one box")
 check(Rules.mutate(state, intent("Daily", 1, starter), 0.5, 10), "daily free box succeeds")
@@ -67,6 +67,7 @@ for _, version in { 6, 7 } do
 	old.lastSeen, old.offlinePending = nil, nil
 	old.lastLoginDay, old.loginStreak = nil, nil
 	old.sfxVolume, old.musicVolume = nil, nil
+	old.tutorialHidden = nil
 	if version == 6 then
 		old.earnings = nil
 	end
@@ -76,7 +77,7 @@ for _, version in { 6, 7 } do
 		"v" .. version .. " profiles start at zero boxes and keep their progress"
 	)
 	check(old.boxesOpened == nil and old.schemaVersion == version, "migration does not mutate its input")
-	check(migrated ~= nil and Profile.encode(migrated).schemaVersion == 12, "migrated profiles re-encode as schema 12")
+	check(migrated ~= nil and Profile.encode(migrated).schemaVersion == 13, "migrated profiles re-encode as schema 13")
 end
 
 -- Malformed counters fail closed instead of being reset.
@@ -93,6 +94,7 @@ local early = Profile.encode(state) :: { [string]: any }
 early.schemaVersion = 7
 early.lastLoginDay, early.loginStreak = nil, nil
 early.sfxVolume, early.musicVolume = nil, nil
+early.tutorialHidden = nil
 table.insert(invalid, early)
 for _, corrupt in invalid do
 	check(Profile.decode(corrupt, 0) == nil, "invalid, missing or premature counters block loading")
@@ -106,6 +108,7 @@ v7.shelfRewards = nil
 v7.lastSeen, v7.offlinePending = nil, nil
 v7.lastLoginDay, v7.loginStreak = nil, nil
 v7.sfxVolume, v7.musicVolume = nil, nil
+v7.tutorialHidden = nil
 local database: unknown = { data = v7, token = "", writer = "old", expires = 0, generation = 4 }
 local update: Persistence.Update = function(_, transform)
 	local result = transform(database)
@@ -120,7 +123,7 @@ check(
 	handle ~= nil and loaded ~= nil and loaded.boxesOpened == 0 and handle.generation == 4,
 	"stored v7 record loads through the lease"
 )
-check(stored.schemaVersion == 12 and stored.boxesOpened == 0, "acquired record is rewritten as v12")
+check(stored.schemaVersion == 13 and stored.boxesOpened == 0, "acquired record is rewritten as v13")
 local corruptRecord: unknown = {
 	data = invalid[1],
 	token = "",

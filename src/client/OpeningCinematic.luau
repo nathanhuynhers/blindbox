@@ -10,6 +10,7 @@ local Figure = require(script.Parent.OpeningFigure)
 local Effects = require(script.Parent.OpeningEffects)
 local Flight = require(script.Parent.OpeningFlight)
 local Result = require(script.Parent.OpeningResult)
+local Lighting = require(script.Parent.OpeningLighting)
 local Cinematic = {}
 export type Cinematic = {
 	draw: (State.State, number) -> (),
@@ -41,7 +42,7 @@ local function solid(
 end
 function Cinematic.create(
 	scope: Scope.Scope,
-	_gui: ScreenGui,
+	gui: ScreenGui,
 	result: Result.Result,
 	profile: Config.Profile,
 	collection: Config.Collection,
@@ -50,6 +51,16 @@ function Cinematic.create(
 ): Cinematic
 	local owner = CameraOwner.create(scope, interrupted)
 	local camera = owner.camera
+	-- A neutral studio look while the camera is ours, released with the camera.
+	local releaseLight: (() -> ())? = nil
+	local function unlight()
+		local release = releaseLight
+		releaseLight = nil
+		if release then
+			release()
+		end
+	end
+	scope.add(unlight)
 	local stage = Instance.new("Model")
 	stage.Name = "BlindboxCinematic"
 	stage:SetAttribute("RequestId", result.requestId)
@@ -233,10 +244,12 @@ function Cinematic.create(
 					light.Enabled = false
 				end
 				owner.restore()
+				unlight()
 				return
 			end
 			if not owner.isOwned() then
 				owner.take()
+				releaseLight = releaseLight or Lighting.hold()
 			end
 			if box and phase == "Enter" then
 				box.model.Parent = stage
@@ -284,9 +297,10 @@ function Cinematic.create(
 					if reduced then 0 else compression
 				)
 			end
-			local compact = camera.ViewportSize.Y < 500
-				and camera.ViewportSize.X > camera.ViewportSize.Y
-			local shift = if compact then 2.4 else 0
+			local compact = Config.compact(gui.AbsoluteSize)
+			-- The camera looks along +Z, so its right is world -X: a negative target shift puts
+			-- the figure left of centre, clear of the compact Reveal card's right-hand column.
+			local shift = if compact then -2.4 else 0
 			local finalTarget = Vector3.new(shift, if compact then 2 else 1.2, 0)
 			local settled = phase == "Result" or phase == "Closing"
 			local finalPosition = Vector3.new(

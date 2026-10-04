@@ -92,6 +92,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		sequence = session.sequence,
 		rate = Rules.rate(state),
 		step = state.step,
+		tutorialHidden = state.tutorialHidden,
 		rates = CollectionEconomy.effectiveRates(state.owned),
 		baseRates = Rules.rates,
 		nextRates = CollectionEconomy.effectiveRates(state.owned, true),

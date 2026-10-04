@@ -236,6 +236,10 @@ check(not State.finish(finishing), "finish is idempotent")
 request.action = "Daily"
 local daily = Result.fromReply(request, before, after, reply)
 check(daily ~= nil and not daily.direct, "daily uses box")
+request.action = "Welcome"
+check(Result.fromReply(request, before, after, reply) ~= nil, "the Welcome Box reveals through the normal opening")
+local welcomeTen = Result.fromBatch({ id = "wt", action = "WelcomeTen", revision = 7 }, before, batchAfter, { id = "wt", ok = true, message = "", figures = batchIds })
+check(#welcomeTen == 4 and welcomeTen[1].tease == "Rare", "the Welcome x10 uses the Open 10 sequence")
 request.action = "Redeem"
 local redeemed = Result.fromReply(request, before, after, reply)
 check(redeemed == nil, "retired redemption cannot reveal a result")

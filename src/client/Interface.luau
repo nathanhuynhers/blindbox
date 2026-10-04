@@ -7,6 +7,7 @@ local Input = game:GetService("UserInputService")
 local Actions = game:GetService("ContextActionService")
 local Tweens = game:GetService("TweenService")
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
+local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Scope = require(script.Parent.UIScope)
 local Context = require(script.Parent.UIContext)
 local Style = require(script.Parent.UIStyle)
@@ -34,6 +35,8 @@ export type Interface = {
 	pending: (boolean) -> (),
 	openDisplay: () -> (),
 	openShelves: () -> (),
+	-- Closes the open screen, if any (the Welcome Quest's first placement reveals the world).
+	closeScreen: () -> (),
 	coinLanded: () -> (),
 	destroy: () -> (),
 }
@@ -166,7 +169,9 @@ function Interface.create(
 			navigate(id)
 		end
 	end)
-	local tutorial = Onboarding.create(stage, scope, dock.tiles, hosts)
+	local tutorial = Onboarding.create(stage, scope, dock.tiles, hosts, function(action)
+		ctx.send(action)
+	end)
 	local frame: Layout.Frame? = nil
 	local laidOut: { [string]: string } = {}
 	local function layoutScreen(id: string)
@@ -230,7 +235,7 @@ function Interface.create(
 			return
 		end
 		hud.update(state)
-		tutorial.update(state, if opened then current else nil)
+		tutorial.update(state, if opened then current else nil, focused)
 		if not state.ready and blockedStatus ~= state.saveStatus then
 			notices.show(state.saveStatus, "error")
 		elseif
@@ -383,13 +388,17 @@ function Interface.create(
 				navigate("Shelves")
 			end
 		end,
+		closeScreen = function()
+			close()
+		end,
 		update = function(state: Types.Snapshot)
 			snapshot = state
 			refresh()
 			if not loginChecked and state.ready then
 				loginChecked = true
-				-- Skipped for brand-new players so onboarding's free-box hints stay uncovered.
-				if state.loginReady and next(state.owned) ~= nil and not opened then
+				-- Not while the Welcome Quest is guiding or its x10 waits: one thing at a time.
+				local quest = not state.tutorialHidden and state.step <= Tutorial.reward
+				if state.loginReady and not quest and not opened then
 					navigate("Login")
 				end
 			end

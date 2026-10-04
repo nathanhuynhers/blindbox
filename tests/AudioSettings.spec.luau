@@ -71,7 +71,7 @@ check(sfx ~= nil and sfx.ok and session.state.sfxVolume == 20, "SetVolume saves 
 
 -- Persistence: v12 round-trips; invalid values fail closed.
 local saved = Profile.encode(session.state)
-check(saved.schemaVersion == 12, "encodes schema 12")
+check(saved.schemaVersion == 13, "encodes schema 13")
 local restored = Profile.decode(saved, 0)
 check(
 	restored ~= nil and restored.sfxVolume == 20 and restored.musicVolume == 35,
@@ -91,6 +91,7 @@ for version = 6, 11 do
 	local old = Profile.encode(Rules.new(0)) :: any
 	old.schemaVersion = version
 	old.sfxVolume, old.musicVolume = nil, nil
+	old.tutorialHidden = nil
 	if version < 11 then
 		old.lastLoginDay, old.loginStreak = nil, nil
 	end

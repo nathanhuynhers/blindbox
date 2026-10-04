@@ -35,7 +35,7 @@ end
 
 local state = Rules.new(0)
 check(
-	state.schemaVersion == 12 and #state.shelves.units == 3,
+	state.schemaVersion == 13 and #state.shelves.units == 3,
 	"fresh schema 9 owns three independent shelves"
 )
 check(#Config.slots() == 9 and Config.visibleShelfUnits == 3, "nine configured local positions")
@@ -310,7 +310,7 @@ for index = 1, Shelves.decodeLimits.placements + 1 do
 end
 check(Profile.decode(huge, 0) == nil, "placement allocation guard")
 local future = Profile.encode(txState)
-future.schemaVersion = 13
+future.schemaVersion = 14
 check(Profile.decode(future, 0) == nil, "future schema fails closed")
 for version = 1, 5 do
 	local old = Profile.encode(txState)
@@ -400,6 +400,7 @@ v8.shelfRewards = nil
 v8.lastSeen, v8.offlinePending = nil, nil
 v8.lastLoginDay, v8.loginStreak = nil, nil
 v8.sfxVolume, v8.musicVolume = nil, nil
+v8.tutorialHidden = nil
 v8.shelves.units[5] = nil
 local migrated = Profile.decode(v8, 0)
 check(
@@ -415,6 +416,7 @@ local premature = Profile.encode(progression) :: { [string]: any }
 premature.schemaVersion = 8
 premature.lastLoginDay, premature.loginStreak = nil, nil
 premature.sfxVolume, premature.musicVolume = nil, nil
+premature.tutorialHidden = nil
 check(Profile.decode(premature, 0) == nil, "v8 records cannot carry shelf rewards")
 local capped = Rules.new(0)
 while Shelves.add(capped.shelves) do

@@ -1,5 +1,6 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
+local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Rules = require(script.Parent.Rules)
 local Protocol = require(script.Parent.Protocol)
 local Shelves = require(script.Parent.Shelves)
@@ -59,6 +60,10 @@ function Transactions.process(
 			message = "Click or tap your own displayed figure nearby."
 		elseif string.sub(intent.action, 1, 5) == "Shelf" then
 			ok, message, figure = Shelves.mutate(session.state, intent, access, now)
+			-- The optional Shelves tip ends only when a figure is actually placed.
+			if ok and intent.action == "ShelfPlace" and session.state.step == Tutorial.shelves then
+				session.state.step = Tutorial.done
+			end
 		elseif (intent.action == "Place" or intent.action == "Remove") and not insideOwnPlot then
 			message = "Return to your own plot to edit your Display."
 		else

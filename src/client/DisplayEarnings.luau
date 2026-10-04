@@ -134,6 +134,8 @@ end
 export type Earnings = {
 	update: (Types.Snapshot) -> number,
 	collected: (Types.Snapshot, Types.Snapshot, Types.Reply) -> (),
+	-- First placement: sparkle the slot and punch its counter so earning is visibly "here".
+	celebrate: (slot: number) -> (),
 	destroy: () -> (),
 }
 
@@ -253,6 +255,17 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 		CoinBurst.destroy()
 	end
 
-	return { update = update, collected = collected, destroy = destroy }
+	local function celebrate(slot: number)
+		local label = labels[slot]
+		local target = if label then label.target else nil
+		if not target or not effects() then
+			return
+		end
+		CoinBurst.celebrate(target.Position - Vector3.new(0, 2, 0))
+		label.scale.Scale = 1.6
+		tween(label.scale, 0.5, { Scale = 1 }, Enum.EasingStyle.Back)
+	end
+
+	return { update = update, collected = collected, celebrate = celebrate, destroy = destroy }
 end
 return Earnings

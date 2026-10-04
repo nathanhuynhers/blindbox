@@ -38,7 +38,9 @@ local function fresh(): Types.Snapshot
 		revision = 0,
 		sequence = 1,
 		rate = 0,
-		step = 1,
+		-- A returning player whose Welcome Quest is finished.
+		step = 7,
+		tutorialHidden = false,
 		rates = Rules.rates,
 		baseRates = Rules.rates,
 		nextRates = Rules.rates,
@@ -252,6 +254,22 @@ end
 reveal = UI.reveal(snapshot, "echo.feather-hush", false, 2)
 check(reveal.placeLabel == "Swap for " .. Catalog.byId[weakest].name, "swap names the lowest earner")
 check(reveal.placeDetail == UI.rate(hush - weakestRate) .. " more", "swap shows the gain")
+-- A duplicate names its permanent rate gain against the snapshot from before the request.
+local earlier = fresh()
+local upgraded = fresh()
+upgraded.rates = table.clone(Rules.rates)
+upgraded.rates["grove.pebble"] = Rules.rates["grove.pebble"] * 1.1
+check(
+	UI.reveal(upgraded, "grove.pebble", false, 2, earlier).earns
+		== string.format(
+			"Duplicate upgrade · %s → %s coins/s",
+			UI.amount(Rules.rates["grove.pebble"]),
+			UI.amount(upgraded.rates["grove.pebble"])
+		),
+	"a duplicate shows its old and new rate"
+)
+check(UI.reveal(upgraded, "grove.pebble", true, 1, earlier).earns:find("^Earns") ~= nil, "a new figure shows its rate")
+check(UI.reveal(earlier, "grove.pebble", false, 2, earlier).earns:find("^Earns") ~= nil, "no gain, no upgrade line")
 
 -- Badges, goals and countdown.
 snapshot = fresh()
