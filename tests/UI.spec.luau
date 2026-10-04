@@ -48,6 +48,7 @@ local function fresh(): Types.Snapshot
 		dailyCollection = Economy.dailyCollection,
 		unlocked = 3,
 		expansionCost = Economy.expansionCosts[4],
+		shelfPrice = Economy.shelfPrice,
 		dailyReady = true,
 		goalProgress = 0,
 		goalClaimed = false,

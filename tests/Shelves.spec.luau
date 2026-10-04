@@ -35,8 +35,8 @@ end
 
 local state = Rules.new(0)
 check(
-	state.schemaVersion == 8 and #state.shelves.units == 3,
-	"fresh schema 8 owns three independent shelves"
+	state.schemaVersion == 9 and #state.shelves.units == 3,
+	"fresh schema 9 owns three independent shelves"
 )
 check(#Config.slots() == 9 and Config.visibleShelfUnits == 3, "nine configured local positions")
 local view = Shelves.newView()
@@ -310,7 +310,7 @@ for index = 1, Shelves.decodeLimits.placements + 1 do
 end
 check(Profile.decode(huge, 0) == nil, "placement allocation guard")
 local future = Profile.encode(txState)
-future.schemaVersion = 9
+future.schemaVersion = 10
 check(Profile.decode(future, 0) == nil, "future schema fails closed")
 for version = 1, 5 do
 	local old = Profile.encode(txState)
@@ -320,5 +320,111 @@ end
 check(
 	Profile.encode(txState).shelves.startIndex == nil and Catalog.byId[id] ~= nil,
 	"carousel remains runtime only"
+)
+-- Shelf progression: free unlock per first collection completion, exponential purchases, cap.
+local Economy = require("./Economy")
+local progression = Rules.new(0)
+local function buyShelf(target: Types.State)
+	return Rules.mutate(target, {
+		action = "BuyShelf",
+		id = "buy-shelf",
+		revision = target.revision,
+	}, 0, 0)
+end
+check(Rules.shelfPrice(progression) == Economy.shelfPrice, "first purchase uses the base price")
+progression.coins = Economy.shelfPrice - 1
+check(not buyShelf(progression) and #progression.shelves.units == 3, "unaffordable purchase rejected")
+progression.coins = Economy.shelfPrice + 200000
+check(
+	buyShelf(progression)
+		and #progression.shelves.units == 4
+		and progression.coins == 200000
+		and progression.shelves.units[4].id == "shelf:4",
+	"purchase charges the price and appends an empty unit"
+)
+check(
+	Rules.shelfPrice(progression) == math.floor(Economy.shelfPrice * Economy.shelfGrowth),
+	"second purchase scales exponentially"
+)
+local grove: { string } = {}
+for _, figure in Catalog.figures do
+	if figure.collection == "grove" then
+		table.insert(grove, figure.id)
+	end
+end
+for index = 2, #grove do
+	progression.discovered[grove[index]] = true
+	progression.owned[grove[index]] = 1
+end
+check(Rules.grantShelves(progression) == 0, "partial collection grants nothing")
+progression.discovered[grove[1]] = true
+progression.owned[grove[1]] = 1
+check(
+	Rules.grantShelves(progression) == 1
+		and #progression.shelves.units == 5
+		and progression.shelfRewards.grove,
+	"first completion grants one free unit"
+)
+check(Rules.grantShelves(progression) == 0, "completion reward is granted once")
+check(
+	Rules.shelfPrice(progression) == math.floor(Economy.shelfPrice * Economy.shelfGrowth),
+	"free units do not raise the purchase price"
+)
+local rolled = Rules.new(0)
+rolled.coins = 1000000
+for index = 1, #grove - 1 do
+	rolled.discovered[grove[index]] = true
+	rolled.owned[grove[index]] = 1
+end
+local missingRoll = 0
+for step = 0, 999 do
+	if Rules.roll(step / 1000, "grove") == grove[#grove] then
+		missingRoll = step / 1000
+		break
+	end
+end
+check(
+	Rules.mutate(rolled, { action = "Buy", id = "b", revision = 0, choice = "grove" }, missingRoll, 0)
+		and rolled.shelfRewards.grove
+		and #rolled.shelves.units == 4,
+	"completing box purchase grants the free unit atomically"
+)
+local saved = Profile.decode(Profile.encode(progression), 0)
+check(
+	saved ~= nil and #saved.shelves.units == 5 and saved.shelfRewards.grove == true,
+	"shelves and rewards persist"
+)
+local v8 = Profile.encode(progression) :: { [string]: any }
+v8.schemaVersion = 8
+v8.shelfRewards = nil
+v8.shelves.units[5] = nil
+local migrated = Profile.decode(v8, 0)
+check(
+	migrated ~= nil and migrated.shelfRewards.grove and #migrated.shelves.units == 5,
+	"pre-reward completions are granted once on load"
+)
+for _, bad in { { unknown = true }, { grove = false }, "grove" } do
+	local corrupt = Profile.encode(progression) :: { [string]: any }
+	corrupt.shelfRewards = bad
+	check(Profile.decode(corrupt, 0) == nil, "invalid shelf rewards fail closed")
+end
+local premature = Profile.encode(progression) :: { [string]: any }
+premature.schemaVersion = 8
+check(Profile.decode(premature, 0) == nil, "v8 records cannot carry shelf rewards")
+local capped = Rules.new(0)
+while Shelves.add(capped.shelves) do
+end
+capped.coins = Economy.coinLimit
+check(
+	#capped.shelves.units == Config.maxShelfUnits
+		and Rules.shelfPrice(capped) == 0
+		and not buyShelf(capped)
+		and capped.coins == Economy.coinLimit,
+	"shelf cap blocks purchases without charging"
+)
+check(
+	Protocol.parse({ action = "BuyShelf", id = "x", revision = 0 }) ~= nil
+		and Protocol.parse({ action = "BuyShelf", id = "x", revision = 0, choice = "grove" }) == nil,
+	"BuyShelf carries no payload"
 )
 print("PASS: " .. checks .. " owned-copy Shelf persistence, repair, validation and carousel checks")

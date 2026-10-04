@@ -98,6 +98,27 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 			end
 		)
 	end
+	-- Header action: buy the next Shelf Unit. Hidden at the cap; disabled while unaffordable.
+	local buy = Button.create(
+		shell.chips,
+		"BuyShelf",
+		{
+			variant = "gold",
+			text = "",
+			size = 14,
+			radius = 14,
+			drop = 0,
+			outline = Style.outlineSmall,
+			icon = "Plus",
+			font = Style.body(Enum.FontWeight.ExtraBold),
+		},
+		ctx.scope,
+		ctx.effects,
+		function()
+			ctx.send("BuyShelf", nil, nil, nil)
+		end
+	)
+	buy.button.Size = UDim2.fromOffset(190, 44)
 	local cabinet = Kit.frame(left, "Cabinet", Style.wood)
 	Kit.corner(cabinet, 20)
 	Kit.stroke(cabinet, Style.woodDark, 4)
@@ -334,6 +355,13 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 				tab.button:SetAttribute("Selected", unit ~= nil and visible.id == unit.id)
 			end
 		end
+		local price = snapshot.shelfPrice
+		buy.button.Visible = price > 0
+		buy.set("Buy Shelf · " .. State.compact(price), ctx.canAct() and snapshot.coins >= price)
+		buy.button:SetAttribute(
+			"AccessibleName",
+			"Buy Shelf for " .. State.number(price) .. " Coins"
+		)
 		-- Prev/next only page beyond three owned shelves.
 		previous.set("", ctx.canAct() and view.canNavigate)
 		following.set("", ctx.canAct() and view.canNavigate)

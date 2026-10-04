@@ -2,6 +2,7 @@
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
+local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
@@ -14,7 +15,7 @@ local Rules = {
 }
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 8,
+		schemaVersion = 9,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
@@ -23,6 +24,7 @@ function Rules.new(now: number): Types.State
 		goalProgress = 0,
 		goalClaimed = false,
 		boxesOpened = 0,
+		shelfRewards = {},
 		coins = Economy.startingCoins,
 		owned = {},
 		discovered = {},
@@ -128,6 +130,38 @@ end
 function Rules.expansionCost(state: Types.State): number
 	return Economy.expansionCosts[state.display.unlocked + 1] or 0
 end
+function Rules.shelfPrice(state: Types.State): number
+	local units = #state.shelves.units
+	if units >= ShelfConfig.maxShelfUnits then
+		return 0
+	end
+	local free = 0
+	for _ in state.shelfRewards do
+		free += 1
+	end
+	local bought = math.max(0, units - ShelfConfig.startingShelfUnits - free)
+	return math.floor(Economy.shelfPrice * Economy.shelfGrowth ^ bought)
+end
+-- First completion (every figure discovered) of each collection grants one free Shelf Unit.
+function Rules.grantShelves(state: Types.State): number
+	local granted = 0
+	for _, collection in Catalog.collections do
+		if not state.shelfRewards[collection.id] then
+			local complete = true
+			for _, figure in Catalog.figures do
+				if figure.collection == collection.id and not state.discovered[figure.id] then
+					complete = false
+					break
+				end
+			end
+			if complete and Shelves.add(state.shelves) then
+				state.shelfRewards[collection.id] = true
+				granted += 1
+			end
+		end
+	end
+	return granted
+end
 -- Buy and Daily use the first roll; BuyTen needs ten.
 function Rules.mutate(
 	state: Types.State,
@@ -191,6 +225,7 @@ function Rules.mutate(
 		end
 		-- Counted in the same atomic grant as the box's figures.
 		state.boxesOpened = math.min(Rules.boxesOpenedLimit, state.boxesOpened + count)
+		Rules.grantShelves(state)
 		if state.step == 1 then
 			state.step = 2
 		elseif state.step == 4 and action ~= "Daily" then
@@ -221,6 +256,18 @@ function Rules.mutate(
 		state.coins -= cost
 		state.display.unlocked += 1
 		state.display.slots[state.display.unlocked] = ""
+	elseif action == "BuyShelf" then
+		local price = Rules.shelfPrice(state)
+		if price == 0 then
+			return false, "Max shelves reached.", nil
+		end
+		if state.coins < price then
+			return false, "Not enough Coins yet.", nil
+		end
+		state.coins -= price
+		Shelves.add(state.shelves)
+		state.revision += 1
+		return true, "New Shelf unlocked!", nil
 	elseif action == "Goal" then
 		if state.goalClaimed or state.goalProgress < 3 then
 			return false, "Display three distinct figures to earn today's reward.", nil

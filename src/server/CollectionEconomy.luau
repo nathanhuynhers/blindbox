@@ -28,6 +28,10 @@ assert(
 	"Unsafe Coin bound"
 )
 assert(Config.setBonus >= 0 and Config.setBonus <= 1, "Invalid themed bonus")
+assert(
+	positive(Config.shelfPrice) and Config.shelfPrice % 1 == 0 and Config.shelfGrowth >= 1,
+	"Invalid shelf pricing"
+)
 for _, cost in Config.expansionCosts do
 	assert(positive(cost) and cost % 1 == 0 and cost <= Config.coinLimit, "Invalid expansion cost")
 end

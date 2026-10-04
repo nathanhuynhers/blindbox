@@ -94,6 +94,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		dailyCollection = Economy.dailyCollection,
 		unlocked = state.display.unlocked,
 		expansionCost = Rules.expansionCost(state),
+		shelfPrice = Rules.shelfPrice(state),
 		dailyReady = state.lastDailyDay < day,
 		goalProgress = state.goalProgress,
 		goalClaimed = state.goalClaimed,

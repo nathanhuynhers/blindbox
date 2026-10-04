@@ -30,7 +30,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
    - Mobile players tap individual figures to collect.
    - Add a nearby sign explaining how to collect, ideally device-specific wording such as "Click to Collect" or "Tap to Collect."
 
-4. **Add Shelf/Page progression**
+4. [x] **Add Shelf/Page progression** — implementation and automated checks complete; Studio playtest, rejoin and two-client acceptance pending.
    - Treat a Shelf and a Page as the same progression unit.
    - Completing a Collection for the first time unlocks a new Shelf/Page.
    - Players can also purchase additional Shelf/Pages using coins.

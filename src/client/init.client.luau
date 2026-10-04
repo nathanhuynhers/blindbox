@@ -24,6 +24,8 @@ local reveal: OpeningResult.Result? = nil
 -- Remaining Open 10 reveals, shown one at a time as each opening closes.
 local batch: { OpeningResult.Result } = {}
 local batchSize = 0
+-- Shown once the opening closes so it never spoils the reveal.
+local shelfNotice: string? = nil
 local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
@@ -102,6 +104,13 @@ table.insert(
 		if state.sequence > sequence then
 			sequence = state.sequence
 			current = state
+			if
+				previous
+				and state.shelves.ownedCount > previous.shelves.ownedCount
+				and not (pending and pending.action == "BuyShelf")
+			then
+				shelfNotice = "Collection complete! New Shelf unlocked"
+			end
 			ui.update(state)
 			displayInteraction.update(displayEarnings.update(state))
 			if opening and opening.isActive() and reveal then
@@ -158,6 +167,10 @@ table.insert(
 		end
 		if #batch > 0 and current and opening and not opening.isActive() then
 			presentNext(current)
+		end
+		if shelfNotice and not (opening and opening.isActive()) and #batch == 0 then
+			ui.message(shelfNotice, "success")
+			shelfNotice = nil
 		end
 		if not current and now - syncAt > 2 then
 			syncAt = now

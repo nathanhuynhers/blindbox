@@ -4,7 +4,7 @@ local Config = {
 	startingShelfUnits = 3,
 	rowsPerShelfUnit = 3,
 	slotsPerRow = 3,
-	shelfAcquisition = "Unassigned",
+	maxShelfUnits = 100,
 }
 function Config.slotId(row: number, slot: number): string
 	return string.format("row:%d/slot:%d", row, slot)

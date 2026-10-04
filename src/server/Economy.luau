@@ -42,6 +42,9 @@ return table.freeze({
 	duplicates = duplicates,
 	expansionCosts = { [4] = 40000, [5] = 400000, [6] = 4000000 },
 	goalReward = 1000,
+	-- Purchased Shelf Unit n (0-based) costs shelfPrice * shelfGrowth^n; free unlocks don't count.
+	shelfPrice = 50000,
+	shelfGrowth = 2.5,
 	setBonus = 0.1,
 	startingCoins = 4500,
 	dailyCollection = "grove",

@@ -50,6 +50,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		and action ~= "Daily"
 		and action ~= "Goal"
 		and action ~= "Expand"
+		and action ~= "BuyShelf"
 		and action ~= "ShelfPlace"
 		and action ~= "ShelfRemove"
 		and action ~= "ShelfNext"

@@ -141,7 +141,7 @@ manual.state.display.slots[1]=""
 check(not Rules.collect(manual.state,1,common) and manual.state.earnings[common]==12.75,"removed figure retains bank")
 manual.state.display.slots[1]=common
 check(Rules.collect(manual.state,1,common) and manual.state.earnings[common]==.75,"redisplay collection retains fractions")
-local legacy=Profile.encode(manual.state); legacy.schemaVersion=6;legacy.earnings=nil;legacy.boxesOpened=nil
+local legacy=Profile.encode(manual.state); legacy.schemaVersion=6;legacy.earnings=nil;legacy.boxesOpened=nil;legacy.shelfRewards=nil
 check(Profile.decode(legacy,20).coins==manual.state.coins,"schema 6 migrates without reset")
 for _, amount in {-1,0/0,math.huge,Config.coinLimit+1} do
  local invalid=Profile.encode(manual.state); invalid.earnings[common]=amount

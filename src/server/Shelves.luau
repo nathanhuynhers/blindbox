@@ -14,6 +14,22 @@ function Shelves.new(): Types.Shelves
 	end
 	return { units = units }
 end
+-- Appends one empty Shelf Unit with an unused ID; false at the shelf cap.
+function Shelves.add(shelves: Types.Shelves): boolean
+	if #shelves.units >= Config.maxShelfUnits then
+		return false
+	end
+	local used: { [string]: boolean } = {}
+	for _, unit in shelves.units do
+		used[unit.id] = true
+	end
+	local index = #shelves.units + 1
+	while used["shelf:" .. index] do
+		index += 1
+	end
+	table.insert(shelves.units, { id = "shelf:" .. index, placements = {}, customization = {} })
+	return true
+end
 function Shelves.newView(): View
 	return { startIndex = 1, revision = 0, lastTurn = -math.huge }
 end

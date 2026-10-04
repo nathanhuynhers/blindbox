@@ -24,7 +24,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 8,
+		schemaVersion = 9,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -38,6 +38,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		goalProgress = state.goalProgress,
 		goalClaimed = state.goalClaimed,
 		boxesOpened = state.boxesOpened,
+		shelfRewards = table.clone(state.shelfRewards),
 	}
 end
 function Profile.decode(raw: unknown, now: number): Types.State?
@@ -48,7 +49,12 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	-- The user requested a fresh economy. A new store isolates old schemas;
 	-- unexpected old/corrupt data in this store fails closed instead of resetting.
 	if
-		(data.schemaVersion ~= 6 and data.schemaVersion ~= 7 and data.schemaVersion ~= 8)
+		(
+			data.schemaVersion ~= 6
+			and data.schemaVersion ~= 7
+			and data.schemaVersion ~= 8
+			and data.schemaVersion ~= 9
+		)
 		or not fields(data, {
 			"schemaVersion",
 			"coins",
@@ -64,6 +70,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"goalClaimed",
 			"pityByGroup",
 			"boxesOpened",
+			"shelfRewards",
 		})
 	then
 		return nil
@@ -188,8 +195,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	if state.goalClaimed and state.goalProgress < 3 then
 		return nil
 	end
-	-- v6/v7 predate the counter: those players start at 0 (Rules.new default). v8 requires it.
-	if data.schemaVersion == 8 then
+	-- v6/v7 predate the counter: those players start at 0 (Rules.new default). v8+ requires it.
+	if data.schemaVersion == 8 or data.schemaVersion == 9 then
 		if not integer(data.boxesOpened, 0, Rules.boxesOpenedLimit) then
 			return nil
 		end
@@ -197,6 +204,22 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	elseif data.boxesOpened ~= nil then
 		return nil
 	end
+	-- v6-v8 predate Shelf rewards; v9 requires the map.
+	if data.schemaVersion == 9 then
+		if typeof(data.shelfRewards) ~= "table" then
+			return nil
+		end
+		for id, granted in data.shelfRewards :: { [string]: unknown } do
+			if typeof(id) ~= "string" or not Catalog.collectionIds[id] or granted ~= true then
+				return nil
+			end
+			state.shelfRewards[id] = true
+		end
+	elseif data.shelfRewards ~= nil then
+		return nil
+	end
+	-- Idempotent: also grants collections completed before Shelf rewards existed.
+	Rules.grantShelves(state)
 	return state
 end
 return Profile

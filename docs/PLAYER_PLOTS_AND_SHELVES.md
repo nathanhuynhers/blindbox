@@ -177,11 +177,14 @@ the plot, Display, persistent identities and carousel domain are unchanged.
 
 Every fresh profile owns exactly **three persistent Shelf Units**, each with nine cosmetic
 positions and its own placements/customization. The three physical structures are presentation
-positions; they render a sliding viewport over the ordered owned units. Future acquisition adds
+positions; they render a sliding viewport over the ordered owned units. Each acquisition adds
 one Shelf Unit, currently nine positions, without widening the plot or adding furniture.
-Acquisition policy is unassigned: no endpoint, purchase UI, product, price or curve exists.
-There is no product-design maximum. Server decoder resource guards are documented in
-[the data model](DATA_MODEL.md); they are not a progression cap.
+The first completion of each collection (every figure discovered) grants one free unit. Players
+can also buy units with the `BuyShelf` intent from the Shelves screen's fourth tab: purchase n
+(0-based, free units excluded) costs `50,000 x 2.5^n` Coins (50K, 125K, 312.5K, 781K, 1.95M, ...).
+The hard cap is 100 owned units; the Buy tab hides there and the server replies "Max shelves
+reached." Buying needs no plot presence. Server decoder resource guards are documented in
+[the data model](DATA_MODEL.md).
 
 Integrated oak/ivory side wings carry large solid left/right chevrons without text labels.
 These accept desktop clicks and mobile taps through ClickDetectors on generous transparent,
@@ -245,8 +248,9 @@ progression are never sent to visitors to render a plot.
 ## Completion and customization
 
 Collection completion remains derived from permanent discoveries and visible in the Collection
-Book/Goals. **Collection-completion rewards are TBD.** Completing a collection does not unlock a
-room, Shelf Unit, skin, currency, trophy, plaque or title. Legacy world completion plaques were
+Book/Goals. The only collection-completion reward is one free Shelf Unit per collection, granted
+once (see above) with a "Collection complete! New Shelf unlocked" toast after the opening closes.
+Completing a collection does not unlock a room, skin, currency, trophy, plaque or title. Legacy world completion plaques were
 derived presentation, not stored grants; they are retired with the old plot geometry.
 
 Each persistent Shelf Unit has an empty `customization` map for a future versioned extension. No customization
@@ -279,5 +283,5 @@ native visual acceptance. Shared ground, existing figure art and Shelf editor re
 the layered plot platform follows the supplied floor concept, and the town, arch, awnings, spawn pad
 and leaderboard follow the approved Blindbox Town mockup. Pocket Grove
 remains a collection, not a core world API/theme dependency. No themed
-forest environment, Game Pass kiosk, shelf pricing, final art, extra Display capacity, likes,
+forest environment, Game Pass kiosk, final art, extra Display capacity, likes,
 ratings, trading, cross-server travel or free placement is part of this implementation.

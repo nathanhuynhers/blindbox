@@ -55,6 +55,8 @@ export type Profile = {
 	goalProgress: number,
 	goalClaimed: boolean,
 	boxesOpened: number,
+	-- Collections whose first completion already granted a free Shelf Unit.
+	shelfRewards: { [string]: boolean },
 }
 export type State = Profile & { revision: number, time: number }
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
@@ -79,6 +81,8 @@ export type Snapshot = {
 	dailyCollection: string,
 	unlocked: number,
 	expansionCost: number,
+	-- Next Shelf Unit price; 0 once the shelf cap is reached.
+	shelfPrice: number,
 	dailyReady: boolean,
 	goalProgress: number,
 	goalClaimed: boolean,

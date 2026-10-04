@@ -23,13 +23,13 @@ Once either editor is open, a living owner can edit their Display and Shelves fr
 inside their own plot; the server rejects edits from outside it. Future paid auto-collect is not implemented.
 See [economy](ECONOMY.md) for exact formulas and tuning.
 
-For canonical Shelf capacity, viewport, owned-copy placement and unresolved completion rewards,
+For canonical Shelf capacity, viewport, owned-copy placement, Shelf progression and completion rewards,
 see [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 
 Scrap, recycling and redemption are removed. New profiles start with 4,500 Coins and fully random
 starter purchases. One free Starter box and the 1,000-Coin daily Display goal retain UTC rules.
 The authorized economy reset uses the Economy2 namespaces; no old-namespace progress is imported.
-Current schema 8 safely upgrades valid Economy2 schemas 6 and 7, while schemas 1–5 are rejected.
+Current schema 9 safely upgrades valid Economy2 schemas 6, 7 and 8, while schemas 1–5 are rejected.
 Existing lease/retry/storage-failure protection remains.
 
 The world is **Blindbox Town**, a cozy blind-box shopping town (no stores or shop buildings):

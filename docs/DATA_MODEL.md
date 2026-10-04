@@ -1,7 +1,7 @@
 # Persistent data model
 
-Current schema: **8**, in the Economy2 namespace. Valid schemas 6 and 7 upgrade (6 with empty
-banks; both with `boxesOpened = 0`); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
+Current schema: **9**, in the Economy2 namespace. Valid schemas 6, 7 and 8 upgrade (6 with empty
+banks; 6/7 with `boxesOpened = 0`; all with empty `shelfRewards`); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
@@ -10,7 +10,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 8 written; valid 6/7 upgrade; unsupported versions block loading/writing |
+| schemaVersion | 9 written; valid 6/7/8 upgrade; unsupported versions block loading/writing |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -22,12 +22,15 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | lastDailyDay | Last claimed free-box UTC day or -1 |
 | goalDay / goalProgress / goalClaimed | Daily Display goal day, highest distinct count 0..3, claim marker |
 | boxesOpened | Lifetime boxes opened, integer 0..1,000,000,000 (`Rules.boxesOpenedLimit`); presentation only |
+| shelfRewards | Known collection IDs to true: collections whose first completion already granted a free Shelf Unit (v9; required) |
 
 Each unit is `{id, placements, customization}`. IDs such as `shelf:1` are stable and unique
 within the ordered array. `placements` maps local `row:R/slot:S` keys to known permanently
 discovered figure IDs. No physical position or world coordinate is saved. Fresh players own
-exactly three units, currently nine positions each. Future acquisition adds individual units;
-no acquisition policy, pricing or product-design maximum is defined.
+exactly three units, currently nine positions each. Units are added (never removed) by the first
+completion of each collection (free, recorded in `shelfRewards`) and by `BuyShelf` purchases, up to
+`ShelfConfig.maxShelfUnits` = 100. Owned count is `#units`; no separate count is stored. Decode
+re-runs the completion grant, so collections completed before v9 grant their unit once on load.
 
 Rows/slots are configured independently of identity. Positive logical coordinates up to
 1,000,000 and identifiers up to 64 characters bound parsing. Valid saved local keys outside the
@@ -83,7 +86,7 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names change as described above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-8 snapshots enter the acquisition/save path (valid schemas 6 and 7 are upgraded first).
+schema-9 snapshots enter the acquisition/save path (valid schemas 6, 7 and 8 are upgraded first).
 Wallet and banks save atomically in one aggregate. Acknowledgements mean in-memory success; crash rollback affects the
 entire last saved aggregate. No offline income. See [operations](OPERATIONS.md).
 
@@ -113,5 +116,5 @@ rebuildable presentation index keyed by UserId string. They are never read back 
 so they cannot corrupt or roll back progress.
 
 Deploy with coordinated server replacement. Rolling back Settings restores the old namespace,
-not progress made in Economy2. A rollback that preserves new progress must support schema 8;
-older (schema-7) code cannot read v8 saves.
+not progress made in Economy2. A rollback that preserves new progress must support schema 9;
+older (schema-8) code cannot read v9 saves.
