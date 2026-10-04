@@ -7,7 +7,7 @@
 -- pass yet. An empty `id` is a PLACEHOLDER: it plays nothing.
 local Manifest = {}
 
-export type Group = "UI" | "SFX" | "Reveal"
+export type Group = "UI" | "SFX" | "Reveal" | "Music"
 export type Entry = {
 	id: string, -- numeric asset ID, or "" (placeholder, silent)
 	source: string,
@@ -19,10 +19,18 @@ export type Entry = {
 	voices: number?, -- Sound instances allowed to overlap (default 1)
 }
 export type Cue = { id: string, source: string }
+export type Track = {
+	id: string, -- numeric asset ID, or "" (placeholder, silent)
+	source: string,
+	volume: number, -- the track's own level; the Music group sets the overall music mix
+	looped: boolean?, -- default true
+	fadeIn: number?, -- seconds
+	fadeOut: number?, -- seconds, when another track takes over or music stops
+}
 
 -- Linear SoundGroup volumes. Master also carries the session mute (Settings > Sound).
 Manifest.master = 0.8
-Manifest.groups = { UI = 0.6, SFX = 0.8, Reveal = 1 } :: { [Group]: number }
+Manifest.groups = { UI = 0.6, SFX = 0.8, Reveal = 1, Music = 0.3 } :: { [Group]: number }
 -- One UI sound per gesture: a tap that also navigates plays only the first sound in this window.
 Manifest.gap = { UI = 0.04 } :: { [Group]: number }
 
@@ -189,5 +197,26 @@ Manifest.opening = {
 		source = "Magic Twirling Small High Pitch Spinning Chi (SFX)",
 	},
 } :: { [string]: Cue }
+
+-- Background music, keyed by area or context. Only "world" exists today. Area or special-event
+-- music later is one more entry here plus a `Music.play(name)` call where that context starts.
+-- Checked in Studio on 2026-10-03 (Audio, owner Roblox, preload Success, 95.5 s) and measured
+-- across its loop point with Looped = true: the level stays continuous through the wrap (no
+-- silent gap). Not yet listened to. Effective level = volume x Music group x Master (~0.19).
+-- Backups (APM Music, verified to load, all end in about 1.5-2 s of silence, so they gap when
+-- looped as-is; a LoopRegion would need a listening pass to pick bar-aligned points):
+--   9046598930 "Watching the Garden Grow (a)" 163 s
+--   9046598509 "Tiny Twinkle Toes (a)" 141 s
+--   1848268110 "Whimsical Reverie - Alt3, NoDrums" 132 s (ukulele and sparkling bells)
+--   9047880640 "Morning Spirit (Underscore)" 106 s
+Manifest.music = {
+	world = {
+		id = "15675069601",
+		source = "Roblox_UI_Loop_Calm_Music",
+		volume = 0.8,
+		fadeIn = 3,
+		fadeOut = 1.5,
+	},
+} :: { [string]: Track }
 
 return Manifest
