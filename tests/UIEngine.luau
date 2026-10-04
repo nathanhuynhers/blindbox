@@ -382,6 +382,21 @@ Engine.workspace = {
 	end,
 }
 
+-- Sfx double: records sound names in play order; the real module has its own spec.
+Engine.sounds = {}
+local soundMuted = false
+Engine.Sfx = {
+	play = function(name)
+		table.insert(Engine.sounds, name)
+	end,
+	muted = function()
+		return soundMuted
+	end,
+	setMuted = function(value)
+		soundMuted = value
+	end,
+}
+
 -- UIPreview / BlindBoxPreview doubles: record identity, build no models.
 Engine.Preview = {
 	create = function(parent)

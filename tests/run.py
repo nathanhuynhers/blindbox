@@ -18,7 +18,7 @@ modules = {
     "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "DisplayInteraction": "client", "HomeTeleport": "server", "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
-    "OpeningAudioConfig": "client", "OpeningAudioSequence": "client",
+    "OpeningAudioConfig": "client", "OpeningAudioSequence": "client", "SoundManifest": "client", "Sfx": "client",
     "OpeningScope": "client", "OpeningBoxSource": "client", "OpeningCamera": "client", "OpeningController": "client",
     "OpeningCinematic": "client", "OpeningEffects": "client", "OpeningBox": "client",
     "OpeningFlight": "client", "OpeningFlightEffects": "client",
@@ -49,6 +49,7 @@ for name, folder in modules.items():
     if name in ui:
         source = source.replace("require(script.Parent.UIPreview)", "Engine.Preview")
         source = source.replace("require(script.Parent.BlindBoxPreview)", "Engine.BoxPreview")
+        source = source.replace("require(script.Parent.Sfx)", "Engine.Sfx")
         source = source.replace("--!strict", UI_PRELUDE, 1)
     for dependency in modules:
         for expression in (
@@ -58,7 +59,7 @@ for name, folder in modules.items():
             source = source.replace(f"require({expression})", f'require("./{dependency}")')
     if name == "OpeningConfig":
         source = source.replace("--!strict", '--!strict\nlocal Vector3 = require("./OpeningVisualEngine").Vector3')
-    if name in ("OpeningFlight", "OpeningFlightEffects", "OpeningCinematic", "OpeningEffects", "OpeningBox", "OpeningFallbackBox", "OpeningFigure", "OpeningAudio", "BlindBoxSkin", "BlindBoxModel"):
+    if name in ("OpeningFlight", "OpeningFlightEffects", "OpeningCinematic", "OpeningEffects", "OpeningBox", "OpeningFallbackBox", "OpeningFigure", "OpeningAudio", "Sfx", "BlindBoxSkin", "BlindBoxModel"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./OpeningVisualEngine")\nlocal game, workspace, Instance, Enum, task, warn = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task, Engine.warn\nlocal Vector3, Vector2, Color3, CFrame, UDim2 = Engine.Vector3, Engine.Vector2, Engine.Color3, Engine.CFrame, Engine.UDim2\nlocal NumberRange, NumberSequence, NumberSequenceKeypoint, ColorSequence = Engine.NumberRange, Engine.NumberSequence, Engine.NumberSequenceKeypoint, Engine.ColorSequence')
         for dependency in ("BlindBoxModel", "AssetManifest", "BlindBoxSpec"):
             for prefix in ("ReplicatedStorage.Shared", "Shared"):
@@ -95,7 +96,7 @@ def run(*names: str) -> None:
                 raise SystemExit(result.returncode)
 
 
-run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
+run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
 run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
