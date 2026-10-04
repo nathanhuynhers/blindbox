@@ -96,28 +96,33 @@ Sfx.play("testUI1")
 check(not sounds("testUI1")[1].IsPlaying, "muted play does nothing")
 Sfx.setMuted(false)
 check(master().Volume == Manifest.master, "unmute restores Master")
--- Preload runs once in the background; failures are logged once and then stay silent.
-local requested = 0
+-- Preload runs once, warms one resident voice per real sound, and only logs failures.
+local preloaded = nil
 local original = E.services.ContentProvider.PreloadAsync
-E.services.ContentProvider.PreloadAsync = function(_self, ids, callback)
-	requested += #ids
-	callback("rbxassetid://1", E.Enum.AssetFetchStatus.Failure)
+E.services.ContentProvider.PreloadAsync = function(_self, list, callback)
+	preloaded = list
 	callback("rbxassetid://1", E.Enum.AssetFetchStatus.Failure)
 end
+local warnings = #E.warnings
 Sfx.preload()
 Sfx.preload()
+check(preloaded == nil, "preload is deferred")
 E.flushTasks()
-check(requested > 0, "preload requests manifest IDs")
-local before = #sounds("testA")
+local real = 0
+for name, entry in Manifest.sounds do
+	if entry.id ~= "" then
+		real += 1
+		check(#sounds(name) >= 1, "resident voice exists: " .. name)
+	end
+end
+check(preloaded and #preloaded == real - 3, "preload warms each new sound's first voice once")
+check(preloaded[1].ClassName == "Sound", "preload passes Sound instances, not ID strings")
+check(#E.warnings == warnings + 1, "a failed load is logged")
 for _, sound in sounds("testA") do
 	sound.IsPlaying = false
-	sound.TimePosition = 99
 end
 Sfx.play("testA")
-check(
-	#sounds("testA") == before and sounds("testA")[1].TimePosition == 99,
-	"failed asset is silent"
-)
+check(#sounds("testA") == 2, "a logged failure never blocks or stacks playback")
 E.services.ContentProvider.PreloadAsync = original
 -- Teardown removes every Sound; the next play rebuilds lazily.
 Sfx.destroy()

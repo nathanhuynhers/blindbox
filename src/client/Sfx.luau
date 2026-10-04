@@ -1,6 +1,7 @@
 --!strict
 -- Client sound effects from SoundManifest. Presentation only: nothing waits on, reads or is
--- gated by a sound. A placeholder, unknown name or failed asset is a silent no-op.
+-- gated by a sound. A placeholder, unknown name or failed asset is a silent no-op: Roblox plays
+-- nothing for a Sound that cannot load, so preload status is only logged.
 local SoundService = game:GetService("SoundService")
 local ContentProvider = game:GetService("ContentProvider")
 local Manifest = require(script.Parent.SoundManifest)
@@ -12,7 +13,6 @@ local pools: { [string]: { Sound } } = {}
 local lastPlayed: { [string]: number } = {}
 local lastGroup: { [string]: number } = {}
 local cursor: { [string]: number } = {}
-local failed: { [string]: boolean } = {}
 local muted, preloaded = false, false
 
 function Sfx.asset(id: string): string?
@@ -49,10 +49,31 @@ function Sfx.group(name: Manifest.Group): SoundGroup
 	return created
 end
 
+-- One pooled voice. A live Sound keeps its asset loaded, so later voices start instantly.
+local function voice(name: string, entry: Manifest.Entry, id: string, pool: { Sound }): Sound
+	local group = Sfx.group(entry.group)
+	local created = Instance.new("Sound")
+	created.Name = name
+	created.SoundId = id
+	created.SoundGroup = group
+	created.Parent = group
+	table.insert(pool, created)
+	return created
+end
+
+local function poolOf(name: string): { Sound }
+	local pool = pools[name]
+	if not pool then
+		pool = {}
+		pools[name] = pool
+	end
+	return pool :: { Sound }
+end
+
 function Sfx.play(name: string)
 	local entry = Manifest.sounds[name]
 	local id = if entry then Sfx.asset(entry.id) else nil
-	if muted or not entry or not id or failed[id] then
+	if muted or not entry or not id then
 		return
 	end
 	local now = os.clock()
@@ -62,9 +83,8 @@ function Sfx.play(name: string)
 	then
 		return
 	end
-	local group = Sfx.group(entry.group)
-	local pool: { Sound } = pools[name] or {}
-	pools[name] = pool
+	Sfx.group(entry.group) -- Rebuilds the groups (and drops stale pools) after a teardown.
+	local pool = poolOf(name)
 	local sound: Sound? = nil
 	for _, candidate in pool do
 		if not candidate.IsPlaying then
@@ -77,16 +97,7 @@ function Sfx.play(name: string)
 		cursor[name] = (cursor[name] or 0) % #pool + 1
 		sound = pool[cursor[name]]
 	end
-	if not sound then
-		local created = Instance.new("Sound")
-		created.Name = name
-		created.SoundId = id
-		created.SoundGroup = group
-		created.Parent = group
-		table.insert(pool, created)
-		sound = created
-	end
-	local playing = sound :: Sound
+	local playing = sound or voice(name, entry, id, pool)
 	lastPlayed[name], lastGroup[entry.group] = now, now
 	playing.Volume = entry.volume
 	playing.PlaybackSpeed = (entry.speed or 1) * (1 + (math.random() * 2 - 1) * (entry.pitch or 0))
@@ -103,34 +114,34 @@ function Sfx.setMuted(value: boolean)
 	root().Volume = if value then 0 else Manifest.master
 end
 
--- Warm the manifest once in the background. A failed asset is logged once and stays silent.
+-- Create each sound's first voice now and warm it in the background. Sound instances, not ID
+-- strings: ContentProvider reports audio ID strings as failed. Failures are logged once.
 function Sfx.preload()
 	if preloaded then
 		return
 	end
 	preloaded = true
-	local ids: { string } = {}
-	local seen: { [string]: boolean } = {}
-	for _, entry in Manifest.sounds do
+	local voices: { Sound } = {}
+	for name, entry in Manifest.sounds do
 		local id = Sfx.asset(entry.id)
-		if id and not seen[id] then
-			seen[id] = true
-			table.insert(ids, id)
+		if id then
+			Sfx.group(entry.group) -- Build groups before taking a pool (a rebuild clears pools).
+			local pool = poolOf(name)
+			if #pool == 0 then
+				table.insert(voices, voice(name, entry, id, pool))
+			end
 		end
 	end
-	if #ids == 0 then
+	if #voices == 0 then
 		return
 	end
 	task.defer(function()
 		local ok, problem = pcall(function()
 			ContentProvider:PreloadAsync(
-				ids,
+				voices,
 				function(contentId: string, status: Enum.AssetFetchStatus)
-					if status ~= Enum.AssetFetchStatus.Success and not failed[contentId] then
-						failed[contentId] = true
-						warn(
-							`Sfx: {contentId} did not load ({tostring(status)}); it will stay silent`
-						)
+					if status ~= Enum.AssetFetchStatus.Success then
+						warn(`Sfx: {contentId} did not load ({tostring(status)}); it plays nothing`)
 					end
 				end
 			)

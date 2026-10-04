@@ -62,12 +62,27 @@ function Audio.preload(scope: Scope.Scope)
 		end
 	end
 	if #ids > 0 then
+		-- One resident Sound per ID for the owner's lifetime: a live Sound keeps its asset loaded,
+		-- so short cues start inside lateTolerance. ID strings do not preload audio.
+		local cache = Instance.new("Folder")
+		cache.Name = "OpeningSoundCache"
+		cache.Parent = SoundService
+		local sounds: { Sound } = {}
+		for _, id in ids do
+			local sound = Instance.new("Sound")
+			sound.SoundId = id
+			sound.Parent = cache
+			table.insert(sounds, sound)
+		end
+		scope.add(function()
+			cache:Destroy()
+		end)
 		local preload = task.defer(function()
 			if not scope.isAlive() then
 				return
 			end
 			pcall(function()
-				ContentProvider:PreloadAsync(ids)
+				ContentProvider:PreloadAsync(sounds)
 			end)
 		end)
 		scope.add(function()

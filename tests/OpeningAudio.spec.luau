@@ -62,13 +62,18 @@ local originalPreload = E.services.ContentProvider.PreloadAsync
 E.services.ContentProvider.PreloadAsync = function(_self, ids)
 	preloads += 1
 	check(#ids == 1, "warmup deduplicates configured IDs")
+	check(ids[1].ClassName == "Sound", "warmup preloads Sound instances, not ID strings")
 end
 local cache = Scope.create()
 Audio.preload(cache)
 check(preloads == 0 and #folder():GetChildren() == 0, "warmup is deferred and silent")
 E.flushTasks()
 check(preloads == 1, "warmup begins before presentation")
+local resident = E.services.SoundService:FindFirstChild("OpeningSoundCache")
+check(resident and #resident:GetChildren() == 1, "one resident Sound per ID keeps it loaded")
+check(not resident:GetChildren()[1].IsPlaying, "resident Sounds never play")
 cache.destroy()
+check(resident.Parent == nil, "resident cache leaves with its owner")
 local canceledCache = Scope.create()
 Audio.preload(canceledCache)
 canceledCache.destroy()
