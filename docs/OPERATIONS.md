@@ -112,7 +112,7 @@ Run that script from the client Command Bar on each screen. These engine checks 
    Verify valid Economy2 schema-6 and schema-7 fixtures upgrade to schema 8 with
    `boxesOpened = 0`; schemas 1–5 and malformed/future records must fail closed. A different
    physical plot must show the same saved exhibit. The runtime viewport resets on join. Reset
-   character without resetting the profile. Verify no repeated starter grant or offline earnings.
+   character without resetting the profile. Verify no repeated starter grant; offline earnings appear only as the claimable popup.
    Disable API access for a fresh persistent join: play must be blocked, not reset.
 5. **Failures:** use the deterministic injected failures first, then test interruption/shutdown
    with expendable private test profiles. Confirm failures pause economic actions and a later
@@ -185,7 +185,8 @@ longer during service failure. Daily grants/claims and their downstream mutation
 together, so unsaved claims roll back with their rewards. Leaving/shutdown makes a bounded final
 save/release attempt; it cannot guarantee durability during a Roblox outage or process kill.
 The UI reports preview, pending save, saving, saved or paused state; it does not promise every
-just-clicked action was durably saved. No offline catch-up is computed on load.
+just-clicked action was durably saved. Offline earnings are computed once on load from the saved
+`lastSeen`; after a crash, up to one autosave interval of extra absence may be counted.
 
 ## Recovery and release procedure
 

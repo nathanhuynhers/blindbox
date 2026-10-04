@@ -1,7 +1,7 @@
 # Persistent data model
 
-Current schema: **10**, in the Economy2 namespace. Valid schemas 6, 7, 8 and 9 upgrade (6 with empty
-banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; all with an unclaimed login streak); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
+Current schema: **11**, in the Economy2 namespace. Valid schemas 6, 7, 8, 9 and 10 upgrade (6 with empty
+banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; 6-9 with `lastSeen = 0`, `offlinePending = 0`; all with an unclaimed login streak); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
@@ -10,7 +10,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 10 written; valid 6/7/8/9 upgrade; unsupported versions block loading/writing |
+| schemaVersion | 11 written; valid 6/7/8/9/10 upgrade; unsupported versions block loading/writing |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -20,10 +20,12 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | shelves | `{units, legacyOverflow?}`: ordered persistent Shelf Units; optional dormant migration records |
 | step | Onboarding stage 1..5 |
 | lastDailyDay | Last claimed free-box UTC day or -1 |
-| lastLoginDay / loginStreak | Daily Login: last claimed UTC day (-1 never) and the consecutive-day streak it completed (0 only when never claimed); v10, required as a consistent pair |
+| lastLoginDay / loginStreak | Daily Login: last claimed UTC day (-1 never) and the consecutive-day streak it completed (0 only when never claimed); v11, required as a consistent pair |
 | goalDay / goalProgress / goalClaimed | Daily Display goal day, highest distinct count 0..3, claim marker |
 | boxesOpened | Lifetime boxes opened, integer 0..1,000,000,000 (`Rules.boxesOpenedLimit`); presentation only |
-| shelfRewards | Known collection IDs to true: collections whose first completion already granted a free Shelf Unit (v9; required) |
+| shelfRewards | Known collection IDs to true: collections whose first completion already granted a free Shelf Unit (v9+; required) |
+| lastSeen | UTC `os.time()` of the last save, integer 0..100,000,000,000; 0 = unknown (new or upgraded), awards nothing (v10; required) |
+| offlinePending | Whole offline Coins not yet claimed, integer 0..1,000,000,000,000; auto-claimed on the next join (v10; required) |
 
 Each unit is `{id, placements, customization}`. IDs such as `shelf:1` are stable and unique
 within the ordered array. `placements` maps local `row:R/slot:S` keys to known permanently
@@ -73,7 +75,8 @@ Units. Unknown fields/groups, NaN, infinity, fractional counters, out-of-bounds 
 unowned or duplicate Display placements and inconsistent daily claims fail closed. Pity storage
 is bounded by the configured group set. Encoding owns copies of both the outer pity map and every
 counter record. Schema 7 also validates and deep-copies earnings; fractions now persist inside
-each figure's bank. Runtime time/revision/receipts are not persisted. No offline accrual is awarded.
+each figure's bank. Runtime time/revision/receipts are not persisted. Offline earnings use only the wall-clock
+`lastSeen` and `offlinePending` fields; see [economy](ECONOMY.md#offline-earnings).
 
 The shelf decoder retains its existing safety guards and optional dormant-reference representation.
 After structural validation it reconciles active Shelf Units in array order and numeric row/slot
@@ -87,9 +90,9 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names change as described above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-9 snapshots enter the acquisition/save path (valid schemas 6, 7 and 8 are upgraded first).
+schema-11 snapshots enter the acquisition/save path (valid schemas 6-10 are upgraded first).
 Wallet and banks save atomically in one aggregate. Acknowledgements mean in-memory success; crash rollback affects the
-entire last saved aggregate. No offline income. See [operations](OPERATIONS.md).
+entire last saved aggregate, including `offlinePending` and `lastSeen`. See [operations](OPERATIONS.md).
 
 Runtime `View = {startIndex, revision, lastTurn}` starts at index 1 each join. Position P renders
 owned index `(startIndex + P - 2) % ownedCount + 1` for P=1..3. Next/Previous changes start by
@@ -117,10 +120,10 @@ rebuildable presentation index keyed by UserId string. They are never read back 
 so they cannot corrupt or roll back progress.
 
 Deploy with coordinated server replacement. Rolling back Settings restores the old namespace,
-not progress made in Economy2. A rollback that preserves new progress must support schema 10;
-older (schema-9) code cannot read v10 saves.
+not progress made in Economy2. A rollback that preserves new progress must support schema 11;
+older (schema-10) code cannot read v11 saves.
 
-## Daily Login streak (v10)
+## Daily Login streak (v11)
 
 `Rules` owns the claim (`Login` intent, no payload fields). One claim per server UTC day
 (`os.time() // 86400`); a claim the day after `lastLoginDay` continues the streak, any gap
@@ -128,5 +131,5 @@ restarts at 1, and a server clock earlier than the last claim refuses. The rewar
 `LoginRewards.reward(streak)` from the shared placeholder table (cycle of its entries, so day 8
 pays Day 1 again). Coins and any boxes are granted in the same non-yielding step that writes the
 marker; a full wallet or box safety limit refuses the whole claim. Box rewards roll, count toward
-`boxesOpened`/pity and play the normal opening. v6-v9 decode as never claimed; a v10 record with a
+`boxesOpened`/pity and play the normal opening. v6-v10 decode as never claimed; a v11 record with a
 missing, non-integer or inconsistent pair fails closed.

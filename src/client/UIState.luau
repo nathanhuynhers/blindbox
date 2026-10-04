@@ -135,6 +135,17 @@ function State.goalReward(snapshot: Types.Snapshot): number
 	return snapshot.goalReward
 end
 
+-- Unclaimed offline Coins (formatted) and the absence that earned them, or nil when none.
+function State.offline(snapshot: Types.Snapshot): (string?, string)
+	if snapshot.offlinePending <= 0 then
+		return nil, ""
+	end
+	local seconds = math.floor(snapshot.offlineSeconds)
+	local hours, minutes = seconds // 3600, seconds % 3600 // 60
+	return State.number(snapshot.offlinePending),
+		if hours > 0 then `{hours}h {minutes}m` else `{math.max(1, minutes)}m`
+end
+
 -- Collections ------------------------------------------------------------------------------
 
 local membersById: { [string]: { string } } = {}

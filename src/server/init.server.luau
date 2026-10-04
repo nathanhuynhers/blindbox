@@ -112,6 +112,8 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		saveStatus = session.storage.status,
 		ready = session.storage.ready,
 		bonus = Rules.bonus(state),
+		offlinePending = state.offlinePending,
+		offlineSeconds = state.offlineSeconds,
 	}
 	stateRemote:FireClient(player, snapshot, reply)
 end

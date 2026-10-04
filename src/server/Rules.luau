@@ -16,7 +16,7 @@ local Rules = {
 }
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 10,
+		schemaVersion = 11,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
@@ -28,6 +28,9 @@ function Rules.new(now: number): Types.State
 		goalClaimed = false,
 		boxesOpened = 0,
 		shelfRewards = {},
+		lastSeen = 0,
+		offlinePending = 0,
+		offlineSeconds = 0,
 		coins = Economy.startingCoins,
 		owned = {},
 		discovered = {},
@@ -115,6 +118,26 @@ function Rules.collect(state: Types.State, slot: number, id: string): (boolean, 
 		state.step = 4
 	end
 	return true, string.format("Collected %d Coins!", amount)
+end
+-- Moves pending offline Coins to the wallet; anything past the Coin limit is dropped.
+function Rules.claimOffline(state: Types.State): number
+	local amount = math.min(state.offlinePending, Economy.coinLimit - state.coins)
+	state.coins += amount
+	state.offlinePending, state.offlineSeconds = 0, 0
+	return amount
+end
+-- On join (wall = UTC os.time()): auto-claim what the previous visit left unclaimed, then award
+-- this absence at the saved Display's rate. Nothing changes a Display while its owner is away.
+function Rules.offline(state: Types.State, wall: number)
+	Rules.claimOffline(state)
+	local away = math.min(wall - state.lastSeen, Economy.offlineMaxSeconds)
+	-- Unknown last save (0) or a clock behind it awards nothing.
+	if state.lastSeen > 0 and away >= Economy.offlineMinSeconds then
+		state.offlinePending =
+			math.floor(math.min(Economy.coinLimit, away * Rules.rate(state) * Economy.offlineRate))
+		state.offlineSeconds = if state.offlinePending > 0 then away else 0
+	end
+	state.lastSeen = wall
 end
 -- Available earning placement, not the quantity of spare copies.
 function Rules.available(state: Types.State, id: string): number
@@ -309,6 +332,13 @@ function Rules.mutate(
 			return true, message, nil, figures
 		end
 		return true, message, figures[1]
+	elseif action == "ClaimOffline" then
+		if state.offlinePending <= 0 then
+			return false, "No offline Coins to claim.", nil
+		end
+		local amount = Rules.claimOffline(state)
+		state.revision += 1
+		return true, string.format("Claimed %d offline Coins!", amount), nil
 	elseif action == "Expand" then
 		local cost = Rules.expansionCost(state)
 		if cost == 0 or state.display.unlocked >= DisplayConfig.maxSlots then

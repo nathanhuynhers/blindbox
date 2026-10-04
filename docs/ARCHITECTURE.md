@@ -57,7 +57,7 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   Daily also increment the persistent `boxesOpened` counter in the same atomic grant.
 - `Protocol`/`Transactions`: allowlisted typed fields/actions, token bucket, profile revision and
   exact retry receipts. Shelf edits additionally require visible persistent Shelf Unit ID and carousel revision and owner access.
-- `Profile`: schema-8 validation/deep copies, including independent pity, per-figure earnings and
+- `Profile`: schema-11 validation/deep copies (v10 adds `lastSeen`/`offlinePending`, see [economy](ECONOMY.md#offline-earnings); v11 adds the Daily Login `lastLoginDay`/`loginStreak`), including independent pity, per-figure earnings and
   the `boxesOpened` counter; valid Economy2 schema-6/7 profiles upgrade (counter starts at 0)
   without a second reset. New save namespaces implement the authorized reset; retired legacy
   adapters are not invoked. Shelf decode removes unowned/excess placements in stable unit and

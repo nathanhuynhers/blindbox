@@ -46,6 +46,10 @@ return table.freeze({
 	shelfPrice = 50000,
 	shelfGrowth = 2.5,
 	setBonus = 0.1,
+	-- Offline earnings: fraction of the online Display rate, accrual cap and minimum absence.
+	offlineRate = 0.5,
+	offlineMaxSeconds = 6 * 60 * 60,
+	offlineMinSeconds = 60,
 	startingCoins = 4500,
 	dailyCollection = "grove",
 	coinLimit = 1000000000000,

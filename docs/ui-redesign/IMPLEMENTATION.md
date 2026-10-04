@@ -32,6 +32,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `LoginScreen` | Daily Login (routed by `Interface` without a dock tile; HUD Daily button with a "!" badge): one card per `LoginRewards` day (claimed mint / today violet outline + TODAY / locked), wider gold final day, streak chip, Claim. Auto-opens once per session on the first ready snapshot when claimable, except for players who own no figures |
 | `RevealCard` | End-of-opening card: NEW (first discovery only), name + rarity pill, chips, owned count, Put on Display / Swap, Open another (price or shortfall), Keep |
 | `OpeningView` | Kept Tap to Open, Skip, hint and curtain; the Result panel is now `RevealCard` |
+| `OfflineEarnings` | Welcome-back card (white card, gold Claim) for offline Display Coins; Claim or tapping outside sends `ClaimOffline` |
 | `OpeningController` | Kept phases, camera, Skip and input ownership; adds an optional `choose` callback (runs after the session fully closes), a Reveal model on `present`, and `refresh` for live affordability |
 | Kept as-is | Opening cinematic/audio/state/box modules, `BlindBoxPreview` (now on `UIKit`), `BlindBoxSkin`, `ShopTheme` (3D box only), `UIPreview`, `UIScope`, `Scroll` (now scale-aware), `NavigationConfig` (simplified), `Notifications` (restyled) |
 

@@ -24,7 +24,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 10,
+		schemaVersion = 11,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -41,6 +41,8 @@ function Profile.encode(state: Types.State): Types.Profile
 		goalClaimed = state.goalClaimed,
 		boxesOpened = state.boxesOpened,
 		shelfRewards = table.clone(state.shelfRewards),
+		lastSeen = state.lastSeen,
+		offlinePending = state.offlinePending,
 	}
 end
 function Profile.decode(raw: unknown, now: number): Types.State?
@@ -57,6 +59,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 8
 			and data.schemaVersion ~= 9
 			and data.schemaVersion ~= 10
+			and data.schemaVersion ~= 11
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -76,6 +79,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"pityByGroup",
 			"boxesOpened",
 			"shelfRewards",
+			"lastSeen",
+			"offlinePending",
 		})
 	then
 		return nil
@@ -223,8 +228,21 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	elseif data.shelfRewards ~= nil then
 		return nil
 	end
-	-- v6-v9 predate the login streak (Rules.new: never claimed). v10 requires a consistent pair.
-	if data.schemaVersion == 10 then
+	-- v6-v9 predate offline earnings: lastSeen 0 (unknown) awards nothing on the first v10+ join.
+	if (data.schemaVersion :: number) >= 10 then
+		if
+			not integer(data.lastSeen, 0, 100000000000)
+			or not integer(data.offlinePending, 0, Economy.coinLimit)
+		then
+			return nil
+		end
+		state.lastSeen, state.offlinePending =
+			data.lastSeen :: number, data.offlinePending :: number
+	elseif data.lastSeen ~= nil or data.offlinePending ~= nil then
+		return nil
+	end
+	-- v6-v10 predate the login streak (Rules.new: never claimed). v11 requires a consistent pair.
+	if data.schemaVersion == 11 then
 		if
 			not integer(data.lastLoginDay, -1, 100000000)
 			or not integer(data.loginStreak, 0, 100000000)

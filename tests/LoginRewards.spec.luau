@@ -1,5 +1,5 @@
 --!strict
--- Schema-v10 consecutive Daily Login: streak rules, one claim per UTC day, atomic grants,
+-- Schema-v11 consecutive Daily Login: streak rules, one claim per UTC day, atomic grants,
 -- remote validation and fail-closed persistence. Uses the actual reward table, whatever it holds.
 local Rules = require("./Rules")
 local Profile = require("./Profile")
@@ -27,7 +27,7 @@ check(LoginRewards.day(1) == 1 and LoginRewards.day(#LoginRewards.days + 1) == 1
 
 -- Seven-plus consecutive days: each claim grants exactly that day's table entry.
 local state = Rules.new(0)
-check(state.schemaVersion == 10 and state.lastLoginDay == -1 and state.loginStreak == 0, "fresh profile never claimed")
+check(state.schemaVersion == 11 and state.lastLoginDay == -1 and state.loginStreak == 0, "fresh profile never claimed")
 local start = 20000
 for offset = 0, #LoginRewards.days do
 	local day = start + offset
@@ -98,16 +98,19 @@ for index = 1, 10 do
 end
 check(session.tokens < 1, "the shared token bucket rate-limits claim spam")
 
--- Persistence: v10 round trip, v6-v9 upgrade to never-claimed, fail-closed invalid pairs.
+-- Persistence: v11 round trip, v6-v10 upgrade to never-claimed, fail-closed invalid pairs.
 local restored = Profile.decode(Profile.encode(state), 0)
 check(
 	restored ~= nil and restored.lastLoginDay == state.lastLoginDay and restored.loginStreak == state.loginStreak,
-	"v10 round trip keeps the streak"
+	"v11 round trip keeps the streak"
 )
-check(Profile.encode(state).schemaVersion == 10, "encodes schema 10")
-for _, version in { 6, 7, 8, 9 } do
+check(Profile.encode(state).schemaVersion == 11, "encodes schema 11")
+for _, version in { 6, 7, 8, 9, 10 } do
 	local old = Profile.encode(Rules.new(0)) :: any
 	old.schemaVersion, old.lastLoginDay, old.loginStreak = version, nil, nil
+	if version < 10 then
+		old.lastSeen, old.offlinePending = nil, nil
+	end
 	if version < 9 then
 		old.shelfRewards = nil
 	end
@@ -122,6 +125,8 @@ for _, version in { 6, 7, 8, 9 } do
 	check(old.lastLoginDay == nil, "upgrade does not mutate its input")
 	local premature = Profile.encode(Rules.new(0)) :: any
 	premature.schemaVersion = version
+	premature.lastSeen = if version >= 10 then premature.lastSeen else nil
+	premature.offlinePending = if version >= 10 then premature.offlinePending else nil
 	premature.shelfRewards = if version >= 9 then premature.shelfRewards else nil
 	premature.boxesOpened = if version >= 8 then premature.boxesOpened else nil
 	premature.earnings = if version >= 7 then premature.earnings else nil
@@ -134,9 +139,9 @@ for _, pair in { { -1, 3 }, { 20000, 0 }, { 20000, -1 }, { 20000, 1.5 }, { 0 / 0
 end
 local missing = Profile.encode(state) :: any
 missing.loginStreak = nil
-check(Profile.decode(missing, 0) == nil, "v10 without the streak fails closed")
+check(Profile.decode(missing, 0) == nil, "v11 without the streak fails closed")
 local future = Profile.encode(state) :: any
-future.schemaVersion = 11
+future.schemaVersion = 12
 check(Profile.decode(future, 0) == nil, "unknown future schema fails closed")
 
 -- Box days hand off to the existing opening: one figure as a single reveal, several as a batch.

@@ -57,6 +57,8 @@ local function fresh(): Types.Snapshot
 		saveStatus = "Preview",
 		ready = true,
 		bonus = 0,
+		offlinePending = 0,
+		offlineSeconds = 0,
 	}
 end
 local snapshot = fresh()
