@@ -14,6 +14,7 @@ local PullSummary = require(script.PullSummary)
 local OfflineEarnings = require(script.OfflineEarnings)
 local UIState = require(script.UIState)
 local Sfx = require(script.Sfx)
+local Music = require(script.Music)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
@@ -30,6 +31,7 @@ local batch: { OpeningResult.Result } = {}
 local results: { PullSummary.Item }? = nil
 -- Shown once the opening closes so it never spoils the reveal.
 local shelfNotice: string? = nil
+local musicStarted = false
 local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
@@ -144,6 +146,11 @@ table.insert(
 				shelfNotice = "Collection complete! New Shelf unlocked"
 			end
 			ui.update(state)
+			if state.ready and not musicStarted then
+				-- Once the profile and plot are ready. Areas or events may switch it later.
+				musicStarted = true
+				Music.play("world")
+			end
 			local offlineCoins, away = UIState.offline(state)
 			if offlineCoins and state.ready and not pending and not offline.isOpen() then
 				offline.show(offlineCoins, away)
@@ -266,5 +273,6 @@ script.Destroying:Connect(function()
 	displayInteraction.destroy()
 	displayEarnings.destroy()
 	ui.destroy()
+	Music.destroy()
 	Sfx.destroy()
 end)
