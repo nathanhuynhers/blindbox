@@ -29,6 +29,7 @@ type Slider = {
 }
 
 local snap = 5 -- Drag and tap snap to 5%; gamepad steps 10%.
+local width, knob = 248, 26 -- Design units; the knob travels inside the track.
 
 local function slider(parent: Instance, name: string, label: string, y: number): Slider
 	local caption = Kit.text(parent, name .. "Label", label, 15)
@@ -43,31 +44,37 @@ local function slider(parent: Instance, name: string, label: string, y: number):
 	button.AutoButtonColor = false
 	button.BackgroundTransparency = 1
 	button.Parent = parent
-	Kit.rect(button, 16, y + 20, 248, 44)
+	Kit.rect(button, 16, y + 20, width, 44)
 	button:SetAttribute("AccessibleName", label .. " volume")
 	local track = Kit.frame(button, "Track", Style.track)
-	Kit.rect(track, 0, 16, 248, 12)
+	Kit.rect(track, 0, 16, width, 12)
 	Kit.round(track)
 	local fill = Kit.frame(track, "Fill", Style.violet)
 	fill.Size = UDim2.fromScale(1, 1)
 	Kit.round(fill)
-	local knob = Kit.frame(button, "Knob", Style.white)
-	knob.AnchorPoint = Vector2.new(0.5, 0.5)
-	knob.Size = UDim2.fromOffset(26, 26)
-	knob.ZIndex = 3
-	Kit.round(knob)
-	Kit.stroke(knob, Style.ink, Style.outlineSmall)
+	local handle = Kit.frame(button, "Knob", Style.white)
+	handle.AnchorPoint = Vector2.new(0.5, 0.5)
+	handle.Size = UDim2.fromOffset(knob, knob)
+	handle.ZIndex = 3
+	Kit.round(handle)
+	Kit.stroke(handle, Style.ink, Style.outlineSmall)
 	return {
 		button = button,
 		paint = function(percent: number)
 			value.Text = percent .. "%"
-			fill.Size = UDim2.fromScale(percent / 100, 1)
-			knob.Position = UDim2.new(percent / 100, 0, 0, 22)
+			local centre = knob / 2 + percent / 100 * (width - knob)
+			fill.Size = UDim2.new(0, centre, 1, 0)
+			handle.Position = UDim2.fromOffset(centre, 22)
 			button:SetAttribute("Volume", percent)
 		end,
+		-- Screen x to 0..1, matching the inset knob travel at any UI scale.
 		fraction = function(x: number): number
-			local width = track.AbsoluteSize.X
-			return if width > 0 then math.clamp((x - track.AbsolutePosition.X) / width, 0, 1) else 0
+			local size = track.AbsoluteSize.X
+			local inset = size * knob / 2 / width
+			local travel = size - 2 * inset
+			return if travel > 0
+				then math.clamp((x - track.AbsolutePosition.X - inset) / travel, 0, 1)
+				else 0
 		end,
 	}
 end
