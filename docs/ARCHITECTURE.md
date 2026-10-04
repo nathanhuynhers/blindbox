@@ -137,7 +137,8 @@ geometry; `UIStyle` owns tokens and collection accents. See
 
 Sound is client presentation only. `SoundManifest` is the single list of asset IDs and levels.
 `Sfx.play(name)` plays pooled, rate-limited voices in `SoundService.Master` (UI / SFX / Reveal)
-with a session-only mute in Settings. UI components and the existing reply handler call it, and
+with a session-only mute in Settings. `Music.play(name)` loops one background track per area or
+context (only `world` today) in the Music group, started once on the first ready snapshot. UI components and the existing reply handler call it, and
 the opening's cue slots read the same manifest. No remotes, server logic or saved data are
 involved. See [game soundpack](SOUND.md).
 

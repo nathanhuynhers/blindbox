@@ -91,7 +91,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Cover UI clicks/navigation, box opening, rarity/reveal moments, coin collection, purchases/claims, Display/Shelf interactions, Daily Goals/Rewards, and other important gameplay actions.
     - Keep the sound direction consistent with the game's polished blind-box collectible feel.
 
-16. **Add background music**
+16. [x] **Add background music** — implemented on `feat/soundpack` ([background music](SOUND.md#background-music)); track verified to load and loop in Studio; user listening and mix acceptance pending.
     - Add looping background music for the main world/plot experience.
     - Keep it subtle enough that gameplay sound effects remain clear.
     - Leave room for area-specific or special-event music later if needed.

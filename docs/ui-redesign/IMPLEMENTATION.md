@@ -23,7 +23,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `ScreenShell` | Panel/sheet, 76px header (56 phone): nav icon, title, subtitle, right chips, round Close; phone coins chip |
 | `Dock` | Five tiles, active raised on violet wash, Display/Shop/Goals badges |
 | `Hud`, `SettingsMenu`, `GoalTracker` | Coins pill beside `GuiService.TopbarInset`; gear popover with Motion and a session-only Sound On/Off; desktop goal card / phone "Goal done · Claim" chip |
-| `Sfx`, `SoundManifest` | Client sounds: one manifest of IDs and levels, pooled and rate-limited playback ([game soundpack](../SOUND.md)) |
+| `Sfx`, `Music`, `SoundManifest` | Client sounds and background music: one manifest of IDs and levels ([game soundpack](../SOUND.md)) |
 | `CollectionList`, `FigureTile` | Shared collection list item (rail on phone); figure card/tile/pick/shelf variants, pooled and rebound |
 | `ShopScreen` | List, kept `BlindBoxPreview`, Open 1 box, free box, What's inside, Drop odds |
 | `CollectionScreen` | List, All/Found/Missing, 4-column grid, detail with Put on Display / On your Display · View / Find it in … boxes |

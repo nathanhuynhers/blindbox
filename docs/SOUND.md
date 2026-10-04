@@ -3,7 +3,7 @@
 Status: **implemented on `feat/soundpack` (backlog item 15).** Every asset ID was verified in
 Studio on 2026-10-03: it is Audio, it is owned by Roblox, ProSoundEffects or APMOfficial, its
 preload succeeded and it has a nonzero length. **Nobody has listened to it yet.** The agent cannot
-hear audio, so the listening and mix pass below is still open. Music (item 16) is out of scope.
+hear audio, so the listening and mix pass below is still open. Background music (item 16) is in [its own section](#background-music).
 
 ## Direction and sourcing
 
@@ -51,6 +51,57 @@ Two Roblox behaviours shaped this design (measured in Studio):
   instead.
 - A new Sound is ready instantly only while another live Sound holds the same asset. A cold load
   took about 0.1 s, longer than the opening's 75 ms one-shot tolerance.
+
+## Background music
+
+Backlog item 16. `src/client/Music.luau` exposes `Music.play(name)`, `Music.stop(fade?)` and
+`Music.playing()`. It plays one looping Sound from `SoundManifest.music`, which is keyed by area
+or context. Only `world` exists today.
+- **Start:** the first ready snapshot (profile and plot loaded) calls `Music.play("world")` once
+  in `init.client.luau`, with a 3 s fade-in. Nothing restarts it; it doesn't depend on the
+  character, so respawns are irrelevant.
+- **No stacking:** repeating the same name does nothing. A different name fades the old track
+  out (`fadeOut`) and fades the new one in.
+- **Extension point:** area or special-event music later is one manifest entry plus a
+  `Music.play(name)` call where that context starts. There is no area system, playlist or event
+  system.
+- **Mix:** the track sits in a `Music` SoundGroup (0.3) under Master, so the Settings Sound switch
+  mutes it too. The effective level is 0.8 × 0.3 × 0.8 ≈ 0.19, below every SFX group.
+- **Failures:** a placeholder or failed asset plays nothing (logged once). The Sound is preloaded
+  as an instance.
+
+| Context | Track | ID | Status |
+| --- | --- | --- | --- |
+| world | Roblox_UI_Loop_Calm_Music (Roblox, 95.5 s, made as a loop) | 15675069601 | Verified to load; loop point measured continuous; **not yet heard** |
+
+How the track was chosen (by measurement, not by ear): each candidate's loudness was sampled near
+its start and end and across a real `Looped` wrap. Every APM candidate checked ends in about
+1.5–2 s of silence and would leave a gap when looped. They're listed as backups in the manifest:
+"Watching the Garden Grow (a)", "Tiny Twinkle Toes (a)", "Whimsical Reverie — Alt3, NoDrums"
+and "Morning Spirit (Underscore)". Using one would need a listening pass to pick bar-aligned
+`LoopRegion` points. Roblox's calm loop stays continuous across the wrap.
+
+Not added (by choice): ducking under the box reveal, fade-out on leave, a separate music switch
+or saved volume, a playlist.
+
+Studio single-client playtest (2026-10-03):
+- Exactly one looping `Music_world` Sound plays in Master > Music.
+- A respawn kept the same Sound playing on (TimePosition 33.2 → 38.9 s over the 5.8 s respawn):
+  no restart, no duplicate.
+- A forced wrap at 94 s looped to 0.1 s (`DidLoop` once) and kept playing as one Sound.
+- Sound Off zeroes Master, which silences the music.
+- A placeholder plays nothing and logs nothing. A missing asset only logs a warning.
+- The 3 s fade-in had already finished before the first MCP call could run, so it is covered by
+  `tests/Music.spec.luau`, not by Studio.
+
+Measured mix (PlaybackLoudness × group × Master; a proxy, not a listening result):
+- **Music:** average 16, peak 38.
+- **SFX peaks:** place 97, revealMythical 95, collect 69, revealCommon 54, coinLand 41,
+  revealRare 28, click 22.
+
+Music averages below every effect, but its loud passages reach about the click and revealRare
+level. revealRare also measures quieter than revealCommon, which may invert the rarity ladder.
+Check both in the mix pass.
 
 ## Manifest
 
@@ -133,7 +184,9 @@ The Studio single-client playtest on 2026-10-03 confirmed in the client's output
 
 The automated checks and the playtest above don't establish what anything sounds like. Still open:
 
-1. **Listening pass**, on headphones, speakers and a phone at a fixed volume. Check every row
+1. **Listening pass**, on headphones, speakers and a phone at a fixed volume. For music, check
+   that the vibe fits Blindbox Town (cozy, warm, playful, unhurried), that the loop seam is
+   clean, and that the music sits under the reveal stings and coins. Adjust `groups.Music` if not. Check every row
    above. Swap any ID you dislike in `SoundManifest.luau`.
 2. **Rarity ladder:** run `tests/StudioOpening.client.luau` → *Compare all five tiers*. Check
    that the five reveals climb clearly, and that Legendary's and Mythical's tease and reveal line
