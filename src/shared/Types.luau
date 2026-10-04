@@ -57,8 +57,13 @@ export type Profile = {
 	boxesOpened: number,
 	-- Collections whose first completion already granted a free Shelf Unit.
 	shelfRewards: { [string]: boolean },
+	-- UTC os.time() of the last save; 0 = unknown (new or pre-v10 profile), never awards offline time.
+	lastSeen: number,
+	-- Whole offline Coins awaiting the return popup's claim; auto-claimed on the next join.
+	offlinePending: number,
 }
-export type State = Profile & { revision: number, time: number }
+-- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
+export type State = Profile & { revision: number, time: number, offlineSeconds: number }
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 export type Snapshot = {
 	shelves: ShelfView,
@@ -91,6 +96,8 @@ export type Snapshot = {
 	saveStatus: string,
 	ready: boolean,
 	bonus: number,
+	offlinePending: number,
+	offlineSeconds: number,
 }
 export type Reply = {
 	id: string,

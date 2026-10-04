@@ -54,6 +54,8 @@ local function snapshot()
 		saveStatus = "Ready",
 		ready = true,
 		bonus = 0,
+		offlinePending = 0,
+		offlineSeconds = 0,
 	}
 end
 local requests = {}

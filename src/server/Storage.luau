@@ -60,6 +60,8 @@ function Storage.open(userId: number): (Session?, string)
 				return nil, "Loading took too long. Please rejoin; your data is protected."
 			end
 			state.time = os.clock()
+			-- The lease guarantees one server per profile, so this runs once per join.
+			Rules.offline(state, os.time())
 			return {
 				state = state,
 				handle = handle,
@@ -92,6 +94,7 @@ function Storage.flush(session: Session, release: boolean): boolean
 	if session.ready then
 		Rules.settle(session.state, os.clock())
 	end
+	session.state.lastSeen = os.time()
 	local snapshot = Profile.encode(session.state)
 	session.status = "Saving..."
 	local saved = false

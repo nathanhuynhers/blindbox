@@ -103,13 +103,29 @@ share of the themed bonus. Coins enter the wallet only when the owner clicks or 
 individual figure. E nearby opens Display management only. Shelves cannot collect or generate income.
 Uncollected balances persist per figure ID even when removed or replaced; redisplay to collect.
 Each bank has a one-trillion-Coin safety ceiling. Collection transfers only whole Coins that fit
-in the wallet, retaining fractions and overflow. No ordinary bank timer/cap or offline income exists.
+in the wallet, retaining fractions and overflow. No ordinary bank timer/cap exists; offline earnings are separate (below).
 Duplicate copies enhance one bank's earning rate, not multiple collection targets.
 
 The server checks exact-target proximity (12 studs), living character, ownership, session readiness
 and rate limits. Clients cannot supply collection amounts or authorize collection through remotes.
 Auto-collect is a future gamepass: the shared server transfer primitive is ready for reuse, but no
 entitlement checks, product IDs, purchase prompts or automatic collection are enabled yet.
+
+## Offline earnings
+
+Displayed figures keep earning while their owner is offline, Coin only. Server `Economy` tuning:
+`offlineRate = 0.5` (fraction of the full online Display rate, including duplicates and the set
+bonus), `offlineMaxSeconds = 6 h` (accrual cap) and `offlineMinSeconds = 60` (shorter absences,
+such as server hops, award nothing). Every save stamps `lastSeen = os.time()`. On join, after the
+lease is acquired, `Rules.offline` first auto-claims any `offlinePending` left from the previous
+visit, then sets `offlinePending = floor(rate * min(now - lastSeen, cap) * offlineRate)` from the
+saved Display. An unknown `lastSeen` (0) or a clock behind it awards nothing.
+
+The client shows a welcome-back popup with the amount and absence; Claim or tapping outside sends
+the `ClaimOffline` intent through the normal transaction path (token bucket, revision, receipts).
+The client never supplies an amount. Claiming zeroes the pending amount in the same aggregate as
+the wallet, so replays and second claims pay nothing; anything above the Coin limit is dropped.
+Robux multipliers and paid boosts are not implemented.
 
 ## Starting and daily progression
 
@@ -173,11 +189,14 @@ Remaining native Studio acceptance:
    visitors, dead characters, distance rejection, respawn, teardown and concurrent interactions.
 6. Remove or replace an earning figure, save/rejoin, then redisplay it and confirm its bank remains.
    In isolated persistent Studio testing, verify schema-6 and schema-7 upgrades, Economy2 store
-   identity, pity/duplicate round trips, UTC claims and pause-on-storage-failure without offline income.
+   identity, pity/duplicate round trips, UTC claims and pause-on-storage-failure; see offline checks below.
 7. In two-client testing, verify private snapshot isolation and reject malformed, repeated, stale and
    cross-owner actions. Visitors may see public Display totals but never private pity data.
 8. Check narrow/mobile details, current/base odds, large-Coin abbreviations, exact values and the
    single Starter daily action. Observe both normal and unlucky pacing.
+9. With isolated persistent storage, display figures, leave for over a minute and rejoin: the popup
+   shows half-rate Coins for the absence; Claim and tap-outside each credit once. Leave before
+   claiming and rejoin: the leftover auto-claims. A quick server hop shows no popup.
 
 Coordinate server replacement for rollout. Old namespaces remain rollback backups, but they do not
 contain Economy2 progress.

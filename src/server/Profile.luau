@@ -24,7 +24,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 9,
+		schemaVersion = 10,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -39,6 +39,8 @@ function Profile.encode(state: Types.State): Types.Profile
 		goalClaimed = state.goalClaimed,
 		boxesOpened = state.boxesOpened,
 		shelfRewards = table.clone(state.shelfRewards),
+		lastSeen = state.lastSeen,
+		offlinePending = state.offlinePending,
 	}
 end
 function Profile.decode(raw: unknown, now: number): Types.State?
@@ -54,6 +56,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 7
 			and data.schemaVersion ~= 8
 			and data.schemaVersion ~= 9
+			and data.schemaVersion ~= 10
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -71,6 +74,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"pityByGroup",
 			"boxesOpened",
 			"shelfRewards",
+			"lastSeen",
+			"offlinePending",
 		})
 	then
 		return nil
@@ -196,7 +201,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		return nil
 	end
 	-- v6/v7 predate the counter: those players start at 0 (Rules.new default). v8+ requires it.
-	if data.schemaVersion == 8 or data.schemaVersion == 9 then
+	if data.schemaVersion ~= 6 and data.schemaVersion ~= 7 then
 		if not integer(data.boxesOpened, 0, Rules.boxesOpenedLimit) then
 			return nil
 		end
@@ -204,8 +209,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	elseif data.boxesOpened ~= nil then
 		return nil
 	end
-	-- v6-v8 predate Shelf rewards; v9 requires the map.
-	if data.schemaVersion == 9 then
+	-- v6-v8 predate Shelf rewards; v9+ requires the map.
+	if data.schemaVersion == 9 or data.schemaVersion == 10 then
 		if typeof(data.shelfRewards) ~= "table" then
 			return nil
 		end
@@ -216,6 +221,19 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			state.shelfRewards[id] = true
 		end
 	elseif data.shelfRewards ~= nil then
+		return nil
+	end
+	-- v6-v9 predate offline earnings: lastSeen 0 (unknown) awards nothing on the first v10 join.
+	if data.schemaVersion == 10 then
+		if
+			not integer(data.lastSeen, 0, 100000000000)
+			or not integer(data.offlinePending, 0, Economy.coinLimit)
+		then
+			return nil
+		end
+		state.lastSeen, state.offlinePending =
+			data.lastSeen :: number, data.offlinePending :: number
+	elseif data.lastSeen ~= nil or data.offlinePending ~= nil then
 		return nil
 	end
 	-- Idempotent: also grants collections completed before Shelf rewards existed.

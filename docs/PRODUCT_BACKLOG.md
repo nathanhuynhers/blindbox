@@ -56,10 +56,10 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 9. [x] **Add x10 Open** — implementation, automated checks and native Studio single-client check complete; multi-client acceptance pending.
    - Everyone can open 10 boxes at once as long as they can afford all 10.
 
-10. **Add offline earnings (Coin only)**
+10. [x] **Add offline earnings (Coin only)** — implementation and automated checks complete; persistent Studio and multi-client acceptance pending.
     - Displayed figures continue earning while the player is offline.
     - Offline earnings should generate at a reduced rate of about 0.5x normal online earnings to prevent abuse; exact tuning can be adjusted during economy balancing.
-    - Offline earnings stop accumulating after a TBD number of hours.
+    - Offline earnings stop accumulating after 6 hours (`Economy.offlineMaxSeconds`).
     - On return, show how much was earned.
     - The player claims normally; Robux multipliers and monetization are deferred to a later phase.
 

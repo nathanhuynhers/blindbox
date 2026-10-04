@@ -16,8 +16,8 @@ contain 43 figures. Prices and income scale by collection tier: Grove 1,500; Tid
 Duplicate copies are permanently retained and automatically enhance their figure's income with
 rarity-scaled diminishing returns. Each figure ID can earn in only one Display slot. Display starts
 with three slots and expands sequentially to six for 40,000 / 400,000 / 4,000,000 Coins.
-Three distinct displayed figures from one collection grant +10% total income once. No offline
-income or visitor payouts. Figures bank income until their owner clicks or taps each figure;
+Three distinct displayed figures from one collection grant +10% total income once. Displayed figures
+keep earning offline at half rate for up to 6 hours, claimed from a welcome-back popup. No visitor payouts. Figures bank income until their owner clicks or taps each figure;
 uncollected balances survive removal and rejoining. E nearby opens Display management only.
 Once either editor is open, a living owner can edit their Display and Shelves from anywhere
 inside their own plot; the server rejects edits from outside it. Future paid auto-collect is not implemented.
@@ -29,7 +29,7 @@ see [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 Scrap, recycling and redemption are removed. New profiles start with 4,500 Coins and fully random
 starter purchases. One free Starter box and the 1,000-Coin daily Display goal retain UTC rules.
 The authorized economy reset uses the Economy2 namespaces; no old-namespace progress is imported.
-Current schema 9 safely upgrades valid Economy2 schemas 6, 7 and 8, while schemas 1–5 are rejected.
+Current schema 10 safely upgrades valid Economy2 schemas 6, 7, 8 and 9, while schemas 1–5 are rejected.
 Existing lease/retry/storage-failure protection remains.
 
 The world is **Blindbox Town**, a cozy blind-box shopping town (no stores or shop buildings):

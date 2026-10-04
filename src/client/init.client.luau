@@ -11,6 +11,7 @@ local DisplayEarnings = require(script.DisplayEarnings)
 local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
 local PullSummary = require(script.PullSummary)
+local OfflineEarnings = require(script.OfflineEarnings)
 local UIState = require(script.UIState)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
@@ -62,6 +63,10 @@ ui = Interface.create(request, function()
 	homeRemote:FireServer()
 end)
 summary = PullSummary.create(ui.openingFocus, ui.effects)
+-- Closing the popup any way claims; a dropped claim re-opens it on the next snapshot.
+local offline = OfflineEarnings.create(ui.effects, function()
+	request("ClaimOffline")
+end)
 local function revealModel(state: Types.Snapshot, result: OpeningResult.Result): UIState.Reveal
 	local model = UIState.reveal(state, result.figureId, result.isNew, result.quantity)
 	if result.sequence == "last" then
@@ -125,6 +130,10 @@ table.insert(
 				shelfNotice = "Collection complete! New Shelf unlocked"
 			end
 			ui.update(state)
+			local offlineCoins, away = UIState.offline(state)
+			if offlineCoins and state.ready and not pending and not offline.isOpen() then
+				offline.show(offlineCoins, away)
+			end
 			displayInteraction.update(displayEarnings.update(state))
 			if opening and opening.isActive() and reveal then
 				-- Live affordability and slots while the Reveal card is up.
@@ -212,6 +221,7 @@ script.Destroying:Connect(function()
 		opening.destroy()
 	end
 	summary.destroy()
+	offline.destroy()
 	displayInteraction.destroy()
 	displayEarnings.destroy()
 	ui.destroy()
