@@ -13,6 +13,7 @@ local Context = require(script.Parent.UIContext)
 local Shell = require(script.Parent.ScreenShell)
 local Tile = require(script.Parent.FigureTile)
 local Preview = require(script.Parent.UIPreview)
+local Sfx = require(script.Parent.Sfx)
 local Shelves = {}
 
 type Spot = {
@@ -151,6 +152,7 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		ctx.scope.connect(spot.Activated, function()
 			selectedSpot = index
 			refresh()
+			Sfx.play("select")
 		end)
 		spots[index] = { button = spot, stroke = stroke, preview = preview, add = add }
 	end

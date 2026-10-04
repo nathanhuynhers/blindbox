@@ -136,6 +136,38 @@ Engine.click(find("SettingsButton"))
 Engine.click(find("MotionFull"))
 Engine.click(find("SettingsCatcher"))
 
+-- Sounds (names only; Sfx.spec covers playback, caps and the one-UI-sound-per-gesture gap).
+local function heard(from)
+	return table.concat(table.move(Engine.sounds, from + 1, #Engine.sounds, 1, {}), ",")
+end
+local mark = #Engine.sounds
+Engine.click(find("DockShop"))
+check(heard(mark) == "open", "opening a screen plays open")
+mark = #Engine.sounds
+Engine.click(find("DockGoals"))
+check(heard(mark) == "tab", "switching screens plays tab")
+mark = #Engine.sounds
+Engine.click(within(host("Goals"), "Close"))
+check(heard(mark) == "close", "closing plays close")
+Engine.click(find("DockShop"))
+mark, requests = #Engine.sounds, {}
+ui.pending(true)
+Engine.click(within(host("Shop"), "BuyBox"))
+check(heard(mark) == "denied" and #requests == 0, "a disabled button plays denied and sends nothing")
+ui.pending(false)
+mark = #Engine.sounds
+Engine.click(within(host("Shop"), "BuyBox"))
+check(heard(mark) == "click" and #requests == 1, "an enabled button clicks once")
+Engine.click(find("DockShop"))
+mark = #Engine.sounds
+Engine.click(find("SettingsButton"))
+Engine.click(find("SoundOff"))
+check(Engine.Sfx.muted() and find("SoundOff"):GetAttribute("Selected"), "Sound Off mutes")
+Engine.click(find("SoundOn"))
+check(not Engine.Sfx.muted() and find("SoundOn"):GetAttribute("Selected"), "Sound On restores")
+Engine.click(find("SettingsCatcher"))
+check(heard(mark) == "select,click,click", "gear selects; toggles click")
+
 -- Shop
 Engine.click(find("DockShop"))
 check(host("Shop").Visible and find("Backdrop").Visible, "dock opens Shop over the dim")

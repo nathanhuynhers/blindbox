@@ -1,9 +1,10 @@
 --!strict
--- Small popover under the HUD gear. Holds the Motion preference (was a floating button).
+-- Small popover under the HUD gear: the Motion preference and a session-only Sound switch.
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
 local Button = require(script.Parent.UIButton)
 local Context = require(script.Parent.UIContext)
+local Sfx = require(script.Parent.Sfx)
 local Menu = {}
 
 export type Menu = {
@@ -31,7 +32,7 @@ function Menu.create(parent: Instance, ctx: Context.Context, setMotion: (boolean
 	root.Visible = false
 	root.ZIndex = 41
 	root.SelectionGroup = true
-	root.Size = UDim2.fromOffset(280, 156)
+	root.Size = UDim2.fromOffset(280, 242)
 	local title = Kit.text(card.face, "Title", "Settings", 20, Style.display())
 	Kit.rect(title, 16, 12, 248, 26)
 	local motion = Kit.text(card.face, "MotionLabel", "Motion", 15)
@@ -96,6 +97,43 @@ function Menu.create(parent: Instance, ctx: Context.Context, setMotion: (boolean
 	)
 	Kit.rect(low.button, 144, 92, 120, 46)
 	paint()
+	-- Not saved: Roblox's own volume still applies, and every session starts with sound on.
+	local soundLabel = Kit.text(card.face, "SoundLabel", "Sound", 15)
+	Kit.rect(soundLabel, 16, 150, 248, 20)
+	local on: Button.Button, off: Button.Button
+	local function paintSound()
+		local muted = Sfx.muted()
+		on.variant(if muted then "white" else "selected")
+		off.variant(if muted then "selected" else "white")
+		on.button:SetAttribute("Selected", not muted)
+		off.button:SetAttribute("Selected", muted)
+	end
+	local function toggle(name: string, muted: boolean)
+		return Button.create(
+			card.face,
+			name,
+			{
+				variant = "white",
+				text = if muted then "Off" else "On",
+				size = 16,
+				radius = 14,
+				drop = 0,
+				outline = Style.outlineSmall,
+				font = Style.body(Enum.FontWeight.ExtraBold),
+			},
+			ctx.scope,
+			ctx.effects,
+			function()
+				Sfx.setMuted(muted)
+				paintSound()
+			end
+		)
+	end
+	on = toggle("SoundOn", false)
+	Kit.rect(on.button, 16, 176, 120, 46)
+	off = toggle("SoundOff", true)
+	Kit.rect(off.button, 144, 176, 120, 46)
+	paintSound()
 	local function set(open: boolean)
 		root.Visible = open
 		catcher.Visible = open

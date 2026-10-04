@@ -11,6 +11,7 @@ local Button = require(script.Parent.UIButton)
 local State = require(script.Parent.UIState)
 local Context = require(script.Parent.UIContext)
 local Preview = require(script.Parent.UIPreview)
+local Sfx = require(script.Parent.Sfx)
 local Slot = {}
 
 export type Mode = { target: number?, placing: string? }
@@ -88,6 +89,7 @@ function Slot.create(
 	unlock.button.AnchorPoint = Vector2.new(0.5, 0)
 	ctx.scope.connect(button.Activated, function()
 		choose(index)
+		Sfx.play("select")
 	end)
 	local width, height = 160, 184
 	local function place()

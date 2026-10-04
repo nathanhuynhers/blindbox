@@ -8,6 +8,7 @@ local Kit = require(script.Parent.UIKit)
 local Progress = require(script.Parent.UIProgress)
 local State = require(script.Parent.UIState)
 local Context = require(script.Parent.UIContext)
+local Sfx = require(script.Parent.Sfx)
 local List = {}
 
 export type List = {
@@ -85,6 +86,7 @@ function List.create(parent: Instance, ctx: Context.Context, choose: (string) ->
 		count.TextXAlignment = Enum.TextXAlignment.Right
 		ctx.scope.connect(button.Activated, function()
 			choose(collection.id)
+			Sfx.play("select")
 		end)
 		items[collection.id] = {
 			button = button,

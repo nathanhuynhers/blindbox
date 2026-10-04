@@ -13,6 +13,7 @@ local OpeningResult = require(script.OpeningResult)
 local PullSummary = require(script.PullSummary)
 local OfflineEarnings = require(script.OfflineEarnings)
 local UIState = require(script.UIState)
+local Sfx = require(script.Sfx)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
@@ -32,6 +33,17 @@ local shelfNotice: string? = nil
 local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
+-- Sounds for confirmed replies. Box results sound through the opening; failures play "error".
+local replySounds: { [string]: string } = {
+	Place = "place",
+	ShelfPlace = "place",
+	Remove = "remove",
+	ShelfRemove = "remove",
+	Expand = "unlock",
+	BuyShelf = "unlock",
+	Goal = "claim",
+}
+Sfx.preload()
 -- The only way the client asks for a change. One request at a time; the server decides.
 local function request(action: string, figure: string?, slot: number?, choice: string?)
 	local state = current
@@ -135,6 +147,13 @@ table.insert(
 				offline.show(offlineCoins, away)
 			end
 			displayInteraction.update(displayEarnings.update(state))
+			if
+				previous
+				and UIState.goal(previous) ~= "ready"
+				and UIState.goal(state) == "ready"
+			then
+				Sfx.play("goalReady")
+			end
 			if opening and opening.isActive() and reveal then
 				-- Live affordability and slots while the Reveal card is up.
 				opening.refresh(revealModel(state, reveal))
@@ -144,6 +163,9 @@ table.insert(
 		-- Server-initiated collections (world click or tap) reply with a "collect:" id.
 		if reply and string.sub(reply.id, 1, 8) == "collect:" then
 			ui.message(reply.message, if reply.ok then "success" else "error")
+			if not reply.ok then
+				Sfx.play("error")
+			end
 			if previous and current then
 				displayEarnings.collected(previous, current, reply)
 			end
@@ -153,6 +175,7 @@ table.insert(
 			pending = nil
 			beforeRequest = nil
 			ui.pending(false)
+			Sfx.play(if reply.ok then replySounds[intent.action] or "" else "error")
 			local feedback = {
 				Place = "Figure displayed",
 				Remove = "Figure removed",
@@ -205,6 +228,7 @@ table.insert(
 		end
 		if shelfNotice and not (opening and opening.isActive()) and #batch == 0 then
 			ui.message(shelfNotice, "success")
+			Sfx.play("complete")
 			shelfNotice = nil
 		end
 		if not current and now - syncAt > 2 then
@@ -226,4 +250,5 @@ script.Destroying:Connect(function()
 	displayInteraction.destroy()
 	displayEarnings.destroy()
 	ui.destroy()
+	Sfx.destroy()
 end)

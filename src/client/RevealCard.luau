@@ -95,6 +95,7 @@ function Card.create(
 		outlineColor = Style.white,
 		shadowColor = Style.revealShadow,
 		detail = "",
+		silent = true,
 	}, scope, effects, none)
 	local another = Button.create(block, "OpenAnother", {
 		variant = "gold",
@@ -105,6 +106,7 @@ function Card.create(
 		outlineColor = Style.white,
 		shadowColor = Style.revealShadow,
 		price = true,
+		silent = true,
 	}, scope, effects, none)
 	local keep = Instance.new("TextButton")
 	keep.Name = "KeepInCollection"

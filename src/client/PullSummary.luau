@@ -10,6 +10,7 @@ local Button = require(script.Parent.UIButton)
 local Tile = require(script.Parent.FigureTile)
 local Scope = require(script.Parent.UIScope)
 local Context = require(script.Parent.UIContext)
+local Sfx = require(script.Parent.Sfx)
 local Summary = {}
 export type Item = { figureId: string, isNew: boolean }
 export type Summary = {
@@ -124,6 +125,7 @@ function Summary.create(focus: (boolean) -> (), effects: () -> boolean): Summary
 			end
 			scope.connect(root:GetPropertyChangedSignal("AbsoluteSize"), layout)
 			gui.Parent = playerGui
+			Sfx.play("results")
 			layout()
 			focus(true)
 			GuiService.SelectedObject = done.button

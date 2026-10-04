@@ -13,6 +13,7 @@ local State = require(script.Parent.UIState)
 local Context = require(script.Parent.UIContext)
 local Shell = require(script.Parent.ScreenShell)
 local List = require(script.Parent.CollectionList)
+local Sfx = require(script.Parent.Sfx)
 local Goals = {}
 
 type Choice = { button: TextButton, stroke: UIStroke, id: string }
@@ -136,6 +137,7 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 		ctx.scope.connect(button.Activated, function()
 			chosen = collection.id
 			refresh()
+			Sfx.play("select")
 		end)
 		choices[index] = { button = button, stroke = stroke, id = collection.id }
 	end

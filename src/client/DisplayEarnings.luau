@@ -10,6 +10,7 @@ local UIState = require(script.Parent.UIState)
 local Style = require(script.Parent.UIStyle)
 local CoinBurst = require(script.Parent.CoinBurst)
 local Icons = require(script.Parent.UIIcons)
+local Sfx = require(script.Parent.Sfx)
 local Earnings = {}
 
 local height = 3.9 -- Studs above the collector target's centre, just over the figure's head.
@@ -165,6 +166,7 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 		end
 		label.text.Text = "0"
 		label.heldUntil = os.clock() + hold
+		Sfx.play("collect") -- Predicted with the burst; the reply only plays it if unpredicted.
 		if effects() then
 			burst(label, UIState.earnings(state, id), landed)
 		end
@@ -224,6 +226,9 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 		local label = if slot then labels[slot] else nil
 		if not label then
 			return
+		end
+		if os.clock() >= label.heldUntil then
+			Sfx.play("collect")
 		end
 		label.heldUntil = 0
 		local id = after.slots[slot :: number]

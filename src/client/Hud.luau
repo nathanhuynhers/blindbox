@@ -11,6 +11,7 @@ local Layout = require(script.Parent.UILayout)
 local Context = require(script.Parent.UIContext)
 local Menu = require(script.Parent.SettingsMenu)
 local Tracker = require(script.Parent.GoalTracker)
+local Sfx = require(script.Parent.Sfx)
 local Hud = {}
 
 export type Hud = {
@@ -78,6 +79,7 @@ function Hud.create(
 					)
 			)
 		end
+		Sfx.play("select")
 	end)
 	-- Functional placeholder only. Final iconography and positioning remain future UI work.
 	local home = Instance.new("TextButton")
@@ -93,7 +95,10 @@ function Hud.create(
 	home:SetAttribute("AccessibleName", "Return Home to your plot")
 	Kit.round(home)
 	Kit.stroke(home, Style.ink)
-	ctx.scope.connect(home.Activated, goHome)
+	ctx.scope.connect(home.Activated, function()
+		goHome()
+		Sfx.play("select")
+	end)
 	local daily = Instance.new("TextButton")
 	daily.Name = "DailyButton"
 	daily.Text = "Daily"
@@ -138,6 +143,7 @@ function Hud.create(
 	local menu = Menu.create(parent, ctx, setMotion)
 	ctx.scope.connect(gear.Activated, function()
 		menu.set(not menu.open())
+		Sfx.play("select")
 	end)
 	local frame: Layout.Frame? = nil
 	local function follow()

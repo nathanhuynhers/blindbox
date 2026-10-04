@@ -9,6 +9,7 @@ local Kit = require(script.Parent.UIKit)
 local Badge = require(script.Parent.UIBadge)
 local Preview = require(script.Parent.UIPreview)
 local Context = require(script.Parent.UIContext)
+local Sfx = require(script.Parent.Sfx)
 local Tile = {}
 
 export type Kind = "card" | "tile" | "shelf" | "pick"
@@ -98,6 +99,7 @@ function Tile.create(
 	ctx.scope.connect(button.Activated, function()
 		if current and enabled then
 			choose(current)
+			Sfx.play("select")
 		end
 	end)
 	local width, height = 100, 100
