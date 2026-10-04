@@ -62,7 +62,7 @@ group and Master levels apply.
 | click | Any enabled `UIButton` (after its action) | Roblox_UI_Small_Click | 15675032796 | UI |
 | select | Tile, list, slot, Shelf spot, chooser, HUD gear/coins/Home taps | Roblox_UI_Bright_Click | 15675059323 | UI |
 | tab | Switching screens | Roblox_UI_Paper_Swipe | 15675037413 | UI |
-| open | Opening a screen (dock, E prompt, Y) | Roblox_UI_Cute_Pop | 15675055424 | UI |
+| open | Opening a screen (dock, E prompt, Y, Daily button); the offline-earnings popup appearing | Roblox_UI_Cute_Pop | 15675055424 | UI |
 | close | Closing a screen; the box opening closing | Roblox_UI_Cute_Goodbye | 15675081158 | UI |
 | denied | Pressing a disabled button (unaffordable, pending) | RBLX UI Back (SFX), speed 0.8 | 10066914500 | UI |
 | error | Server rejected a request or a collect | Roblox_UI_Whistle_Low | 15675062723 | UI |
@@ -72,7 +72,7 @@ group and Master levels apply.
 | remove | Display or Shelf removal confirmed | Suction Pop 6 (SFX) | 9119669618 | SFX |
 | unlock | Display slot or Shelf purchase confirmed | RBLX UI Purchase (SFX) | 10066947742 | SFX |
 | goalReady | Daily goal becomes claimable | Synth Sparkle Tone High Pitch Bell Tone Ding (SFX) | 9126073318 | SFX |
-| claim | Daily goal reward claimed | Roblox_UI_Tonal_Stinger | 15675043410 | SFX |
+| claim | Daily goal, coin-only Daily Login day or offline earnings claimed (box days sound through the opening) | Roblox_UI_Tonal_Stinger | 15675043410 | SFX |
 | results | Open 10 results grid appears | Magic Glows Soft Clusters Of Chiming Hits 3 (SFX) | 9116394756 | Reveal |
 | complete | Collection completed (new Shelf); waits for the Open 10 grid | Magical Meetup - Tag1 (APM) | 9048764102 | Reveal |
 
@@ -107,9 +107,6 @@ to 5 s. Closing and Skip still cut them.
 - **A saved volume setting:** the Sound switch is session-only. Saving it would need a schema
   change, which wasn't authorized.
 - **Background music:** that's backlog item 16.
-- **Daily login and offline earnings claims:** those features aren't on master yet. When they
-  merge, call `Sfx.play("claim")` from their confirmed reply (see the `replySounds` table in
-  `init.client.luau`).
 
 ## Checks
 

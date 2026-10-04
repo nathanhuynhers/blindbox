@@ -42,6 +42,8 @@ local replySounds: { [string]: string } = {
 	Expand = "unlock",
 	BuyShelf = "unlock",
 	Goal = "claim",
+	Login = "claim",
+	ClaimOffline = "claim",
 }
 Sfx.preload()
 -- The only way the client asks for a change. One request at a time; the server decides.
@@ -145,6 +147,7 @@ table.insert(
 			local offlineCoins, away = UIState.offline(state)
 			if offlineCoins and state.ready and not pending and not offline.isOpen() then
 				offline.show(offlineCoins, away)
+				Sfx.play("open")
 			end
 			displayInteraction.update(displayEarnings.update(state))
 			if
@@ -175,7 +178,14 @@ table.insert(
 			pending = nil
 			beforeRequest = nil
 			ui.pending(false)
-			Sfx.play(if reply.ok then replySounds[intent.action] or "" else "error")
+			local sound: string? = if reply.ok then replySounds[intent.action] else "error"
+			-- A Login day that grants boxes sounds through its opening instead.
+			if intent.action == "Login" and (reply.figure or reply.figures) then
+				sound = nil
+			end
+			if sound then
+				Sfx.play(sound)
+			end
 			local feedback = {
 				Place = "Figure displayed",
 				Remove = "Figure removed",
