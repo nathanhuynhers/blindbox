@@ -135,6 +135,12 @@ components (`ScreenShell`, `Dock`, `Hud`, `CollectionList`, `FigureTile`, `UIBut
 geometry; `UIStyle` owns tokens and collection accents. See
 [ui-redesign/IMPLEMENTATION.md](ui-redesign/IMPLEMENTATION.md).
 
+Sound is client presentation only. `SoundManifest` is the single list of asset IDs and levels.
+`Sfx.play(name)` plays pooled, rate-limited voices in `SoundService.Master` (UI / SFX / Reveal)
+with a session-only mute in Settings. UI components and the existing reply handler call it, and
+the opening's cue slots read the same manifest. No remotes, server logic or saved data are
+involved. See [game soundpack](SOUND.md).
+
 Opening presentation is separate: `OpeningResult` derives immutable presentation metadata from
 the pre-request and confirmed reply snapshots; `OpeningController` owns one opening session,
 input focus, sound timing and teardown. `OpeningState` is a deterministic clock/interaction
