@@ -34,7 +34,7 @@ end
 for key in Manifest.opening do
 	check(Mix.cues[key] ~= nil, "manifest names a real opening slot: " .. key)
 end
-check(configured == 48 and filled == 15, "15 of 48 opening slots are filled")
+check(configured == 48 and filled == 14, "14 of 48 opening slots are filled")
 local scope = Scope.create()
 local audio = Audio.create(scope)
 local function folder()

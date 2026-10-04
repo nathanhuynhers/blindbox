@@ -15,6 +15,7 @@ local Cinematic = require(script.Parent.OpeningCinematic)
 local AudioSequence = require(script.Parent.OpeningAudioSequence)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Projection = require(script.Parent.UIState)
+local Sfx = require(script.Parent.Sfx)
 local Controller = {}
 -- Reveal choices: "display" (place/swap), "another" (buy the same box), "keep" (close).
 -- Open 10 steps (result.sequence) always report back, including "keep" and "skip" (skip all).
@@ -195,6 +196,10 @@ function Controller.create(
 					local phase: State.Phase = session.state.phase
 					cinematic.enter(phase)
 					soundtrack.enter(session.state)
+					if phase == "Closing" then
+						-- Outlives the session's own cues, which must end inside the curtain.
+						Sfx.play("close")
+					end
 				end
 				local function cues()
 					local state = session.state

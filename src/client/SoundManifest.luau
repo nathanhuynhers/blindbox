@@ -188,7 +188,6 @@ Manifest.opening = {
 		id = "9125644310",
 		source = "Magic Twirling Small High Pitch Spinning Chi (SFX)",
 	},
-	close = { id = "15675081158", source = "Roblox_UI_Cute_Goodbye" },
 } :: { [string]: Cue }
 
 return Manifest

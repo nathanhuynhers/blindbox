@@ -115,9 +115,13 @@ Config.cues.flightAir.curve =
 Config.cues.dive.curve =
 	{ volume = { 0.2, 1 }, speed = { 0.88, 1.16 }, volumePower = 1.7, speedPower = 1.8 }
 Config.cues.dive.fadeIn = 0.025
--- The library stings run longer than the original brief, and the ladder climbs in level.
--- Phase cuts (Closing, Skip) still end them early.
+-- The library sources run longer than the original brief: one-shot ceilings fit them so a cue
+-- ends naturally instead of being cut mid-waveform, and the reveal ladder climbs in level.
+-- Phase cuts (Flight's Box fade, Closing, Skip) still end them early. { lifetime, volume? }
 local tuning: { [string]: { number } } = {
+	click = { 0.4 },
+	crack = { 0.6 },
+	lid = { 0.6 },
 	revealCommon = { 0.8, 0.5 },
 	revealUncommon = { 1.2, 0.55 },
 	revealRare = { 2, 0.6 },
@@ -128,6 +132,7 @@ local tuning: { [string]: { number } } = {
 	discovery = { 1.6, 0.3 },
 }
 for key, tune in tuning do
-	Config.cues[key].lifetime, Config.cues[key].volume = tune[1], tune[2]
+	Config.cues[key].lifetime = tune[1]
+	Config.cues[key].volume = tune[2] or Config.cues[key].volume
 end
 return Config
