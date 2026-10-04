@@ -24,7 +24,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 11,
+		schemaVersion = 12,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -43,6 +43,8 @@ function Profile.encode(state: Types.State): Types.Profile
 		shelfRewards = table.clone(state.shelfRewards),
 		lastSeen = state.lastSeen,
 		offlinePending = state.offlinePending,
+		sfxVolume = state.sfxVolume,
+		musicVolume = state.musicVolume,
 	}
 end
 function Profile.decode(raw: unknown, now: number): Types.State?
@@ -60,6 +62,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 9
 			and data.schemaVersion ~= 10
 			and data.schemaVersion ~= 11
+			and data.schemaVersion ~= 12
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -81,6 +84,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"shelfRewards",
 			"lastSeen",
 			"offlinePending",
+			"sfxVolume",
+			"musicVolume",
 		})
 	then
 		return nil
@@ -241,8 +246,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	elseif data.lastSeen ~= nil or data.offlinePending ~= nil then
 		return nil
 	end
-	-- v6-v10 predate the login streak (Rules.new: never claimed). v11 requires a consistent pair.
-	if data.schemaVersion == 11 then
+	-- v6-v10 predate the login streak (Rules.new: never claimed). v11+ requires a consistent pair.
+	if (data.schemaVersion :: number) >= 11 then
 		if
 			not integer(data.lastLoginDay, -1, 100000000)
 			or not integer(data.loginStreak, 0, 100000000)
@@ -253,6 +258,15 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		state.lastLoginDay, state.loginStreak =
 			data.lastLoginDay :: number, data.loginStreak :: number
 	elseif data.lastLoginDay ~= nil or data.loginStreak ~= nil then
+		return nil
+	end
+	-- v6-v11 predate audio settings (Rules.new: full volume). v12 requires both percentages.
+	if data.schemaVersion == 12 then
+		if not integer(data.sfxVolume, 0, 100) or not integer(data.musicVolume, 0, 100) then
+			return nil
+		end
+		state.sfxVolume, state.musicVolume = data.sfxVolume :: number, data.musicVolume :: number
+	elseif data.sfxVolume ~= nil or data.musicVolume ~= nil then
 		return nil
 	end
 	-- Idempotent: also grants collections completed before Shelf rewards existed.

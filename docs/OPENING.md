@@ -5,9 +5,10 @@ The five-tier integration preserves the preceding flight polish and cinematic li
 correction. Automated checks execute the actual cinematic,
 box, skin, figure appearance, effects and audio against engine primitives.
 **Native Studio audiovisual, input, performance and multiplayer acceptance is still pending.**
-The synthesized sound pack was rejected after listening and has been disconnected.
-All 48 production audio slots are empty, so opening audio is silent;
-see [audio architecture](#audio-architecture) and the [delivery checklist](OPENING_AUDIO_ASSETS.md).
+The synthesized sound pack was rejected after listening and disconnected. The game soundpack now
+fills 14 of the 48 slots with licensed Creator Store audio (see [game soundpack](SOUND.md)); the
+rest stay silent. See [audio architecture](#audio-architecture) and the
+[delivery checklist](OPENING_AUDIO_ASSETS.md).
 The audio delivery changes no figure assignments, rates, weights, inventory, persistence or purchase
 contract. Shared rarity validation and server rate validation now support future
 high-tier content. See [rarity architecture, audit and future-content procedure](RARITY.md).
@@ -315,15 +316,19 @@ and FOV stay fixed. It does not skip the reveal or discard metadata.
 
 ## Audio architecture
 
-**Opening audio is disabled: all 48 production slots are empty.** The user rejected the
-synthesized pack as engine-like and noisy. The files and upload receipts remain as history;
-none of those IDs is loaded or played by the opening. The
+**14 of 48 slots are filled from `SoundManifest.opening`** (the [game soundpack](SOUND.md)):
+entrance, shake, click, crack, lid, impact, the Legendary/Mythical tease, the five reveals and
+NEW. They are verified to load and have not yet had a listening pass. Opening Sounds join the
+game's Reveal SoundGroup, and the session preload keeps one resident Sound per ID. The close sound
+is the game's Sfx `close`, played on entering Closing. The user rejected the synthesized pack as
+engine-like and noisy. Its files and upload receipts remain as history; none of those IDs is
+loaded or played. The
 [Porcelain & Starlight pack](../assets/audio/opening/README.md) includes the source WAVs,
 reproducible generator, upload receipts, approved moderation results, measured headroom and
 ten full-sequence previews. Native Studio/device listening and rarity prestige acceptance
 remain unverified. The per-key brief is in [OPENING_AUDIO_ASSETS.md](OPENING_AUDIO_ASSETS.md).
 
-`OpeningAudioConfig` owns empty asset slots and mix tuning. Its `sounds` table is also exposed as
+`OpeningAudioConfig` owns the asset slots (filled from `SoundManifest.opening`) and mix tuning. Its `sounds` table is also exposed as
 `OpeningConfig.sounds`. Each cue declares group, volume, PlaybackSpeed, loop, fade-in/out,
 one-shot ceiling, priority and optional fallback/progress curve. `OpeningAudioSequence` reads
 the existing State/Flight clocks; the controller still owns the session, visuals, inputs and

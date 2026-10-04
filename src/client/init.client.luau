@@ -13,6 +13,8 @@ local OpeningResult = require(script.OpeningResult)
 local PullSummary = require(script.PullSummary)
 local OfflineEarnings = require(script.OfflineEarnings)
 local UIState = require(script.UIState)
+local Sfx = require(script.Sfx)
+local Music = require(script.Music)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
@@ -29,11 +31,31 @@ local batch: { OpeningResult.Result } = {}
 local results: { PullSummary.Item }? = nil
 -- Shown once the opening closes so it never spoils the reveal.
 local shelfNotice: string? = nil
+local musicStarted = false
 local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
+-- Sounds for confirmed replies. Box results sound through the opening; failures play "error".
+local replySounds: { [string]: string } = {
+	Place = "place",
+	ShelfPlace = "place",
+	Remove = "remove",
+	ShelfRemove = "remove",
+	Expand = "unlock",
+	BuyShelf = "unlock",
+	Goal = "claim",
+	Login = "claim",
+	ClaimOffline = "claim",
+}
+Sfx.preload()
 -- The only way the client asks for a change. One request at a time; the server decides.
-local function request(action: string, figure: string?, slot: number?, choice: string?)
+local function request(
+	action: string,
+	figure: string?,
+	slot: number?,
+	choice: string?,
+	volume: number?
+)
 	local state = current
 	if not state or not state.ready or pending or (opening and opening.isActive()) then
 		return
@@ -41,6 +63,7 @@ local function request(action: string, figure: string?, slot: number?, choice: s
 	local intent: Types.Intent = {
 		action = action,
 		choice = choice,
+		volume = volume,
 		figure = figure,
 		slot = slot,
 		id = HttpService:GenerateGUID(false),
@@ -130,11 +153,24 @@ table.insert(
 				shelfNotice = "Collection complete! New Shelf unlocked"
 			end
 			ui.update(state)
+			if state.ready and not musicStarted then
+				-- Once the profile and plot are ready. Areas or events may switch it later.
+				musicStarted = true
+				Music.play("world")
+			end
 			local offlineCoins, away = UIState.offline(state)
 			if offlineCoins and state.ready and not pending and not offline.isOpen() then
 				offline.show(offlineCoins, away)
+				Sfx.play("open")
 			end
 			displayInteraction.update(displayEarnings.update(state))
+			if
+				previous
+				and UIState.goal(previous) ~= "ready"
+				and UIState.goal(state) == "ready"
+			then
+				Sfx.play("goalReady")
+			end
 			if opening and opening.isActive() and reveal then
 				-- Live affordability and slots while the Reveal card is up.
 				opening.refresh(revealModel(state, reveal))
@@ -144,6 +180,9 @@ table.insert(
 		-- Server-initiated collections (world click or tap) reply with a "collect:" id.
 		if reply and string.sub(reply.id, 1, 8) == "collect:" then
 			ui.message(reply.message, if reply.ok then "success" else "error")
+			if not reply.ok then
+				Sfx.play("error")
+			end
 			if previous and current then
 				displayEarnings.collected(previous, current, reply)
 			end
@@ -153,16 +192,27 @@ table.insert(
 			pending = nil
 			beforeRequest = nil
 			ui.pending(false)
+			local sound: string? = if reply.ok then replySounds[intent.action] else "error"
+			-- A Login day that grants boxes sounds through its opening instead.
+			if intent.action == "Login" and (reply.figure or reply.figures) then
+				sound = nil
+			end
+			if sound then
+				Sfx.play(sound)
+			end
 			local feedback = {
 				Place = "Figure displayed",
 				Remove = "Figure removed",
 				Expand = "Display slot unlocked",
 				Goal = "Daily reward claimed",
 			}
-			ui.message(
-				if reply.ok then feedback[intent.action] or reply.message else reply.message,
-				if reply.ok then "success" else "error"
-			)
+			-- A saved volume needs no toast; the slider already shows it.
+			if not (reply.ok and intent.action == "SetVolume") then
+				ui.message(
+					if reply.ok then feedback[intent.action] or reply.message else reply.message,
+					if reply.ok then "success" else "error"
+				)
+			end
 			-- Several figures: Open 10 or a multi-box Login reward day.
 			if before and reply.figures then
 				batch = OpeningResult.fromBatch(intent, before, state, reply)
@@ -203,8 +253,15 @@ table.insert(
 				results = nil
 			end
 		end
-		if shelfNotice and not (opening and opening.isActive()) and #batch == 0 then
+		-- Also after the Open 10 grid closes, so the toast and its sting aren't buried under it.
+		if
+			shelfNotice
+			and not (opening and opening.isActive())
+			and #batch == 0
+			and not summary.isOpen()
+		then
 			ui.message(shelfNotice, "success")
+			Sfx.play("complete")
 			shelfNotice = nil
 		end
 		if not current and now - syncAt > 2 then
@@ -226,4 +283,6 @@ script.Destroying:Connect(function()
 	displayInteraction.destroy()
 	displayEarnings.destroy()
 	ui.destroy()
+	Music.destroy()
+	Sfx.destroy()
 end)

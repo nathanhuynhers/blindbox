@@ -6,6 +6,7 @@ local Style = require(script.Parent.UIStyle)
 local Scope = require(script.Parent.UIScope)
 local Kit = require(script.Parent.UIKit)
 local Icons = require(script.Parent.UIIcons)
+local Sfx = require(script.Parent.Sfx)
 local Button = {}
 
 export type Variant = "gold" | "violet" | "mint" | "white" | "ink" | "ghost" | "selected"
@@ -39,6 +40,7 @@ export type Options = {
 	price: boolean?,
 	icon: string?,
 	font: Font?,
+	silent: boolean?, -- The owner plays its own sound (Reveal choices close the opening).
 }
 export type Button = {
 	button: TextButton,
@@ -179,6 +181,11 @@ function Button.create(
 	scope.connect(button.Activated, function()
 		if enabled then
 			callback()
+			if not options.silent then
+				Sfx.play("click") -- After the callback, so a navigation sound wins.
+			end
+		else
+			Sfx.play("denied")
 		end
 	end)
 	scope.add(function()

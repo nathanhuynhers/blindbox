@@ -12,8 +12,8 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
    - Client-only `CoinBurst`: shockwave, sparkles and a soft flash at the figure, then spinning
      gold coins with trails fountain out and home into the player, kicking the HUD Coins pill
      as each lands. A local click/tap predicts it; the server's collect reply (now naming the
-     figure) confirms the "+N" from the wallet delta. Respects the effects setting. No sound
-     yet: no approved coin audio asset exists.
+     figure) confirms the "+N" from the wallet delta. Respects the effects setting. Collect and
+     per-coin landing sounds come from the [game soundpack](SOUND.md).
 
 2. [x] **Show earnings above figures** — implemented; user Studio acceptance pending.
    - Show how many coins each individual displayed figure has accumulated.
@@ -86,12 +86,12 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Player-facing naming/iconography can use "Home" if that fits the UI better than "Jump to Plot."
     - Teleport the character to a safe, consistent location within their own plot.
 
-15. **Add full game soundpack**
+15. [x] **Add full game soundpack** — implemented on `feat/soundpack` ([game soundpack](SOUND.md)); assets verified to load in Studio; user listening and mix acceptance pending.
     - Add cohesive sound effects across the game for important interactions and feedback.
     - Cover UI clicks/navigation, box opening, rarity/reveal moments, coin collection, purchases/claims, Display/Shelf interactions, Daily Goals/Rewards, and other important gameplay actions.
     - Keep the sound direction consistent with the game's polished blind-box collectible feel.
 
-16. **Add background music**
+16. [x] **Add background music** — implemented on `feat/soundpack` ([background music](SOUND.md#background-music)); track verified to load and loop in Studio; user listening and mix acceptance pending.
     - Add looping background music for the main world/plot experience.
     - Keep it subtle enough that gameplay sound effects remain clear.
     - Leave room for area-specific or special-event music later if needed.

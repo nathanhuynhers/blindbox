@@ -24,6 +24,7 @@ local Goals = require(script.Parent.GoalsScreen)
 local Shelves = require(script.Parent.ShelvesScreen)
 local Login = require(script.Parent.LoginScreen)
 local Onboarding = require(script.Parent.Onboarding)
+local Sfx = require(script.Parent.Sfx)
 local Interface = {}
 export type Interface = {
 	update: (Types.Snapshot) -> (),
@@ -42,7 +43,7 @@ local function gamepad(): boolean
 end
 
 function Interface.create(
-	send: (string, string?, number?, string?) -> (),
+	send: (string, string?, number?, string?, number?) -> (),
 	home: (() -> ())?
 ): Interface
 	local scope = Scope.create()
@@ -125,9 +126,9 @@ function Interface.create(
 			return snapshot
 		end,
 		canAct = canAct,
-		send = function(action, figure, slot, choice)
+		send = function(action, figure, slot, choice, volume)
 			if canAct() then
-				send(action, figure, slot, choice)
+				send(action, figure, slot, choice, volume)
 			end
 		end,
 		navigate = function(page, route)
@@ -260,6 +261,9 @@ function Interface.create(
 			show(current, false)
 		end
 		local wasOpen = opened and current == id
+		if not wasOpen then
+			Sfx.play(if opened then "tab" else "open")
+		end
 		current = id
 		opened = true
 		hud.menu.set(false)
@@ -280,6 +284,7 @@ function Interface.create(
 		end
 		show(current, false)
 		opened = false
+		Sfx.play("close")
 		resize()
 		refresh()
 		selectPage()
@@ -394,6 +399,7 @@ function Interface.create(
 			local pop = hud.coins:FindFirstChildOfClass("UIScale") or Instance.new("UIScale")
 			pop.Parent = hud.coins
 			pop.Scale = 1.16
+			Sfx.play("coinLand")
 			Tweens:Create(pop, TweenInfo.new(0.2, Enum.EasingStyle.Back), { Scale = 1 }):Play()
 		end,
 		message = notices.show,

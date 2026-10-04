@@ -10,7 +10,8 @@ export type Context = {
 	scale: () -> number,
 	snapshot: () -> Types.Snapshot?,
 	canAct: () -> boolean,
-	send: (string, string?, number?, string?) -> (),
+	-- action, figure, slot, choice, volume (SetVolume only)
+	send: (string, string?, number?, string?, number?) -> (),
 	navigate: (string, Route?) -> (),
 	close: () -> (),
 	message: (string) -> (),

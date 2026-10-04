@@ -151,6 +151,8 @@ for _, kind in
 		"ParticleEmitterShapeStyle",
 		"ParticleEmitterShapeInOut",
 		"AssetFetchStatus",
+		"EasingStyle",
+		"PlaybackState",
 	}
 do
 	E.Enum[kind] = setmetatable({}, {
@@ -232,6 +234,11 @@ E.replication = E.Instance.new("ReplicatedStorage")
 E.replication.DescendantAdded = E.signal()
 E.services.ReplicatedStorage = E.replication
 E.services.SoundService = E.Instance.new("SoundService")
+E.TweenInfo = {
+	new = function(seconds, style)
+		return { Time = seconds, EasingStyle = style }
+	end,
+}
 E.tasks = {}
 local function schedule(callback)
 	local thread = coroutine.create(callback)

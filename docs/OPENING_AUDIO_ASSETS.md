@@ -1,6 +1,7 @@
 # Opening audio delivery checklist
 
-Status: **rejected pack disconnected; all 48 production slots are empty and silent**.
+Status: **rejected pack disconnected. 14 slots are now filled with licensed Creator Store audio
+from the [game soundpack](SOUND.md); the other 34 are empty and silent.**
 The user found the synthesized audio engine-like and noisy. The rejected
 [Porcelain & Starlight pack](../assets/audio/opening/README.md) remains archived locally.
 The user previously authorized
@@ -9,9 +10,9 @@ third-party samples; Roblox reports all 48 uploads Approved under creator `10334
 Source/master paths, hashes and provenance are in the pack manifest; IDs and owner receipts are
 in `assets/uploads.json`, with moderation results in the pack's `roblox_status.json`.
 
-`src/client/OpeningAudioConfig.luau` no longer resolves this pack from `Shared.AssetIds`.
-`OpeningConfig.sounds` aliases its empty slots for existing tools. With no configured IDs,
-the controller does not preload or play any of these sounds. Native Studio
+`src/client/OpeningAudioConfig.luau` no longer resolves this pack from `Shared.AssetIds`; its
+slots come only from `SoundManifest.opening`, and a spec checks that no rejected ID returns.
+`OpeningConfig.sounds` aliases those slots for existing tools. Native Studio
 playback was not tested by the agent; user listening rejected the pack's quality.
 Test-only dummy IDs never leave the standalone engine double.
 

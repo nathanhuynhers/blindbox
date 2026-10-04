@@ -1,7 +1,7 @@
 # Persistent data model
 
-Current schema: **11**, in the Economy2 namespace. Valid schemas 6, 7, 8, 9 and 10 upgrade (6 with empty
-banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; 6-9 with `lastSeen = 0`, `offlinePending = 0`; all with an unclaimed login streak); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
+Current schema: **12**, in the Economy2 namespace. Valid schemas 6-11 upgrade (6 with empty
+banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; 6-9 with `lastSeen = 0`, `offlinePending = 0`; 6-10 with an unclaimed login streak; all with full volume); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
@@ -10,7 +10,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 11 written; valid 6/7/8/9/10 upgrade; unsupported versions block loading/writing |
+| schemaVersion | 12 written; valid 6-11 upgrade; unsupported versions block loading/writing |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -26,6 +26,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | shelfRewards | Known collection IDs to true: collections whose first completion already granted a free Shelf Unit (v9+; required) |
 | lastSeen | UTC `os.time()` of the last save, integer 0..100,000,000,000; 0 = unknown (new or upgraded), awards nothing (v10; required) |
 | offlinePending | Whole offline Coins not yet claimed, integer 0..1,000,000,000,000; auto-claimed on the next join (v10; required) |
+| sfxVolume / musicVolume | Player audio settings, whole percent 0..100 of the default mix (100 = default); set only by the validated `SetVolume` intent; presentation only (v12; required) |
 
 Each unit is `{id, placements, customization}`. IDs such as `shelf:1` are stable and unique
 within the ordered array. `placements` maps local `row:R/slot:S` keys to known permanently
@@ -90,7 +91,7 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names change as described above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-11 snapshots enter the acquisition/save path (valid schemas 6-10 are upgraded first).
+schema-12 snapshots enter the acquisition/save path (valid schemas 6-11 are upgraded first).
 Wallet and banks save atomically in one aggregate. Acknowledgements mean in-memory success; crash rollback affects the
 entire last saved aggregate, including `offlinePending` and `lastSeen`. See [operations](OPERATIONS.md).
 
@@ -120,8 +121,8 @@ rebuildable presentation index keyed by UserId string. They are never read back 
 so they cannot corrupt or roll back progress.
 
 Deploy with coordinated server replacement. Rolling back Settings restores the old namespace,
-not progress made in Economy2. A rollback that preserves new progress must support schema 11;
-older (schema-10) code cannot read v11 saves.
+not progress made in Economy2. A rollback that preserves new progress must support schema 12;
+older (schema-11) code cannot read v12 saves.
 
 ## Daily Login streak (v11)
 

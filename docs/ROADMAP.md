@@ -21,6 +21,7 @@ required. Public deployment, paid mechanics and trading remain outside the autho
 - [Economy](ECONOMY.md) — current prices, odds, pity, duplicate income and acceptance checklist.
 - [UI redesign implementation](ui-redesign/IMPLEMENTATION.md) and
   [opening](OPENING.md) — merged client UI, opening flow, Open 10 and manual checks.
+- [Game soundpack](SOUND.md) — sound manifest, asset sources, hooks and listening checks.
 - [Operations](OPERATIONS.md) — current release and multi-client verification.
 - [Product backlog](PRODUCT_BACKLOG.md) — remaining product work; entries are not authorization.
 - [Archived milestones 0–6](archive/ROADMAP_MILESTONES.md) — historical planning only.

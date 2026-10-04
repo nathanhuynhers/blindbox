@@ -45,6 +45,7 @@ local events = {
 	Activated = true,
 	MouseButton1Down = true,
 	MouseButton1Up = true,
+	InputBegan = true,
 	MouseEnter = true,
 	MouseLeave = true,
 	SelectionGained = true,
@@ -340,6 +341,8 @@ local services = {
 	GuiService = new("GuiService"),
 	UserInputService = {
 		TouchEnabled = false,
+		InputChanged = signal(),
+		InputEnded = signal(),
 		GetLastInputType = function()
 			return { Name = if gamepadInput then "Gamepad1" else "MouseButton1" }
 		end,
@@ -379,6 +382,21 @@ Engine.workspace = {
 	end,
 	FindFirstChild = function()
 		return nil
+	end,
+}
+
+-- Sfx double: records sound names in play order; the real module has its own spec.
+Engine.sounds = {}
+local soundLevels = { sfx = 1, music = 1 }
+Engine.Sfx = {
+	play = function(name)
+		table.insert(Engine.sounds, name)
+	end,
+	volume = function(kind)
+		return soundLevels[kind]
+	end,
+	setVolume = function(kind, value)
+		soundLevels[kind] = value
 	end,
 }
 

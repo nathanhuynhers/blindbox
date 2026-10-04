@@ -114,6 +114,8 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		bonus = Rules.bonus(state),
 		offlinePending = state.offlinePending,
 		offlineSeconds = state.offlineSeconds,
+		sfxVolume = state.sfxVolume,
+		musicVolume = state.musicVolume,
 	}
 	stateRemote:FireClient(player, snapshot, reply)
 end

@@ -13,16 +13,28 @@ local function check(ok, message)
 	assert(ok, message)
 end
 local baseline = E.connections
--- The rejected source pack must remain disconnected, including every fallback.
-local configured = 0
-for key in Mix.cues do
-	check(
-		Mix.sounds[key] == "" and Audio.asset(key) == nil,
-		"rejected cue and fallback are disconnected: " .. key
-	)
-	configured += 1
+-- Slots come only from SoundManifest.opening; the rejected synthesized pack stays disconnected.
+local Manifest = require("./SoundManifest")
+local AssetIds = require("./AssetIds")
+local rejected = {}
+for key, id in AssetIds do
+	if string.sub(key, 1, 14) == "Audio.Opening." then
+		rejected["rbxassetid://" .. id] = true
+	end
 end
-check(configured == 48, "all original pack slots are silent")
+local configured, filled = 0, 0
+for key in Mix.cues do
+	local source = Manifest.opening[key]
+	local expected = if source then "rbxassetid://" .. source.id else ""
+	check(Mix.sounds[key] == expected, "slot comes from the manifest: " .. key)
+	check(not rejected[Mix.sounds[key]], "rejected pack stays disconnected: " .. key)
+	configured += 1
+	filled += if source then 1 else 0
+end
+for key in Manifest.opening do
+	check(Mix.cues[key] ~= nil, "manifest names a real opening slot: " .. key)
+end
+check(configured == 48 and filled == 14, "14 of 48 opening slots are filled")
 local scope = Scope.create()
 local audio = Audio.create(scope)
 local function folder()
@@ -50,13 +62,18 @@ local originalPreload = E.services.ContentProvider.PreloadAsync
 E.services.ContentProvider.PreloadAsync = function(_self, ids)
 	preloads += 1
 	check(#ids == 1, "warmup deduplicates configured IDs")
+	check(ids[1].ClassName == "Sound", "warmup preloads Sound instances, not ID strings")
 end
 local cache = Scope.create()
 Audio.preload(cache)
 check(preloads == 0 and #folder():GetChildren() == 0, "warmup is deferred and silent")
 E.flushTasks()
 check(preloads == 1, "warmup begins before presentation")
+local resident = E.services.SoundService:FindFirstChild("OpeningSoundCache")
+check(resident and #resident:GetChildren() == 1, "one resident Sound per ID keeps it loaded")
+check(not resident:GetChildren()[1].IsPlaying, "resident Sounds never play")
 cache.destroy()
+check(resident.Parent == nil, "resident cache leaves with its owner")
 local canceledCache = Scope.create()
 Audio.preload(canceledCache)
 canceledCache.destroy()
@@ -64,6 +81,7 @@ E.flushTasks(true)
 check(preloads == 1, "stale warmup never starts after owner teardown")
 E.services.ContentProvider.PreloadAsync = originalPreload
 audio.play("charge")
+check(sound("charge").SoundGroup.Name == "Reveal", "opening sounds join the Reveal group")
 audio.update(0.12)
 local startVolume, startPitch = sound("charge").Volume, sound("charge").PlaybackSpeed
 audio.modulate("charge", 0.5)
@@ -350,7 +368,8 @@ for _, reduced in { false, true } do
 		local stale = E.render:Capture()
 		controller.skip()
 		check(not played.discovery, "duplicate Skip never emits NEW")
-		for _ = 1, 40 do
+		-- Outlast the longest reveal sting's ceiling.
+		for _ = 1, math.ceil((Mix.cues.revealMythical.lifetime + 0.2) / 0.05) do
 			tick(0.05)
 		end
 		for _, child in folder():GetChildren() do
@@ -443,7 +462,8 @@ for _, rarity in { "Common", "Uncommon", "Rare", "Legendary", "Mythical" } do
 	for index = 1, 10 do
 		start(index % 2 == 0, index % 3 == 0, rarity)
 		reach("Result")
-		for _ = 1, 40 do
+		-- Outlast the longest reveal sting's ceiling.
+		for _ = 1, math.ceil((Mix.cues.revealMythical.lifetime + 0.2) / 0.025) do
 			tick(0.025)
 		end
 		check(

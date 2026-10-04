@@ -24,6 +24,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 				and key ~= "shelfId"
 				and key ~= "shelfSlotId"
 				and key ~= "carouselRevision"
+				and key ~= "volume"
 			)
 		then
 			return nil
@@ -57,6 +58,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		and action ~= "ShelfRemove"
 		and action ~= "ShelfNext"
 		and action ~= "ShelfPrevious"
+		and action ~= "SetVolume"
 	then
 		return nil
 	end
@@ -113,8 +115,20 @@ function Protocol.parse(raw: unknown): Types.Intent?
 	elseif slot ~= nil then
 		return nil
 	end
-	local choice = data.choice
-	if action == "Buy" or action == "BuyTen" or action == "Daily" then
+	local choice, volume = data.choice, data.volume
+	if action == "SetVolume" then
+		if
+			(choice ~= "sfx" and choice ~= "music")
+			or typeof(volume) ~= "number"
+			or volume % 1 ~= 0
+			or volume < 0
+			or volume > 100
+		then
+			return nil
+		end
+	elseif volume ~= nil then
+		return nil
+	elseif action == "Buy" or action == "BuyTen" or action == "Daily" then
 		if choice ~= nil and (typeof(choice) ~= "string" or not Catalog.collectionIds[choice]) then
 			return nil
 		end
@@ -131,6 +145,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		revision = revision,
 		figure = if typeof(figure) == "string" then figure else nil,
 		slot = if typeof(slot) == "number" then slot else nil,
+		volume = if typeof(volume) == "number" then volume else nil,
 	}
 	return intent
 end
@@ -143,5 +158,6 @@ function Protocol.same(a: Types.Intent, b: Types.Intent): boolean
 		and a.shelfId == b.shelfId
 		and a.shelfSlotId == b.shelfSlotId
 		and a.carouselRevision == b.carouselRevision
+		and a.volume == b.volume
 end
 return Protocol
