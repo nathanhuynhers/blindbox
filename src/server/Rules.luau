@@ -16,7 +16,7 @@ local Rules = {
 }
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 11,
+		schemaVersion = 12,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
@@ -31,6 +31,8 @@ function Rules.new(now: number): Types.State
 		lastSeen = 0,
 		offlinePending = 0,
 		offlineSeconds = 0,
+		sfxVolume = 100,
+		musicVolume = 100,
 		coins = Economy.startingCoins,
 		owned = {},
 		discovered = {},
@@ -339,6 +341,15 @@ function Rules.mutate(
 		local amount = Rules.claimOffline(state)
 		state.revision += 1
 		return true, string.format("Claimed %d offline Coins!", amount), nil
+	elseif action == "SetVolume" then
+		-- Presentation preference only; Protocol already bounded choice and volume.
+		if intent.choice == "music" then
+			state.musicVolume = intent.volume or state.musicVolume
+		else
+			state.sfxVolume = intent.volume or state.sfxVolume
+		end
+		state.revision += 1
+		return true, "Settings saved.", nil
 	elseif action == "Expand" then
 		local cost = Rules.expansionCost(state)
 		if cost == 0 or state.display.unlocked >= DisplayConfig.maxSlots then

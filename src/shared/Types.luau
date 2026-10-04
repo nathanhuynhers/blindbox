@@ -19,6 +19,8 @@ export type Intent = {
 	shelfId: string?,
 	shelfSlotId: string?,
 	carouselRevision: number?,
+	-- SetVolume only: whole percent 0..100.
+	volume: number?,
 }
 export type Display = { unlocked: number, slots: { string } }
 export type ShelfUnit = {
@@ -64,6 +66,9 @@ export type Profile = {
 	lastSeen: number,
 	-- Whole offline Coins awaiting the return popup's claim; auto-claimed on the next join.
 	offlinePending: number,
+	-- Player audio settings, whole percent 0..100 of the default mix (v12).
+	sfxVolume: number,
+	musicVolume: number,
 }
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
 export type State = Profile & { revision: number, time: number, offlineSeconds: number }
@@ -104,6 +109,8 @@ export type Snapshot = {
 	bonus: number,
 	offlinePending: number,
 	offlineSeconds: number,
+	sfxVolume: number,
+	musicVolume: number,
 }
 export type Reply = {
 	id: string,
