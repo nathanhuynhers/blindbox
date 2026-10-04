@@ -10,6 +10,7 @@ local DisplayInteraction = require(script.DisplayInteraction)
 local DisplayEarnings = require(script.DisplayEarnings)
 local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
+local PullSummary = require(script.PullSummary)
 local UIState = require(script.UIState)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
@@ -20,10 +21,11 @@ local current: Types.Snapshot? = nil
 local pending: Types.Intent? = nil
 local beforeRequest: Types.Snapshot? = nil
 local opening: OpeningController.Controller? = nil
+local summary: PullSummary.Summary
 local reveal: OpeningResult.Result? = nil
--- Remaining Open 10 reveals, shown one at a time as each opening closes.
+-- Open 10: the remaining box/reveal steps, then the results grid once they are done.
 local batch: { OpeningResult.Result } = {}
-local batchSize = 0
+local results: { PullSummary.Item }? = nil
 -- Shown once the opening closes so it never spoils the reveal.
 local shelfNotice: string? = nil
 local sentAt = 0
@@ -59,28 +61,12 @@ end
 ui = Interface.create(request, function()
 	homeRemote:FireServer()
 end)
--- Reveal choices run after the opening has fully closed and released UI focus.
-local function choose(choice: string, result: OpeningResult.Result)
-	local state = current
-	if not state then
-		return
-	end
-	if choice == "display" then
-		local placement = UIState.placement(state, result.figureId)
-		if placement then
-			request("Place", result.figureId, placement.slot, nil)
-		end
-	elseif choice == "another" then
-		local figure = Catalog.byId[result.figureId]
-		if figure then
-			request("Buy", nil, nil, figure.collection)
-		end
-	end
-end
-opening = OpeningController.create(ui.openingFocus, ui.message, choose)
+summary = PullSummary.create(ui.openingFocus, ui.effects)
 local function revealModel(state: Types.Snapshot, result: OpeningResult.Result): UIState.Reveal
 	local model = UIState.reveal(state, result.figureId, result.isNew, result.quantity)
-	if #batch > 0 then
+	if result.sequence == "last" then
+		model.next = "See all results"
+	elseif result.sequence then
 		model.next = string.format("Next figure (%d left)", #batch)
 	end
 	return model
@@ -89,11 +75,38 @@ local function presentNext(state: Types.Snapshot)
 	local result = table.remove(batch, 1)
 	if result and opening then
 		reveal = result
-		-- Only the first (rarest) reveal plays the full opening; the rest are quick.
-		local reduced = not ui.effects() or #batch < batchSize - 1
-		opening.present(result, reduced, nil, revealModel(state, result))
+		opening.present(result, not ui.effects(), nil, revealModel(state, result))
 	end
 end
+-- Reveal choices run after the opening has fully closed and released UI focus.
+local function choose(choice: string, result: OpeningResult.Result)
+	local state = current
+	if not state then
+		return
+	end
+	if result.sequence and choice == "skip" then
+		table.clear(batch)
+	end
+	if choice == "display" then
+		local placement = UIState.placement(state, result.figureId)
+		if placement then
+			request("Place", result.figureId, placement.slot, nil)
+		end
+	elseif choice == "another" and not result.sequence then
+		local figure = Catalog.byId[result.figureId]
+		if figure then
+			request("Buy", nil, nil, figure.collection)
+		end
+	end
+	-- Same frame as the close, so the next step or the grid takes over under the curtain.
+	if result.sequence and #batch > 0 then
+		presentNext(state)
+	elseif result.sequence and results then
+		summary.show(results)
+		results = nil
+	end
+end
+opening = OpeningController.create(ui.openingFocus, ui.message, choose)
 local connections: { RBXScriptConnection } = {}
 local displayInteraction = DisplayInteraction.create(ui.openDisplay, ui.openShelves)
 local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded)
@@ -143,7 +156,13 @@ table.insert(
 			)
 			if before and intent.action == "BuyTen" then
 				batch = OpeningResult.fromBatch(intent, before, state, reply)
-				batchSize = #batch
+				local items: { PullSummary.Item } = {}
+				for _, step in batch do
+					if not step.tease then
+						table.insert(items, { figureId = step.figureId, isNew = step.isNew })
+					end
+				end
+				results = if #items > 0 then items else nil
 				presentNext(state)
 			elseif before then
 				local result = OpeningResult.fromReply(intent, before, state, reply)
@@ -165,8 +184,14 @@ table.insert(
 			ui.message("Waiting for server… recovering the same request.")
 			intentRemote:FireServer(pending)
 		end
-		if #batch > 0 and current and opening and not opening.isActive() then
-			presentNext(current)
+		-- Open 10 recovery after a cancelled step (reset or death mid-sequence).
+		if results and current and opening and not opening.isActive() then
+			if #batch > 0 then
+				presentNext(current)
+			else
+				summary.show(results)
+				results = nil
+			end
 		end
 		if shelfNotice and not (opening and opening.isActive()) and #batch == 0 then
 			ui.message(shelfNotice, "success")
@@ -186,6 +211,7 @@ script.Destroying:Connect(function()
 	if opening then
 		opening.destroy()
 	end
+	summary.destroy()
 	displayInteraction.destroy()
 	displayEarnings.destroy()
 	ui.destroy()

@@ -238,16 +238,19 @@ Engine.View = {
 		Engine.profile = profile
 		Engine.reveal = reveal
 		local primary, hit, skip = node("TextButton"), node("TextButton"), node("TextButton")
-		primary.Parent, hit.Parent, skip.Parent = gui, gui, gui
+		local shield = node("TextButton")
+		primary.Parent, hit.Parent, skip.Parent, shield.Parent = gui, gui, gui, gui
 		-- Reveal card choices; the real RevealCard is covered by Screens.spec.
 		local display, keep = node("TextButton"), node("TextButton")
 		display.Parent, keep.Parent = gui, gui
-		Engine.view = { primary = primary, hitTarget = hit, skip = skip, display = display, keep = keep }
+		Engine.view =
+			{ primary = primary, hitTarget = hit, skip = skip, display = display, keep = keep, shield = shield }
 		Engine.result = result
 		local State = require("./OpeningState")
 		return {
 			primary = primary,
 			hitTarget = hit,
+			shield = shield,
 			skip = skip,
 			choices = { display = display, keep = keep },
 			firstChoice = function()

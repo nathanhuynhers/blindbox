@@ -67,6 +67,13 @@ local intentRemote = remote("Intent")
 local stateRemote = remote("State")
 local syncRemote = remote("RequestState")
 local homeRemote = remote("Home")
+local studioGrantCoinsRemote: RemoteFunction? = nil
+if RunService:IsStudio() then
+	local studioRemote = Instance.new("RemoteFunction")
+	studioRemote.Name = "StudioGrantCoins"
+	studioRemote.Parent = folder
+	studioGrantCoinsRemote = studioRemote
+end
 folder.Parent = ReplicatedStorage
 local function send(player: Player, session: Session, reply: Types.Reply?)
 	session.sequence += 1
@@ -253,6 +260,47 @@ table.insert(
 		session.homeTime = nextRequest
 	end)
 )
+if studioGrantCoinsRemote then
+	studioGrantCoinsRemote.OnServerInvoke = function(
+		player: Player,
+		rawAmount: unknown
+	): (boolean, string, number?)
+		local session = sessions[player]
+		if
+			not RunService:IsStudio()
+			or not session
+			or shuttingDown
+			or not session.storage.ready
+			or os.clock() >= session.storage.safeUntil
+		then
+			return false, "Your Studio session is not ready.", nil
+		end
+		if
+			typeof(rawAmount) ~= "number"
+			or rawAmount ~= rawAmount
+			or rawAmount == math.huge
+			or rawAmount == -math.huge
+			or rawAmount % 1 ~= 0
+			or rawAmount < 1
+			or rawAmount > Economy.coinLimit
+		then
+			return false, "Coin amount must be a positive whole number within the Coin limit.", nil
+		end
+		local state = session.transaction.state
+		Rules.settle(state, os.clock())
+		local granted = math.min(rawAmount, Economy.coinLimit - state.coins)
+		if granted < 1 then
+			return false, "Your wallet is already at the Coin limit.", state.coins
+		end
+		state.coins += granted
+		state.revision += 1
+		if session.storage.handle and not session.storage.busy then
+			session.storage.status = "Autosave pending"
+		end
+		send(player, session, nil)
+		return true, string.format("Granted %d Studio Coins.", granted), state.coins
+	end
+end
 table.insert(
 	connections,
 	intentRemote.OnServerEvent:Connect(function(player: Player, raw: unknown)

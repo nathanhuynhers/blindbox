@@ -380,6 +380,49 @@ chooser.present(result(), false, nil, model)
 reach("Result")
 chooser.cancel()
 check(#chosen == 1, "reset/cancel during the reveal sends nothing")
+
+-- Open 10 steps always report back so the next step can take over in the same frame.
+local function step(extra)
+	sequence += 1
+	local value = {
+		requestId = "opening-" .. sequence,
+		figureId = "tide.pearl",
+		isNew = false,
+		quantity = 1,
+		direct = true,
+		sequence = "middle",
+	}
+	for key, item in extra do
+		value[key] = item
+	end
+	return table.freeze(value)
+end
+table.clear(chosen)
+chooser.present(step({ direct = false, tease = "Mythical", sequence = "first" }), false, nil, model)
+check(Engine.profile.rarity == "Mythical", "the box teases the batch's best rarity")
+reach("Done")
+check(#chosen == 1 and chosen[1].choice == "keep" and not chosen[1].active, "the tease box hands off when it closes")
+chooser.present(step({}), false, nil, model)
+reach("Result")
+Engine.render:Fire(0.4)
+Engine.click("shield")
+Engine.render:Fire(0.12)
+Engine.render:Fire(0.12)
+check(#chosen == 2 and chosen[2].choice == "keep", "clicking anywhere moves to the next figure")
+chooser.present(step({ sequence = "last" }), false, nil, model)
+reach("Silhouette")
+Engine.click("skip")
+check(Engine.state.phase == "Closing", "Skip ends the step instead of jumping to its result")
+Engine.render:Fire(0.12)
+Engine.render:Fire(0.12)
+check(#chosen == 3 and chosen[3].choice == "skip", "Skip reports skip-all")
+chooser.present(result(), false, nil, model)
+reach("Result")
+Engine.render:Fire(0.4)
+Engine.click("shield")
+Engine.render:Fire(0.12)
+check(chooser.isActive() and Engine.state.phase == "Result", "a single opening ignores clicks outside its choices")
+chooser.cancel()
 chooser.destroy()
 chooser.refresh(model)
 check(Engine.connections == baseline, "chooser lifetime subscriptions released")

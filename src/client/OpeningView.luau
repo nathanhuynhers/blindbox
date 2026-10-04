@@ -15,6 +15,8 @@ export type View = {
 	draw: (State.State, boolean) -> (),
 	primary: TextButton,
 	hitTarget: TextButton,
+	-- Full-screen input catcher under every control ("click anywhere" in an Open 10).
+	shield: TextButton,
 	skip: TextButton,
 	-- Reveal choices (display / another / keep); the controller owns their input.
 	choices: { [string]: TextButton },
@@ -109,6 +111,10 @@ function View.create(
 	-- Extend beyond the safe-area GUI to cover the camera at every screen edge.
 	curtain.Position, curtain.Size = UDim2.fromOffset(-100, -100), UDim2.new(1, 200, 1, 200)
 	curtain.ZIndex, curtain.Active, curtain.Parent = 30, false, root
+	-- Open 10 steps meet in the dark: later steps start dark and every step ends dark
+	-- (the next step or the results grid takes over in the same frame).
+	local chainedIn = result.sequence == "middle" or result.sequence == "last"
+	local chainedOut = result.sequence ~= nil
 	local buttonLimit = Instance.new("UISizeConstraint")
 	buttonLimit.MaxSize, buttonLimit.Parent = Vector2.new(400, 54), primary
 	local function layout()
@@ -129,13 +135,15 @@ function View.create(
 	return {
 		primary = primary,
 		hitTarget = hit,
+		shield = blocker,
 		skip = skip,
 		choices = card.choices,
 		firstChoice = card.first,
 		refresh = card.set,
 		draw = function(state, gamepad)
 			local phase, p = state.phase, State.progress(state)
-			local final = phase == "Reveal" or phase == "Result" or phase == "Closing"
+			local final = not state.tease
+				and (phase == "Reveal" or phase == "Result" or phase == "Closing")
 			local ready = phase == "Result" and state.elapsed >= State.resultGuard
 			card.root.Visible, shade.Visible = final, final or phase == "Await"
 			card.root.GroupTransparency = if phase == "Reveal"
@@ -160,8 +168,10 @@ function View.create(
 				elseif phase == "Result" and gamepad then "A to choose  ·  B to keep"
 				else ""
 			heading.Visible = not final and phase ~= "Enter"
-			curtain.BackgroundTransparency = if phase == "Enter" or phase == "Closing"
-				then math.abs(p * 2 - 1)
+			curtain.BackgroundTransparency = if phase == "Enter" and chainedIn
+				then math.clamp(p * 2 - 1, 0, 1)
+				elseif phase == "Closing" and chainedOut then math.clamp(1 - p * 2, 0, 1)
+				elseif phase == "Enter" or phase == "Closing" then math.abs(p * 2 - 1)
 				else 1
 			gui:SetAttribute("Phase", phase)
 		end,

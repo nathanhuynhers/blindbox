@@ -47,20 +47,21 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
    - If they own two copies of a figure, they can only have two copies placed across their Shelves.
    - Native Studio MCP authority, repair and picker-state checks pass; isolated DataStore rejoin and two-client acceptance remain pending.
 
-8. **Add Auto Open Gamepass**
-   - Automatically keep opening boxes.
-   - Let the player stop manually.
-   - Allow stopping automatically when a chosen rarity is pulled.
+8. **Add Onboarding and First-Session Tutorial**
+   - Teach new players the core loop: open → own → display → earn → buy again.
+   - Cover plot ownership, figure placement, collection interaction, and earnings collection.
+   - Use minimal text, visual indicators, and optional skips for returning players.
+   - Verify tutorial does not block progression or create frustration.
 
 9. [x] **Add x10 Open** — implementation, automated checks and native Studio single-client check complete; multi-client acceptance pending.
    - Everyone can open 10 boxes at once as long as they can afford all 10.
 
-10. **Add offline earnings + Robux double**
+10. **Add offline earnings (Coin only)**
     - Displayed figures continue earning while the player is offline.
     - Offline earnings should generate at a reduced rate of about 0.5x normal online earnings to prevent abuse; exact tuning can be adjusted during economy balancing.
     - Offline earnings stop accumulating after a TBD number of hours.
     - On return, show how much was earned.
-    - The player can claim normally or spend Robux to double the offline earnings.
+    - The player claims normally; Robux multipliers and monetization are deferred to a later phase.
 
 11. [x] **Remove finished Daily Goals** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
     - After a Daily Goal is completed and claimed, remove it from the HUD instead of leaving the "Claimed" card there.
@@ -76,22 +77,17 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - As long as the player is physically inside their own plot, they should be able to manage both.
     - Players should not be able to manage these systems from outside their own plot.
 
-14. **Add Auto Collect Gamepass**
-    - While the player is online, automatically collect earnings from all displayed figures once per second.
-    - Players with the Gamepass should not need to manually click or tap each figure to collect online earnings.
-    - This is separate from the offline earnings system.
-
-15. [x] **Add Jump to Plot / Home button** — implementation, automated checks, native Studio single-client behavior and mobile layout checks complete; multi-client and true-touch acceptance pending.
+14. [x] **Add Jump to Plot / Home button** — implementation, automated checks, native Studio single-client behavior and mobile layout checks complete; multi-client and true-touch acceptance pending.
     - Add a button that teleports the player back to their own plot.
     - Player-facing naming/iconography can use "Home" if that fits the UI better than "Jump to Plot."
     - Teleport the character to a safe, consistent location within their own plot.
 
-16. **Add full game soundpack**
+15. **Add full game soundpack**
     - Add cohesive sound effects across the game for important interactions and feedback.
     - Cover UI clicks/navigation, box opening, rarity/reveal moments, coin collection, purchases/claims, Display/Shelf interactions, Daily Goals/Rewards, and other important gameplay actions.
     - Keep the sound direction consistent with the game's polished blind-box collectible feel.
 
-17. **Add background music**
+16. **Add background music**
     - Add looping background music for the main world/plot experience.
     - Keep it subtle enough that gameplay sound effects remain clear.
     - Leave room for area-specific or special-event music later if needed.
@@ -163,7 +159,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 
 - **Variants/colorways:** potentially make duplicate pulls exciting, but this requires revisiting the quantity-stack data model and individual-copy identity.
 - **Trading:** do not implement casually. It requires a separate design for identity, atomic two-profile transfers, replay/duplication prevention, recovery, and economy impact.
-- **Monetization:** design after the core experience is compelling and validate current Roblox policy before implementing paid randomized mechanics.
+- **Gamepasses and monetization:** defer all gamepass-related features (Auto Open, Auto Collect, Robux multipliers) and monetization systems until after core gameplay loop polish is complete. Design and implement only after the core experience is compelling and current Roblox policy is validated for any paid/randomized mechanics. Plan scope separately with full cost/benefit analysis.
 
 ## Product principles
 

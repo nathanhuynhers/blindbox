@@ -1,20 +1,35 @@
 --!strict
--- Paste into Studio's CLIENT Command Bar during Play. Never mapped by Rojo; no remotes/grants.
+-- Paste into Studio's CLIENT Command Bar during Play. Never mapped by Rojo.
 -- Choose a figure or tour a collection/all collections with Open / Continue for each figure.
+-- Set COINS_TO_GRANT above zero for an optional Studio-only Coin grant.
+local COINS_TO_GRANT = 1_000_000 -- Leave at 0 to grant nothing.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 assert(RunService:IsStudio(), "This presentation fixture is Studio-only")
 local player = Players.LocalPlayer
 assert(player, "Run in the CLIENT Command Bar during Play")
 local playerGui = player:WaitForChild("PlayerGui")
 assert(not playerGui:FindFirstChild("OpeningPreview"), "Exit the existing fixture first")
 assert(not playerGui:FindFirstChild("BlindboxOpening"), "Finish the real opening first")
+assert(COINS_TO_GRANT >= 0 and COINS_TO_GRANT % 1 == 0, "COINS_TO_GRANT must be a whole number")
+if COINS_TO_GRANT > 0 then
+	local grantRemote = ReplicatedStorage:WaitForChild("Remotes")
+		:WaitForChild("StudioGrantCoins", 5) :: RemoteFunction?
+	assert(
+		grantRemote,
+		"Studio Coin grant is unavailable; sync the latest server code and restart Play"
+	)
+	local ok, message, balance = grantRemote:InvokeServer(COINS_TO_GRANT)
+	assert(ok, message)
+	print(string.format("%s New balance: %d Coins.", message, balance))
+end
 local source = player.PlayerScripts:WaitForChild("Client")
 local Controller = require(source:WaitForChild("OpeningController") :: ModuleScript)
 local Config = require(source:WaitForChild("OpeningConfig") :: ModuleScript)
-local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
-local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
+local Catalog = require(ReplicatedStorage.Shared.Catalog)
+local Rarity = require(ReplicatedStorage.Shared.Rarity)
 local main = playerGui:WaitForChild("PocketGrove") :: ScreenGui
 local wasEnabled = main.Enabled
 main.Enabled = false
@@ -206,7 +221,7 @@ local function tour(collectionId: string?)
 				end
 				print(
 					string.format(
-						"Figure tour complete: %d figures. No purchases or grants.",
+						"Figure tour complete: %d figures. No purchases or figure grants.",
 						#queue
 					)
 				)
@@ -320,7 +335,7 @@ local function compare(tiers: { Rarity.Id })
 					end
 					assert(seenResult, "Comparison interrupted before Result")
 				end
-				print("PASS: presentation comparison; no catalog edits, purchases or grants")
+				print("PASS: presentation comparison; no catalog edits, purchases or figure grants")
 				return true
 			end)
 			controller.cancel()
@@ -685,7 +700,7 @@ local function cleanup()
 	gui:Destroy()
 	diagnostics:Destroy()
 	main.Enabled = wasEnabled
-	print("Opening fixture exited. No purchases or grants were made.")
+	print("Opening fixture exited. No purchases or figure grants were made.")
 end
 button("Exit preview", cleanup)
 -- Keep an exit above the cinematic and outside the scrolling/hidden menu.

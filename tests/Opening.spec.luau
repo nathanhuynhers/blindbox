@@ -214,10 +214,25 @@ local batchIds = { "grove.pebble", "grove.star", "grove.pebble" }
 local batchAfter = { owned = { ["grove.pebble"] = 2, ["grove.star"] = 1 }, discovered = { ["grove.pebble"] = true, ["grove.star"] = true } }
 local batchRequest = { id = "ten", action = "BuyTen", revision = 7 }
 local batch = Result.fromBatch(batchRequest, before, batchAfter, { id = "ten", ok = true, message = "", figures = batchIds })
-check(#batch == 3 and batch[1].figureId == "grove.star", "Open 10 reveals the rarest figure first")
-check(batch[2].isNew and not batch[3].isNew and batch[3].quantity == 2, "only a figure's first copy in a batch is new")
-check(batch[1].requestId ~= batch[2].requestId, "each batch reveal has its own presentation id")
+check(#batch == 4 and batch[1].tease == "Rare" and not batch[1].direct and batch[1].sequence == "first", "Open 10 opens one box that teases the best rarity")
+check(batch[2].figureId == "grove.pebble" and batch[3].figureId == "grove.star" and batch[4].figureId == "grove.pebble", "figures follow in roll order")
+check(batch[2].direct and batch[2].sequence == "middle" and batch[4].sequence == "last" and batch[4].tease == nil, "figures reveal without boxes")
+check(batch[2].isNew and not batch[4].isNew and batch[4].quantity == 2, "only a figure's first copy in a batch is new")
+check(batch[1].requestId ~= batch[2].requestId and batch[2].requestId ~= batch[4].requestId, "each step has its own presentation id")
 check(#Result.fromBatch(request, before, batchAfter, { id = request.id, ok = true, message = "", figures = batchIds }) == 0, "only BuyTen replies batch")
+local teaseState = State.create(Config.rarities.Rare.timing, false, false, true)
+for _ = 1, 40 do
+	if teaseState.phase == "Await" then
+		State.activate(teaseState)
+	end
+	State.advance(teaseState, State.duration(teaseState))
+	check(teaseState.phase ~= "Silhouette" and teaseState.phase ~= "Result", "the tease box never reveals a figure")
+end
+check(teaseState.phase == "Done", "the tease box closes after the rarity impact")
+local finishing = State.create(Config.rarities.Rare.timing, false, true)
+State.advance(finishing, State.duration(finishing))
+check(State.finish(finishing) and finishing.phase == "Closing" and finishing.skipped, "Skip ends an Open 10 step")
+check(not State.finish(finishing), "finish is idempotent")
 request.action = "Daily"
 local daily = Result.fromReply(request, before, after, reply)
 check(daily ~= nil and not daily.direct, "daily uses box")

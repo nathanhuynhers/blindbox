@@ -418,7 +418,8 @@ No hard stereo/pan dependency or sub-bass-only critical cue is specified.
    Start a fresh Play session; the controller preloads the configured assets automatically.
 2. Sync with the pinned Rojo setup or open the rebuilt `RobloxWorkspace.rbxlx`. Start **Play**,
    switch the Command Bar to **Client**, and paste `tests/StudioOpening.client.luau`.
-   The fixture sends no remotes, spends nothing and grants no figures.
+   The fixture spends nothing and grants no figures. Its optional `COINS_TO_GRANT` setting uses
+   the Studio-only server grant; set it to `0` when reviewing without changing the Studio wallet.
 3. Leave **Skip test: Manual**, **Reduced motion: OFF**, **Result: NEW**, and **Audio diagnostics:
    ON**. Click **Warm configured approved audio (see Output)**; inspect unavailable/permission
    messages. The overlay shows phase, active cue/loop keys, sound/loading counts and summed
@@ -484,7 +485,8 @@ placement or a per-collection GLB. No new asset uploads are needed for this pass
 
 After current Rojo sync or opening the rebuilt place, start Play and paste
 `tests/StudioOpening.client.luau` into the **client Command Bar**. It asserts Studio context,
-is not included in the production Rojo mapping, sends no remotes and grants/spends nothing.
+is not included in the production Rojo mapping, grants no figures and spends nothing. Its
+`COINS_TO_GRANT` setting may request Coins from a server endpoint that exists only in Studio.
 
 The scrolling launcher provides all collection/rarity combinations, a NEW/duplicate toggle,
 reduced motion, a catalog-ID input for every existing figure, direct acquisition, and an automatic Skip

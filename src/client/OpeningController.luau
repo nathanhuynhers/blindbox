@@ -17,6 +17,7 @@ local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Projection = require(script.Parent.UIState)
 local Controller = {}
 -- Reveal choices: "display" (place/swap), "another" (buy the same box), "keep" (close).
+-- Open 10 steps (result.sequence) always report back, including "keep" and "skip" (skip all).
 export type Choose = (string, Result.Result) -> ()
 export type Controller = {
 	present: (Result.Result, boolean, Rarity.Id?, Projection.Reveal?) -> boolean,
@@ -106,11 +107,11 @@ function Controller.create(
 				end
 			end
 			local profile, collection =
-				Config.profile(presentationRarity or figure.rarity),
+				Config.profile(presentationRarity or result.tease or figure.rarity),
 				Config.collection(figure.collection)
 			local scope = Scope.create()
 			local session: Session = {
-				state = State.create(profile.timing, reduced, result.direct),
+				state = State.create(profile.timing, reduced, result.direct, result.tease ~= nil),
 				scope = scope,
 				render = nil,
 				interact = nil,
@@ -263,10 +264,13 @@ function Controller.create(
 						if session.state.phase == "Done" then
 							local choice = session.choice
 							close()
-							if choose and choice and choice ~= "keep" then
+							if
+								choose
+								and (choice and choice ~= "keep" or result.sequence ~= nil)
+							then
 								-- The session is fully closed (focus released) before acting.
 								local chosen, problem = pcall(function()
-									choose(choice, result)
+									choose(choice or "keep", result)
 								end)
 								if not chosen then
 									warn("Reveal choice failed: " .. tostring(problem))
@@ -313,9 +317,12 @@ function Controller.create(
 									else choiceOf(GuiService.SelectedObject) or "keep"
 							)
 							skip = false
+						elseif skip and result.sequence then
+							session.choice = "skip"
 						end
-						local changed = if skip
-							then State.skip(session.state)
+						local changed = if skip and result.sequence
+							then State.finish(session.state)
+							elseif skip then State.skip(session.state)
 							else State.activate(session.state)
 						if changed then
 							if skip then
@@ -348,6 +355,12 @@ function Controller.create(
 				end)
 				connect(view.hitTarget.Activated, function(input)
 					activated(input, false)
+				end)
+				connect(view.shield.Activated, function(input)
+					-- Open 10: anywhere outside the Reveal choices moves on to the next figure.
+					if result.sequence and session.state.phase == "Result" then
+						activated(input, false)
+					end
 				end)
 				connect(view.skip.Activated, function(input)
 					activated(input, true)

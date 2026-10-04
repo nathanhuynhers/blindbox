@@ -36,6 +36,8 @@ export type State = {
 	timing: Timing,
 	durations: { [Phase]: number },
 	direct: boolean,
+	-- Box-only: ends after the rarity tease without revealing a figure.
+	tease: boolean,
 	skipped: boolean,
 }
 State.transition = 0.22
@@ -91,7 +93,7 @@ local reducedCaps: { [Phase]: number } = {
 	Impact = 0.3,
 	Reveal = 0.28,
 }
-function State.create(timing: Timing, reduced: boolean, direct: boolean): State
+function State.create(timing: Timing, reduced: boolean, direct: boolean, tease: boolean?): State
 	return {
 		phase = "Enter",
 		elapsed = 0,
@@ -112,6 +114,7 @@ function State.create(timing: Timing, reduced: boolean, direct: boolean): State
 			Reveal = timing.reveal,
 		},
 		direct = direct,
+		tease = tease == true,
 		skipped = false,
 	}
 end
@@ -136,7 +139,10 @@ function State.advance(state: State, delta: number): boolean
 	local nextPhase: Phase? = following[state.phase]
 	if nextPhase and state.elapsed >= State.duration(state) then
 		-- Visit every phase after stalled frames; never skip a cue or the interaction gate.
-		state.phase = if state.direct and state.phase == "Enter" then "Silhouette" else nextPhase
+		state.phase = if state.direct and state.phase == "Enter"
+			then "Silhouette"
+			elseif state.tease and state.phase == "Impact" then "Closing"
+			else nextPhase
 		state.elapsed = 0
 		return true
 	end
@@ -154,6 +160,14 @@ function State.skip(state: State): boolean
 		return false
 	end
 	state.phase, state.elapsed, state.skipped = "Result", 0, true
+	return true
+end
+-- Ends the opening now (Open 10 Skip jumps past every remaining reveal).
+function State.finish(state: State): boolean
+	if state.phase == "Closing" or state.phase == "Done" then
+		return false
+	end
+	state.phase, state.elapsed, state.skipped = "Closing", 0, true
 	return true
 end
 function State.activate(state: State): boolean

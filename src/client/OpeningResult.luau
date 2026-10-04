@@ -10,7 +10,12 @@ export type Result = {
 	isNew: boolean,
 	quantity: number,
 	direct: boolean,
+	-- Box-only opening that ends after teasing this rarity (the first step of an Open 10).
+	tease: Rarity.Id?,
+	-- Place in an Open 10 sequence; steps hand off to each other under the curtain.
+	sequence: Sequence?,
 }
+export type Sequence = "first" | "middle" | "last"
 
 -- Called at the acknowledgement boundary, before presentation. Snapshots remain authoritative.
 function OpeningResult.fromReply(
@@ -39,7 +44,8 @@ function OpeningResult.fromReply(
 	})
 end
 
--- A BuyTen reply as ten reveals, rarest first; only a figure's first copy is marked new.
+-- A BuyTen reply as one box opening that teases the best rarity, then ten box-less reveals
+-- in roll order. Only a figure's first copy in the batch is marked new.
 function OpeningResult.fromBatch(
 	request: Types.Intent,
 	before: Ownership,
@@ -50,34 +56,38 @@ function OpeningResult.fromBatch(
 	if not reply.ok or reply.id ~= request.id or request.action ~= "BuyTen" or not ids then
 		return {}
 	end
-	local order: { number } = {}
-	for index, id in ids do
-		if not Catalog.byId[id] or (after.owned[id] or 0) < 1 or not after.discovered[id] then
+	local best = 0
+	for _, id in ids do
+		local figure = Catalog.byId[id]
+		if not figure or (after.owned[id] or 0) < 1 or not after.discovered[id] then
 			return {}
 		end
-		order[index] = index
+		best = math.max(best, table.find(Rarity.order, figure.rarity) or 0)
 	end
-	local rank = function(index: number): number
-		return table.find(Rarity.order, Catalog.byId[ids[index]].rarity) or 0
+	if #ids == 0 or best == 0 then
+		return {}
 	end
-	table.sort(order, function(a, b)
-		local rankA, rankB = rank(a), rank(b)
-		return if rankA ~= rankB then rankA > rankB else a < b
-	end)
-	local results: { Result } = {}
+	local box: Result = {
+		requestId = reply.id .. ":box",
+		figureId = ids[1],
+		isNew = false,
+		quantity = after.owned[ids[1]] or 0,
+		direct = false,
+		tease = Rarity.order[best],
+		sequence = "first",
+	}
+	local results: { Result } = { table.freeze(box) }
 	local shown: { [string]: boolean } = {}
-	for position, index in order do
-		local id = ids[index]
-		table.insert(
-			results,
-			table.freeze({
-				requestId = reply.id .. ":" .. position,
-				figureId = id,
-				isNew = before.discovered[id] ~= true and not shown[id],
-				quantity = after.owned[id] or 0,
-				direct = false,
-			})
-		)
+	for index, id in ids do
+		local step: Result = {
+			requestId = reply.id .. ":" .. index,
+			figureId = id,
+			isNew = before.discovered[id] ~= true and not shown[id],
+			quantity = after.owned[id] or 0,
+			direct = true,
+			sequence = if index == #ids then "last" else "middle",
+		}
+		table.insert(results, table.freeze(step))
 		shown[id] = true
 	end
 	return results
