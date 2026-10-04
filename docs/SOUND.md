@@ -26,8 +26,9 @@ Store audio that was ripped from commercial games was deliberately skipped.
   the opening's cue slots. To swap a sound, change only this file. An empty `id` is a placeholder
   and plays nothing.
 - `src/client/Sfx.luau` exposes `Sfx.play(name)`. It handles:
-  - **Groups:** `SoundService.Master` containing UI (0.6), SFX (0.8) and Reveal (1.0). Master is
-    0.8 and also carries the mute.
+  - **Groups:** `SoundService.Master` (0.8) containing UI (0.6), SFX (0.8), Reveal (1.0) and
+    Music (0.3). The player's volumes scale them: Sound effects scales UI, SFX and Reveal; Music
+    scales Music.
   - **Pooling:** a sound's voices are reused. When every voice is busy, the next one in turn
     retriggers instead of stacking.
   - **Rate limits:** a per-name cooldown, plus one UI sound per gesture (a 40 ms UI-group window).
@@ -35,11 +36,11 @@ Store audio that was ripped from commercial games was deliberately skipped.
   - **Pitch:** small random variation on sounds that repeat.
   - **Preload:** each sound's first voice is created at startup and preloaded in the background.
     It stays resident, which keeps the asset loaded.
-  - **Mute:** a session-only switch.
+  - **Volume:** `Sfx.setVolume("sfx" | "music", 0..1)`, driven by the Settings sliders.
   - **Teardown:** `Sfx.destroy()` runs when the client script is destroyed.
 - **Box opening:** the existing `OpeningAudio` engine keeps its phase-locked timing. Its slots now
   come from `SoundManifest.opening` (14 of 48 are filled; the rest stay silent). Its Sounds join
-  the Reveal group, so the Sound switch covers them. Its preload keeps one resident Sound per ID
+  the Reveal group, so the Sound effects volume covers them. Its preload keeps one resident Sound per ID
   for the controller's lifetime. The close sound is the Sfx `close`, played when the session
   enters Closing, because the opening's own cues must end inside its 0.11 s exit curtain.
 - Sounds are presentation only. Server-confirmed sounds play from the client's existing reply and
@@ -65,36 +66,70 @@ or context. Only `world` exists today.
 - **Extension point:** area or special-event music later is one manifest entry plus a
   `Music.play(name)` call where that context starts. There is no area system, playlist or event
   system.
-- **Mix:** the track sits in a `Music` SoundGroup (0.3) under Master, so the Settings Sound switch
-  mutes it too. The effective level is 0.8 × 0.3 × 0.8 ≈ 0.19, below every SFX group.
+- **Mix:** the track sits in a `Music` SoundGroup (0.3) under Master, scaled by the player's
+  Music volume. At 100% the effective level is 0.8 × 0.3 × 0.8 ≈ 0.19, below every SFX group.
+- **Loop point:** library cues end in a few seconds of silence, so a track can set `loopEnd`.
+  Music applies it as the Sound's `LoopRegion`, looping back to the start once the final note has
+  decayed.
 - **Failures:** a placeholder or failed asset plays nothing (logged once). The Sound is preloaded
   as an instance.
 
 | Context | Track | ID | Status |
 | --- | --- | --- | --- |
-| world | Roblox_UI_Loop_Calm_Music (Roblox, 95.5 s, made as a loop) | 15675069601 | Verified to load; loop point measured continuous; **not yet heard** |
+| world | "Summer Breakfast" (APM Music, Bouncing Mallets; 110.7 s, loopEnd 107.8 s) | 9042946814 | Verified to load; LoopRegion wrap measured with no silent gap; **not yet heard** |
 
-How the track was chosen (by measurement, not by ear): each candidate's loudness was sampled near
-its start and end and across a real `Looped` wrap. Every APM candidate checked ends in about
-1.5–2 s of silence and would leave a gap when looped. They're listed as backups in the manifest:
-"Watching the Garden Grow (a)", "Tiny Twinkle Toes (a)", "Whimsical Reverie — Alt3, NoDrums"
-and "Morning Spirit (Underscore)". Using one would need a listening pass to pick bar-aligned
-`LoopRegion` points. Roblox's calm loop stays continuous across the wrap.
+History: the first pick, Roblox's calm loop (`Roblox_UI_Loop_Calm_Music`), was rejected by the
+user as too subdued ("more vibrant and happy and fun, but still calm and chill"). The
+replacement was chosen from library descriptions: "light, tropical and laid-back pop melody,
+marimba, piano, pizzicati, drums played with brushes and handclaps". In Studio, the final note
+decays by 107.6 s and is followed by about 3 s of silence. A `LoopRegion` wrap at 107.8 s returns
+to the music within 0.2 s.
 
-Not added (by choice): ducking under the box reveal, fade-out on leave, a separate music switch
-or saved volume, a playlist.
+Other verified alternatives with measured loop ends are in the manifest comment: "Let It Shine"
+(bouncy marimba and vibraphone), "Happy Whistle" (mallets, whistling, laid-back), "Easy Island"
+(ukulele, marimba, celesta, gentle ska) and the Light version of Summer Breakfast. To try one,
+change `id`/`source`/`loopEnd` for `world` in `SoundManifest.luau`.
 
-Studio single-client playtest (2026-10-03):
+Not added (by choice): ducking under the box reveal, fade-out on leave, a playlist.
+
+## Volume settings
+
+The Settings popover has two sliders, **Sound effects** and **Music**. They replaced the earlier
+session-only Sound On/Off switch.
+- **Input:** drag or tap with 5% snapping, or use gamepad D-pad left/right in 10% steps when a
+  slider is selected. Targets are 44 px tall.
+- **Apply:** a change applies at once (`Sfx.setVolume`).
+- **Save:** releasing the slider sends one `SetVolume` intent (`choice` sfx|music, whole-percent
+  `volume` 0..100) through the normal transaction path: validation, revision, receipts, rate
+  limit and autosave. If another request is in flight, the save retries on the next snapshot
+  until the snapshot confirms the value.
+- **Join:** saved values arrive in the snapshot and apply on join. Saving shows no toast.
+- **Storage:** profiles store `sfxVolume` and `musicVolume` (schema 12, default 100). Older
+  records upgrade at full volume. See [data model](DATA_MODEL.md).
+
+Studio playtest (2026-10-04, single client, Studio preview profile, which isn't saved):
+- Dragging Music from 95% to 40% applied at once (Music group 0.30 → 0.12) and saved
+  ("Settings saved.", snapshot `music = 40`, revision +1), with no toast.
+- Tapping Sound effects at 60% scaled UI 0.60 → 0.36, SFX 0.80 → 0.48 and Reveal 1.0 → 0.60, left
+  Music alone, and saved.
+- Music at 0% silences its group while the track keeps running.
+- Both sliders render inside the popover at 0% and 100%.
+- Saving across a rejoin can't be shown in Studio preview. It is covered by
+  `tests/AudioSettings.spec.luau`: round trip, upgrades from v6-v11, fail-closed values and the
+  transaction path.
+
+Studio single-client playtest of the music engine (2026-10-03, with the first track):
 - Exactly one looping `Music_world` Sound plays in Master > Music.
 - A respawn kept the same Sound playing on (TimePosition 33.2 → 38.9 s over the 5.8 s respawn):
   no restart, no duplicate.
 - A forced wrap at 94 s looped to 0.1 s (`DidLoop` once) and kept playing as one Sound.
-- Sound Off zeroes Master, which silences the music.
+- Sound Off (the switch the sliders later replaced) zeroed Master, which silenced the music.
 - A placeholder plays nothing and logs nothing. A missing asset only logs a warning.
 - The 3 s fade-in had already finished before the first MCP call could run, so it is covered by
   `tests/Music.spec.luau`, not by Studio.
 
-Measured mix (PlaybackLoudness × group × Master; a proxy, not a listening result):
+Measured mix with the first track (PlaybackLoudness × group × Master; a proxy, not a listening
+result; the new track needs its own mix pass):
 - **Music:** average 16, peak 38.
 - **SFX peaks:** place 97, revealMythical 95, collect 69, revealCommon 54, coinLand 41,
   revealRare 28, click 22.
@@ -155,9 +190,6 @@ to 5 s. Closing and Skip still cut them.
   collect, so there's no tick to sound. Collect and the per-coin landing cover it.
 - **Hover sounds:** these would spam, and touch devices have no hover.
 - **Per-step daily goal progress:** progress only changes on a Place, which already sounds.
-- **A saved volume setting:** the Sound switch is session-only. Saving it would need a schema
-  change, which wasn't authorized.
-- **Background music:** that's backlog item 16.
 
 ## Checks
 
@@ -165,7 +197,7 @@ Automated: `tests/Sfx.spec.luau` covers the manifest data, placeholders, voice c
 retriggering, cooldowns, the UI gap, groups, mute, preload and teardown.
 `tests/OpeningAudio.spec.luau` checks that the slots come only from the manifest, that the
 rejected pack stays disconnected, the Reveal group, the resident cache and the ceilings.
-`tests/Screens.spec.luau` covers open, tab, close, click, denied and the Sound switch.
+`tests/Screens.spec.luau` covers open, tab, close, click, denied and the volume sliders.
 
 The Studio single-client playtest on 2026-10-03 confirmed in the client's output log:
 

@@ -31,7 +31,7 @@ starter purchases. One free Starter box and the 1,000-Coin daily Display goal re
 The authorized economy reset uses the Economy2 namespaces; no old-namespace progress is imported.
 Consecutive Daily Login rewards (UTC days, 7-day looping cycle, a missed day restarts at Day 1)
 grant placeholder Coins and free boxes; see [data model](DATA_MODEL.md).
-Current schema 11 safely upgrades valid Economy2 schemas 6, 7, 8, 9 and 10, while schemas 1–5 are rejected.
+Current schema 12 (which adds saved Sound effects and Music volume) safely upgrades valid Economy2 schemas 6–11, while schemas 1–5 are rejected.
 Existing lease/retry/storage-failure protection remains.
 
 The world is **Blindbox Town**, a cozy blind-box shopping town (no stores or shop buildings):
