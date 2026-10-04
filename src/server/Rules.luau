@@ -4,6 +4,8 @@ local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local LoginRewards = require(game:GetService("ReplicatedStorage").Shared.LoginRewards)
+local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
+local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
@@ -16,7 +18,7 @@ local Rules = {
 }
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 12,
+		schemaVersion = 13,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
@@ -39,7 +41,8 @@ function Rules.new(now: number): Types.State
 		revision = 0,
 		earnings = {},
 		time = now,
-		step = 1,
+		step = Tutorial.welcome,
+		tutorialHidden = false,
 	}
 end
 function Rules.figureRate(state: Types.State, id: string): number
@@ -116,8 +119,9 @@ function Rules.collect(state: Types.State, slot: number, id: string): (boolean, 
 	state.earnings[id] = bank - amount
 	state.coins += amount
 	state.revision += 1
-	if state.step == 3 and state.coins >= Rules.prices[Economy.dailyCollection] then
-		state.step = 4
+	-- Only a real Display collection teaches this step; other Coin rewards never advance it.
+	if state.step == Tutorial.collect then
+		state.step = Tutorial.buy
 	end
 	return true, string.format("Collected %d Coins!", amount)
 end
@@ -148,11 +152,17 @@ function Rules.available(state: Types.State, id: string): number
 	end
 	return 1
 end
-function Rules.roll(value: number, collection: string?, state: Types.State?): string
+function Rules.roll(
+	value: number,
+	collection: string?,
+	state: Types.State?,
+	minimum: Rarity.Id?
+): string
 	return CollectionEconomy.roll(
 		value,
 		collection or Economy.dailyCollection,
-		if state then state.pityByGroup else {}
+		if state then state.pityByGroup else {},
+		minimum
 	)
 end
 function Rules.expansionCost(state: Types.State): number
@@ -219,17 +229,27 @@ local function canOpen(
 	end
 	return true, ""
 end
--- Cannot fail once canOpen passed, so a multi-box grant is all-or-nothing.
+-- Cannot fail once canOpen passed, so a multi-box grant is all-or-nothing. With `floor`, the
+-- last box is rolled at that minimum rarity only when no earlier box reached it.
 local function open(
 	state: Types.State,
 	collection: string,
 	count: number,
-	rolls: { number }
+	rolls: { number },
+	floor: Rarity.Id?
 ): ({ string }, number)
 	local figures: { string } = {}
 	local fresh = 0
+	local rank = if floor then table.find(Rarity.order, floor) or 1 else 1
+	local reached = floor == nil
 	for index = 1, count do
-		local id = Rules.roll(rolls[index], collection, state)
+		local id = Rules.roll(
+			rolls[index],
+			collection,
+			state,
+			if index == count and not reached then floor else nil
+		)
+		reached = reached or (table.find(Rarity.order, Catalog.byId[id].rarity) or 0) >= rank
 		if not state.discovered[id] then
 			fresh += 1
 		end
@@ -285,10 +305,9 @@ function Rules.mutate(
 		else
 			state.coins -= price * count
 		end
-		if state.step == 1 then
-			state.step = 2
-		elseif state.step == 4 and action ~= "Daily" then
-			state.step = 5
+		-- Spending Coins on a box is the last Welcome Quest action; it unlocks the free x10.
+		if state.step == Tutorial.buy and action ~= "Daily" then
+			state.step = Tutorial.reward
 		end
 		state.revision += 1
 		if count > 1 then
@@ -322,9 +341,6 @@ function Rules.mutate(
 				return false, refusal, nil
 			end
 			figures = open(state, boxes.collection, boxes.count, rolls)
-			if state.step == 1 then
-				state.step = 2
-			end
 		end
 		state.coins += reward.coins
 		state.lastLoginDay, state.loginStreak = today, streak
@@ -334,6 +350,40 @@ function Rules.mutate(
 			return true, message, nil, figures
 		end
 		return true, message, figures[1]
+	elseif action == "Welcome" or action == "WelcomeTen" then
+		-- One-time rewards: the saved stage is both the claim marker and the grant.
+		local ten = action == "WelcomeTen"
+		if state.step ~= (if ten then Tutorial.reward else Tutorial.welcome) then
+			return false,
+				if ten then "Finish the Welcome Quest first." else "Welcome Box already opened.",
+				nil
+		end
+		local welcome = Economy.welcome
+		local count = if ten then 10 else 1
+		local allowed, refusal = canOpen(state, welcome.collection, count, rolls)
+		if not allowed then
+			return false, refusal, nil
+		end
+		local figures = open(
+			state,
+			welcome.collection,
+			count,
+			rolls,
+			(if ten then welcome.ten else welcome.box) :: Rarity.Id
+		)
+		state.step = if ten then Tutorial.shelves else Tutorial.display
+		state.revision += 1
+		if ten then
+			return true, "Welcome x10 opened!", nil, figures
+		end
+		return true, "Welcome Box opened!", figures[1]
+	elseif action == "SkipTutorial" then
+		if state.tutorialHidden or state.step >= Tutorial.done then
+			return false, "Nothing to skip.", nil
+		end
+		state.tutorialHidden = true
+		state.revision += 1
+		return true, "Tutorial skipped.", nil
 	elseif action == "ClaimOffline" then
 		if state.offlinePending <= 0 then
 			return false, "No offline Coins to claim.", nil
@@ -401,8 +451,8 @@ function Rules.mutate(
 				return false, "Own this figure and display it only once.", nil
 			end
 			state.display.slots[slot] = id
-			if state.step == 2 then
-				state.step = 3
+			if state.step == Tutorial.display then
+				state.step = Tutorial.collect
 			end
 		else
 			if state.display.slots[slot] == "" then

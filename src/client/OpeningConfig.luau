@@ -457,6 +457,11 @@ Config.breakCues = {
 	{ at = Config.breakTiming.lidAt, cue = "lid" },
 	{ at = Config.flight.launchAt, cue = "launch" },
 }
+-- Short landscape (phone) composition, from the opening ScreenGui's safe-area size. The camera
+-- and the Reveal card read this one predicate so the figure never lands under the card.
+function Config.compact(size: Vector2): boolean
+	return size.Y < 500 and size.X > size.Y
+end
 function Config.profile(rarity: string): Profile
 	return Config.rarities[rarity] or Config.rarities.Common
 end

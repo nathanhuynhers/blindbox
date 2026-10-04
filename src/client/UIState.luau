@@ -9,6 +9,7 @@ local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local LoginRewards = require(game:GetService("ReplicatedStorage").Shared.LoginRewards)
+local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local State = {}
 
 -- Formatting -------------------------------------------------------------------------------
@@ -396,12 +397,18 @@ export type Reveal = {
 	another: Another,
 	-- Set while more reveals from an Open 10 are queued; replaces Open another and Keep.
 	next: string?,
+	-- Open 10 steps with more figures queued: jump straight to the results grid.
+	skip: string?,
+	-- The Welcome Quest points elsewhere, so the card hides Open another.
+	guided: boolean?,
 }
+-- `before` is the snapshot from before the request; a duplicate then names its rate gain.
 function State.reveal(
 	snapshot: Types.Snapshot,
 	id: string,
 	isNew: boolean,
-	quantity: number
+	quantity: number,
+	before: Types.Snapshot?
 ): Reveal
 	local figure = Catalog.byId[id]
 	local found, total = State.completion(snapshot, figure.collection)
@@ -420,11 +427,21 @@ function State.reveal(
 		label = "Swap for " .. Catalog.byId[place.replaces].name
 		detail = State.rate(place.gain) .. " more"
 	end
+	local rate = State.figureRate(snapshot, id)
+	local earns = "Earns " .. State.amount(rate) .. " coins/s on Display"
+	local previous = if before and not isNew then State.figureRate(before, id) else 0
+	if previous > 0 and rate > previous then
+		earns = string.format(
+			"Duplicate upgrade · %s → %s coins/s",
+			State.amount(previous),
+			State.amount(rate)
+		)
+	end
 	return {
 		figureId = id,
 		isNew = isNew,
 		quantity = quantity,
-		earns = "Earns " .. State.amount(State.figureRate(snapshot, id)) .. " coins/s on Display",
+		earns = earns,
 		chance = State.percent(State.figureOdds(snapshot, id)) .. " chance",
 		progress = string.format(
 			"%s · %d of %d found",
@@ -449,6 +466,13 @@ export type Badges = { [string]: string }
 -- Dock badges: Display "N empty" (unlocked empty slots), Shop "FREE", Goals claimable count.
 function State.badges(snapshot: Types.Snapshot): Badges
 	local badges: Badges = {}
+	-- The guided Welcome Quest owns attention: only its own free box is badged meanwhile.
+	if Tutorial.guiding(snapshot.step, snapshot.tutorialHidden) then
+		if snapshot.step == Tutorial.welcome then
+			badges.Shop = "FREE"
+		end
+		return badges
+	end
 	local empty = #State.emptySlots(snapshot)
 	if empty > 0 then
 		badges.Display = empty .. " empty"
@@ -462,6 +486,9 @@ function State.badges(snapshot: Types.Snapshot): Badges
 	-- Not a dock tile: the HUD Daily button shows it.
 	if snapshot.loginReady then
 		badges.Login = "!"
+	end
+	if snapshot.step == Tutorial.reward then
+		badges.Shop = "FREE ×10"
 	end
 	return badges
 end

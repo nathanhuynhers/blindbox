@@ -137,6 +137,16 @@ The separate consecutive Daily Login reward pays one entry of `src/shared/LoginR
 day (placeholder values: 500 / 1,000 Coins / one Grove box / 2,500 / 1,000 + one Tidepool box /
 4,000 / 5,000 + one Concepts box), loops after Day 7 and restarts at Day 1 after a missed day.
 
+**Welcome Quest rewards (one time, server-owned, `Economy.welcome`).** The Welcome Box is free
+and separate from the Daily box: one Pocket Grove roll restricted to Uncommon and Rare, keeping their
+normal relative odds (30:10, so 75% Uncommon / 25% Rare). The Welcome x10 is free once the quest's
+paid box is opened: ten normal Pocket Grove rolls, except that the tenth is restricted to Rare when the
+first nine had no Rare (Pocket Grove tops out at Rare). Both count toward `boxesOpened`; neither
+changes normal purchase, Daily, pity or duplicate behavior, and neither can repeat (the saved quest
+stage is the claim marker). The quest's first collection needs no special tuning: a guaranteed
+Uncommon earns about 9–11 Coins/s, so whole Coins are ready within a second of placement. A Pocket
+Grove Legendary/chase figure is a separate future design task, not part of this reward.
+
 After a successful claim, the daily goal disappears from the active HUD; the Goals screen shows
 that no daily goals remain. Claim markers and grants are one profile aggregate. Existing
 clock-rollback, storage-failure and session-exclusion rules remain. See [data model](DATA_MODEL.md).

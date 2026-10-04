@@ -1,7 +1,8 @@
 --!strict
 -- End-of-opening Reveal card over the kept cinematic: NEW badge (first discovery only), name +
--- rarity pill, earning/chance/progress chips, owned count for duplicates, and the choices
--- Put on Display (or Swap) / Open another / Keep it in my Collection.
+-- rarity pill, earning/chance/progress chips (a duplicate's chip names its rate gain), owned
+-- count for duplicates, and the choices Put on Display (or Swap) / Open another / Keep it in
+-- my Collection. Open 10 steps add a stable Skip to results beside Next figure.
 -- The opening controller owns input; this module only renders and exposes the buttons.
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Style = require(script.Parent.UIStyle)
@@ -118,6 +119,17 @@ function Card.create(
 	keep.Text = "Keep it in my Collection"
 	keep.AnchorPoint = Vector2.new(0.5, 0)
 	keep.Parent = block
+	local skip = Instance.new("TextButton")
+	skip.Name = "SkipToResults"
+	skip.AutoButtonColor = false
+	skip.BackgroundColor3 = Style.revealChip
+	skip.FontFace = Style.body(Enum.FontWeight.ExtraBold)
+	skip.TextSize = 16
+	skip.TextColor3 = Style.white
+	skip.AnchorPoint = Vector2.new(0.5, 0)
+	skip.Visible = false
+	skip.Parent = block
+	Kit.corner(skip, 14)
 	local compact = false
 	local model: State.Reveal? = nil
 	local function place()
@@ -140,7 +152,9 @@ function Card.create(
 				item.root.Size = UDim2.fromOffset(0, 28)
 				item.label.TextSize = 13
 			end
-			local chipCount = if owned.root.Visible then 4 else 3
+			-- Short screens drop the chance chip (the Shop lists odds) to keep the toy clear.
+			chance.root.Visible = false
+			local chipCount = if owned.root.Visible then 3 else 2
 			local chipHeight = chipCount * 28 + (chipCount - 1) * 6
 			local y = 0
 			titleRow.Position = UDim2.new(0.5, 0, 0, y)
@@ -156,11 +170,18 @@ function Card.create(
 					y += 64
 				end
 			end
+			local rowHeight = if skip.Visible then 36 else 44
 			keep.Position = UDim2.new(0.5, 0, 0, y)
-			keep.Size = UDim2.new(1, 0, 0, 44)
-			y += 44
+			keep.Size = UDim2.new(1, 0, 0, rowHeight)
+			y += rowHeight
+			if skip.Visible then
+				skip.Position = UDim2.new(0.5, 0, 0, y)
+				skip.Size = UDim2.new(1, 0, 0, 40)
+				y += 44
+			end
 			block.Size = UDim2.new(0.44, 0, 0, y)
 		else
+			chance.root.Visible = model ~= nil
 			block.AnchorPoint = Vector2.new(0.5, 1)
 			block.Position = UDim2.new(0.5, 0, 1, -16)
 			new.root.Parent = block
@@ -193,8 +214,10 @@ function Card.create(
 				another.button.Size = UDim2.fromOffset(260, 66)
 			end
 			local keepY = if showDisplay or showAnother then 194 else 116
-			keep.Position = UDim2.new(0.5, 0, 0, keepY)
-			keep.Size = UDim2.fromOffset(320, 44)
+			keep.Size = UDim2.fromOffset(if skip.Visible then 240 else 320, 44)
+			keep.Position = UDim2.new(0.5, if skip.Visible then -126 else 0, 0, keepY)
+			skip.Size = UDim2.fromOffset(220, 44)
+			skip.Position = UDim2.new(0.5, 124, 0, keepY)
 			block.Size = UDim2.new(1, 0, 0, keepY + 44)
 		end
 	end
@@ -202,10 +225,12 @@ function Card.create(
 		model = next
 		local reveal = model
 		display.button.Visible = reveal ~= nil and reveal.place ~= nil
-		another.button.Visible = reveal ~= nil and reveal.next == nil
+		another.button.Visible = reveal ~= nil and reveal.next == nil and not reveal.guided
 		earns.root.Visible = reveal ~= nil
 		chance.root.Visible = reveal ~= nil
 		progress.root.Visible = reveal ~= nil
+		skip.Visible = reveal ~= nil and reveal.skip ~= nil
+		skip.Text = if reveal and reveal.skip then reveal.skip .. "  ›" else ""
 		keep.Text = if reveal and reveal.next
 			then reveal.next
 			elseif reveal then "Keep it in my Collection"
@@ -223,12 +248,17 @@ function Card.create(
 	set(nil)
 	return {
 		root = root,
-		choices = { display = display.button, another = another.button, keep = keep },
+		choices = { display = display.button, another = another.button, keep = keep, skip = skip },
 		first = function()
 			local reveal = model
 			if reveal and reveal.place then
 				return display.button
-			elseif reveal and reveal.next == nil and reveal.another.need == nil then
+			elseif
+				reveal
+				and reveal.next == nil
+				and not reveal.guided
+				and reveal.another.need == nil
+			then
 				return another.button
 			end
 			return keep

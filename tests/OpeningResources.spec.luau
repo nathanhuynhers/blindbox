@@ -359,6 +359,29 @@ reach("Result")
 resultClean()
 clean()
 template.Parent = E.replication
+-- Reveal lighting: the daytime look holds only while the opening owns the camera.
+local Lighting = require("./OpeningLighting")
+local townClock = E.lighting.ClockTime
+start(ids[1], false)
+reach("Result")
+check(
+	E.lighting.Ambient == Lighting.look.ambient and E.lighting.ClockTime == Lighting.look.clock,
+	"a night reveal uses the daytime look"
+)
+local dawn = E.Color3.fromRGB(90, 78, 92)
+E.lighting.Ambient = dawn
+E.lighting.Changed:Fire("Ambient")
+check(E.lighting.Ambient == Lighting.look.ambient, "a replicated town write cannot darken the reveal")
+clean()
+check(
+	E.lighting.Ambient == dawn and E.lighting.ClockTime == townClock,
+	"closing restores the latest town look"
+)
+-- Short landscape: the figure sits left of the Reveal card's right-hand column.
+local phoneGui = E.Instance.new("ScreenGui")
+phoneGui.AbsoluteSize = E.Vector2.new(666, 342)
+check(Config.compact(phoneGui.AbsoluteSize) and not Config.compact(E.Vector2.new(1280, 720)), "compact means short landscape")
+check(not Config.compact(E.Vector2.new(342, 666)), "portrait is never compact")
 controller.destroy()
 check(E.connections == baseline, "all controller/render/camera connections released")
 

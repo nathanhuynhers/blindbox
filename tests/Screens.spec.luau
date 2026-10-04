@@ -35,7 +35,9 @@ local function snapshot()
 		revision = 0,
 		sequence = 1,
 		rate = 0,
-		step = 1,
+		-- A returning player whose Welcome Quest is finished.
+		step = 7,
+		tutorialHidden = false,
 		rates = Rules.rates,
 		baseRates = Rules.rates,
 		nextRates = Rules.rates,
@@ -574,6 +576,22 @@ end)
 duplicate.set(nil)
 check(within(duplicate.root, "Owned").Visible == true, "duplicate shows owned count")
 check(not duplicate.choices.display.Visible and not duplicate.choices.another.Visible, "no model: Continue only")
+-- Open 10 steps keep a stable Skip to results; a guided reveal drops Open another.
+local stepCard = RevealCard.create(root, scope, "echo.feather-hush", false, 2, function()
+	return false
+end)
+local stepModel = UI.reveal(reveal, "echo.feather-hush", false, 2)
+stepModel.next, stepModel.skip = "Next figure (3 left)", "Skip to results"
+stepCard.set(stepModel)
+check(stepCard.choices.skip.Visible and stepCard.choices.keep.Text == "Next figure (3 left)", "Skip to results sits beside Next figure")
+stepCard.layout(true)
+check(stepCard.choices.skip.Visible and not within(stepCard.root, "Chance").Visible, "phone layout keeps Skip and drops the chance chip")
+stepCard.layout(false)
+check(within(stepCard.root, "Chance").Visible, "desktop restores the chance chip")
+stepModel.next, stepModel.skip, stepModel.guided = nil, nil, true
+stepCard.set(stepModel)
+check(not stepCard.choices.another.Visible and not stepCard.choices.skip.Visible, "a guided reveal hides Open another")
+check(stepCard.first() ~= stepCard.choices.another, "gamepad never starts on a hidden choice")
 scope.destroy()
 
 -- Teardown releases every connection, timer and instance.
@@ -604,6 +622,8 @@ local function joined(owned: boolean): boolean
 	first.loginReady, first.loginStreak = true, 1
 	if owned then
 		first.owned["grove.star"], first.discovered["grove.star"] = 1, true
+	else
+		first.step = 1 -- A brand-new player starting the Welcome Quest.
 	end
 	client.update(first)
 	local shown = Engine.find(Engine.playerGui:FindFirstChild("PocketGrove"), "LoginPresentation").Visible

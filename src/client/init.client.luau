@@ -5,6 +5,7 @@ local HttpService = game:GetService("HttpService")
 local Types = require(ReplicatedStorage.Shared.Types)
 local ShelfConfig = require(ReplicatedStorage.Shared.ShelfConfig)
 local Catalog = require(ReplicatedStorage.Shared.Catalog)
+local Tutorial = require(ReplicatedStorage.Shared.Tutorial)
 local Interface = require(script.Interface)
 local DisplayInteraction = require(script.DisplayInteraction)
 local DisplayEarnings = require(script.DisplayEarnings)
@@ -12,6 +13,7 @@ local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
 local PullSummary = require(script.PullSummary)
 local OfflineEarnings = require(script.OfflineEarnings)
+local WelcomeReward = require(script.WelcomeReward)
 local UIState = require(script.UIState)
 local Sfx = require(script.Sfx)
 local Music = require(script.Music)
@@ -26,9 +28,14 @@ local beforeRequest: Types.Snapshot? = nil
 local opening: OpeningController.Controller? = nil
 local summary: PullSummary.Summary
 local reveal: OpeningResult.Result? = nil
+-- Ownership before the opening's request, so a duplicate can name its rate gain.
+local revealBefore: Types.Snapshot? = nil
 -- Open 10: the remaining box/reveal steps, then the results grid once they are done.
 local batch: { OpeningResult.Result } = {}
 local results: { PullSummary.Item }? = nil
+local resultsHeading: string? = nil
+-- The Welcome Quest finale pops up once per session; the Shop keeps the x10 afterwards.
+local welcomeShown = false
 -- Shown once the opening closes so it never spoils the reveal.
 local shelfNotice: string? = nil
 local musicStarted = false
@@ -90,13 +97,20 @@ summary = PullSummary.create(ui.openingFocus, ui.effects)
 local offline = OfflineEarnings.create(ui.effects, function()
 	request("ClaimOffline")
 end)
+local welcome = WelcomeReward.create(ui.effects, function()
+	request("WelcomeTen")
+end)
 local function revealModel(state: Types.Snapshot, result: OpeningResult.Result): UIState.Reveal
-	local model = UIState.reveal(state, result.figureId, result.isNew, result.quantity)
+	local model =
+		UIState.reveal(state, result.figureId, result.isNew, result.quantity, revealBefore)
 	if result.sequence == "last" then
 		model.next = "See all results"
 	elseif result.sequence then
 		model.next = string.format("Next figure (%d left)", #batch)
+		model.skip = "Skip to results"
 	end
+	-- During the Welcome Quest (and while its x10 waits), the card steers to the next step.
+	model.guided = not state.tutorialHidden and state.step <= Tutorial.reward
 	return model
 end
 local function presentNext(state: Types.Snapshot)
@@ -130,7 +144,7 @@ local function choose(choice: string, result: OpeningResult.Result)
 	if result.sequence and #batch > 0 then
 		presentNext(state)
 	elseif result.sequence and results then
-		summary.show(results)
+		summary.show(results, current, resultsHeading)
 		results = nil
 	end
 end
@@ -213,7 +227,20 @@ table.insert(
 					if reply.ok then "success" else "error"
 				)
 			end
-			-- Several figures: Open 10 or a multi-box Login reward day.
+			if
+				reply.ok
+				and intent.action == "Place"
+				and before
+				and before.step == Tutorial.display
+				and state.step == Tutorial.collect
+				and intent.slot
+			then
+				-- The Welcome Quest's first placement: show where the earning happens, unobstructed.
+				ui.closeScreen()
+				displayEarnings.celebrate(intent.slot)
+			end
+			revealBefore = before
+			-- Several figures: Open 10, the Welcome x10 or a multi-box Login reward day.
 			if before and reply.figures then
 				batch = OpeningResult.fromBatch(intent, before, state, reply)
 				local items: { PullSummary.Item } = {}
@@ -223,6 +250,7 @@ table.insert(
 					end
 				end
 				results = if #items > 0 then items else nil
+				resultsHeading = if intent.action == "WelcomeTen" then "Your Welcome ×10!" else nil
 				presentNext(state)
 			elseif before then
 				local result = OpeningResult.fromReply(intent, before, state, reply)
@@ -249,7 +277,7 @@ table.insert(
 			if #batch > 0 then
 				presentNext(current)
 			else
-				summary.show(results)
+				summary.show(results, current, resultsHeading)
 				results = nil
 			end
 		end
@@ -263,6 +291,21 @@ table.insert(
 			ui.message(shelfNotice, "success")
 			Sfx.play("complete")
 			shelfNotice = nil
+		end
+		local state = current
+		if
+			state
+			and state.ready
+			and state.step == Tutorial.reward
+			and not welcomeShown
+			and not pending
+			and not (opening and opening.isActive())
+			and #batch == 0
+			and not summary.isOpen()
+			and not offline.isOpen()
+		then
+			welcomeShown = true
+			welcome.show()
 		end
 		if not current and now - syncAt > 2 then
 			syncAt = now
@@ -280,6 +323,7 @@ script.Destroying:Connect(function()
 	end
 	summary.destroy()
 	offline.destroy()
+	welcome.destroy()
 	displayInteraction.destroy()
 	displayEarnings.destroy()
 	ui.destroy()

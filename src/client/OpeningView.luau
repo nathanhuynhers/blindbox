@@ -118,8 +118,7 @@ function View.create(
 	local buttonLimit = Instance.new("UISizeConstraint")
 	buttonLimit.MaxSize, buttonLimit.Parent = Vector2.new(400, 54), primary
 	local function layout()
-		local compact = content.AbsoluteSize.Y < 468
-			and content.AbsoluteSize.X > content.AbsoluteSize.Y
+		local compact = Config.compact(gui.AbsoluteSize)
 		local center = if compact then 0.77 else 0.5
 		primary.AnchorPoint, primary.Position = Vector2.new(0.5, 1), UDim2.new(center, 0, 1, -24)
 		primary.Size = if compact then UDim2.new(0.4, 0, 0, 50) else UDim2.new(0.72, 0, 0, 54)
