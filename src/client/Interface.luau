@@ -22,6 +22,7 @@ local Shop = require(script.Parent.ShopScreen)
 local Display = require(script.Parent.DisplayScreen)
 local Goals = require(script.Parent.GoalsScreen)
 local Shelves = require(script.Parent.ShelvesScreen)
+local Login = require(script.Parent.LoginScreen)
 local Onboarding = require(script.Parent.Onboarding)
 local Interface = {}
 export type Interface = {
@@ -46,6 +47,8 @@ function Interface.create(
 ): Interface
 	local scope = Scope.create()
 	local snapshot: Types.Snapshot? = nil
+	-- Daily Login opens itself at most once per session, on the first ready snapshot.
+	local loginChecked = false
 	local effects, focused, pending, opened, destroyed = true, false, false, false, false
 	local current = "Collection"
 	local blockedStatus: string? = nil
@@ -99,6 +102,11 @@ function Interface.create(
 		host.Visible = false
 		hosts[id] = host
 	end
+	-- Daily Login is a routed screen without a dock tile; the HUD Daily button opens it.
+	local loginHost = Kit.frame(screensRoot, "LoginPresentation")
+	loginHost.SelectionGroup = true
+	loginHost.Visible = false
+	hosts.Login = loginHost
 	local notices = Notifications.create(stage, scope)
 	local navigate: (string, Context.Route?) -> () = function() end
 	local close: () -> () = function() end
@@ -141,6 +149,7 @@ function Interface.create(
 		Shop = Shop.create(hosts.Shop, ctx),
 		Goals = Goals.create(hosts.Goals, ctx, now),
 		Shelves = Shelves.create(hosts.Shelves, ctx),
+		Login = Login.create(hosts.Login, ctx),
 	}
 	local hud = Hud.create(stage, ctx, function(value: boolean)
 		effects = value
@@ -372,6 +381,13 @@ function Interface.create(
 		update = function(state: Types.Snapshot)
 			snapshot = state
 			refresh()
+			if not loginChecked and state.ready then
+				loginChecked = true
+				-- Skipped for brand-new players so onboarding's free-box hints stay uncovered.
+				if state.loginReady and next(state.owned) ~= nil and not opened then
+					navigate("Login")
+				end
+			end
 		end,
 		-- Each flying coin that reaches the player kicks the Coins pill.
 		coinLanded = function()

@@ -17,6 +17,7 @@ export type Hud = {
 	root: Frame,
 	coins: TextButton,
 	home: TextButton,
+	daily: TextButton,
 	gear: TextButton,
 	menu: Menu.Menu,
 	layout: (Layout.Frame, opened: boolean) -> (),
@@ -93,6 +94,29 @@ function Hud.create(
 	Kit.round(home)
 	Kit.stroke(home, Style.ink)
 	ctx.scope.connect(home.Activated, goHome)
+	local daily = Instance.new("TextButton")
+	daily.Name = "DailyButton"
+	daily.Text = "Daily"
+	daily.TextSize = 18
+	daily.FontFace = Style.display()
+	daily.TextColor3 = Style.ink
+	daily.AutoButtonColor = true
+	daily.BackgroundColor3 = Style.white
+	daily.ZIndex = 2
+	daily.Parent = root
+	daily:SetAttribute("AccessibleName", "Daily Login rewards")
+	Kit.round(daily)
+	Kit.stroke(daily, Style.ink)
+	local dailyBadge = Badge.corner(daily, "Ready", {
+		fill = Style.alert,
+		color = Style.white,
+		height = 22,
+		size = 13,
+		outline = Style.ink,
+	}, Vector2.new(1, 0), Vector2.new(6, -8))
+	ctx.scope.connect(daily.Activated, function()
+		ctx.navigate("Login")
+	end)
 	local right = Kit.frame(root, "Right")
 	local gearShadow = Kit.frame(right, "GearShadow", Style.ink)
 	gearShadow.ZIndex = 1
@@ -135,6 +159,7 @@ function Hud.create(
 		root = root,
 		coins = coins,
 		home = home,
+		daily = daily,
 		gear = gear,
 		menu = menu,
 		layout = function(geometry: Layout.Frame, opened: boolean)
@@ -149,6 +174,8 @@ function Hud.create(
 			coinShadow.Visible = coins.Visible
 			Kit.rect(home, math.max(12, geometry.hud.x), geometry.dock.y - 54, 96, 44)
 			home.Visible = not opened
+			Kit.rect(daily, math.max(12, geometry.hud.x), geometry.dock.y - 106, 96, 44)
+			daily.Visible = not opened
 			Kit.rect(
 				gear,
 				geometry.gear.x,
@@ -184,6 +211,9 @@ function Hud.create(
 				amount.Text .. " coins, earning " .. rate.label.Text
 			)
 			tracker.update(snapshot)
+			local ready = State.badges(snapshot).Login
+			dailyBadge.root.Visible = ready ~= nil
+			dailyBadge.set(ready or "")
 		end,
 	}
 end

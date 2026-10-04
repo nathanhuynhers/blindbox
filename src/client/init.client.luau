@@ -154,7 +154,8 @@ table.insert(
 				if reply.ok then feedback[intent.action] or reply.message else reply.message,
 				if reply.ok then "success" else "error"
 			)
-			if before and intent.action == "BuyTen" then
+			-- Several figures: Open 10 or a multi-box Login reward day.
+			if before and reply.figures then
 				batch = OpeningResult.fromBatch(intent, before, state, reply)
 				local items: { PullSummary.Item } = {}
 				for _, step in batch do

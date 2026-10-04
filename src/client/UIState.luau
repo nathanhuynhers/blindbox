@@ -8,6 +8,7 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
+local LoginRewards = require(game:GetService("ReplicatedStorage").Shared.LoginRewards)
 local State = {}
 
 -- Formatting -------------------------------------------------------------------------------
@@ -447,6 +448,10 @@ function State.badges(snapshot: Types.Snapshot): Badges
 	if State.goal(snapshot) == "ready" then
 		badges.Goals = "1"
 	end
+	-- Not a dock tile: the HUD Daily button shows it.
+	if snapshot.loginReady then
+		badges.Login = "!"
+	end
 	return badges
 end
 
@@ -455,6 +460,42 @@ function State.goal(snapshot: Types.Snapshot): string
 		then "claimed"
 		elseif snapshot.goalProgress >= 3 then "ready"
 		else "progress"
+end
+
+export type LoginStatus = "claimed" | "ready" | "locked"
+export type LoginDay = { day: number, reward: LoginRewards.Reward, status: LoginStatus }
+-- Daily Login grid: the cycle position of today's claim, each day's reward and status, and
+-- the streak already completed (today's unclaimed day not counted).
+function State.loginDays(snapshot: Types.Snapshot): (number, { LoginDay }, number)
+	local today = LoginRewards.day(snapshot.loginStreak)
+	local days: { LoginDay } = {}
+	for index, reward in LoginRewards.days do
+		days[index] = {
+			day = index,
+			reward = reward,
+			status = if index < today or (index == today and not snapshot.loginReady)
+				then "claimed"
+				elseif index == today then "ready"
+				else "locked",
+		}
+	end
+	return today,
+		days,
+		if snapshot.loginReady then snapshot.loginStreak - 1 else snapshot.loginStreak
+end
+
+-- One line per reward part, e.g. "1,000 coins" over "Tidepool Tales box".
+function State.loginReward(reward: LoginRewards.Reward): string
+	local lines: { string } = {}
+	if reward.coins > 0 then
+		table.insert(lines, State.compact(reward.coins) .. " coins")
+	end
+	local boxes = reward.boxes
+	if boxes then
+		local name = State.collectionName(boxes.collection) .. " box"
+		table.insert(lines, if boxes.count > 1 then boxes.count .. "× " .. name else name)
+	end
+	return table.concat(lines, "\n")
 end
 
 -- Text plus seconds until the shown minute changes (callers refresh at most once a minute).

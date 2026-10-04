@@ -103,6 +103,8 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		expansionCost = Rules.expansionCost(state),
 		shelfPrice = Rules.shelfPrice(state),
 		dailyReady = state.lastDailyDay < day,
+		loginReady = state.lastLoginDay < day,
+		loginStreak = Rules.loginStreak(state, day),
 		goalProgress = state.goalProgress,
 		goalClaimed = state.goalClaimed,
 		goalReward = Economy.goalReward,

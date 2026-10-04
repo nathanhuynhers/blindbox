@@ -47,6 +47,8 @@ local function snapshot()
 		expansionCost = Economy.expansionCosts[4],
 		shelfPrice = Economy.shelfPrice,
 		dailyReady = true,
+		loginReady = false,
+		loginStreak = 1,
 		goalProgress = 0,
 		goalClaimed = false,
 		goalReward = Economy.goalReward,
@@ -379,6 +381,76 @@ check(find("Dock").Visible and not shop.Visible, "Close restores the dock")
 Engine.screen.X, Engine.screen.Y = 1280, 720
 find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
 
+-- Daily Login: HUD button, grid states, claim, pending lock, phone layout and reuse.
+local dailyButton = find("DailyButton")
+check(dailyButton.Visible and not within(dailyButton, "Ready").Visible, "Daily button without badge once claimed")
+check(not host("Login").Visible, "no auto-open on a claimed first snapshot")
+state.loginReady, state.loginStreak = true, 3
+state.sequence += 1
+ui.update(state)
+check(within(dailyButton, "Ready").Visible, "Daily badge when today's reward is claimable")
+check(not host("Login").Visible, "auto-open is decided once, on the first ready snapshot")
+Engine.click(dailyButton)
+local login = host("Login")
+check(login.Visible and not find("DailyButton").Visible, "Daily opens Login and hides the HUD buttons")
+check(
+	within(login, "Day1"):GetAttribute("Status") == "claimed"
+		and within(login, "Day2"):GetAttribute("Status") == "claimed"
+		and within(login, "Day3"):GetAttribute("Status") == "ready"
+		and within(login, "Day4"):GetAttribute("Status") == "locked"
+		and within(login, "Day7"):GetAttribute("Status") == "locked",
+	"grid shows claimed, today and locked days"
+)
+check(within(within(login, "Day3"), "Today").Visible and not within(within(login, "Day2"), "Today").Visible, "TODAY marks only today")
+check(within(within(login, "Streak"), "Text").Text == "2-day streak", "streak chip counts completed days")
+check(within(within(login, "ClaimLogin"), "Label").Text == "Claim Day 3", "claim names today")
+Engine.click(within(login, "ClaimLogin"))
+check(last().action == "Login" and last().choice == nil and last().figure == nil, "Claim sends a bare Login intent")
+ui.pending(true)
+check(not within(login, "ClaimLogin"):GetAttribute("Enabled"), "pending request disables Claim")
+local loginRequests = #requests
+Engine.click(within(login, "ClaimLogin"))
+check(#requests == loginRequests, "no second Login while one is pending")
+ui.pending(false)
+state.loginReady = false
+state.sequence += 1
+ui.update(state)
+check(
+	within(login, "Day3"):GetAttribute("Status") == "claimed" and not within(login, "ClaimLogin"):GetAttribute("Enabled"),
+	"confirmed claim marks today claimed and locks Claim"
+)
+check(not within(dailyButton, "Ready").Visible, "claimed reward clears the Daily badge")
+state.loginReady, state.loginStreak = true, 8
+state.sequence += 1
+ui.update(state)
+check(
+	within(login, "Day1"):GetAttribute("Status") == "ready" and within(login, "Day2"):GetAttribute("Status") == "locked",
+	"day 8 loops back to the Day 1 card"
+)
+Engine.click(within(login, "Close"))
+check(not login.Visible and find("DailyButton").Visible, "Close returns to the world")
+local loginCount, loginConnections = Engine.alive(gui), Engine.connections
+for _ = 1, 25 do
+	Engine.click(find("DailyButton"))
+	state.sequence += 1
+	ui.update(state)
+	Engine.click(within(login, "Close"))
+end
+check(Engine.alive(gui) == loginCount and Engine.connections == loginConnections, "no growth across Login open/close")
+Engine.screen.X, Engine.screen.Y = 844, 390
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+Engine.click(find("DailyButton"))
+check(login.Visible and not find("Dock").Visible, "phone shows Login as a sheet")
+local lastCard = within(login, "Day7")
+check(
+	lastCard.Position.X.Offset + lastCard.Size.X.Offset <= login.Size.X.Offset - 12,
+	"phone row fits all seven days"
+)
+Engine.click(within(login, "Close"))
+Engine.screen.X, Engine.screen.Y = 1280, 720
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+state.loginReady, state.loginStreak = false, 1
+
 -- Rotate between phone and desktop after claim, with no new snapshot.
 Engine.screen.X, Engine.screen.Y = 844, 390
 find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
@@ -472,4 +544,19 @@ check(Engine.find(rejoinedGui, "NoActiveGoals").Visible, "rejoin opens empty goa
 Engine.click(Engine.find(rejoinedGui, "ClaimGoal"))
 rejoined.destroy()
 check(Engine.pending() == 0, "recreated UI releases countdown")
+-- Daily Login auto-opens once on join for returning players, never for brand-new ones.
+local function joined(owned: boolean): boolean
+	local client = Interface.create(function() end)
+	local first = snapshot()
+	first.loginReady, first.loginStreak = true, 1
+	if owned then
+		first.owned["grove.star"], first.discovered["grove.star"] = 1, true
+	end
+	client.update(first)
+	local shown = Engine.find(Engine.playerGui:FindFirstChild("PocketGrove"), "LoginPresentation").Visible
+	client.destroy()
+	return shown
+end
+check(joined(true), "returning player with a claimable reward sees Login on join")
+check(not joined(false), "brand-new player keeps onboarding uncovered")
 print("PASS: " .. checks .. " screen routing, send, pending, countdown and lifetime checks")

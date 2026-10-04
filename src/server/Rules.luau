@@ -3,6 +3,7 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
+local LoginRewards = require(game:GetService("ReplicatedStorage").Shared.LoginRewards)
 local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
@@ -15,11 +16,13 @@ local Rules = {
 }
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 9,
+		schemaVersion = 10,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
 		lastDailyDay = -1,
+		lastLoginDay = -1,
+		loginStreak = 0,
 		goalDay = -1,
 		goalProgress = 0,
 		goalClaimed = false,
@@ -162,7 +165,60 @@ function Rules.grantShelves(state: Types.State): number
 	end
 	return granted
 end
--- Buy and Daily use the first roll; BuyTen needs ten.
+-- Streak a claim on `day` belongs to: the current streak once claimed today, the next one
+-- after a claim yesterday, otherwise Day 1 again.
+function Rules.loginStreak(state: Types.State, day: number): number
+	if state.lastLoginDay >= day then
+		return state.loginStreak
+	end
+	return if state.lastLoginDay == day - 1 then state.loginStreak + 1 else 1
+end
+-- Every check that can refuse opening `count` boxes; run before any mutation.
+local function canOpen(
+	state: Types.State,
+	collection: string,
+	count: number,
+	rolls: { number }
+): (boolean, string)
+	if #rolls < count then
+		return false, "Try again."
+	end
+	-- Validate the whole pool for every box before rolling. Safety limits never reroll a result.
+	for _, figure in Catalog.figures do
+		if
+			figure.collection == collection
+			and (state.owned[figure.id] or 0) > Economy.copyLimit - count
+		then
+			return false, "Collection quantity safety limit reached."
+		end
+	end
+	return true, ""
+end
+-- Cannot fail once canOpen passed, so a multi-box grant is all-or-nothing.
+local function open(
+	state: Types.State,
+	collection: string,
+	count: number,
+	rolls: { number }
+): ({ string }, number)
+	local figures: { string } = {}
+	local fresh = 0
+	for index = 1, count do
+		local id = Rules.roll(rolls[index], collection, state)
+		if not state.discovered[id] then
+			fresh += 1
+		end
+		state.owned[id] = (state.owned[id] or 0) + 1
+		state.discovered[id] = true
+		CollectionEconomy.advance(state.pityByGroup, collection, id)
+		figures[index] = id
+	end
+	-- Counted in the same atomic grant as the box's figures.
+	state.boxesOpened = math.min(Rules.boxesOpenedLimit, state.boxesOpened + count)
+	Rules.grantShelves(state)
+	return figures, fresh
+end
+-- Buy, Daily and one-box Login days use the first roll; BuyTen needs ten.
 function Rules.mutate(
 	state: Types.State,
 	intent: Types.Intent,
@@ -193,39 +249,17 @@ function Rules.mutate(
 		elseif state.coins < price * count then
 			return false, "Not enough Coins yet.", nil
 		end
-		if #rolls < count then
-			return false, "Try again.", nil
+		local allowed, refusal = canOpen(state, collection, count, rolls)
+		if not allowed then
+			return false, refusal, nil
 		end
-		-- Validate the whole pool for every box before rolling. Safety limits never reroll a result.
-		for _, figure in Catalog.figures do
-			if
-				figure.collection == collection
-				and (state.owned[figure.id] or 0) > Economy.copyLimit - count
-			then
-				return false, "Collection quantity safety limit reached.", nil
-			end
-		end
-		-- All checks are above and nothing below can fail, so a multi-box grant is all-or-nothing.
-		local figures: { string } = {}
-		local fresh = 0
-		for index = 1, count do
-			id = Rules.roll(rolls[index], collection, state)
-			if not state.discovered[id] then
-				fresh += 1
-			end
-			state.owned[id] = (state.owned[id] or 0) + 1
-			state.discovered[id] = true
-			CollectionEconomy.advance(state.pityByGroup, collection, id)
-			figures[index] = id
-		end
+		local figures, fresh = open(state, collection, count, rolls)
+		id = figures[1]
 		if action == "Daily" then
 			state.lastDailyDay = today
 		else
 			state.coins -= price * count
 		end
-		-- Counted in the same atomic grant as the box's figures.
-		state.boxesOpened = math.min(Rules.boxesOpenedLimit, state.boxesOpened + count)
-		Rules.grantShelves(state)
 		if state.step == 1 then
 			state.step = 2
 		elseif state.step == 4 and action ~= "Daily" then
@@ -245,6 +279,36 @@ function Rules.mutate(
 				figures
 		end
 		return true, if fresh > 0 then "New discovery!" else "Duplicate bonus increased!", id
+	elseif action == "Login" then
+		-- `>=` also refuses while the server clock reads earlier than the last claim.
+		if state.lastLoginDay >= today then
+			return false, "Come back after the next daily reset.", nil
+		end
+		local streak = Rules.loginStreak(state, today)
+		local reward = LoginRewards.reward(streak)
+		if state.coins > Economy.coinLimit - reward.coins then
+			return false, "Spend Coins before claiming.", nil
+		end
+		local boxes = reward.boxes
+		local figures: { string } = {}
+		if boxes then
+			local allowed, refusal = canOpen(state, boxes.collection, boxes.count, rolls)
+			if not allowed then
+				return false, refusal, nil
+			end
+			figures = open(state, boxes.collection, boxes.count, rolls)
+			if state.step == 1 then
+				state.step = 2
+			end
+		end
+		state.coins += reward.coins
+		state.lastLoginDay, state.loginStreak = today, streak
+		state.revision += 1
+		local message = string.format("Day %d reward claimed!", LoginRewards.day(streak))
+		if #figures > 1 then
+			return true, message, nil, figures
+		end
+		return true, message, figures[1]
 	elseif action == "Expand" then
 		local cost = Rules.expansionCost(state)
 		if cost == 0 or state.display.unlocked >= DisplayConfig.maxSlots then

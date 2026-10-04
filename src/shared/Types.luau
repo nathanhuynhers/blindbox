@@ -51,6 +51,9 @@ export type Profile = {
 	shelves: Shelves,
 	step: number,
 	lastDailyDay: number,
+	-- Consecutive Daily Login: last claimed UTC day (-1 never) and the streak it completed.
+	lastLoginDay: number,
+	loginStreak: number,
 	goalDay: number,
 	goalProgress: number,
 	goalClaimed: boolean,
@@ -84,6 +87,9 @@ export type Snapshot = {
 	-- Next Shelf Unit price; 0 once the shelf cap is reached.
 	shelfPrice: number,
 	dailyReady: boolean,
+	-- Today's login reward is unclaimed; loginStreak is the streak today's claim makes (or made).
+	loginReady: boolean,
+	loginStreak: number,
 	goalProgress: number,
 	goalClaimed: boolean,
 	goalReward: number,

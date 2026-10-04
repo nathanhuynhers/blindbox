@@ -48,6 +48,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		and action ~= "Place"
 		and action ~= "Remove"
 		and action ~= "Daily"
+		and action ~= "Login"
 		and action ~= "Goal"
 		and action ~= "Expand"
 		and action ~= "BuyShelf"

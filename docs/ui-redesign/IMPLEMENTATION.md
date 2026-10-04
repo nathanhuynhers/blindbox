@@ -29,6 +29,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `DisplayScreen`, `DisplaySlot`, `DisplayPicker` | Income chip, set-bonus banner, 6 slots (slot 4 unlock, 5–6 Coming later), picker drawer sorted by earnings with BEST, Remove, Browse Collection, placing mode |
 | `GoalsScreen` | Unclaimed daily goal (empty state after claim), free box chooser, collection progress, minute countdown from `nextDay` |
 | `ShelvesScreen` | Shelf tabs + prev/next, 3×3 cabinet, discovered-figure picker with collection chips, Clear spot |
+| `LoginScreen` | Daily Login (routed by `Interface` without a dock tile; HUD Daily button with a "!" badge): one card per `LoginRewards` day (claimed mint / today violet outline + TODAY / locked), wider gold final day, streak chip, Claim. Auto-opens once per session on the first ready snapshot when claimable, except for players who own no figures |
 | `RevealCard` | End-of-opening card: NEW (first discovery only), name + rarity pill, chips, owned count, Put on Display / Swap, Open another (price or shortfall), Keep |
 | `OpeningView` | Kept Tap to Open, Skip, hint and curtain; the Result panel is now `RevealCard` |
 | `OpeningController` | Kept phases, camera, Skip and input ownership; adds an optional `choose` callback (runs after the session fully closes), a Reveal model on `present`, and `refresh` for live affordability |

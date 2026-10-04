@@ -1,7 +1,7 @@
 # Persistent data model
 
-Current schema: **9**, in the Economy2 namespace. Valid schemas 6, 7 and 8 upgrade (6 with empty
-banks; 6/7 with `boxesOpened = 0`; all with empty `shelfRewards`); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
+Current schema: **10**, in the Economy2 namespace. Valid schemas 6, 7, 8 and 9 upgrade (6 with empty
+banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; all with an unclaimed login streak); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
@@ -10,7 +10,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 9 written; valid 6/7/8 upgrade; unsupported versions block loading/writing |
+| schemaVersion | 10 written; valid 6/7/8/9 upgrade; unsupported versions block loading/writing |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -20,6 +20,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | shelves | `{units, legacyOverflow?}`: ordered persistent Shelf Units; optional dormant migration records |
 | step | Onboarding stage 1..5 |
 | lastDailyDay | Last claimed free-box UTC day or -1 |
+| lastLoginDay / loginStreak | Daily Login: last claimed UTC day (-1 never) and the consecutive-day streak it completed (0 only when never claimed); v10, required as a consistent pair |
 | goalDay / goalProgress / goalClaimed | Daily Display goal day, highest distinct count 0..3, claim marker |
 | boxesOpened | Lifetime boxes opened, integer 0..1,000,000,000 (`Rules.boxesOpenedLimit`); presentation only |
 | shelfRewards | Known collection IDs to true: collections whose first completion already granted a free Shelf Unit (v9; required) |
@@ -116,5 +117,16 @@ rebuildable presentation index keyed by UserId string. They are never read back 
 so they cannot corrupt or roll back progress.
 
 Deploy with coordinated server replacement. Rolling back Settings restores the old namespace,
-not progress made in Economy2. A rollback that preserves new progress must support schema 9;
-older (schema-8) code cannot read v9 saves.
+not progress made in Economy2. A rollback that preserves new progress must support schema 10;
+older (schema-9) code cannot read v10 saves.
+
+## Daily Login streak (v10)
+
+`Rules` owns the claim (`Login` intent, no payload fields). One claim per server UTC day
+(`os.time() // 86400`); a claim the day after `lastLoginDay` continues the streak, any gap
+restarts at 1, and a server clock earlier than the last claim refuses. The reward is
+`LoginRewards.reward(streak)` from the shared placeholder table (cycle of its entries, so day 8
+pays Day 1 again). Coins and any boxes are granted in the same non-yielding step that writes the
+marker; a full wallet or box safety limit refuses the whole claim. Box rewards roll, count toward
+`boxesOpened`/pity and play the normal opening. v6-v9 decode as never claimed; a v10 record with a
+missing, non-integer or inconsistent pair fails closed.

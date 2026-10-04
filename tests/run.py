@@ -14,7 +14,7 @@ modules = {
     "Rarity": "shared",
     "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
-    "Types": "shared", "Catalog": "shared", "Economy": "server",
+    "Types": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
     "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "DisplayInteraction": "client", "HomeTeleport": "server", "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
@@ -32,7 +32,7 @@ ui = [
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
     "ShopScreen", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker",
-    "GoalsScreen", "ShelvesScreen", "RevealCard", "Onboarding", "Interface",
+    "GoalsScreen", "ShelvesScreen", "LoginScreen", "RevealCard", "Onboarding", "Interface",
 ]
 for name in ui:
     modules[name] = "client"
@@ -98,7 +98,7 @@ def run(*names: str) -> None:
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
-run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
+run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "LoginRewards.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 run("PlotEngine", "HomeTeleport.spec")
 fixtures = [
     ('id = "grove.pebble"', 'id = "unknown"', "Invalid economy reference"),

@@ -66,10 +66,14 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 11. [x] **Remove finished Daily Goals** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
     - After a Daily Goal is completed and claimed, remove it from the HUD instead of leaving the "Claimed" card there.
 
-12. **Add consecutive Daily Login Rewards**
+12. [x] **Add consecutive Daily Login Rewards** — implementation and automated checks complete; Studio rejoin, true-touch and two-client acceptance pending.
     - Rewards improve each consecutive day.
     - Day 7 gives a particularly strong reward.
     - Missing a day resets the streak back to Day 1.
+    - UTC days, 7-day looping cycle, schema 10. Placeholder Coins/free boxes live only in
+      `src/shared/LoginRewards.luau`. The Daily Login screen auto-opens once per session when
+      claimable (not for brand-new players) and reopens from the HUD Daily button; box days play
+      the normal opening. The existing free Starter box and Daily goal are unchanged.
 
 13. [x] **Remove proximity requirement for Display and Shelf editing inside own plot** — implementation, automated checks and native Studio authority checks complete. See [verification](PLAYTEST_INTERACTIONS.md).
     - Remove the "Walk Closer" requirement for placing/editing figures on the Display.

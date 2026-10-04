@@ -117,6 +117,9 @@ New profiles receive 4,500 Coins once. The first three purchases use normal rand
 starters are not guaranteed. A duplicate-only start has one enhanced earning figure rather than
 three earning copies. One free Pocket Grove box is available per UTC day. Other boxes cannot be
 claimed free. The daily goal grants 1,000 Coins for displaying three distinct figures simultaneously.
+The separate consecutive Daily Login reward pays one entry of `src/shared/LoginRewards.luau` per UTC
+day (placeholder values: 500 / 1,000 Coins / one Grove box / 2,500 / 1,000 + one Tidepool box /
+4,000 / 5,000 + one Concepts box), loops after Day 7 and restarts at Day 1 after a missed day.
 
 After a successful claim, the daily goal disappears from the active HUD; the Goals screen shows
 that no daily goals remain. Claim markers and grants are one profile aggregate. Existing

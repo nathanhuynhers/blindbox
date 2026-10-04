@@ -69,8 +69,15 @@ function Summary.create(focus: (boolean) -> (), effects: () -> boolean): Summary
 				UDim2.fromOffset(-100, -100), UDim2.new(1, 200, 1, 200)
 			backdrop.Parent = gui
 			local root = Kit.frame(gui, "Results")
-			local title =
-				Kit.text(root, "Title", "Open 10 results", 30, Style.display(), Style.white)
+			-- Multi-box Daily Login rewards reuse this grid with fewer figures.
+			local title = Kit.text(
+				root,
+				"Title",
+				if #items == 10 then "Open 10 results" else string.format("Your %d figures", #items),
+				30,
+				Style.display(),
+				Style.white
+			)
 			title.TextXAlignment = Enum.TextXAlignment.Center
 			local tiles: { Tile.Tile } = {}
 			for index, item in items do

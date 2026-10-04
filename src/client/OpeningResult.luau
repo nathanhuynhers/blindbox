@@ -28,7 +28,8 @@ function OpeningResult.fromReply(
 	if not reply.ok or reply.id ~= request.id or not id or not Catalog.byId[id] then
 		return nil
 	end
-	if request.action ~= "Buy" and request.action ~= "Daily" then
+	-- Login replies carry a figure only on single-box reward days.
+	if request.action ~= "Buy" and request.action ~= "Daily" and request.action ~= "Login" then
 		return nil
 	end
 	local quantity = after.owned[id] or 0
@@ -44,7 +45,7 @@ function OpeningResult.fromReply(
 	})
 end
 
--- A BuyTen reply as one box opening that teases the best rarity, then ten box-less reveals
+-- A BuyTen (or multi-box Login reward) reply as one box opening that teases the best rarity, then ten box-less reveals
 -- in roll order. Only a figure's first copy in the batch is marked new.
 function OpeningResult.fromBatch(
 	request: Types.Intent,
@@ -53,7 +54,12 @@ function OpeningResult.fromBatch(
 	reply: Types.Reply
 ): { Result }
 	local ids = reply.figures
-	if not reply.ok or reply.id ~= request.id or request.action ~= "BuyTen" or not ids then
+	if
+		not reply.ok
+		or reply.id ~= request.id
+		or (request.action ~= "BuyTen" and request.action ~= "Login")
+		or not ids
+	then
 		return {}
 	end
 	local best = 0

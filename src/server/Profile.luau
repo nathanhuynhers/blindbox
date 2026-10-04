@@ -24,7 +24,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 9,
+		schemaVersion = 10,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -34,6 +34,8 @@ function Profile.encode(state: Types.State): Types.Profile
 		shelves = Shelves.copy(state.shelves),
 		step = state.step,
 		lastDailyDay = state.lastDailyDay,
+		lastLoginDay = state.lastLoginDay,
+		loginStreak = state.loginStreak,
 		goalDay = state.goalDay,
 		goalProgress = state.goalProgress,
 		goalClaimed = state.goalClaimed,
@@ -54,6 +56,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 7
 			and data.schemaVersion ~= 8
 			and data.schemaVersion ~= 9
+			and data.schemaVersion ~= 10
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -65,6 +68,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"shelves",
 			"step",
 			"lastDailyDay",
+			"lastLoginDay",
+			"loginStreak",
 			"goalDay",
 			"goalProgress",
 			"goalClaimed",
@@ -196,7 +201,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		return nil
 	end
 	-- v6/v7 predate the counter: those players start at 0 (Rules.new default). v8+ requires it.
-	if data.schemaVersion == 8 or data.schemaVersion == 9 then
+	if (data.schemaVersion :: number) >= 8 then
 		if not integer(data.boxesOpened, 0, Rules.boxesOpenedLimit) then
 			return nil
 		end
@@ -204,8 +209,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	elseif data.boxesOpened ~= nil then
 		return nil
 	end
-	-- v6-v8 predate Shelf rewards; v9 requires the map.
-	if data.schemaVersion == 9 then
+	-- v6-v8 predate Shelf rewards; v9+ requires the map.
+	if (data.schemaVersion :: number) >= 9 then
 		if typeof(data.shelfRewards) ~= "table" then
 			return nil
 		end
@@ -216,6 +221,20 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			state.shelfRewards[id] = true
 		end
 	elseif data.shelfRewards ~= nil then
+		return nil
+	end
+	-- v6-v9 predate the login streak (Rules.new: never claimed). v10 requires a consistent pair.
+	if data.schemaVersion == 10 then
+		if
+			not integer(data.lastLoginDay, -1, 100000000)
+			or not integer(data.loginStreak, 0, 100000000)
+			or (data.lastLoginDay == -1) ~= (data.loginStreak == 0)
+		then
+			return nil
+		end
+		state.lastLoginDay, state.loginStreak =
+			data.lastLoginDay :: number, data.loginStreak :: number
+	elseif data.lastLoginDay ~= nil or data.loginStreak ~= nil then
 		return nil
 	end
 	-- Idempotent: also grants collections completed before Shelf rewards existed.
