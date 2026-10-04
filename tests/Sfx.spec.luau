@@ -87,15 +87,28 @@ check(#sounds("testUI1") == 1 and #sounds("testUI2") == 0, "second UI sound in t
 wait(Manifest.gap.UI + 0.01)
 Sfx.play("testUI2")
 check(#sounds("testUI2") == 1, "UI sound after the gap plays")
--- Mute silences Master (and the opening's Reveal group under it) and skips new plays.
-Sfx.setMuted(true)
-check(Sfx.muted() and master().Volume == 0, "mute zeroes Master")
+-- Player volumes: "sfx" scales UI, SFX and Reveal (the opening); "music" only the Music group.
+Sfx.group("Reveal")
+Sfx.group("Music")
+Sfx.setVolume("sfx", 0.5)
+check(Sfx.volume("sfx") == 0.5, "sfx volume is kept")
+for _, name in { "UI", "SFX", "Reveal" } do
+	check(
+		master():FindFirstChild(name).Volume == Manifest.groups[name] * 0.5,
+		"sfx scales " .. name
+	)
+end
+check(master():FindFirstChild("Music").Volume == Manifest.groups.Music, "sfx leaves Music alone")
+check(master().Volume == Manifest.master, "Master stays at its mix level")
+Sfx.setVolume("sfx", 0)
 wait(0.06)
 sounds("testUI1")[1].IsPlaying = false
 Sfx.play("testUI1")
-check(not sounds("testUI1")[1].IsPlaying, "muted play does nothing")
-Sfx.setMuted(false)
-check(master().Volume == Manifest.master, "unmute restores Master")
+check(not sounds("testUI1")[1].IsPlaying, "sfx volume 0 skips plays")
+Sfx.setVolume("sfx", 0 / 0)
+check(Sfx.volume("sfx") == 1, "a NaN volume falls back to full")
+Sfx.setVolume("sfx", 7)
+check(Sfx.volume("sfx") == 1, "volumes clamp to 0..1")
 -- Preload runs once, warms one resident voice per real sound, and only logs failures.
 local preloaded = nil
 local original = E.services.ContentProvider.PreloadAsync

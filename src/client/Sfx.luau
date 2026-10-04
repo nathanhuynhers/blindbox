@@ -13,7 +13,14 @@ local pools: { [string]: { Sound } } = {}
 local lastPlayed: { [string]: number } = {}
 local lastGroup: { [string]: number } = {}
 local cursor: { [string]: number } = {}
-local muted, preloaded = false, false
+local preloaded = false
+-- Player volume settings, 0..1: "sfx" scales UI, SFX and Reveal; "music" scales Music.
+export type Volume = "sfx" | "music"
+local levels = { sfx = 1, music = 1 }
+
+local function level(name: Manifest.Group): number
+	return (Manifest.groups[name] or 1) * (if name == "Music" then levels.music else levels.sfx)
+end
 
 function Sfx.asset(id: string): string?
 	return if string.match(id, "^[1-9]%d*$") then "rbxassetid://" .. id else nil
@@ -26,7 +33,7 @@ local function root(): SoundGroup
 	end
 	local created = Instance.new("SoundGroup")
 	created.Name = "Master"
-	created.Volume = if muted then 0 else Manifest.master
+	created.Volume = Manifest.master
 	created.Parent = SoundService
 	master = created
 	table.clear(groups)
@@ -43,8 +50,8 @@ function Sfx.group(name: Manifest.Group): SoundGroup
 	end
 	local created = Instance.new("SoundGroup")
 	created.Name = name
-	created.Volume = Manifest.groups[name] or 1
-	created.Parent = parent -- Nested groups multiply, so Master mutes everything.
+	created.Volume = level(name)
+	created.Parent = parent -- Nested groups multiply under Master.
 	groups[name] = created
 	return created
 end
@@ -73,7 +80,7 @@ end
 function Sfx.play(name: string)
 	local entry = Manifest.sounds[name]
 	local id = if entry then Sfx.asset(entry.id) else nil
-	if muted or not entry or not id then
+	if levels.sfx <= 0 or not entry or not id then
 		return
 	end
 	local now = os.clock()
@@ -105,13 +112,21 @@ function Sfx.play(name: string)
 	playing:Play()
 end
 
-function Sfx.muted(): boolean
-	return muted
+function Sfx.volume(kind: Volume): number
+	return if kind == "music" then levels.music else levels.sfx
 end
 
-function Sfx.setMuted(value: boolean)
-	muted = value
-	root().Volume = if value then 0 else Manifest.master
+-- Apply a player volume (0..1) to its existing groups now and to groups built later.
+function Sfx.setVolume(kind: Volume, value: number)
+	local clamped = if value == value then math.clamp(value, 0, 1) else 1
+	if kind == "music" then
+		levels.music = clamped
+	else
+		levels.sfx = clamped
+	end
+	for name, group in groups do
+		group.Volume = level(name :: Manifest.Group)
+	end
 end
 
 -- Create each sound's first voice now and warm it in the background. Sound instances, not ID

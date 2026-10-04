@@ -49,7 +49,13 @@ local replySounds: { [string]: string } = {
 }
 Sfx.preload()
 -- The only way the client asks for a change. One request at a time; the server decides.
-local function request(action: string, figure: string?, slot: number?, choice: string?)
+local function request(
+	action: string,
+	figure: string?,
+	slot: number?,
+	choice: string?,
+	volume: number?
+)
 	local state = current
 	if not state or not state.ready or pending or (opening and opening.isActive()) then
 		return
@@ -57,6 +63,7 @@ local function request(action: string, figure: string?, slot: number?, choice: s
 	local intent: Types.Intent = {
 		action = action,
 		choice = choice,
+		volume = volume,
 		figure = figure,
 		slot = slot,
 		id = HttpService:GenerateGUID(false),
@@ -199,10 +206,13 @@ table.insert(
 				Expand = "Display slot unlocked",
 				Goal = "Daily reward claimed",
 			}
-			ui.message(
-				if reply.ok then feedback[intent.action] or reply.message else reply.message,
-				if reply.ok then "success" else "error"
-			)
+			-- A saved volume needs no toast; the slider already shows it.
+			if not (reply.ok and intent.action == "SetVolume") then
+				ui.message(
+					if reply.ok then feedback[intent.action] or reply.message else reply.message,
+					if reply.ok then "success" else "error"
+				)
+			end
 			-- Several figures: Open 10 or a multi-box Login reward day.
 			if before and reply.figures then
 				batch = OpeningResult.fromBatch(intent, before, state, reply)

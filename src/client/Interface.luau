@@ -43,7 +43,7 @@ local function gamepad(): boolean
 end
 
 function Interface.create(
-	send: (string, string?, number?, string?) -> (),
+	send: (string, string?, number?, string?, number?) -> (),
 	home: (() -> ())?
 ): Interface
 	local scope = Scope.create()
@@ -126,9 +126,9 @@ function Interface.create(
 			return snapshot
 		end,
 		canAct = canAct,
-		send = function(action, figure, slot, choice)
+		send = function(action, figure, slot, choice, volume)
 			if canAct() then
-				send(action, figure, slot, choice)
+				send(action, figure, slot, choice, volume)
 			end
 		end,
 		navigate = function(page, route)

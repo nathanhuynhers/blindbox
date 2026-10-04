@@ -62,8 +62,8 @@ local function snapshot()
 end
 local requests = {}
 local homeRequests = 0
-local ui = Interface.create(function(action, figure, slot, choice)
-	table.insert(requests, { action = action, figure = figure, slot = slot, choice = choice })
+local ui = Interface.create(function(action, figure, slot, choice, volume)
+	table.insert(requests, { action = action, figure = figure, slot = slot, choice = choice, volume = volume })
 end, function()
 	homeRequests += 1
 end)
@@ -161,12 +161,31 @@ check(heard(mark) == "click" and #requests == 1, "an enabled button clicks once"
 Engine.click(find("DockShop"))
 mark = #Engine.sounds
 Engine.click(find("SettingsButton"))
-Engine.click(find("SoundOff"))
-check(Engine.Sfx.muted() and find("SoundOff"):GetAttribute("Selected"), "Sound Off mutes")
-Engine.click(find("SoundOn"))
-check(not Engine.Sfx.muted() and find("SoundOn"):GetAttribute("Selected"), "Sound On restores")
+check(heard(mark) == "select", "gear selects")
+-- Volume sliders: saved values show and apply; a step or drag applies at once and saves once.
+state.sfxVolume, state.musicVolume = 40, 70
+ui.update(state)
+check(find("SfxVolume"):GetAttribute("Volume") == 40, "saved Sound effects volume shows")
+check(Engine.Sfx.volume("sfx") == 0.4 and Engine.Sfx.volume("music") == 0.7, "saved volumes apply")
+requests = {}
+Engine.services.GuiService.SelectedObject = find("SfxVolume")
+local Enum = Engine.Enum
+Engine.bound.SettingsVolumeStep("SettingsVolumeStep", Enum.UserInputState.Begin, { KeyCode = Enum.KeyCode.DPadRight })
+check(Engine.Sfx.volume("sfx") == 0.5, "gamepad step applies at once")
+check(#requests == 1 and last().action == "SetVolume" and last().choice == "sfx" and last().volume == 50, "gamepad step saves once")
+state.sfxVolume = 50
+ui.update(state)
+check(#requests == 1, "the saved snapshot ends the edit without resending")
+Engine.services.GuiService.SelectedObject = nil
+local width = find("MusicVolume"):FindFirstChild("Track").AbsoluteSize.X
+find("MusicVolume").InputBegan:Fire({ UserInputType = Enum.UserInputType.MouseButton1, Position = { X = width * 0.26, Y = 0 } })
+check(Engine.Sfx.volume("music") == 0.25 and #requests == 1, "drag applies (snapped) but waits")
+Engine.services.UserInputService.InputEnded:Fire({ UserInputType = Enum.UserInputType.MouseButton1 })
+check(last().action == "SetVolume" and last().choice == "music" and last().volume == 25, "release saves")
+state.musicVolume = 25
+ui.update(state)
 Engine.click(find("SettingsCatcher"))
-check(heard(mark) == "select,click,click", "gear selects; toggles click")
+check(Engine.bound.SettingsVolumeStep == nil, "closing settings releases the gamepad step")
 
 -- Shop
 Engine.click(find("DockShop"))

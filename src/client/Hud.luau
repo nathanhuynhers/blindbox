@@ -208,6 +208,7 @@ function Hud.create(
 			follow()
 		end,
 		update = function(snapshot: Types.Snapshot)
+			menu.update(snapshot)
 			amount.Text = if snapshot.coins >= 1e7
 				then State.compact(snapshot.coins)
 				else State.number(snapshot.coins)

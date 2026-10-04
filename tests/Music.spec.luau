@@ -72,9 +72,12 @@ for _ = 1, 5 do
 end
 check(#tracks() == 1 and tracks()[1] == sound and #tweens == made, "no restart, no duplicate")
 -- The Sound switch mutes music through Master.
-Sfx.setMuted(true)
-check(sound.SoundGroup.Parent.Volume == 0, "muting Master silences music")
-Sfx.setMuted(false)
+Sfx.setVolume("music", 0)
+check(sound.SoundGroup.Volume == 0, "Music volume 0 silences the Music group")
+check(sound.SoundGroup.Parent.Volume == Manifest.master, "without touching Master")
+Sfx.setVolume("music", 0.5)
+check(sound.SoundGroup.Volume == Manifest.groups.Music * 0.5, "Music volume scales its group")
+Sfx.setVolume("music", 1)
 -- Another context replaces it: the old track fades out and is removed, only one stays current.
 Manifest.music.plaza = { id = "2", source = "test", volume = 0.6, fadeIn = 1, fadeOut = 0.5 }
 Music.play("plaza")
