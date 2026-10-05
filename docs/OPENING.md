@@ -27,6 +27,8 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 | OpeningState | Deterministic clock, phase transitions, Await activation, Skip, Continue guard, cancellation |
 | OpeningConfig | Rarity timings/intensity, collection presentation, shared break markers, camera/effect limits and future tease beats |
 | OpeningCinematic | Local stage, model placement, curved flight, camera choreography and figure presentation |
+| OpeningLayout | Shared compact predicate and aspect/FOV-aware result camera translation |
+| OpeningLighting | Scoped local ambient look; restores the latest replicated town lighting on release |
 | OpeningFlight | Pure deterministic path, timed rarity transformation, hold/apex/dive and layered color samples |
 | OpeningFlightEffects | Preallocated layered comet, curved taper, trailing glints and three depths of atmospheric emitters; owned by FlightEffects |
 | OpeningCamera | Captures/restores camera type, subject, CFrame, Focus and FOV; detects camera replacement/destruction |
@@ -51,13 +53,22 @@ Only the purchasing player's gameplay UI is suppressed through the existing `ope
 callback. ContextActionService sinks movement/jump, clears current movement and owns opening
 inputs. No character anchoring, server teleport or PlayerModule replacement is introduced.
 `OpeningLighting` holds the town's daytime look on the *local* Lighting only while the opening owns
-the camera (night ambient made low-quality/mobile reveals dark), re-asserts it over replicated
+the camera, providing a stable ambient base. It re-asserts it over replicated
 day/night writes, and restores the latest town values when the camera is released.
 
-Short landscape screens (safe area under 500 tall, wider than tall; `OpeningConfig.compact`) use
-one shared predicate for the camera and the Reveal card. The camera shifts its target toward world
--X (its screen right is world -X) so the figure sits left of the card's right-hand column; the
-compact card drops the chance chip.
+Short landscape screens use one shared safe-area/padding predicate through `OpeningConfig.compact`
+and `OpeningLayout`. The camera translates its position and aim toward world -X (its screen right
+is world -X), accounting for aspect ratio and result FOV, to put the figure beside the right column.
+The compact card retains odds, puts NEW/rarity above a bounded name, and uses three compact chip
+rows. Actions remain at least 44px tall, including the batch Next/Skip choices. Reduced-motion
+results recompose on safe-area changes even while their animation loop sleeps. Desktop composition
+and its lower scrim are retained.
+
+The mobile result scrim is confined to the controls column. Native same-result isolation showed
+that the former full-width purple scrim obscured the figure; at night, turning the scrim and camera
+post effects off left a readable figure with stage lights enabled at quality 1 and 21. Disabling
+the stage lights darkened it. The camera grade contributed a smaller tint. World night alone did
+not explain the device difference. See the [A01/A02 comparison and acceptance record](audits/2026-10-04/mobile-opening/README.md).
 
 ## Open 10 and pull summary
 
@@ -230,8 +241,8 @@ destruction, construction/render/input errors and controller teardown all conver
 cleanup scope. Calling cleanup twice is safe. One failing destructor is logged while remaining
 cleanup still runs. The granted item remains owned even when presentation fails.
 
-BloomEffect and ColorCorrectionEffect live only under the local camera. No Lighting service
-properties are edited. Real ParticleEmitters use built-in Roblox particle textures; Beams,
+BloomEffect and ColorCorrectionEffect live only under the local camera. The scoped ambient hold
+above is separate from these effects. Real ParticleEmitters use built-in Roblox particle textures; Beams,
 Trails, lights and the layered energy star provide depth without physics. Effects are preallocated;
 no parts/emitters/tweens/tasks are created per render frame. Bursts cap at 32 particles, rings
 at four, orbit motes at five. Touch devices reduce emission to 55%, with fewer ring segments.
@@ -286,9 +297,10 @@ Result returns to the existing 1.4 baseline. Impact Bloom decays; silhouette/res
 explicit 0.15 profile multiplier instead of inheriting impact state.
 These are deterministic safety baselines, not a claim of finished artistic tuning.
 
-No shared Lighting property is changed, so existing ExposureCompensation, Brightness, Ambient,
-OutdoorAmbient and external post effects require no hardcoded restoration. The fixture checks
-their original values and child counts. The camera restores its captured state on all exit paths.
+The stage does not change server Lighting or other players' town. `OpeningLighting` restores the
+latest town clock, brightness, ambient, outdoor ambient and top color shift on release; exposure
+and external post effects stay untouched. Resource checks cover restoration and child counts.
+The camera restores its captured state on all exit paths.
 
 There are **zero cinematic tweens or Tween.Completed listeners**. Pose, camera and light targets
 are computed by the existing single render loop. No tasks or instances are created per frame.

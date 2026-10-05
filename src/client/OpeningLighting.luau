@@ -1,8 +1,8 @@
 --!strict
 -- While the opening camera owns the view, the local Lighting shows the town's daytime look so
--- the toy reads the same at any time of day and on every device quality. Night ambient alone
--- turned low-quality (phone) reveals into dark purple silhouettes; the stage's point lights
--- cannot compensate there. The server's day/night writes that replicate meanwhile are
+-- the toy has a stable ambient base across time of day and device quality. Stage lights and
+-- an unobstructed model area are also required: the compact scrim previously tinted the toy.
+-- The server's day/night writes that replicate meanwhile are
 -- remembered and put back on release, so the world never keeps the studio look.
 local Lighting = game:GetService("Lighting")
 local OpeningLighting = {}

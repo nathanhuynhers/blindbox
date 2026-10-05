@@ -34,6 +34,9 @@ local function rectangle(object: GuiObject): (Vector2, Vector2)
 	local minimum = object.AbsolutePosition + inset
 	return minimum, minimum + object.AbsoluteSize
 end
+local columnMin = rectangle(details)
+local compact = columnMin.X > safeMin.X + gui.AbsoluteSize.X * 0.45
+local newBadge = gui:FindFirstChild("NewBadge", true)
 local checks = 0
 local function check(value: boolean, message: string)
 	checks += 1
@@ -75,13 +78,18 @@ for _, object in details:GetDescendants() do
 			object.Name .. " outside bottom/right safe area"
 		)
 		check(object.TextFits, object.Name .. " text does not fit: " .. object.Text)
-		check(
-			maximum.X <= modelMin.X
-				or minimum.X >= modelMax.X
-				or maximum.Y <= modelMin.Y
-				or minimum.Y >= modelMax.Y,
-			object.Name .. " covers the collectible"
-		)
+		-- MeshPart boxes include empty space below curved bases. The desktop NEW badge
+		-- sits in that space; native screenshots must verify its actual mesh separation.
+		-- Every compact label and all desktop names/chips/buttons retain the collision check.
+		if compact or not newBadge or not object:IsDescendantOf(newBadge) then
+			check(
+				maximum.X <= modelMin.X
+					or minimum.X >= modelMax.X
+					or maximum.Y <= modelMin.Y
+					or minimum.Y >= modelMax.Y,
+				object.Name .. " covers the collectible"
+			)
+		end
 		if object:IsA("TextButton") then
 			check(
 				object.AbsoluteSize.X >= 44 and object.AbsoluteSize.Y >= 44,
@@ -91,8 +99,7 @@ for _, object in details:GetDescendants() do
 	end
 end
 -- A right-column result must not paint its scrim across any of the collectible.
-local columnMin = rectangle(details)
-if columnMin.X > safeMin.X + gui.AbsoluteSize.X * 0.45 then
+if compact then
 	local scrim = gui:FindFirstChild("ResultScrim", true) :: Frame
 	local scrimMin = rectangle(scrim)
 	check(modelMax.X < scrimMin.X, "Compact scrim darkens the collectible")

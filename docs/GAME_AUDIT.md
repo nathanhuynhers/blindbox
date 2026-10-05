@@ -472,10 +472,18 @@ Physical phones, low graphics quality, persistent rejoin and multi-client remain
 
 | Finding | Status after the rework |
 | --- | --- |
-| A01 | Fixed in source. The compact camera shifted its target the wrong way (camera right is world -X), putting the toy under the card; it now shifts toward -X and the camera and card share `OpeningConfig.compact`. At 706×373 the figure measured x 114–301 and the card column x 386–679. Physical-phone check pending. |
-| A02 | Mitigated. `OpeningLighting` holds the daytime look on local Lighting while the opening owns the camera and restores the town look afterwards (verified in Studio: clock 13 during Result, live town clock after). Low-quality/physical-device confirmation pending. |
+| A01 | Fixed in source and verified in Studio emulation. Wrong camera-shift direction, differing layout thresholds and overflowing vertical controls were corrected with shared safe-area composition, aspect/FOV-aware translation and bounded compact rows. Merged checks passed on iPhone 7, Android A06 and laptop across all five rarities, both motion settings and result variants, including batch Next/Skip. Physical-phone acceptance pending. |
+| A02 | Fixed in source and verified in Studio emulation at qualities 1 and 21; physical acceptance pending. The full-width result scrim obscured/tinted the phone figure; stage-light and camera-effect isolation showed world night alone was insufficient to explain it. The compact scrim now stays behind the controls. Master's scoped local daytime ambient hold is retained; native closing/cancellation restored latest world night. |
 | A03 | Fixed. Stages are saved and advanced only by server-confirmed actions; native Studio: Day 1 Login (+500) during the collect step left the quest on collect; a paid box before the Welcome Box left it on the Welcome Box. |
 | A04 | Fixed. Every batch result keeps a stable **Skip to results** choice; native Studio reached the ten-result summary from it. |
 | A07 | Fixed. Duplicates show `Duplicate upgrade · old → new coins/s` and the owned count (native: 10.95 → 12.6). |
 | A09 | Fixed. In-screen targets get a ring and badge on the control itself; the Welcome Box takes the primary slot and the paid button steps back while it waits. |
 | A05, A06, A08, A10–A14, G01 | Unchanged by this work. |
+
+**Focused A01/A02 follow-up after the master merge.** See the
+[native comparisons, completed checks and remaining acceptance](audits/2026-10-04/mobile-opening/README.md).
+The merged build passed 60 native result projection/layout cases and 20 native interruption
+checks. Actual Welcome Box/placement, paid single and Open 10 paths were exercised through native
+input, including duplicate feedback, reduced motion and Skip to summary. Physical devices were
+unavailable; emulation is not hardware or subjective readability acceptance. Other findings
+received no additional implementation in this follow-up.

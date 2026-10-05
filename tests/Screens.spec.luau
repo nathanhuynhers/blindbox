@@ -585,7 +585,9 @@ stepModel.next, stepModel.skip = "Next figure (3 left)", "Skip to results"
 stepCard.set(stepModel)
 check(stepCard.choices.skip.Visible and stepCard.choices.keep.Text == "Next figure (3 left)", "Skip to results sits beside Next figure")
 stepCard.layout(true)
-check(stepCard.choices.skip.Visible and not within(stepCard.root, "Chance").Visible, "phone layout keeps Skip and drops the chance chip")
+check(stepCard.choices.skip.Visible and within(stepCard.root, "Chance").Visible, "phone batch keeps both Skip and odds")
+check(stepCard.choices.skip.Size.Y.Offset >= 44 and stepCard.choices.keep.Size.Y.Offset >= 44, "batch choices retain touch targets")
+check(stepCard.choices.skip.Position.Y.Offset + stepCard.choices.skip.Size.Y.Offset <= 306, "batch choices fit the short Android content height")
 stepCard.layout(false)
 check(within(stepCard.root, "Chance").Visible, "desktop restores the chance chip")
 stepModel.next, stepModel.skip, stepModel.guided = nil, nil, true
