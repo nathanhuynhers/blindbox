@@ -41,6 +41,7 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 
 6. [x] **Rename Collection to Shelves** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
    - Change the incorrect "Collection" title at the top of the Shelf interface to "Shelves."
+   - The Collection book remains a separate, valid discovery interface.
 
 7. [x] **Restrict Shelf placement to owned figures** â€” implementation and automated checks complete; Studio persistence/multiplayer acceptance pending.
    - Players can only place copies they actually own.
@@ -101,21 +102,30 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Player-facing naming/iconography can use "Home" if that fits the UI better than "Jump to Plot."
     - Teleport the character to a safe, consistent location within their own plot.
 
-15. [x] **Add full game soundpack** — implemented on `feat/soundpack` ([game soundpack](SOUND.md)); assets verified to load in Studio; user listening and mix acceptance pending.
+15. [x] **Add full game soundpack** — merged into master ([game soundpack](SOUND.md)); assets verified to load in Studio; user listening and mix acceptance pending.
     - Add cohesive sound effects across the game for important interactions and feedback.
     - Cover UI clicks/navigation, box opening, rarity/reveal moments, coin collection, purchases/claims, Display/Shelf interactions, Daily Goals/Rewards, and other important gameplay actions.
     - Keep the sound direction consistent with the game's polished blind-box collectible feel.
 
-16. [x] **Add background music** — implemented on `feat/soundpack` ([background music](SOUND.md#background-music)); track verified to load and loop in Studio; user listening and mix acceptance pending.
+16. [x] **Add background music** — merged into master with saved SFX/Music Settings sliders
+    ([background music](SOUND.md#background-music)); track verified to load and loop in Studio;
+    user listening and mix acceptance pending.
     - Add looping background music for the main world/plot experience.
     - Keep it subtle enough that gameplay sound effects remain clear.
     - Leave room for area-specific or special-event music later if needed.
 
-## Phase 1: Make the prototype feel like a game
+## Earlier phase proposals and historical wording
+
+The numbered phase notes below record prior planning. Current implementation and remaining
+acceptance are tracked in the playtest TODO above, [plot reference](PLAYER_PLOTS_AND_SHELVES.md),
+[architecture](ARCHITECTURE.md) and [operations](OPERATIONS.md). These proposals do not reopen
+implemented systems or authorize future work.
+
+### Phase 1: Make the prototype feel like a game
 
 1. **Blind-box opening overhaul**
    - Make opening the signature interaction: tactile, pleasing, exciting, fast, and skippable.
-   - Use collection-specific box presentation, anticipation, rarity-specific reveals, sound/VFX hooks, NEW/duplicate feedback, and a strong Rare/Secret-ready structure.
+   - Use collection-specific box presentation, anticipation, rarity-specific reveals, sound/VFX hooks and NEW/duplicate feedback. The old Rare/Secret-ready wording was a proposal; the current rarity set has no Secret tier.
    - Preserve server-authoritative purchase, roll, inventory, persistence, and economy behavior.
 
 2. **UI/UX overhaul**
@@ -139,25 +149,29 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 5. **Player Plot, Display and Shelves (functional candidate implemented)**
    - Fixed open plots contain a horizontal three-to-six-slot earning Display and cosmetic Shelves.
    - Three persistent Shelf Units start with nine positions each; a fixed three-structure viewport
-     shifts one owned unit per turn. Future expansion adds individual units; no product-design maximum.
-   - Schema v5 preserves legacy cosmetic references and converts each retired v4 page into three units. Walking replaces visit/teleport navigation.
-   - Final art, shelf customization and individual Shelf Unit acquisition/pricing are future work, not implemented.
-   - Collection-completion rewards are TBD; tracking remains.
+     shifts one owned unit per turn. Paid and completion-granted units are implemented.
+   - The schema-v5/page statement belongs to the retired migration design; current Economy2
+     schemas and supported upgrades are in the [data model](DATA_MODEL.md).
+   - Current paid Shelf acquisition and one free unit for first collection completion are
+     implemented; final art and customization remain proposals. See the current
+     [plot reference](PLAYER_PLOTS_AND_SHELVES.md#shelf-units-and-the-three-shelf-viewport).
    - Follow [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 
-## Phase 2: Build depth
+### Phase 2: Build depth (unscoped proposals)
 
-6. **Physical blind-box shop and polished world**
-   - Move beyond menu-only purchasing toward a physical shop/hub with visible collection boxes and open player plots.
+6. **Physical blind-box shop and polished world (historical proposal)**
+   - The current world has open plots and a menu Shop, with no physical shop building. A physical
+     shop would require a separate design decision.
 
-7. **Secret figures**
+7. **Secret figures (historical proposal)**
    - Consider one optional chase Secret per collection.
    - Standard collection completion should not require the Secret.
    - Avoid generic rarity inflation.
 
 8. **Collector progression**
    - Add long-term account progression based on collecting/discovery/completion rather than exponential power multipliers.
-   - Progression rewards need a separate decision; collection-completion rewards remain TBD.
+   - Additional progression rewards need a separate decision; first completion already grants
+     one Shelf Unit per collection.
 
 9. **Social plot features**
    - Walk-in viewing and shared shelf navigation are implemented; evaluate these with multiple clients.
@@ -165,7 +179,8 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 
 10. **More collections and content pipeline**
     - Make adding an original collection a repeatable content update rather than an architecture rewrite.
-    - New collections should combine figures and packaging; completion rewards and matching decor require separate decisions.
+   - New collections should combine figures and packaging; the existing one-unit first-completion
+     reward applies, while other rewards and matching decor require separate decisions.
 
 11. **Daily/weekly quests**
     - Expand the lightweight daily system only after the core loop is fun.

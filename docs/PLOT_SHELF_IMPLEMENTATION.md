@@ -1,8 +1,8 @@
 # Player Plot, Shelf Units and Collection implementation
 
-Status: implemented on `master`. The current persistent schema is **8**; valid Economy2 schemas
-6 and 7 upgrade, while schemas 1–5 are rejected. This report describes current behavior and its
-verification boundaries. See the canonical
+Status: implemented on `master`. This report records the plot/Shelf implementation and its
+verification boundaries. The current profile writes schema 13; valid Economy2 schemas 6–12
+upgrade, while schemas 1–5 are rejected. See the canonical
 [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md) direction and
 [data model](DATA_MODEL.md).
 
@@ -16,7 +16,8 @@ Display and Shelf wash lights without adding per-frame work.
 
 The presentation-only global leaderboard rotates Most Figures, Top Coins/sec and Most Boxes
 Opened. It grants no rewards and never feeds leaderboard data back into a player profile.
-Schema 8 persists `boxesOpened`; valid schema 6 and 7 upgrades initialize it to zero.
+Schema 8 introduced `boxesOpened`; valid schema 6 and 7 upgrades initialize it to zero. The
+current written schema and later field additions are in the [data model](DATA_MODEL.md).
 
 Plot ownership, allocation and cleanup remain server-owned. Players spawn on their assigned plot
 and visitors walk between plots without a teleport or room session. The owner may open Display or
@@ -32,7 +33,7 @@ Each figure banks its own income until the owner clicks or taps it; the nearby E
 management rather than collecting. Uncollected banks survive removal and rejoining.
 
 Shelf Units are persistent cosmetic exhibits. The authoritative capacity, viewport, owned-copy
-placement rule, navigation and unresolved reward decisions are defined only in
+placement rule, navigation and implemented progression rewards are defined in
 [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md). Display placement is independent
 of Shelf placement and does not consume a Shelf copy allowance.
 
@@ -53,7 +54,7 @@ Current implementation and regression coverage verify:
   rebinding on respawn and cleanup when an owner leaves;
 - server-computed plot containment, owner-only Display/Shelf mutation and visitor rejection;
 - Shelf placement bounded by owned copies across visible and offscreen units, including stable
-  repair of over-placed schema-8 records without granting inventory;
+  repair of over-placed valid Economy2 records without granting inventory;
 - carousel wrapping, disabled navigation at the starting capacity, stale revision rejection and
   bounded snapshot/world projection;
 - Display capacities, figure caching, targeted updates and teardown without unbounded tasks,
@@ -77,10 +78,11 @@ subjective rendering, true-touch, device-performance, DataStore rejoin or multi-
 3. Exercise Display capacities 3–6 and repeated Shelf turns through day and night. Confirm figures
    remain readable, navigation wraps correctly, and respawn/leave/rejoin does not add lights,
    figures, connections or stale owner content.
-4. In an isolated persistent test experience, save/rejoin current schema-8 Shelf placements,
+4. In an isolated persistent test experience, save/rejoin current schema-13 Shelf placements,
    carousel-independent state, Display placements, earnings banks and `boxesOpened`. Load valid
-   schema-6 and schema-7 Economy2 fixtures and confirm both upgrade with `boxesOpened = 0`.
-5. Load an intentionally over-placed schema-8 Shelf record. Confirm the earliest allowed placements
+   schema-6 through schema-12 Economy2 fixtures and confirm the
+   [documented upgrade paths](DATA_MODEL.md#authorized-progression-reset).
+5. Load an intentionally over-placed valid Economy2 Shelf record. Confirm the earliest allowed placements
    survive, unrelated progress is unchanged, and the repaired state remains after autosave/rejoin.
 6. Check the Collection fixture, awnings, arches, trees, statues, leaderboard and day/night lighting
    on representative desktop and mobile devices, including an eight-player populated-server soak.

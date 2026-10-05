@@ -11,7 +11,7 @@ that feature set; real storage, device and multi-client acceptance are still pen
 [roadmap](ROADMAP.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
 
 The active world uses fixed open Player Plots, earning Display and cosmetic Shelf Units.
-See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [schema-8 data model](DATA_MODEL.md).
+See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [current data model](DATA_MODEL.md).
 The former separate Gallery/room runtime has been removed, not retained as an alternate path.
 
 ## Server ownership
@@ -57,11 +57,12 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   Daily also increment the persistent `boxesOpened` counter in the same atomic grant.
 - `Protocol`/`Transactions`: allowlisted typed fields/actions, token bucket, profile revision and
   exact retry receipts. Shelf edits additionally require visible persistent Shelf Unit ID and carousel revision and owner access.
-- `Profile`: schema-11 validation/deep copies (v10 adds `lastSeen`/`offlinePending`, see [economy](ECONOMY.md#offline-earnings); v11 adds the Daily Login `lastLoginDay`/`loginStreak`), including independent pity, per-figure earnings and
-  the `boxesOpened` counter; valid Economy2 schema-6/7 profiles upgrade (counter starts at 0)
-  without a second reset. New save namespaces implement the authorized reset; retired legacy
-  adapters are not invoked. Shelf decode removes unowned/excess placements in stable unit and
-  numeric row/slot order so repaired state follows the normal save path.
+- `Profile`: schema-13 validation/deep copies of pity, per-figure earnings, Display, Shelves,
+  rewards, audio settings and Welcome Quest state. Valid Economy2 schemas 6–12 upgrade as
+  [specified in the data model](DATA_MODEL.md); unsupported or corrupt records fail closed.
+  New save namespaces implement the authorized reset; retired legacy adapters are not invoked.
+  Shelf decode removes unowned/excess placements in stable unit and numeric row/slot order so
+  repaired state follows the normal save path.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
 
@@ -144,7 +145,7 @@ geometry; `UIStyle` owns tokens and collection accents. See
 
 Sound is client presentation only. `SoundManifest` is the single list of asset IDs and levels.
 `Sfx.play(name)` plays pooled, rate-limited voices in `SoundService.Master` (UI / SFX / Reveal)
-with saved Sound effects and Music volume sliders in Settings (the `SetVolume` intent, schema 12). `Music.play(name)` loops one background track per area or
+with saved Sound effects and Music volume sliders in Settings (the `SetVolume` intent, added in schema 12). `Music.play(name)` loops one background track per area or
 context (only `world` today) in the Music group, started once on the first ready snapshot. UI components and the existing reply handler call it, and
 the opening's cue slots read the same manifest. No remotes, server logic or saved data are
 involved. See [game soundpack](SOUND.md).

@@ -8,16 +8,17 @@ a Coin-generating Display and persistent cosmetic Shelf Units; nearby players ca
 browse, while only the owner can edit. See the canonical
 [Player Plots, Display and Shelves](docs/PLAYER_PLOTS_AND_SHELVES.md) direction for exact behavior.
 
-Profiles write schema **8** in the Economy2 save namespaces. Valid schema 6 and 7 profiles upgrade;
-schemas 1–5 are rejected. The catalog contains 43 figures across Pocket Grove, Tidepool Tales,
+Profiles currently write schema **13** in `BlindBox_Economy2_Studio` and
+`BlindBox_Economy2_Live`. See the [data model](docs/DATA_MODEL.md) for supported upgrades and
+fail-closed cases. The catalog contains 43 figures across Pocket Grove, Tidepool Tales,
 Concepts, Tender Echoes and We Are All Stars. Scrap, recycling and redemption are removed. The
 economy redesign and UI redesign are merged into `master`.
 
 Open `RobloxWorkspace.rbxlx` in Studio to try it. Studio defaults to **unsaved preview**;
 live servers require a successful persistent load. See [architecture](docs/ARCHITECTURE.md),
 [economy](docs/ECONOMY.md), [roadmap](docs/ROADMAP.md), and
-[testing and release setup](docs/OPERATIONS.md). The candidate is not published, and its new
-Studio/device/live-storage tests have not been run by the agent.
+[testing and release setup](docs/OPERATIONS.md). The candidate is not published; recorded
+single-client Studio checks do not complete persistent, multiplayer or physical-device acceptance.
 
 ## Setup and checks
 Run these commands from the repository root with Rokit on PATH:

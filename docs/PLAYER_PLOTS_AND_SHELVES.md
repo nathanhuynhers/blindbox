@@ -1,7 +1,8 @@
 # Player Plots, Display and Shelves
 
-**Canonical current direction — September 27, 2026.** This replaces the abandoned Showroom/Gallery
-architecture. Display and Collection implement the supplied fixture concepts; native Studio acceptance is pending.
+**Canonical current plot and placement reference (updated October 4, 2026).** This replaces the
+abandoned Showroom/Gallery architecture. Display and Shelves implement the supplied fixture
+concepts; full native persistent, multiplayer and device acceptance is pending.
 See [implementation and checks](PLOT_SHELF_IMPLEMENTATION.md), [schema](DATA_MODEL.md),
 [architecture](ARCHITECTURE.md) and [economy](ECONOMY.md).
 
@@ -148,11 +149,11 @@ The separate client floating Display-rate badge has been removed; Display contro
 individual/total rates. The entrance remains at negative Z, facing toward the back along positive Z.
 
 Each Display position reserves one owned inventory copy. Placement, replacement and removal stay
-server-authoritative. Income remains the sum of base figure rates plus the existing single
-themed bonus: +1 Coin/sec for three distinct Display figures from one collection. Inventory-only
-and shelf figures contribute zero. Rarity rates, odds, acquisition costs and daily rewards remain
-unchanged. The legacy fourth-slot unlock still costs 4,000 Coins. Slots 5/6 have no acquisition
-method or invented price; future methods remain independently configurable.
+server-authoritative. The sum of effective figure rates receives one 10% bonus when at least three
+distinct displayed figures belong to the same collection. Inventory-only and Shelf figures
+contribute zero. Slots 4, 5 and 6 cost 40,000, 400,000 and 4,000,000 Coins respectively and unlock
+sequentially. See [economy](ECONOMY.md#permanent-duplicates-and-display-income) for the rate and
+purchase rules.
 
 Display placement, replacement and removal are authorized while the living owner is anywhere
 inside their own 100-by-96-stud plot footprint and within 20 vertical studs of its origin. The
@@ -239,7 +240,7 @@ carousel away and back invalidates old edits. Existing request receipts and rate
 
 Visitors can walk, look and turn the shared carousel. They cannot edit Display/shelves, unlock
 slots, acquire shelves or change another player's progression. Rendered figures and owner/carousel
-signage are public. The Collection header stays constant during browsing. Owner snapshots go
+signage are public. The Shelves header stays constant during browsing. Owner snapshots go
 only to that owner and project only the three visible units, owned count and navigation
 availability; the owner also receives a derived remaining-copy map for picker behavior.
 Inventories, balances, discoveries and other

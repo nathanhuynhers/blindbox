@@ -3,8 +3,9 @@
 ## Current status
 
 The implemented candidate runs in **Blindbox Town** with open Player Plots, an authoritative
-Coin-generating Display, cosmetic Shelf Units, 43 figures across five collections, schema 8 in
-the Economy2 namespace, and the merged economy and UI redesigns. Scrap, recycling, redemption,
+Coin-generating Display, cosmetic Shelf Units, 43 figures across five collections, schema 13 in
+the Economy2 namespace, and the merged economy, UI, audio and Welcome Quest work. See the
+[data model](DATA_MODEL.md) for current stores and supported upgrades. Scrap, recycling, redemption,
 the retired Showroom/Gallery runtime and teleport browsing are not part of the current game.
 
 Automated and recorded single-client checks do not close the remaining release gate. Native
@@ -15,7 +16,7 @@ required. Public deployment, paid mechanics and trading remain outside the autho
 
 - [Game design](GAME_DESIGN.md) — current player experience and world direction.
 - [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md) — canonical plot, Display and
-  Shelf behavior, capacity and unresolved completion rewards.
+  Shelf behavior, capacity, paid progression and completion rewards.
 - [Architecture](ARCHITECTURE.md) and [data model](DATA_MODEL.md) — system boundaries, authority,
   persistence and schema upgrades.
 - [Economy](ECONOMY.md) — current prices, odds, pity, duplicate income and acceptance checklist.
@@ -26,5 +27,6 @@ required. Public deployment, paid mechanics and trading remain outside the autho
 - [Product backlog](PRODUCT_BACKLOG.md) — remaining product work; entries are not authorization.
 - [Archived milestones 0–6](archive/ROADMAP_MILESTONES.md) — historical planning only.
 
-Final art, shelf customization, individual Shelf Unit acquisition/pricing and collection-completion
-rewards remain unresolved. Implement future work only when the user authorizes that specific task.
+Final art and Shelf customization remain proposals. Paid Shelf acquisition and one free Shelf Unit
+per first collection completion are implemented; their persistent and multiplayer acceptance is
+still pending. Implement future work only when the user authorizes that specific task.

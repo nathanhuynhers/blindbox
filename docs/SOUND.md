@@ -1,6 +1,6 @@
 # Game soundpack
 
-Status: **implemented on `feat/soundpack` (backlog item 15).** Every asset ID was verified in
+Status: **merged into master (backlog items 15 and 16).** Every asset ID was verified in
 Studio on 2026-10-03: it is Audio, it is owned by Roblox, ProSoundEffects or APMOfficial, its
 preload succeeded and it has a nonzero length. **Nobody has listened to it yet.** The agent cannot
 hear audio, so the listening and mix pass below is still open. Background music (item 16) is in [its own section](#background-music).
@@ -104,8 +104,9 @@ session-only Sound On/Off switch.
   limit and autosave. If another request is in flight, the save retries on the next snapshot
   until the snapshot confirms the value.
 - **Join:** saved values arrive in the snapshot and apply on join. Saving shows no toast.
-- **Storage:** profiles store `sfxVolume` and `musicVolume` (schema 12, default 100). Older
-  records upgrade at full volume. See [data model](DATA_MODEL.md).
+- **Storage:** profiles store `sfxVolume` and `musicVolume` (introduced in schema 12, default
+  100); current saves write schema 13. Valid pre-v12 records upgrade at full volume. See
+  [data model](DATA_MODEL.md).
 
 Studio playtest (2026-10-04, single client, Studio preview profile, which isn't saved):
 - Dragging Music from 95% to 40% applied at once (Music group 0.30 → 0.12) and saved

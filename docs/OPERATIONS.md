@@ -1,7 +1,8 @@
 # Full-game testing and release
 
 The economy redesign uses fresh `BlindBox_Economy2_Studio` /
-`BlindBox_Economy2_Live` stores; the current profile schema is 8 (6 and 7 upgrade). Run the
+`BlindBox_Economy2_Live` stores; the current profile schema is 13. Valid Economy2 schemas 6–12
+upgrade as specified in the [data model](DATA_MODEL.md). Run the
 [current economy acceptance checklist](ECONOMY.md#verification-record-and-acceptance-checklist) for
 variable prices, duplicates, soft pity and the authorized progression reset.
 
@@ -28,7 +29,8 @@ game:GetService("ServerScriptService"):SetAttribute("StudioPersistenceTest", tru
 ```
 
 Alternatively set `studioPersistence = true` in `src/server/Settings.luau`. The attribute only
-affects Studio. Studio uses `PocketGrove_Studio_v1`; live servers always use `PocketGrove_Live_v1`.
+affects Studio. Persistent Studio uses `BlindBox_Economy2_Studio`; live servers use
+`BlindBox_Economy2_Live`. Do not test migrations against retired `PocketGrove_*_v1` stores.
 To return to preview, clear the attribute and leave the source setting false. A failed persistent
 load never falls back to preview. No game setting or secret needs to be supplied by a client.
 
@@ -68,14 +70,14 @@ that check; formatting/lint are not substitutes for it. Selene used its cached R
 
 The regression suite runs actual domain, request, schema and storage-transform code:
 
-- 8,878 economy/inventory/request assertions, including 1,000 mixed requests.
-- 81 full-game/persistence fault checks: expansion, legacy cosmetic migration, daily/goal claims, migration, corrupt
+- Economy/inventory/request assertions, including mixed requests.
+- Full-game/persistence fault checks: expansion, legacy cosmetic migration, daily/goal claims, migration, corrupt
   payloads, competing leases, stale writers, uncertain committed replies, retries and release.
-- Four scroll-content/lifecycle assertions with engine property/signal shims; these verify the
+- Scroll-content/lifecycle assertions with engine property/signal shims; these verify the
   sizing logic, not actual Roblox layout rendering.
-- Four invalid economy/catalog startup fixtures.
-- 1,839 UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
-- 1,732 opening-state/result checks: timing, all-phase skip/cancel, rapid inputs, reduced motion,
+- Invalid economy/catalog startup fixtures.
+- UI projection, responsive-grid and lifecycle assertions; these do not render Roblox UI.
+- Opening-state/result checks: timing, all-phase skip/cancel, rapid inputs, reduced motion,
   confirmed NEW/duplicate metadata, delayed snapshots and unsupported/failed replies.
 - Shelf schema/reconciliation, owned-copy placement limits, intent abuse, shared carousel and fixed
   plot lifecycle/rendering suites; see the exact current counts and limits in
@@ -87,15 +89,17 @@ It derives card counts from the catalog, checks the selected collection and meas
 then scrolls to and checks the final card. Repeat for both collections and phone sizes.
 This script is not mapped into the game and has not been run by the agent.
 
-The new opening has its own [visual/input acceptance checklist](OPENING.md#studio-acceptance-checklist)
+The opening has its own [visual/input acceptance checklist](OPENING.md#studio-fixture-and-acceptance)
 and `tests/StudioOpening.client.luau` fixture launcher. Run it in the client Command Bar to compare
 all rarities, both cartons, NEW/duplicates and reduced motion without changing RNG or granting
-items. Neither these Studio checks nor the launcher's lifecycle assertions have been run by the
-agent. Real purchase/retry testing is separate from those presentation-only fixtures.
+items. Recorded native fixture and single-client checks are in the
+[audit follow-ups](GAME_AUDIT.md#post-audit-status); physical-device, persistent and multiplayer
+acceptance remains open. Real purchase/retry testing is separate from presentation-only fixtures.
 
 The redesigned regular UI has a [dedicated device/input checklist](ui-redesign/IMPLEMENTATION.md#studio-checklist-not-yet-run)
 and read-only `tests/StudioUI.client.luau` checks for target sizes, canvas bounds and safe areas.
-Run that script from the client Command Bar on each screen. These engine checks remain unrun.
+Run that script from the client Command Bar on each screen. Some screens have recorded native
+checks in the [audit](GAME_AUDIT.md#system-by-system-audit); they do not sign off every device.
 
 ## Required closed tests
 
@@ -106,11 +110,15 @@ Run that script from the client Command Bar on each screen. These engine checks 
    place/replace/remove unique earners, collect individual banks and verify duplicate-enhanced
    plus themed total rates. Failed or replayed purchases must not spend or grant twice.
 3. **Progression:** buy slots 4, 5 and 6 sequentially; retry each and confirm no duplicate charge.
-   Finish each collection and verify completion tracking without granting a new reward.
+   Finish each collection and verify exactly one free Shelf Unit per first completion, including
+   after rejoin. Check paid Shelf progression separately; see the [plot reference](PLAYER_PLOTS_AND_SHELVES.md).
 4. **Persistence:** in the isolated test store, open/place, unlock, edit shelves and claim rewards.
    Wait for a successful autosave, stop/rejoin and compare balances/counts/Display/Shelf Units/claims.
-   Verify valid Economy2 schema-6 and schema-7 fixtures upgrade to schema 8 with
-   `boxesOpened = 0`; schemas 1–5 and malformed/future records must fail closed. A different
+   Verify valid Economy2 schema-6 through schema-12 fixtures upgrade to schema 13 as documented in
+   the [data model](DATA_MODEL.md#authorized-progression-reset): v6/v7 start `boxesOpened = 0`,
+   v8+ retain that counter, v9+ retain Shelf rewards, v10+ retain offline fields, v11+ retain
+   login streaks, and v12 retains audio settings. Check the v13 Welcome Quest mapping and
+   persisted skip choice. Schemas 1–5 and malformed/future records must fail closed. A different
    physical plot must show the same saved exhibit. The runtime viewport resets on join. Reset
    character without resetting the profile. Verify no repeated starter grant; offline earnings appear only as the claimable popup.
    Disable API access for a fresh persistent join: play must be blocked, not reset.
@@ -152,13 +160,16 @@ Run that script from the client Command Bar on each screen. These engine checks 
     place figures on two accounts in different servers; within about 2.5 minutes both should
     appear on each server's board. Leave and confirm the final score is written. Disable API
     access and confirm the board stays on its last page or placeholders without errors in play.
-13. **Schema 8 migration:** load saved v6 and v7 Economy2 test profiles; they must keep all
-    progress with `boxesOpened = 0`, then count Buy and Daily boxes only. Confirm a v8 save never
-    loads on an older (schema-7) server build.
+13. **Schema 13 migration:** in an isolated persistent place, load valid v6–v12 Economy2 test
+    profiles and verify each version's required fields and defaults against the
+    [data model](DATA_MODEL.md#authorized-progression-reset). For v6/v7, retain progress and
+    initialize `boxesOpened = 0`; for v8–v12, retain the saved counter. Confirm Welcome Quest
+    mapping from older records, v13 save/rejoin, and fail-closed behavior for invalid or future
+    records. Do not run an older writer alongside v13 servers: schema-12 code cannot read v13.
 14. **Shelf owned-copy rule:** with isolated test profiles, try zero, one and two owned copies
     across visible and offscreen units. Confirm a third placement is rejected, removal restores
     one choice immediately, and a failed swap changes neither figure. Load an intentionally
-    over-placed schema-8 record, verify earliest unit/slot placements survive, wait for autosave,
+    over-placed valid Economy2 record, verify earliest unit/slot placements survive, wait for autosave,
     rejoin and verify the repaired result remains while Coins, inventory, discoveries, Display,
     goals and collection completion are unchanged. Repeat with two clients for owner isolation.
 
@@ -205,5 +216,7 @@ just-clicked action was durably saved. Offline earnings are computed once on loa
   or monetized during implementation. Rolling back code must preserve valid stored schemas;
   data rollback is a distinct, reviewed action, not a side effect of reverting the place.
 
-Runtime test record: pending for the expanded candidate. User acceptance applies to the original
-MVP, with the scrolling issue reported. No claim of launch readiness replaces these checks.
+Recorded native single-client checks for parts of the expanded candidate are linked from the
+[audit follow-ups](GAME_AUDIT.md#post-audit-status). Isolated persistent rejoin, multi-client,
+physical-device, listening and populated-server acceptance remain pending. User acceptance of
+the original MVP does not close these current release gates.

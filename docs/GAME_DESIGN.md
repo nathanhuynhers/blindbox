@@ -2,7 +2,8 @@
 
 Current direction is [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 The accepted [historical MVP](archive/MVP.md) established the core loop; the current candidate still needs
-native Studio, storage and multiplayer acceptance. Collection rewards and final art remain TBD.
+native storage, multiplayer and physical-device acceptance. Final art remains a proposal;
+first-completion Shelf rewards are implemented as described in the [plot reference](PLAYER_PLOTS_AND_SHELVES.md).
 
 Open boxes, discover original collectibles, choose active Display earners, earn Coins, collect
 more figures and arrange cosmetic shelves on a large open personal plot. Visitors simply walk
@@ -51,4 +52,5 @@ and Shelf fixture washes until dawn. A global plaza leaderboard rotates
 Most Figures, Top Coins/sec and Most Boxes Opened; it is presentation only and grants nothing.
 The center/right of each plot stays open. Collections and Shop retain their existing UI/art. There
 is no active Showroom, Gallery, interior visit flow, teleport browser, paid product, trading
-system, free placement or new completion reward. See [operations](OPERATIONS.md).
+system or free placement. The implemented completion reward is one Shelf Unit per collection;
+other completion rewards remain proposals. See [operations](OPERATIONS.md).

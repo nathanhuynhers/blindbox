@@ -478,7 +478,15 @@ Physical phones, low graphics quality, persistent rejoin and multi-client remain
 | A04 | Fixed. Every intermediate batch result keeps **View all results** beside Next; first/ninth skips, repeated Next, spam and reset/GUI-cancellation recovery passed in native Studio. See [navigation verification](audits/2026-10-04/open-10-navigation.md); physical touch/gamepad remain pending. |
 | A07 | Fixed. Duplicates show `Duplicate upgrade · old → new coins/s` and the owned count (native: 10.95 → 12.6). |
 | A09 | Fixed. In-screen targets get a ring and badge on the control itself; the Welcome Box takes the primary slot and the paid button steps back while it waits. |
-| A05, A06, A08, A10–A14, G01 | Unchanged by this work. |
+| A05, A06, A08, A10–A14, G01 | Unchanged by the Welcome Quest work. |
+
+**A08 documentation reconciliation (2026-10-04).** The original audit above describes the
+schema-12 candidate it reviewed. The later Welcome Quest merge writes schema 13; valid Economy2
+schemas 6–12 now upgrade to 13. Current operational instructions use the Economy2 Studio/Live
+stores and the [data model](DATA_MODEL.md) for exact migrations. Display economics, Shelf
+owned-copy limits and progression, merged audio, and separate Collection book/Shelves are
+reconciled in their current references. This documentation change does not complete the
+persistent, multiplayer, physical-device or listening acceptance gates.
 
 **Focused A01/A02 follow-up after the master merge.** See the
 [native comparisons, completed checks and remaining acceptance](audits/2026-10-04/mobile-opening/README.md).

@@ -4,8 +4,8 @@
 
 Terminology follows [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md): Display is the
 only Coin-generating placement system; Shelves are cosmetic exhibits on open Player Plots.
-That document is the sole source for Shelf capacity, viewport behavior, future acquisition and
-unresolved collection-completion rewards. Display slots 4–6 currently unlock sequentially with Coins.
+That document is the current source for Shelf capacity, viewport behavior, paid acquisition and
+the one-unit first-completion reward. Display slots 4–6 unlock sequentially with Coins.
 Every paid mechanic below is an unapproved idea, not current behavior or permission to build it.
 
 ## Monetization Philosophy
@@ -134,10 +134,10 @@ Future shelf customization could support skins, materials, colors, backgrounds, 
 trim, decorations, effects and collection styling. Only empty data hooks exist today. No
 cosmetic catalog, furniture system, purchase flow or customization UI is in the current scope.
 
-Additional individual Shelf Units would add nine cosmetic positions each without expanding
-the three physical viewport structures or generating income. Customization would belong to
-each persistent unit. Acquisition method and pricing remain unresolved; this idea bank defines
-no curve, price, product ID or product-design maximum.
+Additional individual Shelf Units already add nine cosmetic positions each without expanding
+the three physical viewport structures or generating income. Players acquire them through the
+implemented Coin purchase curve or first collection completion. Customization would belong to
+each persistent unit; this idea bank defines no Robux product or product-design maximum.
 
 Potential Display cosmetics include pedestal/trim skins and subtle effects. The current cap
 is six economic slots, starting with three; slots 4–6 use the implemented sequential Coin unlocks.
@@ -298,7 +298,7 @@ Potential premium purchases for highly invested players:
 - Elaborate animated shelf themes
 - Premium animated shelf stands and cosmetic Display skins
 - Premium opening animations
-- Additional individual Shelf Units (acquisition and pricing TBD)
+- Possible premium Shelf cosmetics (a separate, unapproved product design)
 - Exclusive cosmetic effects
 - Prestige nameplates/titles
 

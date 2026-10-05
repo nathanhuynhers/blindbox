@@ -1,6 +1,7 @@
 # Collection economy
 
-Implemented and merged into `master`; native Studio acceptance remains pending. The historical
+Implemented and merged into `master`; recorded single-client Studio checks do not close
+persistent, multiplayer or device acceptance. The historical
 [redesign plan](archive/RARITY_ECONOMY_REDESIGN.md) records the discussion. This document and the
 server configuration are the current tuning reference. All prices, grants, odds, owned quantities,
 pity and income calculations remain server-owned.
@@ -88,7 +89,9 @@ effectiveRate = baseRate * multiplier
 
 Only one instance of each figure ID may earn in Display. Three slots start unlocked; slots 4, 5
 and 6 cost 40,000, 400,000 and 4,000,000 Coins, respectively, purchased sequentially. Inventory-only
-figures earn zero. Shelves remain cosmetic, reserve zero copies and may repeat discoveries.
+figures earn zero. Shelves remain cosmetic; placements across all persistent Shelf Units are
+limited to owned copies, independently of Display placement. See
+[cosmetic eligibility](PLAYER_PLOTS_AND_SHELVES.md#cosmetic-eligibility-and-permissions).
 
 Displaying three distinct figures from one collection grants +10% of the total effective Display
 rate, once only. This also applies to mixed-tier Displays that contain a qualifying trio.
@@ -154,12 +157,11 @@ clock-rollback, storage-failure and session-exclusion rules remain. See [data mo
 ## Fresh-save rollout and verification
 
 The user explicitly requested a full progression reset. The new stores are
-`BlindBox_Economy2_Studio` and `BlindBox_Economy2_Live`, now with schema 8. No old Coins, Scrap,
+`BlindBox_Economy2_Studio` and `BlindBox_Economy2_Live`, currently writing schema 13. No old Coins, Scrap,
 figures, discoveries, shelves or progress are imported. Old stores are untouched rollback backups;
 no live store was deleted or published by this implementation. Unexpected old or corrupt data in
-the new namespace fails closed rather than becoming a fresh profile. Valid schema-6 Economy2
-profiles upgrade with empty earnings banks; valid schema-7 profiles retain their banks. Both
-upgrade to schema 8 with `boxesOpened = 0`; schemas 1–5 remain rejected.
+the new namespace fails closed rather than becoming a fresh profile. Valid Economy2 schemas
+6–12 upgrade through the [current data model](DATA_MODEL.md); schemas 1–5 remain rejected.
 
 The verification record below captures automated checks and simulation assumptions. Native Studio,
 real save/rejoin and multi-client playtests remain required.
@@ -201,7 +203,7 @@ Remaining native Studio acceptance:
    must remain unchanged while idle; only the selected figure's bank transfers. Cover feedback,
    visitors, dead characters, distance rejection, respawn, teardown and concurrent interactions.
 6. Remove or replace an earning figure, save/rejoin, then redisplay it and confirm its bank remains.
-   In isolated persistent Studio testing, verify schema-6 and schema-7 upgrades, Economy2 store
+   In isolated persistent Studio testing, verify supported schema upgrades, Economy2 store
    identity, pity/duplicate round trips, UTC claims and pause-on-storage-failure; see offline checks below.
 7. In two-client testing, verify private snapshot isolation and reject malformed, repeated, stale and
    cross-owner actions. Visitors may see public Display totals but never private pity data.

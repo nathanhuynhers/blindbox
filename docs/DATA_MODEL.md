@@ -1,7 +1,10 @@
 # Persistent data model
 
-Current schema: **13**, in the Economy2 namespace. Valid schemas 6-12 upgrade (6 with empty
-banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; 6-9 with `lastSeen = 0`, `offlinePending = 0`; 6-10 with an unclaimed login streak; 6-11 with full volume; 6-12 with a mapped Welcome Quest stage, see below); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
+Current schema: **13**, written to `BlindBox_Economy2_Studio` and
+`BlindBox_Economy2_Live`. The decoder accepts valid Economy2 schemas 6–13; 6–12 upgrade to 13
+on the normal save path. Schemas 1–5, future versions and malformed records fail closed. Existing
+catalog figure IDs are unchanged. The prior audit reviewed schema 12 before the Welcome Quest
+merge; it is now an upgrade source, not the written format.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
@@ -71,6 +74,15 @@ slots, three empty Shelf Units and `boxesOpened = 0`. The first three Starter pu
   so no history is reconstructed.
 - **v8:** v7 plus the required `boxesOpened` counter. A missing, negative, fractional,
   non-number or over-limit value fails closed; it is never reset to zero.
+- **v9:** requires `shelfRewards`; older valid records use an empty map before completed
+  collections receive their one-time free unit through reconciliation.
+- **v10:** requires `lastSeen` and `offlinePending`; older records use zero for both, so an
+  unknown prior absence grants no offline earnings on first upgrade.
+- **v11:** requires a consistent `lastLoginDay`/`loginStreak` pair; older records start unclaimed.
+- **v12:** requires `sfxVolume` and `musicVolume` in 0..100; older records use full volume.
+- **v13:** requires a 1..7 Welcome Quest `step` and boolean `tutorialHidden`. Valid v6–v12
+  records map to stage 1 only when `boxesOpened == 0` and `owned` is empty; otherwise they
+  map to finished stage 7 with no Welcome reward. Earlier `step` values are not reused.
 
 Schema 6 validates and deep-copies quantities, pity entries, unique Display placements and Shelf
 Units. Unknown fields/groups, NaN, infinity, fractional counters, out-of-bounds quantities,
@@ -113,8 +125,8 @@ inventory/discoveries/balances.
 
 ## Box counter and leaderboards
 
-`boxesOpened` increments only inside `Rules.mutate`, in the same non-yielding step that spends
-Coins (Buy) or records the daily claim (Daily) and grants the rolled figure. Rejected requests and
+`boxesOpened` increments only inside `Rules.mutate`, in the same non-yielding grant step for Buy,
+BuyTen, Daily, Login box rewards and Welcome box/x10. Rejected requests and
 replayed request IDs never count. It is clamped at its numeric guard and grants nothing; it
 exists for the global leaderboard. The global leaderboard OrderedDataStores
 (`Settings.liveLeaderboard` / `Settings.studioLeaderboard`, scope = stat key) are a separate,
