@@ -308,6 +308,14 @@ function Card.create(
 		progress.root.Visible = reveal ~= nil
 		skip.Visible = reveal ~= nil and reveal.skip ~= nil
 		skip.Text = if reveal and reveal.skip then reveal.skip .. "  ›" else ""
+		-- Keep the two batch navigation choices adjacent for both vertical phone and
+		-- horizontal desktop layouts, including Roblox's directional gamepad selection.
+		if skip.Visible then
+			keep.NextSelectionDown = skip
+			keep.NextSelectionRight = skip
+			skip.NextSelectionUp = keep
+			skip.NextSelectionLeft = keep
+		end
 		keep.Text = if reveal and reveal.next
 			then reveal.next
 			elseif reveal then "Keep it in my Collection"

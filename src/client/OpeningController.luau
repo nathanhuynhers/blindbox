@@ -315,21 +315,26 @@ function Controller.create(
 					end
 					safely(function()
 						if session.state.phase == "Result" then
-							-- B/X keep; A/Enter/Space press the selected choice (default Keep).
+							-- B/X view the batch summary (Keep for single pulls); A presses the selected choice.
 							pick(
 								if skip
-									then "keep"
+									then if result.sequence
+											and choices.skip
+											and choices.skip.Visible
+										then "skip"
+										else "keep"
 									else choiceOf(GuiService.SelectedObject) or "keep"
 							)
 							skip = false
-						elseif skip and result.sequence then
-							session.choice = "skip"
 						end
 						local changed = if skip and result.sequence
 							then State.finish(session.state)
 							elseif skip then State.skip(session.state)
 							else State.activate(session.state)
 						if changed then
+							if skip and result.sequence then
+								session.choice = "skip"
+							end
 							if skip then
 								audio.stop()
 								cinematic.skip()

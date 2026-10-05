@@ -221,6 +221,27 @@ check(batch[2].isNew and not batch[4].isNew and batch[4].quantity == 2, "only a 
 check(batch[1].requestId ~= batch[2].requestId and batch[2].requestId ~= batch[4].requestId, "each step has its own presentation id")
 check(#Result.fromBatch(request, before, batchAfter, { id = request.id, ok = true, message = "", figures = batchIds }) == 0, "only BuyTen replies batch")
 local teaseState = State.create(Config.rarities.Rare.timing, false, false, true)
+-- A ten-result summary is captured before the presentation queue is consumed. Repeats
+-- include an already discovered figure and a new figure repeated within the same batch.
+local tenIds = { "grove.pebble", "grove.star", "grove.pebble", "grove.moth", "grove.star", "grove.moth", "grove.pebble", "grove.star", "grove.moth", "grove.pebble" }
+local tenBefore = { owned = { ["grove.pebble"] = 2 }, discovered = { ["grove.pebble"] = true } }
+local tenAfter = { owned = { ["grove.pebble"] = 6, ["grove.star"] = 3, ["grove.moth"] = 3 }, discovered = { ["grove.pebble"] = true, ["grove.star"] = true, ["grove.moth"] = true } }
+for _, consumed in { 2, 10, 11 } do
+	local queue = Result.fromBatch(batchRequest, tenBefore, tenAfter, { id = "ten", ok = true, message = "", figures = tenIds })
+	local summary = Result.summary(queue)
+	for _ = 1, consumed do table.remove(queue, 1) end
+	-- The first/ninth skip-all, or ordinary final advance, only retires presentations.
+	table.clear(queue)
+	table.clear(queue)
+	check(#summary == 10 and table.isfrozen(summary), "navigation preserves all ten summary entries")
+	for index, item in summary do
+		check(item.figureId == tenIds[index], "summary preserves confirmed order including repeats")
+		check(item.isNew == (index == 2 or index == 4), "summary preserves first discovery NEW marks")
+		check(table.isfrozen(item), "summary metadata cannot be mutated by presentation")
+	end
+	check(tenBefore.owned["grove.pebble"] == 2 and tenAfter.owned["grove.pebble"] == 6, "navigation never mutates ownership")
+end
+check(#Result.summary({}) == 0, "invalid batch produces no summary")
 for _ = 1, 40 do
 	if teaseState.phase == "Await" then
 		State.activate(teaseState)

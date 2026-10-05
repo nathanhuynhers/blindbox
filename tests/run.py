@@ -31,7 +31,7 @@ modules = {
 ui = [
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
-    "ShopScreen", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker",
+    "ShopScreen", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
     "GoalsScreen", "ShelvesScreen", "LoginScreen", "RevealCard", "Onboarding", "Interface",
 ]
 for name in ui:

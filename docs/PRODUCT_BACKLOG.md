@@ -67,6 +67,9 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
 
 9. [x] **Add x10 Open** — implementation, automated checks and native Studio single-client check complete; multi-client acceptance pending.
    - Everyone can open 10 boxes at once as long as they can afford all 10.
+   - A04 navigation acceptance: settled results retain **View all results** beside Next. First/ninth
+     skips, repeated Next, spam and reset/GUI-cancellation recovery passed in native Studio;
+     physical touch/gamepad remain untested. See [verification](audits/2026-10-04/open-10-navigation.md).
 
 10. [x] **Add offline earnings (Coin only)** — implementation and automated checks complete; persistent Studio and multi-client acceptance pending.
     - Displayed figures continue earning while the player is offline.

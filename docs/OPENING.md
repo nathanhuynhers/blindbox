@@ -79,7 +79,7 @@ Within the batch, only the first occurrence of a newly discovered figure receive
 
 Each result closes fully before the next opens under the transition curtain. During a direct
 reveal, tapping outside the choices advances; the final card says **See all results**. Every
-earlier result also keeps a stable **Skip to results** choice beside **Next figure**, so skipping
+earlier result also keeps a stable **View all results** choice beside **Next figure**, so skipping
 never depends on catching the transition-time Skip. Skip during the sequence clears all remaining
 reveals rather than granting or rerolling anything. A duplicate's earning chip names its permanent
 gain against the pre-request snapshot (`Duplicate upgrade · 4.3 → 4.73 coins/s`) with the owned count. If reset or

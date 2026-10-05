@@ -169,7 +169,9 @@ function View.create(
 				then (if gamepad
 					then "A to open  ·  B to skip"
 					else "Tap the box or press Enter / Space")
-				elseif phase == "Result" and gamepad then "A to choose  ·  B to keep"
+				elseif phase == "Result" and gamepad then if result.sequence
+					then "A to choose  ·  B to view all results"
+					else "A to choose  ·  B to keep"
 				else ""
 			heading.Visible = not final and phase ~= "Enter"
 			curtain.BackgroundTransparency = if phase == "Enter" and chainedIn

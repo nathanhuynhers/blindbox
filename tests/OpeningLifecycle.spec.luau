@@ -416,6 +416,53 @@ check(Engine.state.phase == "Closing", "Skip ends the step instead of jumping to
 Engine.render:Fire(0.12)
 Engine.render:Fire(0.12)
 check(#chosen == 3 and chosen[3].choice == "skip", "Skip reports skip-all")
+-- Settled first/ninth results: mouse, touch, selected gamepad A and the skip API
+-- all close once, respect the guard, and retain the confirmed receipt.
+for _, index in { 1, 9 } do
+	for _, input in { "MouseButton1", "Touch", "Gamepad1", "B", "X", "api" } do
+		for _, reduced in { false, true } do
+			local awarded = step({ requestId = "batch-" .. index .. "-" .. input .. "-" .. tostring(reduced) })
+			local count = #chosen
+			chooser.present(awarded, reduced, nil, { skip = "View all results" })
+			reach("Result")
+			local function activate()
+				if input == "api" then
+					chooser.skip()
+				elseif input == "B" or input == "X" then
+					Engine.input.last = "Gamepad1"
+					Engine.key(input)
+				elseif input == "Gamepad1" then
+					Engine.input.last = "Gamepad1"
+					Engine.guiService.SelectedObject = Engine.view.summary
+					Engine.key("A")
+				else
+					Engine.click("summary", input)
+				end
+			end
+			for _ = 1, 20 do activate() end
+			check(Engine.state.phase == "Result" and #chosen == count, "summary waits for result guard")
+			Engine.render:Fire(0.4)
+			activate()
+			check(Engine.state.phase == "Closing", "settled summary choice closes immediately")
+			for _ = 1, 20 do activate() end
+			Engine.render:Fire(0.12)
+			Engine.render:Fire(0.12)
+			check(#chosen == count + 1 and chosen[#chosen].choice == "skip", "summary spam dispatches skip-all once")
+			check(chosen[#chosen].id == awarded.figureId and not chooser.isActive(), "confirmed figure preserved after close")
+			Engine.input.last = "MouseButton1"
+		end
+	end
+end
+-- A late skip cannot replace Next after the result's accepted choice.
+chooser.present(step({}), false, nil, { skip = "View all results" })
+reach("Result")
+Engine.render:Fire(0.4)
+Engine.click("keep")
+chooser.skip()
+local count = #chosen
+Engine.render:Fire(0.12)
+Engine.render:Fire(0.12)
+check(#chosen == count + 1 and chosen[#chosen].choice == "keep", "closing locks the accepted Next choice")
 chooser.present(result(), false, nil, model)
 reach("Result")
 Engine.render:Fire(0.4)

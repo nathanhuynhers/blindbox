@@ -228,9 +228,9 @@ Engine.game = {
 function Engine.key(key)
 	Engine.actions.bound.BlindboxOpeningInput("", "Begin", { KeyCode = key })
 end
-function Engine.click(which)
+function Engine.click(which, inputType)
 	local input = node("InputObject")
-	input.UserInputType = { Name = "MouseButton1" }
+	input.UserInputType = { Name = inputType or "MouseButton1" }
 	Engine.view[which].Activated:Fire(input)
 end
 Engine.View = {
@@ -242,9 +242,12 @@ Engine.View = {
 		primary.Parent, hit.Parent, skip.Parent, shield.Parent = gui, gui, gui, gui
 		-- Reveal card choices; the real RevealCard is covered by Screens.spec.
 		local display, keep = node("TextButton"), node("TextButton")
+		local summary = node("TextButton")
+		summary.Parent = gui
+		summary.Visible = reveal ~= nil and reveal.skip ~= nil
 		display.Parent, keep.Parent = gui, gui
 		Engine.view =
-			{ primary = primary, hitTarget = hit, skip = skip, display = display, keep = keep, shield = shield }
+			{ primary = primary, hitTarget = hit, skip = skip, display = display, keep = keep, shield = shield, summary = summary }
 		Engine.result = result
 		local State = require("./OpeningState")
 		return {
@@ -252,7 +255,7 @@ Engine.View = {
 			hitTarget = hit,
 			shield = shield,
 			skip = skip,
-			choices = { display = display, keep = keep },
+			choices = { display = display, keep = keep, skip = summary },
 			firstChoice = function()
 				return display
 			end,

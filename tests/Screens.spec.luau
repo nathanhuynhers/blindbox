@@ -581,12 +581,15 @@ local stepCard = RevealCard.create(root, scope, "echo.feather-hush", false, 2, f
 	return false
 end)
 local stepModel = UI.reveal(reveal, "echo.feather-hush", false, 2)
-stepModel.next, stepModel.skip = "Next figure (3 left)", "Skip to results"
+stepModel.next, stepModel.skip = "Next figure (3 left)", "View all results"
 stepCard.set(stepModel)
 check(stepCard.choices.skip.Visible and stepCard.choices.keep.Text == "Next figure (3 left)", "Skip to results sits beside Next figure")
+check(stepCard.choices.skip.Text == "View all results  ›", "batch action names the complete summary")
+check(stepCard.choices.keep.NextSelectionRight == stepCard.choices.skip and stepCard.choices.skip.NextSelectionLeft == stepCard.choices.keep, "desktop gamepad navigation connects Next and summary")
 stepCard.layout(true)
 check(stepCard.choices.skip.Visible and within(stepCard.root, "Chance").Visible, "phone batch keeps both Skip and odds")
 check(stepCard.choices.skip.Size.Y.Offset >= 44 and stepCard.choices.keep.Size.Y.Offset >= 44, "batch choices retain touch targets")
+check(stepCard.choices.keep.NextSelectionDown == stepCard.choices.skip and stepCard.choices.skip.NextSelectionUp == stepCard.choices.keep, "phone gamepad navigation connects Next and summary")
 check(stepCard.choices.skip.Position.Y.Offset + stepCard.choices.skip.Size.Y.Offset <= 306, "batch choices fit the short Android content height")
 stepCard.layout(false)
 check(within(stepCard.root, "Chance").Visible, "desktop restores the chance chip")
@@ -595,6 +598,35 @@ stepCard.set(stepModel)
 check(not stepCard.choices.another.Visible and not stepCard.choices.skip.Visible, "a guided reveal hides Open another")
 check(stepCard.first() ~= stepCard.choices.another, "gamepad never starts on a hidden choice")
 scope.destroy()
+
+-- Render the actual summary from confirmed batch metadata, including repeated figures.
+local OpeningResult = require("./OpeningResult")
+local PullSummary = require("./PullSummary")
+local ids = { "grove.pebble", "grove.star", "grove.pebble", "grove.moth", "grove.star", "grove.moth", "grove.pebble", "grove.star", "grove.moth", "grove.pebble" }
+local confirmed = snapshot()
+confirmed.owned = { ["grove.pebble"] = 6, ["grove.star"] = 3, ["grove.moth"] = 3 }
+confirmed.discovered = { ["grove.pebble"] = true, ["grove.star"] = true, ["grove.moth"] = true }
+local steps = OpeningResult.fromBatch({ id = "summary-test", action = "BuyTen", revision = 0 }, { owned = { ["grove.pebble"] = 2 }, discovered = { ["grove.pebble"] = true } }, confirmed, { id = "summary-test", ok = true, message = "", figures = ids })
+local items = OpeningResult.summary(steps)
+table.clear(steps)
+local summaryFocus = false
+local pullSummary = PullSummary.create(function(value) summaryFocus = value end, function() return false end)
+pullSummary.show(items, confirmed)
+local summaryGui = Engine.playerGui:FindFirstChild("OpenTenResults")
+local tiles = {}
+for _, child in within(summaryGui, "Results"):GetChildren() do
+        if child:GetAttribute("FigureId") then table.insert(tiles, child) end
+end
+table.sort(tiles, function(a, b) return a.LayoutOrder < b.LayoutOrder end)
+check(#tiles == 10 and summaryFocus, "the real summary renders all ten confirmed results")
+for index, tile in tiles do
+        check(tile:GetAttribute("FigureId") == ids[index], "summary tiles retain confirmed roll order")
+        local isNew = index == 2 or index == 4
+        check(within(tile, "Sub").Text == (if isNew then "NEW! · " else "") .. Catalog.byId[ids[index]].rarity, "summary tiles retain correct NEW marks")
+end
+pullSummary.destroy()
+pullSummary.destroy()
+check(not summaryFocus and not pullSummary.isOpen(), "summary teardown is idempotent and releases focus")
 
 -- Teardown releases every connection, timer and instance.
 ui.destroy()

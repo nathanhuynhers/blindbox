@@ -107,7 +107,7 @@ local function revealModel(state: Types.Snapshot, result: OpeningResult.Result):
 		model.next = "See all results"
 	elseif result.sequence then
 		model.next = string.format("Next figure (%d left)", #batch)
-		model.skip = "Skip to results"
+		model.skip = "View all results"
 	end
 	-- During the Welcome Quest (and while its x10 waits), the card steers to the next step.
 	model.guided = not state.tutorialHidden and state.step <= Tutorial.reward
@@ -243,12 +243,7 @@ table.insert(
 			-- Several figures: Open 10, the Welcome x10 or a multi-box Login reward day.
 			if before and reply.figures then
 				batch = OpeningResult.fromBatch(intent, before, state, reply)
-				local items: { PullSummary.Item } = {}
-				for _, step in batch do
-					if not step.tease then
-						table.insert(items, { figureId = step.figureId, isNew = step.isNew })
-					end
-				end
+				local items = OpeningResult.summary(batch)
 				results = if #items > 0 then items else nil
 				resultsHeading = if intent.action == "WelcomeTen" then "Your Welcome ×10!" else nil
 				presentNext(state)

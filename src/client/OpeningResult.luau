@@ -16,6 +16,19 @@ export type Result = {
 	sequence: Sequence?,
 }
 export type Sequence = "first" | "middle" | "last"
+export type SummaryItem = { figureId: string, isNew: boolean }
+
+-- Capture the complete confirmed list before navigation consumes any presentation steps.
+-- Skipping/cancellation may change the queue, never the summary or its discovery marks.
+function OpeningResult.summary(steps: { Result }): { SummaryItem }
+	local items: { SummaryItem } = {}
+	for _, step in steps do
+		if not step.tease then
+			table.insert(items, table.freeze({ figureId = step.figureId, isNew = step.isNew }))
+		end
+	end
+	return table.freeze(items)
+end
 
 -- Called at the acknowledgement boundary, before presentation. Snapshots remain authoritative.
 function OpeningResult.fromReply(
