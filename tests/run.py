@@ -17,7 +17,7 @@ modules = {
     "Types": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
     "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "DisplayInteraction": "client", "HomeTeleport": "server", "Profile": "server", "Persistence": "server", "Scroll": "client",
-    "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client",
+    "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client", "OpeningLayout": "client",
     "OpeningAudioConfig": "client", "OpeningAudioSequence": "client", "SoundManifest": "client", "Sfx": "client", "Music": "client",
     "OpeningScope": "client", "OpeningBoxSource": "client", "OpeningCamera": "client", "OpeningController": "client",
     "OpeningCinematic": "client", "OpeningEffects": "client", "OpeningBox": "client",

@@ -48,6 +48,10 @@ function Card.create(
 	new.root.AnchorPoint = Vector2.new(0.5, 0)
 	new.root.Visible = isNew
 	local block = Kit.frame(root, "Details")
+	local meta = Kit.frame(block, "CompactMeta")
+	meta.Size = UDim2.new(1, 0, 0, 24)
+	local metaList = Kit.list(meta, Enum.FillDirection.Horizontal, 8, Enum.VerticalAlignment.Center)
+	metaList.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	local titleRow = Kit.frame(block, "TitleRow")
 	titleRow.AutomaticSize = Enum.AutomaticSize.X
 	titleRow.AnchorPoint = Vector2.new(0.5, 0)
@@ -58,6 +62,8 @@ function Card.create(
 	name.Size = UDim2.fromScale(0, 1)
 	name.TextTruncate = Enum.TextTruncate.None
 	name.LayoutOrder = 1
+	local nameLimit = Instance.new("UITextSizeConstraint")
+	nameLimit.MinTextSize, nameLimit.MaxTextSize, nameLimit.Parent = 14, 26, name
 	local pill = Badge.rarity(titleRow, 30, 14, Style.white)
 	pill.root.LayoutOrder = 2
 	-- Studio presentation previews may override the tier; production passes the figure's own.
@@ -67,6 +73,9 @@ function Card.create(
 	chips.AnchorPoint = Vector2.new(0.5, 0)
 	local chipList =
 		Kit.list(chips, Enum.FillDirection.Horizontal, 10, Enum.VerticalAlignment.Center)
+	scope.add(function()
+		chipList:Destroy() -- Detached while the compact rows are positioned explicitly.
+	end)
 	chipList.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	local function chip(id: string, order: number, mint: boolean): Badge.Badge
 		local made = Badge.create(chips, id, "", {
@@ -77,6 +86,8 @@ function Card.create(
 			font = Style.body(Enum.FontWeight.ExtraBold),
 		})
 		made.root.LayoutOrder = order
+		local limit = Instance.new("UITextSizeConstraint")
+		limit.MinTextSize, limit.MaxTextSize, limit.Parent = 10, 13, made.label
 		return made
 	end
 	local earns = chip("Earns", 1, true)
@@ -120,46 +131,114 @@ function Card.create(
 	keep.Parent = block
 	local compact = false
 	local model: State.Reveal? = nil
+	for _, item in { display, another } do
+		for _, label in { item.label, item.detail } do
+			local limit = Instance.new("UITextSizeConstraint")
+			limit.MinTextSize = if label == item.detail then 10 else 14
+			limit.MaxTextSize = if label == item.detail then 12 else 20
+			limit.Parent = label
+		end
+	end
 	local function place()
 		local showDisplay = display.button.Visible
 		local showAnother = another.button.Visible
+		meta.Visible = compact
+		titleRow.AutomaticSize = if compact then Enum.AutomaticSize.None else Enum.AutomaticSize.X
+		name.AutomaticSize = if compact then Enum.AutomaticSize.None else Enum.AutomaticSize.X
+		name.Size = UDim2.fromScale(if compact then 1 else 0, 1)
+		name.TextScaled, name.TextWrapped = compact, compact
+		nameLimit.MaxTextSize = if compact then 26 else 44
+		pill.root.Parent = if compact then meta else titleRow
+		pill.root.Size = UDim2.fromOffset(0, if compact then 24 else 30)
+		pill.label.TextSize = if compact then 12 else 14
+		chipList.Parent = if compact then nil else chips
+		chips.AutomaticSize = if compact then Enum.AutomaticSize.None else Enum.AutomaticSize.X
+		for _, item in { earns, chance, progress, owned } do
+			item.root.AutomaticSize = if compact
+				then Enum.AutomaticSize.None
+				else Enum.AutomaticSize.X
+			item.label.AutomaticSize = if compact
+				then Enum.AutomaticSize.None
+				else Enum.AutomaticSize.X
+			item.label.Size = UDim2.fromScale(if compact then 1 else 0, 1)
+			item.label.TextScaled = compact
+			local limit = item.label:FindFirstChildOfClass("UITextSizeConstraint")
+			if limit then
+				limit.MaxTextSize = if compact then 13 else 15
+			end
+		end
+		for _, item in { display, another } do
+			local row = item.label.Parent :: Frame
+			row.AutomaticSize = if compact then Enum.AutomaticSize.None else Enum.AutomaticSize.XY
+			row.Size = if compact then UDim2.new(1, -16, 0, 26) else UDim2.fromOffset(0, 0)
+			item.label.AutomaticSize = if compact
+				then Enum.AutomaticSize.None
+				else Enum.AutomaticSize.X
+			item.label.Size = if compact
+				then UDim2.new(1, if item == another then -108 else 0, 1, 0)
+				else UDim2.fromOffset(0, 27)
+			item.label.TextScaled = compact
+			item.detail.AutomaticSize = if compact
+				then Enum.AutomaticSize.None
+				else Enum.AutomaticSize.X
+			item.detail.Size = if compact then UDim2.new(1, -12, 0, 14) else UDim2.fromOffset(0, 17)
+			item.detail.TextScaled = compact
+			local labelLimit = item.label:FindFirstChildOfClass("UITextSizeConstraint")
+			local detailLimit = item.detail:FindFirstChildOfClass("UITextSizeConstraint")
+			if labelLimit and detailLimit then
+				labelLimit.MaxTextSize = if compact then 20 else 22
+				detailLimit.MaxTextSize = if compact then 12 else 13
+			end
+			if item.price then
+				local priceGroup = item.price.Parent :: Frame
+				priceGroup.AutomaticSize = if compact
+					then Enum.AutomaticSize.None
+					else Enum.AutomaticSize.X
+				priceGroup.Size =
+					UDim2.fromOffset(if compact then 100 else 0, if compact then 26 else 33)
+				item.price.TextSize = if compact then 15 else 18
+			end
+		end
 		if compact then
 			-- Phone landscape: a right-hand column beside the figure (the camera shifts left).
 			block.AnchorPoint = Vector2.new(0.5, 1)
-			block.Position = UDim2.new(0.77, 0, 1, -12)
-			block.Size = UDim2.fromScale(0.44, 0)
-			new.root.Parent = block
-			new.root.Position = UDim2.new(0.5, 0, 0, -42)
-			new.root.Size = UDim2.fromOffset(0, 34)
-			new.label.TextSize = 16
-			name.TextSize = 28
-			titleRow.Size = UDim2.fromOffset(0, 36)
-			chipList.FillDirection = Enum.FillDirection.Vertical
-			chipList.Padding = UDim.new(0, 6)
+			block.Position = UDim2.fromScale(0.76, 1)
+			new.root.Parent = meta
+			new.root.Size = UDim2.fromOffset(0, 24)
+			new.label.TextSize = 13
+			new.root.LayoutOrder = 1
+			titleRow.Position = UDim2.new(0.5, 0, 0, 28)
+			titleRow.Size = UDim2.new(1, 0, 0, 34)
 			for _, item in { earns, chance, progress, owned } do
-				item.root.Size = UDim2.fromOffset(0, 28)
-				item.label.TextSize = 13
+				item.root.AnchorPoint = Vector2.zero
 			end
-			local chipCount = if owned.root.Visible then 4 else 3
-			local chipHeight = chipCount * 28 + (chipCount - 1) * 6
-			local y = 0
-			titleRow.Position = UDim2.new(0.5, 0, 0, y)
-			y += 44
-			chips.Position = UDim2.new(0.5, 0, 0, y)
-			chips.Size = UDim2.fromOffset(0, chipHeight)
-			y += chipHeight + 12
+			earns.root.Position, earns.root.Size = UDim2.fromOffset(0, 0), UDim2.new(1, 0, 0, 22)
+			chance.root.Position = UDim2.fromOffset(0, 26)
+			chance.root.Size = if owned.root.Visible
+				then UDim2.new(0.5, -3, 0, 22)
+				else UDim2.new(1, 0, 0, 22)
+			owned.root.Position, owned.root.Size =
+				UDim2.new(0.5, 3, 0, 26), UDim2.new(0.5, -3, 0, 22)
+			progress.root.Position, progress.root.Size =
+				UDim2.fromOffset(0, 52), UDim2.new(1, 0, 0, 22)
+			chips.Position, chips.Size = UDim2.new(0.5, 0, 0, 66), UDim2.new(1, 0, 0, 74)
+			if not model then
+				owned.root.Position, owned.root.Size =
+					UDim2.fromOffset(0, 0), UDim2.new(1, 0, 0, 22)
+			end
+			local y = if model then 146 elseif owned.root.Visible then 98 else 70
 			for _, item in { display, another } do
 				if item.button.Visible then
 					item.button.AnchorPoint = Vector2.new(0.5, 0)
 					item.button.Position = UDim2.new(0.5, 0, 0, y)
-					item.button.Size = UDim2.new(1, 0, 0, 56)
-					y += 64
+					item.button.Size = UDim2.new(1, 0, 0, 48)
+					y += 56
 				end
 			end
 			keep.Position = UDim2.new(0.5, 0, 0, y)
 			keep.Size = UDim2.new(1, 0, 0, 44)
 			y += 44
-			block.Size = UDim2.new(0.44, 0, 0, y)
+			block.Size = UDim2.new(0.48, 0, 0, y)
 		else
 			block.AnchorPoint = Vector2.new(0.5, 1)
 			block.Position = UDim2.new(0.5, 0, 1, -16)

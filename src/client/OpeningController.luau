@@ -395,6 +395,11 @@ function Controller.create(
 					end)
 				end)
 				local camera = workspace.CurrentCamera
+				connect(gui:GetPropertyChangedSignal("AbsoluteSize"), function()
+					safely(function()
+						draw(0) -- Safe-area changes also recompose a sleeping reduced-motion result.
+					end)
+				end)
 				if camera then
 					connect(camera:GetPropertyChangedSignal("ViewportSize"), function()
 						safely(function()

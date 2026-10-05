@@ -219,6 +219,9 @@ end
 local originalNew = E.Instance.new
 E.Instance.new = function(class)
 	local object = originalNew(class)
+	if class == "ScreenGui" then
+		object.AbsoluteSize = E.camera.ViewportSize
+	end
 	if class == "Sound" then
 		object.IsLoaded, object.IsPlaying = true, false
 	end

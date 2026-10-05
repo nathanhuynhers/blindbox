@@ -10,6 +10,7 @@ local Figure = require(script.Parent.OpeningFigure)
 local Effects = require(script.Parent.OpeningEffects)
 local Flight = require(script.Parent.OpeningFlight)
 local Result = require(script.Parent.OpeningResult)
+local Layout = require(script.Parent.OpeningLayout)
 local Cinematic = {}
 export type Cinematic = {
 	draw: (State.State, number) -> (),
@@ -41,7 +42,7 @@ local function solid(
 end
 function Cinematic.create(
 	scope: Scope.Scope,
-	_gui: ScreenGui,
+	gui: ScreenGui,
 	result: Result.Result,
 	profile: Config.Profile,
 	collection: Config.Collection,
@@ -284,9 +285,16 @@ function Cinematic.create(
 					if reduced then 0 else compression
 				)
 			end
-			local compact = camera.ViewportSize.Y < 500
-				and camera.ViewportSize.X > camera.ViewportSize.Y
-			local shift = if compact then 2.4 else 0
+			local safe = gui.AbsoluteSize
+			local compact = Layout.compact(safe.X, safe.Y)
+			local shift = if compact
+				then Layout.cameraShift(
+					safe.X,
+					safe.Y,
+					if reduced then 12 else settings.resultDistance,
+					if reduced then settings.reducedFov else settings.resultFov
+				)
+				else 0
 			local finalTarget = Vector3.new(shift, if compact then 2 else 1.2, 0)
 			local settled = phase == "Result" or phase == "Closing"
 			local finalPosition = Vector3.new(

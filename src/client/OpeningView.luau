@@ -10,6 +10,7 @@ local Result = require(script.Parent.OpeningResult)
 local Scope = require(script.Parent.OpeningScope)
 local Projection = require(script.Parent.UIState)
 local RevealCard = require(script.Parent.RevealCard)
+local Layout = require(script.Parent.OpeningLayout)
 local View = {}
 export type View = {
 	draw: (State.State, boolean) -> (),
@@ -118,8 +119,12 @@ function View.create(
 	local buttonLimit = Instance.new("UISizeConstraint")
 	buttonLimit.MaxSize, buttonLimit.Parent = Vector2.new(400, 54), primary
 	local function layout()
-		local compact = content.AbsoluteSize.Y < 468
-			and content.AbsoluteSize.X > content.AbsoluteSize.Y
+		local compact = Layout.compact(root.AbsoluteSize.X, root.AbsoluteSize.Y)
+		-- The bottom scrim was tinting the mobile toy back into a silhouette. Keep the
+		-- compact gradient behind the choices only; desktop retains its original wash.
+		shade.Position = if compact then UDim2.fromScale(0.48, 0) else UDim2.fromScale(0, 0.45)
+		shade.Size = if compact then UDim2.fromScale(0.52, 1) else UDim2.fromScale(1, 0.55)
+		gradient.Rotation = if compact then 0 else 90
 		local center = if compact then 0.77 else 0.5
 		primary.AnchorPoint, primary.Position = Vector2.new(0.5, 1), UDim2.new(center, 0, 1, -24)
 		primary.Size = if compact then UDim2.new(0.4, 0, 0, 50) else UDim2.new(0.72, 0, 0, 54)
