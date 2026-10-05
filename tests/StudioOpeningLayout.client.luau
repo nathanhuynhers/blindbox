@@ -95,6 +95,24 @@ for _, object in details:GetDescendants() do
 				object.AbsoluteSize.X >= 44 and object.AbsoluteSize.Y >= 44,
 				object.Name .. " below touch minimum"
 			)
+			if object.Selectable then
+				local point = object.AbsolutePosition + object.AbsoluteSize / 2
+				local first: GuiButton? = nil
+				for _, hit in player.PlayerGui:GetGuiObjectsAtPosition(point.X, point.Y) do
+					local at: Instance? = hit
+					while at and at ~= player.PlayerGui do
+						if at:IsA("GuiButton") and at.Active then
+							first = at
+							break
+						end
+						at = at.Parent
+					end
+					if first then
+						break
+					end
+				end
+				check(first == object, object.Name .. " is obstructed by another input target")
+			end
 		end
 	end
 end

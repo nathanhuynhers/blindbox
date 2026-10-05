@@ -239,7 +239,10 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 			Kit.rect(row.status, pinner - 100, 8, 88, 20)
 			Kit.rect(row.bar.root, 60, 34, pinner - 72, 8)
 		end
-		Kit.fit(body, top + cardHeight + 22, height)
+		-- Include the last collection row even when the short-layout card is smaller
+		-- than its contents; checking only the card bounds truncates that target.
+		local progressBottom = 52 + math.max(0, #rows - 1) * 62 + 54
+		Kit.fit(body, top + math.max(cardHeight, progressBottom) + 22, height)
 	end
 	local timer: thread? = nil
 	local visible = false

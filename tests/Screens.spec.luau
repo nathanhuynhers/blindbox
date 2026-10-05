@@ -666,4 +666,162 @@ local function joined(owned: boolean): boolean
 end
 check(joined(true), "returning player with a claimable reward sees Login on join")
 check(not joined(false), "brand-new player keeps onboarding uncovered")
+-- Short safe areas: exercise the real screen sizing code rather than a duplicate pixel formula.
+-- The engine double does not render; native Studio checks additionally measure clipping/scrolling.
+local ShopScreen = require("./ShopScreen")
+local ShelvesScreen = require("./ShelvesScreen")
+local Layout = require("./UILayout")
+for _, viewport in { { 705, 338 }, { 666, 374 }, { 1280, 720 } } do
+	Engine.screen.X, Engine.screen.Y = viewport[1], viewport[2]
+	local menus = Interface.create(function() end)
+	menus.update(snapshot())
+	local menuGui = Engine.playerGui:FindFirstChild("PocketGrove")
+	local settings = Engine.find(menuGui, "Settings")
+	check(
+		settings.Position.Y.Offset >= 0
+			and settings.Position.Y.Offset + settings.Size.Y.Offset <= viewport[2],
+		"Settings remains inside the safe height"
+	)
+	menus.destroy()
+	local geometry = Layout.frame(viewport[1], viewport[2], { left = 96, right = viewport[1] })
+	local panel = geometry.panel
+	check(
+		panel.x >= 0
+			and panel.y >= 0
+			and panel.x + panel.width <= geometry.width
+			and panel.y + panel.height <= geometry.height,
+		"sheet stays in the safe area"
+	)
+	local parent = Engine.Instance.new("Frame")
+	local scope = Scope.create()
+	local data = snapshot()
+	local ctx = {
+		scope = scope,
+		effects = function()
+			return false
+		end,
+		scale = function()
+			return geometry.scale
+		end,
+		snapshot = function()
+			return data
+		end,
+		canAct = function()
+			return true
+		end,
+		send = function() end,
+		navigate = function() end,
+		close = function() end,
+		message = function() end,
+	}
+	local screen = ShopScreen.create(parent, ctx)
+	screen.layout(panel.width, panel.height, geometry.phone)
+	for _, collection in Catalog.collections do
+		data.discovered = {}
+		screen.route({ collection = collection.id })
+		local contents = within(screen.root, "Contents")
+		local members = UI.members(collection.id)
+		-- Discover after rendering the unknown state: a target-only check on empty data is insufficient.
+		for _, id in members do
+			data.discovered[id] = true
+		end
+		screen.update(data)
+		local previous = nil
+		for _, id in members do
+			local tile = within(contents, id)
+			check(tile.Visible and tile.Selectable, "discovered Shop figure is selectable")
+			check(
+				tile.Size.X.Offset >= 44 and tile.Size.Y.Offset >= 44,
+				"Shop target >= 44 in both dimensions"
+			)
+			check(
+				tile.Position.X.Offset >= 0
+					and tile.Position.X.Offset + tile.Size.X.Offset <= contents.Size.X.Offset,
+				"Shop figure fits the pane width"
+			)
+			if previous and previous.Position.Y.Offset == tile.Position.Y.Offset then
+				check(
+					tile.Position.X.Offset - previous.Position.X.Offset - previous.Size.X.Offset
+						>= 8,
+					"adjacent figures have readable separation"
+				)
+			end
+			previous = tile
+		end
+		local Tile = require("./FigureTile")
+		local states = Tile.create(contents, ctx, "tile", function() end)
+		states.size(previous.Size.X.Offset, previous.Size.Y.Offset)
+		for _, view in
+			{
+				{ discovered = false },
+				{ discovered = true },
+				{ discovered = true, selected = true },
+				{ discovered = true, enabled = false },
+			}
+		do
+			states.set(members[1], view)
+			check(
+				states.button.Size.X.Offset >= 44 and states.button.Size.Y.Offset >= 44,
+				"all figure states preserve target geometry"
+			)
+			check(
+				states.button.Selectable == (view.enabled ~= false),
+				"disabled figure cannot be selected"
+			)
+			check(
+				states.button:GetAttribute("Selected") == (view.selected == true),
+				"selected figure style survives sizing"
+			)
+		end
+		states.button:Destroy()
+		for _, name in { "InsideTitle", "OddsTitle", "OddsBar" } do
+			check(within(contents, name).Visible, "Shop keeps contents and odds")
+		end
+		local product = within(screen.root, "Product")
+		for _, name in { "BuyBox", "BuyTen", "DailyBox" } do
+			local action = within(product, name)
+			check(
+				action.Visible and action.Size.Y.Offset >= 44,
+				"Shop retains purchase/free actions"
+			)
+			local bottom = action.Position.Y.Offset + action.Size.Y.Offset + 4
+			check(
+				bottom <= math.max(product.Size.Y.Offset, product.CanvasSize.Y.Offset),
+				"Shop action scroll-reachable"
+			)
+		end
+	end
+	screen.root:Destroy()
+	local shelves = ShelvesScreen.create(parent, ctx)
+	shelves.layout(panel.width, panel.height, geometry.phone)
+	shelves.update(data)
+	local scroll = within(shelves.root, "CabinetScroll")
+	local cabinet = within(shelves.root, "Cabinet")
+	local body = within(shelves.root, "Body")
+	check(
+		scroll.Position.Y.Offset + scroll.Size.Y.Offset <= body.Size.Y.Offset,
+		"cabinet viewport stays inside clipping body"
+	)
+	for index = 1, 9 do
+		local spot = within(cabinet, "Spot" .. index)
+		check(
+			spot.Size.X.Offset >= 44 and spot.Size.Y.Offset >= 44,
+			"Shelf positions retain touch size"
+		)
+		local bottom = cabinet.Position.Y.Offset + spot.Position.Y.Offset + spot.Size.Y.Offset
+		check(
+			bottom <= math.max(scroll.Size.Y.Offset, scroll.CanvasSize.Y.Offset),
+			"all nine Shelf positions scroll-reachable"
+		)
+	end
+	check(
+		not within(shelves.root, "Picker"):IsDescendantOf(scroll),
+		"picker and cabinet never nest scrollers"
+	)
+	for index = 1, 3 do
+		check(within(shelves.root, "Shelf" .. index).Visible, "three visible Shelf tabs preserved")
+	end
+	scope.destroy()
+	parent:Destroy()
+end
 print("PASS: " .. checks .. " screen routing, send, pending, countdown and lifetime checks")

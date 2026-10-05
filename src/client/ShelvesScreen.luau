@@ -120,7 +120,12 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		end
 	)
 	buy.button.Size = UDim2.fromOffset(190, 44)
-	local cabinet = Kit.frame(left, "Cabinet", Style.wood)
+	-- Sibling of the picker, so a cabinet gesture cannot scroll the figure list.
+	local cabinetScroll = Kit.canvas(left, "CabinetScroll")
+	local scrollHint =
+		Kit.text(left, "CabinetScrollHint", "Scroll for bottom shelf ↓", 12, nil, Style.muted)
+	scrollHint.TextXAlignment = Enum.TextXAlignment.Center
+	local cabinet = Kit.frame(cabinetScroll, "Cabinet", Style.wood)
 	Kit.corner(cabinet, 20)
 	Kit.stroke(cabinet, Style.woodDark, 4)
 	local boards: { Frame } = {}
@@ -287,7 +292,15 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		end
 		local cabinetY = 68
 		local cabinetHeight = math.max(if phone then 228 else 300, height - cabinetY - 16)
-		Kit.rect(cabinet, pad, cabinetY, inner, cabinetHeight)
+		local available = height - cabinetY + 4
+		local overflow = cabinetHeight + 8 > available
+		local viewportHeight = available - (if overflow then 22 else 0)
+		Kit.rect(cabinetScroll, pad - 4, cabinetY - 4, inner + 8, viewportHeight)
+		Kit.rect(cabinet, 4, 4, inner - cabinetScroll.ScrollBarThickness, cabinetHeight)
+		Kit.fit(cabinetScroll, cabinetHeight + 8, viewportHeight)
+		scrollHint.Visible = overflow
+		Kit.rect(scrollHint, pad, height - 22, inner, 18)
+		inner -= cabinetScroll.ScrollBarThickness
 		local rowGap = 8
 		local rowHeight = math.floor((cabinetHeight - 20 - rowGap * 2) / 3)
 		local spotWidth = State.cells(inner - 20 - 16, 3, 8)

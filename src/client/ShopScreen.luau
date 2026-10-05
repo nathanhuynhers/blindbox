@@ -40,7 +40,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		refresh()
 	end)
 	-- Middle: product
-	local product = Kit.frame(body, "Product")
+	local product = Kit.canvas(body, "Product")
 	local stage = Kit.frame(product, "ProductStage")
 	local preview = BoxPreview.create(stage, ctx.scope)
 	local boxTitle = Kit.text(product, "BoxTitle", "", 24, Style.display())
@@ -199,6 +199,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 				Kit.rect(button, 14, y, middle - 28, tall)
 				y += tall + 14
 			end
+			Kit.fit(product, y - 14 + 8, height)
 		else
 			-- The free-box slot is always reserved so the product never jumps when it hides.
 			local extra = (math.max(2, #order) - 2) * 66
@@ -218,26 +219,28 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 				Kit.rect(button, (middle - buttonWidth) / 2, y, buttonWidth, tall)
 				y += tall + 14
 			end
+			Kit.fit(product, y - 14 + 8, height)
 		end
 	end
 	local function arrangeInfo(count: number, rowCount: number)
 		local pad = if phone then 14 else 20
-		local inner = infoWidth - pad * 2
+		local inner = infoWidth - pad * 2 - info.ScrollBarThickness
 		local y = if phone then 10 else 16
 		Kit.rect(inside, pad, y, inner - 90, 26)
 		inside.TextSize = if phone then 17 else 20
 		Kit.rect(insideCount, pad + inner - 90, y, 90, 26)
 		y += 34
-		local gap = if phone then 5 else 6
-		local cell = State.cells(inner, 7, gap)
+		local gap = 8
+		local columns = math.clamp(math.floor((inner + gap) / (Style.target + gap)), 1, 7)
+		local cell = State.cells(inner, columns, gap)
 		local tileHeight = if phone then 44 else 48
 		for index, tile in tiles do
-			local column, line = (index - 1) % 7, (index - 1) // 7
+			local column, line = (index - 1) % columns, (index - 1) // columns
 			tile.size(cell, tileHeight)
 			tile.button.Position =
 				UDim2.fromOffset(pad + column * (cell + gap), y + line * (tileHeight + gap))
 		end
-		y += math.ceil(count / 7) * (tileHeight + gap) + 8
+		y += math.ceil(count / columns) * (tileHeight + gap) + 8
 		Kit.rect(oddsTitle, pad, y, inner - 90, 26)
 		oddsTitle.TextSize = if phone then 17 else 20
 		Kit.rect(perBox, pad + inner - 90, y, 90, 26)

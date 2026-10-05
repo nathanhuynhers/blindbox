@@ -487,3 +487,14 @@ checks. Actual Welcome Box/placement, paid single and Open 10 paths were exercis
 input, including duplicate feedback, reduced motion and Skip to summary. Physical devices were
 unavailable; emulation is not hardware or subjective readability acceptance. Other findings
 received no additional implementation in this follow-up.
+
+**Focused A05/A06 small-screen follow-up (2026-10-04).** Both failures were reproduced before
+editing in a fresh worktree from `origin/master` (`c90cd23`). Shop now derives columns from the
+44px minimum plus figure separation and keeps purchase/free-box actions scroll-reachable.
+Shelves has an independent cabinet scroller with an overflow hint; all nine positions remain
+reachable, while iPhone and desktop cabinets fit without scrolling. Two narrow Goals/Settings
+bounds corrections were identified during the required wider screen pass. All major screens
+were inspected at 705×338 and 666×374; native UI/scroll/input checks, standalone suites, formatting,
+lint, source diagnostics and build passed. Physical-device acceptance remains pending.
+See [before/after evidence and acceptance limits](audits/2026-10-04/small-screen-ui/README.md).
+The original A05/A06 findings above remain the historical audit evidence.

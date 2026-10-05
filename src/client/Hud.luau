@@ -199,7 +199,13 @@ function Hud.create(
 			tracker.layout(geometry.tracker.x, geometry.tracker.y, phone)
 			menu.place(
 				geometry.gear.x + geometry.gear.width - 280,
-				geometry.gear.y + geometry.gear.height + 10
+				math.max(
+					8,
+					math.min(
+						geometry.gear.y + geometry.gear.height + 10,
+						geometry.height - menu.root.Size.Y.Offset - 8
+					)
+				)
 			)
 			right.Visible = not opened
 			if opened then

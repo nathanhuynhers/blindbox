@@ -8,6 +8,54 @@ local GuiService = game:GetService("GuiService")
 assert(RunService:IsStudio(), "Studio-only UI check")
 local player = Players.LocalPlayer
 assert(player, "Use the client Command Bar")
+local summary = player.PlayerGui:FindFirstChild("OpenTenResults") :: ScreenGui?
+if summary and summary.Enabled then
+	local safe = summary:WaitForChild("Results") :: Frame
+	RunService.Heartbeat:Wait()
+	RunService.Heartbeat:Wait()
+	local origin, extent = safe.AbsolutePosition, safe.AbsoluteSize
+	local count = 0
+	local results, actions = 0, 0
+	for _, target in safe:GetDescendants() do
+		if not target:IsA("GuiButton") then
+			continue
+		end
+		local visible = true
+		local ancestor: Instance? = target
+		while ancestor and ancestor ~= summary do
+			if ancestor:IsA("GuiObject") and not ancestor.Visible then
+				visible = false
+			end
+			ancestor = ancestor.Parent
+		end
+		if not visible then
+			continue
+		end
+		local position, size = target.AbsolutePosition, target.AbsoluteSize
+		assert(
+			position.X >= origin.X - 1
+				and position.Y >= origin.Y - 1
+				and position.X + size.X <= origin.X + extent.X + 1
+				and position.Y + size.Y <= origin.Y + extent.Y + 1,
+			"Summary target escapes safe area: " .. target.Name
+		)
+		if target.Selectable then
+			assert(size.X >= 43.9 and size.Y >= 43.9, "Small summary target: " .. target.Name)
+			actions += 1
+		end
+		if target.Parent == safe and target:GetAttribute("FigureId") then
+			results += 1
+		end
+		count += 1
+	end
+	local title = safe:FindFirstChild("Title") :: TextLabel?
+	assert(results > 0 and actions > 0, "Summary needs its results and a Done action")
+	if title and title.Text == "Open 10 results" then
+		assert(results == 10, "Open 10 must show all ten results")
+	end
+	print(string.format("PASS: %d summary tiles/controls inside %s", count, tostring(extent)))
+	return
+end
 local gui = player.PlayerGui:WaitForChild("PocketGrove") :: ScreenGui
 assert(gui.Enabled, "Finish the opening before checking the normal UI")
 RunService.Heartbeat:Wait()
@@ -29,6 +77,57 @@ local function visible(object: GuiObject): boolean
 	return true
 end
 local buttons, scrolls = 0, 0
+-- A descendant may be outside a scroll window only when its complete target is reachable
+-- in that canvas. Once crossing a scroller, test the viewport against outer clipping frames.
+local function reachable(target: GuiObject)
+	local position, size = target.AbsolutePosition, target.AbsoluteSize
+	local ancestor = target.Parent
+	while ancestor and ancestor ~= gui do
+		if ancestor:IsA("ScrollingFrame") then
+			local origin = ancestor.AbsolutePosition
+			local window = ancestor.AbsoluteWindowSize
+			local canvas = ancestor.AbsoluteCanvasSize
+			local offset = ancestor.CanvasPosition * scale
+			local x, y = position.X - origin.X + offset.X, position.Y - origin.Y + offset.Y
+			local direction = ancestor.ScrollingDirection
+			local horizontal = direction == Enum.ScrollingDirection.X
+				or direction == Enum.ScrollingDirection.XY
+			local vertical = direction == Enum.ScrollingDirection.Y
+				or direction == Enum.ScrollingDirection.XY
+			assert(
+				x >= -1
+					and y >= -1
+					and x + size.X <= (if horizontal then math.max(canvas.X, window.X) else window.X) + 1
+					and y + size.Y <= (if vertical then math.max(canvas.Y, window.Y) else window.Y) + 1
+					and size.X <= window.X + 1
+					and size.Y <= window.Y + 1,
+				"Unreachable scroll target: " .. target:GetFullName()
+			)
+			position, size = origin, ancestor.AbsoluteSize
+		elseif ancestor:IsA("GuiObject") and ancestor.ClipsDescendants then
+			local origin, extent = ancestor.AbsolutePosition, ancestor.AbsoluteSize
+			assert(
+				position.X >= origin.X - 1
+					and position.Y >= origin.Y - 1
+					and position.X + size.X <= origin.X + extent.X + 1
+					and position.Y + size.Y <= origin.Y + extent.Y + 1,
+				"Clipped descendant: "
+					.. target:GetFullName()
+					.. " inside "
+					.. ancestor:GetFullName()
+			)
+		end
+		ancestor = ancestor.Parent
+	end
+	local origin, extent = bounds.AbsolutePosition, bounds.AbsoluteSize
+	assert(
+		position.X >= origin.X - 1
+			and position.Y >= origin.Y - 1
+			and position.X + size.X <= origin.X + extent.X + 1
+			and position.Y + size.Y <= origin.Y + extent.Y + 1,
+		"Target leaves device safe area: " .. target:GetFullName()
+	)
+end
 for _, object in gui:GetDescendants() do
 	if object:IsA("GuiButton") and visible(object) and object.Selectable then
 		buttons += 1
@@ -36,6 +135,7 @@ for _, object in gui:GetDescendants() do
 			object.AbsoluteSize.X >= 43.9 and object.AbsoluteSize.Y >= 43.9,
 			"Small target: " .. object:GetFullName()
 		)
+		reachable(object)
 	elseif object:IsA("ScrollingFrame") and visible(object) then
 		local layout = object:FindFirstChildOfClass("UIGridLayout")
 			or object:FindFirstChildOfClass("UIListLayout")
@@ -47,13 +147,55 @@ for _, object in gui:GetDescendants() do
 				else 0
 			-- AbsoluteContentSize is in screen pixels; CanvasSize is in design units.
 			assert(
-				object.CanvasSize.Y.Offset + 1 >= math.ceil(layout.AbsoluteContentSize.Y / scale + extra),
+				object.CanvasSize.Y.Offset + 1
+					>= math.ceil(layout.AbsoluteContentSize.Y / scale + extra),
 				"Truncated vertical scroll: " .. object:GetFullName()
 			)
 			assert(
-				object.CanvasSize.Y.Offset <= math.ceil(layout.AbsoluteContentSize.Y / scale + extra) + 2,
+				object.CanvasSize.Y.Offset
+					<= math.ceil(layout.AbsoluteContentSize.Y / scale + extra) + 2,
 				"Inflated vertical scroll (scale not applied): " .. object:GetFullName()
 			)
+		elseif not layout and object.AutomaticCanvasSize == Enum.AutomaticSize.None then
+			-- Manually positioned Shop product/odds and Shelf cabinet canvases must contain
+			-- their real visible children; checking only UIGridLayout misses these panes.
+			local bottom = 0
+			for _, child in object:GetDescendants() do
+				if child:IsA("GuiObject") and visible(child) then
+					local nested = false
+					local ancestor = child.Parent
+					while ancestor and ancestor ~= object do
+						if ancestor:IsA("ScrollingFrame") then
+							nested = true
+							break
+						end
+						ancestor = ancestor.Parent
+					end
+					-- Nested scrollers own their canvas; only their viewport belongs here.
+					if not nested then
+						bottom = math.max(
+							bottom,
+							(
+								child.AbsolutePosition.Y
+								- object.AbsolutePosition.Y
+								+ child.AbsoluteSize.Y
+							)
+									/ scale
+								+ object.CanvasPosition.Y
+						)
+					end
+				end
+			end
+			local window = object.AbsoluteWindowSize.Y / scale
+			assert(
+				bottom <= math.max(window, object.CanvasSize.Y.Offset) + 1,
+				"Truncated manual canvas: " .. object:GetFullName()
+			)
+			assert(
+				object.CanvasSize.Y.Offset <= math.max(window, bottom + 32) + 1,
+				"Inflated manual canvas: " .. object:GetFullName()
+			)
+			scrolls += 1
 		end
 	end
 	if object:IsA("GuiObject") and visible(object) then
@@ -78,8 +220,7 @@ for _, host in screens:GetChildren() do
 		open = host
 		local inside = host.AbsolutePosition.X >= bounds.AbsolutePosition.X - 1
 			and host.AbsolutePosition.Y >= bounds.AbsolutePosition.Y - 1
-			and host.AbsolutePosition.X + host.AbsoluteSize.X
-				<= bounds.AbsolutePosition.X + bounds.AbsoluteSize.X + 1
+			and host.AbsolutePosition.X + host.AbsoluteSize.X <= bounds.AbsolutePosition.X + bounds.AbsoluteSize.X + 1
 			and host.AbsolutePosition.Y + host.AbsoluteSize.Y
 				<= bounds.AbsolutePosition.Y + bounds.AbsoluteSize.Y + 1
 		assert(inside, "Screen leaves the safe area: " .. host.Name)
@@ -89,7 +230,10 @@ local dim = stage:WaitForChild("Backdrop") :: GuiObject
 assert(dim.Visible == (open ~= nil), "World dim shows exactly while a screen is open")
 local phone = bounds.AbsoluteSize.Y < 560 or bounds.AbsoluteSize.X < 900
 local dock = stage:WaitForChild("Dock") :: Frame
-assert(dock.Visible == (open == nil or not phone), "Dock: always on desktop, hidden under phone sheets")
+assert(
+	dock.Visible == (open == nil or not phone),
+	"Dock: always on desktop, hidden under phone sheets"
+)
 local coins = stage:WaitForChild("Hud"):WaitForChild("Coins") :: GuiObject
 if coins.Visible then
 	local inset = GuiService.TopbarInset
@@ -101,12 +245,75 @@ end
 if open then
 	local close = open:FindFirstChild("Close", true) :: GuiObject?
 	assert(close and visible(close), "Open screen needs its Close button")
+	local home = stage:FindFirstChild("HomeButton", true) :: GuiObject?
+	assert(not home or not visible(home), "Home must not obstruct a modal screen")
+end
+-- Check actual PlayerGui hit order (including TouchGui), not just visual rectangles.
+-- Off-window scroll targets are covered by reachability above; check their input after scrolling.
+local settings = stage:FindFirstChild("Settings", true)
+local activePanel = if settings
+		and settings:IsA("GuiObject")
+		and visible(settings)
+	then settings
+	else open
+if activePanel then
+	for _, target in activePanel:GetDescendants() do
+		if target:IsA("GuiButton") and target.Selectable and visible(target) then
+			local point = target.AbsolutePosition + target.AbsoluteSize / 2
+			local onScreen = true
+			local ancestor = target.Parent
+			while ancestor and ancestor ~= gui do
+				if ancestor:IsA("GuiObject") and ancestor.ClipsDescendants then
+					local origin, extent = ancestor.AbsolutePosition, ancestor.AbsoluteSize
+					if
+						point.X < origin.X
+						or point.Y < origin.Y
+						or point.X > origin.X + extent.X
+						or point.Y > origin.Y + extent.Y
+					then
+						onScreen = false
+					end
+				end
+				ancestor = ancestor.Parent
+			end
+			if onScreen then
+				local first: GuiButton? = nil
+				for _, hit in player.PlayerGui:GetGuiObjectsAtPosition(point.X, point.Y) do
+					local at: Instance? = hit
+					while at and at ~= player.PlayerGui do
+						if at:IsA("GuiButton") and at.Active then
+							first = at
+							break
+						end
+						at = at.Parent
+					end
+					if first then
+						break
+					end
+				end
+				assert(
+					first == target,
+					"Obstructed control: "
+						.. target:GetFullName()
+						.. " behind "
+						.. (if first then first:GetFullName() else "no hit")
+				)
+			end
+		end
+	end
 end
 local count = #gui:GetDescendants()
 local baseline = gui:GetAttribute("StudioDescendants")
-local key = (if open then open.Name else "World") .. "@" .. bounds.AbsoluteSize.X .. "x" .. bounds.AbsoluteSize.Y
+local key = (if open then open.Name else "World")
+	.. "@"
+	.. bounds.AbsoluteSize.X
+	.. "x"
+	.. bounds.AbsoluteSize.Y
 if typeof(baseline) == "number" and gui:GetAttribute("StudioDescendantsKey") == key then
-	assert(count == baseline, string.format("Instance growth: %d -> %d descendants", baseline, count))
+	assert(
+		count == baseline,
+		string.format("Instance growth: %d -> %d descendants", baseline, count)
+	)
 	print("PASS: no instance growth since the previous run on " .. key)
 else
 	gui:SetAttribute("StudioDescendants", count)
