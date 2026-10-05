@@ -1,11 +1,19 @@
 # Product Backlog — Playtest Round 2 (2026-10-05)
 
 This document tracks the next batch of follow-up work captured from playtesting after the original
-[Product Backlog](PRODUCT_BACKLOG.md). It is intentionally separated by implementation surface so
-logic-heavy work can go to Codex while UI, visual, world, animation and experience work can go to
-Claude.
+[Product Backlog](PRODUCT_BACKLOG.md). Tasks are separated by implementation surface so it is easy to
+distinguish gameplay/system work from UI, visual, world, animation and experience work.
 
-Mixed features are split into paired tasks instead of asking one agent to own both sides.
+Agent labels in this document are **recommendations, not ownership rules**:
+- **Codex** is a good fit for contained pure-logic, backend, economy and gameplay-system tasks.
+- **Claude** can handle both logic and UI, and is generally the better fit when a task involves
+  substantial UI/UX, visual design, world-building, animation or cross-cutting implementation.
+- **Codex** is also reasonable for very small or straightforward UI changes when a separate design
+  pass would add little value.
+- Use whichever agent is the better fit for the actual scope once the task is opened.
+
+Mixed features are split into paired logic and presentation tasks when that makes the work easier to
+reason about, but the same agent may handle both parts when appropriate.
 
 ## Verified existing behavior — no new task
 
@@ -25,7 +33,10 @@ Mixed features are split into paired tasks instead of asking one agent to own bo
 
 # Bug Fixes
 
-## UI / World / Design bugs — Claude
+## UI / World / Design bugs
+
+**Agent recommendation:** Claude for visual/world investigation or polish; Codex is also fine when the
+fix is a simple instance/code cleanup with little design judgment.
 
 ### BUG-UI-01 — Remove the white tile in the middle of the plaza
 
@@ -45,7 +56,9 @@ Mixed features are split into paired tasks instead of asking one agent to own bo
 
 # New Implementation — Pure Logic / Gameplay Systems
 
-These tasks should generally go to **Codex**.
+**Agent recommendation:** Codex is usually the most efficient choice for contained logic-only work.
+Claude is also a good choice when the logic task is coupled to broader feature implementation or when
+you want one agent to carry the feature through end-to-end.
 
 ### LOGIC-01 — Per-figure Display pressure-plate collection
 
@@ -132,7 +145,9 @@ Paired with **UI-09**.
 
 # New Implementation — UI / World / Animation / Experience
 
-These tasks should generally go to **Claude**.
+**Agent recommendation:** Claude is preferred for substantial UI/UX, visual design, world-building,
+animation and experience work. Codex is also a reasonable choice for simple, well-specified UI changes
+that do not require much visual iteration or design judgment.
 
 ### UI-01 — Design and add per-figure Display pressure plates
 
@@ -237,7 +252,10 @@ Paired with **LOGIC-06**.
 Do not prioritize these until the active bug fixes and implementation tasks above are in a strong,
 playtested state.
 
-## Stretch logic — Codex
+## Stretch logic
+
+**Agent recommendation:** Codex for isolated system/backend work; Claude is equally viable if the
+stretch feature is being implemented together with its player-facing experience.
 
 ### STRETCH-LOGIC-01 — Achievements and titles system
 
@@ -259,7 +277,10 @@ playtested state.
 - Keep tuning configurable and test the effect across all rarity tiers.
 - Do not begin final implementation until the gamepass/tuning decisions are set.
 
-## Stretch UI / design — Claude
+## Stretch UI / design
+
+**Agent recommendation:** Claude for design-heavy presentation work; Codex is acceptable for small,
+straightforward UI implementation once the design is already decided.
 
 ### STRETCH-UI-01 — Achievements and titles presentation
 
@@ -292,7 +313,7 @@ Paired with **STRETCH-LOGIC-02**.
 8. Shelf showcase auto-scroll (**UI-05**).
 9. Opening audio/music behavior (**UI-06**).
 10. Physical plot Shop pair (**LOGIC-04 + UI-07**).
-11. Plaza limited-shop pair (**LOGIC-05 + UI-08**) after stock/rotation scope is decided.
+11. Plaza limited-shop pair (**LOGIC-05 + UI-08**).
 12. Equip Best pair (**LOGIC-06 + UI-09**).
 13. Achievements/titles stretch pair.
 14. Luck/gamepass system last.
