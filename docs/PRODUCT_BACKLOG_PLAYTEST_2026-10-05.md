@@ -100,10 +100,15 @@ Paired with **UI-08**.
   UI to show the current selection, normal price, discounted price, remaining stock and refresh time.
 - Do not allow retries, reconnects or rapid clicks to duplicate stock or purchases.
 - Keep discount amount, stock counts and selection weights configurable for economy tuning.
-- **Open balancing decision:** whether limited stock is per-player, per-server or globally shared.
-  Resolve this before final implementation.
-- **Open cadence decision:** whether the hourly rotation is globally synchronized or server-local.
-  Prefer a deterministic/server-authoritative design once the desired scope is chosen.
+- Limited stock is **per player**. One player's purchase must not reduce another player's stock.
+- The hourly offer rotation is **globally synchronized across all servers**: every server should show
+  the same offers for the same hourly window.
+- Derive the active rotation from a shared deterministic time window/server-authoritative schedule so
+  reconnecting or server hopping cannot reroll the offers.
+- Persist each player's purchased quantity for the active rotation window so joining another server
+  cannot reset their personal stock.
+- When the next global hourly window begins, the offer set and each player's personal stock refresh
+  to that window's configured inventory.
 
 ### LOGIC-06 — Equip Best Display loadout
 
