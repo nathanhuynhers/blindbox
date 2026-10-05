@@ -11,6 +11,7 @@ local Effects = require(script.Parent.OpeningEffects)
 local Flight = require(script.Parent.OpeningFlight)
 local Result = require(script.Parent.OpeningResult)
 local Layout = require(script.Parent.OpeningLayout)
+local Lighting = require(script.Parent.OpeningLighting)
 local Cinematic = {}
 export type Cinematic = {
 	draw: (State.State, number) -> (),
@@ -51,6 +52,16 @@ function Cinematic.create(
 ): Cinematic
 	local owner = CameraOwner.create(scope, interrupted)
 	local camera = owner.camera
+	-- A neutral studio look while the camera is ours, released with the camera.
+	local releaseLight: (() -> ())? = nil
+	local function unlight()
+		local release = releaseLight
+		releaseLight = nil
+		if release then
+			release()
+		end
+	end
+	scope.add(unlight)
 	local stage = Instance.new("Model")
 	stage.Name = "BlindboxCinematic"
 	stage:SetAttribute("RequestId", result.requestId)
@@ -234,10 +245,12 @@ function Cinematic.create(
 					light.Enabled = false
 				end
 				owner.restore()
+				unlight()
 				return
 			end
 			if not owner.isOwned() then
 				owner.take()
+				releaseLight = releaseLight or Lighting.hold()
 			end
 			if box and phase == "Enter" then
 				box.model.Parent = stage
@@ -286,7 +299,7 @@ function Cinematic.create(
 				)
 			end
 			local safe = gui.AbsoluteSize
-			local compact = Layout.compact(safe.X, safe.Y)
+			local compact = Config.compact(safe)
 			local shift = if compact
 				then Layout.cameraShift(
 					safe.X,

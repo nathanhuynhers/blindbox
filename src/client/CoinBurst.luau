@@ -138,6 +138,11 @@ function Burst.count(amount: number): number
 	return math.clamp(math.floor(4 + math.log10(math.max(1, amount)) * 4), 5, 24)
 end
 
+-- Flash, shockwave and sparkles without coins: a figure was just put on Display.
+function Burst.celebrate(origin: Vector3)
+	impact(origin)
+end
+
 -- landed runs once per coin that reaches the player (the HUD pill kick).
 function Burst.play(origin: Vector3, amount: number, landed: (() -> ())?)
 	impact(origin)

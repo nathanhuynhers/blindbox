@@ -233,6 +233,21 @@ E.Instance.new = function(class)
 	return object
 end
 E.camera.ViewportSize = E.Vector2.new(1280, 720)
+-- The opening composes from its ScreenGui's safe-area size (desktop unless a test changes it).
+local plainNew = E.Instance.new
+E.Instance.new = function(class)
+	local object = plainNew(class)
+	if class == "ScreenGui" then
+		object.AbsoluteSize = E.Vector2.new(1280, 720)
+	end
+	return object
+end
+-- Lighting at the town's night look; Changed fires for any property write (replication too).
+E.lighting = E.Instance.new("Lighting")
+E.lighting.Changed = E.signal()
+E.lighting.Ambient, E.lighting.OutdoorAmbient = E.Color3.fromRGB(38, 42, 70), E.Color3.fromRGB(84, 94, 140)
+E.lighting.Brightness, E.lighting.ColorShift_Top, E.lighting.ClockTime = 0.9, E.Color3.fromRGB(120, 140, 200), 22
+E.services.Lighting = E.lighting
 E.replication = E.Instance.new("ReplicatedStorage")
 E.replication.DescendantAdded = E.signal()
 E.services.ReplicatedStorage = E.replication

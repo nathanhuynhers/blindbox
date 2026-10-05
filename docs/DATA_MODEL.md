@@ -1,7 +1,7 @@
 # Persistent data model
 
-Current schema: **12**, in the Economy2 namespace. Valid schemas 6-11 upgrade (6 with empty
-banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; 6-9 with `lastSeen = 0`, `offlinePending = 0`; 6-10 with an unclaimed login streak; all with full volume); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
+Current schema: **13**, in the Economy2 namespace. Valid schemas 6-12 upgrade (6 with empty
+banks; 6/7 with `boxesOpened = 0`; 6-8 with empty `shelfRewards`; 6-9 with `lastSeen = 0`, `offlinePending = 0`; 6-10 with an unclaimed login streak; 6-11 with full volume; 6-12 with a mapped Welcome Quest stage, see below); schemas 1-5 remain rejected. Existing catalog figure IDs are unchanged.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
@@ -10,7 +10,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 12 written; valid 6-11 upgrade; unsupported versions block loading/writing |
+| schemaVersion | 13 written; valid 6-12 upgrade; unsupported versions block loading/writing |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -18,7 +18,8 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | discovered | Known figure IDs to true; permanent; includes every owned ID |
 | display | `{unlocked, slots}`: capacity 3..6, dense slot array of that length, empty string or owned figure ID; nonempty IDs must be unique |
 | shelves | `{units, legacyOverflow?}`: ordered persistent Shelf Units; optional dormant migration records |
-| step | Onboarding stage 1..5 |
+| step | Welcome Quest stage 1..7 (shared `Tutorial` ids): 1 Welcome Box, 2 Display, 3 collect, 4 paid box, 5 free x10 waiting, 6 optional Shelves tip, 7 done. Server-advanced only; it is also the one-time claim marker for both Welcome rewards (v13; 1..5 with older meanings before) |
+| tutorialHidden | The player skipped Welcome Quest guidance; rewards stay claimable (v13; required) |
 | lastDailyDay | Last claimed free-box UTC day or -1 |
 | lastLoginDay / loginStreak | Daily Login: last claimed UTC day (-1 never) and the consecutive-day streak it completed (0 only when never claimed); v11, required as a consistent pair |
 | goalDay / goalProgress / goalClaimed | Daily Display goal day, highest distinct count 0..3, claim marker |
@@ -91,7 +92,7 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names change as described above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-12 snapshots enter the acquisition/save path (valid schemas 6-11 are upgraded first).
+schema-13 snapshots enter the acquisition/save path (valid schemas 6-12 are upgraded first).
 Wallet and banks save atomically in one aggregate. Acknowledgements mean in-memory success; crash rollback affects the
 entire last saved aggregate, including `offlinePending` and `lastSeen`. See [operations](OPERATIONS.md).
 
@@ -121,8 +122,8 @@ rebuildable presentation index keyed by UserId string. They are never read back 
 so they cannot corrupt or roll back progress.
 
 Deploy with coordinated server replacement. Rolling back Settings restores the old namespace,
-not progress made in Economy2. A rollback that preserves new progress must support schema 12;
-older (schema-11) code cannot read v12 saves.
+not progress made in Economy2. A rollback that preserves new progress must support schema 13;
+older (schema-12) code cannot read v13 saves.
 
 ## Daily Login streak (v11)
 
@@ -134,3 +135,22 @@ pays Day 1 again). Coins and any boxes are granted in the same non-yielding step
 marker; a full wallet or box safety limit refuses the whole claim. Box rewards roll, count toward
 `boxesOpened`/pity and play the normal opening. v6-v10 decode as never claimed; a v11 record with a
 missing, non-integer or inconsistent pair fails closed.
+
+## Welcome Quest (v13)
+
+`step` is the first-session quest stage and the only record of its one-time rewards. `Rules`
+advances it from the action each stage teaches: the `Welcome` intent (1→2, a free Pocket Grove box
+rolled at Uncommon or better), a Display `Place` (2→3), a genuine server-authorized Display
+collection in `Rules.collect` (3→4; Daily Login, goals, offline Coins, Studio grants and other wallet
+changes never advance it), any paid `Buy`/`BuyTen` (4→5; the Daily free box does not count), the
+`WelcomeTen` intent (5→6, ten free Pocket Grove boxes whose last roll is raised to Rare only when the
+first nine had none) and a successful `ShelfPlace` (6→7). Each Welcome intent is accepted only at its
+own stage, in the same non-yielding step that grants, counts `boxesOpened` and writes the next stage,
+so retries, replays, rejoins and skips cannot repeat a grant. `SkipTutorial` sets
+`tutorialHidden`; it hides guidance only and changes no stage or reward. A v13 record with a stage
+outside 1..7 or a missing/non-boolean `tutorialHidden` fails closed.
+
+Older stages meant something else and there was no Welcome reward, so a v6-v12 profile that never
+opened a box and owns nothing upgrades to stage 1 (it receives the quest and its rewards); every
+other upgraded profile becomes stage 7 (finished, no Welcome rewards). Ownership is used only for this
+one-time legacy mapping, never to decide a v13 player's progress.

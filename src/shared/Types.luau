@@ -51,7 +51,10 @@ export type Profile = {
 	discovered: { [string]: boolean },
 	display: Display,
 	shelves: Shelves,
+	-- Welcome Quest stage (shared Tutorial ids, schema 13); advanced only by the server.
 	step: number,
+	-- The player skipped Welcome Quest guidance; rewards stay claimable.
+	tutorialHidden: boolean,
 	lastDailyDay: number,
 	-- Consecutive Daily Login: last claimed UTC day (-1 never) and the streak it completed.
 	lastLoginDay: number,
@@ -85,6 +88,7 @@ export type Snapshot = {
 	sequence: number,
 	rate: number,
 	step: number,
+	tutorialHidden: boolean,
 	rates: { [string]: number },
 	odds: { [string]: number },
 	prices: { [string]: number },

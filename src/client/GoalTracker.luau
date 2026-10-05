@@ -7,6 +7,7 @@ local Button = require(script.Parent.UIButton)
 local Progress = require(script.Parent.UIProgress)
 local State = require(script.Parent.UIState)
 local Context = require(script.Parent.UIContext)
+local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Tracker = {}
 
 export type Tracker = {
@@ -106,7 +107,9 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 		end,
 		update = function(snapshot: Types.Snapshot)
 			local goal = State.goal(snapshot)
-			active, ready = goal ~= "claimed", goal == "ready"
+			-- Stays out of the way while the Welcome Quest guides the first loop.
+			local quiet = Tutorial.guiding(snapshot.step, snapshot.tutorialHidden)
+			active, ready = goal ~= "claimed" and not quiet, goal == "ready" and not quiet
 			local reward = State.compact(State.goalReward(snapshot))
 			local progress = math.clamp(snapshot.goalProgress, 0, 3)
 			status.Text = if goal == "claimed"

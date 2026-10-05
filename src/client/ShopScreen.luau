@@ -1,9 +1,12 @@
 --!strict
 -- Shop: collection list | 3D box preview + Open / free box | What's inside + Drop odds.
 -- Price, odds and free-box options come from UIState projections, never hardcoded.
+-- While a Welcome Quest gift waits (the Welcome Box, later the free x10) it takes the top
+-- slot; the Daily free box stays out of the way until the x10 is opened or guidance skipped.
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
+local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
 local Button = require(script.Parent.UIButton)
@@ -102,6 +105,25 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			end
 		end
 	)
+	local giftAction = "Welcome"
+	local gift = Button.create(
+		product,
+		"WelcomeGift",
+		{
+			variant = "mint",
+			text = "Open your free Welcome Box",
+			size = 20,
+			radius = 20,
+			drop = 5,
+			icon = "Gift",
+		},
+		ctx.scope,
+		ctx.effects,
+		function()
+			ctx.send(giftAction)
+		end
+	)
+	gift.button.Visible = false
 	-- Right: contents and odds
 	local info = Kit.canvas(body, "Contents")
 	local inside = Kit.text(info, "InsideTitle", "What's inside", 20, Style.display())
@@ -156,6 +178,13 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		Kit.rect(info, listWidth + middle, 0, side, height)
 		infoWidth = side
 		local buttonWidth = math.min(300, middle - 32)
+		-- Visible actions top to bottom; the first is the large primary one.
+		local order: { TextButton } = {}
+		for _, item in { gift, buy, ten, free } do
+			if item.button.Visible then
+				table.insert(order, item.button)
+			end
+		end
 		if phone then
 			Kit.rect(stage, 14, 10, 92, 92)
 			boxTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -164,11 +193,15 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			boxTitle.TextWrapped = true
 			Kit.rect(boxTitle, 118, 12, middle - 130, 44)
 			Kit.rect(progress, 118, 58, middle - 130, 36)
-			Kit.rect(buy.button, 14, 114, middle - 28, 54)
-			Kit.rect(ten.button, 14, 182, middle - 28, 46)
-			Kit.rect(free.button, 14, if ten.button.Visible then 240 else 182, middle - 28, 46)
+			local y = 114
+			for index, button in order do
+				local tall = if index == 1 then 54 else 46
+				Kit.rect(button, 14, y, middle - 28, tall)
+				y += tall + 14
+			end
 		else
-			local extra = if ten.button.Visible then 66 else 0
+			-- The free-box slot is always reserved so the product never jumps when it hides.
+			local extra = (math.max(2, #order) - 2) * 66
 			local stageSize = math.clamp(height - 230 - extra, 120, 200)
 			local total = stageSize + 12 + 30 + 20 + 12 + 64 + 14 + 52 + extra
 			local top = math.max(12, (height - total) / 2)
@@ -179,15 +212,12 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			boxTitle.TextWrapped = false
 			Kit.rect(boxTitle, 12, top + stageSize + 12, middle - 24, 30)
 			Kit.rect(progress, 12, top + stageSize + 42, middle - 24, 20)
-			Kit.rect(buy.button, (middle - buttonWidth) / 2, top + stageSize + 74, buttonWidth, 64)
-			Kit.rect(ten.button, (middle - buttonWidth) / 2, top + stageSize + 152, buttonWidth, 52)
-			Kit.rect(
-				free.button,
-				(middle - buttonWidth) / 2,
-				top + stageSize + 152 + extra,
-				buttonWidth,
-				52
-			)
+			local y = top + stageSize + 74
+			for index, button in order do
+				local tall = if index == 1 then 64 else 52
+				Kit.rect(button, (middle - buttonWidth) / 2, y, buttonWidth, tall)
+				y += tall + 14
+			end
 		end
 	end
 	local function arrangeInfo(count: number, rowCount: number)
@@ -263,16 +293,36 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local affordTen = price > 0 and snapshot.coins >= price * 10
 		ten.setPrice(State.compact(price * 10))
 		ten.set("Open 10 boxes", ctx.canAct() and affordTen)
-		if ten.button.Visible ~= affordTen then
-			ten.button.Visible = affordTen
-			arrange()
-		end
 		local options = State.freeBoxOptions(snapshot)
 		freeChoice = if table.find(options, selected)
 			then selected
 			elseif #options == 1 then options[1]
 			else nil
-		free.button.Visible = snapshot.dailyReady and freeChoice ~= nil
+		local welcomeBox = snapshot.step == Tutorial.welcome
+		local welcomeTen = snapshot.step == Tutorial.reward
+		local quest = not snapshot.tutorialHidden and snapshot.step <= Tutorial.reward
+		giftAction = if welcomeTen then "WelcomeTen" else "Welcome"
+		gift.set(
+			if welcomeTen then "Open your FREE ×10" else "Open your free Welcome Box",
+			ctx.canAct()
+		)
+		-- The gift is the one obvious action; the paid box steps back while it waits.
+		buy.variant(if welcomeBox or welcomeTen then "white" else "gold")
+		local visible = {
+			[gift.button] = welcomeBox or welcomeTen,
+			[ten.button] = affordTen,
+			[free.button] = snapshot.dailyReady and freeChoice ~= nil and not quest,
+		}
+		local moved = false
+		for button, shown in visible do
+			if button.Visible ~= shown then
+				button.Visible = shown
+				moved = true
+			end
+		end
+		if moved then
+			arrange()
+		end
 		free.set(
 			if freeChoice == selected
 				then "Claim today's free box"

@@ -147,6 +147,15 @@ for id, config in Config.collections do
 		end
 	end
 end
+local welcome = Config.welcome
+for _, minimum in { welcome.box, welcome.ten } do
+	local floor = table.find(Rarity.order, minimum :: Rarity.Id)
+	local reachable = false
+	for rarity in Config.buckets[Config.collections[welcome.collection].buckets] do
+		reachable = reachable or (table.find(Rarity.order, rarity) or 0) >= (floor or math.huge)
+	end
+	assert(reachable, "Invalid welcome reward")
+end
 Economy.rates, Economy.prices, Economy.groups = rates, prices, groups
 function Economy.buckets(collection: string, pity: { [string]: Types.Pity }): { [string]: number }
 	local config = Config.collections[collection]
@@ -190,14 +199,28 @@ function Economy.odds(pity: { [string]: Types.Pity }): { [string]: number }
 	end
 	return result
 end
-function Economy.roll(value: number, collection: string, pity: { [string]: Types.Pity }): string
+-- `minimum` drops the rarities below it and rescales the rest; their relative odds are unchanged.
+function Economy.roll(
+	value: number,
+	collection: string,
+	pity: { [string]: Types.Pity },
+	minimum: Rarity.Id?
+): string
 	assert(value >= 0 and value < 1, "Roll must be in [0, 1)")
 	local buckets = Economy.buckets(collection, pity)
-	local cursor = value * 100
+	local floor = if minimum then table.find(Rarity.order, minimum) or 1 else 1
+	local total = 0
+	for index, rarity in Rarity.order do
+		if index >= floor then
+			total += buckets[rarity] or 0
+		end
+	end
+	assert(total > 0, "No figures at the minimum rarity")
+	local cursor = value * total
 	local last = ""
-	for _, rarity in Rarity.order do
+	for index, rarity in Rarity.order do
 		local chance = buckets[rarity]
-		if chance then
+		if chance and index >= floor then
 			for _, figure in Catalog.figures do
 				if figure.collection == collection and figure.rarity == rarity then
 					last = figure.id

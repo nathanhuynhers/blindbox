@@ -100,6 +100,7 @@ local v9 = Profile.encode(saved) :: { [string]: any }
 v9.schemaVersion = 9
 v9.lastLoginDay, v9.loginStreak = nil, nil
 v9.sfxVolume, v9.musicVolume = nil, nil
+v9.tutorialHidden = nil
 check(Profile.decode(v9, 0) == nil, "v9 records cannot carry offline fields")
 v9.lastSeen, v9.offlinePending = nil, nil
 local upgraded = Profile.decode(v9, 0)

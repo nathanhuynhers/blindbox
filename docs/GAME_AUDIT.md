@@ -460,3 +460,22 @@ A13 is already planned; A14 is an observed implementation risk tied to an existi
 - **Old generic UI overhaul/scaffolding language:** current screens are substantially redesigned. Keep concrete acceptance defects and any still-approved art scope; avoid treating a completed system as absent.
 
 These are review flags, not deletions or authorization for future milestone work.
+
+# Post-audit status
+
+The findings above are the 2026-10-04 audit record and are left as observed. Later changes are
+tracked here, not by editing that evidence.
+
+**Welcome Quest / FTUE rework (2026-10-04, schema 13).** Automated suites plus a native
+single-client Studio walkthrough (desktop 1529×770 and a resized 706×373 game viewport) were run.
+Physical phones, low graphics quality, persistent rejoin and multi-client remain unverified.
+
+| Finding | Status after the rework |
+| --- | --- |
+| A01 | Fixed in source. The compact camera shifted its target the wrong way (camera right is world -X), putting the toy under the card; it now shifts toward -X and the camera and card share `OpeningConfig.compact`. At 706×373 the figure measured x 114–301 and the card column x 386–679. Physical-phone check pending. |
+| A02 | Mitigated. `OpeningLighting` holds the daytime look on local Lighting while the opening owns the camera and restores the town look afterwards (verified in Studio: clock 13 during Result, live town clock after). Low-quality/physical-device confirmation pending. |
+| A03 | Fixed. Stages are saved and advanced only by server-confirmed actions; native Studio: Day 1 Login (+500) during the collect step left the quest on collect; a paid box before the Welcome Box left it on the Welcome Box. |
+| A04 | Fixed. Every batch result keeps a stable **Skip to results** choice; native Studio reached the ten-result summary from it. |
+| A07 | Fixed. Duplicates show `Duplicate upgrade · old → new coins/s` and the owned count (native: 10.95 → 12.6). |
+| A09 | Fixed. In-screen targets get a ring and badge on the control itself; the Welcome Box takes the primary slot and the paid button steps back while it waits. |
+| A05, A06, A08, A10–A14, G01 | Unchanged by this work. |

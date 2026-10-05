@@ -117,10 +117,17 @@ goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and 
 and an owned-figure picker. Native nearby prompts route to the existing Display and Shelves screens;
 they do not send mutation requests. Exhausted figures remain non-actionable using the existing tile state.
 There is no visit directory or teleport callback.
-`Onboarding` shows session-only first-session hints (free box, Display, collect, Shelves, buy
-again) to players whose first ready snapshot owns no figures. It rings dock tiles/the free-box
-button and points at the first displayed figure, never blocks input or sends intents, and Skip
-ends it for the session. No profile field records it.
+`Onboarding` presents the Welcome Quest from the server-owned `step` (schema 13, shared
+`Tutorial` ids): Welcome Box → Display → collect → paid box → free x10, then an optional Shelves
+tip. `Rules` advances the stage only from the action each stage teaches (see
+[data model](DATA_MODEL.md#welcome-quest-v13)); the client never infers progress from wallet
+changes, screen visits or ownership. A quest card shows the current action, progress pips and the
+x10 reward; a pulsing gold ring sits on the one control the step needs (dock tiles add a pointer,
+in-screen targets a corner badge that survives phone sheets), and the collect step adds a world
+pointer and glow on the displayed figure. It never blocks input or sends gameplay intents; two-tap
+Skip sends `SkipTutorial`. `ShopScreen` offers the Welcome Box and later the x10 as its primary
+"gift" action, `WelcomeReward` is the quest-complete popup, and competing badges, the goal card and
+the Daily Login auto-open stay quiet while the quest guides.
 `UIStyle`, `UIKit`, `UIButton`, `UIBadge`, `UIProgress`, `UIIcons` and `UIPreview` provide tokens,
 primitives, controls, progress, icon shapes and 3D portraits. `UIState` derives read-only
 presentation metadata and is the only reader of snapshot economy fields; `UIScope` owns
@@ -142,7 +149,7 @@ context (only `world` today) in the Music group, started once on the first ready
 the opening's cue slots read the same manifest. No remotes, server logic or saved data are
 involved. See [game soundpack](SOUND.md).
 
-Opening presentation is separate: `OpeningResult` derives immutable presentation metadata from
+Opening presentation is separate (the Welcome Box and Welcome x10 use it unchanged): `OpeningResult` derives immutable presentation metadata from
 the pre-request and confirmed reply snapshots; `OpeningController` owns one opening session,
 input focus, sound timing and teardown. `OpeningState` is a deterministic clock/interaction
 state machine. `OpeningCinematic` owns an isolated client-only 3D stage; `OpeningCamera` and

@@ -59,6 +59,9 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		and action ~= "ShelfNext"
 		and action ~= "ShelfPrevious"
 		and action ~= "SetVolume"
+		and action ~= "Welcome"
+		and action ~= "WelcomeTen"
+		and action ~= "SkipTutorial"
 	then
 		return nil
 	end

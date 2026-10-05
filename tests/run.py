@@ -14,13 +14,13 @@ modules = {
     "Rarity": "shared",
     "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
-    "Types": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
+    "Types": "shared", "Tutorial": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
     "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "DisplayInteraction": "client", "HomeTeleport": "server", "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client", "OpeningLayout": "client",
     "OpeningAudioConfig": "client", "OpeningAudioSequence": "client", "SoundManifest": "client", "Sfx": "client", "Music": "client",
     "OpeningScope": "client", "OpeningBoxSource": "client", "OpeningCamera": "client", "OpeningController": "client",
-    "OpeningCinematic": "client", "OpeningEffects": "client", "OpeningBox": "client",
+    "OpeningCinematic": "client", "OpeningLighting": "client", "OpeningEffects": "client", "OpeningBox": "client",
     "OpeningFlight": "client", "OpeningFlightEffects": "client",
     "OpeningFallbackBox": "client", "OpeningFigure": "client", "OpeningAudio": "client", "BlindBoxSkin": "client",
     "ShopTheme": "client",
@@ -59,7 +59,7 @@ for name, folder in modules.items():
             source = source.replace(f"require({expression})", f'require("./{dependency}")')
     if name == "OpeningConfig":
         source = source.replace("--!strict", '--!strict\nlocal Vector3 = require("./OpeningVisualEngine").Vector3')
-    if name in ("OpeningFlight", "OpeningFlightEffects", "OpeningCinematic", "OpeningEffects", "OpeningBox", "OpeningFallbackBox", "OpeningFigure", "OpeningAudio", "Sfx", "Music", "BlindBoxSkin", "BlindBoxModel"):
+    if name in ("OpeningFlight", "OpeningFlightEffects", "OpeningCinematic", "OpeningLighting", "OpeningEffects", "OpeningBox", "OpeningFallbackBox", "OpeningFigure", "OpeningAudio", "Sfx", "Music", "BlindBoxSkin", "BlindBoxModel"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./OpeningVisualEngine")\nlocal game, workspace, Instance, Enum, task, warn = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task, Engine.warn\nlocal Vector3, Vector2, Color3, CFrame, UDim2 = Engine.Vector3, Engine.Vector2, Engine.Color3, Engine.CFrame, Engine.UDim2\nlocal NumberRange, NumberSequence, NumberSequenceKeypoint, ColorSequence = Engine.NumberRange, Engine.NumberSequence, Engine.NumberSequenceKeypoint, Engine.ColorSequence')
         for dependency in ("BlindBoxModel", "AssetManifest", "BlindBoxSpec"):
             for prefix in ("ReplicatedStorage.Shared", "Shared"):
@@ -101,7 +101,7 @@ def run(*names: str) -> None:
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
-run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
+run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 run("PlotEngine", "HomeTeleport.spec")
 fixtures = [
     ('id = "grove.pebble"', 'id = "unknown"', "Invalid economy reference"),

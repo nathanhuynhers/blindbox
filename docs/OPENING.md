@@ -49,8 +49,15 @@ nontouching and nonqueryable. Other clients receive no cinematic instances.
 
 Only the purchasing player's gameplay UI is suppressed through the existing `openingFocus`
 callback. ContextActionService sinks movement/jump, clears current movement and owns opening
-inputs. No character anchoring, server teleport, PlayerModule replacement or world Lighting
-property mutation is introduced.
+inputs. No character anchoring, server teleport or PlayerModule replacement is introduced.
+`OpeningLighting` holds the town's daytime look on the *local* Lighting only while the opening owns
+the camera (night ambient made low-quality/mobile reveals dark), re-asserts it over replicated
+day/night writes, and restores the latest town values when the camera is released.
+
+Short landscape screens (safe area under 500 tall, wider than tall; `OpeningConfig.compact`) use
+one shared predicate for the camera and the Reveal card. The camera shifts its target toward world
+-X (its screen right is world -X) so the figure sits left of the card's right-hand column; the
+compact card drops the chance chip.
 
 ## Open 10 and pull summary
 
@@ -60,13 +67,18 @@ without revealing an outcome; the following direct reveals use the server-confir
 Within the batch, only the first occurrence of a newly discovered figure receives NEW status.
 
 Each result closes fully before the next opens under the transition curtain. During a direct
-reveal, tapping outside the choices advances; the final card says **See all results**. Skip during
-the sequence clears all remaining reveals rather than granting or rerolling anything. If reset or
+reveal, tapping outside the choices advances; the final card says **See all results**. Every
+earlier result also keeps a stable **Skip to results** choice beside **Next figure**, so skipping
+never depends on catching the transition-time Skip. Skip during the sequence clears all remaining
+reveals rather than granting or rerolling anything. A duplicate's earning chip names its permanent
+gain against the pre-request snapshot (`Duplicate upgrade · 4.3 → 4.73 coins/s`) with the owned count. If reset or
 death cancels a step, the client resumes the remaining confirmed sequence and still reaches the
 summary. Reveal choices never trigger another Open 10 purchase.
 
 After the last reveal—or immediately after skip-all—`PullSummary` shows all ten figures in a
-responsive grid, marks first discoveries and closes with Done. It is presentation only: the
+responsive grid beside the collection's discovery progress (found portraits, grey silhouettes for
+missing figures), marks first discoveries and closes with Done. The Welcome x10 (`WelcomeTen`) uses
+this same sequence. It is presentation only: the
 snapshot already owns every grant, the summary cannot navigate or send an intent, and its scope,
 focus and GUI are destroyed on close or client teardown.
 

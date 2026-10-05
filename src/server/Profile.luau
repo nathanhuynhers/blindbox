@@ -6,6 +6,7 @@ local Rules = require(script.Parent.Rules)
 local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
+local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -24,7 +25,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 12,
+		schemaVersion = 13,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -33,6 +34,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		display = { unlocked = state.display.unlocked, slots = table.clone(state.display.slots) },
 		shelves = Shelves.copy(state.shelves),
 		step = state.step,
+		tutorialHidden = state.tutorialHidden,
 		lastDailyDay = state.lastDailyDay,
 		lastLoginDay = state.lastLoginDay,
 		loginStreak = state.loginStreak,
@@ -63,6 +65,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 10
 			and data.schemaVersion ~= 11
 			and data.schemaVersion ~= 12
+			and data.schemaVersion ~= 13
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -73,6 +76,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"display",
 			"shelves",
 			"step",
+			"tutorialHidden",
 			"lastDailyDay",
 			"lastLoginDay",
 			"loginStreak",
@@ -92,7 +96,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	end
 	if
 		not integer(data.coins, 0, Economy.coinLimit)
-		or not integer(data.step, 1, 5)
+		or not integer(data.step, 1, if data.schemaVersion == 13 then Tutorial.done else 5)
 		or typeof(data.owned) ~= "table"
 		or typeof(data.discovered) ~= "table"
 		or typeof(data.pityByGroup) ~= "table"
@@ -260,14 +264,29 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	elseif data.lastLoginDay ~= nil or data.loginStreak ~= nil then
 		return nil
 	end
-	-- v6-v11 predate audio settings (Rules.new: full volume). v12 requires both percentages.
-	if data.schemaVersion == 12 then
+	-- v6-v11 predate audio settings (Rules.new: full volume). v12+ requires both percentages.
+	if (data.schemaVersion :: number) >= 12 then
 		if not integer(data.sfxVolume, 0, 100) or not integer(data.musicVolume, 0, 100) then
 			return nil
 		end
 		state.sfxVolume, state.musicVolume = data.sfxVolume :: number, data.musicVolume :: number
 	elseif data.sfxVolume ~= nil or data.musicVolume ~= nil then
 		return nil
+	end
+	-- v13 saves the Welcome Quest stage and skip choice. Older stages meant something else and
+	-- there was no Welcome reward, so an upgraded profile that never opened a box starts the
+	-- quest and any other upgraded profile is treated as finished (no Welcome rewards).
+	if data.schemaVersion == 13 then
+		if typeof(data.tutorialHidden) ~= "boolean" then
+			return nil
+		end
+		state.tutorialHidden = data.tutorialHidden :: boolean
+	elseif data.tutorialHidden ~= nil then
+		return nil
+	else
+		state.step = if state.boxesOpened == 0 and next(state.owned) == nil
+			then Tutorial.welcome
+			else Tutorial.done
 	end
 	-- Idempotent: also grants collections completed before Shelf rewards existed.
 	Rules.grantShelves(state)

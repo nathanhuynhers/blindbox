@@ -22,6 +22,8 @@ export type View = {
 	onDisplay: boolean?,
 	best: boolean?,
 	enabled: boolean?,
+	-- Undiscovered figures show a grey silhouette instead of "?" (collection progress).
+	silhouette: boolean?,
 }
 export type Tile = {
 	button: TextButton,
@@ -179,8 +181,9 @@ function Tile.create(
 				well.BackgroundColor3 = accent.wash
 			end
 			bar.BackgroundColor3 = if edged then tint else well.BackgroundColor3
-			preview.figure(if view.discovered then id else nil, true)
-			unknown.Visible = not view.discovered
+			local shape = view.discovered or view.silhouette == true
+			preview.figure(if shape then id else nil, view.discovered)
+			unknown.Visible = not shape
 			name.Text = if view.discovered then figure.name else "???"
 			sub.Text = view.sub or ""
 			sub.TextColor3 = view.subColor or Style.muted
