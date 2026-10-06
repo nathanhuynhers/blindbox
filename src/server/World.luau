@@ -305,6 +305,12 @@ function World.create(): Built
 	local root = Instance.new("Folder")
 	root.Name = "MainWorld"
 	TownPlacements.clear()
+	-- Rojo preserves this loose import in older places; it is not a collectible template.
+	for _, instance in workspace:GetChildren() do
+		if instance.Name == "EXPORT_PebblePip" and instance:IsA("Model") then
+			instance:Destroy()
+		end
+	end
 	hideLegacyBaseplate()
 	createGround(root)
 	local plaza = PlazaFixture.create(root)

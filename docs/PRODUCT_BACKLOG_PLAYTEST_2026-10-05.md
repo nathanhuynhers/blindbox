@@ -45,12 +45,23 @@ fix is a simple instance/code cleanup with little design judgment.
 - Verify the fix in Studio from normal gameplay camera angles.
 - Do not alter unrelated plaza geometry.
 
+Implementation: the pale tile was the runtime `MainWorld.MainPlaza.PlazaSpawn` marker, whose
+top protruded 0.02 studs above the paving. `PlazaFixture` now makes that already noncolliding
+marker invisible while retaining its enabled spawn routing. The original solid `PlazaSurface`
+covers the full footprint; no floor geometry or collision was removed.
+
 ### BUG-UI-02 — Remove the stray Pebble Pip from the plaza
 
 - Investigate why a Pebble Pip figure/model is sitting loose somewhere in the main plaza.
 - Remove the unintended world instance while preserving the real collectible asset and any legitimate
   uses of Pebble Pip in boxes, inventory, Display, Shelves or previews.
 - Verify it does not reappear after a fresh server/session.
+
+Implementation: the inspected Studio place retained the old direct Workspace model
+`EXPORT_PebblePip` (21 imported `PP_*` parts), outside the town placement registry. Rojo preserves
+unmapped Workspace children, so `World.create` removes only that exact direct-child Model on
+each server/world build. The canonical `grove.pebble` production template uses eight
+`PebblePip_*` parts and remains registered and available; figure loaders and consumers are unchanged.
 
 ---
 

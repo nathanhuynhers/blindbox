@@ -19,6 +19,8 @@ local Awning = require("./Awning")
 local Plot = require("./PlayerPlot")
 local Rules = require("./Rules")
 local Profile = require("./Profile")
+local Catalog = require("./Catalog")
+local Assets = require("./AssetManifest")
 local Shelves = require("./Shelves")
 local ShelfConfig = require("./ShelfConfig")
 local function close(a, b)
@@ -73,7 +75,31 @@ legacyBaseplate.Name = "Baseplate"
 legacyBaseplate.Size = Engine.Vector3.new(512, 20, 512)
 legacyBaseplate.Position = Engine.Vector3.new(0, -10, 0)
 legacyBaseplate.Parent = Engine.workspace
+local looseExport = Engine.Instance.new("Model")
+looseExport.Name = "EXPORT_PebblePip"
+looseExport.Parent = Engine.workspace
+local retainedAssets = Engine.Instance.new("Folder")
+retainedAssets.Name = "RetainedAssets"
+retainedAssets.Parent = Engine.workspace
+local retainedExport = looseExport:Clone()
+retainedExport.Parent = retainedAssets
+local ownedPebble = Engine.Instance.new("Model")
+ownedPebble.Name = "grove.pebble"
+ownedPebble.Parent = retainedAssets
 local built = World.create()
+check(looseExport.dead, "only the loose Workspace export is removed")
+check(
+	not retainedExport.dead and not ownedPebble.dead,
+	"nested imports and legitimate Pebble Pip are preserved"
+)
+check(
+	Catalog.byId["grove.pebble"] ~= nil,
+	"canonical Pebble Pip catalog identity remains available"
+)
+check(
+	Assets.resolve("Models.PocketGrove.PebblePip") ~= "",
+	"canonical Pebble Pip production asset remains registered"
+)
 local world = built.root
 local groundTop = Layout.groundTop
 local function descendantParts(parent)
@@ -269,6 +295,11 @@ for _, node in Engine.nodes do
 end
 check(#spawnLocations == 1 and spawnLocations[1] == built.spawn, "one plaza SpawnLocation")
 local spawn = built.spawn
+check(spawn.Transparency == 1 and not spawn.CanQuery and not spawn.CanTouch, "spawn routing marker creates no pale tile or physical obstruction")
+check(plazaSurface.CanCollide and plazaSurface.Transparency == 0 and plazaSurface.Material == TownStyle.materials.plaza and plazaSurface.Color == TownStyle.colors.plaza, "original opaque solid paving remains beneath the spawn marker")
+for _, corner in corners(spawn) do
+	check(radius(corner) < Config.plazaRadius and radius(corner) > Layout.plaza.inlayOuter, "entire repaired tile footprint rests on one continuous plaza surface")
+end
 check(
 	spawn.Neutral and spawn.Duration == 0 and spawn.Enabled and not spawn.CanCollide,
 	"plaza spawn is a neutral flush pad without a force field"
@@ -609,6 +640,14 @@ check(TownPlacements.swap("Sakura", template) == 26, "all 26 sakura spots swap t
 check(sample.placeholder == nil and sample.model ~= nil and sample.model.Parent == sampleParent, "the model takes the placeholder's place")
 check(sample.model.Name == sampleName and close(sample.model:GetScale(), sample.size / 4), "the model is scaled to the spot's width")
 check(TownPlacements.swap("Sakura", template) == 0, "a second load never duplicates trees")
+check(
+	#TownPlacements.list("grove.pebble") == 0 and #TownPlacements.list("EXPORT_PebblePip") == 0,
+	"Pebble Pip has no town placement registration"
+)
+check(
+	Engine.workspace:FindFirstChild("EXPORT_PebblePip") == nil,
+	"model arrival and refresh do not recreate the loose export"
+)
 local broken = Engine.Instance.new("Model")
 check(TownPlacements.swap("Poplar", broken) == 0 and TownPlacements.list("Poplar")[1].placeholder ~= nil, "a template without its size keeps the placeholders")
 local used = {}
@@ -1580,6 +1619,21 @@ detector.MouseClick:fire(guest)
 check(collects == 2, "destroyed collector disconnected")
 Plot.destroy(replacement)
 world:Destroy()
+local rebuilt = World.create()
+check(
+	Engine.workspace:FindFirstChild("EXPORT_PebblePip") == nil,
+	"world rebuild after plot teardown keeps the loose export absent"
+)
+check(
+	rebuilt.spawn.Parent == rebuilt.root:FindFirstChild("MainPlaza") and rebuilt.spawn.Enabled,
+	"world rebuild preserves the intended plaza spawn"
+)
+check(
+	not retainedExport.dead and not ownedPebble.dead,
+	"rebuild still preserves legitimate figure instances"
+)
+rebuilt.root:Destroy()
+retainedAssets:Destroy()
 check(NightLights.controllerCount() == controllersBeforePlots, "all plot lighting controllers are cleaned up")
 check(Engine.connections == 0, "no owned connections remain")
 print(

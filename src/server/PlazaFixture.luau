@@ -203,6 +203,8 @@ local function spawnPad(model: Model, top: number): SpawnLocation
 	spawn.CanCollide = false
 	spawn.CanQuery = false
 	spawn.CanTouch = false
+	-- This noncolliding marker routes spawns; the continuous plaza paving owns the surface.
+	spawn.Transparency = 1
 	spawn.Neutral = true
 	spawn.Duration = 0
 	spawn.Enabled = true
