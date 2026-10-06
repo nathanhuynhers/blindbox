@@ -4,6 +4,8 @@ local Controller = require("./OpeningController")
 local Camera = require("./OpeningCamera")
 local Scope = require("./OpeningScope")
 local Config = require("./OpeningConfig")
+local MovementConfig = require("./MovementConfig")
+Engine.humanoid.WalkSpeed = MovementConfig.baselineWalkSpeed
 local checks = 0
 local function check(value, message)
 	checks += 1
@@ -46,6 +48,7 @@ local function clean()
 	check(not Engine.workspace:FindFirstChild("BlindboxCinematic"), "stage removed")
 	check(not Engine.workspace:FindFirstChild("OpeningSounds"), "sounds removed")
 	check(next(Engine.actions.bound) == nil, "input and movement released")
+	check(Engine.humanoid.WalkSpeed == MovementConfig.baselineWalkSpeed, "opening exit preserves configured speed")
 	check(
 		Engine.camera.CameraType == "Custom" and Engine.camera.FieldOfView == 73,
 		"camera type/FOV restored"
@@ -499,10 +502,12 @@ local owner = Camera.create(cameraScope, function()
 	cameraScope.destroy()
 end)
 owner.take()
+Engine.humanoid.WalkSpeed = MovementConfig.baselineWalkSpeed + 3
 Engine.camera.FieldOfView = 42
 owner.restore()
 owner.restore()
 cameraScope.destroy()
+check(Engine.humanoid.WalkSpeed == MovementConfig.baselineWalkSpeed + 3, "camera restore preserves a later server-owned speed")
 check(
 	Engine.camera.FieldOfView == 73 and Engine.camera.CameraType == "Custom",
 	"explicit camera restoration is idempotent"

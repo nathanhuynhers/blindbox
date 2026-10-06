@@ -17,6 +17,7 @@ local Storage = require(script.Storage)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
 local PlayerSpawn = require(script.PlayerSpawn)
+local PlayerMovement = require(script.PlayerMovement)
 local HomeTeleport = require(script.HomeTeleport)
 local Leaderboard = require(script.Leaderboard)
 local DayNight = require(script.DayNight)
@@ -44,6 +45,7 @@ type Session = {
 local plots = PlotSlots.new(PlotConfig.maxPlots)
 local sessions: { [Player]: Session } = {}
 local loading: { [Player]: boolean } = {}
+local movement: { [Player]: PlayerMovement.Binding } = {}
 local closing = 0
 local shuttingDown = false
 local random = Random.new()
@@ -129,6 +131,11 @@ local function closeStorage(storage: Storage.Session)
 	closing -= 1
 end
 local function remove(player: Player)
+	local binding = movement[player]
+	if binding then
+		movement[player] = nil
+		PlayerMovement.unbind(binding)
+	end
 	local session = sessions[player]
 	if not session then
 		return
@@ -146,6 +153,11 @@ end
 local function added(player: Player)
 	if sessions[player] or loading[player] or shuttingDown then
 		return
+	end
+	-- Bind before profile loading yields: the initial plaza character also gets
+	-- the baseline, independent of plot assignment or storage readiness.
+	if not movement[player] then
+		movement[player] = PlayerMovement.bind(player)
 	end
 	local plotIndex = PlotSlots.claim(plots, player.UserId)
 	if not plotIndex then
@@ -378,6 +390,10 @@ table.insert(
 )
 game:BindToClose(function()
 	shuttingDown = true
+	for player, binding in movement do
+		PlayerMovement.unbind(binding)
+		movement[player] = nil
+	end
 	for _, connection in connections do
 		connection:Disconnect()
 	end

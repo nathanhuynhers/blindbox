@@ -105,7 +105,10 @@ The envelope remains `{data, token, expires, generation, writer}` under `Player_
 Store names change as described above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
 schema-13 snapshots enter the acquisition/save path (valid schemas 6-12 are upgraded first).
-Wallet and banks save atomically in one aggregate. Acknowledgements mean in-memory success; crash rollback affects the
+Wallet and banks save atomically in one aggregate.
+Replacement collects as many outgoing whole Coins as the wallet accepts; residual fractions and
+overflow remain in `earnings` under the outgoing ID. This uses the existing schema and does not
+advance the Welcome Quest collection stage. Acknowledgements mean in-memory success; crash rollback affects the
 entire last saved aggregate, including `offlinePending` and `lastSeen`. See [operations](OPERATIONS.md).
 
 Runtime `View = {startIndex, revision, lastTurn}` starts at index 1 each join. Position P renders
