@@ -33,6 +33,12 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   striped awnings for Display/Shelves. `PlotStyle.accent(ownerId)` is the single accent accessor.
 - `PlayerSpawn`: binds a loaded player to their plot's server-computed spawn `CFrame` for the
   current character, respawns and reloads; unbound on leave.
+- `MovementConfig`/`PlayerMovement`: server-only baseline WalkSpeed (20 studs/second for
+  LOGIC-03 playtesting), bound before profile loading for initial characters and every respawn.
+  A character-owned ChildAdded watcher handles late Humanoids without polling or waits and
+  disconnects on success, removal, replacement or unbind. No modifiers or movement entitlements
+  exist. Future server-owned speed resolution belongs in PlayerMovement. Opening input/camera
+  teardown and Home teleports do not write or restore WalkSpeed.
 - `DayNight`/`NightLights`: a 1-second server loop sets `Lighting.ClockTime` and interpolated
   lighting looks over a 20-minute cycle; `NightLights` is a 64-light budgeted registry that
   switches lights and lens glows only when crossing dusk/dawn. One lifecycle-owned controller
