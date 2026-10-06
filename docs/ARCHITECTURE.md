@@ -86,8 +86,11 @@ owns six bounded ClickDetector targets for clicks/taps, validates living owner/e
 distance and ancestry, and disconnects input handlers on teardown. Native server callbacks mint
 collection requests through Transactions with a server-only authorization flag. Remote Collect
 requests cannot set that flag. Rate limits and receipts share the normal transaction path.
-Rules.collect transfers whole Coins atomically, retains overflow/fractions, and is the future
-auto-collect extension point; no gamepass service is implemented. Owner snapshots expose balances
+Rules.collect and validated Display replacement share a server-only bank transfer helper that
+retains overflow/fractions. Place validates before settling the old loadout, transfers only the
+outgoing figure's bank and swaps with one revision update in the non-yielding mutation. Rejected
+placements leave gameplay state unchanged. Only genuine collection advances the Welcome Quest;
+no gamepass service is implemented. Owner snapshots expose balances
 only to the owner. Native E proximity prompts near the Display and Shelves open their corresponding
 management screens through `DisplayInteraction` and the existing Interface router. They never send
 mutation requests. Local ownership, living-character and distance checks guard those routes;

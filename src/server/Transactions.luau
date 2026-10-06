@@ -32,7 +32,10 @@ function Transactions.process(
 	if not intent then
 		return nil, false
 	end
-	Rules.settle(session.state, now)
+	-- Place settles inside Rules only after validation; rejects/replays cannot mutate gameplay.
+	if intent.action ~= "Place" then
+		Rules.settle(session.state, now)
+	end
 	for index = #session.receipts, 1, -1 do
 		if now - session.receipts[index].time > 120 then
 			table.remove(session.receipts, index)
@@ -67,7 +70,7 @@ function Transactions.process(
 		elseif (intent.action == "Place" or intent.action == "Remove") and not insideOwnPlot then
 			message = "Return to your own plot to edit your Display."
 		else
-			ok, message, figure, figures = Rules.mutate(session.state, intent, roll, day)
+			ok, message, figure, figures = Rules.mutate(session.state, intent, roll, day, now)
 		end
 	end
 	local reply: Types.Reply =

@@ -19,7 +19,9 @@ rarity-scaled diminishing returns. Each figure ID can earn in only one Display s
 with three slots and expands sequentially to six for 40,000 / 400,000 / 4,000,000 Coins.
 Three distinct displayed figures from one collection grant +10% total income once. Displayed figures
 keep earning offline at half rate for up to 6 hours, claimed from a welcome-back popup. No visitor payouts. Figures bank income until their owner clicks or taps each figure;
-uncollected balances survive removal and rejoining. E nearby opens Display management only.
+removal preserves the bank, while replacement automatically attempts to collect the outgoing
+figure's whole bank. Fractions and wallet overflow survive replacement and rejoining.
+E nearby opens Display management only.
 Once either editor is open, a living owner can edit their Display and Shelves from anywhere
 inside their own plot; the server rejects edits from outside it. Future paid auto-collect is not implemented.
 See [economy](ECONOMY.md) for exact formulas and tuning.

@@ -103,21 +103,27 @@ function Rules.settle(state: Types.State, now: number)
 		end
 	end
 end
--- Server-only transfer primitive, also reusable by a future authorized auto-collect service.
+-- Server-only bank transfer; callers validate authorization and own revision/quest updates.
+local function transferBank(state: Types.State, id: string): number
+	local bank = state.earnings[id] or 0
+	local amount = math.min(math.floor(bank), Economy.coinLimit - state.coins)
+	if amount > 0 then
+		state.earnings[id] = bank - amount
+		state.coins += amount
+	end
+	return amount
+end
 function Rules.collect(state: Types.State, slot: number, id: string): (boolean, string)
 	if id == "" or state.display.slots[slot] ~= id or not state.owned[id] then
 		return false, "That figure is no longer displayed."
 	end
-	local bank = state.earnings[id] or 0
-	local amount = math.min(math.floor(bank), Economy.coinLimit - state.coins)
+	local amount = transferBank(state, id)
 	if amount <= 0 then
 		return false,
 			if state.coins == Economy.coinLimit
 				then "Spend Coins before collecting."
 				else "No whole Coins ready yet."
 	end
-	state.earnings[id] = bank - amount
-	state.coins += amount
 	state.revision += 1
 	-- Only a real Display collection teaches this step; other Coin rewards never advance it.
 	if state.step == Tutorial.collect then
@@ -268,12 +274,16 @@ function Rules.mutate(
 	state: Types.State,
 	intent: Types.Intent,
 	roll: number | { number },
-	day: number?
+	day: number?,
+	now: number?
 ): (boolean, string, string?, { string }?)
 	local action, id = intent.action, intent.figure or ""
 	local rolls = if type(roll) == "number" then { roll } else roll
 	local today = day or 0
-	Rules.refreshDay(state, today)
+	-- Place must pass every check before settlement or any gameplay mutation.
+	if action ~= "Place" then
+		Rules.refreshDay(state, today)
+	end
 	if action == "Collect" then
 		local ok, message = Rules.collect(state, intent.slot or 0, id)
 		return ok, message, if ok then id else nil
@@ -449,6 +459,14 @@ function Rules.mutate(
 			end
 			if Rules.available(state, id) == 0 then
 				return false, "Own this figure and display it only once.", nil
+			end
+			Rules.refreshDay(state, today)
+			Rules.settle(state, now or state.time)
+			local outgoing = state.display.slots[slot]
+			if outgoing ~= "" then
+				-- Collect under the old loadout; overflow/fractions stay recoverable by ID.
+				-- This is part of Place, not a genuine Welcome Quest collection.
+				transferBank(state, outgoing)
 			end
 			state.display.slots[slot] = id
 			if state.step == Tutorial.display then

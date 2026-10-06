@@ -102,17 +102,23 @@ can help finance a later box and may out-earn its early pulls.
 
 Transactions settle elapsed time at the previous rate before changing inventory or placement.
 Each displayed figure banks its own income, including fractional Coins and its proportional
-share of the themed bonus. Coins enter the wallet only when the owner clicks or taps that
-individual figure. E nearby opens Display management only. Shelves cannot collect or generate income.
-Uncollected balances persist per figure ID even when removed or replaced; redisplay to collect.
+share of the themed bonus. Clicking or tapping an individual figure collects its bank. A successful
+replacement also settles the old Display loadout and attempts to collect only the outgoing figure's
+whole bank before the swap. Empty-slot placement and ordinary Remove do not collect. E nearby
+opens Display management only. Shelves cannot collect or generate income. Fractions and wallet
+overflow persist per figure ID after replacement; redisplay to collect the remainder. Removal
+preserves the entire bank.
 Each bank has a one-trillion-Coin safety ceiling. Collection transfers only whole Coins that fit
 in the wallet, retaining fractions and overflow. No ordinary bank timer/cap exists; offline earnings are separate (below).
 Duplicate copies enhance one bank's earning rate, not multiple collection targets.
 
 The server checks exact-target proximity (12 studs), living character, ownership, session readiness
 and rate limits. Clients cannot supply collection amounts or authorize collection through remotes.
-Auto-collect is a future gamepass: the shared server transfer primitive is ready for reuse, but no
-entitlement checks, product IDs, purchase prompts or automatic collection are enabled yet.
+Paid auto-collect remains a future gamepass; no entitlement checks, product IDs or purchase prompts
+are implemented. Replacement uses the same server-only bank transfer as manual collection, without
+advancing the Welcome Quest collection stage. Validation, settlement, transfer, swap and one revision
+update remain non-yielding; rejected Place requests do not settle or mutate gameplay state, and
+transaction receipts prevent retry collection.
 
 ## Offline earnings
 
@@ -202,7 +208,9 @@ Remaining native Studio acceptance:
 5. Click or tap each occupied slot, including slots 4-6, and test the E management prompt. The wallet
    must remain unchanged while idle; only the selected figure's bank transfers. Cover feedback,
    visitors, dead characters, distance rejection, respawn, teardown and concurrent interactions.
-6. Remove or replace an earning figure, save/rejoin, then redisplay it and confirm its bank remains.
+6. Replace an earning figure and confirm only its whole bank transfers. Test partial/full wallets,
+   retry the same request, save/rejoin, then redisplay it and collect retained overflow/fractions.
+   Remove must preserve the entire bank without collection.
    In isolated persistent Studio testing, verify supported schema upgrades, Economy2 store
    identity, pity/duplicate round trips, UTC claims and pause-on-storage-failure; see offline checks below.
 7. In two-client testing, verify private snapshot isolation and reject malformed, repeated, stale and
