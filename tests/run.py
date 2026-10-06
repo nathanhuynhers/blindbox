@@ -11,6 +11,7 @@ root = Path(__file__).resolve().parents[1]
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "MovementConfig": "server", "PlayerMovement": "server",
     "Rarity": "shared",
     "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
@@ -87,6 +88,8 @@ for name, folder in modules.items():
     if name in ("PlotFixture", "CollectionFixture", "DisplayFixture", "PlotGeometry", "PlayerPlot", "HomeTeleport", "World", "FigureSlots", "PlotStyle", "Awning", "NightLights", "TownStyle", "TownLayout", "TownProps", "PlazaFixture", "LeaderboardBoard", "DayNight"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./PlotEngine")\nlocal Instance, Vector3, Color3, CFrame, UDim2, workspace = Engine.Instance, Engine.Vector3, Engine.Color3, Engine.CFrame, Engine.UDim2, Engine.workspace\nlocal Enum, Vector2, UDim, warn = Engine.Enum, Engine.Vector2, Engine.UDim, Engine.warn\nlocal NumberRange, NumberSequence = Engine.NumberRange, Engine.NumberSequence')
         source = source.replace('local FigureModel = require(game:GetService("ReplicatedStorage").Shared.FigureModel)', 'local FigureModel = Engine.FigureModel')
+        if name == "PlayerPlot":
+            source = source.replace('--!strict', '--!strict\nlocal game = require("./PlotEngine").game\nlocal os = {clock = function() return require("./PlotEngine").clock end}', 1)
     if name in ("Rarity", "Catalog", "OpeningConfig", "ShopTheme"):
         source = source.replace("--!strict", '--!strict\nlocal Color3 = require("./OpeningVisualEngine").Color3')
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
@@ -105,10 +108,12 @@ def run(*names: str) -> None:
 
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("CoinEngine", "CoinCounter.spec")
+run("PlayerMovement.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
-run("Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
+run("DisplayReplacement.spec", "Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
 run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 run("PlotEngine", "HomeTeleport.spec")
+run("PlotEngine", "CollectionPlates.spec")
 fixtures = [
     ('id = "grove.pebble"', 'id = "unknown"', "Invalid economy reference"),
     ('weight = 1', 'weight = 0', "Invalid income units/weight"),

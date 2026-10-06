@@ -33,6 +33,12 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   striped awnings for Display/Shelves. `PlotStyle.accent(ownerId)` is the single accent accessor.
 - `PlayerSpawn`: binds a loaded player to their plot's server-computed spawn `CFrame` for the
   current character, respawns and reloads; unbound on leave.
+- `MovementConfig`/`PlayerMovement`: server-only baseline WalkSpeed (20 studs/second for
+  LOGIC-03 playtesting), bound before profile loading for initial characters and every respawn.
+  A character-owned ChildAdded watcher handles late Humanoids without polling or waits and
+  disconnects on success, removal, replacement or unbind. No modifiers or movement entitlements
+  exist. Future server-owned speed resolution belongs in PlayerMovement. Opening input/camera
+  teardown and Home teleports do not write or restore WalkSpeed.
 - `DayNight`/`NightLights`: a 1-second server loop sets `Lighting.ClockTime` and interpolated
   lighting looks over a 20-minute cycle; `NightLights` is a 64-light budgeted registry that
   switches lights and lens glows only when crossing dusk/dawn. One lifecycle-owned controller
@@ -86,8 +92,11 @@ owns six bounded ClickDetector targets for clicks/taps, validates living owner/e
 distance and ancestry, and disconnects input handlers on teardown. Native server callbacks mint
 collection requests through Transactions with a server-only authorization flag. Remote Collect
 requests cannot set that flag. Rate limits and receipts share the normal transaction path.
-Rules.collect transfers whole Coins atomically, retains overflow/fractions, and is the future
-auto-collect extension point; no gamepass service is implemented. Owner snapshots expose balances
+Rules.collect and validated Display replacement share a server-only bank transfer helper that
+retains overflow/fractions. Place validates before settling the old loadout, transfers only the
+outgoing figure's bank and swaps with one revision update in the non-yielding mutation. Rejected
+placements leave gameplay state unchanged. Only genuine collection advances the Welcome Quest;
+no gamepass service is implemented. Owner snapshots expose balances
 only to the owner. Native E proximity prompts near the Display and Shelves open their corresponding
 management screens through `DisplayInteraction` and the existing Interface router. They never send
 mutation requests. Local ownership, living-character and distance checks guard those routes;
@@ -96,6 +105,24 @@ per-figure coin collection. The client owns three
 service listeners for its lifetime and refreshes the device-aware counter plaque through the
 existing snapshot updates, so late plot replication and respawn need no new listeners. Prompt
 hiding is presentation, not an authorization check.
+
+`DisplayFixture` also owns six retained collection plates, two parts each, aligned to the same
+plot-local slot X coordinates and recentered on every capacity change. Only unlocked plates are
+visible; empty ones use muted panels and occupied ones use a pastel inset/gold Coin cue. No lights
+or per-frame work are added. `PlayerPlot.bindCollectors` owns six `Touched` listeners alongside
+the six click listeners. Contacts resolve the current character through Players, then require a
+living owner, attached character/current plot, exact fixture/plate ancestry, narrow local physical
+proximity, and a current ready session with an unexpired storage lease. The current authoritative
+slot chooses the figure, so replacement never collects a cached target. Both inputs mint the same
+non-yielding Transactions request; receipts, settlement, wallet/fraction/overflow and Welcome Quest
+semantics are unchanged. A 0.35-second per-slot debounce retains only current character identity
+and time; respawn needs no new listeners. Teardown disconnects all listeners and destroys all pads.
+The six target parts keep `CanTouch` enabled even while empty/locked, because Roblox disconnects
+touch listeners when it becomes false ([BasePart API](https://create.roblox.com/docs/reference/engine/classes/BasePart#CanTouch));
+eligibility is enforced by server state instead. Eight plots add 96 parts and 48 touch listeners,
+with no additional lights. The runtime fixture budget increases by those twelve parts to 162 per
+plot; the contact suite counts 153 BaseParts including awning wedges and click targets at six slots
+(figure asset geometry excluded). World and light budgets are unchanged.
 
 See [data model](DATA_MODEL.md) for validation and [operations](OPERATIONS.md) for recovery.
 Every load/acquire, save and release uses UpdateAsync. Lease tokens are unique per join. Leases

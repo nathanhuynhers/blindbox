@@ -213,6 +213,7 @@ local function node(class)
 		Destroying = signal(),
 		MouseClick = signal(),
 		Triggered = signal(),
+		Touched = signal(),
 		dead = false,
 		CanCollide = true,
 		Transparency = 0,
@@ -252,6 +253,11 @@ local function node(class)
 			end
 		end,
 	})
+	local touchConnect = object.Touched.Connect
+	object.Touched.Connect = function(self, callback)
+		assert(object.CanTouch ~= false, "Cannot connect Touched with CanTouch disabled")
+		return touchConnect(self, callback)
+	end
 	function object:GetPivot()
 		return self.pivot or frame(self.Position)
 	end
@@ -272,7 +278,14 @@ local function node(class)
 	function object:Clone()
 		local copy = node(self.ClassName)
 		for key, value in pairs(self) do
-			if type(value) ~= "function" and key ~= "_children" and key ~= "_parent" and key ~= "attrs" and key ~= "Destroying" and key ~= "MouseClick" then
+			if
+				type(value) ~= "function"
+				and key ~= "_children"
+				and key ~= "_parent"
+				and key ~= "attrs"
+				and key ~= "Destroying"
+				and key ~= "MouseClick"
+			then
 				rawset(copy, key, value)
 			end
 		end
@@ -316,7 +329,30 @@ local function node(class)
 	function object:IsA(kind)
 		return self.ClassName == kind
 			or (kind == "BasePart" and partClasses[self.ClassName] == true)
-			or (kind == "Light" and (self.ClassName == "PointLight" or self.ClassName == "SurfaceLight"))
+			or (
+				kind == "Light"
+				and (self.ClassName == "PointLight" or self.ClassName == "SurfaceLight")
+			)
+	end
+	function object:IsDescendantOf(ancestor)
+		local parent = self.Parent
+		while parent do
+			if parent == ancestor then
+				return true
+			end
+			parent = parent.Parent
+		end
+		return false
+	end
+	function object:FindFirstAncestorOfClass(kind)
+		local parent = self.Parent
+		while parent do
+			if parent:IsA(kind) then
+				return parent
+			end
+			parent = parent.Parent
+		end
+		return nil
 	end
 	function object:SetAttribute(key, value)
 		self.attrs[key] = value
@@ -407,6 +443,7 @@ end
 Engine.Template = Template
 function Engine.player(id)
 	local character = node("Model")
+	character.Parent = Engine.workspace
 	local root = Template.part(character, "HumanoidRootPart", vector(0, 0, 0))
 	local humanoid = node("Humanoid")
 	humanoid.Parent = character
@@ -414,7 +451,12 @@ function Engine.player(id)
 	function character:PivotTo(cf)
 		root.Position = cf.Position
 	end
-	local player = { UserId = id, DisplayName = "Player " .. id, Character = character }
+	local player = {
+		UserId = id,
+		DisplayName = "Player " .. id,
+		Character = character,
+		Parent = Engine.services.Players,
+	}
 	Engine.players[id] = player
 	return player
 end
@@ -434,8 +476,21 @@ Engine.FigureModel = {
 }
 Engine.figureVariants = {}
 Engine.services = {
-	Players = {},
-	UserInputService = { TouchEnabled = false, MouseEnabled = true, LastInputTypeChanged = signal() },
+	Players = {
+		GetPlayerFromCharacter = function(_, character)
+			for _, player in Engine.players do
+				if player.Character == character then
+					return player
+				end
+			end
+			return nil
+		end,
+	},
+	UserInputService = {
+		TouchEnabled = false,
+		MouseEnabled = true,
+		LastInputTypeChanged = signal(),
+	},
 	ProximityPromptService = { PromptShown = signal(), PromptTriggered = signal() },
 }
 Engine.game = {

@@ -17,6 +17,10 @@ local ivory = Color3.fromRGB(242, 235, 220)
 local oak = Color3.fromRGB(198, 165, 120)
 local warmPanel = Color3.fromRGB(235, 225, 204)
 local charcoal = Color3.fromRGB(48, 46, 43)
+local coinGold = Color3.fromRGB(220, 162, 44)
+-- Low-profile floor inlays, clear of the counter front and the walking/expansion space.
+Fixture.plate = table.freeze({ width = 5.8, depth = 3.8, frontOffset = -7.5, debounce = 0.35 })
+export type Plate = { model: Model, base: Part, target: Part, cue: TextLabel }
 type Piece = {
 	name: string,
 	size: Vector3,
@@ -167,7 +171,67 @@ export type Render = {
 	accent: Color3,
 	awning: Model?,
 	light: SurfaceLight,
+	plates: { Plate },
 }
+local function createPlate(parent: Instance, slot: number): Plate
+	local model = Instance.new("Model")
+	model.Name = "CollectionPlate" .. slot
+	model:SetAttribute("SlotId", slot)
+	model.Parent = parent
+	local base = Geometry.partAt(
+		model,
+		"OakRim",
+		Vector3.new(Fixture.plate.width, 0.12, Fixture.plate.depth),
+		CFrame.new(),
+		oak
+	)
+	local target = Geometry.partAt(
+		model,
+		"Step",
+		Vector3.new(Fixture.plate.width - 0.4, 0.08, Fixture.plate.depth - 0.4),
+		CFrame.new(),
+		ivory
+	)
+	for _, part in { base, target } do
+		part.Material = if part == base then Enum.Material.Wood else Enum.Material.SmoothPlastic
+		part.CanCollide = false
+		part.CanQuery = false
+		part.CanTouch = false
+	end
+	-- Keep the six listeners alive across empty/locked/occupied transitions. Roblox disconnects
+	-- Touched when CanTouch becomes false; server slot validation controls eligibility instead.
+	target.CanTouch = true
+	local gui = Instance.new("SurfaceGui")
+	gui.Name = "CollectionCue"
+	gui.Face = Enum.NormalId.Top
+	gui.CanvasSize = Vector2.new(460, 260)
+	gui.AlwaysOnTop = false
+	gui.LightInfluence = 0.35
+	gui.Active = false
+	gui.Parent = target
+	local cue = Instance.new("TextLabel")
+	cue.Name = "Cue"
+	cue.Size = UDim2.fromScale(1, 1)
+	cue.BackgroundTransparency = 1
+	cue.Font = Enum.Font.GothamBold
+	cue.TextSize = 34
+	cue.TextColor3 = charcoal
+	cue.Text = "—"
+	cue.Parent = gui
+	return { model = model, base = base, target = target, cue = cue }
+end
+function Fixture.setPlates(render: Render, slots: { string })
+	for slot, plate in render.plates do
+		local unlocked = slot <= render.capacity
+		local active = unlocked and (slots[slot] or "") ~= ""
+		plate.base.Transparency = if unlocked then 0 else 1
+		plate.target.Transparency = if unlocked then 0 else 1
+		plate.target.Color = if active then ivory:Lerp(render.accent, 0.18) else warmPanel
+		plate.cue.Visible = unlocked
+		plate.cue.Text = if active then "●  COLLECT" else "—"
+		plate.cue.TextColor3 = if active then coinGold else oak
+	end
+end
 function Fixture.width(capacity: number): number
 	assert(
 		capacity >= Display.defaultSlots and capacity <= Display.maxSlots and capacity % 1 == 0,
@@ -230,6 +294,16 @@ function Fixture.resize(render: Render, capacity: number)
 			Geometry.displayZ + Fixture.management.frontOffset
 		)
 	render.capacity = capacity
+	for slot, plate in render.plates do
+		local at = render.transform
+			* CFrame.new(
+				(slot - (capacity + 1) / 2) * Fixture.style.spacing,
+				0,
+				Geometry.displayZ + Fixture.plate.frontOffset
+			)
+		plate.base.CFrame = at * CFrame.new(0, 0.06, 0)
+		plate.target.CFrame = at * CFrame.new(0, 0.16, 0)
+	end
 end
 function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): Render
 	local model = Instance.new("Model")
@@ -287,7 +361,7 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	coin.Position = UDim2.fromScale(0.105, 0.67)
 	coin.Text = "●"
 	coin.TextScaled = true
-	coin.TextColor3 = Color3.fromRGB(220, 162, 44)
+	coin.TextColor3 = coinGold
 	coin.Parent = gui
 	-- A non-interactive plaque on the counter front, away from the figure click targets.
 	local instructions = Instance.new("SurfaceGui")
@@ -307,7 +381,7 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	instruction.Font = Enum.Font.GothamBold
 	instruction.TextColor3 = charcoal
 	instruction.TextScaled = true
-	instruction.Text = "Click or Tap Each Figure to Collect"
+	instruction.Text = "Step on a Plate or Click / Tap its Figure to Collect"
 	instruction.Parent = instructions
 	-- Keep the native management prompt centered near the floor so its large card stays below figures.
 	-- resize() preserves that position at every supported Display capacity.
@@ -335,8 +409,13 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 		accent = accent or PlotStyle.DefaultAccent,
 		awning = nil,
 		light = light,
+		plates = {},
 	}
+	for slot = 1, Display.maxSlots do
+		table.insert(render.plates, createPlate(model, slot))
+	end
 	Fixture.resize(render, Display.defaultSlots)
+	Fixture.setPlates(render, {})
 	model.Parent = parent
 	return render
 end

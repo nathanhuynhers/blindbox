@@ -12,6 +12,7 @@ local Shelves = require(script.Parent.Shelves)
 local FigureSlots = require(script.Parent.FigureSlots)
 local Rules = require(script.Parent.Rules)
 local NightLights = require(script.Parent.NightLights)
+local Players = game:GetService("Players")
 export type Plot = {
 	model: Model,
 	ownerId: number,
@@ -163,6 +164,7 @@ function PlayerPlot.render(plot: Plot, state: Types.State)
 		placements[tostring(slot)] = id
 	end
 	FigureSlots.render(plot.display, placements)
+	DisplayFixture.setPlates(plot.fixture, state.display.slots)
 	for slot, target in plot.collectors do
 		local id = state.display.slots[slot] or ""
 		local anchor = plot.display.anchors[tostring(slot)]
@@ -231,7 +233,11 @@ function PlayerPlot.bind(plot: Plot, onTurn: (Player, number) -> ())
 	end
 end
 -- ClickDetector.MouseClick handles both desktop clicks and mobile taps, once per activation.
-function PlayerPlot.bindCollectors(plot: Plot, onCollect: (Player, number, string) -> ())
+function PlayerPlot.bindCollectors(
+	plot: Plot,
+	onCollect: (Player, number, string) -> (),
+	currentState: () -> Types.State?
+)
 	assert(#plot.collectors == 0, "Collectors already bound")
 	local folder = Instance.new("Folder")
 	folder.Name = "FigureCollectors"
@@ -253,8 +259,10 @@ function PlayerPlot.bindCollectors(plot: Plot, onCollect: (Player, number, strin
 		local function collect(actor: Player)
 			local pos = position(actor)
 			local id = target:GetAttribute("FigureId")
+			local state = currentState()
 			if
 				plot.active
+				and root.Parent == workspace
 				and plot.model.Parent == root
 				and folder.Parent == plot.model
 				and target.Parent == folder
@@ -265,11 +273,74 @@ function PlayerPlot.bindCollectors(plot: Plot, onCollect: (Player, number, strin
 				and PlayerPlot.contains(plot, actor)
 				and typeof(id) == "string"
 				and id ~= ""
+				and state
+				and slot <= state.display.unlocked
+				and state.display.slots[slot] == id
 			then
 				onCollect(actor, slot, id)
 			end
 		end
 		table.insert(plot.connections, click.MouseClick:Connect(collect))
+		local plate = plot.fixture.plates[slot]
+		-- No character listeners or timers: resolve the current character on every contact.
+		-- Retain only its identity and one timestamp per slot; respawn starts a fresh debounce.
+		local lastCharacter: Model? = nil
+		local lastTouch = -math.huge
+		table.insert(
+			plot.connections,
+			plate.target.Touched:Connect(function(hit: BasePart)
+				local character = hit:FindFirstAncestorOfClass("Model")
+				local actor = if character then Players:GetPlayerFromCharacter(character) else nil
+				local state = currentState()
+				local pos = if actor then position(actor) else nil
+				if
+					not actor
+					or not character
+					or actor.Character ~= character
+					or not pos
+					or not state
+				then
+					return
+				end
+				local id = state.display.slots[slot]
+				local delta = plate.target.CFrame:PointToObjectSpace(pos)
+				if
+					not (
+						plot.active
+						and root.Parent == workspace
+						and plot.model.Parent == root
+						and plot.fixture.model.Parent == plot.model
+						and plate.model.Parent == plot.fixture.model
+						and plate.target.Parent == plate.model
+						and plot.fixture.plates[slot] == plate
+						and actor.UserId == plot.ownerId
+						and actor.Parent == Players
+						and character:IsDescendantOf(workspace)
+						and hit:IsDescendantOf(character)
+						and slot <= state.display.unlocked
+						and id
+						and id ~= ""
+						and state.owned[id]
+						and PlayerPlot.contains(plot, actor)
+						and math.abs(delta.X) <= plate.target.Size.X / 2 + 1
+						and math.abs(delta.Z) <= plate.target.Size.Z / 2 + 1
+						and delta.Y >= -1
+						and delta.Y <= 6
+					)
+				then
+					return
+				end
+				local now = os.clock()
+				if
+					lastCharacter == character
+					and now - lastTouch < DisplayFixture.plate.debounce
+				then
+					return
+				end
+				lastCharacter, lastTouch = character, now
+				onCollect(actor, slot, id)
+			end)
+		)
 	end
 end
 function PlayerPlot.destroy(plot: Plot)

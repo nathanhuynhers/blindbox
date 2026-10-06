@@ -101,7 +101,8 @@ surface; the only thing in the doorway is a flush 0.12-stud oak deck. It also ad
 noncolliding three-ring **spawn pad** on the open right floor (local X=-18, Z=-28) and striped
 **awnings**: one above the Display sign that resizes with Display capacity, and one above the
 Shelves header. Neither awning enters the horizontal expansion zones or the open center/right.
-An active plot uses at most 150 runtime parts (140 at six Display slots).
+An active plot has a 162-part runtime fixture budget (153 BaseParts including awning wedges,
+collection plates and click targets at six Display slots; figure asset geometry excluded).
 
 ### Spawning
 
@@ -133,8 +134,18 @@ Display is the **only** Coin-generating collectible placement system. It starts 
 slots and currently supports at most 6. The concept-board fixture uses one continuous off-white
 counter, pale oak base band, recessed charcoal plinth, broad warm back panel, simple end supports
 and an integrated framed sign. All geometry is native Roblox Parts. A recessed, non-neon diffuser
-provides one subtle downward warm light. There are no individual pads, cubbies, floating slot
-labels or physical representations of locked slots. Locked slots remain visible in the UI.
+provides one subtle downward warm light. There are no cubbies or floating slot labels. Locked
+slots remain visible in the UI; their retained collection plates stay hidden in the world until unlocked.
+
+Each supported slot has one shallow, nonblocking oak-rimmed collection plate in front of its
+figure, 5.8 by 3.8 studs, with its inset top 0.2 studs above the walking surface. Plates use the
+same plot-local transform and 8-stud slot spacing, recentering with capacities 3–6. Occupied pads
+have a soft pastel-ivory inset and small gold Coin/collection cue; empty pads use a muted panel
+and dash. Each uses two parts, one noninteractive top SurfaceGui, and no lights. A living owner
+stepping on a pad collects only the figure currently in that slot through the existing authoritative
+transaction path. Visitors, empty/locked slots, stale sessions and invalid/distant contacts are
+rejected. Click/tap collection remains available; E still opens management. See [architecture](ARCHITECTURE.md)
+for listener lifecycle and [economy](ECONOMY.md) for bank preservation and the native checklist.
 
 `DisplayFixture` builds and resizes the same pieces for capacities 3/4/5/6, with counter widths
 28/36/44/52 studs. Counter depth is 8.5 studs; its top and figure anchors are Y=3 above plot origin,

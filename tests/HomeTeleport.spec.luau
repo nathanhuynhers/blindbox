@@ -2,6 +2,7 @@
 -- Exercises the actual server Home authorization against the plot/character engine shim.
 local Engine = require("./PlotEngine")
 local HomeTeleport = require("./HomeTeleport")
+local MovementConfig = require("./MovementConfig")
 
 local checks = 0
 local function check(condition: boolean, message: string)
@@ -22,6 +23,8 @@ end
 
 local owner = Engine.player(101)
 owner.Character.Parent = Engine.workspace
+local movementHumanoid = owner.Character:FindFirstChildOfClass("Humanoid")
+movementHumanoid.WalkSpeed = MovementConfig.baselineWalkSpeed
 local ownPlot = plot(owner.UserId, Engine.Vector3.new(40, 5, -20))
 ownPlot.spawn = Engine.CFrame.lookAt(Engine.Vector3.new(40, 5, -20), Engine.Vector3.new(30, 5, -30))
 local root = owner.Character:FindFirstChild("HumanoidRootPart")
@@ -41,6 +44,7 @@ check(
 	"uses own plot spawn CFrame"
 )
 check(landed == ownPlot.spawn, "preserves the spawn CFrame's inward facing")
+check(movementHumanoid.WalkSpeed == MovementConfig.baselineWalkSpeed, "Home preserves configured speed")
 check(
 	root.AssemblyLinearVelocity.Magnitude == 0 and root.AssemblyAngularVelocity.Magnitude == 0,
 	"clears velocity"

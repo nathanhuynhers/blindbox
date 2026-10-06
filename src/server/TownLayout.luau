@@ -84,5 +84,6 @@ return table.freeze({
 		wallHeight = 60,
 	}),
 	-- Measured totals are asserted by the plot spec; these are the ceilings.
-	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 150, nightLights = 64 }),
+	-- Six collection plates add twelve parts per active plot; world/light budgets are unchanged.
+	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 162, nightLights = 64 }),
 })
