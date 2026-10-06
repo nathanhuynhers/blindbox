@@ -60,7 +60,7 @@ function Interaction.create(
 		if label and label:IsA("TextLabel") then
 			-- The owner's Display total shares the plaque instead of adding another sign.
 			label.Text = string.format(
-				"%s to Collect · %s Coins Ready",
+				"Step on a Plate or %s its Figure · %s Coins Ready",
 				if touch then "Tap" else "Click",
 				UIState.compact(total)
 			)

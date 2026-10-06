@@ -125,7 +125,7 @@ function Onboarding.guide(state: Types.Snapshot, page: string?, touch: boolean):
 		local verb = if touch then "Tap" else "Click"
 		local guide = if step == Tutorial.collect
 			then make(
-				verb .. " your figure to collect its Coins!",
+				"Step on its plate or " .. verb .. " your figure to collect its Coins!",
 				if page then "Close" else nil,
 				"Close"
 			)
@@ -428,7 +428,7 @@ function Onboarding.create(
 			world.Adornee = collector -- A lost target just disables the pointer below.
 		end
 		world.Enabled = collector ~= nil
-		worldText.Text = if touch() then "Tap to collect!" else "Click to collect!"
+		worldText.Text = "Step on its plate!"
 		highlight(if collector and plot and slot then ownFigure(plot, slot) else nil)
 	end
 

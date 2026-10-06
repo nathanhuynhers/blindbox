@@ -1548,7 +1548,7 @@ local collects = 0
 Plot.bindCollectors(other, function(actor, slot, id)
 	check(actor == guest and slot == 1 and id == "grove.pebble", "physical target identity")
 	collects += 1
-end)
+end, function() return otherState end)
 otherState.owned["grove.pebble"] = 1
 otherState.discovered["grove.pebble"] = true
 otherState.display.slots[1] = "grove.pebble"

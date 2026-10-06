@@ -97,6 +97,24 @@ service listeners for its lifetime and refreshes the device-aware counter plaque
 existing snapshot updates, so late plot replication and respawn need no new listeners. Prompt
 hiding is presentation, not an authorization check.
 
+`DisplayFixture` also owns six retained collection plates, two parts each, aligned to the same
+plot-local slot X coordinates and recentered on every capacity change. Only unlocked plates are
+visible; empty ones use muted panels and occupied ones use a pastel inset/gold Coin cue. No lights
+or per-frame work are added. `PlayerPlot.bindCollectors` owns six `Touched` listeners alongside
+the six click listeners. Contacts resolve the current character through Players, then require a
+living owner, attached character/current plot, exact fixture/plate ancestry, narrow local physical
+proximity, and a current ready session with an unexpired storage lease. The current authoritative
+slot chooses the figure, so replacement never collects a cached target. Both inputs mint the same
+non-yielding Transactions request; receipts, settlement, wallet/fraction/overflow and Welcome Quest
+semantics are unchanged. A 0.35-second per-slot debounce retains only current character identity
+and time; respawn needs no new listeners. Teardown disconnects all listeners and destroys all pads.
+The six target parts keep `CanTouch` enabled even while empty/locked, because Roblox disconnects
+touch listeners when it becomes false ([BasePart API](https://create.roblox.com/docs/reference/engine/classes/BasePart#CanTouch));
+eligibility is enforced by server state instead. Eight plots add 96 parts and 48 touch listeners,
+with no additional lights. The runtime fixture budget increases by those twelve parts to 162 per
+plot; the contact suite counts 153 BaseParts including awning wedges and click targets at six slots
+(figure asset geometry excluded). World and light budgets are unchanged.
+
 See [data model](DATA_MODEL.md) for validation and [operations](OPERATIONS.md) for recovery.
 Every load/acquire, save and release uses UpdateAsync. Lease tokens are unique per join. Leases
 last 120 seconds, renew with 30-second autosaves, and local gameplay pauses after 85 seconds

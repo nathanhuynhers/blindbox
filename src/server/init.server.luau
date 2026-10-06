@@ -219,6 +219,14 @@ local function added(player: Player)
 		if reply then
 			send(player, session, reply)
 		end
+	end, function()
+		return if sessions[player] == session
+				and player.Parent == Players
+				and not shuttingDown
+				and storage.ready
+				and os.clock() < storage.safeUntil
+			then transaction.state
+			else nil
 	end)
 	PlayerPlot.render(session.plot, storage.state)
 	-- Respawns and character reloads land on this player's own spawn pad until they leave.

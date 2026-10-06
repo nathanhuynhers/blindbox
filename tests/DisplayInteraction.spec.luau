@@ -39,6 +39,8 @@ Plot.bindCollectors(plot, function(actor, slot, id)
 		slot = slot,
 		figure = id,
 	}, 0, true, 0, 0, nil, true)
+end, function()
+	return state
 end)
 Plot.render(plot, state)
 local fixture = plot.fixture.model
@@ -59,20 +61,21 @@ check(
 local sign = fixture:FindFirstChild("CollectSignFace"):FindFirstChild("CollectSign")
 local instruction = sign:FindFirstChild("Instruction")
 check(
-	string.find(instruction.Text, "Click to Collect", 1, true) and not sign.Active,
+	string.find(instruction.Text, "Step on a Plate or Click its Figure", 1, true)
+		and not sign.Active,
 	"desktop instruction plaque is noninteractive"
 )
 input.LastInputTypeChanged:fire(Engine.Enum.UserInputType.Touch)
-check(string.find(instruction.Text, "Tap to Collect", 1, true), "touch wording")
+check(string.find(instruction.Text, "Step on a Plate or Tap its Figure", 1, true), "touch wording")
 input.LastInputTypeChanged:fire(Engine.Enum.UserInputType.MouseMovement)
 check(
-	string.find(instruction.Text, "Click to Collect", 1, true),
+	string.find(instruction.Text, "Click its Figure", 1, true),
 	"hybrid device returns to mouse wording"
 )
 control.update(12345)
 input.LastInputTypeChanged:fire(Engine.Enum.UserInputType.Touch)
 check(
-	string.find(instruction.Text, "Tap to Collect · 12.3K Coins Ready", 1, true),
+	string.find(instruction.Text, "Tap its Figure · 12.3K Coins Ready", 1, true),
 	"plaque keeps the owner's Display total across input changes"
 )
 input.LastInputTypeChanged:fire(Engine.Enum.UserInputType.MouseMovement)
@@ -187,7 +190,10 @@ local mobileText = replacement.fixture.model
 	:FindFirstChild("CollectSignFace")
 	:FindFirstChild("CollectSign")
 	:FindFirstChild("Instruction")
-check(string.find(mobileText.Text, "Tap to Collect", 1, true), "touch-only initial device wording")
+check(
+	string.find(mobileText.Text, "Step on a Plate or Tap its Figure", 1, true),
+	"touch-only initial device wording"
+)
 mobile.destroy()
 Plot.destroy(replacement)
 Plot.destroy(other)
