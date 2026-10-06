@@ -23,7 +23,7 @@ modules = {
     "OpeningCinematic": "client", "OpeningLighting": "client", "OpeningEffects": "client", "OpeningBox": "client",
     "OpeningFlight": "client", "OpeningFlightEffects": "client",
     "OpeningFallbackBox": "client", "OpeningFigure": "client", "OpeningAudio": "client", "BlindBoxSkin": "client",
-    "ShopTheme": "client",
+    "ShopTheme": "client", "CoinCounter": "client", "CoinBurst": "client", "DisplayEarnings": "client",
     "UIState": "client", "UIScope": "client", "UILayout": "client", "UIContext": "client",
     "NavigationConfig": "client", "NavigationAssetIds": "shared",
 }
@@ -46,6 +46,11 @@ UI_PRELUDE = "\n".join([
 ])
 for name, folder in modules.items():
     source = (root / "src" / folder / f"{name}.luau").read_text(encoding="utf-8-sig")
+    if name in ("CoinBurst", "DisplayEarnings"):
+        source = source.replace("--!strict", '--!strict\nlocal Engine = require("./CoinEngine")\nlocal game, workspace, Instance, Enum, task, os, warn = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task, Engine.os, Engine.warn\nlocal Color3, Vector3, Vector2, CFrame, UDim2, UDim, TweenInfo = Engine.Color3, Engine.Vector3, Engine.Vector2, Engine.CFrame, Engine.UDim2, Engine.UDim, Engine.TweenInfo\nlocal ColorSequence, NumberRange, NumberSequence, NumberSequenceKeypoint = Engine.ColorSequence, Engine.NumberRange, Engine.NumberSequence, Engine.NumberSequenceKeypoint')
+        source = source.replace("require(script.Parent.UIIcons)", "Engine.Icons")
+        source = source.replace("require(script.Parent.UIStyle)", "Engine.Style")
+        source = source.replace("require(script.Parent.Sfx)", "Engine.Sfx")
     if name in ui:
         source = source.replace("require(script.Parent.UIPreview)", "Engine.Preview")
         source = source.replace("require(script.Parent.BlindBoxPreview)", "Engine.BoxPreview")
@@ -99,6 +104,7 @@ def run(*names: str) -> None:
 
 
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
+run("CoinEngine", "CoinCounter.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
 run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")

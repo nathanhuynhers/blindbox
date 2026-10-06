@@ -108,6 +108,18 @@ ui.openingFocus(false)
 
 -- HUD and dock
 check(within(find("Hud"), "Balance").Text == "5,000,000", "HUD shows the snapshot balance")
+ui.displayCoins(4000000)
+ui.pending(true)
+ui.pending(false)
+check(within(find("Hud"), "Balance").Text == "4,000,000", "HUD refresh preserves presentation balance")
+Engine.click(within(find("Hud"), "Coins"))
+check(string.find(within(find("Notification"), "Message").Text, "5,000,000 Coins", 1, true) ~= nil, "exact wallet tap uses authoritative balance")
+Engine.advance(8)
+ui.displayCoins(9999999)
+check(within(find("Hud"), "Balance").Text == "9,999,999", "presentation below abbreviation threshold")
+ui.displayCoins(10001000)
+check(within(find("Hud"), "Balance").Text == "10M", "presentation crosses abbreviation threshold")
+ui.displayCoins(state.coins)
 check(within(find("Hud"), "Rate"):FindFirstChild("Text").Text == "+0/s", "HUD income chip")
 check(find("Hud"):FindFirstChild("Scrap", true) == nil, "no Scrap pill")
 for _, id in { "Collection", "Display", "Shop", "Goals", "Shelves" } do
@@ -128,14 +140,20 @@ Engine.click(homeButton)
 check(homeRequests == 1, "Home activation sends one request")
 
 -- Settings popover holds Motion.
+local coinInterruptions = 0
+ui.onCoinInterrupted(function() coinInterruptions += 1 end, function() end)
 Engine.click(find("SettingsButton"))
 check(find("Settings").Visible, "gear opens settings")
 Engine.click(find("MotionReduced"))
+check(coinInterruptions == 1, "reduced motion interrupts active Coin presentation")
 check(find("MotionReduced"):GetAttribute("Selected") == true, "Motion preference toggles")
 Engine.click(find("SettingsCatcher"))
 check(not find("Settings").Visible, "outside tap closes settings")
 Engine.click(find("SettingsButton"))
 Engine.click(find("MotionFull"))
+ui.openingFocus(true)
+check(coinInterruptions == 2, "opening interruption reconciles hidden HUD presentation")
+ui.openingFocus(false)
 Engine.click(find("SettingsCatcher"))
 
 -- Sounds (names only; Sfx.spec covers playback, caps and the one-UI-sound-per-gesture gap).
@@ -225,6 +243,7 @@ end
 check(rows == #UI.rarityOdds(state, "echo"), "one odds row per rarity present")
 state = snapshot()
 state.coins = 20
+ui.displayCoins(999999999)
 state.dailyReady = false
 state.sequence += 1
 ui.update(state)
@@ -232,12 +251,14 @@ check(not within(shop, "DailyBox").Visible, "free box hidden once claimed")
 local before = #requests
 Engine.click(within(shop, "BuyBox"))
 check(#requests == before, "unaffordable box cannot be bought")
+check(within(find("Hud"), "Balance").Text == "999.9M", "affordability ignores presentation value")
 check(not within(shop, "BuyTen").Visible, "Open 10 hidden when ten boxes are unaffordable")
 check(
 	within(within(shop, "BuyBox"), "Detail").Text == "Need " .. UI.compact(Rules.prices.echo - 20) .. " more",
 	"shortfall explains why"
 )
 state.coins = 5000000
+ui.displayCoins(state.coins)
 ui.update(state)
 ui.pending(true)
 Engine.click(within(shop, "BuyBox"))
@@ -643,11 +664,15 @@ local savedSnapshot = snapshot()
 savedSnapshot.goalClaimed, savedSnapshot.goalProgress = true, 3
 rejoined.update(savedSnapshot)
 local rejoinedGui = Engine.playerGui:FindFirstChild("PocketGrove")
+check(within(Engine.find(rejoinedGui, "Hud"), "Balance").Text == "5,000,000", "rebuilt UI starts with exact wallet")
+local disposed = 0
+rejoined.onCoinInterrupted(function() end, function() disposed += 1 end)
 check(not Engine.find(rejoinedGui, "GoalTracker").Visible and not Engine.find(rejoinedGui, "GoalChip").Visible, "claimed snapshot hides goal on new client tree")
 Engine.click(Engine.find(rejoinedGui, "DockGoals"))
 check(Engine.find(rejoinedGui, "NoActiveGoals").Visible, "rejoin opens empty goal state")
 Engine.click(Engine.find(rejoinedGui, "ClaimGoal"))
 rejoined.destroy()
+check(disposed == 1, "UI teardown disposes collection presentation owner once")
 check(Engine.pending() == 0, "recreated UI releases countdown")
 -- Daily Login auto-opens once on join for returning players, never for brand-new ones.
 local function joined(owned: boolean): boolean

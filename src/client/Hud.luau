@@ -22,7 +22,8 @@ export type Hud = {
 	gear: TextButton,
 	menu: Menu.Menu,
 	layout: (Layout.Frame, opened: boolean) -> (),
-	update: (Types.Snapshot) -> (),
+	update: (Types.Snapshot, number?) -> (),
+	displayCoins: (number) -> (),
 }
 
 function Hud.create(
@@ -161,6 +162,10 @@ function Hud.create(
 		)
 	end
 	ctx.scope.connect(coins:GetPropertyChangedSignal("AbsoluteSize"), follow)
+	local function displayCoins(value: number)
+		amount.Text = if value >= 1e7 then State.compact(value) else State.number(value)
+		coins:SetAttribute("AccessibleName", amount.Text .. " coins, earning " .. rate.label.Text)
+	end
 	return {
 		root = root,
 		coins = coins,
@@ -213,16 +218,11 @@ function Hud.create(
 			end
 			follow()
 		end,
-		update = function(snapshot: Types.Snapshot)
+		displayCoins = displayCoins,
+		update = function(snapshot: Types.Snapshot, displayed: number?)
 			menu.update(snapshot)
-			amount.Text = if snapshot.coins >= 1e7
-				then State.compact(snapshot.coins)
-				else State.number(snapshot.coins)
 			rate.set(State.rate(State.totalRate(snapshot)))
-			coins:SetAttribute(
-				"AccessibleName",
-				amount.Text .. " coins, earning " .. rate.label.Text
-			)
+			displayCoins(displayed or snapshot.coins)
 			tracker.update(snapshot)
 			local ready = State.badges(snapshot).Login
 			dailyBadge.root.Visible = ready ~= nil

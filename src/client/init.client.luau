@@ -151,7 +151,8 @@ end
 opening = OpeningController.create(ui.openingFocus, ui.message, choose)
 local connections: { RBXScriptConnection } = {}
 local displayInteraction = DisplayInteraction.create(ui.openDisplay, ui.openShelves)
-local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded)
+local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded, ui.displayCoins)
+ui.onCoinInterrupted(displayEarnings.interrupt, displayEarnings.destroy)
 table.insert(
 	connections,
 	stateRemote.OnClientEvent:Connect(function(state: Types.Snapshot, reply: Types.Reply?)
@@ -166,6 +167,7 @@ table.insert(
 			then
 				shelfNotice = "Collection complete! New Shelf unlocked"
 			end
+			displayEarnings.receive(previous, state, reply)
 			ui.update(state)
 			if state.ready and not musicStarted then
 				-- Once the profile and plot are ready. Areas or events may switch it later.
@@ -195,10 +197,8 @@ table.insert(
 		if reply and string.sub(reply.id, 1, 8) == "collect:" then
 			ui.message(reply.message, if reply.ok then "success" else "error")
 			if not reply.ok then
+				displayEarnings.interrupt()
 				Sfx.play("error")
-			end
-			if previous and current then
-				displayEarnings.collected(previous, current, reply)
 			end
 		end
 		if reply and intent and reply.id == intent.id then

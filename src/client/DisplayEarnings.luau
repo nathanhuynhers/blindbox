@@ -11,12 +11,15 @@ local Style = require(script.Parent.UIStyle)
 local CoinBurst = require(script.Parent.CoinBurst)
 local Icons = require(script.Parent.UIIcons)
 local Sfx = require(script.Parent.Sfx)
+local Counter = require(script.Parent.CoinCounter)
+local Scope = require(script.Parent.UIScope)
 local Earnings = {}
 
 local height = 3.9 -- Studs above the collector target's centre, just over the figure's head.
 local reach = 12 -- Mirrors the server's collect distance so prediction matches its decision.
 local hold = 1.5 -- Seconds a predicted "0" wins over older snapshots awaiting the reply.
 
+type Flight = { count: number, impacts: number, complete: boolean, token: number? }
 type Label = {
 	gui: BillboardGui,
 	text: TextLabel,
@@ -25,7 +28,18 @@ type Label = {
 	click: RBXScriptConnection?,
 	heldUntil: number,
 	burstAt: number,
+	flight: Flight?,
+	pop: Tween?,
 }
+local temporary: { [Scope.Scope]: boolean } = {}
+local function temporaryScope(): Scope.Scope
+	local scope = Scope.create()
+	temporary[scope] = true
+	scope.add(function()
+		temporary[scope] = nil
+	end)
+	return scope
+end
 
 local function ownCollectors(): Instance?
 	local plots = workspace:FindFirstChild("PlayerPlots")
@@ -89,19 +103,28 @@ local function newLabel(slot: number): Label
 end
 
 -- World-space coin fountain from the figure into the player; the number punches as it empties.
-local function burst(label: Label, amount: number, landed: () -> ())
+local function burst(label: Label, amount: number, landed: () -> (), completed: () -> ())
 	label.burstAt = os.clock()
 	label.scale.Scale = 1.5
-	tween(label.scale, 0.4, { Scale = 1 }, Enum.EasingStyle.Back)
+	if label.pop then
+		label.pop:Cancel()
+	end
+	label.pop = tween(label.scale, 0.4, { Scale = 1 }, Enum.EasingStyle.Back)
 	local target = label.target
 	if target then
-		CoinBurst.play(target.Position - Vector3.new(0, 2, 0), amount, landed)
+		CoinBurst.play(target.Position - Vector3.new(0, 2, 0), amount, landed, completed)
+	else
+		completed()
 	end
 end
 
 -- Confirmed amount slams in, overshoots, then drifts up and fades.
 local function float(label: Label, amount: number)
+	local scope = temporaryScope()
 	local text = Instance.new("TextLabel")
+	scope.add(function()
+		text:Destroy()
+	end)
 	text.Name = "Collected"
 	text.BackgroundTransparency = 1
 	text.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -117,30 +140,122 @@ local function float(label: Label, amount: number)
 	local scale = Instance.new("UIScale")
 	scale.Scale = 0.2
 	scale.Parent = text
-	tween(scale, 0.3, { Scale = 1.15 }, Enum.EasingStyle.Back)
-	task.delay(0.5, function()
+	local pop = tween(scale, 0.3, { Scale = 1.15 }, Enum.EasingStyle.Back)
+	scope.add(function()
+		pop:Cancel()
+	end)
+	local waiting = true
+	local thread = task.delay(0.5, function()
+		waiting = false
 		if text.Parent then
-			tween(text, 0.8, {
+			local drift = tween(text, 0.8, {
 				Position = UDim2.new(0.5, 0, 0.5, -84),
 				TextTransparency = 1,
 				TextStrokeTransparency = 1,
-			}).Completed:Connect(function()
-				text:Destroy()
+			})
+			scope.add(function()
+				drift:Cancel()
 			end)
+			scope.connect(drift.Completed, scope.destroy)
+		else
+			scope.destroy()
+		end
+	end)
+	scope.add(function()
+		if waiting then
+			task.cancel(thread)
 		end
 	end)
 end
 
 export type Earnings = {
 	update: (Types.Snapshot) -> number,
-	collected: (Types.Snapshot, Types.Snapshot, Types.Reply) -> (),
+	receive: (Types.Snapshot?, Types.Snapshot, Types.Reply?) -> (),
+	interrupt: () -> (),
 	-- First placement: sparkle the slot and punch its counter so earning is visibly "here".
 	celebrate: (slot: number) -> (),
 	destroy: () -> (),
 }
 
-function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
+function Earnings.create(
+	effects: () -> boolean,
+	landed: () -> (),
+	display: (number) -> ()
+): Earnings
 	local labels: { Label } = {}
+	local scope = Scope.create()
+	local counter = Counter.create(display)
+	local destroyed = false
+	local function interrupt()
+		counter.reconcile()
+		CoinBurst.destroy()
+		for child in table.clone(temporary) do
+			child.destroy()
+		end
+		for _, label in labels do
+			label.flight = nil
+			label.heldUntil = 0
+			if label.pop then
+				label.pop:Cancel()
+				label.pop = nil
+			end
+			label.scale.Scale = 1
+		end
+	end
+	local death: RBXScriptConnection? = nil
+	local function characterRemoving()
+		interrupt()
+		if death then
+			death:Disconnect()
+			death = nil
+		end
+	end
+	local function characterChanged()
+		characterRemoving()
+		local character = Players.LocalPlayer.Character
+		local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
+		if humanoid then
+			death = humanoid.Died:Connect(interrupt)
+		end
+	end
+	scope.add(function()
+		if death then
+			death:Disconnect()
+		end
+	end)
+	scope.connect(Players.LocalPlayer.CharacterRemoving, characterRemoving)
+	scope.connect(Players.LocalPlayer.CharacterAdded, characterChanged)
+	characterChanged()
+	local function start(label: Label, amount: number): Flight
+		local flight: Flight = { count = CoinBurst.count(amount), impacts = 0, complete = false }
+		local ok, problem = pcall(function()
+			burst(label, amount, function()
+				if flight.complete or destroyed then
+					return
+				end
+				flight.impacts += 1
+				if flight.token then
+					counter.impact(flight.token, flight.impacts)
+				end
+				landed()
+			end, function()
+				if flight.complete then
+					return
+				end
+				flight.complete = true
+				if flight.token then
+					counter.finish(flight.token)
+				end
+			end)
+			return nil
+		end)
+		if not ok then
+			flight.complete = true
+			interrupt()
+			warn(problem)
+		end
+		return flight
+	end
 	local snapshot: Types.Snapshot? = nil
 	local gui = Players.LocalPlayer:WaitForChild("PlayerGui")
 	for slot = 1, DisplayConfig.maxSlots do
@@ -159,6 +274,7 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 			or not id
 			or id == ""
 			or UIState.earnings(state, id) < 1
+			or os.clock() < label.heldUntil
 			or not label.target
 			or not root
 			or not root:IsA("BasePart")
@@ -170,7 +286,7 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 		label.heldUntil = os.clock() + hold
 		Sfx.play("collect") -- Predicted with the burst; the reply only plays it if unpredicted.
 		if effects() then
-			burst(label, UIState.earnings(state, id), landed)
+			label.flight = start(label, UIState.earnings(state, id))
 		end
 	end
 
@@ -179,6 +295,9 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 		local label = labels[slot]
 		if label.target == target then
 			return
+		end
+		if label.target then
+			interrupt()
 		end
 		if label.click then
 			label.click:Disconnect()
@@ -197,6 +316,9 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 	end
 
 	local function update(state: Types.Snapshot): number
+		if destroyed then
+			return 0
+		end
 		snapshot = state
 		local folder = ownCollectors()
 		local total = 0
@@ -215,36 +337,82 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 		return total
 	end
 
-	-- Authoritative confirmation: amount is the wallet delta; burst only if not predicted.
-	local function collected(before: Types.Snapshot, after: Types.Snapshot, reply: Types.Reply)
-		if not reply.ok then
-			for _, label in labels do
-				label.heldUntil = 0
+	-- Called only for newly accepted snapshots, before the HUD renders that snapshot.
+	local function receive(before: Types.Snapshot?, after: Types.Snapshot, reply: Types.Reply?)
+		if destroyed then
+			return
+		end
+		local collection = reply and string.sub(reply.id, 1, 8) == "collect:"
+		local amount = if before then after.coins - before.coins else 0
+		local slot = if collection
+				and reply
+				and reply.figure
+			then table.find(after.slots, reply.figure)
+			else nil
+		local label = if slot then labels[slot] else nil
+		local character = Players.LocalPlayer.Character
+		local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
+		local animate = collection
+			and reply
+			and reply.ok
+			and amount > 0
+			and before
+			and after.sequence == before.sequence + 1
+			and after.ready
+			and effects()
+			and label
+			and label.target
+			and humanoid
+			and humanoid.Health > 0
+		if not animate then
+			if
+				collection
+				and reply
+				and reply.ok
+				and amount > 0
+				and label
+				and os.clock() >= label.heldUntil
+			then
+				Sfx.play("collect")
+			end
+			counter.snapshot(after.coins)
+			if (before and amount ~= 0) or (reply and not reply.ok) or not after.ready then
+				interrupt()
 			end
 			update(after)
 			return
 		end
-		local slot = if reply.figure then table.find(after.slots, reply.figure) else nil
-		local label = if slot then labels[slot] else nil
-		if not label then
-			return
-		end
-		if os.clock() >= label.heldUntil then
+		local targetLabel = label :: Label
+		local flight = targetLabel.flight
+		targetLabel.flight = nil -- One prediction can confirm only one collection.
+		if not flight then
 			Sfx.play("collect")
+			flight = start(targetLabel, amount)
 		end
-		label.heldUntil = 0
-		local id = after.slots[slot :: number]
-		label.text.Text = UIState.compact(UIState.earnings(after, id))
-		if effects() then
-			local amount = after.coins - before.coins
-			if os.clock() - label.burstAt > hold then
-				burst(label, amount, landed)
-			end
-			float(label, amount)
+		local confirmed = flight :: Flight
+		confirmed.token = counter.snapshot(after.coins, amount, confirmed.impacts, confirmed.count)
+		if confirmed.complete and confirmed.token then
+			counter.finish(confirmed.token)
+		end
+		targetLabel.heldUntil = 0
+		update(after)
+		local ok, problem = pcall(function()
+			float(targetLabel, amount)
+			return nil
+		end)
+		if not ok then
+			interrupt()
+			warn(problem)
 		end
 	end
 
 	local function destroy()
+		if destroyed then
+			return
+		end
+		destroyed = true
+		interrupt()
+		scope.destroy()
 		for _, label in labels do
 			if label.click then
 				label.click:Disconnect()
@@ -256,6 +424,9 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 	end
 
 	local function celebrate(slot: number)
+		if destroyed then
+			return
+		end
 		local label = labels[slot]
 		local target = if label then label.target else nil
 		if not target or not effects() then
@@ -263,9 +434,18 @@ function Earnings.create(effects: () -> boolean, landed: () -> ()): Earnings
 		end
 		CoinBurst.celebrate(target.Position - Vector3.new(0, 2, 0))
 		label.scale.Scale = 1.6
-		tween(label.scale, 0.5, { Scale = 1 }, Enum.EasingStyle.Back)
+		if label.pop then
+			label.pop:Cancel()
+		end
+		label.pop = tween(label.scale, 0.5, { Scale = 1 }, Enum.EasingStyle.Back)
 	end
 
-	return { update = update, collected = collected, celebrate = celebrate, destroy = destroy }
+	return {
+		update = update,
+		receive = receive,
+		interrupt = interrupt,
+		celebrate = celebrate,
+		destroy = destroy,
+	}
 end
 return Earnings

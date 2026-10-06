@@ -38,6 +38,8 @@ export type Interface = {
 	-- Closes the open screen, if any (the Welcome Quest's first placement reveals the world).
 	closeScreen: () -> (),
 	coinLanded: () -> (),
+	displayCoins: (number) -> (),
+	onCoinInterrupted: (() -> (), () -> ()) -> (),
 	destroy: () -> (),
 }
 
@@ -51,6 +53,16 @@ function Interface.create(
 ): Interface
 	local scope = Scope.create()
 	local snapshot: Types.Snapshot? = nil
+	local displayedCoins: number? = nil
+	local interruptCoins: () -> () = function() end
+	local destroyCoins: () -> () = function() end
+	local coinTween: Tween? = nil
+	scope.add(function()
+		destroyCoins()
+		if coinTween then
+			coinTween:Cancel()
+		end
+	end)
 	-- Daily Login opens itself at most once per session, on the first ready snapshot.
 	local loginChecked = false
 	local effects, focused, pending, opened, destroyed = true, false, false, false, false
@@ -157,6 +169,9 @@ function Interface.create(
 	}
 	local hud = Hud.create(stage, ctx, function(value: boolean)
 		effects = value
+		if not value then
+			interruptCoins()
+		end
 	end, function()
 		if canAct() and home then
 			home()
@@ -234,7 +249,7 @@ function Interface.create(
 		if not state then
 			return
 		end
-		hud.update(state)
+		hud.update(state, displayedCoins)
 		tutorial.update(state, if opened then current else nil, focused)
 		if not state.ready and blockedStatus ~= state.saveStatus then
 			notices.show(state.saveStatus, "error")
@@ -377,7 +392,21 @@ function Interface.create(
 	end)
 	resize()
 	refresh()
+	scope.connect(gui.Destroying, function()
+		destroyed = true
+		scope.destroy()
+	end)
 	return {
+		displayCoins = function(value)
+			displayedCoins = value
+			if not destroyed then
+				hud.displayCoins(value)
+			end
+		end,
+		onCoinInterrupted = function(callback, teardown)
+			interruptCoins = callback
+			destroyCoins = teardown
+		end,
 		openDisplay = function()
 			if canAct() and not opened then
 				navigate("Display")
@@ -405,11 +434,20 @@ function Interface.create(
 		end,
 		-- Each flying coin that reaches the player kicks the Coins pill.
 		coinLanded = function()
+			if destroyed then
+				return
+			end
 			local pop = hud.coins:FindFirstChildOfClass("UIScale") or Instance.new("UIScale")
 			pop.Parent = hud.coins
 			pop.Scale = 1.16
 			Sfx.play("coinLand")
-			Tweens:Create(pop, TweenInfo.new(0.2, Enum.EasingStyle.Back), { Scale = 1 }):Play()
+			if coinTween then
+				coinTween:Cancel()
+			end
+			local tween =
+				Tweens:Create(pop, TweenInfo.new(0.2, Enum.EasingStyle.Back), { Scale = 1 })
+			coinTween = tween
+			tween:Play()
 		end,
 		message = notices.show,
 		effects = ctx.effects,
@@ -419,6 +457,9 @@ function Interface.create(
 		end,
 		openingFocus = function(value: boolean)
 			focused = value
+			if value then
+				interruptCoins()
+			end
 			gui.Enabled = not value
 			if not value then
 				resize()

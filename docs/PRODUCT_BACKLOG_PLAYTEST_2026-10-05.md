@@ -172,6 +172,49 @@ Paired with **LOGIC-01**.
 - Reconcile to the exact authoritative final wallet value at the end of the animation.
 - Keep large-number abbreviation and rapid/repeated collection behavior clean.
 
+Implementation (2026-10-05): client presentation implemented; native visual acceptance remains
+open. `CoinCounter` tracks only the unlanded portion of confirmed collection deltas, independently
+of the immediate authoritative snapshot. The existing `CoinBurst` impact boundary is the moment
+a homing world-space Coin comes within 1.6 studs of the player's root and disappears; that same
+callback kicks the HUD and now advances its number. There is no additional animation timer.
+Predicted impacts are recorded before confirmation without changing the wallet. Overlapping
+collections retain separate tokens; completions use the latest wallet rather than a captured
+balance. Unclassified wallet changes and snapshot gaps reconcile immediately, as do skipped
+effects, interruption, reset/death, teardown and failures. HUD exact-value taps, screen balances
+and affordability still use snapshots. The existing HUD abbreviation threshold and round-down
+formatting are preserved. Frame listeners exist only while world Coins are flying.
+
+Deterministic coverage is in `tests/CoinCounter.spec.luau` (actual counter, earnings and burst
+modules with engine primitives shimmed) and `tests/Screens.spec.luau` (actual HUD/Interface).
+No server economy, reward, snapshot timing, remote or schema change is part of UI-02.
+
+Verification: `rokit install` and `wally install` succeeded with normal cache access; the
+lockfile content is unchanged. The full `tests/run.py` harness passed, including economy,
+persistence and UI suites plus 47 Coin presentation assertions. The final screen suite passed
+1,100 assertions. `stylua src`, `stylua --check src`, `selene src` (zero errors/warnings),
+`rojo build default.project.json -o RobloxWorkspace.rbxlx` and `git diff --check` passed.
+Changed-client-file Luau LSP analysis with a fresh Rojo sourcemap and installed Roblox
+definitions reported no source diagnostics; it emitted only the standalone file-watcher warning.
+
+Studio checklist (not run: no Studio instance connected during implementation):
+
+- One collection: the number trails initially, each landing kick advances it, and the final
+  number and exact-value tap agree with the wallet. Listen for unchanged collect/landing sounds.
+- Spam collections on one and several figures, including slots 4–6: progress stays monotonic
+  except actual spending/corrections, and all bursts end at the newest wallet.
+- Buy a box or Display slot while Coins are flying: the deduction appears immediately, flying
+  Coins cannot restore spent value, and affordability uses the exact wallet. Also claim a reward.
+- Reset during flight; toggle effects off; start a box opening; rebuild/remove the UI: the
+  presentation reconciles immediately and no old flight can change it afterwards.
+- Large balances: cross 10 million, billion and trillion boundaries; verify abbreviations round
+  down and a HUD tap still shows the exact wallet, including when a collection is in flight.
+- Repeat on a narrow phone viewport and gamepad; verify HUD sizing, sheet balance, input and
+  selection behavior. With effects off, collections should update immediately without a flight.
+
+Visual tuning remains: assess the readability of equal per-impact shares at small balances and
+under large-number abbreviation, and the feel of overlapping landing kicks. Existing Coin paths,
+counts, impact radius and HUD styling were retained.
+
 ### UI-03 — Add an aesthetic pity-progress presentation
 
 - Pity already exists for eligible high-tier collections; this task is presentation, not a new pity
