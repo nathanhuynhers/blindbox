@@ -114,7 +114,11 @@ guest.Character:PivotTo(collector.CFrame)
 local accepted = requests
 click.MouseClick:fire(guest)
 check(requests == accepted, "non-owner rejected before transaction")
-owner.Character:PivotTo(collector.CFrame + Engine.Vector3.new(0, 0, 13))
+owner.Character:PivotTo(collector.CFrame + Engine.Vector3.new(0, 0, 20))
+click.MouseClick:fire(owner)
+check(requests == accepted + 1, "figure tap accepted at the extended range boundary")
+accepted = requests
+owner.Character:PivotTo(collector.CFrame + Engine.Vector3.new(0, 0, 20.01))
 click.MouseClick:fire(owner)
 check(requests == accepted, "far collection rejected before transaction")
 local parent = collector.Parent

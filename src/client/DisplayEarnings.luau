@@ -16,7 +16,7 @@ local Scope = require(script.Parent.UIScope)
 local Earnings = {}
 
 local height = 3.9 -- Studs above the collector target's centre, just over the figure's head.
-local reach = 12 -- Mirrors the server's collect distance so prediction matches its decision.
+local reach = DisplayConfig.collectDistance -- Matches the server's tap/click validation.
 local hold = 1.5 -- Seconds a predicted "0" wins over older snapshots awaiting the reply.
 
 type Flight = { count: number, impacts: number, complete: boolean, token: number? }

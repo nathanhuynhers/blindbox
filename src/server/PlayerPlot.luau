@@ -175,7 +175,7 @@ function PlayerPlot.render(plot: Plot, state: Types.State)
 		target.CanQuery = id ~= ""
 		local click = target:FindFirstChildOfClass("ClickDetector")
 		if click then
-			click.MaxActivationDistance = if id ~= "" then 12 else 0
+			click.MaxActivationDistance = if id ~= "" then DisplayConfig.collectDistance else 0
 		end
 	end
 	local visible = Shelves.publicView(state.shelves, plot.view)
@@ -269,7 +269,7 @@ function PlayerPlot.bindCollectors(
 				and click.Parent == target
 				and actor.UserId == plot.ownerId
 				and pos
-				and (pos - target.Position).Magnitude <= 12
+				and (pos - target.Position).Magnitude <= DisplayConfig.collectDistance
 				and PlayerPlot.contains(plot, actor)
 				and typeof(id) == "string"
 				and id ~= ""
