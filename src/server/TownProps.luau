@@ -144,18 +144,20 @@ function TownProps.giftBox(
 	base: CFrame,
 	size: number,
 	color: Color3,
-	bow: boolean
+	bow: boolean,
+	ribbonColor: Color3?
 ): Model
 	local box = model(parent, name)
 	local center = base * CFrame.new(0, size / 2, 0)
 	local ribbon = 0.18 * size
+	local tie = ribbonColor or colors.ribbon
 	TownProps.part(box, "Box", Vector3.new(size, size, size), center, color, materials.plastic)
 	TownProps.part(
 		box,
 		"RibbonA",
 		Vector3.new(ribbon, size + 0.12, size + 0.12),
 		center,
-		colors.ribbon,
+		tie,
 		materials.plastic,
 		false
 	)
@@ -164,7 +166,7 @@ function TownProps.giftBox(
 		"RibbonB",
 		Vector3.new(size + 0.08, size + 0.06, ribbon),
 		center,
-		colors.ribbon,
+		tie,
 		materials.plastic,
 		false
 	)
@@ -178,7 +180,7 @@ function TownProps.giftBox(
 				top
 					* CFrame.new(side * 0.15 * size, 0.08 * size, 0)
 					* CFrame.Angles(0, 0, math.rad(side * 32)),
-				colors.ribbon,
+				tie,
 				materials.plastic,
 				false
 			)
@@ -188,7 +190,7 @@ function TownProps.giftBox(
 			"BowKnot",
 			Vector3.new(1.1 * ribbon, 1.1 * ribbon, 1.1 * ribbon),
 			top * CFrame.new(0, 0.05 * size, 0),
-			colors.ribbon,
+			tie,
 			materials.plastic,
 			false
 		)
@@ -395,38 +397,6 @@ function TownProps.bollard(parent: Instance, name: string, base: CFrame): (Model
 	return bollard, NightLights.add(light, lens, colors.lensOn)
 end
 
--- Bench facing -Z of `base`.
-function TownProps.bench(parent: Instance, name: string, base: CFrame): Model
-	local bench = model(parent, name)
-	for _, side in { -1, 1 } do
-		TownProps.part(
-			bench,
-			"Leg",
-			Vector3.new(0.5, 1.5, 2),
-			base * CFrame.new(side * 2.8, 0.75, 0),
-			colors.iron,
-			materials.metal
-		)
-	end
-	TownProps.part(
-		bench,
-		"Seat",
-		Vector3.new(7, 0.35, 2.2),
-		base * CFrame.new(0, 1.675, 0),
-		colors.oak,
-		materials.wood
-	)
-	TownProps.part(
-		bench,
-		"Back",
-		Vector3.new(7, 1.8, 0.35),
-		base * CFrame.new(0, 2.85, 1.05) * CFrame.Angles(math.rad(-10), 0, 0),
-		colors.oak,
-		materials.wood
-	)
-	return bench
-end
-
 function TownProps.planter(
 	parent: Instance,
 	name: string,
@@ -579,6 +549,347 @@ function TownProps.pottedPlant(parent: Instance, name: string, base: CFrame): Mo
 		false
 	)
 	return plant
+end
+
+-- ------------------------------------------------------------------ plaza pop-up stalls
+
+local sideFaces =
+	{ Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right }
+
+local function surface(part: BasePart, face: Enum.NormalId, name: string): SurfaceGui
+	local gui = Instance.new("SurfaceGui")
+	gui.Name = name
+	gui.Face = face
+	gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	gui.PixelsPerStud = 40
+	gui.Parent = part
+	return gui
+end
+
+local function patch(
+	parent: Instance,
+	name: string,
+	position: UDim2,
+	size: UDim2,
+	color: Color3,
+	round: boolean?
+): Frame
+	local frame = Instance.new("Frame")
+	frame.Name = name
+	frame.BorderSizePixel = 0
+	frame.BackgroundColor3 = color
+	frame.Position = position
+	frame.Size = size
+	frame.Parent = parent
+	if round then
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0.5, 0)
+		corner.Parent = frame
+	end
+	return frame
+end
+
+local function faceWidth(part: BasePart, face: Enum.NormalId): number
+	return if face == Enum.NormalId.Left or face == Enum.NormalId.Right
+		then part.Size.Z
+		else part.Size.X
+end
+
+-- Odd count of `band`-wide stripes on the four side faces, accent at both ends; `rings` runs them
+-- around the part (candy pole) instead of top to bottom (canopy).
+local function stripes(part: BasePart, color: Color3, band: number, rings: boolean)
+	for _, face in sideFaces do
+		local length = if rings then part.Size.Y else faceWidth(part, face)
+		local count = math.max(3, math.floor(length / band / 2) * 2 + 1)
+		local gui = surface(part, face, "Stripes")
+		for index = 1, count, 2 do
+			local from = (index - 1) / count
+			if rings then
+				patch(gui, "Stripe", UDim2.fromScale(0, from), UDim2.fromScale(1, 1 / count), color)
+			else
+				patch(gui, "Stripe", UDim2.fromScale(from, 0), UDim2.fromScale(1 / count, 1), color)
+			end
+		end
+	end
+end
+
+-- Row of alternating accent/ivory scallops along an invisible hem part's side faces.
+local function scallops(hem: BasePart, color: Color3)
+	for _, face in sideFaces do
+		local count = math.floor(faceWidth(hem, face) / hem.Size.Y)
+		local gui = surface(hem, face, "Scallops")
+		for index = 1, count do
+			patch(
+				gui,
+				"Scallop",
+				UDim2.fromScale((index - 1) / count, 0),
+				UDim2.fromScale(1 / count, 1),
+				if index % 2 == 1 then color else colors.ivory,
+				true
+			)
+		end
+	end
+end
+
+-- Rim, cross spokes and hub drawn on both caps of a cylinder wheel.
+local function spokes(wheel: BasePart)
+	for _, face in { Enum.NormalId.Left, Enum.NormalId.Right } do
+		local gui = surface(wheel, face, "Spokes")
+		local rim = patch(
+			gui,
+			"Rim",
+			UDim2.fromScale(0.14, 0.14),
+			UDim2.fromScale(0.72, 0.72),
+			colors.oak,
+			true
+		)
+		rim.BackgroundTransparency = 1
+		local stroke = Instance.new("UIStroke")
+		stroke.Color = colors.oakDark
+		stroke.Thickness = 4
+		stroke.Parent = rim
+		patch(
+			gui,
+			"Spoke",
+			UDim2.fromScale(0.46, 0.14),
+			UDim2.fromScale(0.08, 0.72),
+			colors.oakDark
+		)
+		patch(
+			gui,
+			"Spoke",
+			UDim2.fromScale(0.14, 0.46),
+			UDim2.fromScale(0.72, 0.08),
+			colors.oakDark
+		)
+		patch(
+			gui,
+			"Hub",
+			UDim2.fromScale(0.39, 0.39),
+			UDim2.fromScale(0.22, 0.22),
+			colors.oakDark,
+			true
+		)
+	end
+end
+
+local function sign(part: BasePart, text: string)
+	local gui = surface(part, Enum.NormalId.Front, "Sign")
+	gui.LightInfluence = 0.4
+	local label = Instance.new("TextLabel")
+	label.Name = "Text"
+	label.BackgroundTransparency = 1
+	label.Position = UDim2.fromScale(0.06, 0.1)
+	label.Size = UDim2.fromScale(0.88, 0.8)
+	label.Font = Enum.Font.FredokaOne
+	label.Text = text
+	label.TextScaled = true
+	label.TextColor3 = colors.charcoal
+	label.Parent = gui
+end
+
+local function anchor(part: BasePart, name: string, offset: Vector3)
+	local attachment = Instance.new("Attachment")
+	attachment.Name = name
+	attachment.CFrame = CFrame.new(offset)
+	attachment.Parent = part
+end
+
+TownProps.stallCounterTop = 3.8
+TownProps.stallPeekaHeight = 3.2
+
+-- Peeka's Pop-up flower cart facing -Z of `base`; the viewer's left is +X. Deal slots stay blank
+-- for the stall logic: Counter.BoxAnchor and Counter.PriceTagAnchor (Attachments facing the
+-- stall front), Body.StockPips.Strip and ClockTag.ClockFace (SurfaceGuis). Bulbs are lens-only, so
+-- they glow at dusk without spending the PointLight budget.
+function TownProps.stall(
+	parent: Instance,
+	name: string,
+	base: CFrame,
+	body: Color3,
+	stripe: Color3
+): (Model, { NightLights.Entry })
+	local stall = model(parent, name)
+	local top = TownProps.stallCounterTop
+	local cart = TownProps.part(
+		stall,
+		"Body",
+		Vector3.new(8, 2.8, 4.2),
+		base * CFrame.new(0, 2, 0),
+		body,
+		materials.plastic
+	)
+	local pips = surface(cart, Enum.NormalId.Front, "StockPips")
+	local strip = patch(pips, "Strip", UDim2.fromScale(0.3, 0.52), UDim2.fromScale(0.4, 0.2), body)
+	strip.BackgroundTransparency = 1
+	-- One cylinder per wheel pair: its caps show front and back, its middle hides under the cart.
+	for _, side in { -1, 1 } do
+		local wheel = TownProps.part(
+			stall,
+			"Wheel",
+			Vector3.new(4.7, 2.6, 2.6),
+			base * CFrame.new(side * 2.65, 1.3, 0) * CFrame.Angles(0, math.rad(90), 0),
+			colors.oak,
+			materials.wood
+		)
+		wheel.Shape = Enum.PartType.Cylinder
+		spokes(wheel)
+	end
+	local counter = TownProps.part(
+		stall,
+		"Counter",
+		Vector3.new(9, 0.4, 5),
+		base * CFrame.new(0, top - 0.2, 0),
+		colors.oak,
+		materials.wood
+	)
+	local plaque = TownProps.part(
+		stall,
+		"Plaque",
+		Vector3.new(3.6, 1.1, 0.12),
+		base * CFrame.new(0, 2.7, -2.16),
+		colors.ivory,
+		materials.plastic,
+		false
+	)
+	sign(plaque, "Hourly Deal")
+
+	-- Peeka peeking from the "?" box; the uploaded stall Peeka replaces this stand-in.
+	local feet = base * CFrame.new(2.3, top, -0.4)
+	local peeka = model(stall, "Peeka")
+	TownProps.part(
+		peeka,
+		"Box",
+		Vector3.new(1.8, 1.5, 1.6),
+		feet * CFrame.new(0, 0.75, 0),
+		colors.pink,
+		materials.plastic
+	)
+	TownProps.ball(peeka, "Head", 1.5, feet * CFrame.new(0, 1.9, 0), colors.face, materials.plastic)
+	TownPlacements.add("PeekaStall", feet, TownProps.stallPeekaHeight, "height", peeka)
+
+	-- Empty cake stand for the offered box, with the price tag hanging to its right.
+	TownProps.cylinder(
+		stall,
+		"CakeStandStem",
+		0.35,
+		0.8,
+		base * CFrame.new(0, top, -0.6),
+		colors.ivory,
+		materials.plastic
+	)
+	TownProps.cylinder(
+		stall,
+		"CakeStand",
+		1.8,
+		0.14,
+		base * CFrame.new(0, top + 0.8, -0.6),
+		colors.ivory,
+		materials.plastic
+	)
+	anchor(counter, "BoxAnchor", Vector3.new(0, 1.14, -0.6))
+	anchor(counter, "PriceTagAnchor", Vector3.new(-2.3, 1.1, -1.2))
+
+	for _, side in { -1, 1 } do
+		local pole = TownProps.part(
+			stall,
+			"Pole",
+			Vector3.new(0.35, 3.9, 0.35),
+			base * CFrame.new(side * 3.8, top + 1.95, -0.3),
+			colors.ivory,
+			materials.plastic
+		)
+		stripes(pole, stripe, 0.45, true)
+	end
+	local tag = TownProps.part(
+		stall,
+		"ClockTag",
+		Vector3.new(1.8, 0.9, 0.12),
+		base * CFrame.new(4.88, top + 1.3, -0.3) * CFrame.Angles(0, 0, math.rad(4)),
+		colors.oak,
+		materials.wood,
+		false
+	)
+	local face = surface(tag, Enum.NormalId.Front, "ClockFace")
+	local dial = patch(
+		face,
+		"Dial",
+		UDim2.fromScale(0.06, 0.15),
+		UDim2.fromScale(0.36, 0.7),
+		colors.ivory,
+		true
+	)
+	patch(dial, "Hand", UDim2.fromScale(0.46, 0.18), UDim2.fromScale(0.08, 0.36), colors.charcoal)
+	patch(dial, "Hand", UDim2.fromScale(0.5, 0.46), UDim2.fromScale(0.28, 0.08), colors.charcoal)
+
+	-- Canopy: striped skirt, a dome whose lower half hides inside it, and a scalloped hem.
+	local skirt = TownProps.part(
+		stall,
+		"Canopy",
+		Vector3.new(9.4, 1.3, 5.4),
+		base * CFrame.new(0, 8.25, 0),
+		colors.ivory,
+		materials.plastic,
+		false
+	)
+	stripes(skirt, stripe, 1.1, false)
+	local dome = TownProps.part(
+		stall,
+		"Dome",
+		Vector3.new(8.6, 2.5, 4.8),
+		base * CFrame.new(0, 8.9, 0),
+		stripe,
+		materials.plastic,
+		false
+	)
+	local mesh = Instance.new("SpecialMesh")
+	mesh.MeshType = Enum.MeshType.Sphere
+	mesh.Parent = dome
+	local hem = TownProps.part(
+		stall,
+		"Hem",
+		Vector3.new(9.5, 0.7, 5.5),
+		base * CFrame.new(0, 7.35, 0),
+		stripe,
+		materials.plastic,
+		false
+	)
+	hem.Transparency = 1
+	hem.CastShadow = false
+	scallops(hem, stripe)
+	local banner = TownProps.part(
+		stall,
+		"Banner",
+		Vector3.new(4.4, 0.75, 0.1),
+		base * CFrame.new(0, 9.3, -2.62),
+		colors.ivory,
+		materials.plastic,
+		false
+	)
+	sign(banner, "Peeka's Pop-up")
+	TownProps.giftBox(
+		stall,
+		"GiftBox",
+		base * CFrame.new(0, 10.08, 0) * CFrame.Angles(0, math.rad(12), 0),
+		1,
+		colors.pink,
+		true,
+		colors.gold
+	)
+	local lights = {}
+	for index = -2, 2 do
+		local bulb = TownProps.ball(
+			stall,
+			"Bulb",
+			0.3,
+			base * CFrame.new(index * 1.7, 6.9, -2.78),
+			colors.lensOff,
+			materials.plastic,
+			false
+		)
+		table.insert(lights, NightLights.add(nil, bulb, colors.lensOn))
+	end
+	return stall, lights
 end
 
 -- ------------------------------------------------------------------ uploaded-model spots

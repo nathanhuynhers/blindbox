@@ -25,7 +25,7 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `TownModels`/`TownPlacements`: server-only templates for the uploaded tree and Peeka statue
   models (part-count, collision and facing checks), and the registry that swaps each part
   placeholder for a scaled copy when its model loads. Failed loads keep the placeholders.
-  `PlazaFixture` owns the plaza, giant blind box, benches, planters, board placement and the
+  `PlazaFixture` owns the plaza, giant blind box, pop-up stalls, planters, board placement and the
   pre-assignment `SpawnLocation`. `TownLayout` holds every radius/angle and the part/light
   budgets, `TownStyle` the pastel palette, and `TownProps` the reusable native-part prop builders.
 - `PlotGeometry`/`PlotFixture`/`PlotStyle`/`Awning`: one plot-local `CFrame` per plot; layered

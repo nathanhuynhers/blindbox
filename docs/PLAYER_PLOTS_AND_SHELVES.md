@@ -26,7 +26,7 @@ The shared world is **Blindbox Town**, a cozy blind-box shopping town built from
 - **Plaza (radius 50):** paved surface, oak-stone trim and an inlay ring. In the center is the
   giant blind-box landmark: a pastel pink 18-by-16-by-18 box with "?" on all four sides on a round
   wooden base, its ribboned, bowed lid hinged at the back, tipped 24 degrees open and lifted, with
-  a soft inner glow and four neon sparkles. Three benches, four planters and the leaderboard sit
+  a soft inner glow and four neon sparkles. Three Peeka's Pop-up stalls, four planters and the leaderboard sit
   at radius 44-45 in the gaps between path mouths; tests assert that every plaza prop stays
   outside every path's walking corridor. A flush neutral `SpawnLocation` (no force field) sits on
   open paving beside the leaderboard for players who do not have a plot yet.

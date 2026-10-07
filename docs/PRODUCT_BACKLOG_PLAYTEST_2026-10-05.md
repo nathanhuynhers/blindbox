@@ -289,6 +289,15 @@ Paired with **LOGIC-05**.
 - Keep the stalls visually coherent with the main world and Peeka/collectible theme.
 - Design states for sold out, available, refresh-soon and newly refreshed inventory.
 
+**Status (2026-10-07): physical models built; dynamic content open.** The three plaza benches are
+now Mint, Sky and Butter flower-cart stalls (`TownProps.stall`, placed by `PlazaFixture` as
+`Stall_1`-`Stall_3` at plaza gaps 1, 3 and 5, facing the centre) with the stall Peeka on each
+counter, an empty cake stand, a clock tag and dusk bulbs (lens glow only, no PointLight budget).
+Still open: **LOGIC-05** and the dynamic display content it feeds. The models expose blank slots for
+it: `Counter.BoxAnchor` and `Counter.PriceTagAnchor` (Attachments), `Body.StockPips.Strip` and
+`ClockTag.ClockFace` (SurfaceGuis). No offer box, price, stock, timer, state visuals (sold out,
+refresh soon, new) or interaction prompt exist yet.
+
 ### UI-09 — Add an Equip Best control to the Display UI
 
 Paired with **LOGIC-06**.

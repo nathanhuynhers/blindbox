@@ -214,7 +214,7 @@ check(
 	"legacy Baseplate is hidden beneath the island"
 )
 
--- Plaza: paved floor, the giant blind box, benches, planters, leaderboard and spawn.
+-- Plaza: paved floor, the giant blind box, pop-up stalls, planters, leaderboard and spawn.
 local plaza = groups.MainPlaza
 local plazaSurface = plaza:FindFirstChild("PlazaSurface")
 local plazaTrim = plaza:FindFirstChild("PlazaTrim")
@@ -268,14 +268,41 @@ for _, part in box:GetChildren() do
 	end
 end
 check(sparkles >= 3, "a few sparkle accents")
-local furniture = { Bench = 0, Planter = 0 }
+local furniture = { Bench = 0, Stall = 0, Planter = 0 }
 for _, child in plaza:GetChildren() do
 	local kind = string.match(child.Name, "^(%a+)_%d+$")
-	if kind == "Bench" or kind == "Planter" then
+	if kind == "Bench" or kind == "Stall" or kind == "Planter" then
 		furniture[kind] += 1
 	end
 end
-check(furniture.Bench == 3 and furniture.Planter == 4, "three benches and four planters")
+check(furniture.Stall == 3 and furniture.Bench == 0 and furniture.Planter == 4, "three pop-up stalls replace the benches beside four planters")
+for index, theme in TownStyle.stalls do
+	local stall = plaza:FindFirstChild("Stall_" .. index)
+	assert(stall)
+	local cart = stall:FindFirstChild("Body")
+	local counter = stall:FindFirstChild("Counter")
+	local tag = stall:FindFirstChild("ClockTag")
+	check(cart.Color == theme.body and stall:FindFirstChild("Dome").Color == theme.stripe, theme.name .. " stall wears its pastel cart and canopy")
+	check(
+		dot(counter.CFrame.LookVector, (Engine.Vector3.new(0, counter.Position.Y, 0) - counter.Position).Unit) > 0.99,
+		"each stall faces the plaza center"
+	)
+	check(cart.CanCollide and counter.CanCollide and not stall:FindFirstChild("Canopy").CanCollide, "collidable cart under a walk-through canopy")
+	local strip = cart:FindFirstChild("StockPips"):FindFirstChild("Strip")
+	check(
+		counter:FindFirstChild("BoxAnchor").ClassName == "Attachment"
+			and counter:FindFirstChild("PriceTagAnchor").ClassName == "Attachment"
+			and strip ~= nil
+			and #strip:GetChildren() == 0
+			and tag:FindFirstChild("ClockFace") ~= nil,
+		"named deal slots wait blank for the stall logic"
+	)
+	for _, node in stall:GetDescendants() do
+		if node.ClassName == "TextLabel" then
+			check(node.Text == "Hourly Deal" or node.Text == "Peeka's Pop-up", "stalls carry no sample prices or timers")
+		end
+	end
+end
 for _, part in descendantParts(plaza) do
 	local planar = math.sqrt(part.Position.X ^ 2 + part.Position.Z ^ 2)
 	if planar > Layout.landmark.baseRadius + 2 and part.ClassName == "Part" then
@@ -522,11 +549,13 @@ print(string.format("Static night lights: %d (+1 per active plot) / %d", staticL
 local sampleBollard = groups.Paths:FindFirstChild("Path_1"):FindFirstChild("Bollard_1_Left")
 local sampleLens = sampleBollard:FindFirstChild("WarmLens")
 local dayColor = sampleLens.Color
+local stallBulb = plaza:FindFirstChild("Stall_1"):FindFirstChild("Bulb")
 NightLights.set(true)
 check(
 	sampleLens.Material == "Neon" and sampleLens:FindFirstChildOfClass("PointLight").Enabled and NightLights.isOn(),
 	"dusk turns lights and lens glows on"
 )
+check(stallBulb.Material == "Neon" and stallBulb.Color == TownStyle.colors.lensOn, "stall bulbs glow at dusk without a PointLight")
 NightLights.set(false)
 check(
 	sampleLens.Material == "SmoothPlastic"
@@ -603,6 +632,7 @@ local expectedKinds = {
 	PeekaTada = 1,
 	PeekaHug = 1,
 	PeekaNap = 1,
+	PeekaStall = 3,
 }
 for kind, expected in expectedKinds do
 	local spots = TownPlacements.list(kind)
@@ -612,7 +642,7 @@ for kind, expected in expectedKinds do
 		check(spot.size > 0 and (spot.fit == "width" or spot.fit == "height"), "each spot has a target size")
 	end
 end
-check(#TownPlacements.list() == 56, "52 trees and 4 statues wait for uploaded models")
+check(#TownPlacements.list() == 59, "52 trees, 4 statues and 3 stall Peekas wait for uploaded models")
 for _, spot in TownPlacements.list("PeekaHug") do
 	check(spot.fit == "width" and spot.size == TownProps.statueWidth, "statues fit the 12-stud pedestal footprint")
 end
