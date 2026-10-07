@@ -85,5 +85,8 @@ return table.freeze({
 	}),
 	-- Measured totals are asserted by the plot spec; these are the ceilings.
 	-- Six collection plates add twelve parts per active plot; world/light budgets are unchanged.
-	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 162, nightLights = 64 }),
+	-- The plot Shop adds 19 kiosk parts and an 8-part Peeka stand-in: 180 measured with click
+	-- targets (was 153). The uploaded shopkeeper replacing the stand-in is mesh geometry, excluded
+	-- like figures; the Shop adds no lights.
+	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 184, nightLights = 64 }),
 })

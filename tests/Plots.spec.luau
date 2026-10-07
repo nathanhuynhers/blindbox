@@ -13,6 +13,7 @@ local TownStyle = require("./TownStyle")
 local TownProps = require("./TownProps")
 local TownPlacements = require("./TownPlacements")
 local NightLights = require("./NightLights")
+local ShopFixture = require("./ShopFixture")
 local PlotStyle = require("./PlotStyle")
 local LeaderboardBoard = require("./LeaderboardBoard")
 local Awning = require("./Awning")
@@ -847,6 +848,77 @@ for _, ring in descendantParts(pad) do
 	)
 end
 check(descendantParts(pad)[1].Color == PlotStyle.DefaultAccent, "spawn pad uses the plot accent")
+-- Plot Shop: on the open side opposite the Shelves, clear of the spawn pad, Display and arch path.
+local function extents(part)
+	local half = part.Size / 2
+	local total = Engine.Vector3.new(0, 0, 0)
+	for _, axis in { { part.CFrame.RightVector, half.X }, { part.CFrame.UpVector, half.Y }, { part.CFrame.LookVector, half.Z } } do
+		local v = plot.transform:VectorToObjectSpace(axis[1])
+		total = total + Engine.Vector3.new(math.abs(v.X), math.abs(v.Y), math.abs(v.Z)) * axis[2]
+	end
+	return total
+end
+local shop = plot.shop
+local shopParts = descendantParts(shop.model)
+local minX, maxX, minZ, maxZ = math.huge, -math.huge, math.huge, -math.huge
+for _, piece in shopParts do
+	local at = localPosition(plot.transform, piece.Position)
+	local extent = extents(piece)
+	minX, maxX = math.min(minX, at.X - extent.X), math.max(maxX, at.X + extent.X)
+	minZ, maxZ = math.min(minZ, at.Z - extent.Z), math.max(maxZ, at.Z + extent.Z)
+	check(piece.Anchored and piece.CanTouch == false, "Shop parts are anchored and never touch-enabled: " .. piece.Name)
+end
+local walkable = Config.width / 2 - PlotFixture.style.floorInset
+check(
+	minX >= -walkable and maxZ <= Config.depth / 2 - PlotFixture.style.floorInset and minZ >= -walkable,
+	string.format("Shop stays on the walking surface: X %.1f..%.1f, Z %.1f..%.1f", minX, maxX, minZ, maxZ)
+)
+check(maxX - minX <= 17 and maxZ - minZ <= 19, string.format("Shop footprint about 16 x 14 studs plus props: %.1f x %.1f", maxX - minX, maxZ - minZ))
+check(
+	maxX < -Fixture.width(6) / 2 - 2 and maxX < -Config.pathWidth / 2 and maxX < Geometry.shelfX - 20,
+	string.format("Shop stays west of the Display, arch path and Shelves: max X %.1f", maxX)
+)
+check(maxZ < Geometry.displayZ - 10, string.format("Shop stays clear of the Display and its plates: max Z %.1f", maxZ))
+local padAt, padRadius = PlotFixture.spawnPad.position, PlotFixture.spawnPad.diameter / 2
+local nearestX = math.clamp(padAt.X, minX, maxX)
+local nearestZ = math.clamp(padAt.Z, minZ, maxZ)
+check(
+	math.sqrt((nearestX - padAt.X) ^ 2 + (nearestZ - padAt.Z) ^ 2) > padRadius + 4,
+	"Shop stays clear of the spawn pad"
+)
+print(string.format("Plot Shop footprint: X %.1f..%.1f, Z %.1f..%.1f", minX, maxX, minZ, maxZ))
+local facing = plot.transform:VectorToObjectSpace(ShopFixture.frame(plot.transform).LookVector)
+check(facing.X > 0.999, "Shop window faces the plot centre")
+local openAt = localPosition(plot.transform, shop.parts.OpenShop.Position)
+check(
+	openAt.X > maxX - 1 and close(openAt.Z, ShopFixture.position.Z) and openAt.Y < 1,
+	"Open Shop prompt anchor sits low and centred in front of the counter"
+)
+for _, node in shop.model:GetDescendants() do
+	check(not node:IsA("Light"), "Shop adds no Light instances to the night-light budget")
+end
+check(shop.keeper.Parent == shop.model and shop.keeper.Name == "Shopkeeper", "part-built Peeka stands in until the model loads")
+check(#descendantParts(shop.keeper) == 8, "eight-part Peeka stand-in")
+check(#shopParts == 27, "19-part kiosk plus Peeka stand-in")
+check(
+	shop.model:GetAttribute("Night") == false and not shop.ceiling.Enabled and not shop.halos[1].Visible,
+	"Shop starts in its day look"
+)
+NightLights.set(true)
+check(
+	shop.model:GetAttribute("Night") == true
+		and shop.window.LightInfluence == 0
+		and shop.ceiling.Enabled
+		and shop.bulbs.LightInfluence == 0
+		and shop.halos[1].Visible
+		and shop.bulbFrames[1].BackgroundColor3 == ShopFixture.palette.bulbOn,
+	"window glow and awning bulbs switch on with the plot's night controller"
+)
+NightLights.set(false)
+check(
+	shop.model:GetAttribute("Night") == false and shop.window.LightInfluence == 1 and not shop.halos[1].Visible,
+	"Shop returns to its day look at dawn"
+)
 local unitCount = 0
 for _, child in plot.collection.model:GetChildren() do
 	check(
@@ -1632,6 +1704,28 @@ check(
 	not retainedExport.dead and not ownedPebble.dead,
 	"rebuild still preserves legitimate figure instances"
 )
+-- Uploaded shopkeeper: replaces live stand-ins when it loads, and plots made later use it at once.
+local placementsBefore = #TownPlacements.list(ShopFixture.shopkeeper.kind)
+local early = Plot.create(Engine.player(501), 1)
+check(#TownPlacements.list(ShopFixture.shopkeeper.kind) == placementsBefore + 1, "each plot registers one shopkeeper spot")
+local template = Engine.Instance.new("Model")
+template.Name = ShopFixture.shopkeeper.kind
+template:SetAttribute("NaturalWidth", 2)
+template:SetAttribute("NaturalHeight", 3.2)
+Engine.Template.part(template, "PeekaShopkeeper_Body", Engine.Vector3.new(0, 1, 0))
+local standInModel = early.shop.keeper
+check(TownPlacements.swap(ShopFixture.shopkeeper.kind, template) == 1, "a loading shopkeeper swaps every live plot stand-in")
+local swapped = early.shop.model:FindFirstChild("Shopkeeper")
+check(
+	standInModel.dead and swapped and swapped ~= standInModel and close(swapped:GetScale(), ShopFixture.shopkeeper.height / 3.2),
+	"uploaded shopkeeper replaces the stand-in at the counter height"
+)
+local late = Plot.create(Engine.player(502), 2)
+local lateKeeper = late.shop.model:FindFirstChild("Shopkeeper")
+check(late.shop.keeper.dead and lateKeeper and lateKeeper ~= late.shop.keeper, "plots created after loading use the model at once")
+Plot.destroy(early)
+Plot.destroy(late)
+check(#TownPlacements.list(ShopFixture.shopkeeper.kind) == placementsBefore, "plot teardown forgets its shopkeeper spot")
 rebuilt.root:Destroy()
 retainedAssets:Destroy()
 check(NightLights.controllerCount() == controllersBeforePlots, "all plot lighting controllers are cleaned up")

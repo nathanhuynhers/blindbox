@@ -43,12 +43,13 @@ Pocket Grove discovery progress with silhouettes for missing figures, and an opt
 introduces Shelves afterwards. See [data model](DATA_MODEL.md#welcome-quest-v13).
 Existing lease/retry/storage-failure protection remains.
 
-The world is **Blindbox Town**, a cozy blind-box shopping town (no stores or shop buildings):
+The world is **Blindbox Town**, a cozy blind-box shopping town (no shared stores or shop buildings):
 eight open plots ring a paved plaza with a giant opening blind box, joined by direct paths and
 crossed by the cobbled Market Street ring with lanterns. Gift-box stacks and marble statues of Peeka, the town mascot, fill the
 gaps between plots, sculpted sakura and green trees line the town, and a hedge wraps the island. Players spawn on their own plot;
 each active plot has a walk-through `<DisplayName>'s Showroom` arch, potted plants, striped
-Display/Shelves awnings and a spawn pad, all in one shared pastel-pink accent. A 20-minute
+Display/Shelves awnings, a spawn pad and Peeka's Box Shop, a box-shaped kiosk where Peeka minds
+the counter and E opens the existing Shop screen (owner only), all in one shared pastel-pink accent. A 20-minute
 day/night cycle switches lanterns and plot lights on at dusk and strengthens the existing Display
 and Shelf fixture washes until dawn. A global plaza leaderboard rotates
 Most Figures, Top Coins/sec and Most Boxes Opened; it is presentation only and grants nothing.

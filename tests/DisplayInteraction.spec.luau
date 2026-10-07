@@ -16,10 +16,13 @@ local prompts = Engine.services.ProximityPromptService
 local input = Engine.services.UserInputService
 local opened = 0
 local shelvesOpened = 0
+local shopOpened = 0
 local control = Interaction.create(function()
 	opened += 1
 end, function()
 	shelvesOpened += 1
+end, function()
+	shopOpened += 1
 end)
 local plot = Plot.create(owner, 1)
 local session = Transactions.new(0)
@@ -48,7 +51,24 @@ local target = fixture:FindFirstChild("ManageDisplay")
 local prompt = target:FindFirstChildOfClass("ProximityPrompt")
 local shelfTarget = plot.collection.model:FindFirstChild("ManageShelves")
 local shelfPrompt = shelfTarget:FindFirstChildOfClass("ProximityPrompt")
+local shopTarget = plot.shop.model:FindFirstChild("OpenShop")
+local shopPrompt = shopTarget:FindFirstChildOfClass("ProximityPrompt")
 control.update()
+check(
+	shopPrompt.Name == "OpenShopPrompt"
+		and shopPrompt.KeyboardKeyCode == Engine.Enum.KeyCode.E
+		and shopPrompt.ActionText == "Open Shop"
+		and shopPrompt.ObjectText == "Peeka's Box Shop"
+		and shopPrompt.MaxActivationDistance == 12
+		and shopPrompt.HoldDuration == 0
+		and shopPrompt.RequiresLineOfSight == false
+		and shopPrompt.Enabled,
+	"E · Open Shop matches the Display and Shelves prompts"
+)
+check(
+	shopTarget.Transparency == 1 and not shopTarget.CanCollide and not shopTarget.CanQuery,
+	"Shop prompt anchor is invisible and nonblocking"
+)
 check(
 	prompt.KeyboardKeyCode == Engine.Enum.KeyCode.E and prompt.ActionText == "Manage Display",
 	"E clearly manages Display"
@@ -91,6 +111,19 @@ prompts.PromptTriggered:fire(shelfPrompt, owner)
 check(shelvesOpened == 1, "nearby owner opens Shelves management")
 prompts.PromptTriggered:fire(shelfPrompt, guest)
 check(shelvesOpened == 1, "another actor cannot open the local Shelves UI")
+owner.Character:PivotTo(shopTarget.CFrame)
+prompts.PromptShown:fire(shopPrompt)
+check(shopPrompt.Enabled, "the owner keeps their own Shop prompt")
+prompts.PromptTriggered:fire(shopPrompt, owner)
+check(shopOpened == 1 and opened == 1 and shelvesOpened == 1, "nearby owner opens only the Shop")
+prompts.PromptTriggered:fire(shopPrompt, guest)
+check(shopOpened == 1, "another actor cannot open the local Shop")
+owner.Character:PivotTo(shopTarget.CFrame + Engine.Vector3.new(12.01, 0, 0))
+prompts.PromptTriggered:fire(shopPrompt, owner)
+check(shopOpened == 1, "far Shop trigger ignored")
+owner.Character:PivotTo(shopTarget.CFrame + Engine.Vector3.new(12, 0, 0))
+prompts.PromptTriggered:fire(shopPrompt, owner)
+check(shopOpened == 2, "inclusive Shop prompt distance boundary")
 check(state.coins == 4500 and requests == 0, "management never invokes economy collection")
 local collector = plot.collectors[2]
 local click = collector:FindFirstChildOfClass("ClickDetector")
@@ -137,6 +170,13 @@ owner.Character = Engine.player(33).Character
 owner.Character:PivotTo(target.CFrame)
 prompts.PromptTriggered:fire(prompt, owner)
 check(opened == 3, "respawn uses the new character without rebinding")
+owner.Character:PivotTo(shopTarget.CFrame)
+prompts.PromptTriggered:fire(shopPrompt, owner)
+check(shopOpened == 3, "respawned owner opens the Shop without rebinding")
+owner.Character:FindFirstChildOfClass("Humanoid").Health = 0
+prompts.PromptTriggered:fire(shopPrompt, owner)
+check(shopOpened == 3, "dead character cannot open the Shop")
+owner.Character = Engine.player(34).Character
 local other = Plot.create(guest, 2)
 local otherTarget = other.fixture.model:FindFirstChild("ManageDisplay")
 local otherPrompt = otherTarget:FindFirstChildOfClass("ProximityPrompt")
@@ -153,6 +193,17 @@ check(
 	not otherShelfPrompt.Enabled and shelvesOpened == 1,
 	"guest Shelves prompt is hidden and cannot route management"
 )
+local otherShopTarget = other.shop.model:FindFirstChild("OpenShop")
+local otherShopPrompt = otherShopTarget:FindFirstChildOfClass("ProximityPrompt")
+owner.Character:PivotTo(otherShopTarget.CFrame)
+prompts.PromptShown:fire(otherShopPrompt)
+prompts.PromptTriggered:fire(otherShopPrompt, owner)
+check(
+	not otherShopPrompt.Enabled and shopOpened == 3,
+	"visitors see no Shop prompt on another plot and cannot open the Shop there"
+)
+control.update()
+check(not otherShopPrompt.Enabled, "snapshot refresh never re-enables another plot's Shop prompt")
 local liveConnections = Engine.connections
 for _ = 1, 40 do
 	Plot.render(plot, Rules.new(0))
@@ -165,10 +216,13 @@ for _, instance in plot.model:GetDescendants() do
 		promptCount += 1
 	end
 end
-check(promptCount == 2, "one Display and one Shelves management prompt remain after rerenders")
+check(promptCount == 3, "one Display, one Shelves and one Shop prompt remain after rerenders")
 Plot.destroy(plot)
 prompts.PromptTriggered:fire(prompt, owner)
 check(opened == 3, "destroyed plot prompt cannot reopen")
+owner.Character:PivotTo(shopTarget.CFrame)
+prompts.PromptTriggered:fire(shopPrompt, owner)
+check(shopOpened == 3, "torn-down plot Shop prompt cannot reopen")
 local replacement = Plot.create(owner, 1)
 control.update()
 local replacementTarget = replacement.fixture.model:FindFirstChild("ManageDisplay")
@@ -179,11 +233,21 @@ local replacementShelfTarget = replacement.collection.model:FindFirstChild("Mana
 owner.Character:PivotTo(replacementShelfTarget.CFrame)
 prompts.PromptTriggered:fire(replacementShelfTarget:FindFirstChildOfClass("ProximityPrompt"), owner)
 check(shelvesOpened == 2, "replacement Shelves use the same one listener")
+local replacementShopTarget = replacement.shop.model:FindFirstChild("OpenShop")
+local replacementShopPrompt = replacementShopTarget:FindFirstChildOfClass("ProximityPrompt")
+replacementShopPrompt.Enabled = false -- Hidden before ownership replicated.
+control.update()
+check(replacementShopPrompt.Enabled, "snapshot refresh recovers the owner's replacement Shop prompt")
+owner.Character:PivotTo(replacementShopTarget.CFrame)
+prompts.PromptTriggered:fire(replacementShopPrompt, owner)
+check(shopOpened == 4, "replacement Shop uses the same one listener")
 control.destroy()
 prompts.PromptTriggered:fire(replacementTarget:FindFirstChildOfClass("ProximityPrompt"), owner)
 check(opened == 4, "client teardown disconnects prompt routing")
 prompts.PromptTriggered:fire(replacementShelfTarget:FindFirstChildOfClass("ProximityPrompt"), owner)
 check(shelvesOpened == 2, "client teardown disconnects Shelves prompt routing")
+prompts.PromptTriggered:fire(replacementShopPrompt, owner)
+check(shopOpened == 4, "client teardown disconnects Shop prompt routing")
 input.TouchEnabled, input.MouseEnabled = true, false
 local mobile = Interaction.create(function() end)
 local mobileText = replacement.fixture.model

@@ -113,6 +113,22 @@ Paired with **UI-07**.
   second store backend.
 - Cleanly handle leaving range, respawn, plot teardown and ownership/session changes.
 
+Implementation (2026-10-07, with UI-07): `ShopFixture` places an invisible `OpenShop` anchor low
+and centred in front of the plot Shop counter with a native `OpenShopPrompt` (**E · Open Shop**,
+object text "Peeka's Box Shop", 12 studs, no hold, no line-of-sight requirement), matching the
+Display/Shelves prompts. `DisplayInteraction` routes it with the same one listener into a new
+`Interface.openShop`, which navigates to the existing Shop screen only when `canAct()` (ready,
+no pending request, no opening focus) and no screen is open. Owner only: every client hides
+other plots' Shop prompts on `PromptShown` and snapshot refreshes re-enable only its own, so
+visitors see the kiosk and Peeka but no prompt. Triggers recheck the actor, ancestry, living
+character and inclusive 12-stud distance; respawn needs no rebinding, and plot teardown or
+replacement leaves the single listener valid. No remote, store backend, purchase path, schema or
+persistent field was added; buying still goes through the existing Shop flow.
+
+Coverage: `tests/DisplayInteraction.spec.luau` (prompt properties, owner opens only the Shop,
+other actors and far/dead triggers rejected, visitor prompt hidden and never re-enabled,
+respawn, teardown, replacement plot, client teardown; 148 checks).
+
 ### LOGIC-05 — Hourly limited-stock discounted plaza shops
 
 Paired with **UI-08**.
@@ -276,6 +292,39 @@ Paired with **LOGIC-04**.
 - Present a clear nearby **E** interaction prompt that opens the existing Shop UI.
 - The physical Shop is an entry point to the current Shop UI, not a replacement for the Shop interface.
 - Keep the footprint compatible with plot expansion and do not obstruct the Display or Shelves.
+
+Implementation (2026-10-07): built to the approved "Peeka's Box Shop" canvas. See
+[Peeka's Box Shop](PLAYER_PLOTS_AND_SHELVES.md#peekas-box-shop-plot-shop) for the layout.
+`ShopFixture` builds a 16 x 14-stud kiosk at plot-local (-38, 6), window facing the plot centre,
+opposite the Shelves and clear of the spawn pad, Display plates and arch path (asserted on all
+eight radial plots). 19 native parts carry the box body, gold rim, hat lid with gold bow, awning,
+counter, bell, plant and chalkboard; SurfaceGuis paint the dots, "?" sides, plaque, scalloped
+hem, bulbs and shelves of pastel mini boxes. The plot's existing night controller switches the
+window glow and bulbs (unlit SurfaceGuis, no Light instances, light budget unchanged). The
+uploaded `PeekaShopkeeper` replaces an 8-part stand-in through `TownPlacements`, which now
+caches ready templates for later plots and forgets a plot's spot on teardown. Client
+`ShopKeeper` adds the idle bob (within 40 studs), one paw wave on entering the owner's prompt
+range and sleepy eyes after dusk; local-only, per-frame step only while near, still when
+Motion is reduced, cleaned up on death, teardown and client teardown.
+
+Budget: `plotRuntimeParts` grows 162 -> 184 (measured 153 -> 180 at six Display slots with
+click targets) because the Shop is a whole new fixture; the uploaded shopkeeper's 19 MeshParts
+are excluded like figure geometry. Coverage: `tests/Plots.spec.luau` (footprint clearance,
+facing, anchor, no lights, day/night, stand-in, template swap for live and later plots,
+teardown) and `tests/ShopKeeper.spec.luau` (18 motion lifecycle checks).
+
+Checks run (2026-10-07): `stylua --check src`, `selene src` (0/0/0), Luau LSP 1.70.1 analyze (no
+diagnostics), `rojo build`, and `python tests/run.py` (all suites plus 12 startup fixtures; plot
+runtime 168/184 without and 180 with click targets; static lights 53/64 unchanged). Studio MCP
+on a fresh Rojo build, solo play: the uploaded shopkeeper loaded and replaced the stand-in
+(19 parts, 4.8 studs); day and real dusk captures (dusk via the live DayNight cycle: warm window,
+glowing bulbs, sleepy Peeka); pressing E within range as the owner opened the existing Shop
+screen; a second plot built in slot 2 for a fake owner showed the kiosk and stand-in Peeka, and
+its prompt was hidden on approach while the local owner's stayed enabled; neighbouring plots
+read cohesively and nothing outside the platform overlaps the kiosk; the owner's wave played
+once (about 1.8 s) on entering range and returned to rest. The wave pose and larger side "?"
+were tuned from these captures. Not run: a true multi-client visitor test, phone/gamepad
+devices and seeing the native prompt card (MCP captures omit it).
 
 ### UI-08 — Build tiny limited-stock shops in the main plaza
 

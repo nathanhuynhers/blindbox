@@ -6,6 +6,7 @@ local Prompts = game:GetService("ProximityPromptService")
 local Scope = require(script.Parent.UIScope)
 local UIState = require(script.Parent.UIState)
 local Interaction = {}
+local prompts = { "ManageDisplayPrompt", "ManageShelvesPrompt", "OpenShopPrompt" }
 
 local function ownPlot(): Instance?
 	local plots = workspace:FindFirstChild("PlayerPlots")
@@ -23,6 +24,8 @@ local function promptTarget(name: string): BasePart?
 		fixtureName, targetName = "DisplayFixture", "ManageDisplay"
 	elseif name == "ManageShelvesPrompt" then
 		fixtureName, targetName = "CollectionFixture", "ManageShelves"
+	elseif name == "OpenShopPrompt" then
+		fixtureName, targetName = "ShopFixture", "OpenShop"
 	else
 		return nil
 	end
@@ -33,7 +36,8 @@ end
 
 function Interaction.create(
 	openDisplay: () -> (),
-	openShelves: (() -> ())?
+	openShelves: (() -> ())?,
+	openShop: (() -> ())?
 ): { update: (number?) -> (), destroy: () -> () }
 	local scope = Scope.create()
 	local function ownConnection(connection: RBXScriptConnection)
@@ -45,7 +49,7 @@ function Interaction.create(
 	local total = 0
 	local function update(banked: number?)
 		total = banked or total
-		for _, name in { "ManageDisplayPrompt", "ManageShelvesPrompt" } do
+		for _, name in prompts do
 			local target = promptTarget(name)
 			local prompt = if target then target:FindFirstChild(name) else nil
 			if prompt and prompt:IsA("ProximityPrompt") then
@@ -77,7 +81,8 @@ function Interaction.create(
 		update()
 	end))
 	ownConnection(Prompts.PromptShown:Connect(function(prompt: ProximityPrompt)
-		if prompt.Name == "ManageDisplayPrompt" or prompt.Name == "ManageShelvesPrompt" then
+		if table.find(prompts, prompt.Name) then
+			-- Owner only: hide another plot's management or Shop prompt on this client.
 			if prompt.Parent ~= promptTarget(prompt.Name) then
 				prompt.Enabled = false
 			end
@@ -103,8 +108,12 @@ function Interaction.create(
 		then
 			if prompt.Name == "ManageDisplayPrompt" then
 				openDisplay()
-			elseif openShelves then
-				openShelves()
+			elseif prompt.Name == "ManageShelvesPrompt" then
+				if openShelves then
+					openShelves()
+				end
+			elseif openShop then
+				openShop()
 			end
 		end
 	end))

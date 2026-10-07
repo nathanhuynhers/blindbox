@@ -18,7 +18,7 @@ never saved. The experience player cap must match the configured eight-plot limi
 ### Blindbox Town (shared world)
 
 The shared world is **Blindbox Town**, a cozy blind-box shopping town built from native Parts
-(no stores, townhouses, shop buildings or box machines). `World`, `PlazaFixture`, `TownProps`,
+(no stores, townhouses, shop buildings or box machines; each plot's own kiosk is below). `World`, `PlazaFixture`, `TownProps`,
 `TownLayout` and `TownStyle` build it once per server; one plot-local `CFrame` still places each plot.
 
 - **Ground:** a grass island (top Y=0.5, radius 276) with a stone curb edge and soil skirt.
@@ -101,8 +101,35 @@ surface; the only thing in the doorway is a flush 0.12-stud oak deck. It also ad
 noncolliding three-ring **spawn pad** on the open right floor (local X=-18, Z=-28) and striped
 **awnings**: one above the Display sign that resizes with Display capacity, and one above the
 Shelves header. Neither awning enters the horizontal expansion zones or the open center/right.
-An active plot has a 162-part runtime fixture budget (153 BaseParts including awning wedges,
-collection plates and click targets at six Display slots; figure asset geometry excluded).
+An active plot has a 184-part runtime fixture budget (180 BaseParts including awning wedges,
+collection plates, click targets and the plot Shop at six Display slots; figure asset geometry
+and the uploaded shopkeeper excluded).
+
+### Peeka's Box Shop (plot Shop)
+
+Every active plot has **Peeka's Box Shop**, a kiosk shaped like Peeka's box on the open side
+opposite the Shelves: footprint centre at local X=-38, Z=6 (about X -44..-29, Z -3..16 with the
+plant and chalkboard), window facing +X toward the plot centre, clear of the spawn pad, Display,
+plates and arch path. `ShopFixture` builds it from 19 native parts: a pink (#F28DB2) box body
+with a gold rim, the lid tipped on the roof like a hat with a big gold bow, a pink/ivory striped
+awning with a scalloped hem and bulbs, an oak counter with a brass bell, a potted plant and an
+"OPEN / press E" chalkboard. SurfaceGuis paint the polka dots, the white "?" on both sides, the
+"Peeka's Box Shop" plaque and the shelves of pastel mini boxes behind the window. At dusk the
+plot's existing night controller makes the window and bulbs glow (unlit SurfaceGuis, no Light
+instances), so the 64-light budget is unchanged.
+
+Peeka stands behind the counter: the uploaded `Models.Town.PeekaShopkeeper` (fitted to 4.8 studs)
+replaces an 8-part stand-in through `TownPlacements` whenever it loads, including for plots
+created later; a failed load keeps the stand-in. `ShopKeeper` on each client gives a slow idle
+bob while the local player is within 40 studs, one paw wave when the owner enters prompt range,
+and sleepy eyes after dusk (awake for the wave). It edits only local copies, connects its
+per-frame step only while someone is near, and stays still when Motion is reduced.
+
+A native **E · Open Shop** prompt (object text "Peeka's Box Shop", 12 studs, no hold) sits low in
+front of the counter and opens the existing Shop screen through the same client routing as the
+Display and Shelves prompts: owner only (other plots' prompts are hidden on each client), living
+character, distance and ancestry rechecked, pending requests and opening focus respected. It adds
+no remote, store backend or purchase path.
 
 ### Spawning
 

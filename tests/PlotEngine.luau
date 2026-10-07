@@ -183,7 +183,7 @@ local function axisZ(angle)
 end
 Engine.CFrame = {
 	new = function(a, b, c)
-		return frame(if type(a) == "number" then vector(a, b, c) else a)
+		return frame(if type(a) == "number" then vector(a, b, c) else a or vector(0, 0, 0))
 	end,
 	Angles = function(x, y, z)
 		return axisX(x) * axisY(y) * axisZ(z)
@@ -259,7 +259,7 @@ local function node(class)
 		return touchConnect(self, callback)
 	end
 	function object:GetPivot()
-		return self.pivot or frame(self.Position)
+		return self.pivot or rawget(self, "WorldPivot") or frame(self.Position)
 	end
 	function object:GetScale()
 		return self.scale or 1
@@ -492,6 +492,7 @@ Engine.services = {
 		LastInputTypeChanged = signal(),
 	},
 	ProximityPromptService = { PromptShown = signal(), PromptTriggered = signal() },
+	RunService = { RenderStepped = signal() },
 }
 Engine.game = {
 	GetService = function(_, name)

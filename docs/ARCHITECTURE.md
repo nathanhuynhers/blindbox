@@ -122,7 +122,12 @@ touch listeners when it becomes false ([BasePart API](https://create.roblox.com/
 eligibility is enforced by server state instead. Eight plots add 96 parts and 48 touch listeners,
 with no additional lights. The runtime fixture budget increases by those twelve parts to 162 per
 plot; the contact suite counts 153 BaseParts including awning wedges and click targets at six slots
-(figure asset geometry excluded). World and light budgets are unchanged.
+(figure asset geometry excluded). World and light budgets are unchanged. The plot Shop
+(`ShopFixture`, 19 kiosk parts plus an 8-part Peeka stand-in) later raised the budget to 184,
+measured at 180 with click targets; it adds no lights, remotes or listeners on the server. Its
+uploaded shopkeeper is a `TownPlacements` spot: the module caches ready templates so plots made
+after loading swap at once, and plot teardown removes the spot. The client `ShopKeeper` polls
+every 0.5 s and binds `RenderStepped` only while a shopkeeper is within 40 studs.
 
 See [data model](DATA_MODEL.md) for validation and [operations](OPERATIONS.md) for recovery.
 Every load/acquire, save and release uses UpdateAsync. Lease tokens are unique per join. Leases

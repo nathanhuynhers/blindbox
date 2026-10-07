@@ -35,6 +35,7 @@ export type Interface = {
 	pending: (boolean) -> (),
 	openDisplay: () -> (),
 	openShelves: () -> (),
+	openShop: () -> (),
 	-- Closes the open screen, if any (the Welcome Quest's first placement reveals the world).
 	closeScreen: () -> (),
 	coinLanded: () -> (),
@@ -415,6 +416,11 @@ function Interface.create(
 		openShelves = function()
 			if canAct() and not opened then
 				navigate("Shelves")
+			end
+		end,
+		openShop = function()
+			if canAct() and not opened then
+				navigate("Shop")
 			end
 		end,
 		closeScreen = function()
