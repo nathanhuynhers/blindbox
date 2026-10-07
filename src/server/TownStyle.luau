@@ -48,6 +48,12 @@ return table.freeze({
 		rgb(163, 220, 184),
 		rgb(245, 180, 138),
 	}),
+	-- Plaza pop-up stalls in plaza order: cart body and canopy stripe.
+	stalls = table.freeze({
+		table.freeze({ name = "Mint", body = rgb(205, 238, 219), stripe = rgb(143, 211, 176) }),
+		table.freeze({ name = "Sky", body = rgb(211, 234, 247), stripe = rgb(142, 200, 232) }),
+		table.freeze({ name = "Butter", body = rgb(252, 235, 184), stripe = rgb(242, 207, 107) }),
+	}),
 	materials = table.freeze({
 		grass = Enum.Material.Grass,
 		stone = Enum.Material.Slate,

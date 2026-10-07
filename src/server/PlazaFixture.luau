@@ -1,5 +1,5 @@
 --!strict
--- Central plaza: paved floor, the giant opening blind box, benches, planters, the physical
+-- Central plaza: paved floor, the giant opening blind box, pop-up stalls, planters, the physical
 -- leaderboard and the flush pre-assignment spawn. Every path mouth stays clear.
 local Config = require(script.Parent.PlotConfig)
 local Geometry = require(script.Parent.PlotGeometry)
@@ -255,14 +255,20 @@ function Plaza.create(parent: Instance): Built
 	local top = plaza.surfaceTop + 0.02
 	local lights = { giantBox(model, CFrame.new(0, top, 0)) }
 	local board: LeaderboardBoard.Board? = nil
+	local stalls = 0
 	for gap, kind in plaza.gaps do
 		local degrees = Plaza.gapDegrees(gap)
-		if kind == "Bench" then
-			TownProps.bench(
+		if kind == "Stall" then
+			stalls += 1
+			local theme = Style.stalls[stalls]
+			local _, entries = TownProps.stall(
 				model,
-				"Bench_" .. gap,
-				Geometry.polarTransform(degrees, plaza.furnitureRadius, plaza.surfaceTop)
+				"Stall_" .. stalls,
+				Geometry.polarTransform(degrees, plaza.furnitureRadius, plaza.surfaceTop),
+				theme.body,
+				theme.stripe
 			)
+			table.move(entries, 1, #entries, #lights + 1, lights)
 		elseif kind == "Planter" then
 			TownProps.planter(
 				model,

@@ -48,7 +48,7 @@ local kinds: { [string]: Kind } = {
 	},
 	PeekaHug = { key = Manifest.Town.PeekaHug, parts = 18, solid = "all", face = "PeekaHug_Eyes" },
 	PeekaNap = { key = Manifest.Town.PeekaNap, parts = 15, solid = "all", face = "PeekaNap_Eyes" },
-	-- The shopkeeper stands behind every plot Shop counter; the stall Peeka is a template only.
+	-- The shopkeeper stands behind every plot Shop counter; the stall Peeka on each plaza stall.
 	PeekaShopkeeper = {
 		key = Manifest.Town.PeekaShopkeeper,
 		parts = 19,

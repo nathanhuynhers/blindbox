@@ -20,11 +20,11 @@ return table.freeze({
 		inlayInner = 25,
 		-- Gap contents clockwise from the gap after plot slot 1. Path mouths stay open.
 		gaps = table.freeze({
-			"Bench",
+			"Stall",
 			"Planter",
-			"Bench",
+			"Stall",
 			"Planter",
-			"Bench",
+			"Stall",
 			"Planter",
 			"Leaderboard",
 			"Planter",
