@@ -114,7 +114,7 @@ Each bank has a one-trillion-Coin safety ceiling. Collection transfers only whol
 in the wallet, retaining fractions and overflow. No ordinary bank timer/cap exists; offline earnings are separate (below).
 Duplicate copies enhance one bank's earning rate, not multiple collection targets.
 
-The server checks exact-target proximity (12 studs), living character, ownership, session readiness
+The server checks exact-target proximity (20 studs for figure taps/clicks), living character, ownership, session readiness
 and rate limits. Clients cannot supply collection amounts or authorize collection through remotes.
 Paid auto-collect remains a future gamepass; no entitlement checks, product IDs or purchase prompts
 are implemented. Replacement uses the same server-only bank transfer as manual collection, without

@@ -19,7 +19,7 @@ result in Roblox Studio and reported that everything looked and worked correctly
   every Shelf edit.
 - Each figure retains its existing server-bound `ClickDetector`. Native mouse clicks and touch
   taps enter one handler, with no additional touch listener or remote. The server checks the
-  living owner, exact target ancestry, 12-stud distance and plot bounds. The existing session/
+  living owner, exact target ancestry, 20-stud distance and plot bounds. The existing session/
   storage-readiness gate, token bucket, revision/receipt handling and non-yielding transaction
   transfer remain authoritative. Only the selected bank transfers whole Coins; zero balances,
   fractional remainders, wallet overflow, income generation and saved banks retain their rules.
@@ -92,7 +92,7 @@ rule: a living owner may mutate either system anywhere inside their active 100-b
 within 20 vertical studs of its origin. Ownership still comes from the remote callback Player and
 active session; visitors, missing/dead characters and owners beyond any plot boundary are rejected.
 The nearby E prompts remain physical shortcuts for opening Display and Shelf management, while
-clicking or tapping a figure to collect Coins retains its independent 12-stud physical range.
+clicking or tapping a figure to collect Coins uses an independent 20-stud physical range.
 
 The full harness passes with center, rear and far-corner access plus immediate X/Z/vertical outside
 denial. A fresh Rojo build was also opened through Studio MCP. Native Player/Character/CFrame checks

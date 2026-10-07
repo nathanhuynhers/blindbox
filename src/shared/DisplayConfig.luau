@@ -4,5 +4,6 @@
 return table.freeze({
 	defaultSlots = 3,
 	maxSlots = 6,
+	collectDistance = 20, -- Figure tap/click range; floor plates still require physical contact.
 	unlockMethods = table.freeze({ [4] = "Coins", [5] = "Coins", [6] = "Coins" }),
 })
