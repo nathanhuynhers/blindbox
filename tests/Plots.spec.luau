@@ -879,6 +879,7 @@ for _, ring in descendantParts(pad) do
 end
 check(descendantParts(pad)[1].Color == PlotStyle.DefaultAccent, "spawn pad uses the plot accent")
 -- Plot Shop: on the open side opposite the Shelves, clear of the spawn pad, Display and arch path.
+do
 local function extents(part)
 	local half = part.Size / 2
 	local total = Engine.Vector3.new(0, 0, 0)
@@ -949,6 +950,7 @@ check(
 	shop.model:GetAttribute("Night") == false and shop.window.LightInfluence == 1 and not shop.halos[1].Visible,
 	"Shop returns to its day look at dawn"
 )
+end
 local unitCount = 0
 for _, child in plot.collection.model:GetChildren() do
 	check(
@@ -1735,6 +1737,7 @@ check(
 	"rebuild still preserves legitimate figure instances"
 )
 -- Uploaded shopkeeper: replaces live stand-ins when it loads, and plots made later use it at once.
+do
 local placementsBefore = #TownPlacements.list(ShopFixture.shopkeeper.kind)
 local early = Plot.create(Engine.player(501), 1)
 check(#TownPlacements.list(ShopFixture.shopkeeper.kind) == placementsBefore + 1, "each plot registers one shopkeeper spot")
@@ -1756,6 +1759,7 @@ check(late.shop.keeper.dead and lateKeeper and lateKeeper ~= late.shop.keeper, "
 Plot.destroy(early)
 Plot.destroy(late)
 check(#TownPlacements.list(ShopFixture.shopkeeper.kind) == placementsBefore, "plot teardown forgets its shopkeeper spot")
+end
 rebuilt.root:Destroy()
 retainedAssets:Destroy()
 check(NightLights.controllerCount() == controllersBeforePlots, "all plot lighting controllers are cleaned up")
