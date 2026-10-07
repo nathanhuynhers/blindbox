@@ -77,6 +77,8 @@ Manifest.Town = {
 	PeekaTada = "Models.Town.PeekaTada",
 	PeekaHug = "Models.Town.PeekaHug",
 	PeekaNap = "Models.Town.PeekaNap",
+	PeekaShopkeeper = "Models.Town.PeekaShopkeeper",
+	PeekaStall = "Models.Town.PeekaStall",
 	SakuraPetal = "Town.SakuraPetal",
 }
 

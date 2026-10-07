@@ -113,6 +113,8 @@ return {
 	["Models.Town.PeekaHug"] = "71329500330456",
 	["Models.Town.PeekaNap"] = "136954192101557",
 	["Models.Town.PeekaPeekaboo"] = "111248853942299",
+	["Models.Town.PeekaShopkeeper"] = "94848503157575",
+	["Models.Town.PeekaStall"] = "81029470112339",
 	["Models.Town.PeekaTada"] = "95471855409752",
 	["Models.Town.Poplar"] = "99948508677909",
 	["Models.Town.Puffball"] = "79069740439179",

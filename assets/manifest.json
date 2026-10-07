@@ -1676,6 +1676,58 @@
       "source": "assets/models/town-trees/sakura_petal.png",
       "displayName": "Blindbox Town - Sakura Petal",
       "assetType": "Image"
+    },
+    "peeka_shopkeeper": {
+      "key": "Models.Town.PeekaShopkeeper",
+      "source": "assets/models/peeka-shop/shopkeeper/model/shopkeeper_roblox.glb",
+      "displayName": "Blindbox Town - Peeka Shopkeeper",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PeekaShopkeeper",
+        "PeekaShopkeeper_Apron",
+        "PeekaShopkeeper_Body",
+        "PeekaShopkeeper_Bow",
+        "PeekaShopkeeper_Box",
+        "PeekaShopkeeper_BoxMarks",
+        "PeekaShopkeeper_BoxRibbon",
+        "PeekaShopkeeper_Cheeks",
+        "PeekaShopkeeper_CoinPocket",
+        "PeekaShopkeeper_EyeShine",
+        "PeekaShopkeeper_Eyes",
+        "PeekaShopkeeper_EyesClosed",
+        "PeekaShopkeeper_Head",
+        "PeekaShopkeeper_InnerEars",
+        "PeekaShopkeeper_Lace",
+        "PeekaShopkeeper_Lid",
+        "PeekaShopkeeper_LidRibbon",
+        "PeekaShopkeeper_Mouth",
+        "PeekaShopkeeper_Nose",
+        "PeekaShopkeeper_RightArm"
+      ]
+    },
+    "peeka_stall": {
+      "key": "Models.Town.PeekaStall",
+      "source": "assets/models/peeka-shop/stall/model/stall_roblox.glb",
+      "displayName": "Blindbox Town - Peeka Stall",
+      "assetType": "Model",
+      "requiredNodes": [
+        "PeekaStall",
+        "PeekaStall_Bow",
+        "PeekaStall_Box",
+        "PeekaStall_BoxDots",
+        "PeekaStall_BoxMarks",
+        "PeekaStall_BoxRibbon",
+        "PeekaStall_Cheeks",
+        "PeekaStall_EyeShine",
+        "PeekaStall_Eyes",
+        "PeekaStall_Head",
+        "PeekaStall_InnerEars",
+        "PeekaStall_Lid",
+        "PeekaStall_LidRibbon",
+        "PeekaStall_Mouth",
+        "PeekaStall_Nose",
+        "PeekaStall_Paws"
+      ]
     }
   }
 }

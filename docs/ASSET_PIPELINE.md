@@ -76,8 +76,11 @@ collection artwork (aliases `we_are_all_stars_emblem`, `we_are_all_stars_shop_pa
 ### Town models
 
 Town trees and the Peeka statues are sculpted like figures but live in `assets/models/`:
-`town-trees/figures.py` (sakura, puffball, poplar, topiary) and `peeka-statues/figures.py`
-(peekaboo, tada, hug, nap). Build one with
+`town-trees/figures.py` (sakura, puffball, poplar, topiary), `peeka-statues/figures.py`
+(peekaboo, tada, hug, nap) and `peeka-shop/figures.py` (shopkeeper, stall: true-colour Peekas
+for the shops, aliases `peeka_shopkeeper` / `peeka_stall`, keys `Models.Town.PeekaShopkeeper` /
+`Models.Town.PeekaStall`; the figures.py docstring describes the wave arm and sleepy-eye parts).
+Build one with
 `FIG_ASSETS=models blender -b --factory-startup --python tools/figures/build.py -- <folder> <slug> final`.
 They are registered as `town_<slug>` / `peeka_statue_<slug>` (keys `Models.Town.*`) and uploaded
 with `scripts/upload_assets.py`, not `publish.py`, because they are not catalog figures. The

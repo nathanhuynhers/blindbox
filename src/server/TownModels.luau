@@ -48,6 +48,19 @@ local kinds: { [string]: Kind } = {
 	},
 	PeekaHug = { key = Manifest.Town.PeekaHug, parts = 18, solid = "all", face = "PeekaHug_Eyes" },
 	PeekaNap = { key = Manifest.Town.PeekaNap, parts = 15, solid = "all", face = "PeekaNap_Eyes" },
+	-- Shop Peekas load as templates only; nothing places them yet.
+	PeekaShopkeeper = {
+		key = Manifest.Town.PeekaShopkeeper,
+		parts = 19,
+		solid = "all",
+		face = "PeekaShopkeeper_Eyes",
+	},
+	PeekaStall = {
+		key = Manifest.Town.PeekaStall,
+		parts = 15,
+		solid = "all",
+		face = "PeekaStall_Eyes",
+	},
 }
 TownModels.kinds = table.freeze(kinds)
 

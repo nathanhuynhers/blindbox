@@ -1,0 +1,451 @@
+{
+  "figure": "PeekaShopkeeper",
+  "title": "Peeka: Shopkeeper",
+  "rarity": "Mascot",
+  "size_xyz_studs": [
+    2.057,
+    1.7793,
+    3.247
+  ],
+  "meshes": 19,
+  "triangles": 15096,
+  "materials": [
+    "PeekaShopkeeper_Apron",
+    "PeekaShopkeeper_Blush",
+    "PeekaShopkeeper_Box",
+    "PeekaShopkeeper_EyeGloss",
+    "PeekaShopkeeper_EyeShine",
+    "PeekaShopkeeper_Fur",
+    "PeekaShopkeeper_InnerEar",
+    "PeekaShopkeeper_Lace",
+    "PeekaShopkeeper_Lid",
+    "PeekaShopkeeper_Mouth",
+    "PeekaShopkeeper_Nose",
+    "PeekaShopkeeper_QuestionMark",
+    "PeekaShopkeeper_Ribbon"
+  ],
+  "components": {
+    "PeekaShopkeeper_Body": {
+      "tris": 2000,
+      "verts": 1002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.9537
+    },
+    "PeekaShopkeeper_RightArm": {
+      "tris": 700,
+      "verts": 352,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.12036
+    },
+    "PeekaShopkeeper_Apron": {
+      "tris": 1098,
+      "verts": 551,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05852
+    },
+    "PeekaShopkeeper_Lace": {
+      "tris": 900,
+      "verts": 340,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00412
+    },
+    "PeekaShopkeeper_CoinPocket": {
+      "tris": 400,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00286
+    },
+    "PeekaShopkeeper_Box": {
+      "tris": 700,
+      "verts": 352,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08848
+    },
+    "PeekaShopkeeper_BoxRibbon": {
+      "tris": 400,
+      "verts": 200,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.013
+    },
+    "PeekaShopkeeper_BoxMarks": {
+      "tris": 500,
+      "verts": 266,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00588
+    },
+    "PeekaShopkeeper_Head": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.9749
+    },
+    "PeekaShopkeeper_InnerEars": {
+      "tris": 600,
+      "verts": 304,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01096
+    },
+    "PeekaShopkeeper_Lid": {
+      "tris": 900,
+      "verts": 452,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0988
+    },
+    "PeekaShopkeeper_LidRibbon": {
+      "tris": 500,
+      "verts": 246,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03649
+    },
+    "PeekaShopkeeper_Bow": {
+      "tris": 800,
+      "verts": 402,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01896
+    },
+    "PeekaShopkeeper_Eyes": {
+      "tris": 498,
+      "verts": 253,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00709
+    },
+    "PeekaShopkeeper_EyeShine": {
+      "tris": 200,
+      "verts": 108,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00029
+    },
+    "PeekaShopkeeper_Cheeks": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00261
+    },
+    "PeekaShopkeeper_Nose": {
+      "tris": 100,
+      "verts": 52,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00021
+    },
+    "PeekaShopkeeper_Mouth": {
+      "tris": 200,
+      "verts": 102,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00032
+    },
+    "PeekaShopkeeper_EyesClosed": {
+      "tris": 300,
+      "verts": 154,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00099
+    }
+  },
+  "build": {
+    "PeekaShopkeeper_Body": {
+      "active_blocks": 3356,
+      "blocks": 8778,
+      "grid": [
+        169,
+        177,
+        153
+      ],
+      "raw_tris": 159208,
+      "removed_faces": 0,
+      "seconds": 4.4
+    },
+    "PeekaShopkeeper_RightArm": {
+      "active_blocks": 1543,
+      "blocks": 4116,
+      "grid": [
+        113,
+        169,
+        113
+      ],
+      "raw_tris": 72200,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "PeekaShopkeeper_Apron": {
+      "active_blocks": 3095,
+      "blocks": 9152,
+      "grid": [
+        209,
+        129,
+        177
+      ],
+      "raw_tris": 152080,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "PeekaShopkeeper_Lace": {
+      "active_blocks": 1412,
+      "blocks": 6732,
+      "grid": [
+        273,
+        145,
+        89
+      ],
+      "raw_tris": 67628,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "PeekaShopkeeper_CoinPocket": {
+      "active_blocks": 614,
+      "blocks": 2548,
+      "grid": [
+        113,
+        105,
+        113
+      ],
+      "raw_tris": 22736,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "PeekaShopkeeper_Box": {
+      "active_blocks": 579,
+      "blocks": 648,
+      "grid": [
+        73,
+        73,
+        65
+      ],
+      "raw_tris": 22304,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "PeekaShopkeeper_BoxRibbon": {
+      "active_blocks": 1067,
+      "blocks": 1904,
+      "grid": [
+        137,
+        129,
+        57
+      ],
+      "raw_tris": 38248,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "PeekaShopkeeper_BoxMarks": {
+      "active_blocks": 1464,
+      "blocks": 4693,
+      "grid": [
+        153,
+        153,
+        105
+      ],
+      "raw_tris": 43832,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "PeekaShopkeeper_Head": {
+      "active_blocks": 7282,
+      "blocks": 27232,
+      "grid": [
+        257,
+        185,
+        297
+      ],
+      "raw_tris": 332532,
+      "removed_faces": 0,
+      "seconds": 4.9
+    },
+    "PeekaShopkeeper_InnerEars": {
+      "active_blocks": 2034,
+      "blocks": 22550,
+      "grid": [
+        441,
+        81,
+        329
+      ],
+      "raw_tris": 64464,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "PeekaShopkeeper_Lid": {
+      "active_blocks": 1424,
+      "blocks": 3179,
+      "grid": [
+        137,
+        137,
+        89
+      ],
+      "raw_tris": 63420,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "PeekaShopkeeper_LidRibbon": {
+      "active_blocks": 2654,
+      "blocks": 10400,
+      "grid": [
+        209,
+        201,
+        129
+      ],
+      "raw_tris": 133176,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "PeekaShopkeeper_Bow": {
+      "active_blocks": 1582,
+      "blocks": 6555,
+      "grid": [
+        185,
+        121,
+        153
+      ],
+      "raw_tris": 75556,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "PeekaShopkeeper_Eyes": {
+      "active_blocks": 1062,
+      "blocks": 4536,
+      "grid": [
+        217,
+        97,
+        113
+      ],
+      "raw_tris": 36128,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "PeekaShopkeeper_EyeShine": {
+      "active_blocks": 520,
+      "blocks": 4992,
+      "grid": [
+        257,
+        97,
+        105
+      ],
+      "raw_tris": 9000,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "PeekaShopkeeper_Cheeks": {
+      "active_blocks": 742,
+      "blocks": 4329,
+      "grid": [
+        297,
+        105,
+        73
+      ],
+      "raw_tris": 20732,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "PeekaShopkeeper_Nose": {
+      "active_blocks": 201,
+      "blocks": 990,
+      "grid": [
+        89,
+        81,
+        73
+      ],
+      "raw_tris": 4092,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "PeekaShopkeeper_Mouth": {
+      "active_blocks": 347,
+      "blocks": 1980,
+      "grid": [
+        121,
+        97,
+        89
+      ],
+      "raw_tris": 8876,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "PeekaShopkeeper_EyesClosed": {
+      "active_blocks": 567,
+      "blocks": 3828,
+      "grid": [
+        233,
+        97,
+        89
+      ],
+      "raw_tris": 14608,
+      "removed_faces": 0,
+      "seconds": 0.2
+    }
+  },
+  "glb": {
+    "bytes": 354156,
+    "nodes": [
+      "PeekaShopkeeper_Apron",
+      "PeekaShopkeeper_Body",
+      "PeekaShopkeeper_Bow",
+      "PeekaShopkeeper_Box",
+      "PeekaShopkeeper_BoxMarks",
+      "PeekaShopkeeper_BoxRibbon",
+      "PeekaShopkeeper_Cheeks",
+      "PeekaShopkeeper_CoinPocket",
+      "PeekaShopkeeper_Eyes",
+      "PeekaShopkeeper_EyesClosed",
+      "PeekaShopkeeper_EyeShine",
+      "PeekaShopkeeper_Head",
+      "PeekaShopkeeper_InnerEars",
+      "PeekaShopkeeper_Lace",
+      "PeekaShopkeeper_Lid",
+      "PeekaShopkeeper_LidRibbon",
+      "PeekaShopkeeper_Mouth",
+      "PeekaShopkeeper_Nose",
+      "PeekaShopkeeper_RightArm",
+      "PeekaShopkeeper"
+    ],
+    "meshes": 19,
+    "materials": 13,
+    "images": 13,
+    "textures": 13,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": []
+  },
+  "catalog": null,
+  "root": "PeekaShopkeeper",
+  "face": "PeekaShopkeeper_Eyes",
+  "glass": [],
+  "reimport": {
+    "meshes": 19,
+    "triangle_mismatches": {}
+  }
+}

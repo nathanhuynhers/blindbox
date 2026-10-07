@@ -1007,6 +1007,24 @@
     "sha256": "33ce9aeb925f8e89ce886ca5037599b8228c5b3c91093100dfe39fa6535fca4b",
     "source": "assets/models/peeka-statues/peekaboo/model/peekaboo_roblox.glb"
   },
+  "Models.Town.PeekaShopkeeper": {
+    "assetId": "94848503157575",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "db79e649ef3f04ed772ab387e06efa1fc2c7d37b4b4972c52441b04be5ae65d4",
+    "source": "assets/models/peeka-shop/shopkeeper/model/shopkeeper_roblox.glb"
+  },
+  "Models.Town.PeekaStall": {
+    "assetId": "81029470112339",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "81a06c6767fea6126c3daaee30089d9c98a203e902a3d49144a269a91357ef2a",
+    "source": "assets/models/peeka-shop/stall/model/stall_roblox.glb"
+  },
   "Models.Town.PeekaTada": {
     "assetId": "95471855409752",
     "assetType": "Model",
