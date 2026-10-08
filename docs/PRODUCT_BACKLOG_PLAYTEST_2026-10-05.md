@@ -336,7 +336,7 @@ Mainline integration: retained UI-05 Shelf auto-scroll and its editor-session me
 updated both UI-03 snapshot test sessions to the new shape. All prescribed tooling/type checks
 and the full regression suite (including 256 Shelf showcase checks) passed on the combined tree.
 
-Linear-pity follow-up (2026-10-07), on `feat/uncapped-pity`, pending final tuning/mainline merge:
+Linear-pity follow-up (2026-10-07), implemented on `feat/uncapped-pity` with original tuning retained:
 the user subsequently authorized replacing capped chances with linear growth to 100%.
 The former 8%/2% limits are removed; the preserved warm-up/increments currently reach due counts
 of 2,020 Legendary / 66,900 Mythical. Only the hit rarity resets. Mythical has priority when both
@@ -352,8 +352,9 @@ and every regression suite plus 18 invalid-configuration fixtures passes. New li
 now has 251 state/layout/lifecycle checks and UI coverage 1,288 checks. EconomySimulation ran
 300 seeded progression trials: median Concepts/Echo/Stars phase hours 5.06 / 4.28 / 1.59 under
 the simulation's existing strongest-Display assumptions, excluding opening delay and daily rewards.
-This is tuning evidence, not a live player acceptance result. Shorter linear targets are under
-discussion: the current worst-case guarantees are much later than the typical reset-to-hit waits.
+This is tuning evidence, not a live player acceptance result. The user selected keeping the
+original linear ramps after reviewing next-box odds; the distant worst-case guarantees are
+much later than the typical reset-to-hit waits.
 Studio MCP in the same unsaved local preview loaded the tested follow-up modules; native confirmed
 snapshot/TextFits/scroll checks passed at 666x374 for simultaneous guarantees and chances beyond
 the former caps (9% Legendary / 2.65% Mythical). Normal Shop Buy/opening/Keep purchases granted

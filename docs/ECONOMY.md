@@ -68,7 +68,7 @@ the lower rarities receive zero. Published odds always total 100%; individual de
 be literal probabilities once their sum exceeds 100%. At a guarantee only the winning rarity has
 100%. The Shop distinguishes Guaranteed from Due next, and explains simultaneous priority.
 
-These thresholds preserve the old warm-up and increments; shorter targets are under review.
+The user selected retaining these original warm-up periods and linear increments.
 An isolated reset-to-hit calculation gives mean waits of 60.5 Legendary and 457.0 Mythical boxes,
 with 90th percentiles of 110 and 755. These are distribution estimates, not affordability or
 progression acceptance evidence; extreme overlapping droughts redistribute the probability budget.
