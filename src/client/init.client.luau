@@ -7,6 +7,7 @@ local ShelfConfig = require(ReplicatedStorage.Shared.ShelfConfig)
 local Catalog = require(ReplicatedStorage.Shared.Catalog)
 local Tutorial = require(ReplicatedStorage.Shared.Tutorial)
 local Interface = require(script.Interface)
+local ShelfEditor = require(script.ShelfEditor)
 local DisplayInteraction = require(script.DisplayInteraction)
 local ShopKeeper = require(script.ShopKeeper)
 local DisplayEarnings = require(script.DisplayEarnings)
@@ -25,6 +26,10 @@ local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
 local syncRemote = remotes:WaitForChild("RequestState") :: RemoteEvent
 local homeRemote = remotes:WaitForChild("Home") :: RemoteEvent
+local shelfEditorRemote = remotes:WaitForChild("ShelfEditor") :: RemoteEvent
+local shelfEditor = ShelfEditor.create(function(isOpen, token)
+	shelfEditorRemote:FireServer(isOpen, token)
+end)
 local current: Types.Snapshot? = nil
 local pending: Types.Intent? = nil
 local beforeRequest: Types.Snapshot? = nil
@@ -79,6 +84,10 @@ local function request(
 	if not state or not state.ready or pending or (opening and opening.isActive()) then
 		return
 	end
+	local shelfAction = string.sub(action, 1, 5) == "Shelf" or action == "BuyShelf"
+	if shelfAction and not shelfEditor.ready() then
+		return
+	end
 	local intent: Types.Intent = {
 		action = action,
 		choice = choice,
@@ -97,6 +106,9 @@ local function request(
 		intent.slot = nil
 	end
 	pending = intent
+	if shelfAction then
+		shelfEditor.pending(true)
+	end
 	beforeRequest = state
 	ui.pending(true)
 	deal.pending(true)
@@ -105,7 +117,7 @@ local function request(
 end
 ui = Interface.create(request, function()
 	homeRemote:FireServer()
-end)
+end, shelfEditor)
 summary = PullSummary.create(ui.openingFocus, ui.effects)
 -- Closing the popup any way claims; a dropped claim re-opens it on the next snapshot.
 local offline = OfflineEarnings.create(ui.effects, function()
@@ -198,6 +210,7 @@ table.insert(
 		if state.sequence > sequence then
 			sequence = state.sequence
 			current = state
+			shelfEditor.receive(state.shelfEditorToken)
 			if
 				previous
 				and state.shelves.ownedCount > previous.shelves.ownedCount
@@ -244,6 +257,9 @@ table.insert(
 		if reply and intent and reply.id == intent.id then
 			local before = beforeRequest
 			pending = nil
+			if string.sub(intent.action, 1, 5) == "Shelf" or intent.action == "BuyShelf" then
+				shelfEditor.pending(false)
+			end
 			beforeRequest = nil
 			ui.pending(false)
 			deal.pending(false)

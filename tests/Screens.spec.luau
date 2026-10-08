@@ -3,6 +3,7 @@
 -- locks, countdown timer lifetime, instance reuse and teardown. No rendering is simulated.
 local Engine = require("./UIEngine")
 local Interface = require("./Interface")
+local ShelfEditor = require("./ShelfEditor")
 local RevealCard = require("./RevealCard")
 local Scope = require("./UIScope")
 local UI = require("./UIState")
@@ -895,4 +896,67 @@ for _, viewport in { { 705, 338 }, { 666, 374 }, { 1280, 720 } } do
 	scope.destroy()
 	parent:Destroy()
 end
+-- The real Interface gates Shelf controls on a server pause acknowledgement.
+local lifecycle = {}
+local guard = ShelfEditor.create(function(isOpen, token)
+	table.insert(lifecycle, { isOpen = isOpen, token = token })
+end)
+local guardedRequests = 0
+local guarded = Interface.create(function()
+	guardedRequests += 1
+end, nil, guard)
+local guardedGui = Engine.playerGui:FindFirstChild("PocketGrove")
+local guardedState = snapshot()
+guardedState.owned["grove.star"] = 1
+guardedState.discovered["grove.star"] = true
+guardedState.shelfAvailable["grove.star"] = 1
+guarded.update(guardedState)
+guarded.openShelves()
+local guardedShelves = within(guardedGui, "ShelvesPresentation")
+local guardedFigure = within(within(guardedShelves, "Figures"), "grove.star")
+check(#lifecycle == 1 and lifecycle[1].isOpen, "native Shelves open sends lifecycle pause")
+check(not guardedFigure.Selectable, "picker disabled before server pause acknowledgement")
+Engine.click(guardedFigure)
+check(guardedRequests == 0, "unacknowledged picker cannot send an edit")
+-- A timer advanced before the opening reached the server; its ack carries this view.
+guardedState.shelves.visible = {
+	{ id = "shelf:2", index = 2, placements = {} },
+	{ id = "shelf:3", index = 3, placements = {} },
+	{ id = "shelf:4", index = 4, placements = {} },
+}
+guardedState.shelves.carouselRevision += 1
+guard.receive(lifecycle[1].token)
+guarded.update(guardedState)
+check(guardedFigure.Selectable, "acknowledged picker enables edits")
+check(within(guardedShelves, "Shelves"):GetAttribute("SelectedShelfId") == "shelf:2", "ack refreshes shelf selection before editing")
+Engine.click(guardedFigure)
+check(guardedRequests == 1, "acknowledged picker sends an edit")
+guard.pending(true)
+guarded.pending(true)
+Engine.click(within(guardedShelves, "Close"))
+check(not guardedShelves.Visible and #lifecycle == 1, "Close hides editor but retains pending hold")
+guard.pending(false)
+guarded.pending(false)
+check(#lifecycle == 2 and not lifecycle[2].isOpen, "edit receipt releases closed editor hold")
+Engine.click(within(guardedGui, "DockShelves"))
+check(#lifecycle == 3 and lifecycle[3].isOpen and not guard.ready(), "dock reopen needs fresh acknowledgement")
+guard.receive(lifecycle[1].token)
+guarded.update(guardedState)
+check(not guardedFigure.Selectable, "older ack cannot enable reopened picker")
+guard.receive(lifecycle[3].token)
+guarded.update(guardedState)
+Engine.click(within(guardedGui, "DockCollection"))
+check(#lifecycle == 4 and not lifecycle[4].isOpen, "switching screens releases Shelf hold")
+guarded.openShelves() -- The other screen is still open, so world shortcut stays guarded.
+check(#lifecycle == 4, "world shortcut respects open-screen rules")
+guarded.closeScreen()
+guarded.openShelves()
+guard.receive(lifecycle[5].token)
+guarded.update(guardedState)
+guard.pending(true)
+guarded.destroy()
+check(#lifecycle == 5 and not guard.ready(), "UI teardown retains pending edit hold")
+guard.pending(false)
+check(#lifecycle == 6 and not lifecycle[6].isOpen, "late receipt after UI teardown releases hold")
+check(Engine.pending() == 0, "editor gating adds no client timer")
 print("PASS: " .. checks .. " screen routing, send, pending, countdown and lifetime checks")

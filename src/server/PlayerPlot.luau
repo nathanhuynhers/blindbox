@@ -11,6 +11,7 @@ local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.Displa
 local Geometry = require(script.Parent.PlotGeometry)
 local Config = require(script.Parent.PlotConfig)
 local Shelves = require(script.Parent.Shelves)
+local Showcase = require(script.Parent.ShelfShowcase)
 local FigureSlots = require(script.Parent.FigureSlots)
 local Rules = require(script.Parent.Rules)
 local NightLights = require(script.Parent.NightLights)
@@ -23,6 +24,7 @@ export type Plot = {
 	spawn: CFrame,
 	active: boolean,
 	view: Shelves.View,
+	showcase: Showcase.Controller,
 	display: FigureSlots.Render,
 	shelves: FigureSlots.Render,
 	physicalShelves: { Model },
@@ -47,6 +49,7 @@ root.Name = "PlayerPlots"
 root.Parent = workspace
 local function cleanup(plot: Plot)
 	plot.active = false
+	Showcase.destroy(plot.showcase)
 	if plot.nightLighting then
 		NightLights.release(plot.nightLighting)
 		plot.nightLighting = nil
@@ -78,6 +81,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		spawn = PlotFixture.spawnCFrame(transform),
 		active = true,
 		view = Shelves.newView(),
+		showcase = Showcase.new(player.UserId),
 		display = FigureSlots.new(model, "DisplayFigures", {}, DisplayFixture.style.figureScale),
 		shelves = FigureSlots.new(
 			model,
@@ -213,6 +217,34 @@ function PlayerPlot.render(plot: Plot, state: Types.State)
 	CollectionFixture.setNavigation(plot.collection, visible.canNavigate)
 	plot.model:SetAttribute("ShelfCarouselRevision", visible.carouselRevision)
 end
+-- Both automatic and manual navigation use the same domain turn and renderer.
+local function advance(plot: Plot, state: Types.State, direction: number, now: number): boolean
+	if not Shelves.turn(state.shelves, plot.view, direction, now) then
+		return false
+	end
+	PlayerPlot.render(plot, state)
+	return true
+end
+function PlayerPlot.stepShowcase(plot: Plot, state: Types.State, now: number): boolean
+	if not plot.active or plot.model.Parent ~= root or plot.ownerId ~= plot.showcase.ownerId then
+		Showcase.destroy(plot.showcase)
+		return false
+	end
+	if not Showcase.due(plot.showcase, #state.shelves.units, now) then
+		return false
+	end
+	-- Only scan players when a step is due. Use the existing living-player viewing
+	-- boundary, and wait a full interval if nobody can see/browse this plot.
+	local nearby = false
+	for _, player in Players:GetPlayers() do
+		if PlayerPlot.canNavigate(plot, player) then
+			nearby = true
+			break
+		end
+	end
+	Showcase.wait(plot.showcase, now)
+	return nearby and advance(plot, state, 1, now)
+end
 function PlayerPlot.turn(
 	plot: Plot,
 	actor: Player,
@@ -223,11 +255,12 @@ function PlayerPlot.turn(
 	if not PlayerPlot.canNavigate(plot, actor) then
 		return false
 	end
-	if not Shelves.turn(state.shelves, plot.view, direction, now) then
+	if direction ~= -1 and direction ~= 1 then
 		return false
 	end
-	PlayerPlot.render(plot, state)
-	return true
+	-- Even a press inside the shared turn cooldown expresses manual browsing.
+	Showcase.browse(plot.showcase, now)
+	return advance(plot, state, direction, now)
 end
 function PlayerPlot.bind(plot: Plot, onTurn: (Player, number) -> ())
 	for index, hitbox in plot.hitboxes do

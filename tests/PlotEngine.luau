@@ -477,6 +477,15 @@ Engine.FigureModel = {
 Engine.figureVariants = {}
 Engine.services = {
 	Players = {
+		GetPlayers = function()
+			local players = {}
+			for _, player in Engine.players do
+				if player.Parent == Engine.services.Players then
+					table.insert(players, player)
+				end
+			end
+			return players
+		end,
 		GetPlayerFromCharacter = function(_, character)
 			for _, player in Engine.players do
 				if player.Character == character then

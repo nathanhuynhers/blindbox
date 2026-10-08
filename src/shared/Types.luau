@@ -94,6 +94,8 @@ export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 -- Private owner presentation only: build-up toward the chance cap, never a guaranteed hit.
 export type PityProgress = { Legendary: number, Mythical: number }
 export type Snapshot = {
+	-- Runtime owner-only acknowledgement of the Shelf editor's showcase pause.
+	shelfEditorToken: number?,
 	shelves: ShelfView,
 	shelfAvailable: { [string]: number },
 	coins: number,

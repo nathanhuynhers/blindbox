@@ -250,6 +250,18 @@ Previous reverses these sequences. Owner UI navigation/editing is available anyw
 owner's plot. The same exact footprint and vertical bound used by Display editing applies; leaving
 the plot disables mutations. Public physical carousel navigation keeps its separate perimeter margin.
 
+UI-05 adds a runtime server showcase: overflowing Shelves
+advance one unit every seven seconds through that same turn/render path. The existing shared
+one-second scheduler checks viewing range only when a step is due; with nobody alive in the
+public navigation boundary, it waits another interval. At most three units have no scheduled
+step. Valid physical arrow presses (including presses during the turn cooldown) pause auto-scroll
+for ten seconds; successful editor navigation also applies that delay. The owner Shelves screen
+holds the showcase still until it closes and every pending Shelf request is acknowledged, then
+waits at least three seconds (or the remaining browsing delay). The timings live in `ShelfConfig`.
+An owner-only lifecycle token is acknowledged with the latest authoritative view before edits
+enable, preventing an auto step in transit from invalidating an edit. Manual navigation retains
+its existing revision checks. Plot teardown clears the hold and schedule; nothing is persisted.
+
 Shelf Units use stable IDs such as `shelf:1`; placements use local keys such as
 `row:3/slot:1`. The unit ID owns the contents regardless of physical viewport position.
 Moving or reskinning geometry never changes these keys. Increasing geometry
