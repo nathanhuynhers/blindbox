@@ -16,6 +16,7 @@ export type Callbacks = {
 	remove: () -> (),
 	cancel: () -> (),
 	browse: () -> (),
+	equip: () -> (),
 }
 export type Picker = {
 	root: Frame,
@@ -52,6 +53,15 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 	local browse = small(root, "Browse", "Browse Collection", ctx, callbacks.browse)
 	local remove = small(root, "Remove", "Remove", ctx, callbacks.remove)
 	local cancel = small(root, "Cancel", "Cancel", ctx, callbacks.cancel)
+	-- Whole-Display action: shares the header row with the slot controls, shown when they aren't.
+	local equip = Button.create(root, "EquipBest", {
+		variant = "violet",
+		text = "Equip Best",
+		size = 15,
+		radius = 12,
+		drop = 3,
+	}, ctx.scope, ctx.effects, callbacks.equip)
+	equip.button:SetAttribute("AccessibleName", "Equip Best: fill your Display with top earners")
 	local layout = Kit.grid(root, 10)
 	-- 14px padding leaves room for the BEST badge, which overhangs the top card edge.
 	local grid = Kit.scroll(root, "Choices", ctx.scope, layout, 14, ctx.scale)
@@ -102,6 +112,7 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		Kit.rect(remove.button, x, 4, 86, 44)
 		x -= 158
 		Kit.rect(browse.button, x, 4, 150, 44)
+		Kit.rect(equip.button, pad + inner - 156, 2, 156, 44)
 		Kit.rect(grid, pad - 11, 47, inner + 22, height - 49)
 		local columns = if phone then 4 else 6
 		cell = State.cells(inner - 12, columns, 10)
@@ -137,6 +148,16 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 			browse.set("Browse Collection", true)
 			remove.set("Remove", ctx.canAct())
 			cancel.set("Cancel", true)
+			local owned = false
+			for _, count in snapshot.owned do
+				owned = owned or count > 0
+			end
+			equip.button.Visible = target == nil and placing == nil and owned
+			equip.set("Equip Best", ctx.canAct())
+			-- Header text gets whatever the right-hand controls leave free.
+			local reserve = if target or placing then 348 elseif equip.button.Visible then 168 else 0
+			title.Size = UDim2.fromOffset(width - 28 - reserve, 26)
+			sort.Size = UDim2.fromOffset(width - 28 - reserve, 16)
 			if placing then
 				title.Text = "Placing "
 					.. Catalog.byId[placing].name

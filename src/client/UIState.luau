@@ -295,6 +295,27 @@ function State.emptySlots(snapshot: Types.Snapshot): { number }
 	return slots
 end
 
+-- Equip Best feedback from the snapshots around the reply: income gained and changed slots.
+function State.equipSummary(before: Types.Snapshot, after: Types.Snapshot): (string, { number })
+	local changed: { number } = {}
+	for slot = 1, math.min(after.unlocked, DisplayConfig.maxSlots) do
+		if (before.slots[slot] or "") ~= (after.slots[slot] or "") then
+			table.insert(changed, slot)
+		end
+	end
+	if #changed == 0 then
+		return "Already your best Display", changed
+	end
+	local names = table.concat(changed, ", ")
+	return string.format(
+		"Best Display: %s · slot%s %s changed",
+		State.rate(State.totalRate(after) - State.totalRate(before)),
+		if #changed == 1 then "" else "s",
+		names
+	),
+		changed
+end
+
 export type Pick = { id: string, rate: number }
 local function better(a: Pick, b: Pick): boolean
 	if a.rate ~= b.rate then

@@ -113,7 +113,7 @@ run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec"
 run("CoinEngine", "CoinCounter.spec")
 run("PlayerMovement.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
-run("DisplayReplacement.spec", "Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
+run("DisplayReplacement.spec", "EquipBest.spec", "Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
 run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 run("PlotEngine", "HomeTeleport.spec")
 run("PlotEngine", "CollectionPlates.spec")

@@ -95,6 +95,9 @@ limited to owned copies, independently of Display placement. See
 
 Displaying three distinct figures from one collection grants +10% of the total effective Display
 rate, once only. This also applies to mixed-tier Displays that contain a qualifying trio.
+**Equip Best** picks the server's highest-income Display for the unlocked slots (top figures, or a
+collection's top three plus the best others when the bonus wins) and applies it as one Display
+transaction with Place-swap bank collection; an already optimal Display is left unchanged.
 
 The strongest fully enhanced lower rarity remains below the weakest unenhanced next rarity
 within each collection. Cross-economic-tier comparisons intentionally differ: an earlier Mythical

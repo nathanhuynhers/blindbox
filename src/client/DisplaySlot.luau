@@ -1,6 +1,7 @@
 --!strict
 -- One Display slot card: filled (figure, name, rate), empty (+ Choose / Choosing…),
 -- slot 4 unlock price, or "Coming later" for slots with no unlock yet.
+local TweenService = game:GetService("TweenService")
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Style = require(script.Parent.UIStyle)
@@ -19,6 +20,8 @@ export type Slot = {
 	button: TextButton,
 	size: (width: number, height: number) -> (),
 	update: (Types.Snapshot, Mode) -> (),
+	-- Quick settle-in pop after Equip Best changes this slot; none when Motion is off.
+	pop: (delay: number) -> (),
 }
 
 function Slot.create(
@@ -32,6 +35,8 @@ function Slot.create(
 	button.Text = ""
 	button.AutoButtonColor = false
 	button.BackgroundColor3 = Style.white
+	-- Centred so the Equip Best pop (UIScale) grows from the middle of the card.
+	button.AnchorPoint = Vector2.new(0.5, 0.5)
 	button.Parent = parent
 	button:SetAttribute("Slot", index)
 	Kit.corner(button, 18)
@@ -91,6 +96,14 @@ function Slot.create(
 		choose(index)
 		Sfx.play("select")
 	end)
+	local scale = Instance.new("UIScale")
+	scale.Parent = button
+	local tween: Tween? = nil
+	ctx.scope.add(function()
+		if tween then
+			tween:Cancel()
+		end
+	end)
 	local width, height = 160, 184
 	local function place()
 		local compact = height < 170
@@ -110,6 +123,28 @@ function Slot.create(
 	end
 	return {
 		button = button,
+		pop = function(delay: number)
+			if tween then
+				tween:Cancel()
+				tween = nil
+			end
+			scale.Scale = 1
+			if not ctx.effects() then
+				return
+			end
+			scale.Scale = 0.86
+			local info = TweenInfo.new(
+				0.28,
+				Enum.EasingStyle.Back,
+				Enum.EasingDirection.Out,
+				0,
+				false,
+				delay
+			)
+			local nextTween = TweenService:Create(scale, info, { Scale = 1 })
+			tween = nextTween
+			nextTween:Play()
+		end,
 		size = function(nextWidth: number, nextHeight: number)
 			width, height = nextWidth, nextHeight
 			button.Size = UDim2.fromOffset(width, height)
