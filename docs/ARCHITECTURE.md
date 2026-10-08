@@ -58,6 +58,12 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `Shelves`: owned-copy placement limits across all persistent units, visible owned-unit validation,
   stable slot IDs, deterministic load repair, runtime carousel revision/wraparound/cooldown and
   bounded three-unit projections. Display placement and Shelf allowance remain independent.
+- `ShelfShowcase`: runtime per-plot cadence, browsing idle delay and owner editor hold, driven by
+  the existing one-second scheduler through `PlayerPlot`'s shared turn/render path. The owner-only
+  `ShelfEditor` presentation remote accepts a boolean and bounded monotonic token; owner snapshots
+  acknowledge that token with the current view. Client `ShelfEditor` enables edits only after this
+  acknowledgement and retains the hold until pending edits receive their receipt, including when
+  the screen closes. No progression authority, persisted fields or extra plot tasks are added.
 - `Rules`/`Economy`/`CollectionEconomy`: collection prices, soft pity, permanent duplicate income,
   unique earning placements, sequential Coin slot unlocks and Starter-only daily grants. Buy and
   Daily also increment the persistent `boxesOpened` counter in the same atomic grant.

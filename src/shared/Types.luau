@@ -92,6 +92,8 @@ export type Profile = {
 export type State = Profile & { revision: number, time: number, offlineSeconds: number }
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 export type Snapshot = {
+	-- Runtime owner-only acknowledgement of the Shelf editor's showcase pause.
+	shelfEditorToken: number?,
 	shelves: ShelfView,
 	shelfAvailable: { [string]: number },
 	coins: number,

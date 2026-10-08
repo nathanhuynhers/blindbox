@@ -26,6 +26,7 @@ local Shelves = require(script.Parent.ShelvesScreen)
 local Login = require(script.Parent.LoginScreen)
 local Onboarding = require(script.Parent.Onboarding)
 local Sfx = require(script.Parent.Sfx)
+local ShelfEditor = require(script.Parent.ShelfEditor)
 local Interface = {}
 export type Interface = {
 	update: (Types.Snapshot) -> (),
@@ -50,7 +51,8 @@ end
 
 function Interface.create(
 	send: (string, string?, number?, string?, number?) -> (),
-	home: (() -> ())?
+	home: (() -> ())?,
+	shelfEditor: ShelfEditor.Controller?
 ): Interface
 	local scope = Scope.create()
 	local snapshot: Types.Snapshot? = nil
@@ -128,7 +130,12 @@ function Interface.create(
 	local navigate: (string, Context.Route?) -> () = function() end
 	local close: () -> () = function() end
 	local function canAct(): boolean
-		return snapshot ~= nil and snapshot.ready and not pending and not focused and not destroyed
+		return snapshot ~= nil
+			and snapshot.ready
+			and not pending
+			and not focused
+			and not destroyed
+			and (not shelfEditor or not opened or current ~= "Shelves" or shelfEditor.ready())
 	end
 	local ctx: Context.Context = {
 		scope = scope,
@@ -269,6 +276,9 @@ function Interface.create(
 		end
 	end
 	local function show(id: string, value: boolean)
+		if id == "Shelves" and shelfEditor then
+			shelfEditor.shown(value)
+		end
 		local shown = screens[id].shown
 		if shown then
 			shown(value)
@@ -296,6 +306,9 @@ function Interface.create(
 		refresh()
 		if not wasOpen then
 			show(id, true)
+			-- Opening Shelves clears the prior acknowledgement; disable mutations
+			-- until update receives a snapshot of the newly held server view.
+			refresh()
 		end
 		selectPage()
 	end
@@ -395,6 +408,9 @@ function Interface.create(
 	refresh()
 	scope.connect(gui.Destroying, function()
 		destroyed = true
+		if shelfEditor then
+			shelfEditor.destroy()
+		end
 		scope.destroy()
 	end)
 	return {
@@ -476,6 +492,9 @@ function Interface.create(
 			destroyed = true
 			if opened then
 				show(current, false)
+			end
+			if shelfEditor then
+				shelfEditor.destroy()
 			end
 			scope.destroy()
 			local selected = GuiService.SelectedObject

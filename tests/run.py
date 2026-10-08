@@ -11,6 +11,7 @@ root = Path(__file__).resolve().parents[1]
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "ShelfShowcase": "server", "ShelfEditor": "client",
     "MovementConfig": "server", "PlayerMovement": "server",
     "Rarity": "shared",
     "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "ShopFixture": "server", "FigureSlots": "server", "World": "server",
@@ -116,6 +117,7 @@ run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("DisplayReplacement.spec", "EquipBest.spec", "Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
 run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "Deals.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 run("PlotEngine", "HomeTeleport.spec")
+run("PlotEngine", "ShelfShowcase.spec")
 run("PlotEngine", "CollectionPlates.spec")
 run("PlotEngine", "ShopKeeper.spec")
 fixtures = [

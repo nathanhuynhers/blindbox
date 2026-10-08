@@ -13,6 +13,7 @@ local Transactions = require(script.Transactions)
 local Deals = require(script.Deals)
 local PlayerPlot = require(script.PlayerPlot)
 local Shelves = require(script.Shelves)
+local ShelfShowcase = require(script.ShelfShowcase)
 local PlotSlots = require(script.PlotSlots)
 local PlotConfig = require(script.PlotConfig)
 local Storage = require(script.Storage)
@@ -71,6 +72,7 @@ local intentRemote = remote("Intent")
 local stateRemote = remote("State")
 local syncRemote = remote("RequestState")
 local homeRemote = remote("Home")
+local shelfEditorRemote = remote("ShelfEditor")
 local studioGrantCoinsRemote: RemoteFunction? = nil
 if RunService:IsStudio() then
 	local studioRemote = Instance.new("RemoteFunction")
@@ -97,6 +99,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	local day = math.floor(os.time() / 86400)
 	Rules.refreshDay(state, day)
 	local snapshot: Types.Snapshot = {
+		shelfEditorToken = session.plot.showcase.editorToken,
 		shelves = Shelves.publicView(state.shelves, session.plot.view),
 		shelfAvailable = Shelves.availability(state.shelves, state.owned),
 		coins = state.coins,
@@ -304,6 +307,21 @@ table.insert(
 		session.homeTime = nextRequest
 	end)
 )
+table.insert(
+	connections,
+	shelfEditorRemote.OnServerEvent:Connect(
+		function(player: Player, rawOpen: unknown, rawToken: unknown)
+			local session = sessions[player]
+			if not session or shuttingDown or not session.plot.active then
+				return
+			end
+			-- Resolve only the callback player's plot. Allow a close while storage is
+			-- unavailable; no gameplay authority is granted by this presentation signal.
+			ShelfShowcase.editor(session.plot.showcase, rawOpen, rawToken, os.clock())
+			-- The regular bounded owner snapshot acknowledges the token AND latest view.
+		end
+	)
+)
 if studioGrantCoinsRemote then
 	studioGrantCoinsRemote.OnServerInvoke = function(
 		player: Player,
@@ -373,6 +391,12 @@ table.insert(
 			return
 		end
 		if changed then
+			if typeof(raw) == "table" then
+				local action = (raw :: { [string]: unknown }).action
+				if action == "ShelfNext" or action == "ShelfPrevious" then
+					ShelfShowcase.browse(session.plot.showcase, os.clock())
+				end
+			end
 			PlayerPlot.render(session.plot, session.transaction.state)
 			if
 				session.storage.handle
@@ -400,6 +424,9 @@ table.insert(
 			if session.storage.ready then
 				Rules.settle(session.transaction.state, now)
 				Leaderboard.observe(player.UserId, session.transaction.state, now)
+				if now < session.storage.safeUntil then
+					PlayerPlot.stepShowcase(session.plot, session.transaction.state, now)
+				end
 			end
 		end
 		for player, session in sessions do

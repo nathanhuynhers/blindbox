@@ -303,6 +303,32 @@ counts, impact radius and HUD styling were retained.
 - Preserve current shelf/page selection behavior and all placement/editing interactions.
 - Verify the experience with different amounts of unlocked Shelf content.
 
+**Implemented (2026-10-07); native acceptance pending.**
+The server advances the shared three-unit viewport by one unit every seven seconds, wrapping
+through `Shelves.turn` and the same world renderer as physical arrows. `ShelfConfig` exposes
+the seven-second cadence, ten-second browsing idle and three-second editor-close idle. The
+existing one-second session scheduler drives bounded per-plot controller state; empty and
+non-overflowing Shelves schedule no step, and a due step waits another interval when nobody
+alive is inside the plot's existing public navigation range. Valid physical presses pause even
+during the turn cooldown; successful editor browsing also delays resume. No geometry, saved
+state, dependencies or animation were added.
+
+Opening Shelves sends an owner-only presentation token. Edits enable only after an owner
+snapshot acknowledges the server hold with the latest viewport; closing retains that hold until
+pending Shelf edits/navigation/purchases receive their receipt, including retry recovery. Auto
+cannot invalidate an edit already in flight. Plot teardown/ownership change disables the
+controller. Manual navigation keeps existing permission, range, cooldown and revision rules.
+
+Verification: `rokit install`, `wally install`, `stylua src`, `stylua --check src`, `selene src`
+(zero errors/warnings), Rojo 7.7.0 sourcemap/place build and Luau LSP 1.70.1 analysis with Roblox
+definitions (no source diagnostics; standalone watcher notice only). The full `tests/run.py`
+suite passed, including 256 new showcase checks and 15 real-Interface gating/lifecycle checks,
+plus all 16 invalid-configuration fixtures. Coverage includes zero/three/four/100 units, looping,
+owner/visitor arrows, nearby-viewer deferral, close/reopen/teardown and delayed opening/edit/reply
+transport across auto deadlines. Studio MCP inspection found older scripts in
+`RobloxWorkspace.rbxlx`; the native loop/arrows/editor playtest was not run.
+Native, multi-client and device acceptance remain open.
+
 ### UI-06 — Add opening/pull audio behavior and pause background music
 
 - Add or refine sound design for the blind-box pulling/opening sequence.

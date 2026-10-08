@@ -42,6 +42,15 @@ carousel state starts from the first unit on join and is not persisted. `FigureS
 physical figures and replaces only changed IDs or figures whose production model becomes ready.
 Plot teardown disconnects owned connections, destroys content and releases the slot.
 
+UI-05 uses `ShelfShowcase` controller state per plot and
+the existing server one-second scheduler, with no extra plot tasks or connections. `PlayerPlot`
+shares the domain turn/renderer between arrows and seven-second automatic steps. `ShelfEditor`
+gates client edits until an owner snapshot acknowledges the server pause and current viewport;
+closing the UI retains that pause across delayed edits and receipt recovery. Browsing delays
+resume for ten seconds, editor close for at least three seconds, and unseen plots defer steps.
+The empty/three/four/100-unit cases, real UI gating, delayed-edit race and lifecycle cleanup are
+covered by repository regressions. Native Studio and multi-client acceptance remain pending.
+
 The Collection installation is a three-bay oak-and-ivory fixture with bounded native parts,
 row lighting, a permanent Shelves header and shared physical navigation controls. It is visual
 presentation only; Shelf ownership, placement limits and carousel decisions remain server-owned.
