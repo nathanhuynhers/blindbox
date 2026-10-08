@@ -275,7 +275,7 @@ counts, impact radius and HUD styling were retained.
 
 ### UI-03 — Add an aesthetic pity-progress presentation
 
-**Status (2026-10-07): implemented on `feat/shop-pity-progress`; not merged.**
+**Status (2026-10-07): implemented and merged into `master`.**
 
 - Pity already exists for eligible high-tier collections; this task is presentation, not a new pity
   algorithm.
@@ -331,6 +331,10 @@ The local unpublished-place leaderboard emitted its existing DataStore retry war
 errors were observed. Still required: true two-client/native privacy acceptance, a full native
 desktop viewport, real phone/gamepad input and persistent save/rejoin. Engine doubles and the
 solo fixture do not close those gates.
+
+Mainline integration: retained UI-05 Shelf auto-scroll and its editor-session metadata;
+updated both UI-03 snapshot test sessions to the new shape. All prescribed tooling/type checks
+and the full regression suite (including 256 Shelf showcase checks) passed on the combined tree.
 
 ### UI-04 — Add decorative lighting to player plots
 

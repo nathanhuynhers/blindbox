@@ -16,7 +16,7 @@ end
 local snapshot
 local send = SnapshotSender({FireClient = function(_, _, value) snapshot = value end})
 local session = {transaction = {state = Rules.new(0)}, sequence = 0,
-	plot = {view = {first = 1, revision = 0}}, storage = {status = "Ready", ready = true}}
+	plot = {view = {first = 1, revision = 0}, showcase = {editorToken = 0}}, storage = {status = "Ready", ready = true}}
 session.transaction.state.coins = 10000000
 session.transaction.state.step = 7
 send("owner", session)

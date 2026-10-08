@@ -20,7 +20,7 @@ local send = SnapshotSender({FireClient = function(_, player, snapshot)
 end})
 local function session()
 	return {transaction = Transactions.new(0), sequence = 0,
-		plot = {view = {first = 1, revision = 0}}, storage = {status = "Ready", ready = true}}
+		plot = {view = {first = 1, revision = 0}, showcase = {editorToken = 0}}, storage = {status = "Ready", ready = true}}
 end
 local alice, bob = session(), session()
 alice.transaction.state.coins = 10000000
