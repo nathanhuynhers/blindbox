@@ -103,4 +103,24 @@ return table.freeze({
 		{ id = "star.meteor-shower", units = 8.5, weight = 1 },
 		{ id = "star.dreamcatcher", units = 22, weight = 1 },
 	},
+	-- Plaza pop-up stall deals (LOGIC-05). Offers change every `windowSeconds` of UTC time and
+	-- come from the window index and `seed` alone, so every server shows the same three. Each
+	-- player may buy `stock` boxes per stall per window at `discount` off the normal price.
+	-- The free Starter collection (Daily, Welcome and Login rewards) is never offered.
+	deals = {
+		windowSeconds = 60 * 60,
+		seed = 20261007,
+		discount = 0.25,
+		stock = 3,
+		stalls = 3,
+		-- Client presentation: the stall clock tag turns gold this close to the next window.
+		refreshSoonSeconds = 5 * 60,
+		-- Relative weights; a collection left out is never offered.
+		weights = {
+			{ collection = "tide", weight = 4 },
+			{ collection = "concept", weight = 3 },
+			{ collection = "echo", weight = 1.5 },
+			{ collection = "star", weight = 1.5 },
+		},
+	},
 })

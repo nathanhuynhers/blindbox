@@ -150,6 +150,17 @@ Paired with **UI-08**.
 - When the next global hourly window begins, the offer set and each player's personal stock refresh
   to that window's configured inventory.
 
+**Status (2026-10-07): implemented on `feat/plaza-popup-stall-deals`, not merged.** Server `Deals`
+derives each UTC hour's three offers from the window index and `Economy.deals.seed` (weighted,
+no repeat in a window, Pocket Grove excluded); deal price is 25% off rounded to whole Coins (min 1);
+stock is 3 per player per stall per window, saved as schema 14 `deals` (v6–v13 upgrade with full
+stock). The `Deal` intent carries only the stall and window; the server rejects stale windows, sold
+out stalls and short wallets and reuses the Shop `Buy` grant, revision and receipts. Tuning and the
+Studio-only `StudioDealWindowSeconds` hook: [economy](ECONOMY.md#plaza-stall-deals-hourly). Checked in
+`tests/Deals.spec.luau` and one Studio client (three-stall buys, sell-out, stale-window refusal,
+120-second and real top-of-hour rollovers). Still open: a two-client Studio run, a real save/rejoin
+(Studio runs preview, not saved) and native gamepad/phone devices.
+
 ### LOGIC-06 — Equip Best Display loadout
 
 Paired with **UI-09**.
@@ -338,14 +349,20 @@ Paired with **LOGIC-05**.
 - Keep the stalls visually coherent with the main world and Peeka/collectible theme.
 - Design states for sold out, available, refresh-soon and newly refreshed inventory.
 
-**Status (2026-10-07): physical models built; dynamic content open.** The three plaza benches are
-now Mint, Sky and Butter flower-cart stalls (`TownProps.stall`, placed by `PlazaFixture` as
-`Stall_1`-`Stall_3` at plaza gaps 1, 3 and 5, facing the centre) with the stall Peeka on each
-counter, an empty cake stand, a clock tag and dusk bulbs (lens glow only, no PointLight budget).
-Still open: **LOGIC-05** and the dynamic display content it feeds. The models expose blank slots for
-it: `Counter.BoxAnchor` and `Counter.PriceTagAnchor` (Attachments), `Body.StockPips.Strip` and
-`ClockTag.ClockFace` (SurfaceGuis). No offer box, price, stock, timer, state visuals (sold out,
-refresh soon, new) or interaction prompt exist yet.
+**Status (2026-10-07): models on master; dynamic content implemented on
+`feat/plaza-popup-stall-deals`, not merged.** The three plaza benches are Mint, Sky and Butter
+flower-cart stalls (`TownProps.stall`, placed by `PlazaFixture` as `Stall_1`-`Stall_3`). The client
+`DealStalls` fills their slots with this player's view: the skinned production box on the cake stand
+(native collection box as fallback), a hanging tag with the struck-through and deal price, a -25%
+sticker, own-stock pips and "N left for you" between the wheels, and the clock tag ("New deal in" /
+"Restocks in" mm:ss, gold under five minutes). Sold out dims the box, shows the banner and closes
+the stall Peeka's eyes; the first minute of a window shows NEW! and the Peeka hops once at the flip.
+E ("Peeka's Pop-up · See deal", 11 studs, any player) opens the `DealPopup` Hourly Deal card (stall
+icon, countdown chip, Close, box well with sticker, collection chip, prices, pips, "Same deal on
+every server this hour", gold Buy / Buying… / Need N more / Sold out · back in mm:ss). It updates
+live across a rollover and a successful buy hands over to the normal opening. No world parts were
+added (tag and stickers are client-only parts). Studio-checked on desktop and at phone size
+(706×373); gamepad B/selection could not be injected through the Studio MCP.
 
 ### UI-09 — Add an Equip Best control to the Display UI
 

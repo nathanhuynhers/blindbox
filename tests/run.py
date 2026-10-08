@@ -16,7 +16,7 @@ modules = {
     "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "ShopFixture": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "Types": "shared", "Tutorial": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
-    "CollectionEconomy": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
+    "CollectionEconomy": "server", "Deals": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "DisplayInteraction": "client", "ShopKeeper": "client", "HomeTeleport": "server", "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client", "OpeningLayout": "client",
     "OpeningAudioConfig": "client", "OpeningAudioSequence": "client", "SoundManifest": "client", "Sfx": "client", "Music": "client",
@@ -114,7 +114,7 @@ run("CoinEngine", "CoinCounter.spec")
 run("PlayerMovement.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("DisplayReplacement.spec", "Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
-run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
+run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "Deals.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")
 run("PlotEngine", "HomeTeleport.spec")
 run("PlotEngine", "CollectionPlates.spec")
 run("PlotEngine", "ShopKeeper.spec")
@@ -131,6 +131,10 @@ fixtures = [
     ('group = "star"', 'group = "concept"', "Shared pity must use identical profiles"),
     ('pity = "standard"', 'pity = "missing"', "Unknown pity profile"),
     ('units = 0.55', 'units = 0/0', "Invalid income units/weight"),
+    ('collection = "tide", weight = 4', 'collection = "grove", weight = 4', "Deals may only offer purchasable non-Starter collections"),
+    ('discount = 0.25', 'discount = 1', "Invalid deal discount"),
+    ('stock = 3', 'stock = 0', "Invalid deal stock"),
+    ('weight = 1.5 }', 'weight = 0 }', "Invalid deal weight"),
 ]
 for index, (old, new, expected) in enumerate(fixtures):
     fixture = out / f"invalid-{index}"

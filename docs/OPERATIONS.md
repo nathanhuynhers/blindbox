@@ -1,7 +1,7 @@
 # Full-game testing and release
 
 The economy redesign uses fresh `BlindBox_Economy2_Studio` /
-`BlindBox_Economy2_Live` stores; the current profile schema is 13. Valid Economy2 schemas 6–12
+`BlindBox_Economy2_Live` stores; the current profile schema is 14. Valid Economy2 schemas 6–13
 upgrade as specified in the [data model](DATA_MODEL.md). Run the
 [current economy acceptance checklist](ECONOMY.md#verification-record-and-acceptance-checklist) for
 variable prices, duplicates, soft pity and the authorized progression reset.
@@ -114,7 +114,7 @@ checks in the [audit](GAME_AUDIT.md#system-by-system-audit); they do not sign of
    after rejoin. Check paid Shelf progression separately; see the [plot reference](PLAYER_PLOTS_AND_SHELVES.md).
 4. **Persistence:** in the isolated test store, open/place, unlock, edit shelves and claim rewards.
    Wait for a successful autosave, stop/rejoin and compare balances/counts/Display/Shelf Units/claims.
-   Verify valid Economy2 schema-6 through schema-12 fixtures upgrade to schema 13 as documented in
+   Verify valid Economy2 schema-6 through schema-13 fixtures upgrade to schema 14 as documented in
    the [data model](DATA_MODEL.md#authorized-progression-reset): v6/v7 start `boxesOpened = 0`,
    v8+ retain that counter, v9+ retain Shelf rewards, v10+ retain offline fields, v11+ retain
    login streaks, and v12 retains audio settings. Check the v13 Welcome Quest mapping and

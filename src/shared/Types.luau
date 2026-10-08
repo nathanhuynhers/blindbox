@@ -21,6 +21,8 @@ export type Intent = {
 	carouselRevision: number?,
 	-- SetVolume only: whole percent 0..100.
 	volume: number?,
+	-- Deal only: the stall deal window the client is looking at (its stall travels in `slot`).
+	window: number?,
 }
 export type Display = { unlocked: number, slots: { string } }
 export type ShelfUnit = {
@@ -41,6 +43,18 @@ export type ShelfView = {
 	visible: { VisibleShelf },
 	carouselRevision: number,
 	canNavigate: boolean,
+}
+-- A player's plaza stall purchases in one deal window; another window means full stock (v14).
+export type DealStock = { window: number, bought: { number } }
+-- One stall's offer this window: normal and deal price plus the viewer's own remaining stock.
+export type DealOffer = { collection: string, price: number, deal: number, left: number }
+-- `ends` is the UTC time the window closes; `soon` the refresh-soon threshold in seconds.
+export type DealView = {
+	window: number,
+	ends: number,
+	stock: number,
+	soon: number,
+	offers: { DealOffer },
 }
 export type Profile = {
 	schemaVersion: number,
@@ -72,6 +86,7 @@ export type Profile = {
 	-- Player audio settings, whole percent 0..100 of the default mix (v12).
 	sfxVolume: number,
 	musicVolume: number,
+	deals: DealStock,
 }
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
 export type State = Profile & { revision: number, time: number, offlineSeconds: number }
@@ -115,6 +130,7 @@ export type Snapshot = {
 	offlineSeconds: number,
 	sfxVolume: number,
 	musicVolume: number,
+	deals: DealView,
 }
 export type Reply = {
 	id: string,

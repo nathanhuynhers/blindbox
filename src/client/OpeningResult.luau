@@ -47,6 +47,7 @@ function OpeningResult.fromReply(
 		and request.action ~= "Daily"
 		and request.action ~= "Login"
 		and request.action ~= "Welcome"
+		and request.action ~= "Deal"
 	then
 		return nil
 	end

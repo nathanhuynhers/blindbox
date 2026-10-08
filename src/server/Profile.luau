@@ -25,7 +25,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 13,
+		schemaVersion = 14,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -47,6 +47,7 @@ function Profile.encode(state: Types.State): Types.Profile
 		offlinePending = state.offlinePending,
 		sfxVolume = state.sfxVolume,
 		musicVolume = state.musicVolume,
+		deals = { window = state.deals.window, bought = table.clone(state.deals.bought) },
 	}
 end
 function Profile.decode(raw: unknown, now: number): Types.State?
@@ -66,6 +67,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 11
 			and data.schemaVersion ~= 12
 			and data.schemaVersion ~= 13
+			and data.schemaVersion ~= 14
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -90,13 +92,18 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"offlinePending",
 			"sfxVolume",
 			"musicVolume",
+			"deals",
 		})
 	then
 		return nil
 	end
 	if
 		not integer(data.coins, 0, Economy.coinLimit)
-		or not integer(data.step, 1, if data.schemaVersion == 13 then Tutorial.done else 5)
+		or not integer(
+			data.step,
+			1,
+			if (data.schemaVersion :: number) >= 13 then Tutorial.done else 5
+		)
 		or typeof(data.owned) ~= "table"
 		or typeof(data.discovered) ~= "table"
 		or typeof(data.pityByGroup) ~= "table"
@@ -276,7 +283,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	-- v13 saves the Welcome Quest stage and skip choice. Older stages meant something else and
 	-- there was no Welcome reward, so an upgraded profile that never opened a box starts the
 	-- quest and any other upgraded profile is treated as finished (no Welcome rewards).
-	if data.schemaVersion == 13 then
+	if (data.schemaVersion :: number) >= 13 then
 		if typeof(data.tutorialHidden) ~= "boolean" then
 			return nil
 		end
@@ -287,6 +294,41 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		state.step = if state.boxesOpened == 0 and next(state.owned) == nil
 			then Tutorial.welcome
 			else Tutorial.done
+	end
+	-- v6-v13 predate plaza stall deals (Rules.new: no window, full stock). v14 requires the
+	-- record; a stale window is harmless because Deals.refresh drops it before any use or save.
+	if data.schemaVersion == 14 then
+		local deals = data.deals
+		if typeof(deals) ~= "table" then
+			return nil
+		end
+		local record = deals :: { [string]: unknown }
+		if
+			not fields(record, { "window", "bought" })
+			or not integer(record.window, -1, 9007199254740991)
+			or typeof(record.bought) ~= "table"
+		then
+			return nil
+		end
+		local bought: { number } = {}
+		local count = 0
+		for stall, value in record.bought :: { [unknown]: unknown } do
+			if not integer(stall, 1, 16) or not integer(value, 0, 1000000) then
+				return nil
+			end
+			count += 1
+			bought[stall :: number] = value :: number
+		end
+		if count ~= #bought then
+			return nil
+		end
+		-- Dense up to the configured stalls, so a purchase never leaves a hole in the array.
+		for stall = count + 1, Economy.deals.stalls do
+			bought[stall] = 0
+		end
+		state.deals = { window = record.window :: number, bought = bought }
+	elseif data.deals ~= nil then
+		return nil
 	end
 	-- Idempotent: also grants collections completed before Shelf rewards existed.
 	Rules.grantShelves(state)

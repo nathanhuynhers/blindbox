@@ -27,7 +27,7 @@ check(LoginRewards.day(1) == 1 and LoginRewards.day(#LoginRewards.days + 1) == 1
 
 -- Seven-plus consecutive days: each claim grants exactly that day's table entry.
 local state = Rules.new(0)
-check(state.schemaVersion == 13 and state.lastLoginDay == -1 and state.loginStreak == 0, "fresh profile never claimed")
+check(state.schemaVersion == 14 and state.lastLoginDay == -1 and state.loginStreak == 0, "fresh profile never claimed")
 local start = 20000
 for offset = 0, #LoginRewards.days do
 	local day = start + offset
@@ -104,12 +104,13 @@ check(
 	restored ~= nil and restored.lastLoginDay == state.lastLoginDay and restored.loginStreak == state.loginStreak,
 	"v11 round trip keeps the streak"
 )
-check(Profile.encode(state).schemaVersion == 13, "encodes schema 13")
+check(Profile.encode(state).schemaVersion == 14, "encodes schema 14")
 for _, version in { 6, 7, 8, 9, 10 } do
 	local old = Profile.encode(Rules.new(0)) :: any
 	old.schemaVersion, old.lastLoginDay, old.loginStreak = version, nil, nil
 	old.sfxVolume, old.musicVolume = nil, nil
 	old.tutorialHidden = nil
+	old.deals = nil
 	if version < 10 then
 		old.lastSeen, old.offlinePending = nil, nil
 	end
@@ -143,7 +144,7 @@ local missing = Profile.encode(state) :: any
 missing.loginStreak = nil
 check(Profile.decode(missing, 0) == nil, "v11 without the streak fails closed")
 local future = Profile.encode(state) :: any
-future.schemaVersion = 14
+future.schemaVersion = 15
 check(Profile.decode(future, 0) == nil, "unknown future schema fails closed")
 
 -- Box days hand off to the existing opening: one figure as a single reveal, several as a batch.

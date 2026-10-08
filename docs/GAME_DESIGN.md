@@ -34,7 +34,7 @@ starter purchases. One free Starter box and the 1,000-Coin daily Display goal re
 The authorized economy reset uses the Economy2 namespaces; no old-namespace progress is imported.
 Consecutive Daily Login rewards (UTC days, 7-day looping cycle, a missed day restarts at Day 1)
 grant placeholder Coins and free boxes; see [data model](DATA_MODEL.md).
-Current schema 13 (which saves the Welcome Quest stage and skip choice) safely upgrades valid Economy2 schemas 6–12, while schemas 1–5 are rejected.
+Current schema 14 (which adds the plaza stall stock to schema 13's Welcome Quest stage and skip choice) safely upgrades valid Economy2 schemas 6–13, while schemas 1–5 are rejected.
 
 New players get a short Welcome Quest taught through real actions: open a free Welcome Box
 (Pocket Grove, Uncommon or Rare), put the figure on Display, collect its Coins, open a box with

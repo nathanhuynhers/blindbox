@@ -34,10 +34,19 @@ local function promptTarget(name: string): BasePart?
 	return if target and target:IsA("BasePart") then target else nil
 end
 
+-- A plaza pop-up stall's "See deal" prompt: any player may open it, so only its stall is checked.
+local function dealStall(prompt: ProximityPrompt): number?
+	local counter = prompt.Parent
+	local stall = if counter and counter:IsA("BasePart") then counter.Parent else nil
+	local index = if stall then stall:GetAttribute("DealStall") else nil
+	return if prompt.Name == "DealPrompt" and typeof(index) == "number" then index else nil
+end
+
 function Interaction.create(
 	openDisplay: () -> (),
 	openShelves: (() -> ())?,
-	openShop: (() -> ())?
+	openShop: (() -> ())?,
+	openDeal: ((number) -> ())?
 ): { update: (number?) -> (), destroy: () -> () }
 	local scope = Scope.create()
 	local function ownConnection(connection: RBXScriptConnection)
@@ -92,7 +101,8 @@ function Interaction.create(
 		if actor ~= Players.LocalPlayer then
 			return
 		end
-		local target = promptTarget(prompt.Name)
+		local stall = dealStall(prompt)
+		local target = if stall then prompt.Parent :: BasePart else promptTarget(prompt.Name)
 		local character = Players.LocalPlayer.Character
 		local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
 		local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
@@ -106,7 +116,11 @@ function Interaction.create(
 			and humanoid.Health > 0
 			and (root.Position - target.Position).Magnitude <= prompt.MaxActivationDistance
 		then
-			if prompt.Name == "ManageDisplayPrompt" then
+			if stall then
+				if openDeal then
+					openDeal(stall)
+				end
+			elseif prompt.Name == "ManageDisplayPrompt" then
 				openDisplay()
 			elseif prompt.Name == "ManageShelvesPrompt" then
 				if openShelves then

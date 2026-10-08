@@ -551,6 +551,83 @@ function State.countdown(nextDay: number, now: number): (string, number)
 end
 
 -- Equal cells across an exact width; never truncates the last column.
+-- Plaza stall deals --------------------------------------------------------------------------
+
+-- available / last one / sold out / refresh soon / just refreshed, plus a stall whose window
+-- has ended locally while the next snapshot (with the new offer) is on its way.
+export type DealStatus = "available" | "last" | "soldout" | "soon" | "fresh" | "restocking"
+export type Deal = {
+	stall: number,
+	window: number,
+	collection: string,
+	name: string,
+	price: number,
+	deal: number,
+	percent: number,
+	left: number,
+	stock: number,
+	status: DealStatus,
+	-- "mm:ss" until the window ends; the clock tag reads "<clockLabel> <clock>".
+	clock: string,
+	clockLabel: string,
+	stockText: string,
+	button: string,
+	canBuy: boolean,
+}
+-- Seconds after a window opens that its stalls show "Just refreshed".
+State.dealFresh = 60
+
+function State.clock(seconds: number): string
+	local whole = math.max(0, math.ceil(finite(seconds)))
+	return string.format("%d:%02d", whole // 60, whole % 60)
+end
+
+-- Presentation for one stall at server time `now`; nil until a snapshot carries the offer.
+function State.deal(snapshot: Types.Snapshot, stall: number, now: number): Deal?
+	local deals = snapshot.deals
+	local offer = if deals then deals.offers[stall] else nil
+	if not deals or not offer then
+		return nil
+	end
+	local remaining = deals.ends - now
+	-- ends = (window + 1) * length, so the window length needs no extra field.
+	local elapsed = deals.ends / (deals.window + 1) - remaining
+	local left = math.clamp(offer.left, 0, deals.stock)
+	local status: DealStatus = if remaining <= 0
+		then "restocking"
+		elseif left == 0 then "soldout"
+		elseif elapsed < State.dealFresh then "fresh"
+		elseif remaining <= deals.soon then "soon"
+		elseif left == 1 then "last"
+		else "available"
+	local clock = State.clock(remaining)
+	local short = State.need(snapshot, offer.deal)
+	local canBuy = status ~= "restocking" and status ~= "soldout" and short == nil
+	return {
+		stall = stall,
+		window = deals.window,
+		collection = offer.collection,
+		name = State.collectionName(offer.collection),
+		price = offer.price,
+		deal = offer.deal,
+		percent = math.floor((1 - offer.deal / math.max(1, offer.price)) * 100 + 0.5),
+		left = left,
+		stock = deals.stock,
+		status = status,
+		clock = clock,
+		clockLabel = if status == "soldout" then "Restocks in" else "New deal in",
+		stockText = if left == 0
+			then "All yours! Thank you"
+			elseif left == 1 then "Last one for you!"
+			else `{left} left for you`,
+		button = if status == "restocking"
+			then "New deal coming…"
+			elseif status == "soldout" then `Sold out · back in {clock}`
+			else short or `Buy for {State.number(offer.deal)}`,
+		canBuy = canBuy,
+	}
+end
+
 function State.cells(width: number, columns: number, gap: number): number
 	return math.max(1, math.floor((width - gap * (columns - 1)) / math.max(1, columns)))
 end

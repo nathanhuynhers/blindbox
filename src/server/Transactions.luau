@@ -20,7 +20,8 @@ function Transactions.process(
 	roll: number | { number },
 	day: number?,
 	access: Shelves.Access?,
-	collectAuthorized: boolean?
+	collectAuthorized: boolean?,
+	window: number?
 ): (Types.Reply?, boolean)
 	session.tokens = math.min(4, session.tokens + math.max(0, now - session.tokenTime) * 2)
 	session.tokenTime = now
@@ -70,7 +71,8 @@ function Transactions.process(
 		elseif (intent.action == "Place" or intent.action == "Remove") and not insideOwnPlot then
 			message = "Return to your own plot to edit your Display."
 		else
-			ok, message, figure, figures = Rules.mutate(session.state, intent, roll, day, now)
+			ok, message, figure, figures =
+				Rules.mutate(session.state, intent, roll, day, now, window)
 		end
 	end
 	local reply: Types.Reply =

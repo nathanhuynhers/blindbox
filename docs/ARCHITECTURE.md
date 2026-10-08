@@ -61,10 +61,15 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `Rules`/`Economy`/`CollectionEconomy`: collection prices, soft pity, permanent duplicate income,
   unique earning placements, sequential Coin slot unlocks and Starter-only daily grants. Buy and
   Daily also increment the persistent `boxesOpened` counter in the same atomic grant.
+- `Deals`: plaza stall deals. Offers per UTC hour from the window index and config seed alone
+  (no cross-server state), the rounded deal price, per-player stock refresh and the private
+  snapshot view (offers, own stock, window end). `Rules` runs the `Deal` intent through the Shop
+  `Buy` grant. `PlazaFixture` adds one "See deal" ProximityPrompt and a `DealStall` attribute per
+  stall; no parts. See [economy](ECONOMY.md#plaza-stall-deals-hourly).
 - `Protocol`/`Transactions`: allowlisted typed fields/actions, token bucket, profile revision and
   exact retry receipts. Shelf edits additionally require visible persistent Shelf Unit ID and carousel revision and owner access.
-- `Profile`: schema-13 validation/deep copies of pity, per-figure earnings, Display, Shelves,
-  rewards, audio settings and Welcome Quest state. Valid Economy2 schemas 6–12 upgrade as
+- `Profile`: schema-14 validation/deep copies of pity, per-figure earnings, Display, Shelves,
+  rewards, audio settings, Welcome Quest state and plaza stall stock. Valid Economy2 schemas 6–13 upgrade as
   [specified in the data model](DATA_MODEL.md); unsupported or corrupt records fail closed.
   New save namespaces implement the authorized reset; retired legacy adapters are not invoked.
   Shelf decode removes unowned/excess placements in stable unit and numeric row/slot order so
@@ -174,6 +179,15 @@ components (`ScreenShell`, `Dock`, `Hud`, `CollectionList`, `FigureTile`, `UIBut
 `UIScale` stage. `UIState` is the single projection of snapshot economy fields; `UILayout` owns
 geometry; `UIStyle` owns tokens and collection accents. See
 [ui-redesign/IMPLEMENTATION.md](ui-redesign/IMPLEMENTATION.md).
+
+Plaza stalls are client presentation over the snapshot's `deals` view. `DealStalls` fills each
+stall's slots locally: the skinned production box (native collection box as fallback) on
+`Counter.BoxAnchor`, a price tag and sticker panel (client-only parts, outside the world part
+budget), the player's own stock pips on `Body.StockPips.Strip` and the countdown on
+`ClockTag.ClockFace`, refreshed by one half-second loop from `workspace:GetServerTimeNow()`. Sold
+out dims the box, shows the banner and squashes the stall Peeka's eyes shut; a new window shows
+NEW! for a minute and the Peeka hops once. `DisplayInteraction` routes the stall prompt to
+`DealPopup`, which follows every snapshot (live rollover) and sends only the `Deal` intent.
 
 Sound is client presentation only. `SoundManifest` is the single list of asset IDs and levels.
 `Sfx.play(name)` plays pooled, rate-limited voices in `SoundService.Master` (UI / SFX / Reveal)

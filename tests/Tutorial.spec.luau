@@ -195,7 +195,7 @@ check(not Rules.mutate(done, { action = "SkipTutorial", id = "s", revision = 0 }
 
 -- Persistence: v13 validation and the one-time legacy mapping.
 local saved = Profile.encode(session.state)
-check(saved.schemaVersion == 13 and saved.step == Tutorial.done and saved.tutorialHidden == false, "encodes stage and skip")
+check(saved.schemaVersion == 14 and saved.step == Tutorial.done and saved.tutorialHidden == false, "encodes stage and skip")
 for _, broken in { 0, 8, 2.5 } do
 	local copy = Profile.encode(session.state)
 	copy.step = broken
@@ -207,6 +207,7 @@ check(Profile.decode(missing, 0) == nil, "v13 requires the skip flag")
 local function legacy(state: Types.State, step: number): any
 	local old = Profile.encode(state) :: any
 	old.schemaVersion, old.tutorialHidden, old.step = 12, nil, step
+	old.deals = nil
 	return old
 end
 local blank = Rules.new(0)

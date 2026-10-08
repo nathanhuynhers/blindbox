@@ -265,5 +265,51 @@ check(
 mobile.destroy()
 Plot.destroy(replacement)
 Plot.destroy(other)
+-- Plaza stall "See deal": any player, routed with its stall index and distance-checked.
+local Plaza = require("./PlazaFixture")
+local Layout = require("./TownLayout")
+input.TouchEnabled, input.MouseEnabled = false, true
+local deals: { number } = {}
+local openedBefore, shelvesBefore, shopBefore = opened, shelvesOpened, shopOpened
+local dealControl = Interaction.create(function() end, nil, nil, function(stall)
+	table.insert(deals, stall)
+end)
+local plazaModel = Plaza.create(Engine.workspace).model
+for index = 1, 3 do
+	local stall = plazaModel:FindFirstChild("Stall_" .. index)
+	local counter = stall:FindFirstChild("Counter")
+	local dealPrompt = counter:FindFirstChild("DealPrompt")
+	check(
+		stall:GetAttribute("DealStall") == index
+			and dealPrompt.ObjectText == "Peeka's Pop-up"
+			and dealPrompt.ActionText == "See deal"
+			and dealPrompt.KeyboardKeyCode == Engine.Enum.KeyCode.E
+			and dealPrompt.HoldDuration == 0
+			and dealPrompt.RequiresLineOfSight == false
+			and dealPrompt.MaxActivationDistance == Layout.plaza.dealPromptRange
+			and dealPrompt.MaxActivationDistance >= 10
+			and dealPrompt.MaxActivationDistance <= 12,
+		"each stall carries an E See deal prompt within 10-12 studs"
+	)
+end
+local dealCounter = plazaModel:FindFirstChild("Stall_2"):FindFirstChild("Counter")
+local dealPrompt = dealCounter:FindFirstChild("DealPrompt")
+Engine.services.Players.LocalPlayer = guest
+guest.Character:PivotTo(dealCounter.CFrame)
+prompts.PromptShown:fire(dealPrompt)
+check(dealPrompt.Enabled, "visitors keep the deal prompt: any player may look")
+prompts.PromptTriggered:fire(dealPrompt, guest)
+check(#deals == 1 and deals[1] == 2, "the nearby player opens that stall's deal")
+check(
+	opened == openedBefore and shelvesOpened == shelvesBefore and shopOpened == shopBefore,
+	"a deal prompt opens nothing else"
+)
+prompts.PromptTriggered:fire(dealPrompt, owner)
+check(#deals == 1, "another actor cannot open the local deal popup")
+guest.Character:PivotTo(dealCounter.CFrame + Engine.Vector3.new(Layout.plaza.dealPromptRange + 0.01, 0, 0))
+prompts.PromptTriggered:fire(dealPrompt, guest)
+check(#deals == 1, "far deal trigger ignored")
+Engine.services.Players.LocalPlayer = owner
+dealControl.destroy()
 check(Engine.connections == 0, "all plot and client connections released")
 print("PASS: " .. checks .. " Display interaction checks (engine shim)")

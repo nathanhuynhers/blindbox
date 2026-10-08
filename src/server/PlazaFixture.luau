@@ -261,7 +261,7 @@ function Plaza.create(parent: Instance): Built
 		if kind == "Stall" then
 			stalls += 1
 			local theme = Style.stalls[stalls]
-			local _, entries = TownProps.stall(
+			local stall, entries = TownProps.stall(
 				model,
 				"Stall_" .. stalls,
 				Geometry.polarTransform(degrees, plaza.furnitureRadius, plaza.surfaceTop),
@@ -269,6 +269,18 @@ function Plaza.create(parent: Instance): Built
 				theme.stripe
 			)
 			table.move(entries, 1, #entries, #lights + 1, lights)
+			-- Any player may look; the client opens the deal popup and the server prices a buy.
+			stall:SetAttribute("DealStall", stalls)
+			local prompt = Instance.new("ProximityPrompt")
+			prompt.Name = "DealPrompt"
+			prompt.ObjectText = "Peeka's Pop-up"
+			prompt.ActionText = "See deal"
+			prompt.KeyboardKeyCode = Enum.KeyCode.E
+			prompt.MaxActivationDistance = plaza.dealPromptRange
+			prompt.HoldDuration = 0
+			prompt.RequiresLineOfSight = false
+			prompt.Enabled = true
+			prompt.Parent = stall:FindFirstChild("Counter")
 		elseif kind == "Planter" then
 			TownProps.planter(
 				model,

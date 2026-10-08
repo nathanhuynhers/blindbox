@@ -4,11 +4,13 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
+local ServerStorage = game:GetService("ServerStorage")
 local Types = require(ReplicatedStorage.Shared.Types)
 local Rules = require(script.Rules)
 local Economy = require(script.Economy)
 local CollectionEconomy = require(script.CollectionEconomy)
 local Transactions = require(script.Transactions)
+local Deals = require(script.Deals)
 local PlayerPlot = require(script.PlayerPlot)
 local Shelves = require(script.Shelves)
 local PlotSlots = require(script.PlotSlots)
@@ -77,6 +79,18 @@ if RunService:IsStudio() then
 	studioGrantCoinsRemote = studioRemote
 end
 folder.Parent = ReplicatedStorage
+-- Current plaza deal window and its length. Studio playtests may shorten it with the
+-- StudioDealWindowSeconds attribute on ServerStorage; live servers always use the config.
+local function dealClock(): (number, number)
+	local seconds = Economy.deals.windowSeconds
+	local override = if RunService:IsStudio()
+		then ServerStorage:GetAttribute("StudioDealWindowSeconds")
+		else nil
+	if typeof(override) == "number" and override >= 10 and override % 1 == 0 then
+		seconds = override
+	end
+	return Deals.window(os.time(), seconds), seconds
+end
 local function send(player: Player, session: Session, reply: Types.Reply?)
 	session.sequence += 1
 	local state = session.transaction.state
@@ -119,6 +133,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		offlineSeconds = state.offlineSeconds,
 		sfxVolume = state.sfxVolume,
 		musicVolume = state.musicVolume,
+		deals = Deals.view(state, dealClock()),
 	}
 	stateRemote:FireClient(player, snapshot, reply)
 end
@@ -181,6 +196,8 @@ local function added(player: Player)
 	end
 	local transaction = Transactions.new(os.clock())
 	transaction.state = storage.state
+	-- Drop a previous window's stall purchases on load; every snapshot keeps it current.
+	Deals.refresh(transaction.state, (dealClock()))
 	local session: Session = {
 		transaction = transaction,
 		plot = PlayerPlot.create(player, plotIndex),
@@ -348,7 +365,9 @@ table.insert(
 			PlayerPlot.canManage(session.plot, player),
 			rolls(),
 			math.floor(os.time() / 86400),
-			PlayerPlot.access(session.plot, player)
+			PlayerPlot.access(session.plot, player),
+			nil,
+			(dealClock())
 		)
 		if not reply then
 			return

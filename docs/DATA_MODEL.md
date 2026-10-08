@@ -1,7 +1,7 @@
 # Persistent data model
 
-Current schema: **13**, written to `BlindBox_Economy2_Studio` and
-`BlindBox_Economy2_Live`. The decoder accepts valid Economy2 schemas 6–13; 6–12 upgrade to 13
+Current schema: **14**, written to `BlindBox_Economy2_Studio` and
+`BlindBox_Economy2_Live`. The decoder accepts valid Economy2 schemas 6–14; 6–13 upgrade to 14
 on the normal save path. Schemas 1–5, future versions and malformed records fail closed. Existing
 catalog figure IDs are unchanged. The prior audit reviewed schema 12 before the Welcome Quest
 merge; it is now an upgrade source, not the written format.
@@ -13,7 +13,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 13 written; valid 6-12 upgrade; unsupported versions block loading/writing |
+| schemaVersion | 14 written; valid 6-13 upgrade; unsupported versions block loading/writing |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -31,6 +31,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | lastSeen | UTC `os.time()` of the last save, integer 0..100,000,000,000; 0 = unknown (new or upgraded), awards nothing (v10; required) |
 | offlinePending | Whole offline Coins not yet claimed, integer 0..1,000,000,000,000; auto-claimed on the next join (v10; required) |
 | sfxVolume / musicVolume | Player audio settings, whole percent 0..100 of the default mix (100 = default); set only by the validated `SetVolume` intent; presentation only (v12; required) |
+| deals | Plaza stall stock `{window, bought}`: the deal window index (-1 = none yet) and a dense array of boxes bought per stall in that window, integers 0..1,000,000, at most 16 stalls (v14; required) |
 
 Each unit is `{id, placements, customization}`. IDs such as `shelf:1` are stable and unique
 within the ordered array. `placements` maps local `row:R/slot:S` keys to known permanently
@@ -83,6 +84,8 @@ slots, three empty Shelf Units and `boxesOpened = 0`. The first three Starter pu
 - **v13:** requires a 1..7 Welcome Quest `step` and boolean `tutorialHidden`. Valid v6–v12
   records map to stage 1 only when `boxesOpened == 0` and `owned` is empty; otherwise they
   map to finished stage 7 with no Welcome reward. Earlier `step` values are not reused.
+- **v14:** requires the plaza stall `deals` record. Valid v6–v13 records start with
+  `{window = -1}` and full stock; an older record that already carries `deals` fails closed.
 
 Schema 6 validates and deep-copies quantities, pity entries, unique Display placements and Shelf
 Units. Unknown fields/groups, NaN, infinity, fractional counters, out-of-bounds quantities,
@@ -104,7 +107,7 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names change as described above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-13 snapshots enter the acquisition/save path (valid schemas 6-12 are upgraded first).
+schema-14 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first).
 Wallet and banks save atomically in one aggregate.
 Replacement collects as many outgoing whole Coins as the wallet accepts; residual fractions and
 overflow remain in `earnings` under the outgoing ID. This uses the existing schema and does not
@@ -137,8 +140,8 @@ rebuildable presentation index keyed by UserId string. They are never read back 
 so they cannot corrupt or roll back progress.
 
 Deploy with coordinated server replacement. Rolling back Settings restores the old namespace,
-not progress made in Economy2. A rollback that preserves new progress must support schema 13;
-older (schema-12) code cannot read v13 saves.
+not progress made in Economy2. A rollback that preserves new progress must support schema 14;
+older (schema-13) code cannot read v14 saves.
 
 ## Daily Login streak (v11)
 
@@ -169,3 +172,18 @@ Older stages meant something else and there was no Welcome reward, so a v6-v12 p
 opened a box and owns nothing upgrades to stage 1 (it receives the quest and its rewards); every
 other upgraded profile becomes stage 7 (finished, no Welcome rewards). Ownership is used only for this
 one-time legacy mapping, never to decide a v13 player's progress.
+
+## Plaza stall deals (v14)
+
+`Deals` (server) derives every hourly window's three stall offers from `os.time() //
+Economy.deals.windowSeconds` and the config seed alone (a stateless 32-bit hash, not an engine
+RNG), so all servers agree with no messaging. `deals.window` names the window the `bought` counts
+belong to. `Deals.refresh` replaces a record from any other window with zeros (on join and on
+every owner snapshot, before autosaves, and inside the purchase), so stale windows never limit a
+new one and a rejoin or server hop inside the same window keeps the count. The record is decoded
+structurally (unknown fields, non-integers, negatives, sparse arrays and stall keys above 16 fail
+closed); a short array is padded with zeros to the configured stall count. A record from a
+different window is valid and simply refreshed. The purchase increments `bought[stall]` in the same
+non-yielding grant as the Coins, figure, pity and `boxesOpened` changes, so a crash rolls all of
+them back together. A clock that steps back into an earlier window also resets the count; that
+edge (seconds of cross-server skew around the hour) is accepted.

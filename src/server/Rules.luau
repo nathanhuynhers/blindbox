@@ -9,6 +9,7 @@ local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
+local Deals = require(script.Parent.Deals)
 local Rules = {
 	rates = CollectionEconomy.rates,
 	odds = CollectionEconomy.odds({}),
@@ -18,7 +19,7 @@ local Rules = {
 }
 function Rules.new(now: number): Types.State
 	return {
-		schemaVersion = 13,
+		schemaVersion = 14,
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
@@ -35,6 +36,7 @@ function Rules.new(now: number): Types.State
 		offlineSeconds = 0,
 		sfxVolume = 100,
 		musicVolume = 100,
+		deals = { window = -1, bought = table.create(Economy.deals.stalls, 0) },
 		coins = Economy.startingCoins,
 		owned = {},
 		discovered = {},
@@ -269,13 +271,15 @@ local function open(
 	Rules.grantShelves(state)
 	return figures, fresh
 end
--- Buy, Daily and one-box Login days use the first roll; BuyTen needs ten.
+-- Buy, Daily, Deal and one-box Login days use the first roll; BuyTen needs ten. `window` is the
+-- current plaza deal window (Deals.window); without it every Deal is refused as stale.
 function Rules.mutate(
 	state: Types.State,
 	intent: Types.Intent,
 	roll: number | { number },
 	day: number?,
-	now: number?
+	now: number?,
+	window: number?
 ): (boolean, string, string?, { string }?)
 	local action, id = intent.action, intent.figure or ""
 	local rolls = if type(roll) == "number" then { roll } else roll
@@ -287,12 +291,25 @@ function Rules.mutate(
 	if action == "Collect" then
 		local ok, message = Rules.collect(state, intent.slot or 0, id)
 		return ok, message, if ok then id else nil
-	elseif action == "Buy" or action == "Daily" or action == "BuyTen" then
+	elseif action == "Buy" or action == "Daily" or action == "BuyTen" or action == "Deal" then
 		local count = if action == "BuyTen" then 10 else 1
 		local collection = intent.choice or Economy.dailyCollection
-		local price = Rules.prices[collection]
-		if not price then
+		local stall = intent.slot or 0
+		if action == "Deal" then
+			-- The server re-derives this window's offer and price; the client named only the stall.
+			if window == nil or intent.window ~= window then
+				return false, "That deal just changed. Take a look at the new one!", nil
+			end
+			Deals.refresh(state, window)
+			collection = Deals.offers(window)[stall] or ""
+		end
+		local normal = Rules.prices[collection]
+		if not normal then
 			return false, "Unknown collection.", nil
+		end
+		local price = if action == "Deal" then Deals.price(normal) else normal
+		if action == "Deal" and Deals.left(state, stall) < 1 then
+			return false, "Sold out for you this hour.", nil
 		end
 		if action == "Daily" then
 			if collection ~= Economy.dailyCollection then
@@ -314,6 +331,9 @@ function Rules.mutate(
 			state.lastDailyDay = today
 		else
 			state.coins -= price * count
+		end
+		if action == "Deal" then
+			state.deals.bought[stall] = (state.deals.bought[stall] or 0) + 1
 		end
 		-- Spending Coins on a box is the last Welcome Quest action; it unlocks the free x10.
 		if state.step == Tutorial.buy and action ~= "Daily" then

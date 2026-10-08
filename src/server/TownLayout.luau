@@ -30,6 +30,8 @@ return table.freeze({
 			"Planter",
 		}),
 		furnitureRadius = 44,
+		-- "See deal" prompt reach from each stall counter's center.
+		dealPromptRange = 11,
 		leaderboardRadius = 45,
 		-- Flush pre-assignment spawn beside the leaderboard, on plot slot 8's path axis.
 		spawnSlot = Config.maxPlots,

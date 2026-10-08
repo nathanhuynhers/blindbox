@@ -3,6 +3,7 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local ShelfConfig = require(game:GetService("ReplicatedStorage").Shared.ShelfConfig)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
+local Economy = require(script.Parent.Economy)
 local Protocol = {}
 function Protocol.parse(raw: unknown): Types.Intent?
 	if typeof(raw) ~= "table" then
@@ -25,6 +26,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 				and key ~= "shelfSlotId"
 				and key ~= "carouselRevision"
 				and key ~= "volume"
+				and key ~= "window"
 			)
 		then
 			return nil
@@ -62,6 +64,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		and action ~= "Welcome"
 		and action ~= "WelcomeTen"
 		and action ~= "SkipTutorial"
+		and action ~= "Deal"
 	then
 		return nil
 	end
@@ -97,8 +100,11 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		return nil
 	end
 	local needsFigure = action == "Collect" or action == "Place" or action == "ShelfPlace"
-	local needsSlot = action == "Collect" or action == "Place" or action == "Remove"
-	local figure, slot = data.figure, data.slot
+	local needsSlot = action == "Collect"
+		or action == "Place"
+		or action == "Remove"
+		or action == "Deal"
+	local figure, slot, window = data.figure, data.slot, data.window
 	if needsFigure then
 		if typeof(figure) ~= "string" or #figure > 64 or not Catalog.byId[figure] then
 			return nil
@@ -116,6 +122,20 @@ function Protocol.parse(raw: unknown): Types.Intent?
 			return nil
 		end
 	elseif slot ~= nil then
+		return nil
+	end
+	-- Deal carries only its stall (in `slot`) and the window the client saw; the server prices it.
+	if action == "Deal" then
+		if
+			(slot :: number) > Economy.deals.stalls
+			or typeof(window) ~= "number"
+			or window % 1 ~= 0
+			or window < 0
+			or window > 9007199254740991
+		then
+			return nil
+		end
+	elseif window ~= nil then
 		return nil
 	end
 	local choice, volume = data.choice, data.volume
@@ -149,6 +169,7 @@ function Protocol.parse(raw: unknown): Types.Intent?
 		figure = if typeof(figure) == "string" then figure else nil,
 		slot = if typeof(slot) == "number" then slot else nil,
 		volume = if typeof(volume) == "number" then volume else nil,
+		window = if typeof(window) == "number" then window else nil,
 	}
 	return intent
 end
@@ -162,5 +183,6 @@ function Protocol.same(a: Types.Intent, b: Types.Intent): boolean
 		and a.shelfSlotId == b.shelfSlotId
 		and a.carouselRevision == b.carouselRevision
 		and a.volume == b.volume
+		and a.window == b.window
 end
 return Protocol

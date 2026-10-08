@@ -15,6 +15,8 @@ local OpeningResult = require(script.OpeningResult)
 local PullSummary = require(script.PullSummary)
 local OfflineEarnings = require(script.OfflineEarnings)
 local WelcomeReward = require(script.WelcomeReward)
+local DealPopup = require(script.DealPopup)
+local DealStalls = require(script.DealStalls)
 local UIState = require(script.UIState)
 local Sfx = require(script.Sfx)
 local Music = require(script.Music)
@@ -43,6 +45,7 @@ local musicStarted = false
 local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
+local deal: DealPopup.Controller
 -- Sounds for confirmed replies. Box results sound through the opening; failures play "error".
 local replySounds: { [string]: string } = {
 	Place = "place",
@@ -62,7 +65,8 @@ local function request(
 	figure: string?,
 	slot: number?,
 	choice: string?,
-	volume: number?
+	volume: number?,
+	window: number?
 )
 	local state = current
 	if not state or not state.ready or pending or (opening and opening.isActive()) then
@@ -76,6 +80,7 @@ local function request(
 		slot = slot,
 		id = HttpService:GenerateGUID(false),
 		revision = state.revision,
+		window = window,
 	}
 	if string.sub(action, 1, 5) == "Shelf" then
 		intent.shelfId = choice
@@ -87,6 +92,7 @@ local function request(
 	pending = intent
 	beforeRequest = state
 	ui.pending(true)
+	deal.pending(true)
 	sentAt = os.clock()
 	intentRemote:FireServer(intent)
 end
@@ -101,6 +107,11 @@ end)
 local welcome = WelcomeReward.create(ui.effects, function()
 	request("WelcomeTen")
 end)
+-- E at a plaza stall; Buy names only the stall and the deal window on screen.
+deal = DealPopup.create(ui.effects, function(stall, window)
+	request("Deal", nil, stall, nil, nil, window)
+end)
+local dealStalls = DealStalls.create(ui.effects)
 local function revealModel(state: Types.Snapshot, result: OpeningResult.Result): UIState.Reveal
 	local model =
 		UIState.reveal(state, result.figureId, result.isNew, result.quantity, revealBefore)
@@ -151,7 +162,25 @@ local function choose(choice: string, result: OpeningResult.Result)
 end
 opening = OpeningController.create(ui.openingFocus, ui.message, choose)
 local connections: { RBXScriptConnection } = {}
-local displayInteraction = DisplayInteraction.create(ui.openDisplay, ui.openShelves, ui.openShop)
+local displayInteraction = DisplayInteraction.create(
+	ui.openDisplay,
+	ui.openShelves,
+	ui.openShop,
+	function(stall)
+		local state = current
+		if
+			state
+			and state.ready
+			and not (opening and opening.isActive())
+			and not summary.isOpen()
+			and not offline.isOpen()
+			and not welcome.isOpen()
+		then
+			ui.closeScreen()
+			deal.show(stall)
+		end
+	end
+)
 local shopKeeper = ShopKeeper.create(ui.effects)
 local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded, ui.displayCoins)
 ui.onCoinInterrupted(displayEarnings.interrupt, displayEarnings.destroy)
@@ -171,6 +200,8 @@ table.insert(
 			end
 			displayEarnings.receive(previous, state, reply)
 			ui.update(state)
+			deal.update(state)
+			dealStalls.update(state)
 			if state.ready and not musicStarted then
 				-- Once the profile and plot are ready. Areas or events may switch it later.
 				musicStarted = true
@@ -208,6 +239,11 @@ table.insert(
 			pending = nil
 			beforeRequest = nil
 			ui.pending(false)
+			deal.pending(false)
+			-- A bought deal opens like a Shop box; the popup gives way to the opening.
+			if reply.ok and intent.action == "Deal" then
+				deal.close()
+			end
 			local sound: string? = if reply.ok then replySounds[intent.action] else "error"
 			-- A Login day that grants boxes sounds through its opening instead.
 			if intent.action == "Login" and (reply.figure or reply.figures) then
@@ -321,6 +357,8 @@ script.Destroying:Connect(function()
 	summary.destroy()
 	offline.destroy()
 	welcome.destroy()
+	deal.destroy()
+	dealStalls.destroy()
 	displayInteraction.destroy()
 	shopKeeper.destroy()
 	displayEarnings.destroy()

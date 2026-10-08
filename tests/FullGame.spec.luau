@@ -49,7 +49,7 @@ for _, mutate in {
  function(s) s.display.slots[2]=nil end,
  function(s) s.scrap=0 end,
  function(s) s.schemaVersion=5 end,
- function(s) s.schemaVersion=14 end,
+ function(s) s.schemaVersion=15 end,
  function(s) s.goalClaimed=true; s.goalProgress=0 end,
 } do
  local corrupt=Profile.encode(restored);mutate(corrupt)

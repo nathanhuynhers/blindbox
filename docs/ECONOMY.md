@@ -138,6 +138,34 @@ The client never supplies an amount. Claiming zeroes the pending amount in the s
 the wallet, so replays and second claims pay nothing; anything above the Coin limit is dropped.
 Robux multipliers and paid boosts are not implemented.
 
+## Plaza stall deals (hourly)
+
+The three plaza pop-up stalls each sell one box at a discount per UTC hour. Tuning lives in
+`Economy.deals` (server; defaults, all provisional): `discount = 0.25`, `stock = 3` boxes per
+player per stall per window, `windowSeconds = 3600`, `refreshSoonSeconds = 300` (the clock tag's
+"refresh soon" look) and the selection weights Tidepool Tales 4, Verities 3, Tender Echoes 1.5,
+We Are All Stars 1.5. Pocket Grove, the free Starter box behind Daily, Welcome and Login rewards,
+is never offered; startup asserts reject a Starter, Daily or Welcome collection, a non-positive
+weight, a discount outside 0..1 or a zero stock.
+
+- **Rotation:** window = `os.time() // windowSeconds`. Each stall's offer is a weighted pick from a
+  stateless hash of the window index, the config `seed` and the stall number, skipping
+  collections already picked in that window while any remain. Every server derives the same
+  three offers with no messaging, and a rejoin or server hop cannot reroll them.
+- **Price:** `max(1, floor(price * (1 - discount) + 0.5))`, so 2,000 / 20,000 / 200,000 become
+  1,500 / 15,000 / 150,000.
+- **Stock:** per player, saved in the profile (`deals`, schema 14) for the current window only;
+  the next window refills it. One player's purchases never touch another's.
+- **Purchase:** the `Deal` intent carries only the stall (`slot`) and the window the client saw.
+  The server refuses a stale window, a sold-out stall or a short wallet, then runs the same
+  non-yielding grant as Shop `Buy` at the deal price (roll, pity, `boxesOpened`, the Welcome
+  Quest paid-box step) and counts the stall in the same step. Token bucket, revision and receipt
+  replay apply as for every intent, so retries and rapid clicks buy at most once. The purchase,
+  like the Shop, needs no proximity; the stall prompt is only how players find it.
+
+Studio playtests may shorten the window by setting the `StudioDealWindowSeconds` attribute
+(integer, at least 10) on ServerStorage; it is ignored outside Studio.
+
 ## Starting and daily progression
 
 New profiles receive 4,500 Coins once. The first three purchases use normal random odds; distinct
@@ -165,11 +193,11 @@ clock-rollback, storage-failure and session-exclusion rules remain. See [data mo
 ## Fresh-save rollout and verification
 
 The user explicitly requested a full progression reset. The new stores are
-`BlindBox_Economy2_Studio` and `BlindBox_Economy2_Live`, currently writing schema 13. No old Coins, Scrap,
+`BlindBox_Economy2_Studio` and `BlindBox_Economy2_Live`, currently writing schema 14. No old Coins, Scrap,
 figures, discoveries, shelves or progress are imported. Old stores are untouched rollback backups;
 no live store was deleted or published by this implementation. Unexpected old or corrupt data in
 the new namespace fails closed rather than becoming a fresh profile. Valid Economy2 schemas
-6–12 upgrade through the [current data model](DATA_MODEL.md); schemas 1–5 remain rejected.
+6–13 upgrade through the [current data model](DATA_MODEL.md); schemas 1–5 remain rejected.
 
 The verification record below captures automated checks and simulation assumptions. Native Studio,
 real save/rejoin and multi-client playtests remain required.
