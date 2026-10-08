@@ -2,7 +2,7 @@
 -- Server-only tuning; collections reference reusable tiers and explicit figure income units.
 export type Tier = { price: number, paybackSeconds: number }
 export type Collection = { tier: string, buckets: string, pity: string?, group: string }
-export type Curve = { base: number, start: number, increment: number, maximum: number }
+export type Curve = { base: number, start: number, increment: number }
 export type Duplicate = { maximum: number, curve: number }
 local tiers: { [string]: Tier } = {
 	starter = { price = 1500, paybackSeconds = 180 },
@@ -23,8 +23,8 @@ local buckets: { [string]: { [string]: number } } = {
 }
 local pity: { [string]: { [string]: Curve } } = {
 	standard = {
-		Legendary = { base = 1, start = 40, increment = 0.05, maximum = 8 },
-		Mythical = { base = 0.1, start = 300, increment = 0.0015, maximum = 2 },
+		Legendary = { base = 1, start = 40, increment = 0.05 },
+		Mythical = { base = 0.1, start = 300, increment = 0.0015 },
 	},
 }
 local duplicates: { [string]: Duplicate } = {

@@ -2,7 +2,8 @@
 -- Unmapped Studio fixture for a freshly built, unpublished place only.
 -- In Edit, disable ServerScriptService.Server, insert this file as a sibling Script, then Play.
 -- In the SERVER Command Bar: ServerStorage.ShopLuckFixture:Invoke("Zero" / "Mid" / "Boosted" /
--- "Cap" / "LegendaryHit" / "MythicalHit"). In the CLIENT Command Bar afterwards:
+-- "LegendaryDue" / "MythicalDue" / "BothDue" / "NearDue" / "LegendaryHit" / "MythicalHit").
+-- In the CLIENT Command Bar afterwards:
 -- ReplicatedStorage.Remotes.RequestState:FireServer(). The ordinary Shop consumes that snapshot.
 -- Open Shop and choose Tender Echoes. Stop Play to discard all changes. Never save this fixture.
 local RunService = game:GetService("RunService")
@@ -36,7 +37,8 @@ control.OnInvoke = function(name: string)
 	local state = assert(owners[player.UserId], "Wait for the preview profile").state
 	local stages = {
 		Zero = {0, 0}, Mid = {20, 150}, Boosted = {90, 780},
-		Cap = {Economy.counterLimit, Economy.counterLimit},
+		LegendaryDue = {2020, 780}, MythicalDue = {90, 66900}, BothDue = {2020, 66900},
+		NearDue = {2018, 0}, BeyondOldCaps = {200, 2000},
 	}
 	local stage = stages[name]
 	if stage then

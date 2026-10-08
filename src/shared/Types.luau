@@ -91,7 +91,7 @@ export type Profile = {
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
 export type State = Profile & { revision: number, time: number, offlineSeconds: number }
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
--- Private owner presentation only: build-up toward the chance cap, never a guaranteed hit.
+-- Private owner presentation only: build-up toward a rarity guarantee; odds resolve priority.
 export type PityProgress = { Legendary: number, Mythical: number }
 export type Snapshot = {
 	-- Runtime owner-only acknowledgement of the Shelf editor's showcase pause.

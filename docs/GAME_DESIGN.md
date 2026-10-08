@@ -12,7 +12,9 @@ over from the shared world. Pocket Grove and Tidepool Tales are collections, not
 The supported hierarchy is Common < Uncommon < Rare < Legendary < Mythical. Five collections
 contain 43 figures. Prices and income scale by collection tier: Grove 1,500; Tide 2,000; Concepts
 20,000; Tender Echoes and We Are All Stars both 200,000 Coins. Standard high-tier base odds are
-1% Legendary and 0.1% Mythical, with collection-specific increasing-chance pity and no hard guarantee.
+1% Legendary and 0.1% Mythical, with collection-specific linear increasing-chance pity that
+eventually guarantees a rarity. Each rarity resets independently; see [economy](ECONOMY.md)
+for current tuning, probability-budget handling and simultaneous-guarantee priority.
 
 Duplicate copies are permanently retained and automatically enhance their figure's income with
 rarity-scaled diminishing returns. Each figure ID can earn in only one Display slot. Display starts

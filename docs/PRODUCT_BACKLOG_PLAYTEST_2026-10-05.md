@@ -289,7 +289,7 @@ counts, impact radius and HUD styling were retained.
   "no pity for this collection" state rather than showing meaningless progress.
 - Preserve the existing current-vs-base odds presentation.
 
-Implementation: a compact "Luck building" well follows Drop odds in the Shop's existing
+Original UI-03 implementation (before the linear-pity follow-up below): a compact "Luck building" well follows Drop odds in the Shop's existing
 scrolling contents pane. Separate crimson Legendary and violet Mythical tracks use the
 canonical rarity palette, with Fresh luck / Building / Lucky! / Max boost states and exact
 current/base total odds (including the first 0.1015% Mythical boost). The footer says
@@ -335,6 +335,33 @@ solo fixture do not close those gates.
 Mainline integration: retained UI-05 Shelf auto-scroll and its editor-session metadata;
 updated both UI-03 snapshot test sessions to the new shape. All prescribed tooling/type checks
 and the full regression suite (including 256 Shelf showcase checks) passed on the combined tree.
+
+Linear-pity follow-up (2026-10-07), on `feat/uncapped-pity`, pending final tuning/mainline merge:
+the user subsequently authorized replacing capped chances with linear growth to 100%.
+The former 8%/2% limits are removed; the preserved warm-up/increments currently reach due counts
+of 2,020 Legendary / 66,900 Mythical. Only the hit rarity resets. Mythical has priority when both
+are due, with Legendary retained for the following box. Below a guarantee, combined high-tier
+demands over 100% share the probability budget proportionally. Schema 14 and saved progress remain.
+The private fraction now tracks the guarantee threshold. The well shows Guaranteed / Due next,
+with "Builds toward a guaranteed rarity" or "Mythical first · Legendary next"; ordinary odds remain.
+Near-100% formatting cannot round up to a false guarantee. Starter omission is retained.
+
+Follow-up checks: prescribed provision/format/lint/build/LSP checks pass (no source diagnostics),
+and every regression suite plus 18 invalid-configuration fixtures passes. New linear coverage:
+5,449 probability, guarantee, independent-reset, persistence and replay assertions; Shop coverage
+now has 251 state/layout/lifecycle checks and UI coverage 1,288 checks. EconomySimulation ran
+300 seeded progression trials: median Concepts/Echo/Stars phase hours 5.06 / 4.28 / 1.59 under
+the simulation's existing strongest-Display assumptions, excluding opening delay and daily rewards.
+This is tuning evidence, not a live player acceptance result. Shorter linear targets are under
+discussion: the current worst-case guarantees are much later than the typical reset-to-hit waits.
+Studio MCP in the same unsaved local preview loaded the tested follow-up modules; native confirmed
+snapshot/TextFits/scroll checks passed at 666x374 for simultaneous guarantees and chances beyond
+the former caps (9% Legendary / 2.65% Mythical). Normal Shop Buy/opening/Keep purchases granted
+Mythical then Legendary when both were due, with native confirmed independent resets. The preview
+fixture was removed and Studio returned to Edit. The reveal card now explicitly labels its
+post-hit snapshot chance as "Next box"; its automated projection check passes, but a second native
+wording pass was not completed (Studio's restart call did not return). Existing
+multi-client/device/save-rejoin gaps remain.
 
 ### UI-04 — Add decorative lighting to player plots
 

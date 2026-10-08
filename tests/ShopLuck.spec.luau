@@ -74,17 +74,22 @@ for _, viewport in {{1280, 720}, {844, 390}, {667, 375}, {568, 320}} do
 	screen.update(snapshot)
 	check(#tweens == mark, "unchanged snapshot cannot restart lucky glints")
 	update(90, 780)
-	check(meter("Legendary"):GetAttribute("Fraction") == 0.5, "mid meter uses confirmed server fraction")
+	check(meter("Legendary"):GetAttribute("Fraction") == 90 / 2020, "meter uses confirmed guarantee progress")
 	check(child("Legendary", "LuckOdds").Text == "3.5% now · 1% base", "raised total vs base odds")
 	if not frame.phone then
 		local label = Engine.find(find("OddsRow4"), "Figures")
 		check(string.find(label.Text, "base 1%", 1, true) ~= nil, "existing base odds presentation retained")
 	end
-	update(1000000, 1000000)
-	check(child("Legendary", "Status").Text == "Max boost", "capped meter never promises a reward")
-	check(child("Legendary", "LuckOdds").Text == "8% now · 1% base", "cap remains probabilistic")
-	check(child("Mythical", "LuckOdds").Text == "2% now · 0.1% base", "independent Mythical cap")
-	update(0, 1000000)
+	update(2020, 0)
+	check(child("Legendary", "Status").Text == "Guaranteed", "due Legendary has honest guarantee copy")
+	check(child("Legendary", "LuckOdds").Text == "100% now · 1% base", "confirmed Legendary guarantee odds")
+	update(2020, 66900)
+	check(child("Legendary", "Status").Text == "Due next", "due Legendary waits behind Mythical")
+	check(child("Mythical", "Status").Text == "Guaranteed", "due Mythical has honest guarantee copy")
+	check(child("Legendary", "LuckOdds").Text == "0% now · 1% base", "queued guarantee does not lie about next box")
+	check(child("Mythical", "LuckOdds").Text == "100% now · 0.1% base", "confirmed Mythical guarantee odds")
+	check(find("LuckNote").Text == "Mythical first · Legendary next", "simultaneous guarantees explain priority")
+	update(0, 66900)
 	check(child("Legendary", "LuckFill").Size.X.Scale == 0, "hit gently resets fill to zero")
 	check(child("Mythical", "LuckFill").Size.X.Scale == 1, "Legendary reset preserves Mythical")
 	check(tweens[#tweens].goals.Size.X.Scale == 0, "reset owns a fill tween")
@@ -121,7 +126,7 @@ for _, viewport in {{1280, 720}, {844, 390}, {667, 375}, {568, 320}} do
 	effects = false
 	mark = #tweens
 	update(90, 780)
-	check(#tweens == mark and child("Legendary", "LuckFill").Size.X.Scale == 0.5,
+	check(#tweens == mark and child("Legendary", "LuckFill").Size.X.Scale == 90 / 2020,
 		"reduced motion updates immediately without tweens")
 	effects = true
 end
@@ -131,9 +136,9 @@ gui.Enabled = false
 local hiddenMark = #tweens
 update(90, 780)
 check(#tweens == hiddenMark, "hidden opening does not spend the lucky moment")
-check(meter("Legendary"):GetAttribute("Fraction") == 0.5, "hidden metadata still updates from confirmed snapshot")
+check(meter("Legendary"):GetAttribute("Fraction") == 90 / 2020, "hidden metadata still updates from confirmed snapshot")
 gui.Enabled = true
-check(#tweens > hiddenMark and child("Legendary", "LuckFill").Size.X.Scale == 0.5,
+check(#tweens > hiddenMark and child("Legendary", "LuckFill").Size.X.Scale == 90 / 2020,
 	"returning Shop presents the confirmed boost")
 check(tweens[#tweens].goals.Transparency == 1, "returning boost has one soft glint")
 gui.Enabled = false

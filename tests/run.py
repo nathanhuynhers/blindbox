@@ -123,6 +123,7 @@ run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec"
 run("CoinEngine", "CoinCounter.spec")
 run("PlayerMovement.spec")
 run("PityProgress.spec")
+run("LinearPity.spec")
 run("UIEngine", "ShopLuck.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("DisplayReplacement.spec", "EquipBest.spec", "Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
@@ -141,6 +142,8 @@ fixtures = [
     ('maximum = 0.6, curve = 5', 'maximum = 0.6, curve = 0', "Invalid duplicate curve"),
     ('base = 1, start = 40', 'base = 2, start = 40', "Pity base differs from bucket"),
     ('start = 40', 'start = -1', "Invalid pity start"),
+    ('increment = 0.05', 'increment = 0', "Invalid pity curve"),
+    ('increment = 0.05', 'increment = 0.00001', "Pity guarantee unreachable"),
     ('group = "star"', 'group = "concept"', "Shared pity must use identical profiles"),
     ('pity = "standard"', 'pity = "missing"', "Unknown pity profile"),
     ('units = 0.55', 'units = 0/0', "Invalid income units/weight"),

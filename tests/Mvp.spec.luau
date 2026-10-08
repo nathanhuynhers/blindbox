@@ -54,8 +54,8 @@ check(close(buckets.Common/buckets.Uncommon,60/25),"lower probabilities retain p
 check(close(Economy.buckets("star",pity).Legendary,1),"collection pity isolation")
 pity.echo={legendaryDryRolls=Config.counterLimit,mythicalDryRolls=Config.counterLimit}
 buckets=Economy.buckets("echo",pity)
-check(buckets.Legendary==8 and buckets.Mythical==2,"pity capped without guarantee")
-check(Catalog.byId[Economy.roll(0,"echo",pity)].rarity=="Common","maximum pity still permits Common")
+check(buckets.Legendary==0 and buckets.Mythical==100,"simultaneous guarantees prioritize Mythical")
+check(Catalog.byId[Economy.roll(0,"echo",pity)].rarity=="Mythical","due Mythical is guaranteed even at roll zero")
 Economy.advance(pity,"echo","echo.moon-doze")
 check(pity.echo.mythicalDryRolls==0 and pity.echo.legendaryDryRolls==Config.counterLimit,"independent Mythical reset")
 Economy.advance(pity,"echo","echo.feather-hush")

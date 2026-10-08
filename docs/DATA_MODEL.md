@@ -131,11 +131,12 @@ inventory/discoveries/balances.
 
 `pityProgress` is an owner-only collection map with separate Legendary/Mythical fractions in
 0..1. The server derives each fraction from the saved dry-roll count divided by the count at
-which that rarity's chance reaches its cap; it includes warm-up before odds rise. Full means
-maximum boosted **chance**, never a guaranteed reward. Starter collections are omitted. Raw
+which that rarity becomes due for a guarantee; it includes warm-up before odds rise. Full means
+due: normally that rarity has 100% next-box odds. If both are due, Mythical wins this box and
+Legendary remains due for the following box. Starter collections are omitted. Raw
 counters, pity groups and curve parameters stay server-only. The Shop combines these fractions
 with its existing current/base odds projection and refreshes only from confirmed snapshots;
-the algorithm and profile schema are unchanged.
+the existing profile schema and saved counters are retained.
 
 ## Box counter and leaderboards
 

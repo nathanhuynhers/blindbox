@@ -80,6 +80,8 @@ check(UI.rate(1.25) == "+1.25/s" and UI.rate(35) == "+35/s", "small rates keep f
 check(UI.rate(1111.11) == "+1,111/s" and UI.rate(2400000) == "+2.4M/s", "large rates abbreviate")
 check(UI.percent(20) == "20%" and UI.percent(4.615) == "4.6%", "chances at one decimal")
 check(UI.percent(0.1) == "0.1%" and UI.percent(0.05) == "0.05%", "sub-1% chances stay readable")
+check(UI.percent(99.95) == "99.95%" and UI.percent(99.9985) == "99.9985%", "near-guarantee odds never round to 100")
+check(UI.percent(99.999999) == "99.9999%" and UI.percent(100) == "100%", "only actual guaranteed odds show 100 percent")
 check(UI.percent(0 / 0) == "0%" and UI.percent(140) == "100%", "invalid chances fail closed")
 
 -- Economy fields: price, odds and rates are read through UIState only.
@@ -363,6 +365,11 @@ end
 check(#BlindBoxSpec.missing(semanticNames) == 0, "blind-box semantics satisfy preview contract")
 
 -- Projections work with fully frozen state (screens never mutate snapshots).
+snapshot = fresh()
+snapshot.odds["echo.moon-doze"] = 0
+check(UI.reveal(snapshot, "echo.moon-doze", true, 1).chance == "Next box: 0%",
+	"a post-hit zero chance is labeled as next-box odds, not the odds of the hit")
+
 snapshot = fresh()
 own("grove.star", 2)
 table.freeze(snapshot.owned)

@@ -33,9 +33,9 @@ for _, collection in {"concept", "echo", "star"} do
 		"fresh owner has zero build-up for " .. collection)
 end
 check(a.pityProgress.grove == nil and a.pityProgress.tide == nil, "three-tier collections omit pity")
-check(near(a.pityProgress.echo.Legendary, 0.5), "mid Legendary progress toward chance cap")
+check(near(a.pityProgress.echo.Legendary, 90 / 2020), "Legendary progress toward guarantee")
 local curve = Economy.pity.standard.Mythical
-local full = curve.start + math.ceil((curve.maximum - curve.base) / curve.increment)
+local full = curve.start + math.ceil((100 - curve.base) / curve.increment)
 check(near(a.pityProgress.echo.Mythical, 780 / full), "mid Mythical uses its own curve")
 check(a.pityProgress.concept.Legendary == 0 and a.pityProgress.star.Mythical == 0, "collection isolation")
 check(a.pityByGroup == nil and a.pityProgress.echo.legendaryDryRolls == nil, "no raw counters replicated")
@@ -49,7 +49,7 @@ for _, collection in {"concept", "echo", "star"} do
 	local view = CollectionEconomy.pityProgress(counters)[collection]
 	check(view.Legendary == 1 and view.Mythical == 1, "both progress meters saturate for " .. collection)
 	local odds = CollectionEconomy.buckets(collection, counters)
-	check(odds.Legendary == 8 and odds.Mythical == 2, "full meters still mean chance, never guarantee")
+	check(odds.Legendary == 0 and odds.Mythical == 100, "full meters respect Mythical-first guarantee priority")
 end
 local function buy(roll: number, id: string)
 	local state = alice.transaction.state

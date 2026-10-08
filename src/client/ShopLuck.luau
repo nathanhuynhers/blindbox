@@ -1,6 +1,6 @@
 --!strict
--- Compact owner-only luck keeps the ordinary odds rows intact. Full means capped chance,
--- never a guaranteed pull. Tweens belong to the screen and replace prior work on refresh.
+-- Compact owner-only luck keeps the ordinary odds rows intact. The confirmed next-box odds
+-- distinguish a guarantee from a queued tier. Tweens belong to the screen.
 local TweenService = game:GetService("TweenService")
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
@@ -37,7 +37,7 @@ function Luck.create(parent: Instance, ctx: Context.Context): View
 	Kit.corner(root, 14)
 	local title = Kit.text(root, "LuckTitle", "Luck building", 15, Style.display())
 	local note =
-		Kit.text(root, "LuckNote", "Higher chances, never guaranteed", 12, nil, Style.muted)
+		Kit.text(root, "LuckNote", "Builds toward a guaranteed rarity", 12, nil, Style.muted)
 	note.TextWrapped = true
 	note.TextTruncate = Enum.TextTruncate.None
 	local meters: { Meter } = {}
@@ -128,6 +128,13 @@ function Luck.create(parent: Instance, ctx: Context.Context): View
 		update = function(snapshot, collection)
 			local rows = State.luck(snapshot, collection)
 			root.Visible = #rows == 2
+			local waiting = false
+			for _, row in rows do
+				waiting = waiting or row.status == "Due next"
+			end
+			note.Text = if waiting
+				then "Mythical first · Legendary next"
+				else "Builds toward a guaranteed rarity"
 			for index, meter in meters do
 				local row = rows[index]
 				if not row then

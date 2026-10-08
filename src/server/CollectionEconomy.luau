@@ -9,6 +9,9 @@ local prices: { [string]: number } = {}
 local weights: { [string]: number } = {}
 local totals: { [string]: { [string]: number } } = {}
 local groups: { [string]: string } = {}
+local function guaranteeDry(curve: Config.Curve): number
+	return curve.start + math.ceil((100 - curve.base) / curve.increment)
+end
 local function positive(value: number): boolean
 	return value > 0 and value < math.huge
 end
@@ -66,7 +69,6 @@ for id, config in Config.collections do
 	if config.pity then
 		local profile = Config.pity[config.pity]
 		assert(profile, "Unknown pity profile")
-		local maxTotal = 0
 		for rarity, curve in profile do
 			assert(rarity == "Legendary" or rarity == "Mythical", "Unsupported pity rarity")
 			assert(curve.base == buckets[rarity], "Pity base differs from bucket")
@@ -74,18 +76,10 @@ for id, config in Config.collections do
 				curve.start >= 0 and curve.start % 1 == 0 and curve.start <= Config.counterLimit,
 				"Invalid pity start"
 			)
-			assert(
-				positive(curve.increment) and curve.maximum >= curve.base and curve.maximum < 100,
-				"Invalid pity curve"
-			)
-			assert(
-				curve.start + math.ceil((curve.maximum - curve.base) / curve.increment)
-					<= Config.counterLimit,
-				"Pity cap unreachable"
-			)
-			maxTotal += curve.maximum
+			assert(positive(curve.increment) and curve.base < 100, "Invalid pity curve")
+			assert(guaranteeDry(curve) < Config.counterLimit, "Pity guarantee unreachable")
 		end
-		assert(profile.Legendary and profile.Mythical and maxTotal < 100, "Invalid high-tier total")
+		assert(profile.Legendary and profile.Mythical, "Invalid high-tier profile")
 		local previous = groups[config.group]
 		if previous then
 			local other = Config.collections[previous]
@@ -167,7 +161,7 @@ function Economy.pityProgress(pity: { [string]: Types.Pity }): { [string]: Types
 			local profile = Config.pity[config.pity]
 			local function fraction(rarity: string, dry: number): number
 				local curve = profile[rarity]
-				local full = curve.start + math.ceil((curve.maximum - curve.base) / curve.increment)
+				local full = guaranteeDry(curve)
 				return if full > 0 then math.clamp(dry / full, 0, 1) else 0
 			end
 			result[id] = {
@@ -189,22 +183,34 @@ function Economy.buckets(collection: string, pity: { [string]: Types.Pity }): { 
 		local progress = pity[config.group]
 		local profile = Config.pity[config.pity]
 		local baseHigh, currentHigh = 0, 0
+		local guaranteed: string? = nil
 		for rarity, curve in profile do
 			local dry = if not progress
 				then 0
 				elseif rarity == "Legendary" then progress.legendaryDryRolls
 				else progress.mythicalDryRolls
-			result[rarity] = math.min(
-				curve.maximum,
-				curve.base + math.max(0, dry - curve.start) * curve.increment
-			)
+			result[rarity] = curve.base + math.max(0, dry - curve.start) * curve.increment
+			if dry >= guaranteeDry(curve) and (not guaranteed or rarity == "Mythical") then
+				guaranteed = rarity
+			end
 			baseHigh += curve.base
 			currentHigh += result[rarity]
 		end
-		for rarity, chance in result do
-			if not profile[rarity] then
-				result[rarity] = chance * (100 - currentHigh) / (100 - baseHigh)
+		if guaranteed then
+			-- A box can contain only one rarity. Mythical wins a simultaneous guarantee;
+			-- the Legendary counter stays due and is guaranteed on the following box.
+			for rarity in result do
+				result[rarity] = if rarity == guaranteed then 100 else 0
 			end
+			return result
+		end
+		-- In an extreme double drought, demands can exceed the available 100% before
+		-- either guarantee is due. Share that budget proportionally; never negative odds.
+		local highScale = if currentHigh > 100 then 100 / currentHigh else 1
+		for rarity, chance in result do
+			result[rarity] = if profile[rarity]
+				then chance * highScale
+				else chance * math.max(0, 100 - currentHigh) / (100 - baseHigh)
 		end
 	end
 	return result

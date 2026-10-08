@@ -40,6 +40,12 @@ Keep published group IDs stable. Removing or renaming a persisted group requires
 unknown saved groups fail closed. Adding a new unique group needs no schema change, because an
 absent group means zero dry rolls.
 
+Pity curves define base, warm-up start and a positive percentage-point increment, with no
+separate maximum. Each curve must reach 100% before the persisted counter safety guard; startup
+rejects unreachable guarantees. Both Legendary and Mythical curves are required for a high-tier
+profile. Combined demands over 100% share the budget proportionally; simultaneous guarantees
+grant Mythical first and retain Legendary for the following box. See ECONOMY.md for current tuning.
+
 Base rates are derived once at startup:
 
 ```text

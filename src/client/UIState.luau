@@ -70,8 +70,9 @@ function State.percent(value: number): string
 	if value == 0 then
 		return "0%"
 	end
-	local text = if value >= 1
-		then string.format("%.1f", math.floor(value * 10 + 0.5) / 10)
+	local text = if value >= 99 and value < 100
+		then string.format("%.4f", math.min(value, 99.9999))
+		elseif value >= 1 then string.format("%.1f", math.floor(value * 10 + 0.5) / 10)
 		else string.format("%.3f", math.floor(value * 1000 + 0.5) / 1000)
 	return trim(text) .. "%"
 end
@@ -279,13 +280,20 @@ function State.luck(snapshot: Types.Snapshot, collection: string): { LuckRow }
 				chance = row.total,
 				base = row.base,
 				boosted = boosted,
-				status = if fraction >= 1
-					then "Max boost"
+				status = if row.total == 100
+					then "Guaranteed"
+					elseif fraction >= 1 then "Due next"
 					elseif boosted then "Lucky!"
 					elseif fraction > 0 then "Building"
 					else "Fresh luck",
 				-- Preserve small first boosts (e.g. Mythical 0.1015%) without rounding them away.
-				odds = string.format("%g%% now · %g%% base", row.total, row.base),
+				odds = string.format(
+					"%s now · %g%% base",
+					if row.total >= 99
+						then State.percent(row.total)
+						else string.format("%g%%", row.total),
+					row.base
+				),
 			})
 		end
 	end
@@ -506,7 +514,8 @@ function State.reveal(
 		isNew = isNew,
 		quantity = quantity,
 		earns = earns,
-		chance = State.percent(State.figureOdds(snapshot, id)) .. " chance",
+		-- The confirmed snapshot describes the next box, after this hit reset its rarity.
+		chance = "Next box: " .. State.percent(State.figureOdds(snapshot, id)),
 		progress = string.format(
 			"%s · %d of %d found",
 			State.collectionName(figure.collection),
