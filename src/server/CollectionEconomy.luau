@@ -157,6 +157,30 @@ for _, minimum in { welcome.box, welcome.ten } do
 	assert(reachable, "Invalid welcome reward")
 end
 Economy.rates, Economy.prices, Economy.groups = rates, prices, groups
+-- Derive fresh per-collection presentation values from this owner's state only. No counters,
+-- curve parameters or group identities cross the replication boundary.
+function Economy.pityProgress(pity: { [string]: Types.Pity }): { [string]: Types.PityProgress }
+	local result: { [string]: Types.PityProgress } = {}
+	for id, config in Config.collections do
+		if config.pity then
+			local progress = pity[config.group]
+			local profile = Config.pity[config.pity]
+			local function fraction(rarity: string, dry: number): number
+				local curve = profile[rarity]
+				local full = curve.start + math.ceil((curve.maximum - curve.base) / curve.increment)
+				return if full > 0 then math.clamp(dry / full, 0, 1) else 0
+			end
+			result[id] = {
+				Legendary = fraction(
+					"Legendary",
+					if progress then progress.legendaryDryRolls else 0
+				),
+				Mythical = fraction("Mythical", if progress then progress.mythicalDryRolls else 0),
+			}
+		end
+	end
+	return result
+end
 function Economy.buckets(collection: string, pity: { [string]: Types.Pity }): { [string]: number }
 	local config = Config.collections[collection]
 	assert(config, "Unknown collection")

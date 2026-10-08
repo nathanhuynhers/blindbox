@@ -249,6 +249,49 @@ function State.rarityOdds(snapshot: Types.Snapshot, collection: string): { OddsR
 	return rows
 end
 
+export type LuckRow = {
+	rarity: string,
+	fraction: number,
+	chance: number,
+	base: number,
+	boosted: boolean,
+	status: string,
+	odds: string,
+}
+-- Build-up is supplied by the server; current/base chances use the Shop's existing projection.
+function State.luck(snapshot: Types.Snapshot, collection: string): { LuckRow }
+	local progress = snapshot.pityProgress and snapshot.pityProgress[collection]
+	local result: { LuckRow } = {}
+	if not progress then
+		return result
+	end
+	for _, row in State.rarityOdds(snapshot, collection) do
+		local value = if row.rarity == "Legendary"
+			then progress.Legendary
+			elseif row.rarity == "Mythical" then progress.Mythical
+			else nil
+		if value then
+			local fraction = math.clamp(finite(value), 0, 1)
+			local boosted = row.total > row.base + 1e-6
+			table.insert(result, {
+				rarity = row.rarity,
+				fraction = fraction,
+				chance = row.total,
+				base = row.base,
+				boosted = boosted,
+				status = if fraction >= 1
+					then "Max boost"
+					elseif boosted then "Lucky!"
+					elseif fraction > 0 then "Building"
+					else "Fresh luck",
+				-- Preserve small first boosts (e.g. Mythical 0.1015%) without rounding them away.
+				odds = string.format("%g%% now · %g%% base", row.total, row.base),
+			})
+		end
+	end
+	return result
+end
+
 function State.oddsLabel(row: OddsRow): string
 	local text = if row.count == 1
 		then "1 figure"

@@ -91,6 +91,8 @@ export type Profile = {
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
 export type State = Profile & { revision: number, time: number, offlineSeconds: number }
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
+-- Private owner presentation only: build-up toward the chance cap, never a guaranteed hit.
+export type PityProgress = { Legendary: number, Mythical: number }
 export type Snapshot = {
 	shelves: ShelfView,
 	shelfAvailable: { [string]: number },
@@ -106,6 +108,7 @@ export type Snapshot = {
 	tutorialHidden: boolean,
 	rates: { [string]: number },
 	odds: { [string]: number },
+	pityProgress: { [string]: PityProgress },
 	prices: { [string]: number },
 	baseRates: { [string]: number },
 	nextRates: { [string]: number },

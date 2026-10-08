@@ -113,6 +113,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		baseRates = Rules.rates,
 		nextRates = CollectionEconomy.effectiveRates(state.owned, true),
 		odds = CollectionEconomy.odds(state.pityByGroup),
+		pityProgress = CollectionEconomy.pityProgress(state.pityByGroup),
 		baseOdds = Rules.odds,
 		prices = Rules.prices,
 		dailyCollection = Economy.dailyCollection,

@@ -32,7 +32,7 @@ modules = {
 ui = [
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
-    "ShopScreen", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
+    "ShopScreen", "ShopLuck", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
     "GoalsScreen", "ShelvesScreen", "LoginScreen", "RevealCard", "Onboarding", "Interface",
 ]
 for name in ui:
@@ -97,6 +97,15 @@ for name, folder in modules.items():
         source = source.replace("--!strict", '--!strict\nlocal Color3 = require("./OpeningVisualEngine").Color3')
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
 
+# Exercise the exact production owner-snapshot send function, with only its I/O context injected.
+bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
+send = bootstrap[bootstrap.index("local function send("):bootstrap.index("local function closeStorage(")]
+sender = '\n'.join(f'local {name} = require("./{name}")' for name in
+                   ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals"))
+sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
+sender += 'local function dealClock() return Deals.window(os.time()), Economy.deals.windowSeconds end\n'
+sender += send + '\nreturn send\nend\n'
+(out / "SnapshotSender.luau").write_text(sender, encoding="utf-8")
 
 def run(*names: str) -> None:
     """Copy test files into build/tests and run each spec; stop on the first failure."""
@@ -112,6 +121,8 @@ def run(*names: str) -> None:
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("CoinEngine", "CoinCounter.spec")
 run("PlayerMovement.spec")
+run("PityProgress.spec")
+run("UIEngine", "ShopLuck.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
 run("DisplayReplacement.spec", "EquipBest.spec", "Mvp.spec", "FullGame.spec", "Scroll.spec", "Opening.spec", "UI.spec", "AssetManifest.spec")
 run("BlindBox.spec", "Shelves.spec", "Leaderboard.spec", "BoxesOpened.spec", "Offline.spec", "LoginRewards.spec", "AudioSettings.spec", "Tutorial.spec", "Deals.spec", "PlotEngine", "Plots.spec", "DisplayInteraction.spec")

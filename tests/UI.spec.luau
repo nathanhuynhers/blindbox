@@ -8,6 +8,7 @@ local Rules = require("./Rules")
 local Economy = require("./Economy")
 local Catalog = require("./Catalog")
 local Types = require("./Types")
+local CollectionEconomy = require("./CollectionEconomy")
 local ShopTheme = require("./ShopTheme")
 local BlindBoxSpec = require("./BlindBoxSpec")
 local NavigationConfig = require("./NavigationConfig")
@@ -45,6 +46,7 @@ local function fresh(): Types.Snapshot
 		baseRates = Rules.rates,
 		nextRates = Rules.rates,
 		odds = Rules.odds,
+		pityProgress = CollectionEconomy.pityProgress({}),
 		baseOdds = Rules.odds,
 		prices = Rules.prices,
 		dailyCollection = Economy.dailyCollection,

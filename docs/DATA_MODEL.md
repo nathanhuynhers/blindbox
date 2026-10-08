@@ -129,6 +129,14 @@ persistent `shelfId`, local `shelfSlotId`, profile revision, carousel revision a
 the living owner is inside their own plot. Visitors receive replicated geometry, never private
 inventory/discoveries/balances.
 
+`pityProgress` is an owner-only collection map with separate Legendary/Mythical fractions in
+0..1. The server derives each fraction from the saved dry-roll count divided by the count at
+which that rarity's chance reaches its cap; it includes warm-up before odds rise. Full means
+maximum boosted **chance**, never a guaranteed reward. Starter collections are omitted. Raw
+counters, pity groups and curve parameters stay server-only. The Shop combines these fractions
+with its existing current/base odds projection and refreshes only from confirmed snapshots;
+the algorithm and profile schema are unchanged.
+
 ## Box counter and leaderboards
 
 `boxesOpened` increments only inside `Rules.mutate`, in the same non-yielding grant step for Buy,

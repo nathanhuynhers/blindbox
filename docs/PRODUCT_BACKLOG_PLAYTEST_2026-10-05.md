@@ -275,6 +275,8 @@ counts, impact radius and HUD styling were retained.
 
 ### UI-03 — Add an aesthetic pity-progress presentation
 
+**Status (2026-10-07): implemented on `feat/shop-pity-progress`; not merged.**
+
 - Pity already exists for eligible high-tier collections; this task is presentation, not a new pity
   algorithm.
 - Show the player's current pity/progress somewhere natural in the Shop / box-purchase experience.
@@ -286,6 +288,49 @@ counts, impact radius and HUD styling were retained.
 - For collections that do not have those rarities/pity, omit the indicator or use an intentional
   "no pity for this collection" state rather than showing meaningless progress.
 - Preserve the existing current-vs-base odds presentation.
+
+Implementation: a compact "Luck building" well follows Drop odds in the Shop's existing
+scrolling contents pane. Separate crimson Legendary and violet Mythical tracks use the
+canonical rarity palette, with Fresh luck / Building / Lucky! / Max boost states and exact
+current/base total odds (including the first 0.1015% Mythical boost). The footer says
+"Higher chances, never guaranteed". Full tracks mean capped chance, not a guaranteed hit.
+Pocket Grove and Tidepool Tales omit the well and its space: their three-rarity odds need no
+extra inapplicable mechanic note. Existing odds rows and purchase controls are retained.
+
+The ordinary owner snapshot now carries only server-derived per-collection build-up fractions
+(`pityProgress`); raw counters, groups and curve parameters stay server-only. The fraction
+includes the warm-up and saturates when the existing chance cap is reached. No roll, counter,
+purchase, persistence or schema algorithm changed. Only confirmed snapshots update the meters;
+purchase clicks and pending requests never predict progress. A raised chance gets one soft
+glint, hits ease the appropriate fill back to zero, and opening focus defers unfinished feedback
+until the Shop returns. Reduced motion updates immediately. Screen scope owns the tweens and
+GUI visibility connection; no timers or per-frame work were added.
+
+Checks run (2026-10-07): `rokit install`, `wally install` (empty dependencies retained),
+`stylua src`, `stylua --check src`, `selene src` (0 errors/warnings/parse errors), Rojo
+sourcemap/build with pinned 7.7.0, Luau LSP 1.70.1 analyze (no source diagnostics),
+`git diff --check`, and `python tests/run.py` (all suites plus 16 invalid-startup fixtures).
+New coverage: 27 server assertions exercising the exact production snapshot sender, collection
+and owner isolation, no raw counters/aliasing, caps, confirmed independent hits and failed buys;
+223 actual Shop-screen state/layout/lifecycle assertions, including pending/no optimistic
+progress, missing-data omission, first boosts, warm-up, cap, both resets, reduced motion,
+opening-focus resume and teardown at 1280x720, 844x390, 667x375 and 568x320.
+
+Studio MCP: freshly built unpublished place, solo Play, unsaved server-owned fixture data fed
+through the ordinary RequestState/State path. Native checks verified snapshot agreement,
+TextFits and scrolling to the complete meter/footer at 666x374 for zero, mid warm-up, boosted,
+capped and independent Legendary/Mythical hits; reduced motion checked through Settings.
+The final module also passed an opening-focus hide/confirmed-reset/return check and a normal
+Shop Buy -> opening -> Skip -> Keep in Collection flow, returning with the next confirmed
+Legendary/Mythical fractions (1/180 and 782/1567) and correct Building/Lucky! labels.
+Screenshots: [zero](../artifacts/ui-03/zero-phone.jpg),
+[mid](../artifacts/ui-03/mid-phone.jpg), [boosted](../artifacts/ui-03/boosted-phone.jpg).
+Reproduction: unmapped `tests/StudioShopLuck.server.luau` bootstrap plus
+`tests/StudioShopLuck.client.luau` native assertions. These never enter the production Rojo map.
+The local unpublished-place leaderboard emitted its existing DataStore retry warning; no Shop
+errors were observed. Still required: true two-client/native privacy acceptance, a full native
+desktop viewport, real phone/gamepad input and persistent save/rejoin. Engine doubles and the
+solo fixture do not close those gates.
 
 ### UI-04 — Add decorative lighting to player plots
 

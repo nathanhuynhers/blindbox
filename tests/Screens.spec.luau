@@ -9,6 +9,7 @@ local UI = require("./UIState")
 local Rules = require("./Rules")
 local Economy = require("./Economy")
 local Catalog = require("./Catalog")
+local CollectionEconomy = require("./CollectionEconomy")
 local checks = 0
 local function check(condition: boolean, message: string)
 	checks += 1
@@ -42,6 +43,7 @@ local function snapshot()
 		baseRates = Rules.rates,
 		nextRates = Rules.rates,
 		odds = Rules.odds,
+		pityProgress = CollectionEconomy.pityProgress({}),
 		baseOdds = Rules.odds,
 		prices = Rules.prices,
 		dailyCollection = Economy.dailyCollection,
@@ -213,6 +215,7 @@ check(host("Shop").Visible and find("Backdrop").Visible, "dock opens Shop over t
 check(find("DockShop"):GetAttribute("Active") == true, "active dock tile")
 check(find("Dock").Visible, "dock stays visible on desktop while a screen is open")
 local shop = host("Shop")
+check(not within(shop, "LuckProgress").Visible, "no meaningless pity panel on Grove")
 check(within(shop, "BoxTitle").Text == "Pocket Grove box", "first collection selected")
 check(within(shop, "Discovery").Text == "0 of 6 found · 6 left to discover", "box progress")
 check(

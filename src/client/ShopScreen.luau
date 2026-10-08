@@ -17,6 +17,7 @@ local Shell = require(script.Parent.ScreenShell)
 local List = require(script.Parent.CollectionList)
 local Tile = require(script.Parent.FigureTile)
 local BoxPreview = require(script.Parent.BlindBoxPreview)
+local ShopLuck = require(script.Parent.ShopLuck)
 local Shop = {}
 
 local largest = 0
@@ -126,6 +127,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 	gift.button.Visible = false
 	-- Right: contents and odds
 	local info = Kit.canvas(body, "Contents")
+	local luck = ShopLuck.create(info, ctx)
 	local inside = Kit.text(info, "InsideTitle", "What's inside", 20, Style.display())
 	local insideCount = Kit.text(info, "InsideCount", "", 13, nil, Style.muted)
 	insideCount.TextXAlignment = Enum.TextXAlignment.Right
@@ -275,8 +277,10 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			end
 		end
 		y += if phone then math.ceil(rowCount / 2) * rowHeight else rowCount * (rowHeight + 6)
-		-- Room is left under the rows for a later "current vs base chance" line.
-		Kit.fit(info, y + 24, height)
+		y += 12
+		local luckHeight = luck.layout(inner, phone)
+		Kit.rect(luck.root, pad, y, inner, luckHeight)
+		Kit.fit(info, y + luckHeight + 12, height)
 	end
 	local function update(snapshot: Types.Snapshot)
 		shell.update(snapshot)
@@ -366,6 +370,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			view.count.Text = State.oddsLabel(row)
 			view.pct.Text = State.percent(row.total)
 		end
+		luck.update(snapshot, selected)
 		arrangeInfo(#members, shown)
 	end
 	refresh = function()
