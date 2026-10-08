@@ -16,6 +16,7 @@ export type Callbacks = {
 	remove: () -> (),
 	cancel: () -> (),
 	browse: () -> (),
+	equip: () -> (),
 }
 export type Picker = {
 	root: Frame,
@@ -52,6 +53,15 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 	local browse = small(root, "Browse", "Browse Collection", ctx, callbacks.browse)
 	local remove = small(root, "Remove", "Remove", ctx, callbacks.remove)
 	local cancel = small(root, "Cancel", "Cancel", ctx, callbacks.cancel)
+	-- Whole-Display action: shares the header row with the slot controls, shown when they aren't.
+	local equip = Button.create(root, "EquipBest", {
+		variant = "violet",
+		text = "Equip Best",
+		size = 15,
+		radius = 12,
+		drop = 3,
+	}, ctx.scope, ctx.effects, callbacks.equip)
+	equip.button:SetAttribute("AccessibleName", "Equip Best: fill your Display with top earners")
 	local layout = Kit.grid(root, 10)
 	-- 14px padding leaves room for the BEST badge, which overhangs the top card edge.
 	local grid = Kit.scroll(root, "Choices", ctx.scope, layout, 14, ctx.scale)
@@ -90,19 +100,23 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		return created
 	end
 	local function arrange()
-		local pad = 14
+		-- Header row: 44px controls inset 12px from the top and 16px from the rounded edge, with
+		-- the title block centred beside them and the grid starting below their shadow.
+		local pad = 16
+		local top = 12
 		local inner = width - pad * 2
-		Kit.rect(title, pad, 6, inner - 348, 26)
-		Kit.rect(sort, pad, 32, inner - 348, 16)
+		Kit.rect(title, pad, top, inner - 348, 26)
+		Kit.rect(sort, pad, top + 26, inner - 348, 16)
 		sort.TextXAlignment = Enum.TextXAlignment.Left
 		local x = pad + inner
 		x -= 84
-		Kit.rect(cancel.button, x, 4, 84, 44)
+		Kit.rect(cancel.button, x, top, 84, 44)
 		x -= 94
-		Kit.rect(remove.button, x, 4, 86, 44)
+		Kit.rect(remove.button, x, top, 86, 44)
 		x -= 158
-		Kit.rect(browse.button, x, 4, 150, 44)
-		Kit.rect(grid, pad - 11, 47, inner + 22, height - 49)
+		Kit.rect(browse.button, x, top, 150, 44)
+		Kit.rect(equip.button, pad + inner - 152, top, 152, 44)
+		Kit.rect(grid, pad - 11, top + 46, inner + 22, height - top - 48)
 		local columns = if phone then 4 else 6
 		cell = State.cells(inner - 12, columns, 10)
 		local tileHeight = if phone then 64 else 72
@@ -110,9 +124,9 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		for _, item in tiles do
 			item.size(cell, tileHeight)
 		end
-		Kit.rect(empty, pad, 50, inner, 36)
+		Kit.rect(empty, pad, top + 50, inner, 36)
 		shop.button.AnchorPoint = Vector2.new(0.5, 0)
-		shop.button.Position = UDim2.new(0.5, 0, 0, 90)
+		shop.button.Position = UDim2.new(0.5, 0, 0, top + 90)
 		shop.button.Size = UDim2.fromOffset(200, 46)
 	end
 	return {
@@ -137,6 +151,16 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 			browse.set("Browse Collection", true)
 			remove.set("Remove", ctx.canAct())
 			cancel.set("Cancel", true)
+			local owned = false
+			for _, count in snapshot.owned do
+				owned = owned or count > 0
+			end
+			equip.button.Visible = target == nil and placing == nil and owned
+			equip.set("Equip Best", ctx.canAct())
+			-- Header text gets whatever the right-hand controls leave free.
+			local reserve = if target or placing then 348 elseif equip.button.Visible then 164 else 0
+			title.Size = UDim2.fromOffset(width - 32 - reserve, 26)
+			sort.Size = UDim2.fromOffset(width - 32 - reserve, 16)
 			if placing then
 				title.Text = "Placing "
 					.. Catalog.byId[placing].name

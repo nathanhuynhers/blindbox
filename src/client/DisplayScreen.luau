@@ -39,6 +39,8 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 	bannerAmount.TextXAlignment = Enum.TextXAlignment.Right
 	local target: number? = nil
 	local placing: string? = nil
+	-- Display before an Equip Best request; its reply pops the slots that changed.
+	local equipping: Types.Snapshot? = nil
 	local refresh: () -> () = function() end
 	local slots: { SlotCard.Slot } = {}
 	for index = 1, DisplayConfig.maxSlots do
@@ -94,6 +96,14 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 		browse = function()
 			ctx.navigate("Collection", { slot = target })
 		end,
+		equip = function()
+			local snapshot = ctx.snapshot()
+			if snapshot and ctx.canAct() then
+				target, placing, equipping = nil, nil, snapshot
+				ctx.send("EquipBest", nil, nil, nil)
+				refresh()
+			end
+		end,
 	})
 	local width, height, phone = 0, 0, false
 	local function arrange()
@@ -110,7 +120,8 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local slotHeight = if phone then 150 else 176
 		for index, slot in slots do
 			slot.size(cell, slotHeight)
-			slot.button.Position = UDim2.fromOffset(pad + (index - 1) * (cell + gap), y)
+			slot.button.Position =
+				UDim2.fromOffset(pad + (index - 1) * (cell + gap) + cell / 2, y + slotHeight / 2)
 		end
 		y += slotHeight + 8
 		local drawer = math.max(if phone then 140 else 150, height - y - 12)
@@ -128,6 +139,15 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 			local _, free = State.copies(snapshot, placing)
 			if free < 1 or State.displayed(snapshot, placing) then
 				placing = nil
+			end
+		end
+		local before = equipping
+		if before and ctx.canAct() and snapshot.sequence ~= before.sequence then
+			-- A newer snapshot with pending cleared is the reply: pop changed cards in one wave.
+			equipping = nil
+			local _, changed = State.equipSummary(before, snapshot)
+			for order, slot in changed do
+				slots[slot].pop((order - 1) * 0.06)
 			end
 		end
 		income.set("+" .. State.amount(State.totalRate(snapshot)) .. " coins/s")
@@ -176,6 +196,7 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 			refresh()
 		end,
 		route = function(route: Context.Route?)
+			equipping = nil
 			placing = if route
 					and route.placing
 					and Catalog.byId[route.placing]

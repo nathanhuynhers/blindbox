@@ -153,6 +153,65 @@ function Rules.offline(state: Types.State, wall: number)
 	end
 	state.lastSeen = wall
 end
+-- Highest-income loadout for the unlocked slots and its Rules.rate. Income is the subtotal,
+-- times (1 + setBonus) once any collection shows three distinct figures, so an optimum is either
+-- the top figures overall or, for one collection, its top three plus the best of the rest
+-- (exchange argument; tests check it against brute force). Ties keep rate, then catalog order.
+function Rules.best(state: Types.State): ({ string }, number)
+	local count = math.min(state.display.unlocked, DisplayConfig.maxSlots)
+	local ranked: { string } = {}
+	local order: { [string]: number } = {}
+	local rate: { [string]: number } = {}
+	for index, figure in Catalog.figures do
+		if (state.owned[figure.id] or 0) > 0 and Rules.rates[figure.id] then
+			table.insert(ranked, figure.id)
+			order[figure.id], rate[figure.id] = index, Rules.figureRate(state, figure.id)
+		end
+	end
+	table.sort(ranked, function(a, b)
+		if rate[a] ~= rate[b] then
+			return rate[a] > rate[b]
+		end
+		return order[a] < order[b]
+	end)
+	local function fill(picked: { string }): { string }
+		for _, id in ranked do
+			if #picked >= count then
+				break
+			end
+			if not table.find(picked, id) then
+				table.insert(picked, id)
+			end
+		end
+		return picked
+	end
+	local candidates = { fill({}) }
+	if count >= 3 then
+		for _, collection in Catalog.collections do
+			local trio: { string } = {}
+			for _, id in ranked do
+				if #trio < 3 and Catalog.byId[id].collection == collection.id then
+					table.insert(trio, id)
+				end
+			end
+			if #trio == 3 then
+				table.insert(candidates, fill(trio))
+			end
+		end
+	end
+	local saved = state.display.slots
+	local best, total = candidates[1], -1
+	for _, candidate in candidates do
+		state.display.slots = candidate
+		local income = Rules.rate(state)
+		-- Relative tolerance: equal sets summed in another order are not an improvement.
+		if income > total * (1 + 1e-9) then
+			best, total = candidate, income
+		end
+	end
+	state.display.slots = saved
+	return best, total
+end
 -- Available earning placement, not the quantity of spare copies.
 function Rules.available(state: Types.State, id: string): number
 	if (state.owned[id] or 0) == 0 or table.find(state.display.slots, id) then
@@ -284,8 +343,8 @@ function Rules.mutate(
 	local action, id = intent.action, intent.figure or ""
 	local rolls = if type(roll) == "number" then { roll } else roll
 	local today = day or 0
-	-- Place must pass every check before settlement or any gameplay mutation.
-	if action ~= "Place" then
+	-- Place and EquipBest must pass every check before settlement or any gameplay mutation.
+	if action ~= "Place" and action ~= "EquipBest" then
 		Rules.refreshDay(state, today)
 	end
 	if action == "Collect" then
@@ -462,6 +521,39 @@ function Rules.mutate(
 		end
 		state.goalClaimed = true
 		state.coins += Economy.goalReward
+	elseif action == "EquipBest" then
+		local best, income = Rules.best(state)
+		if income <= Rules.rate(state) * (1 + 1e-9) then
+			-- Already optimal: a successful no-op with no settlement, swap or revision.
+			return true, "Already your best Display.", nil
+		end
+		local slots = state.display.slots
+		local keep: { [string]: boolean } = {}
+		local incoming: { string } = {}
+		for _, figure in best do
+			keep[figure] = true
+			if not table.find(slots, figure) then
+				table.insert(incoming, figure)
+			end
+		end
+		Rules.refreshDay(state, today)
+		Rules.settle(state, now or state.time)
+		-- Kept figures stay in their slots; each replaced figure is collected like a Place swap.
+		for slot = 1, state.display.unlocked do
+			local outgoing = slots[slot]
+			if #incoming > 0 and not keep[outgoing] then
+				if outgoing ~= "" then
+					transferBank(state, outgoing)
+				end
+				slots[slot] = table.remove(incoming, 1) :: string
+			end
+		end
+		if state.step == Tutorial.display then
+			state.step = Tutorial.collect
+		end
+		Rules.refreshDay(state, today)
+		state.revision += 1
+		return true, "Best Display equipped.", nil
 	elseif action == "Place" or action == "Remove" then
 		local slot = intent.slot
 		if

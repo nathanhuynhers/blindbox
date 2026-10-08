@@ -353,6 +353,49 @@ check(host("Shop").Visible, "R1 cycles to the next screen")
 Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonL1 })
 check(display.Visible, "L1 cycles back")
 
+-- Equip Best: a secondary violet control in the picker header, hidden while a slot is targeted.
+local equip = within(picker, "EquipBest")
+check(equip.Visible and equip:GetAttribute("Enabled"), "Equip Best offered with owned figures")
+check(within(equip, "Label").Text == "Equip Best" and equip.Size.Y.Offset >= 44, "Equip Best label and touch target")
+Engine.click(within(display, "DisplaySlot2"))
+check(not equip.Visible, "slot controls replace Equip Best while choosing")
+Engine.click(within(picker, "Cancel"))
+local equipRequests = #requests
+Engine.click(equip)
+check(#requests == equipRequests + 1 and last().action == "EquipBest" and last().figure == nil and last().slot == nil, "Equip Best sends one bare intent")
+ui.pending(true)
+check(equip.Visible and not equip:GetAttribute("Enabled"), "Equip Best disabled while pending")
+Engine.click(equip)
+check(#requests == equipRequests + 1, "no second request while pending")
+local before = state
+state = table.clone(before)
+state.slots = { "grove.star", "grove.moth", "" }
+state.rate = 7 + before.rates["grove.moth"]
+state.sequence += 1
+ui.update(state)
+ui.pending(false)
+local summary, changed = UI.equipSummary(before, state)
+check(#changed == 1 and changed[1] == 2, "summary lists the changed slot")
+check(string.find(summary, UI.rate(before.rates["grove.moth"]), 1, true) ~= nil and string.find(summary, "slot 2 changed", 1, true) ~= nil, "summary shows income gain and slot")
+check(within(display, "DisplaySlot2"):FindFirstChildOfClass("UIScale").Scale == 1, "changed slot settles at full size")
+check(UI.equipSummary(state, state) == "Already your best Display", "already optimal message")
+check(equip:GetAttribute("Enabled"), "Equip Best re-enabled after the reply")
+local notReady = table.clone(state)
+notReady.ready = false
+notReady.sequence += 1
+ui.update(notReady)
+check(not equip:GetAttribute("Enabled"), "Equip Best disabled until the profile is ready")
+state.sequence = notReady.sequence + 1
+ui.update(state)
+local bare = table.clone(state)
+bare.owned, bare.slots = {}, { "", "", "" }
+bare.sequence += 1
+ui.update(bare)
+check(not equip.Visible, "no Equip Best without figures")
+state.sequence = bare.sequence + 1
+ui.update(state)
+Engine.advance(8) -- Let the not-ready status toast expire before the timer counts below.
+
 -- Goals: countdown from nextDay, at most once a minute, only while visible.
 Engine.now = 86400 * 2 - (5 * 3600 + 11 * 60 + 30)
 local timersBefore = Engine.pending()

@@ -179,6 +179,26 @@ Paired with **UI-09**.
 - Settle/preserve outgoing figure earnings correctly when replacing them.
 - The operation should be deterministic, retry-safe and not mint/lose Coins.
 
+Implementation (2026-10-07, with UI-09): a new `EquipBest` intent (no figure, slot or choice
+payload) runs through `Transactions` like Place: token bucket, revision, receipts, own-plot rule
+and settlement only after validation; the server's existing readiness/lease gate applies.
+`Rules.best` ranks owned figures by `Rules.figureRate` (rarity, tier, duplicates), ties by catalog
+order, and scores with `Rules.rate`. Because the +10% bonus applies once to the whole subtotal when
+any collection shows three distinct figures, an optimum is either the top N figures or, for one
+collection, its top three plus the best N-3 others; those 1 + collections candidates are exact.
+If the current Display earns as much (relative 1e-9), the reply is a successful
+"Already your best Display." with no settlement, swap or revision. Otherwise one transaction
+settles at the old loadout, keeps retained figures in their slots, fills empty and replaced slots,
+and collects each replaced figure's whole bank through the same transfer as a Place swap
+(fractions and wallet overflow stay banked by ID). It also completes the Welcome Quest placement
+step.
+
+Coverage: `tests/EquipBest.spec.luau` (400 seeded inventories vs a brute-force subset oracle with
+duplicates and 3-6 slots, a Grove trio beating a higher raw Tidepool rate, one-time bonus with two
+trios, equal-rate ties, no-op, Coins + banks conservation with full/partial/empty wallets, retries,
+save round trip, off-plot/stale/rate-limited/payload rejections). Removing the trio candidates
+makes the oracle check fail.
+
 ---
 
 # New Implementation — UI / World / Animation / Experience
@@ -373,6 +393,21 @@ Paired with **LOGIC-06**.
 - Provide satisfying feedback when the Display is reorganized.
 - If the current Display is already optimal, communicate that cleanly instead of appearing broken.
 - Keep mobile/gamepad layout in mind.
+
+Implementation (2026-10-07, with LOGIC-06): a violet **Equip Best** button (156×44) sits at the
+right of the Display picker header, shown whenever no slot is being chosen or placed and the player
+owns a figure; the slot controls (Browse/Remove/Cancel) take that row while a slot is targeted. It
+is disabled while a request is pending or the profile isn't ready. The reply toast is built by
+`UIState.equipSummary` from the snapshots around the request ("Best Display: +12.4/s · slots 2, 3
+changed", placement sound) or a calm info toast "Already your best Display" without a sound.
+Changed slot cards pop in a 0.06 s-staggered 0.28 s Back scale wave, skipped when Motion is off.
+Gamepad selection uses the standard button. Coverage: `tests/Screens.spec.luau` (visibility,
+send, pending/not-ready disable, slot-targeting hides it, summary/already-best text, pop end state).
+The picker title/hint now take the width the right-hand controls leave free, which also fixed the
+phone hint truncation. Single-client Studio check (2026-10-07, desktop and 844×390 phone preview):
+swap of two weak Grove figures plus an empty slot for the top three, outgoing whole banks collected
+with fractions retained, second press "Already your best Display", off-plot request rejected,
+gamepad-selectable button, no console errors. Multi-client/visitor and real-device checks remain.
 
 ---
 

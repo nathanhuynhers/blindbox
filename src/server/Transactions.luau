@@ -33,8 +33,11 @@ function Transactions.process(
 	if not intent then
 		return nil, false
 	end
-	-- Place settles inside Rules only after validation; rejects/replays cannot mutate gameplay.
-	if intent.action ~= "Place" then
+	-- Place/EquipBest settle inside Rules only after validation; rejects/replays cannot mutate.
+	local display = intent.action == "Place"
+		or intent.action == "Remove"
+		or intent.action == "EquipBest"
+	if intent.action ~= "Place" and intent.action ~= "EquipBest" then
 		Rules.settle(session.state, now)
 	end
 	for index = #session.receipts, 1, -1 do
@@ -68,7 +71,7 @@ function Transactions.process(
 			if ok and intent.action == "ShelfPlace" and session.state.step == Tutorial.shelves then
 				session.state.step = Tutorial.done
 			end
-		elseif (intent.action == "Place" or intent.action == "Remove") and not insideOwnPlot then
+		elseif display and not insideOwnPlot then
 			message = "Return to your own plot to edit your Display."
 		else
 			ok, message, figure, figures =

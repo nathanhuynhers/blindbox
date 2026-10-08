@@ -47,8 +47,15 @@ local sequence = -1
 local ui: Interface.Interface
 local deal: DealPopup.Controller
 -- Sounds for confirmed replies. Box results sound through the opening; failures play "error".
+local feedback: { [string]: string } = {
+	Place = "Figure displayed",
+	Remove = "Figure removed",
+	Expand = "Display slot unlocked",
+	Goal = "Daily reward claimed",
+}
 local replySounds: { [string]: string } = {
 	Place = "place",
+	EquipBest = "place",
 	ShelfPlace = "place",
 	Remove = "remove",
 	ShelfRemove = "remove",
@@ -245,6 +252,18 @@ table.insert(
 				deal.close()
 			end
 			local sound: string? = if reply.ok then replySounds[intent.action] else "error"
+			local text = if reply.ok
+				then feedback[intent.action] or reply.message
+				else reply.message
+			local kind = if reply.ok then "success" else "error"
+			if reply.ok and intent.action == "EquipBest" and before then
+				local changed
+				text, changed = UIState.equipSummary(before, state)
+				if #changed == 0 then
+					-- Already optimal is a calm notice, not a failure or a placement.
+					sound, kind = nil, "info"
+				end
+			end
 			-- A Login day that grants boxes sounds through its opening instead.
 			if intent.action == "Login" and (reply.figure or reply.figures) then
 				sound = nil
@@ -252,18 +271,9 @@ table.insert(
 			if sound then
 				Sfx.play(sound)
 			end
-			local feedback = {
-				Place = "Figure displayed",
-				Remove = "Figure removed",
-				Expand = "Display slot unlocked",
-				Goal = "Daily reward claimed",
-			}
 			-- A saved volume needs no toast; the slider already shows it.
 			if not (reply.ok and intent.action == "SetVolume") then
-				ui.message(
-					if reply.ok then feedback[intent.action] or reply.message else reply.message,
-					if reply.ok then "success" else "error"
-				)
+				ui.message(text, kind)
 			end
 			if
 				reply.ok
