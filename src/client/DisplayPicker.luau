@@ -100,20 +100,23 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		return created
 	end
 	local function arrange()
-		local pad = 14
+		-- Header row: 44px controls inset 12px from the top and 16px from the rounded edge, with
+		-- the title block centred beside them and the grid starting below their shadow.
+		local pad = 16
+		local top = 12
 		local inner = width - pad * 2
-		Kit.rect(title, pad, 6, inner - 348, 26)
-		Kit.rect(sort, pad, 32, inner - 348, 16)
+		Kit.rect(title, pad, top, inner - 348, 26)
+		Kit.rect(sort, pad, top + 26, inner - 348, 16)
 		sort.TextXAlignment = Enum.TextXAlignment.Left
 		local x = pad + inner
 		x -= 84
-		Kit.rect(cancel.button, x, 4, 84, 44)
+		Kit.rect(cancel.button, x, top, 84, 44)
 		x -= 94
-		Kit.rect(remove.button, x, 4, 86, 44)
+		Kit.rect(remove.button, x, top, 86, 44)
 		x -= 158
-		Kit.rect(browse.button, x, 4, 150, 44)
-		Kit.rect(equip.button, pad + inner - 156, 2, 156, 44)
-		Kit.rect(grid, pad - 11, 47, inner + 22, height - 49)
+		Kit.rect(browse.button, x, top, 150, 44)
+		Kit.rect(equip.button, pad + inner - 152, top, 152, 44)
+		Kit.rect(grid, pad - 11, top + 46, inner + 22, height - top - 48)
 		local columns = if phone then 4 else 6
 		cell = State.cells(inner - 12, columns, 10)
 		local tileHeight = if phone then 64 else 72
@@ -121,9 +124,9 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		for _, item in tiles do
 			item.size(cell, tileHeight)
 		end
-		Kit.rect(empty, pad, 50, inner, 36)
+		Kit.rect(empty, pad, top + 50, inner, 36)
 		shop.button.AnchorPoint = Vector2.new(0.5, 0)
-		shop.button.Position = UDim2.new(0.5, 0, 0, 90)
+		shop.button.Position = UDim2.new(0.5, 0, 0, top + 90)
 		shop.button.Size = UDim2.fromOffset(200, 46)
 	end
 	return {
@@ -155,9 +158,9 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 			equip.button.Visible = target == nil and placing == nil and owned
 			equip.set("Equip Best", ctx.canAct())
 			-- Header text gets whatever the right-hand controls leave free.
-			local reserve = if target or placing then 348 elseif equip.button.Visible then 168 else 0
-			title.Size = UDim2.fromOffset(width - 28 - reserve, 26)
-			sort.Size = UDim2.fromOffset(width - 28 - reserve, 16)
+			local reserve = if target or placing then 348 elseif equip.button.Visible then 164 else 0
+			title.Size = UDim2.fromOffset(width - 32 - reserve, 26)
+			sort.Size = UDim2.fromOffset(width - 32 - reserve, 16)
 			if placing then
 				title.Text = "Placing "
 					.. Catalog.byId[placing].name
