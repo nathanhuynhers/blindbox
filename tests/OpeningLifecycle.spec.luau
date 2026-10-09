@@ -5,6 +5,9 @@ local Camera = require("./OpeningCamera")
 local Scope = require("./OpeningScope")
 local Config = require("./OpeningConfig")
 local MovementConfig = require("./MovementConfig")
+local Music = require("./Music")
+local Manifest = require("./SoundManifest")
+local Sfx = require("./Sfx")
 Engine.humanoid.WalkSpeed = MovementConfig.baselineWalkSpeed
 local checks = 0
 local function check(value, message)
@@ -12,6 +15,12 @@ local function check(value, message)
 	assert(value, message)
 end
 local focused, reports = false, 0
+-- Background music is playing before any opening; every session pauses it, every exit resumes it.
+Music.play("world")
+local music = Sfx.group("Music"):FindFirstChild("Music_world")
+local function silenced()
+	return Music.suppressed() and not music.IsPlaying and music.Volume == 0
+end
 local baseline = Engine.connections
 local controller = Controller.create(function(value)
 	focused = value
@@ -59,6 +68,9 @@ local function clean()
 	)
 	check(Engine.camera.CameraSubject == Engine.humanoid, "camera subject restored")
 	check(Engine.connections == baseline + 2, "session signal/render connections removed")
+	check(not Music.suppressed(), "music no longer suppressed")
+	check(music.IsPlaying and music.Volume == Manifest.music.world.volume, "music resumed at its level")
+	check(#Sfx.group("Music"):GetChildren() == 1, "one music track, never doubled")
 end
 for _, reduced in { false, true } do
 	for _, phase in
@@ -79,6 +91,7 @@ for _, reduced in { false, true } do
 	do
 		local awarded = result()
 		check(controller.present(awarded, reduced), "can start")
+		check(silenced(), "music pauses as the opening starts")
 		check(not controller.present(awarded, reduced), "cannot overlap")
 		reach(if phase == "Closing" then "Result" else phase)
 		if phase == "Closing" then
@@ -330,8 +343,12 @@ do
 	controller.cancel()
 	clean()
 end
+controller.present(result(), false)
+reach("Flight")
+check(silenced(), "music paused mid-opening")
 controller.destroy()
 controller.destroy()
+check(not Music.suppressed() and music.IsPlaying, "controller teardown resumes music")
 check(Engine.connections == baseline, "controller lifetime subscriptions released")
 check(not controller.present(result(), false), "destroyed controller cannot reopen")
 
@@ -346,6 +363,7 @@ end, function() end, function(choice, awarded)
 		id = awarded.figureId,
 		active = chooser.isActive(),
 		focused = focused,
+		suppressed = Music.suppressed(),
 	})
 end)
 local model = { label = "reveal model" }
@@ -405,7 +423,9 @@ chooser.present(step({ direct = false, tease = "Mythical", sequence = "first" })
 check(Engine.profile.rarity == "Mythical", "the box teases the batch's best rarity")
 reach("Done")
 check(#chosen == 1 and chosen[1].choice == "keep" and not chosen[1].active, "the tease box hands off when it closes")
+check(not chosen[1].suppressed, "music is released before the next step or the summary takes over")
 chooser.present(step({}), false, nil, model)
+check(silenced(), "the next Open 10 step pauses it again")
 reach("Result")
 Engine.render:Fire(0.4)
 Engine.click("shield")
@@ -419,6 +439,7 @@ check(Engine.state.phase == "Closing", "Skip ends the step instead of jumping to
 Engine.render:Fire(0.12)
 Engine.render:Fire(0.12)
 check(#chosen == 3 and chosen[3].choice == "skip", "Skip reports skip-all")
+check(not chosen[3].suppressed and not Music.suppressed(), "Skip to the summary resumes music")
 -- Settled first/ninth results: mouse, touch, selected gamepad A and the skip API
 -- all close once, respect the guard, and retain the confirmed receipt.
 for _, index in { 1, 9 } do

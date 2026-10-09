@@ -6,7 +6,7 @@ correction. Automated checks execute the actual cinematic,
 box, skin, figure appearance, effects and audio against engine primitives.
 **Native Studio audiovisual, input, performance and multiplayer acceptance is still pending.**
 The synthesized sound pack was rejected after listening and disconnected. The game soundpack now
-fills 14 of the 48 slots with licensed Creator Store audio (see [game soundpack](SOUND.md)); the
+fills 17 of the 48 slots with licensed Creator Store audio (see [game soundpack](SOUND.md)); the
 rest stay silent. See [audio architecture](#audio-architecture) and the
 [delivery checklist](OPENING_AUDIO_ASSETS.md).
 The audio delivery changes no figure assignments, rates, weights, inventory, persistence or purchase
@@ -340,11 +340,13 @@ and FOV stay fixed. It does not skip the reveal or discard metadata.
 
 ## Audio architecture
 
-**14 of 48 slots are filled from `SoundManifest.opening`** (the [game soundpack](SOUND.md)):
-entrance, shake, click, crack, lid, impact, the Legendary/Mythical tease, the five reveals and
-NEW. They are verified to load and have not yet had a listening pass. Opening Sounds join the
+**17 of 48 slots are filled from `SoundManifest.opening`** (the [game soundpack](SOUND.md)):
+entrance, shake, click, crack, lid, impact, all five rarity identities, the five reveals and
+NEW. Gains follow a measured loudness ladder (UI-06, [rarity ladder](SOUND.md#manifest)). The
+background music is paused for the whole session and resumed from the same spot by the
+session scope on every exit ([background music](SOUND.md#background-music)). They are verified to load and have not yet had a listening pass. Opening Sounds join the
 game's Reveal SoundGroup, and the session preload keeps one resident Sound per ID. The close sound
-is the game's Sfx `close`, played on entering Closing. The user rejected the synthesized pack as
+is the game's Sfx `close`, played on entering Closing (not on Open 10 hand-overs between figures). The user rejected the synthesized pack as
 engine-like and noisy. Its files and upload receipts remain as history; none of those IDs is
 loaded or played. The
 [Porcelain & Starlight pack](../assets/audio/opening/README.md) includes the source WAVs,
@@ -364,7 +366,8 @@ local gain buses, not global SoundService changes. Sounds belong to the session'
 motion cannot change critical cue loudness. Stereo sources may preserve modest depth without
 hard panning; critical information must work in mono. This follows Roblox's documented
 [Sound placement behavior](https://create.roblox.com/docs/sound/objects).
-No listener, global reverb, other gameplay sound or audio setting changes.
+No listener, global reverb or audio setting changes; the only other sound touched is the
+background music, paused through `Music.suppress` for the session.
 
 Master gain is 0.45. Relative gains include crack 0.85, impact 0.82, reveal 0.60, launch 0.62,
 lid 0.42, flight tone 0.28, air 0.18 and ambience 0.10. Ambience ducks to 25% for Break;

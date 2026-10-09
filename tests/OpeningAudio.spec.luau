@@ -34,7 +34,30 @@ end
 for key in Manifest.opening do
 	check(Mix.cues[key] ~= nil, "manifest names a real opening slot: " .. key)
 end
-check(configured == 48 and filled == 14, "14 of 48 opening slots are filled")
+check(configured == 48 and filled == 17, "17 of 48 opening slots are filled")
+-- Rarity cue selection: each tier picks its own identity (mid-flight) and reveal sting, none silent
+-- and none shared, and gain x measured loudness climbs Common -> Mythical. Common stays at least
+-- half of Rare so the lowest tiers still sound rewarding.
+local Rarity = require("./Rarity")
+for _, kind in { "rarity", "reveal" } do
+	local ids, previous, levels = {}, 0, {}
+	for _, tier in Rarity.order do
+		local profile = Config.profile(tier)
+		local key = if kind == "reveal" then profile.cues.reveal else profile.tease[1].cue
+		check(key == kind .. tier, "tier selects its own cue: " .. kind .. tier)
+		local id = Audio.asset(key)
+		check(id ~= nil and id == Mix.sounds[key], "tier cue is filled, not a fallback: " .. key)
+		check(not ids[id :: string], "tier cue is a distinct sample: " .. key)
+		ids[id :: string] = true
+		local loudness = Manifest.opening[key].loudness
+		check(loudness ~= nil and loudness > 0, "tier cue has a measured loudness: " .. key)
+		local level = Mix.cues[key].volume * (loudness :: number)
+		check(level > previous, "rarity ladder climbs at " .. key)
+		previous, levels[tier] = level, level
+	end
+	check(levels.Common >= levels.Rare / 2, kind .. ": Common is not dead next to Rare")
+	check(levels.Mythical >= levels.Common * 2, kind .. ": Mythical is clearly bigger than Common")
+end
 local scope = Scope.create()
 local audio = Audio.create(scope)
 local function folder()
@@ -498,6 +521,83 @@ check(
 	not folder() and E.connections == baseline,
 	"active controller destroy and stale heartbeat release all audio"
 )
+-- Open 10: the tease box and ten direct steps hand over the way the client does (the next step
+-- starts inside the previous one's choice callback). One session's sounds at a time, one reveal
+-- per figure, no stacking, and only the way out plays the close sound.
+local Sfx = require("./Sfx")
+local closes = 0
+local sfxPlay = Sfx.play
+Sfx.play = function(name, ...)
+	if name == "close" then
+		closes += 1
+	end
+	return sfxPlay(name, ...)
+end
+local queue = {
+	{
+		requestId = "x10:box",
+		figureId = "grove.pebble",
+		quantity = 1,
+		isNew = false,
+		direct = false,
+		tease = "Rare",
+		sequence = "first",
+	},
+}
+for index = 1, 10 do
+	table.insert(queue, {
+		requestId = "x10:" .. index,
+		figureId = "grove.pebble",
+		quantity = index,
+		isNew = index == 1,
+		direct = true,
+		sequence = if index == 10 then "last" else "middle",
+	})
+end
+local relay
+relay = Controller.create(function() end, function(message)
+	error(message)
+end, function()
+	local nextStep = table.remove(queue, 1)
+	if nextStep then
+		relay.present(table.freeze(nextStep), false)
+	end
+end)
+table.clear(played)
+relay.present(table.freeze(table.remove(queue, 1)), false)
+local mostFolders, mostReveals = 0, 0
+for _ = 1, 20000 do
+	if not relay.isActive() then
+		break
+	end
+	local phase = E.state.phase
+	if phase == "Await" or (phase == "Result" and E.state.elapsed >= State.resultGuard) then
+		E.key("A")
+	else
+		tick(0.025)
+	end
+	local folders, reveals = 0, 0
+	for _, child in E.services.SoundService:GetChildren() do
+		if child.Name == "OpeningSounds" then
+			folders += 1
+			for _, voice in child:GetChildren() do
+				reveals += if string.sub(voice.Name, 1, 6) == "reveal" then 1 else 0
+			end
+		end
+	end
+	mostFolders, mostReveals = math.max(mostFolders, folders), math.max(mostReveals, reveals)
+end
+local revealed = 0
+for name, count in played do
+	revealed += if string.sub(name, 1, 6) == "reveal" then count else 0
+end
+check(not relay.isActive() and #queue == 0, "Open 10 runs to the end")
+check(mostFolders == 1 and mostReveals == 1, "Open 10 steps never stack sounds")
+check(revealed == 10 and played.discovery == 1, "one reveal per figure, NEW only when new")
+check(closes == 1, "only the last step's exit plays close")
+check(not folder(), "Open 10 leaves no opening sounds")
+Sfx.play = sfxPlay
+relay.destroy()
 template:Destroy()
 print(
 	"PASS: "
