@@ -18,7 +18,9 @@ export type Entry = {
 	cooldown: number?, -- minimum seconds between two plays of this name (default 0.05)
 	voices: number?, -- Sound instances allowed to overlap (default 1)
 }
-export type Cue = { id: string, source: string }
+-- loudness: mean PlaybackLoudness at Volume 1, measured in Studio. A signal proxy, not a listening
+-- result; it lets a test keep the rarity ladder climbing when an ID or a gain changes.
+export type Cue = { id: string, source: string, loudness: number? }
 export type Track = {
 	id: string, -- numeric asset ID, or "" (placeholder, silent)
 	source: string,
@@ -174,25 +176,58 @@ Manifest.opening = {
 	crack = { id = "9117624959", source = "Plastic Sheet Impacts Rips Paper Tears 6 (SFX)" },
 	lid = { id = "9119669295", source = "Suction Pop 2 (SFX)" },
 	impact = { id = "9120917438", source = "Wood Impacts Soft Impacts On Temple Blocks 1 (SFX)" },
+	-- Rarity identity, mid-flight as the box's energy changes color: every tier gets one, so
+	-- Common and Uncommon flights are never silent. Glassy ding < bell burst < chime cluster.
+	rarityCommon = {
+		id = "9126073953",
+		source = "Synth Sparkle Tone High Pitch Tone Burst Din (SFX)",
+		loudness = 33,
+	},
+	rarityUncommon = {
+		id = "9126071458",
+		source = "Synth Sparkle Tone High Pitch Bell Tone Burs (SFX)",
+		loudness = 19,
+	},
+	rarityRare = {
+		id = "9116395179",
+		source = "Magic Glows Soft Clusters Of Chiming Hits 6 (SFX)",
+		loudness = 6,
+	},
 	rarityLegendary = {
 		id = "9116395089",
 		source = "Magic Glows Soft Clusters Of Chiming Hits 4 (SFX)",
+		loudness = 7,
 	},
 	rarityMythical = {
 		id = "9125635442",
 		source = "Magical Exit Sparkling Pass Bys Clinking Chi (SFX)",
+		loudness = 36,
 	},
 	revealCommon = {
 		id = "9126076030",
 		source = "Synth Sparkle Tone High Pitch Tone Burst Pin (SFX)",
+		loudness = 13,
 	},
 	revealUncommon = {
 		id = "9126073001",
 		source = "Synth Sparkle Tone High Pitch Bell Tone Ding (SFX)",
+		loudness = 11,
 	},
-	revealRare = { id = "9116394876", source = "Magic Glows Soft Clusters Of Chiming Hits 2 (SFX)" },
-	revealLegendary = { id = "9048764475", source = "Magical Meetup - Hit2 (APM Music)" },
-	revealMythical = { id = "9048764286", source = "Magical Meetup - Tag2 (APM Music)" },
+	revealRare = {
+		id = "9116394876",
+		source = "Magic Glows Soft Clusters Of Chiming Hits 2 (SFX)",
+		loudness = 12,
+	},
+	revealLegendary = {
+		id = "9048764475",
+		source = "Magical Meetup - Hit2 (APM Music)",
+		loudness = 40,
+	},
+	revealMythical = {
+		id = "9048764286",
+		source = "Magical Meetup - Tag2 (APM Music)",
+		loudness = 47,
+	},
 	discovery = {
 		id = "9125644310",
 		source = "Magic Twirling Small High Pitch Spinning Chi (SFX)",
@@ -211,6 +246,9 @@ Manifest.opening = {
 --   9038721033 "Easy Island" (ukulele, marimba, celesta, gentle ska beat), loopEnd 135.2
 --   9042948177 "Summer Breakfast (Light version)", loopEnd 107.6
 --   15675069601 "Roblox_UI_Loop_Calm_Music" (the first pick; a true loop, no loopEnd needed)
+-- Background music pauses for a box opening: fade out this fast, then pause; fade back in this
+-- slowly when it resumes from the same spot. Seconds.
+Manifest.suppress = { fadeOut = 0.3, fadeIn = 1.2 }
 Manifest.music = {
 	world = {
 		-- "Light, tropical and laid-back pop melody, marimba, piano, pizzicati, drums played

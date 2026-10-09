@@ -39,7 +39,7 @@ Store audio that was ripped from commercial games was deliberately skipped.
   - **Volume:** `Sfx.setVolume("sfx" | "music", 0..1)`, driven by the Settings sliders.
   - **Teardown:** `Sfx.destroy()` runs when the client script is destroyed.
 - **Box opening:** the existing `OpeningAudio` engine keeps its phase-locked timing. Its slots now
-  come from `SoundManifest.opening` (14 of 48 are filled; the rest stay silent). Its Sounds join
+  come from `SoundManifest.opening` (17 of 48 are filled; the rest stay silent). Its Sounds join
   the Reveal group, so the Sound effects volume covers them. Its preload keeps one resident Sound per ID
   for the controller's lifetime. The close sound is the Sfx `close`, played when the session
   enters Closing, because the opening's own cues must end inside its 0.11 s exit curtain.
@@ -90,7 +90,18 @@ Other verified alternatives with measured loop ends are in the manifest comment:
 (ukulele, marimba, celesta, gentle ska) and the Light version of Summer Breakfast. To try one,
 change `id`/`source`/`loopEnd` for `world` in `SoundManifest.luau`.
 
-Not added (by choice): ducking under the box reveal, fade-out on leave, a playlist.
+- **Paused during box openings (UI-06):** `Music.suppress(true)` fades the track out in 0.3 s
+  and then pauses it; `Music.suppress(false)` resumes it from the same TimePosition and fades back
+  in over 1.2 s (`SoundManifest.suppress`). The only caller is `OpeningController`, which sets it
+  when a session starts and releases it from the session's own scope, so every exit resumes it:
+  Continue/Keep, Skip, cancel, reset/death/respawn, GUI or stage removal, a presentation error and
+  controller teardown. Open 10 steps hand over in the same frame; a release followed by a new
+  suppress while the track is still silent pauses at once, so the music never blips between
+  figures and resumes when the results grid appears. Repeated calls are no-ops, a track started
+  while suppressed waits paused, and `Music.destroy()` clears the flag. The Music slider still
+  scales the group as before.
+
+Not added (by choice): fade-out on leave, a playlist.
 
 ## Volume settings
 
@@ -173,6 +184,9 @@ Opening cue slots (timing, ducking and fallbacks stay in `OpeningAudioConfig`/`S
 | crack | Seal breaks (foil/paper tear) | Plastic Sheet Impacts Rips Paper Tears 6 (SFX) | 9117624959 |
 | lid | Lid pops off | Suction Pop 2 (SFX) | 9119669295 |
 | impact (all `impactX` fall back) | Figure lands | Wood Impacts Soft Impacts On Temple Blocks 1 (SFX) | 9120917438 |
+| rarityCommon | Common identity, mid-flight (UI-06) | Synth Sparkle Tone High Pitch Tone Burst Din (SFX) ("Ding 6") | 9126073953 |
+| rarityUncommon | Uncommon identity, mid-flight (UI-06) | Synth Sparkle Tone High Pitch Bell Tone Burs (SFX) ("Burst 2") | 9126071458 |
+| rarityRare | Rare identity, mid-flight (UI-06) | Magic Glows Soft Clusters Of Chiming Hits 6 (SFX) | 9116395179 |
 | rarityLegendary | Legendary tease pulse | Magic Glows Soft Clusters Of Chiming Hits 4 (SFX) | 9116395089 |
 | rarityMythical | Mythical bloom | Magical Exit Sparkling Pass Bys Clinking Chi (SFX) | 9125635442 |
 | revealCommon | Small plink | Synth Sparkle Tone High Pitch Tone Burst Pin (SFX) | 9126076030 |
@@ -182,8 +196,27 @@ Opening cue slots (timing, ducking and fallbacks stay in `OpeningAudioConfig`/`S
 | revealMythical | Fuller bells tag with a tail | Magical Meetup - Tag2 (APM) | 9048764286 |
 | discovery | NEW sparkle (first discovery only) | Magic Twirling Small High Pitch Spinning Chi (SFX) | 9125644310 |
 
-The reveal levels climb from 0.5 (Common) to 0.75 (Mythical), and the ceilings grow from 0.8 s
-to 5 s. Closing and Skip still cut them.
+**Rarity ladder (UI-06).** Every tier now has its own identity cue as the box's energy changes
+color mid-flight (Common and Uncommon flights used to be silent) and its own reveal sting. The
+manifest records each source's measured loudness (mean `PlaybackLoudness` at Volume 1, Studio
+2026-10-08), and `OpeningAudioConfig` sets gains so gain × loudness climbs Common → Mythical:
+
+| Tier | Identity gain (level) | Reveal gain (level) | Reveal ceiling |
+| --- | --- | --- | --- |
+| Common | 0.15 (5.0) | 0.5 (6.5) | 0.8 s |
+| Uncommon | 0.3 (5.7) | 0.65 (7.2) | 1.2 s |
+| Rare | 1.1 (6.6) | 0.95 (11.4) | 2 s |
+| Legendary | 1.1 (7.7) | 0.7 (28) | 2.6 s |
+| Mythical | 0.48 (17.3) | 0.75 (35) | 5 s |
+
+The old gains had Rare's soft chime cluster (peak 35 at Volume 1) under Common's ping (133), so
+Rare reveal and Legendary identity gained the most. `tests/OpeningAudio.spec.luau` keeps the
+ladder climbing, Common at least half of Rare, and every tier on a distinct filled sample. The
+level is a signal proxy (it averages a cue's tail), not a listening result. Closing and Skip still
+cut the stings. **Open 10:** one session plays at a time, so stings never stack; only the run's
+exit plays `close` (the tease box and figure-to-figure hand-overs stay quiet), then the results
+sting. Anticipation stays the shake ticks: the store's risers are horror/noise builds, so `charge`
+and `tension` remain empty.
 
 ## Deliberately not added
 
@@ -197,7 +230,27 @@ to 5 s. Closing and Skip still cut them.
 Automated: `tests/Sfx.spec.luau` covers the manifest data, placeholders, voice caps and
 retriggering, cooldowns, the UI gap, groups, mute, preload and teardown.
 `tests/OpeningAudio.spec.luau` checks that the slots come only from the manifest, that the
-rejected pack stays disconnected, the Reveal group, the resident cache and the ceilings.
+rejected pack stays disconnected, the Reveal group, the resident cache and the ceilings, plus
+rarity cue selection, the loudness ladder and an Open 10 run (no stacking, one reveal per figure,
+one close). `tests/Music.spec.luau` covers the suppress state machine (fade, pause in place,
+resume, repeats, cancelled fades, same-frame hand-over, start while suppressed, teardown);
+`tests/OpeningLifecycle.spec.luau` checks that the music is paused during every session and
+playing at its level after every exit path, including Open 10 hand-overs and Skip-all.
+
+Studio single-client check (2026-10-08, UI-06, real Shop UI, logged from the client; the agent
+can't hear, so this is timing and state, not listening):
+
+- Single box (Uncommon): music faded and paused 0.3 s after the opening began; click, crack, lid,
+  rarityUncommon, impact, revealUncommon, NEW in order; Keep resumed from the same TimePosition
+  (25.8 s) and reached full level 1.1 s later. One music track throughout.
+- Open 10 with "View all results" after three figures: the tease box (Rare) played rarityRare and
+  handed over with no close sound and no music blip; each figure revealed once; Skip-all played one
+  close and the results sting, and the music resumed from where it paused 34 s earlier.
+- Single box, Skip mid-flight (Common): rarityCommon, then one revealCommon; music stayed paused
+  on the Result card and resumed on Keep.
+- Reset mid-flight (0.6 s after the lid) and reset on the Result card: the opening and its sounds
+  were removed and the music resumed from its paused position at full level.
+- No game warnings or errors in the output.
 `tests/Screens.spec.luau` covers open, tab, close, click, denied and the volume sliders.
 
 The Studio single-client playtest on 2026-10-03 confirmed in the client's output log:

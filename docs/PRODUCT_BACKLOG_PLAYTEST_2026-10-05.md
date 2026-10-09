@@ -416,6 +416,18 @@ Native, multi-client and device acceptance remain open.
 - Preserve the existing SFX/Music volume settings.
 - Keep Common through Mythical reveals differentiated without making lower rarities feel dead.
 
+Implementation (2026-10-08): client only, no server or schema change. `Music.suppress` is the one
+"music suppressed" state; `OpeningController` sets it when a session starts and releases it from
+the session scope, so finish, Skip, cancel, Open 10 summaries, reset/death, GUI/stage removal,
+errors and teardown all resume the track from where it paused (0.3 s fade out, 1.2 s fade back).
+Every rarity now has a mid-flight identity cue (three new licensed Pro Sound Effects IDs for
+Common, Uncommon and Rare) and gains follow measured source loudness so both identity and reveal
+climb Common -> Mythical; Rare's soft reveal no longer sits under Common. Open 10 hand-overs drop
+the per-figure close sound. Volume sliders and reduced motion behave as before. Details, the gain
+table and the Studio check are in [the soundpack](SOUND.md#background-music). Coverage:
+`tests/Music.spec.luau`, `tests/OpeningLifecycle.spec.luau`, `tests/OpeningAudio.spec.luau`.
+Human listening is still open.
+
 ### UI-07 — Build the physical plot Shop with a cute Peeka shopkeeper
 
 Paired with **LOGIC-04**.

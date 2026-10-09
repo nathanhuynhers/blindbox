@@ -16,6 +16,7 @@ local AudioSequence = require(script.Parent.OpeningAudioSequence)
 local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Projection = require(script.Parent.UIState)
 local Sfx = require(script.Parent.Sfx)
+local Music = require(script.Parent.Music)
 local Controller = {}
 -- Reveal choices: "display" (place/swap), "another" (buy the same box), "keep" (close).
 -- Open 10 steps (result.sequence) always report back, including "keep" and "skip" (skip all).
@@ -127,6 +128,11 @@ function Controller.create(
 				end
 			end
 			local ok, reason = pcall(function()
+				-- Every exit (finish, Skip, cancel, reset, error, teardown) destroys this scope.
+				scope.add(function()
+					Music.suppress(false)
+				end)
+				Music.suppress(true)
 				local selection = GuiService.SelectedObject
 				scope.add(function()
 					GuiService.SelectedObject = if selection and selection.Parent
@@ -196,8 +202,16 @@ function Controller.create(
 					local phase: State.Phase = session.state.phase
 					cinematic.enter(phase)
 					soundtrack.enter(session.state)
-					if phase == "Closing" then
-						-- Outlives the session's own cues, which must end inside the curtain.
+					-- Outlives the session's own cues, which must end inside the curtain. An Open 10
+					-- step handing over to the next figure stays quiet; only the way out sounds.
+					if
+						phase == "Closing"
+						and (
+							not result.sequence
+							or result.sequence == "last"
+							or session.choice == "skip"
+						)
+					then
 						Sfx.play("close")
 					end
 				end

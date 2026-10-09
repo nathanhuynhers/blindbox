@@ -10,6 +10,7 @@ local Music = {}
 
 type Playing = { name: string, sound: Sound, tween: Tween? }
 local current: Playing? = nil
+local suppressed = false -- Owned by the box opening's session scope (Music.suppress).
 local fading: { [Sound]: Playing } = {} -- Stopped tracks still fading out.
 
 local function fade(entry: Playing, volume: number, seconds: number, done: (() -> ())?)
@@ -83,7 +84,11 @@ function Music.play(name: string)
 	local entry: Playing = { name = name, sound = sound, tween = nil }
 	current = entry
 	sound:Play()
-	fade(entry, track.volume, track.fadeIn or 0)
+	if suppressed then
+		sound:Pause() -- Waits at the start; Music.suppress(false) resumes and fades it in.
+	else
+		fade(entry, track.volume, track.fadeIn or 0)
+	end
 	task.defer(function()
 		local ok, problem = pcall(function()
 			-- A Sound instance, not the ID string: ContentProvider fails audio ID strings.
@@ -99,6 +104,39 @@ function Music.play(name: string)
 	end)
 end
 
+-- The box opening's switch, set and released only by its session scope so every exit path
+-- (finish, Skip, cancel, reset, error, teardown) resumes. On: fade out quickly, then pause in place.
+-- Off: resume from the same spot and fade back in. Repeats are no-ops, so it never double-plays.
+function Music.suppress(on: boolean)
+	if suppressed == on then
+		return
+	end
+	suppressed = on
+	local entry = current
+	if not entry then
+		return
+	end
+	local sound = entry.sound
+	if on then
+		-- Already silent (e.g. an Open 10 step handing over in the same frame): pause at once.
+		fade(entry, 0, if sound.Volume > 0.01 then Manifest.suppress.fadeOut else 0, function()
+			if suppressed and current == entry then
+				sound:Pause()
+			end
+		end)
+	else
+		if not sound.IsPlaying then
+			sound:Resume()
+		end
+		local track = Manifest.music[entry.name]
+		fade(entry, if track then track.volume else 0, Manifest.suppress.fadeIn)
+	end
+end
+
+function Music.suppressed(): boolean
+	return suppressed
+end
+
 function Music.playing(): string?
 	return if current then current.name else nil
 end
@@ -109,6 +147,7 @@ function Music.destroy()
 		table.insert(entries, entry)
 	end
 	current = nil
+	suppressed = false
 	table.clear(fading)
 	for _, entry in entries do
 		if entry then
