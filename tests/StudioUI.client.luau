@@ -260,6 +260,9 @@ else
 	end
 	local origin, extent = bounds.AbsolutePosition, bounds.AbsoluteSize
 	local inset = GuiService.TopbarInset
+	-- An open settings popover's outside-tap catcher covers the row on purpose.
+	local popover = stage:FindFirstChild("Settings", true) :: GuiObject?
+	local catching = popover ~= nil and visible(popover)
 	for index, button in row do
 		local position, size = button.AbsolutePosition, button.AbsoluteSize
 		assert(size.X >= 43.9 and size.Y >= 43.9, "Small HUD target: " .. button.Name)
@@ -290,6 +293,9 @@ else
 				)
 			end
 		end
+		if catching then
+			continue
+		end
 		local point = position + size / 2
 		local first: Instance? = nil
 		for _, hit in player.PlayerGui:GetGuiObjectsAtPosition(point.X, point.Y) do
@@ -298,7 +304,10 @@ else
 				break
 			end
 		end
-		assert(first == button, button.Name .. " is behind " .. (if first then first:GetFullName() else "no hit"))
+		assert(
+			first == button,
+			button.Name .. " is behind " .. (if first then first:GetFullName() else "no hit")
+		)
 	end
 	print("PASS: HUD row [Daily][Home][gear] targets, gaps, safe area and hit order")
 end
