@@ -112,6 +112,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		DisplayFixture.setNight(fixture, enabled)
 		CollectionFixture.setNight(collection, enabled)
 		ShopFixture.setNight(shop, enabled)
+		PlotFixture.setNight(entrance, enabled)
 	end)
 	table.insert(
 		plot.connections,

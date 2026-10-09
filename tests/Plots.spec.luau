@@ -543,10 +543,10 @@ check(edgeTrees == 3 * Config.maxPlots and plotStacks == Config.maxPlots, "tree 
 -- Night lights stay inside the budget and switch lens glow with the lights.
 local staticLights = NightLights.lightCount()
 check(
-	staticLights == 32 + 2 * Config.maxPlots + 1 + 4 and staticLights + Config.maxPlots <= NightLights.budget,
-	string.format("static night lights %d leave room for eight arch glows within %d", staticLights, NightLights.budget)
+	staticLights == 32 + 2 * Config.maxPlots + 1 + 4 and staticLights + 2 * Config.maxPlots <= NightLights.budget,
+	string.format("static night lights %d leave room for eight arch glows and floor fills within %d", staticLights, NightLights.budget)
 )
-print(string.format("Static night lights: %d (+1 per active plot) / %d", staticLights, NightLights.budget))
+print(string.format("Static night lights: %d (+2 per active plot) / %d", staticLights, NightLights.budget))
 local sampleBollard = groups.Paths:FindFirstChild("Path_1"):FindFirstChild("Bollard_1_Left")
 local sampleLens = sampleBollard:FindFirstChild("WarmLens")
 local dayColor = sampleLens.Color
@@ -726,7 +726,7 @@ for index = 3, Config.maxPlots do
 	local controllersBefore = NightLights.controllerCount()
 	if index == 3 then NightLights.set(true) end
 	local radialPlot = Plot.create(actor, index)
-	check(NightLights.lightCount() == lightsBefore + 1, "an active plot adds exactly one arch glow")
+	check(NightLights.lightCount() == lightsBefore + 2, "an active plot adds exactly one arch glow and one floor fill")
 	check(NightLights.controllerCount() == controllersBefore + 1, "an active plot adds one fixture lighting controller")
 	if index == 3 then
 		check(radialPlot.fixture.light.Brightness == Fixture.lighting.nightBrightness, "plot created at night immediately uses night fixture lighting")
@@ -795,7 +795,7 @@ for index = 3, Config.maxPlots do
 		print(string.format("Active plot runtime parts at 6 Display slots: %d / %d", runtimeParts, Layout.budgets.plotRuntimeParts))
 	end
 	Plot.destroy(radialPlot)
-	check(NightLights.lightCount() == lightsBefore, "plot release returns its arch glow to the budget")
+	check(NightLights.lightCount() == lightsBefore, "plot release returns its arch glow and floor fill to the budget")
 	check(NightLights.controllerCount() == controllersBefore, "plot release removes its fixture lighting controller")
 	Plot.destroy(radialPlot)
 	check(NightLights.lightCount() == lightsBefore, "release is idempotent")
@@ -847,6 +847,14 @@ end
 for _, piece in descendantParts(entrance.model) do
 	local at = localPosition(plot.transform, piece.Position)
 	local bottom = at.Y - piece.Size.Y / 2
+	if piece == entrance.parts.Fill then
+		-- The floor-fill anchor is an invisible, intangible light holder high over the plot centre.
+		check(
+			piece.Transparency == 1 and not piece.CanCollide and not piece.CanQuery and bottom > 15,
+			"floor-fill anchor is invisible, intangible and above head height"
+		)
+		continue
+	end
 	check(
 		math.abs(at.X) + piece.Size.X / 2 <= Config.width / 2
 			and math.abs(at.Z) + piece.Size.Z / 2 <= Config.depth / 2
@@ -860,8 +868,11 @@ for _, piece in descendantParts(entrance.model) do
 		)
 	end
 end
-check(#descendantParts(entrance.model) == 10, "ten-part entrance arch")
-check(#entrance.lights == 3 and entrance.lights[1].light ~= nil, "one sign glow plus two lamp lenses")
+check(#descendantParts(entrance.model) == 11, "ten-part entrance arch plus the floor-fill anchor")
+check(
+	#entrance.lights == 4 and entrance.lights[1].light ~= nil and entrance.lights[2].light ~= nil,
+	"one sign glow, one floor fill and two lamp lenses"
+)
 local pad = plot.spawnPad
 for _, ring in descendantParts(pad) do
 	local at = localPosition(plot.transform, ring.Position)
@@ -950,6 +961,70 @@ check(
 	shop.model:GetAttribute("Night") == false and shop.window.LightInfluence == 1 and not shop.halos[1].Visible,
 	"Shop returns to its day look at dawn"
 )
+end
+-- UI-04 decorative plot lights: painted string lights under both awnings, marquee bulbs on the
+-- arch beam and a doorway glow pool, all switched by the plot's existing night controller.
+do
+	local function decor(): ({ any }, number, number)
+		local guis, halos, lights = {}, 0, 0
+		for _, node in plot.model:GetDescendants() do
+			if node:IsA("SurfaceGui") and (node.Name == "StringLights" or node.Name == "DoorGlow") then
+				table.insert(guis, node)
+				for _, frame in node:GetChildren() do
+					if frame.Name == "Halo" and frame.Visible then
+						halos += 1
+					end
+				end
+			elseif node:IsA("Light") then
+				lights += 1
+			end
+			check(not (node:IsA("BasePart") and node.Material == "Neon" and node.Name == "StringLights"), "string lights are never Neon")
+		end
+		return guis, halos, lights
+	end
+	local guis, halos, lightsBefore = decor()
+	-- Display awning + Shelves awning + both faces of the arch beam + doorway pool.
+	check(#guis == 5 and halos == 0, "five decorative light surfaces start dark by day")
+	local doorGlow = plot.entrance.doorGlow
+	check(doorGlow.Enabled == false and doorGlow.LightInfluence == 0, "doorway glow starts off")
+	NightLights.set(true)
+	local nightGuis, nightHalos, nightLights = decor()
+	local lit = true
+	for _, gui in nightGuis do
+		if gui.Name == "StringLights" then
+			lit = lit and gui.LightInfluence == 0
+			for _, frame in gui:GetChildren() do
+				if frame.Name == "Bulb" then
+					lit = lit and frame.BackgroundColor3 == Awning.bulbs.on
+				end
+			end
+		end
+	end
+	check(lit and nightHalos > 40 and doorGlow.Enabled, "dusk lights every awning, beam bulb and the doorway glow")
+	check(nightLights == lightsBefore, "decorative lights add no Light instances")
+	local fill = plot.entrance.parts.Fill:FindFirstChildOfClass("PointLight")
+	local fillAt = plot.transform:PointToObjectSpace(plot.entrance.parts.Fill.Position)
+	check(
+		fill.Enabled and not fill.Shadows and fill.Range == PlotFixture.fill.range and fillAt.Y > 15 and math.abs(fillAt.X) < 1,
+		"one shadowless floor fill lights the plot centre from above at night"
+	)
+	-- A Display awning rebuilt at night (capacity change) comes back lit.
+	local capacity = plot.fixture.capacity
+	Fixture.resize(plot.fixture, if capacity < 6 then capacity + 1 else capacity - 1)
+	local rebuiltLit = false
+	for _, node in (plot.fixture.awning :: any):GetDescendants() do
+		if node.Name == "StringLights" and node:IsA("SurfaceGui") then
+			rebuiltLit = node.LightInfluence == 0
+		end
+	end
+	check(rebuiltLit, "Display awning rebuilt at night keeps its string lights on")
+	Fixture.resize(plot.fixture, capacity)
+	NightLights.set(false)
+	local _, dawnHalos = decor()
+	check(
+		dawnHalos == 0 and not doorGlow.Enabled and not plot.entrance.parts.Fill:FindFirstChildOfClass("PointLight").Enabled,
+		"dawn turns every decorative light and the floor fill off"
+	)
 end
 local unitCount = 0
 for _, child in plot.collection.model:GetChildren() do

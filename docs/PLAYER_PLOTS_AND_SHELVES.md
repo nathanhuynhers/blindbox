@@ -44,8 +44,8 @@ The shared world is **Blindbox Town**, a cozy blind-box shopping town built from
   hedge ring (radius 264) and 32 invisible, 60-stud-tall boundary walls just behind it.
 
 Budgets: at most 1,100 static world parts (1,021 native parts at start, including the eight
-platforms, petal carpets and statue gardens) and 64 dusk-to-dawn lights (53 static plus one arch
-glow per active plot, 61 at eight players). Once the uploaded models load, the world holds about
+platforms, petal carpets and statue gardens) and 72 dusk-to-dawn lights (53 static plus one arch
+glow and one floor fill per active plot, 69 at eight players). Once the uploaded models load, the world holds about
 1,190 parts, most of them MeshParts.
 
 ### Trees and statues (uploaded models)
@@ -78,8 +78,18 @@ dusk, night and dawn looks. At dusk (17.8, as the default sky sets) and dawn (6.
 lantern, bollard, giant-box and arch light and swaps lens parts to Neon or back. Switching only
 happens when that state changes; nothing runs per frame. Each active plot registers one teardown-owned
 controller that changes only the brightness of the Display's existing wash (0.65 day, 1.25 night)
-and the nine existing Shelf row washes (0.35 day, 0.9 night). It creates no extra lights, keeps
-the 64-light budget unchanged, and continues to cover Display widths 3-6 and all carousel views.
+and the nine existing Shelf row washes (0.35 day, 0.9 night). It creates no extra lights and continues to cover Display widths 3-6 and all carousel views.
+The same controller switches the plot's decorative lights (UI-04): warm string lights swagged
+under the Display and Shelves awning hems, marquee bulbs on both faces of the arch beam, and a
+soft warm pool on the doorway deck. All are painted on SurfaceGuis that turn unlit
+(`LightInfluence` 0) at dusk, the Shop's bulb treatment: no Light instances, no Neon, so figure
+colors are untouched. Each awning adds one invisible bulb strip (two parts
+per plot, 170 of 184 runtime parts at six Display slots); a Display awning rebuilt at night by a
+capacity change comes back lit. The painted bulbs cast no light, so each plot also registers one
+real `NightLights` floor fill: a shadowless warm PointLight (brightness 0.9, range 60) on an
+invisible anchor 18 studs above the plot centre, enough to read the open floor, Shop and Shelves at
+night while the town stays dark. It is the one extra Light per plot (12 instead of 11) and the reason
+the night-light budget is 72.
 
 ### Plot platforms and entrances
 
@@ -116,7 +126,7 @@ awning with a scalloped hem and bulbs, an oak counter with a brass bell, a potte
 "OPEN / press E" chalkboard. SurfaceGuis paint the polka dots, the white "?" on both sides, the
 "Peeka's Box Shop" plaque and the shelves of pastel mini boxes behind the window. At dusk the
 plot's existing night controller makes the window and bulbs glow (unlit SurfaceGuis, no Light
-instances), so the 64-light budget is unchanged.
+instances), so the night-light budget is unchanged.
 
 Peeka stands behind the counter: the uploaded `Models.Town.PeekaShopkeeper` (fitted to 4.8 studs)
 replaces an 8-part stand-in through `TownPlacements` whenever it loads, including for plots
@@ -166,9 +176,9 @@ slots remain visible in the UI; their retained collection plates stay hidden in 
 
 Each supported slot has one shallow, nonblocking oak-rimmed collection plate in front of its
 figure, 5.8 by 3.8 studs, with its inset top 0.2 studs above the walking surface. Plates use the
-same plot-local transform and 8-stud slot spacing, recentering with capacities 3–6. Occupied pads
-have a soft pastel-ivory inset and small gold Coin/collection cue; empty pads use a muted panel
-and dash. Each uses two parts, one noninteractive top SurfaceGui, and no lights. A living owner
+same plot-local transform and 8-stud slot spacing, recentering with capacities 3–6. Each pad's
+top is painted as a rounded cushion with two paw prints: occupied pads turn blush with accent paws
+and rim, a gold coin and "COLLECT"; empty pads keep a cream cushion with faded oak paws and a dash. Each uses two parts, one noninteractive top SurfaceGui, and no lights. A living owner
 stepping on a pad collects only the figure currently in that slot through the existing authoritative
 transaction path. Visitors, empty/locked slots, stale sessions and invalid/distant contacts are
 rejected. Click/tap collection remains available; E still opens management. See [architecture](ARCHITECTURE.md)

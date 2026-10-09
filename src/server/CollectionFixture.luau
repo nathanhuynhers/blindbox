@@ -380,6 +380,7 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	return render
 end
 function Fixture.setNight(render: Render, enabled: boolean)
+	Awning.setLit(render.awning, enabled)
 	local brightness = if enabled
 		then Fixture.lighting.nightBrightness
 		else Fixture.lighting.dayBrightness

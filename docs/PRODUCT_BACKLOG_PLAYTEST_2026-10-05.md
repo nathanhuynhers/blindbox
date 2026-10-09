@@ -371,6 +371,45 @@ multi-client/device/save-rejoin gaps remain.
 - Avoid excessive brightness, neon/simulator styling or lights that interfere with figure readability.
 - Ensure repeated neighboring plots still look cohesive.
 
+**Implemented (2026-10-08); native multi-player acceptance pending.**
+At dusk each active plot lights warm string lights swagged under the Display and Shelves awning
+hems, marquee bulbs on both faces of the pink arch beam, and a soft warm pool on the doorway deck;
+at dawn they go dark. The bulbs reuse the Shop's treatment: painted SurfaceGui dots on cream by
+day that become unlit (`LightInfluence` 0) warm amber with faint halos at night. They are switched
+by the plot's existing night controller (the same `NightLights` state change as the lanterns),
+add no Light instances and no Neon, so Display/Shelf washes and figure colors are unchanged.
+Every plot uses the same fixtures and accent, so neighbours match.
+
+Follow-up (user: plot interiors still too dark at night): painted bulbs cast no light, so each
+plot now also has one real floor fill, a shadowless warm PointLight (brightness 0.9, range 60) on an
+invisible anchor 18 studs above the plot centre, registered with `NightLights` like the arch glow.
+Budgets: +3 runtime parts (two bulb strips and the fill anchor: 168 to 171 of 184 at six Display
+slots); world parts unchanged at 1,090/1,100. **Night-light budget raised 64 to 72:** 53 static +
+2 per plot (arch glow, floor fill) = 69 at eight plots (previously 61), leaving 3 spare. Scene
+Light instances at eight plots rise from 141 to 149 (+6%), all shadowless.
+
+Requested alongside: the Display stepping plates are cuter. Each plate's existing top SurfaceGui
+now paints a rounded cushion with two paw prints; occupied plates turn blush with accent paws and
+rim, a gold coin and "COLLECT"; empty plates keep a cream cushion with faded paws and the dash. The
+art sits in one frame turned -90 degrees so it reads upright from the entrance (the old cue text
+was sideways). Still two parts, one SurfaceGui and no lights per plate; collection rules unchanged.
+
+Verification: `rokit install`, `wally install`, `stylua src`, `stylua --check src`, `selene src`
+(0 errors/warnings), Rojo 7.7.0 sourcemap/place build and Luau LSP analysis with Roblox
+definitions (no source diagnostics). The full `tests/run.py` suite passed with all 18
+invalid-configuration fixtures, including new checks for day-off/dusk-on/dawn-off of all five
+decorative surfaces, no Neon, the floor fill (one shadowless overhead light per plot, on at dusk,
+off at dawn, released with the plot), the 72 budget, a Display awning rebuilt at night staying lit,
+and occupied/empty/locked plate art. Studio MCP playtest (single client): at start the plot
+showed the unlit string lights; after waiting for the real `DayNight` dusk the server reported all
+five surfaces lit and the doorway glow on, and window captures of one plot and of neighbouring
+plots were taken. For the floor fill, a held night look compared fill off/on (tuning only), then
+after the override was removed and the real `DayNight` dusk arrived the server reported the fill
+on, shadowless and 12 Light instances per plot; one-plot and neighbour captures were retaken. The neighbours were server-side visual
+copies of the lit live plot in slots 2 and 8, since Studio had one player. The occupied plate look
+was checked by rendering the production `DisplayFixture` code with sample slots in an empty plot
+slot. Native multi-player, device and figure-color-at-night acceptance with real figures remain open.
+
 ### UI-05 — Add continuous showcase auto-scroll to Shelves
 
 - Make the player's Shelves continuously and smoothly scroll through their figures so the collection

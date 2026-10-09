@@ -40,7 +40,7 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   exist. Future server-owned speed resolution belongs in PlayerMovement. Opening input/camera
   teardown and Home teleports do not write or restore WalkSpeed.
 - `DayNight`/`NightLights`: a 1-second server loop sets `Lighting.ClockTime` and interpolated
-  lighting looks over a 20-minute cycle; `NightLights` is a 64-light budgeted registry that
+  lighting looks over a 20-minute cycle; `NightLights` is a 72-light budgeted registry that
   switches lights and lens glows only when crossing dusk/dawn. One lifecycle-owned controller
   per active plot also retunes its existing Display and Shelf wash lights at those transitions;
   controllers consume no actual-light budget and add no per-frame work.

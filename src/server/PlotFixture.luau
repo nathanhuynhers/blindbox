@@ -1,5 +1,6 @@
 --!strict
 -- Native-part visual treatment for one plot transform and its dynamic owner entrance.
+local Awning = require(script.Parent.Awning)
 local Config = require(script.Parent.PlotConfig)
 local Geometry = require(script.Parent.PlotGeometry)
 local NightLights = require(script.Parent.NightLights)
@@ -36,6 +37,15 @@ Fixture.arch = table.freeze({
 	plantX = 15.5,
 	lampOn = Color3.fromRGB(255, 214, 140),
 })
+-- One soft, shadowless warm fill high over the plot so the open floor is not dark at night.
+-- Kept well above head height and centred, so it reaches the floor broadly but only adds a
+-- gentle, near-white warmth on the Display figures (about 40 studs away).
+Fixture.fill = table.freeze({
+	position = Vector3.new(0, 18, -4),
+	range = 60,
+	brightness = 0.9,
+	color = Color3.fromRGB(255, 228, 192),
+})
 -- Plot-local spawn pad on the open center/right floor (local -X is the right side from the entrance).
 Fixture.spawnPad = table.freeze({ position = Vector3.new(-18, 0, -28), diameter = 9, height = 4 })
 local palette, style = Fixture.palette, Fixture.style
@@ -46,6 +56,7 @@ export type Entrance = {
 	label: TextLabel,
 	labels: { TextLabel },
 	lights: { NightLights.Entry },
+	doorGlow: SurfaceGui,
 }
 local function part(
 	parent: Instance,
@@ -265,6 +276,19 @@ function Fixture.createEntrance(
 		palette.sign,
 		Enum.Material.SmoothPlastic
 	)
+	local fillAnchor = part(
+		model,
+		transform,
+		"FloorFill",
+		Vector3.new(1, 1, 1),
+		Fixture.fill.position,
+		palette.sign,
+		Enum.Material.SmoothPlastic
+	)
+	fillAnchor.Transparency = 1
+	fillAnchor.CanCollide = false
+	fillAnchor.CanQuery = false
+	parts.Fill = fillAnchor
 	for _, piece in parts do
 		piece.CanTouch = false
 	end
@@ -290,7 +314,7 @@ function Fixture.createEntrance(
 		label.Parent = gui
 		table.insert(labels, label)
 	end
-	-- One sign glow plus the two post lamps, switched with the town's other dusk lights.
+	-- One sign glow, the floor fill and the two post lamps, switched with the town's dusk lights.
 	local glow = Instance.new("SurfaceLight")
 	glow.Name = "SignGlow"
 	glow.Face = Enum.NormalId.Front
@@ -300,13 +324,63 @@ function Fixture.createEntrance(
 	glow.Angle = 100
 	glow.Enabled = false
 	glow.Parent = parts.Face
+	-- Marquee bulbs on both faces of the beam and a soft unlit pool on the doorway deck follow the
+	-- plot's night controller (`setNight`); neither adds a Light instance or a part.
+	local beam = parts.Beam
+	local count = math.floor(beam.Size.X / 1.4)
+	local points = {}
+	for index = 1, count do
+		table.insert(points, Vector2.new((index - 0.5) * beam.Size.X / count, beam.Size.Y / 2))
+	end
+	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
+		Awning.paintBulbs(beam, face, points)
+	end
+	Awning.setLit(beam, false)
+	local doorGlow = Instance.new("SurfaceGui")
+	doorGlow.Name = "DoorGlow"
+	doorGlow.Face = Enum.NormalId.Top
+	doorGlow.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	doorGlow.PixelsPerStud = 12
+	doorGlow.LightInfluence = 0
+	doorGlow.Active = false
+	doorGlow.Enabled = false
+	doorGlow.Parent = parts.Deck
+	for _, ring in { { 0.95, 0.9, 0.9 }, { 0.7, 0.65, 0.86 }, { 0.42, 0.4, 0.83 } } do
+		local pool = Instance.new("Frame")
+		pool.Name = "Pool"
+		pool.AnchorPoint = Vector2.new(0.5, 0.5)
+		pool.Position = UDim2.fromScale(0.5, 0.5)
+		pool.Size = UDim2.fromScale(ring[1], ring[2])
+		pool.BackgroundColor3 = arch.lampOn
+		pool.BackgroundTransparency = ring[3]
+		pool.BorderSizePixel = 0
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0.5, 0)
+		corner.Parent = pool
+		pool.Parent = doorGlow
+	end
+	local fill = Instance.new("PointLight")
+	fill.Name = "FloorFill"
+	fill.Color = Fixture.fill.color
+	fill.Brightness = Fixture.fill.brightness
+	fill.Range = Fixture.fill.range
+	fill.Enabled = false
+	fill.Parent = fillAnchor
 	local lights = {
 		NightLights.add(glow, nil, nil),
+		NightLights.add(fill, nil, nil),
 		NightLights.add(nil, parts.LeftLamp, arch.lampOn),
 		NightLights.add(nil, parts.RightLamp, arch.lampOn),
 	}
 	model.Parent = parent
-	return { model = model, parts = parts, label = labels[1], labels = labels, lights = lights }
+	return {
+		model = model,
+		parts = parts,
+		label = labels[1],
+		labels = labels,
+		lights = lights,
+		doorGlow = doorGlow,
+	}
 end
 
 -- Flush, noncolliding spawn pad on the open center/right floor, clear of the arch and fixtures.
@@ -347,6 +421,12 @@ function Fixture.spawnCFrame(transform: CFrame): CFrame
 			Vector3.new(at.X, Fixture.spawnPad.height, at.Z),
 			Vector3.new(0, Fixture.spawnPad.height, Geometry.displayZ)
 		)
+end
+
+-- Driven by the plot's existing night controller, only when the day/night state changes.
+function Fixture.setNight(entrance: Entrance, enabled: boolean)
+	Awning.setLit(entrance.parts.Beam, enabled)
+	entrance.doorGlow.Enabled = enabled
 end
 
 function Fixture.releaseEntrance(entrance: Entrance)

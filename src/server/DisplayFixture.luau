@@ -20,7 +20,58 @@ local charcoal = Color3.fromRGB(48, 46, 43)
 local coinGold = Color3.fromRGB(220, 162, 44)
 -- Low-profile floor inlays, clear of the counter front and the walking/expansion space.
 Fixture.plate = table.freeze({ width = 5.8, depth = 3.8, frontOffset = -7.5, debounce = 0.35 })
-export type Plate = { model: Model, base: Part, target: Part, cue: TextLabel }
+export type Plate = {
+	model: Model,
+	base: Part,
+	target: Part,
+	cue: TextLabel,
+	cushion: Frame,
+	paws: { Frame },
+	coin: Frame,
+}
+-- Plate art: a rounded blush cushion with two little paw prints and a coin, all painted on the
+-- plate's single SurfaceGui. `blush` is the occupied cushion; empty plates fall back to cream.
+local plateArt = table.freeze({
+	blush = Color3.fromRGB(255, 236, 242),
+	cream = Color3.fromRGB(246, 239, 226),
+	canvas = Vector2.new(460, 260),
+})
+local function round(parent: Instance, name: string, at: UDim2, size: UDim2, color: Color3): Frame
+	local frame = Instance.new("Frame")
+	frame.Name = name
+	frame.AnchorPoint = Vector2.new(0.5, 0.5)
+	frame.Position = at
+	frame.Size = size
+	frame.BackgroundColor3 = color
+	frame.BorderSizePixel = 0
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0.5, 0)
+	corner.Parent = frame
+	frame.Parent = parent
+	return frame
+end
+-- One paw: a soft heel pad with four toe beans fanned above it.
+local function paw(parent: Instance, x: number, tilt: number, frames: { Frame })
+	local y = plateArt.canvas.Y / 2 + 14
+	table.insert(
+		frames,
+		round(parent, "PawPad", UDim2.fromOffset(x, y), UDim2.fromOffset(46, 38), oak)
+	)
+	for index, angle in { -54, -18, 18, 54 } do
+		local radians = math.rad(angle + tilt)
+		local reach = if index == 1 or index == 4 then 36 else 40
+		table.insert(
+			frames,
+			round(
+				parent,
+				"PawToe",
+				UDim2.fromOffset(x + math.sin(radians) * reach, y - math.cos(radians) * reach),
+				UDim2.fromOffset(17, 20),
+				oak
+			)
+		)
+	end
+end
 type Piece = {
 	name: string,
 	size: Vector3,
@@ -170,6 +221,7 @@ export type Render = {
 	capacity: number,
 	accent: Color3,
 	awning: Model?,
+	night: boolean,
 	light: SurfaceLight,
 	plates: { Plate },
 }
@@ -204,21 +256,63 @@ local function createPlate(parent: Instance, slot: number): Plate
 	local gui = Instance.new("SurfaceGui")
 	gui.Name = "CollectionCue"
 	gui.Face = Enum.NormalId.Top
-	gui.CanvasSize = Vector2.new(460, 260)
+	-- A Top-face canvas runs along the plate's depth, so the art is drawn in one frame turned
+	-- -90 degrees to read upright from the entrance side.
+	gui.CanvasSize = Vector2.new(plateArt.canvas.Y, plateArt.canvas.X)
 	gui.AlwaysOnTop = false
 	gui.LightInfluence = 0.35
 	gui.Active = false
 	gui.Parent = target
+	local art = Instance.new("Frame")
+	art.Name = "Art"
+	art.AnchorPoint = Vector2.new(0.5, 0.5)
+	art.Position = UDim2.fromScale(0.5, 0.5)
+	art.Size = UDim2.fromOffset(plateArt.canvas.X, plateArt.canvas.Y)
+	art.Rotation = -90
+	art.BackgroundTransparency = 1
+	art.Parent = gui
+	local cushion = Instance.new("Frame")
+	cushion.Name = "Cushion"
+	cushion.Position = UDim2.fromOffset(12, 12)
+	cushion.Size = UDim2.new(1, -24, 1, -24)
+	cushion.BackgroundColor3 = plateArt.cream
+	cushion.BorderSizePixel = 0
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 56)
+	corner.Parent = cushion
+	local stroke = Instance.new("UIStroke")
+	stroke.Thickness = 6
+	stroke.Color = oak
+	stroke.Parent = cushion
+	cushion.Parent = art
+	local paws: { Frame } = {}
+	paw(art, 72, -12, paws)
+	paw(art, plateArt.canvas.X - 72, 12, paws)
+	local coin = round(art, "Coin", UDim2.fromOffset(230, 92), UDim2.fromOffset(54, 54), coinGold)
+	local shine = Instance.new("UIStroke")
+	shine.Thickness = 5
+	shine.Color = Color3.fromRGB(255, 226, 140)
+	shine.Parent = coin
 	local cue = Instance.new("TextLabel")
 	cue.Name = "Cue"
-	cue.Size = UDim2.fromScale(1, 1)
+	cue.AnchorPoint = Vector2.new(0.5, 0.5)
+	cue.Position = UDim2.fromOffset(230, 172)
+	cue.Size = UDim2.fromOffset(250, 56)
 	cue.BackgroundTransparency = 1
-	cue.Font = Enum.Font.GothamBold
-	cue.TextSize = 34
+	cue.Font = Enum.Font.FredokaOne
+	cue.TextSize = 44
 	cue.TextColor3 = charcoal
 	cue.Text = "—"
-	cue.Parent = gui
-	return { model = model, base = base, target = target, cue = cue }
+	cue.Parent = art
+	return {
+		model = model,
+		base = base,
+		target = target,
+		cue = cue,
+		cushion = cushion,
+		paws = paws,
+		coin = coin,
+	}
 end
 function Fixture.setPlates(render: Render, slots: { string })
 	for slot, plate in render.plates do
@@ -228,8 +322,21 @@ function Fixture.setPlates(render: Render, slots: { string })
 		plate.target.Transparency = if unlocked then 0 else 1
 		plate.target.Color = if active then ivory:Lerp(render.accent, 0.18) else warmPanel
 		plate.cue.Visible = unlocked
-		plate.cue.Text = if active then "●  COLLECT" else "—"
-		plate.cue.TextColor3 = if active then coinGold else oak
+		plate.cue.Text = if active then "COLLECT" else "—"
+		plate.cue.TextColor3 = if active then render.accent:Lerp(charcoal, 0.45) else oak
+		plate.cushion.Visible = unlocked
+		plate.cushion.BackgroundColor3 = if active then plateArt.blush else plateArt.cream
+		local stroke = plate.cushion:FindFirstChildOfClass("UIStroke")
+		if stroke then
+			stroke.Color = if active then render.accent else oak
+			stroke.Transparency = if active then 0 else 0.5
+		end
+		for _, bean in plate.paws do
+			bean.Visible = unlocked
+			bean.BackgroundColor3 = if active then render.accent else oak
+			bean.BackgroundTransparency = if active then 0 else 0.6
+		end
+		plate.coin.Visible = active
 	end
 end
 function Fixture.width(capacity: number): number
@@ -277,7 +384,7 @@ function Fixture.resize(render: Render, capacity: number)
 		render.awning:Destroy()
 	end
 	local awning = Fixture.awning
-	render.awning = Awning.build(
+	local canopy = Awning.build(
 		render.model,
 		"Awning",
 		render.transform * CFrame.new(0, awning.backY, Geometry.displayZ + awning.backZ),
@@ -286,6 +393,8 @@ function Fixture.resize(render: Render, capacity: number)
 		awning.rise,
 		render.accent
 	)
+	Awning.setLit(canopy, render.night)
+	render.awning = canopy
 	local manage = render.parts.ManageDisplay
 	manage.CFrame = render.transform
 		* CFrame.new(
@@ -408,6 +517,7 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 		capacity = 0,
 		accent = accent or PlotStyle.DefaultAccent,
 		awning = nil,
+		night = false,
 		light = light,
 		plates = {},
 	}
@@ -420,6 +530,10 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	return render
 end
 function Fixture.setNight(render: Render, enabled: boolean)
+	render.night = enabled
+	if render.awning then
+		Awning.setLit(render.awning, enabled)
+	end
 	render.light.Brightness = if enabled
 		then Fixture.lighting.nightBrightness
 		else Fixture.lighting.dayBrightness

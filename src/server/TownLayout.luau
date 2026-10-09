@@ -90,5 +90,7 @@ return table.freeze({
 	-- The plot Shop adds 19 kiosk parts and an 8-part Peeka stand-in: 180 measured with click
 	-- targets (was 153). The uploaded shopkeeper replacing the stand-in is mesh geometry, excluded
 	-- like figures; the Shop adds no lights.
-	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 184, nightLights = 64 }),
+	-- Night lights: 53 static + per active plot one arch sign glow and one floor fill = 69 at
+	-- eight plots (was 61 of 64); 72 keeps three spare.
+	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 184, nightLights = 72 }),
 })

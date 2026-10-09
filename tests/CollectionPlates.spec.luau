@@ -86,6 +86,11 @@ for capacity = 3, 6 do
 			"two parts and one restrained native cue per plate"
 		)
 		if slot <= capacity then
+			check(
+				plate.coin.Visible and plate.cushion.Visible and plate.paws[1].Visible
+					and plate.cue.Text == "COLLECT",
+				"occupied plate shows its cushion, paws and coin"
+			)
 			local anchor = plot.display.anchors[tostring(slot)]
 			local localAnchor = plot.transform:PointToObjectSpace(anchor.Position)
 			check(
@@ -110,7 +115,12 @@ for capacity = 3, 6 do
 			local before = requests
 			touch(slot, owner)
 			check(
-				requests == before and plate.target.Transparency == 1 and not plate.cue.Visible,
+				requests == before
+					and plate.target.Transparency == 1
+					and not plate.cue.Visible
+					and not plate.cushion.Visible
+					and not plate.paws[1].Visible
+					and not plate.coin.Visible,
 				"locked plate cannot collect or advertise income"
 			)
 		end
@@ -184,7 +194,10 @@ accepted = requests
 nextContact()
 touch(1, owner)
 check(
-	requests == accepted and plot.fixture.plates[1].cue.Text == "—",
+	requests == accepted
+		and plot.fixture.plates[1].cue.Text == "—"
+		and not plot.fixture.plates[1].coin.Visible
+		and plot.fixture.plates[1].paws[1].BackgroundTransparency > 0,
 	"empty plate is subdued and inactive"
 )
 state.display.slots[1] = ids[1]
@@ -301,9 +314,9 @@ for _, object in plot.model:GetDescendants() do
 	end
 end
 check(
-	parts <= Layout.budgets.plotRuntimeParts and lights == 11,
+	parts <= Layout.budgets.plotRuntimeParts and lights == 12,
 	string.format(
-		"plates and collectors fit the existing runtime part budget and add no lights: %d parts, %d lights",
+		"plates and collectors fit the runtime part budget and add no lights (12 incl. floor fill): %d parts, %d lights",
 		parts,
 		lights
 	)
