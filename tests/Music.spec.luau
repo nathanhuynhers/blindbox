@@ -110,4 +110,71 @@ Music.play("world")
 E.flushTasks()
 check(#E.warnings == warnings + 1 and Music.playing() == "world", "failed load only logs")
 Music.destroy()
-print(`PASS: {checks} Music manifest, start-once, fade, switch, mute, mix and teardown checks`)
+-- Opening suppression: one owner flag, a short fade then pause in place, resume from the same spot.
+local duck = Manifest.suppress
+check(duck.fadeOut > 0 and duck.fadeOut <= 0.5, "music clears quickly for the opening")
+check(duck.fadeIn >= duck.fadeOut and duck.fadeIn <= 3, "and returns smoothly")
+Music.suppress(true)
+Music.suppress(false)
+check(not Music.suppressed() and #tracks() == 0, "suppress with no track is safe")
+Music.play("world")
+local track = tracks()[1]
+finish(tweens[#tweens])
+track.TimePosition = 42
+made = #tweens
+Music.suppress(true)
+local out = tweens[#tweens]
+check(Music.suppressed() and #tweens == made + 1, "suppress starts one fade")
+check(out.goal.Volume == 0 and out.info.Time == duck.fadeOut, "quick fade out")
+check(track.IsPlaying, "still audible while fading out")
+Music.suppress(true)
+check(#tweens == made + 1, "a repeat suppress is a no-op")
+finish(out)
+check(not track.IsPlaying and track.pauses == 1, "paused once the fade ends")
+Music.suppress(false)
+local back = tweens[#tweens]
+check(track.IsPlaying and track.resumes == 1, "resumes")
+check(track.TimePosition == 42, "from where it left off")
+check(
+	back.goal.Volume == Manifest.music.world.volume and back.info.Time == duck.fadeIn,
+	"fades back"
+)
+Music.suppress(false)
+check(track.resumes == 1 and #tracks() == 1, "a repeat release never double-plays")
+finish(back)
+-- Released mid-fade-out (a quick Skip/cancel): the pause never lands, the fade reverses.
+Music.suppress(true)
+out = tweens[#tweens]
+Music.suppress(false)
+check(out.canceled and track.IsPlaying and track.pauses == 1, "a cancelled fade never pauses")
+out.Completed:Fire(E.Enum.PlaybackState.Completed) -- Even a stray late completion.
+check(track.IsPlaying, "a late completion cannot mute a released track")
+finish(tweens[#tweens])
+-- Open 10 hand-over: release and re-suppress in one frame while silent pauses at once.
+Music.suppress(true)
+finish(tweens[#tweens])
+local resumes, pauses = track.resumes, track.pauses
+Music.suppress(false)
+Music.suppress(true)
+check(track.Volume == 0 and not track.IsPlaying, "the hand-over stays silent")
+check(track.resumes == resumes + 1 and track.pauses == pauses + 1, "and pauses without a fade")
+-- A track started while suppressed waits paused and silent, then fades in on release.
+Music.stop(0)
+Music.play("world")
+track = tracks()[1]
+check(
+	#tracks() == 1 and not track.IsPlaying and track.Volume == 0,
+	"starts paused while suppressed"
+)
+Music.suppress(false)
+check(
+	track.IsPlaying and tweens[#tweens].goal.Volume == Manifest.music.world.volume,
+	"then fades in"
+)
+-- Teardown while suppressed clears the flag.
+Music.suppress(true)
+Music.destroy()
+check(not Music.suppressed() and #tracks() == 0, "teardown clears suppression")
+print(
+	`PASS: {checks} Music manifest, start-once, fade, switch, mute, mix, suppress and teardown checks`
+)

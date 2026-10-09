@@ -1,7 +1,9 @@
 # Opening audio delivery checklist
 
-Status: **rejected pack disconnected. 14 slots are now filled with licensed Creator Store audio
-from the [game soundpack](SOUND.md); the other 34 are empty and silent.**
+Status: **rejected pack disconnected. 17 slots are now filled with licensed Creator Store audio
+from the [game soundpack](SOUND.md); the other 31 are empty and silent.** UI-06 (2026-10-08) added
+`rarityCommon`, `rarityUncommon` and `rarityRare` and retuned the identity/reveal gains against
+measured loudness; see the [rarity ladder](SOUND.md#manifest).
 The user found the synthesized audio engine-like and noisy. The rejected
 [Porcelain & Starlight pack](../assets/audio/opening/README.md) remains archived locally.
 The user previously authorized

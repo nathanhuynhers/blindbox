@@ -118,16 +118,21 @@ Config.cues.dive.fadeIn = 0.025
 -- The library sources run longer than the original brief: one-shot ceilings fit them so a cue
 -- ends naturally instead of being cut mid-waveform, and the reveal ladder climbs in level.
 -- Phase cuts (Flight's Box fade, Closing, Skip) still end them early. { lifetime, volume? }
+-- Volumes offset each source's measured loudness (SoundManifest.opening) so both rarity cues
+-- climb Common -> Mythical; the soft Rare chime cluster needs the most gain.
 local tuning: { [string]: { number } } = {
 	click = { 0.4 },
 	crack = { 0.6 },
 	lid = { 0.6 },
 	revealCommon = { 0.8, 0.5 },
-	revealUncommon = { 1.2, 0.55 },
-	revealRare = { 2, 0.6 },
+	revealUncommon = { 1.2, 0.65 },
+	revealRare = { 2, 0.95 },
 	revealLegendary = { 2.6, 0.7 },
 	revealMythical = { 5, 0.75 },
-	rarityLegendary = { 1.2, 0.48 },
+	rarityCommon = { 0.8, 0.15 },
+	rarityUncommon = { 1.1, 0.3 },
+	rarityRare = { 1.6, 1.1 },
+	rarityLegendary = { 1.2, 1.1 },
 	rarityMythical = { 1.6, 0.48 },
 	discovery = { 1.6, 0.3 },
 }

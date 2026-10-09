@@ -197,6 +197,14 @@ end
 function M:Play()
 	self.IsPlaying = true
 end
+function M:Pause()
+	self.IsPlaying = false
+	self.pauses = (self.pauses or 0) + 1
+end
+function M:Resume()
+	self.IsPlaying = true
+	self.resumes = (self.resumes or 0) + 1
+end
 function M:Clone()
 	local object = E.Instance.new(self.ClassName)
 	for key, value in self.props do
@@ -255,6 +263,30 @@ E.services.SoundService = E.Instance.new("SoundService")
 E.TweenInfo = {
 	new = function(seconds, style)
 		return { Time = seconds, EasingStyle = style }
+	end,
+}
+-- Instant tweens by default (Music under the opening controller); Music.spec swaps in a recorder.
+-- Completed is the tween's own signal (collected with it), so it isn't a counted connection.
+E.services.TweenService = {
+	Create = function(_self, object, _info, goal)
+		local listeners = {}
+		local tween = {
+			Completed = {
+				Connect = function(_signal, callback)
+					table.insert(listeners, callback)
+				end,
+			},
+		}
+		function tween:Play()
+			for key, value in goal do
+				object[key] = value
+			end
+			for _, callback in listeners do
+				callback(E.Enum.PlaybackState.Completed)
+			end
+		end
+		function tween:Cancel() end
+		return tween
 	end,
 }
 E.tasks = {}
