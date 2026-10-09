@@ -196,6 +196,18 @@
       "displayName": "Navigation Shelves Icon",
       "assetType": "Image"
     },
+    "navigation_daily": {
+      "key": "Navigation.Daily",
+      "source": "assets/ui/navigation/daily_navigation_icon.png",
+      "displayName": "Navigation Daily Icon",
+      "assetType": "Image"
+    },
+    "navigation_home": {
+      "key": "Navigation.Home",
+      "source": "assets/ui/navigation/home_navigation_icon.png",
+      "displayName": "Navigation Home Icon",
+      "assetType": "Image"
+    },
     "pocket_grove_corner_top_left": {
       "key": "Collection.PocketGrove.CornerTopLeft",
       "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_top_left.png",

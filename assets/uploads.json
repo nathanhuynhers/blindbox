@@ -1187,6 +1187,24 @@
     "sha256": "33c6590252bf221905e4d794b63b891e0fd718aff935dc1e688c0c6007dc5dfc",
     "source": "assets/figures/we-are-all-stars/wishing/model/wishing_roblox.glb"
   },
+  "Navigation.Daily": {
+    "assetId": "100827043771835",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ce88e462463ab82404c10f7da69f2f12b33941d34276c3be69e35202d87075bc",
+    "source": "assets/ui/navigation/daily_navigation_icon.png"
+  },
+  "Navigation.Home": {
+    "assetId": "82764315087705",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7c95388382ef91794a6ec681fc1fa05d91092489d2a4ff2cc65f62f0e9fa4ff7",
+    "source": "assets/ui/navigation/home_navigation_icon.png"
+  },
   "Town.SakuraPetal": {
     "assetId": "110930105901678",
     "assetType": "Image",

@@ -73,10 +73,14 @@ border) and still explain why ("Need 1,240 more").
   76px (nav icon 56px, title 30px, one-line subtitle, optional right-side chip, round 48px ink
   Close). Body below. Short heights scroll the body, never clip it.
 - **HUD:** Coins pill (coin glyph, balance, mint "+N/s" chip) top-left, placed right of the Roblox
-  top-bar buttons (respect `GuiService` top-bar inset). Settings gear top-right opens a small
-  popover holding the Motion preference (replaces the floating Motion button). Desktop also shows
-  a Daily goal tracker card under the gear (title, 3-segment progress, Claim when ready); phone
-  collapses it to a "Goal done · Claim" chip.
+  top-bar buttons (respect `GuiService` top-bar inset). Top-right row **[Daily] [Home] [gear]**:
+  matching round white buttons (ink stroke, hard drop shadow; 52px desktop, 44px with 10px gaps
+  on phone, icon-only with accessible names). Daily and Home use glossy navigation icon art;
+  Daily carries the "!" Ready badge and an idle nudge (still with Motion Reduced). The row hides
+  while any screen is open, like the gear. The gear opens a small popover holding the Motion
+  preference (beside the row on short phones). Desktop also shows a Daily goal tracker card
+  under the row (title, 3-segment progress, Claim when ready); phone collapses it to a
+  "Goal · Claim" chip left of the row.
 - **Dock:** 5 tiles (Collection, Display, Shop, Goals, Shelves), 100×94 desktop / 68×70 phone, icon
   + label, active = violet wash + raised. Badges: Display "N empty" (unlocked empty slots),
   Shop "FREE" (daily box ready), Goals count (claimable rewards). Phone dock sits between the

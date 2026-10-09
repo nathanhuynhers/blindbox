@@ -66,6 +66,8 @@ Manifest.Navigation = {
 	Shop = "Navigation.Shop",
 	Goals = "Navigation.Goals",
 	Shelves = "Navigation.Shelves",
+	Daily = "Navigation.Daily",
+	Home = "Navigation.Home",
 }
 Manifest.Models = { BlindBoxBase = "Models.BlindBoxBase" }
 Manifest.Town = {

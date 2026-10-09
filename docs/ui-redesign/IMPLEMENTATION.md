@@ -22,7 +22,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `UIBadge`, `UIProgress`, `UIIcons` | Pills/chips/rarity pill/corner badges; bar and segments; frame-drawn icons including the coin glyph |
 | `ScreenShell` | Panel/sheet, 76px header (56 phone): nav icon, title, subtitle, right chips, round Close; phone coins chip |
 | `Dock` | Five tiles, active raised on violet wash, Display/Shop/Goals badges |
-| `Hud`, `SettingsMenu`, `GoalTracker` | Coins pill beside `GuiService.TopbarInset`; gear popover with Motion and saved Sound effects / Music volume sliders; desktop goal card / phone "Goal done · Claim" chip |
+| `Hud`, `SettingsMenu`, `GoalTracker` | Coins pill beside `GuiService.TopbarInset`; top-right `[Daily][Home][gear]` row (`UILayout` `daily`/`home`/`gear` rects, `UIButton` "raised" variant); gear popover with Motion and saved Sound effects / Music volume sliders; desktop goal card / phone "Goal · Claim" chip |
 | `Sfx`, `Music`, `SoundManifest` | Client sounds and background music: one manifest of IDs and levels ([game soundpack](../SOUND.md)) |
 | `CollectionList`, `FigureTile` | Shared collection list item (rail on phone); figure card/tile/pick/shelf variants, pooled and rebound |
 | `ShopScreen` | List, kept `BlindBoxPreview`, Open 1 box, free box, What's inside, Drop odds |
@@ -30,7 +30,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `DisplayScreen`, `DisplaySlot`, `DisplayPicker` | Income chip, set-bonus banner, 6 slots (slot 4 unlock, 5–6 Coming later), picker drawer sorted by earnings with BEST, Remove, Browse Collection, placing mode |
 | `GoalsScreen` | Unclaimed daily goal (empty state after claim), free box chooser, collection progress, minute countdown from `nextDay` |
 | `ShelvesScreen` | Shelf tabs + prev/next, 3×3 cabinet, discovered-figure picker with collection chips, Clear spot |
-| `LoginScreen` | Daily Login (routed by `Interface` without a dock tile; HUD Daily button with a "!" badge): one card per `LoginRewards` day (claimed mint / today violet outline + TODAY / locked), wider gold final day, streak chip, Claim. Auto-opens once per session on the first ready snapshot when claimable, except for players who own no figures |
+| `LoginScreen` | Daily Login (routed by `Interface` without a dock tile; HUD Daily button with a "!" badge and idle nudge): one card per `LoginRewards` day (claimed mint / today violet outline + TODAY / locked), wider gold final day, streak chip, Claim. Auto-opens once per session on the first ready snapshot when claimable, except for players who own no figures |
 | `RevealCard` | End-of-opening card: NEW (first discovery only), name + rarity pill, chips, owned count, Put on Display / Swap, Open another (price or shortfall), Keep |
 | `OpeningView` | Kept Tap to Open, Skip, hint and curtain; the Result panel is now `RevealCard` |
 | `OfflineEarnings` | Welcome-back card (white card, gold Claim) for offline Display Coins; Claim or tapping outside sends `ClaimOffline` |
@@ -123,7 +123,11 @@ creator user `103346374`.
 
 ## Navigation image import and missing images
 
-Rojo does not upload the five PNG files under `assets/ui/navigation/`. If a navigation semantic
+Rojo does not upload the PNG files under `assets/ui/navigation/`. The HUD Daily and Home icons
+(`Navigation.Daily` / `Navigation.Home`, rendered by `assets/ui/navigation/hud_icons.py` in
+Blender) were uploaded through `scripts/upload_assets.py` (aliases `navigation_daily`,
+`navigation_home`), so their `NavigationAssetIds` fields stay empty and resolve to the generated
+IDs. Without any ID the button shows its "Daily" / "Home" label instead. If a navigation semantic
 key has no generated asset ID and no valid entry in `src/shared/NavigationAssetIds.luau`,
 `AssetManifest.resolve()` returns an empty string and the icon intentionally does not render. The
 runtime icon hierarchy, sizing and transparency are not a substitute for a Roblox-hosted image.
@@ -197,7 +201,8 @@ Paste the scripts in `tests/Studio*.client.luau` into the client Command Bar whe
    - Tapping it shows the exact value.
    - The gear popover toggles Motion (Full/Reduced), and outside taps or B close it.
    - The goal card shows progress and claims when ready.
-   - On phone the "Goal done · Claim" chip appears only when the goal is ready.
+   - On phone the "Goal · Claim" chip appears only when the goal is ready.
+   - The top-right row: Daily (badge, nudge), Home, gear; hidden while a screen is open.
    - With no screen open, nothing else covers the world. Run `StudioUI` here.
 3. **Dock:**
    - Badges: Display "N empty", Shop FREE, Goals 1.

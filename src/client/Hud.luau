@@ -1,6 +1,7 @@
 --!strict
--- World HUD: Coins pill (balance + income chip) right of Roblox's menu buttons, settings gear
--- with its popover, and the daily goal tracker. Nothing else covers the world.
+-- World HUD: Coins pill (balance + income chip) right of Roblox's menu buttons, the top-right
+-- Daily / Home / settings row with the settings popover, and the daily goal tracker. Nothing
+-- else covers the world.
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
@@ -12,6 +13,9 @@ local Context = require(script.Parent.UIContext)
 local Menu = require(script.Parent.SettingsMenu)
 local Tracker = require(script.Parent.GoalTracker)
 local Sfx = require(script.Parent.Sfx)
+local Button = require(script.Parent.UIButton)
+local Navigation = require(script.Parent.NavigationConfig)
+local TweenService = game:GetService("TweenService")
 local Hud = {}
 
 export type Hud = {
@@ -82,70 +86,105 @@ function Hud.create(
 		end
 		Sfx.play("select")
 	end)
-	-- Functional placeholder only. Final iconography and positioning remain future UI work.
-	local home = Instance.new("TextButton")
-	home.Name = "HomeButton"
-	home.Text = "Home"
-	home.TextSize = 18
-	home.FontFace = Style.display()
-	home.TextColor3 = Style.ink
-	home.AutoButtonColor = true
-	home.BackgroundColor3 = Style.white
-	home.ZIndex = 2
-	home.Parent = root
-	home:SetAttribute("AccessibleName", "Return Home to your plot")
-	Kit.round(home)
-	Kit.stroke(home, Style.ink)
-	ctx.scope.connect(home.Activated, function()
-		goHome()
-		Sfx.play("select")
+	-- Top-right row [Daily] [Home] [gear]: one set of round white buttons with a hard ink
+	-- shadow that drops on press. Daily sits furthest from the corner, where its badge and
+	-- nudge catch the eye; the gear keeps the corner.
+	local right = Kit.frame(root, "Right")
+	local function roundButton(name: string, accessible: string, callback: () -> ()): Button.Button
+		local made = Button.create(right, name, {
+			variant = "raised",
+			text = "",
+			size = 14,
+			radius = 64,
+			drop = 4,
+			silent = true,
+		}, ctx.scope, ctx.effects, callback)
+		made.button.ZIndex = 2
+		made.button:SetAttribute("AccessibleName", accessible)
+		return made
+	end
+	-- Glossy navigation art; without an uploaded image the label shows alone, like the dock.
+	local function art(made: Button.Button, id: string): ImageLabel
+		local icon = Kit.image(made.face, "Icon", Navigation.image(id))
+		icon.AnchorPoint = Vector2.new(0.5, 0.5)
+		icon.Position = UDim2.fromScale(0.5, 0.5)
+		icon.Size = UDim2.fromScale(0.88, 0.88)
+		icon.Visible = icon.Image ~= ""
+		made.label.Text = if icon.Visible then "" else id
+		return icon
+	end
+	local daily = roundButton("DailyButton", "Daily Login rewards", function()
+		ctx.navigate("Login")
 	end)
-	local daily = Instance.new("TextButton")
-	daily.Name = "DailyButton"
-	daily.Text = "Daily"
-	daily.TextSize = 18
-	daily.FontFace = Style.display()
-	daily.TextColor3 = Style.ink
-	daily.AutoButtonColor = true
-	daily.BackgroundColor3 = Style.white
-	daily.ZIndex = 2
-	daily.Parent = root
-	daily:SetAttribute("AccessibleName", "Daily Login rewards")
-	Kit.round(daily)
-	Kit.stroke(daily, Style.ink)
-	local dailyBadge = Badge.corner(daily, "Ready", {
+	local dailyIcon = art(daily, "Daily")
+	local dailyBadge = Badge.corner(daily.button, "Ready", {
 		fill = Style.alert,
 		color = Style.white,
 		height = 22,
 		size = 13,
 		outline = Style.ink,
 	}, Vector2.new(1, 0), Vector2.new(6, -8))
-	ctx.scope.connect(daily.Activated, function()
-		ctx.navigate("Login")
+	local home = roundButton("HomeButton", "Return Home to your plot", function()
+		goHome()
+		Sfx.play("select")
 	end)
-	local right = Kit.frame(root, "Right")
-	local gearShadow = Kit.frame(right, "GearShadow", Style.ink)
-	gearShadow.ZIndex = 1
-	Kit.round(gearShadow)
-	local gear = Instance.new("TextButton")
-	gear.Name = "SettingsButton"
-	gear.Text = ""
-	gear.AutoButtonColor = false
-	gear.BackgroundColor3 = Style.white
-	gear.ZIndex = 2
-	gear.Parent = right
-	gear:SetAttribute("AccessibleName", "Settings")
-	Kit.round(gear)
-	Kit.stroke(gear, Style.ink)
-	local gearIcon = Icons.create(gear, "Gear", Style.ink, 26)
-	gearIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-	gearIcon.Position = UDim2.fromScale(0.5, 0.5)
-	local tracker = Tracker.create(right, ctx)
-	local menu = Menu.create(parent, ctx, setMotion)
-	ctx.scope.connect(gear.Activated, function()
+	art(home, "Home")
+	-- Idle nudge on Daily while a reward waits. Rotating the icon never moves layout;
+	-- Motion Reduced keeps it still.
+	local loginReady = false
+	local nudge: Tween? = nil
+	local function wiggle()
+		local on = loginReady and ctx.effects()
+		if on == (nudge ~= nil) then
+			return
+		end
+		if nudge then
+			nudge:Cancel()
+			nudge = nil
+			dailyIcon.Rotation = 0
+		end
+		if on then
+			local tween = TweenService:Create(
+				dailyIcon,
+				TweenInfo.new(
+					0.14,
+					Enum.EasingStyle.Sine,
+					Enum.EasingDirection.InOut,
+					-1,
+					true,
+					1.8
+				),
+				{ Rotation = 10 }
+			)
+			nudge = tween
+			tween:Play()
+		end
+	end
+	ctx.scope.add(function()
+		if nudge then
+			nudge:Cancel()
+		end
+	end)
+	local menu = Menu.create(parent, ctx, function(value: boolean)
+		setMotion(value)
+		wiggle()
+	end)
+	local gear = roundButton("SettingsButton", "Settings", function()
 		menu.set(not menu.open())
 		Sfx.play("select")
 	end)
+	local gearIcon = Icons.create(gear.face, "Gear", Style.ink, 26)
+	gearIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+	gearIcon.Position = UDim2.fromScale(0.5, 0.5)
+	-- Gamepad: left/right walks the row in reading order.
+	daily.button.NextSelectionRight = home.button
+	home.button.NextSelectionLeft = daily.button
+	home.button.NextSelectionRight = gear.button
+	gear.button.NextSelectionLeft = home.button
+	local tracker = Tracker.create(right, ctx)
+	local function place(made: Button.Button, rect: Layout.Rect)
+		Kit.rect(made.button, rect.x, rect.y, rect.width, rect.height)
+	end
 	local frame: Layout.Frame? = nil
 	local function follow()
 		local geometry = frame
@@ -169,9 +208,9 @@ function Hud.create(
 	return {
 		root = root,
 		coins = coins,
-		home = home,
-		daily = daily,
-		gear = gear,
+		home = home.button,
+		daily = daily.button,
+		gear = gear.button,
 		menu = menu,
 		layout = function(geometry: Layout.Frame, opened: boolean)
 			frame = geometry
@@ -181,37 +220,25 @@ function Hud.create(
 			coin.Size = UDim2.fromOffset(if phone then 24 else 30, if phone then 24 else 30)
 			amount.TextSize = if phone then 19 else 24
 			-- Phone sheets carry their own coins chip; the HUD hides under an open sheet.
+			-- The top-right row follows the gear: hidden while any screen is open.
 			coins.Visible = not (phone and opened)
 			coinShadow.Visible = coins.Visible
-			Kit.rect(home, math.max(12, geometry.hud.x), geometry.dock.y - 54, 96, 44)
-			home.Visible = not opened
-			Kit.rect(daily, math.max(12, geometry.hud.x), geometry.dock.y - 106, 96, 44)
-			daily.Visible = not opened
-			Kit.rect(
-				gear,
-				geometry.gear.x,
-				geometry.gear.y,
-				geometry.gear.width,
-				geometry.gear.height
-			)
-			Kit.rect(
-				gearShadow,
-				geometry.gear.x,
-				geometry.gear.y + (if phone then 3 else 4),
-				geometry.gear.width,
-				geometry.gear.height
-			)
+			place(daily, geometry.daily)
+			place(home, geometry.home)
+			place(gear, geometry.gear)
+			gearIcon.Size = UDim2.fromOffset(if phone then 24 else 26, if phone then 24 else 26)
 			tracker.layout(geometry.tracker.x, geometry.tracker.y, phone)
-			menu.place(
-				geometry.gear.x + geometry.gear.width - 280,
-				math.max(
-					8,
-					math.min(
-						geometry.gear.y + geometry.gear.height + 10,
-						geometry.height - menu.root.Size.Y.Offset - 8
-					)
+			-- Below the row; on short phones beside it (left of Daily) rather than over it.
+			local menuSize = menu.root.Size
+			local below = geometry.gear.y + geometry.gear.height + 10
+			if below + menuSize.Y.Offset + 8 <= geometry.height then
+				menu.place(geometry.gear.x + geometry.gear.width - menuSize.X.Offset, below)
+			else
+				menu.place(
+					math.max(8, geometry.daily.x - 10 - menuSize.X.Offset),
+					math.max(8, math.min(geometry.gear.y, geometry.height - menuSize.Y.Offset - 8))
 				)
-			)
+			end
 			right.Visible = not opened
 			if opened then
 				menu.set(false)
@@ -227,6 +254,8 @@ function Hud.create(
 			local ready = State.badges(snapshot).Login
 			dailyBadge.root.Visible = ready ~= nil
 			dailyBadge.set(ready or "")
+			loginReady = ready ~= nil
+			wiggle()
 		end,
 	}
 end

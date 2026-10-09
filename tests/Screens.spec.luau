@@ -134,13 +134,118 @@ check(within(find("DockShop"), "Badge").Visible, "Shop FREE badge while the dail
 check(not within(find("DockGoals"), "Badge").Visible, "no Goals badge without a claim")
 check(not find("Backdrop").Visible, "world is not dimmed with no screen open")
 local homeButton = find("HomeButton")
-check(homeButton.Text == "Home", "temporary Home button is labeled")
 check(
-	homeButton:GetAttribute("AccessibleName") == "Return Home to your plot",
-	"Home has an accessible name"
+	homeButton:GetAttribute("AccessibleName") == "Return Home to your plot"
+		and find("DailyButton"):GetAttribute("AccessibleName") == "Daily Login rewards"
+		and find("SettingsButton"):GetAttribute("AccessibleName") == "Settings",
+	"icon-only HUD buttons keep accessible names"
 )
+for _, name in { "DailyButton", "HomeButton" } do
+	local icon = within(within(find(name), "Face"), "Icon")
+	local label = within(find(name), "Label")
+	check(icon.Image ~= "" and icon.Visible and label.Text == "", name .. " shows its uploaded glossy icon, no label")
+end
+check(find("Hud"):FindFirstChild("GearShadow", true) == nil, "the gear shares the row's button, not a separate shadow")
+local homeSounds = #Engine.sounds
 Engine.click(homeButton)
-check(homeRequests == 1, "Home activation sends one request")
+check(homeRequests == 1 and Engine.sounds[homeSounds + 1] == "select", "Home activation sends one request and selects")
+check(
+	find("DailyButton").NextSelectionRight == homeButton
+		and homeButton.NextSelectionRight == find("SettingsButton")
+		and find("SettingsButton").NextSelectionLeft == homeButton
+		and homeButton.NextSelectionLeft == find("DailyButton"),
+	"gamepad walks Daily, Home, Settings in order"
+)
+
+-- Top-right HUD row [Daily][Home][gear] at desktop, tablet and phone landscape sizes:
+-- order, spacing, touch size, safe area, top bar, and no overlap with the Coins pill,
+-- goal tracker / chip or settings popover. Positions are in stage (design) units.
+local function rect(object)
+	return {
+		x = object.Position.X.Offset,
+		y = object.Position.Y.Offset,
+		width = object.Size.X.Offset,
+		height = object.Size.Y.Offset,
+	}
+end
+local function apart(a, b)
+	return a.x + a.width <= b.x or b.x + b.width <= a.x or a.y + a.height <= b.y or b.y + b.height <= a.y
+end
+local function onScreen(object)
+	while object and object ~= gui do
+		if object.Visible == false then
+			return false
+		end
+		object = object.Parent
+	end
+	return true
+end
+local GuiService = Engine.services.GuiService
+local defaultInset = GuiService.TopbarInset
+local function resizeTo(width, height, topLeft)
+	Engine.screen.X, Engine.screen.Y = width, height
+	GuiService.TopbarInset = Engine.Rect.new(topLeft, 0, width, 48)
+	find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+end
+local rowChecks = 0
+for _, case in {
+	{ 1280, 720, 104 }, { 1920, 1080, 104 }, { 1366, 768, 104 }, { 900, 560, 104 }, { 1024, 768, 104 },
+	{ 667, 375, 96 }, { 666, 374, 96 }, { 705, 338, 96 }, { 740, 360, 96 }, { 844, 390, 96 }, { 932, 430, 96 },
+} do
+	local width, height, topLeft = case[1], case[2], case[3]
+	resizeTo(width, height, topLeft)
+	local label = width .. "x" .. height
+	local phone = height < 560 or width < 900
+	local scale = if phone then 1 else math.clamp(math.min(width / 1280, height / 720), 1, 2)
+	local designWidth, designHeight = width / scale, height / scale
+	local daily, home, gear = rect(find("DailyButton")), rect(find("HomeButton")), rect(find("SettingsButton"))
+	check(onScreen(find("DailyButton")) and onScreen(find("HomeButton")) and onScreen(find("SettingsButton")), label .. ": row shows with no screen open")
+	check(daily.x < home.x and home.x < gear.x and daily.y == gear.y and home.y == gear.y, label .. ": Daily, Home, gear left to right")
+	for _, button in { daily, home, gear } do
+		check(button.width * scale >= 44 and button.height * scale >= 44, label .. ": 44pt touch targets")
+		check(button.width == gear.width and button.height == gear.height, label .. ": one footprint for the set")
+		check(button.x >= topLeft / scale and button.x + button.width <= designWidth, label .. ": row inside the safe area, right of the Roblox buttons")
+		check(button.y >= 0 and button.y + button.height + 4 <= designHeight, label .. ": row (with shadow) inside the safe height")
+	end
+	check(home.x - (daily.x + daily.width) >= 8 and gear.x - (home.x + home.width) >= 8, label .. ": thumb-safe gaps")
+	check(gear.width == (if phone then 44 else 52), label .. ": sized from the phone / desktop geometry")
+	-- Ready badge: top-right of Daily, offset (6, -8); it must stay on screen and clear of Home.
+	check(daily.y - 8 >= 0 and daily.x + daily.width + 6 <= home.x - 2, label .. ": Ready badge stays on screen and off Home")
+	-- Coins pill budget: the widest pill (9-digit balance + "+12.5K/s" chip) is about 230 on
+	-- phone and 290 on desktop (the double does not measure text).
+	local coins = rect(within(find("Hud"), "Coins"))
+	local coinsRight = coins.x + (if phone then 230 else 290)
+	if phone then
+		local chip = rect(within(find("Hud"), "GoalChip"))
+		check(chip.x <= daily.x - 8 and chip.y == daily.y, label .. ": goal chip sits left of the row")
+		check(chip.x - chip.width >= coinsRight + 8, label .. ": goal chip clears the Coins pill")
+	else
+		check(daily.x >= coinsRight + 8, label .. ": row clears the Coins pill")
+		local card = rect(within(find("Hud"), "GoalTracker"))
+		check(card.y >= gear.y + gear.height + 4 + 6, label .. ": tracker card below the row and its shadow")
+	end
+	Engine.click(find("SettingsButton"))
+	local settings = rect(find("Settings"))
+	check(find("Settings").Visible, label .. ": gear opens settings")
+	for _, button in { daily, home, gear } do
+		check(apart(settings, { x = button.x, y = button.y, width = button.width, height = button.height + 4 }), label .. ": settings popover clear of the row")
+	end
+	check(
+		settings.x >= 0 and settings.y >= 0 and settings.x + settings.width <= designWidth and settings.y + settings.height <= designHeight,
+		label .. ": settings popover inside the safe area"
+	)
+	Engine.click(find("SettingsCatcher"))
+	-- An open screen (phone sheet or desktop panel) hides the row, like the gear.
+	Engine.click(find("DockShop"))
+	check(not onScreen(find("DailyButton")) and not onScreen(find("HomeButton")) and not onScreen(find("SettingsButton")), label .. ": row hides while a screen is open")
+	Engine.click(within(host("Shop"), "Close"))
+	check(onScreen(find("DailyButton")), label .. ": Close restores the row")
+	rowChecks += 1
+end
+check(rowChecks == 11, "every viewport ran")
+Engine.screen.X, Engine.screen.Y = 1280, 720
+GuiService.TopbarInset = defaultInset
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
 
 -- Settings popover holds Motion.
 local coinInterruptions = 0
@@ -512,10 +617,18 @@ state.loginReady, state.loginStreak = true, 3
 state.sequence += 1
 ui.update(state)
 check(within(dailyButton, "Ready").Visible, "Daily badge when today's reward is claimable")
+local dailyIcon = within(within(dailyButton, "Face"), "Icon")
+check(dailyIcon.Rotation ~= 0, "Daily nudges while a reward waits")
+Engine.click(find("SettingsButton"))
+Engine.click(find("MotionReduced"))
+check(dailyIcon.Rotation == 0, "Motion Reduced stills the nudge")
+Engine.click(find("MotionFull"))
+check(dailyIcon.Rotation ~= 0, "Motion Full restores the nudge")
+Engine.click(find("SettingsCatcher"))
 check(not host("Login").Visible, "auto-open is decided once, on the first ready snapshot")
 Engine.click(dailyButton)
 local login = host("Login")
-check(login.Visible and not find("DailyButton").Visible, "Daily opens Login and hides the HUD buttons")
+check(login.Visible and not onScreen(find("DailyButton")) and not onScreen(find("HomeButton")), "Daily opens Login and hides the HUD row")
 check(
 	within(login, "Day1"):GetAttribute("Status") == "claimed"
 		and within(login, "Day2"):GetAttribute("Status") == "claimed"
@@ -543,6 +656,7 @@ check(
 	"confirmed claim marks today claimed and locks Claim"
 )
 check(not within(dailyButton, "Ready").Visible, "claimed reward clears the Daily badge")
+check(within(within(dailyButton, "Face"), "Icon").Rotation == 0, "claimed reward stops the nudge")
 state.loginReady, state.loginStreak = true, 8
 state.sequence += 1
 ui.update(state)
@@ -551,7 +665,7 @@ check(
 	"day 8 loops back to the Day 1 card"
 )
 Engine.click(within(login, "Close"))
-check(not login.Visible and find("DailyButton").Visible, "Close returns to the world")
+check(not login.Visible and onScreen(find("DailyButton")), "Close returns to the world")
 local loginCount, loginConnections = Engine.alive(gui), Engine.connections
 for _ = 1, 25 do
 	Engine.click(find("DailyButton"))

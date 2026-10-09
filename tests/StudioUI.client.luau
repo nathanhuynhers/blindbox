@@ -245,8 +245,62 @@ end
 if open then
 	local close = open:FindFirstChild("Close", true) :: GuiObject?
 	assert(close and visible(close), "Open screen needs its Close button")
-	local home = stage:FindFirstChild("HomeButton", true) :: GuiObject?
-	assert(not home or not visible(home), "Home must not obstruct a modal screen")
+	for _, name in { "DailyButton", "HomeButton", "SettingsButton" } do
+		local button = stage:FindFirstChild(name, true) :: GuiObject?
+		assert(not button or not visible(button), name .. " must not obstruct a modal screen")
+	end
+else
+	-- Top-right HUD row [Daily][Home][gear]: 44px targets, 8px gaps, safe area and top bar,
+	-- clear of the other HUD pieces, and first in the real hit order (TouchGui included).
+	local row: { GuiObject } = {}
+	for _, name in { "DailyButton", "HomeButton", "SettingsButton" } do
+		local button = stage:FindFirstChild(name, true) :: GuiObject
+		assert(button and visible(button), name .. " must show in the world")
+		table.insert(row, button)
+	end
+	local origin, extent = bounds.AbsolutePosition, bounds.AbsoluteSize
+	local inset = GuiService.TopbarInset
+	for index, button in row do
+		local position, size = button.AbsolutePosition, button.AbsoluteSize
+		assert(size.X >= 43.9 and size.Y >= 43.9, "Small HUD target: " .. button.Name)
+		assert(
+			position.X >= math.max(origin.X, inset.Min.X) - 1
+				and position.Y >= origin.Y - 1
+				and position.X + size.X <= origin.X + extent.X + 1
+				and position.Y + size.Y <= origin.Y + extent.Y + 1,
+			button.Name .. " escapes the safe area or sits under the Roblox buttons"
+		)
+		if index > 1 then
+			local previous = row[index - 1]
+			assert(
+				position.X - (previous.AbsolutePosition.X + previous.AbsoluteSize.X) >= 7.9,
+				"HUD row gap under 8px before " .. button.Name
+			)
+		end
+		for _, other in { "Coins", "GoalChip", "GoalTracker", "Settings" } do
+			local piece = stage:FindFirstChild(other, true) :: GuiObject?
+			if piece and visible(piece) then
+				local p, q = piece.AbsolutePosition, piece.AbsoluteSize
+				assert(
+					p.X + q.X <= position.X
+						or position.X + size.X <= p.X
+						or p.Y + q.Y <= position.Y
+						or position.Y + size.Y <= p.Y,
+					button.Name .. " overlaps " .. other
+				)
+			end
+		end
+		local point = position + size / 2
+		local first: Instance? = nil
+		for _, hit in player.PlayerGui:GetGuiObjectsAtPosition(point.X, point.Y) do
+			if hit:IsA("GuiButton") and hit.Active then
+				first = hit
+				break
+			end
+		end
+		assert(first == button, button.Name .. " is behind " .. (if first then first:GetFullName() else "no hit"))
+	end
+	print("PASS: HUD row [Daily][Home][gear] targets, gaps, safe area and hit order")
 end
 -- Check actual PlayerGui hit order (including TouchGui), not just visual rectangles.
 -- Off-window scroll targets are covered by reachability above; check their input after scrolling.

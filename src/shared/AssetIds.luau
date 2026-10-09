@@ -133,5 +133,7 @@ return {
 	["Models.WeAreAllStars.Reminiscence"] = "130504878326463",
 	["Models.WeAreAllStars.Sanctuary"] = "74567398331175",
 	["Models.WeAreAllStars.Wishing"] = "112630885709193",
+	["Navigation.Daily"] = "100827043771835",
+	["Navigation.Home"] = "82764315087705",
 	["Town.SakuraPetal"] = "110930105901678",
 } :: { [string]: string }

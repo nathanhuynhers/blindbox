@@ -9,13 +9,14 @@ local Icons = require(script.Parent.UIIcons)
 local Sfx = require(script.Parent.Sfx)
 local Button = {}
 
-export type Variant = "gold" | "violet" | "mint" | "white" | "ink" | "ghost" | "selected"
+export type Variant = "gold" | "violet" | "mint" | "white" | "raised" | "ink" | "ghost" | "selected"
 type Paint = { fill: Color3, text: Color3, outline: Color3, shadow: boolean, transparent: boolean? }
 local paints: { [string]: Paint } = {
 	gold = { fill = Style.gold, text = Style.ink, outline = Style.ink, shadow = true },
 	violet = { fill = Style.violet, text = Style.white, outline = Style.ink, shadow = true },
 	mint = { fill = Style.mint, text = Style.mintInk, outline = Style.ink, shadow = true },
 	white = { fill = Style.white, text = Style.ink, outline = Style.ink, shadow = false },
+	raised = { fill = Style.white, text = Style.ink, outline = Style.ink, shadow = true },
 	ink = { fill = Style.ink, text = Style.white, outline = Style.ink, shadow = false },
 	selected = { fill = Style.ink, text = Style.white, outline = Style.ink, shadow = false },
 	ghost = {

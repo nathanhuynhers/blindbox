@@ -1,5 +1,5 @@
 --!strict
--- Daily goal tracker in the HUD: a card under the gear on desktop, a "Goal done" chip on phone.
+-- Daily goal tracker in the HUD: a card under the gear on desktop, a "Goal · Claim" chip on phone.
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
@@ -73,7 +73,7 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 		"GoalChip",
 		{
 			variant = "gold",
-			text = "Goal done · Claim",
+			text = "Goal · Claim",
 			size = 16,
 			radius = 22,
 			drop = 3,
@@ -86,6 +86,7 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 		end
 	)
 	chip.button.AnchorPoint = Vector2.new(1, 0)
+	chip.button.Size = UDim2.fromOffset(140, 44)
 	local phone = false
 	local active, ready = false, false
 	local function visibility()
@@ -124,8 +125,12 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 			claim.button.Visible = goal == "ready"
 			claim.set("Claim " .. reward .. " coins", ctx.canAct())
 			size(goal == "ready")
-			chip.set("Goal done · Claim " .. reward, ctx.canAct())
-			chip.button.Size = UDim2.fromOffset(170 + #reward * 10, 44)
+			-- Phone only: compact copy so it fits between the Coins pill and the top-right row.
+			chip.set("Goal · Claim", ctx.canAct())
+			chip.button:SetAttribute(
+				"AccessibleName",
+				"Daily goal done: claim " .. reward .. " coins"
+			)
 			visibility()
 		end,
 	}

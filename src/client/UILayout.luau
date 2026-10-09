@@ -17,6 +17,9 @@ export type Frame = {
 	height: number,
 	phone: boolean,
 	hud: Rect,
+	-- Top-right HUD row, left to right: Daily, Home, Settings gear.
+	daily: Rect,
+	home: Rect,
 	gear: Rect,
 	tracker: Rect,
 	dock: Dock,
@@ -55,6 +58,14 @@ local function dock(width: number, height: number, phone: boolean): Dock
 	}
 end
 
+-- Square HUD buttons ending at `gearX`, `gap` apart (a thumb-safe gap on phone).
+local function row(gearX: number, y: number, size: number, gap: number): (Rect, Rect, Rect)
+	local function at(index: number): Rect
+		return { x = gearX - index * (size + gap), y = y, width = size, height = size }
+	end
+	return at(2), at(1), at(0)
+end
+
 -- `topbar` is the free span between Roblox's own top-bar buttons, in pixels of the safe area.
 function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): Frame
 	local phone = Layout.phone(pixelWidth, pixelHeight)
@@ -65,14 +76,18 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 	if phone then
 		local hudX = math.max(8, left + 8)
 		local sheetX = if width - hudX - 8 >= 600 then hudX else 8
+		local daily, home, gear = row(right - 10 - 44, 8, 44, 10)
 		return {
 			scale = scale,
 			width = width,
 			height = height,
 			phone = true,
 			hud = { x = hudX, y = 8, width = 0, height = 44 },
-			gear = { x = right - 10 - 44, y = 8, width = 44, height = 44 },
-			tracker = { x = right - 10 - 44 - 8, y = 8, width = 0, height = 44 },
+			daily = daily,
+			home = home,
+			gear = gear,
+			-- The phone "Goal · Claim" chip is right-anchored just left of the row.
+			tracker = { x = daily.x - 10, y = 8, width = 0, height = 44 },
 			dock = bar,
 			panel = { x = sheetX, y = 6, width = width - sheetX - 8, height = height - 14 },
 			header = 56,
@@ -83,13 +98,16 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 	local top, bottom = 84, bar.y - 26
 	local panelWidth = math.min(1280, width - margin * 2)
 	local panelHeight = math.min(640, bottom - top)
+	local daily, home, gear = row(right - 20 - 52, 18, 52, 10)
 	return {
 		scale = scale,
 		width = width,
 		height = height,
 		phone = false,
 		hud = { x = math.max(16, left + 10), y = 14, width = 0, height = 52 },
-		gear = { x = right - 20 - 52, y = 18, width = 52, height = 52 },
+		daily = daily,
+		home = home,
+		gear = gear,
 		tracker = { x = right - 20 - 270, y = 82, width = 270, height = 0 },
 		dock = bar,
 		panel = {
