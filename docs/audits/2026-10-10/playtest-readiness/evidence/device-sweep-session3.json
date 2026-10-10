@@ -1,0 +1,21 @@
+{
+  "note": "Session 3 (Studio e26ac926, build eea7737 + DisplayPicker column change NOT yet loaded). Studio rendered only after being brought to the foreground (the B01 1x1 viewport reproduced whenever the window was fully covered). Progressed fixture state: +50,000,000 Studio grant, Welcome guidance skipped, two paid Open 10 batches (Tender Echoes, We Are All Stars), Equip Best. Screens opened by ButtonY/ButtonR1 keys sent through VirtualInput (routing only, not gamepad acceptance); Settings and Daily by native pointer. Each record: StudioUI result (visible 44px targets, whole-target hit points), measured viewport, Stage UIScale, TouchControlsEnabled. hires results reflect the rerun after the fixture's corner-inset UIScale correction (the first run reported four false Backdrop hits because 16px design corner radii were not multiplied by UIScale 2). ?|Shop and ?|Display are the default 1529x730 editor viewport before the sweep began.",
+  "log": [
+    "0.06 step=1 coins=4500 owned=0 unlocked=3",
+    "1.06 coins=50004500 (Studio-only fixture grant)",
+    "12.61 Tutorial skipped. (native Skip, Sure?)",
+    "16.61 coins=48004500 owned=10 5 new discoveries! (Tender Echoes Open 10, 2,000,000 once; Skip at Await reached the summary)",
+    "111.88 coins=46004500 owned=20 6 new discoveries! (We Are All Stars Open 10, 2,000,000 once)",
+    "121.64 slots=echo.crate-spark|echo.echo-line|echo.paper-crown Best Display equipped."
+  ],
+  "results": {
+    "ipad4x3 1023x768 s1.00": {"World": "PASS 11", "Collection": "PASS 22/138", "Display": "PASS 20/120; picker name 'Page Turner Star' truncated at 55px (fixed in DisplayPicker columns, verified in session 4)", "Shop": "PASS 29/207", "Goals": "PASS 14/72", "Shelves": "PASS 34/249", "Login": "PASS 8/18", "Settings": "Not recorded"},
+    "largetablet 1375x1032 s1.07": {"World": "PASS 11", "Collection": "PASS 22/144", "Display": "PASS 20/126", "Shop": "PASS 29/207", "Goals": "PASS 14/72", "Shelves": "PASS 22/144", "Login": "PASS 8/18", "Settings": "PASS 15/36"},
+    "laptop 1365x768 s1.07": {"World": "PASS 11", "Collection": "PASS 22/144", "Display": "PASS 20/110", "Shop": "PASS 29/198", "Goals": "PASS 14/72", "Shelves": "PASS 34/246", "Login": "PASS 8/18", "Settings": "PASS 15/36"},
+    "hd720 1279x720 s1.00": {"World": "PASS 11", "Collection": "PASS 22/144", "Display": "PASS 20/110", "Shop": "PASS 29/198", "Goals": "PASS 14/72", "Shelves": "PASS 22/144", "Login": "PASS 8/18", "Settings": "PASS 15/36"},
+    "desktop 1919x1079 s1.50": {"World": "PASS 11", "Collection": "PASS 22/144", "Display": "PASS 20/114", "Shop": "PASS 29/198", "Goals": "PASS 14/72", "Shelves": "PASS 34/246", "Login": "PASS 8/18", "Settings": "PASS 15/36"},
+    "hires 2560x1440 s2.00": {"World": "PASS 11", "Collection": "PASS 22/144", "Display": "PASS 20/114", "Shop": "PASS 29/199", "Goals": "PASS 14/72", "Shelves": "PASS 22/144", "Login": "PASS 8/18", "Settings": "PASS 15/36"},
+    "ultrawide 3440x1440 s2.00": {"World": "PASS 11", "Collection": "PASS 22/144", "Display": "PASS 20/114", "Shop": "PASS 29/199", "Goals": "PASS 14/72", "Shelves": "PASS 34/246", "Login": "Not recorded", "Settings": "PASS 15/36"}
+  },
+  "touch_ownership": "Every open-screen record had TouchControlsEnabled false; every World/Settings record had it true."
+}

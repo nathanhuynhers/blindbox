@@ -1,0 +1,19 @@
+{
+  "build": "feat/playtest-readiness 1b90716 (AQ01-AQ05/DR01 fixes; Shop phone label fix AQ06 not yet in this Studio session)",
+  "studio": "b5779791-c88b-4c34-ae1f-686f223d2f3f, RobloxWorkspace.rbxlx built from the worktree, PlaceId 0",
+  "device": "StudioDeviceSimulatorService iphone_7, LandscapeLeft; Camera.ViewportSize 666x374; SafeArea 666x374; GuiInset (0,58); UIScale 1; TouchEnabled true",
+  "observer": "Remotes.State.OnClientEvent listener installed ~2s after PocketGrove appeared; times are seconds after it, include tool round trips, screenshots and inspection pauses; not an onboarding-speed benchmark",
+  "input": "Native Studio tool pointer via instance paths (summary tiles via GUI coordinates), native W/A/S/D for plate collection. No callbacks fired, no grants, no tutorial skip.",
+  "log": [
+    "0.07 step=1 coins=4500 owned=0 slots=|| unlocked=3 login=true",
+    "70.81 step=2 coins=4500 owned=1 Welcome Box opened! (Moon Moth, Uncommon, NEW; Open via the Tap to Open button)",
+    "102.39 step=3 slots=grove.moth Display updated. (Put on Display from the reveal)",
+    "150.92 step=4 coins=5032 Collected 532 Coins! (walked onto CollectionPlate1 with W then W+D)",
+    "160.84 step=5 coins=3532 owned=2 New discovery! (paid Grove box, 1,500 charged once; opened by tapping the box itself; Sprout Scout, Common; Keep returned to Shop)",
+    "200.97 step=6 owned=12 Welcome x10 opened! (reward popup OPEN 10 NOW, Skip twice, summary of ten, Grove 6/6)",
+    "558.87 step=7 Shelf updated. (optional tip complete; intended Sunbeam Sprite but the coordinate tap selected Mallow Cap - input-tool mapping under device simulation, see REPORT)",
+    "580.41 step=7 Shelf updated. (an instance-path click on the hidden phone dock tile DockGoals landed on visible Shelves content at that position; tool artifact, not a game action path)",
+    "701.34 step=7 coins=4032 login=false Day 1 reward claimed! (+500 once under a double click)"
+  ],
+  "after": "Settings Motion Reduced selected (native); Home returned the character to spawn (18, 3.44, -142) with TouchControlsEnabled true"
+}

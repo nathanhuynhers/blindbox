@@ -1,0 +1,23 @@
+{
+  "note": "Session 2 (Studio 9dca0c20, build 89df9a2, progressed fixture state: 10 We Are All Stars figures, 3 displayed, 6 slots unlocked, tutorial skipped). Screens opened by native Studio pointer (iphone7, smalltablet) or by the menu's bound ButtonY/ButtonR1 keys sent through VirtualInput (cutout presets, where instance-path pointer clicks land offset). A watcher ran tests/StudioUI.client.luau (whole-target hit order, 44px targets, safe area, scroll canvases, touch ownership) plus a text probe about 0.6s after each screen became visible. overflow = TextBounds larger than its label; truncated = TextTruncate active and TextFits false. ipad4x3|World is INVALID and excluded: the viewport stalled at 959x599 (B01 recurrence) and Login was open.",
+  "log": [
+    "0.06 step=1 coins=4500 owned=0 slots=|| unlocked=3",
+    "71.46 coins=50004500 (Studio-only fixture grant +50,000,000)",
+    "93.16 Tutorial skipped. (two native taps on Skip then Sure?)",
+    "129.86 coins=48004500 owned=10 6 new discoveries! (paid We Are All Stars Open 10, 2,000,000 charged once)",
+    "202.26 slots=star.lamplight|star.garden|star.page-turner Best Display equipped.",
+    "220.72 coins=47964500 unlocked=4 (native Unlock 40K)",
+    "222.76 coins=47564500 unlocked=5 (native double-click Unlock 400K, charged once)",
+    "233.44 coins=43564500 unlocked=6 (native Unlock 4M)",
+    "510.94 coins=43565000 Day 1 reward claimed! (offset instance-path pointer click during the cutout-device sweep, not an intended action)",
+    "636.32 coins=43566000 Display updated. (offset instance-path pointer click during the device sweep, not an intended action)"
+  ],
+  "results": {
+    "iphone7 666x374": {"World": "PASS 10 targets", "Collection": "PASS 16 targets/144 hit points", "Display": "PASS 11/81; picker names truncated: Mirrorlight Star, Reminiscence Star", "Shop": "PASS 16/135; overflow ProjectedCollectionName 'Pocket Grove'", "Goals": "PASS 9/30", "Shelves": "PASS 22/189", "Login": "PASS 2/18", "Settings": "PASS 14/36"},
+    "a06 705x338": {"World": "PASS 10", "Collection": "PASS 16/141", "Display": "PASS 11/69; picker names truncated: Mirrorlight Star, Reminiscence Star", "Shop": "PASS 16/129; overflow ProjectedCollectionName", "Goals": "PASS 9/18", "Shelves": "PASS 22/162", "Login": "PASS 1/9", "Settings": "Not run (pointer offset on cutout preset)"},
+    "iphone13 749x388": {"World": "PASS 10", "Collection": "PASS 16/144", "Display": "PASS 11/81; picker name truncated: Reminiscence Star", "Shop": "PASS 16/138; overflow ProjectedCollectionName", "Goals": "PASS 9/30", "Shelves": "PASS 15/135", "Login": "Not run (pointer offset)", "Settings": "Not run (pointer offset)"},
+    "iphone16max 830x439": {"World": "PASS 9", "Collection": "PASS 16/144", "Display": "PASS 11/99; picker names truncated: Mirrorlight Star, Reminiscence Star", "Shop": "PASS 16/144; overflow ProjectedCollectionName", "Goals": "PASS 7/18", "Shelves": "PASS 15/135", "Login": "Not run", "Settings": "Not run"},
+    "smalltablet 959x599": {"World": "PASS 9", "Collection": "PASS 22/104", "Display": "PASS 17/72; picker names truncated: Mirrorlight Star, Wishing Star, Reminiscence Star", "Shop": "PASS 22/110; overflow ProjectedCollectionName", "Goals": "PASS 14/52; truncated row name 'We Are All Stars'", "Shelves": "PASS 28/165", "Login": "PASS 7/9", "Settings": "PASS 13/36"}
+  },
+  "touch_ownership": "Every screen record had TouchControlsEnabled false while open; every World/Settings record had it true."
+}

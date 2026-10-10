@@ -1,0 +1,15 @@
+{
+  "branch": "feat/playtest-readiness",
+  "head": "c30c4fe (base e8c2b69, audited gameplay source 4b50fb76)",
+  "place": "RobloxWorkspace.rbxlx built by Rojo 7.7.0 from this worktree; Studio session 23f85aed (PlaceId 0, GameId 0, unsaved preview)",
+  "method": "FNV-1a 32-bit over each LuaSourceContainer.Source (CR removed) for StarterPlayerScripts.Client, ServerScriptService.Server and ReplicatedStorage.Shared, compared with src/client, src/server and src/shared .luau files (CR removed). The Luau side uses (h << 24) + h * 403 to keep the multiply exact; an earlier double-precision attempt produced false mismatches and was discarded.",
+  "result": {"repo": 131, "studio": 131, "match": 131, "mismatch": 0, "extra": 0},
+  "merged": {
+    "head": "33ce714 (this branch merged with master 0bb97f9: HUD Daily/Home labels, gear tile, Shelf auto toggle from another session)",
+    "studio": "94cdfcd7, RobloxWorkspace.rbxlx rebuilt after the merge",
+    "result": {"repo": 131, "studio": 131, "match": 131, "mismatch": 0, "extra": 0},
+    "rechecks": "StudioUI + text probe PASS on World, Collection, Display, Shop, Goals, Shelves and Settings at iphone7 666x374, a06 705x338 (Settings not run) and hd720 1279x720 (plus Login); TouchControlsEnabled false on every open screen and true in the world."
+  },
+  "earlier_sessions": "Sessions 1 (b5779791, build 1b90716), 2 (9dca0c20, 89df9a2) and 3 (e26ac926, eea7737) were checked for the specific changed modules by source markers only (TouchControlsEnabled, 'Open Welcome Box', name.TextWrapped, minCell); results from those sessions are labelled with their build.",
+  "gamepads": "UserInputService:GetConnectedGamepads() empty; GamepadEnabled false; TouchEnabled false without the simulator."
+}

@@ -1,0 +1,28 @@
+{
+  "conditions": "Studio session 23f85aed, build c30c4fe, single client, StudioDeviceSimulatorService hd_720 -> 1279x720, UIScale 1. Windows 11 host; Studio editor client, not a phone. Studio was brought to the foreground before sampling; it was not continuously verified to stay uncovered for the whole run. Default Studio graphics quality (not changed). Progressed fixture state: 30-80 owned copies across 5 collections, 6/6 Display occupied, 1 occupied plot. Sampler: module-owned Heartbeat accumulator, 10 s windows (FPS = frames/sum(dt), p95/max frame time, Stats:GetTotalMemoryUsageMb, Stats.InstanceCount, PlayerGui descendants).",
+  "menu_repetition": {
+    "procedure": "3 warm-up cycles then 10 measured cycles of Y + R1 x4 + Y through all five dock screens; 20 s idle; counts taken with every screen closed.",
+    "baseline": {"pocketGroveDescendants": 4830, "playerGuiDescendants": 4988, "workspaceDescendants": 4735, "instances": 59745, "memoryMb": 2698.69, "guiMemoryMb": 41.43},
+    "after10Cycles": {"pocketGroveDescendants": 4830, "playerGuiDescendants": 4988, "workspaceDescendants": 4735, "instances": 59745, "memoryMb": 2696.96, "guiMemoryMb": 41.34},
+    "touchControlsAfter": true
+  },
+  "repeated_openings": {
+    "procedure": "3 paid Open 10 (Open, first reveal, View all results, Done), 15 s settle; then 2 more Pocket Grove batches with no new figure types.",
+    "after3": {"pocketGroveDescendants": 4861, "instances": 59776, "workspaceDescendants": 4735, "memoryMb": 2708.75, "openingGui": false, "summaryGui": false, "cinematicStage": false, "camera": "Custom"},
+    "after2More": {"pocketGroveDescendants": 4861, "instances": 59776, "workspaceDescendants": 4735, "memoryMb": 2730.18, "uniqueOwned": 15, "pickerTiles": 14},
+    "interpretation": "+31 GUI descendants after the first three batches match pooled picker/Collection tiles for newly owned figure types; no further growth when no new types were added."
+  },
+  "soak_idle_world": {
+    "durationSeconds": 1822,
+    "windows": 182,
+    "fps": {"min": 58.60, "median": 60.00, "mean": 59.99, "max": 60.02},
+    "p95FrameMs": {"min": 17.87, "median": 18.02, "max": 18.22},
+    "maxFrameMs": {"median": 19.31, "max": 267.10, "note": "two windows at ~921-931 s contained 267 ms and 140 ms frames; all other windows <= 32 ms"},
+    "memoryMb": {"start": 2730.22, "min": 2328.48, "median": 2337.48, "finish": 2335.38, "note": "dropped ~300 MB at ~410 s and ~100 MB at ~770 s, then flat 2,328-2,350"},
+    "instances": {"start": 59776, "finish": 59776},
+    "pocketGroveDescendants": {"start": 4861, "finish": 4861},
+    "workspaceDescendants": {"start": 4735, "finish": 4735}
+  },
+  "not_measured": "Low/high graphics (would change the user's quality setting), eight occupied plots, full Shelves, network metrics, engine-wide connection/task counts (not enumerable from scripts), physical hardware.",
+  "earlier_samples_note": "Idle-world windows before the warm-up (t=10-100 s) show GUI 3,267-4,286 and instances 57,799-58,863 while the progressed state was being built (openings, Equip Best, unlocks)."
+}

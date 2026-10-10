@@ -1,0 +1,26 @@
+{
+  "setup": "StudioTestService:ExecuteMultiplayerTestAsync(2) from Edit on build c30c4fe (RobloxWorkspace.rbxlx). Separate rendered client windows: Player1 (UserId -1, Studio 9876eb05) and Player2 (UserId -2, Studio 84d9c91b), each 1274x672 GUI viewport; server 420a9b74. PlaceId 0, unsaved preview.",
+  "native": {
+    "StudioSystemScreens on fresh Player1 Display": "PASS 'Display: 3 of 6 slots unlocked in order' (corrected fixture, partial-unlock contract)",
+    "StudioUI on Player1 Display 1274x672": "PASS 12 targets, 42 whole-target hit points",
+    "Concurrent paid Open 1 (double click on each client within ~1.5s)": "Player1 4,500 -> 3,000, owned 1; Player2 4,500 -> 3,000, owned 1. One charge per player.",
+    "Player2 reveal -> Put on Display": "slots=grove.sprout, 'Display updated.'",
+    "Visitor prompt": "Player1 standing 2 studs from Player2's ManageDisplay: prompt Enabled=false on Player1's client (server-side prompt enabled for the owner). Native E opened no screen and sent no request.",
+    "Visitor on owner's collection plate": "Player1 walked onto Player2's CollectionPlate1: no collect; Player1 Coins 3,000 unchanged; Player2 bank kept accruing 234.65 -> 249.40.",
+    "Visitor click on owner's figure": "Native mouse down/up on Player2's FigureCollectors.1 (Mouse.Target confirmed, 7.96 studs). Server ClickDetector.MouseClick fired for Player1 and was denied: Player1 Coins unchanged, Player2 Coins/bank unchanged (bank continued accruing).",
+    "Owner click on own figure (positive control)": "Player2 native mouse down/up at 11.2 studs: MouseClick fired, 'Collected 562 Coins!' (3,000 -> 3,562).",
+    "Tool note": "The Studio MCP single 'mouseButtonClick' action did not fire world ClickDetector.MouseClick in these clients; explicit mouseButtonDown/mouseButtonUp did. The first visitor-click result was discarded as inconclusive for that reason.",
+    "Per-player deal stock": "Player1 native E at Stall_1 opened DealPopup: We Are All Stars 150,000 (-25%), 'Need 47K more' with 103,000 Coins (fixture grant). After a further labelled grant, a native double-click bought once (503,000 -> 353,000, left 3 -> 2); two more native purchases 353,000 -> 203,000 -> 53,000, left 0; popup 'Sold out for you this hour', Buy disabled 'Sold out - back in 11:10'. Player2 stock remained star:3, tide:3, concept:3.",
+    "Private state": "Player2's snapshot contains only its own owned/earnings/deals; no other player's inventory fields.",
+    "Home from plaza": "Player1 native Home closed nothing unexpected and returned to own spawn (18, 3.44, -142)."
+  },
+  "synthetic_labelled": {
+    "probes": "Player1 FireServer Intent: NaN revision; stale revision; unknown collection; out-of-range slot 1e9; unowned figure; foreign player/userId fields; stale deal window; 5,000-char id; 100,000-char action; non-table payload; infinite volume.",
+    "result": "No mutation: coins 53,000, revision 6, owned, slots, deal stock 0 and sfxVolume 100 identical before/after. Replies: stale revision 'State changed. Try again.'; off-plot Place 'Return to your own plot to edit your Display.'; malformed payloads dropped. RequestState still answered."
+  },
+  "lifecycle": {
+    "disconnect": "Server Kick of Player2 removed plot -2 within 3s; Player1 plot unchanged.",
+    "reassignment": "StudioTestService:AddPlayers(1) created Player3 (-3), assigned the freed PlotSlot 2 at the same pivot."
+  },
+  "not_covered": "Real DataStore save/rejoin (unsaved preview), physical touch/controller, cross-server deal behavior, engine-wide connection/task counts."
+}

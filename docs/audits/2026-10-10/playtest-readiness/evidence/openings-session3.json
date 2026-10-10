@@ -1,0 +1,23 @@
+{
+  "note": "Session 3, hd_720 1279x720, UIScale 1. Real Shop purchases with Studio-only fixture Coins; all openings driven by the native Studio pointer (Open, Skip twice, Next figure, View all results, Done). StudioOpeningLayout (native mesh bounds, camera projection, text fitting, safe area) ran on settled results. Batch contents come from the authoritative reply's figures list.",
+  "batches_we_are_all_stars_open10": [
+    "1 Com:wishing,Com:wishing,Unc:lamplight,Unc:nightlight,Rar:echo,Rar:sanctuary,Com:wishing,Com:wishing,Unc:nightlight,Com:wishing (Skip at Shake)",
+    "2 Unc:lamplight,Unc:garden,Com:page-turner,Com:page-turner,Rar:radiant,Unc:lamplight,Rar:radiant,Com:mirrorlight,Com:page-turner,Com:reminiscence (Skip at Charge)",
+    "3 Unc:garden,Rar:sanctuary,Unc:lamplight,Com:page-turner,Com:reminiscence x2,Unc:garden,Com:reminiscence x2,Com:page-turner",
+    "4 Unc:garden,Com:wishing,Com:page-turner x2,Com:wishing,Unc:lamplight,Com:page-turner,Unc:lamplight,Com:page-turner,Com:mirrorlight",
+    "5 Com:mirrorlight,Unc:lamplight,Com:reminiscence,Com:wishing,Com:mirrorlight,Com:wishing x2,Com:reminiscence,Rar:sanctuary,Com:page-turner",
+    "6 Com:reminiscence,Com:wishing,Rar:echo,Unc:nightlight,Com:reminiscence,Com:page-turner,Unc:garden,Com:page-turner,Com:wishing x2",
+    "7 Com:wishing,LEGENDARY:meteor-shower,Com:wishing,Unc:garden,Com:wishing,Com:page-turner x2,Com:mirrorlight x2,Com:page-turner (skipped; Legendary seen only in the summary)",
+    "8 Com:wishing,Com:reminiscence,Com:page-turner,Rar:radiant,Unc:garden,Com:mirrorlight,Com:wishing,Com:mirrorlight,Com:wishing,Unc:nightlight",
+    "9 Unc:lamplight x2,Com:mirrorlight,Rar:sanctuary,Unc:garden,Com:wishing,Unc:nightlight,Com:page-turner,Com:reminiscence,Com:mirrorlight (opened and stepped natively)"
+  ],
+  "charges": "Wallet fell by exactly 2,000,000 per batch (44,004,500 -> 28,004,500 across batches 1-8, plus earlier Tender Echoes/We Are All Stars batches). No duplicate charge or award was observed.",
+  "native_result_layout": {
+    "Uncommon Lamplight Star": "PASS 276 native opening bounds/text/projection checks at 1279x720",
+    "Common Mirrorlight Star": "PASS 246 checks at 1279x720",
+    "Rare Sanctuary Star (duplicate x4, swap offer)": "PASS 292 checks at 1279x720"
+  },
+  "skip_phases_native": ["Await (Tender Echoes ten, session 3)", "Shake (batch 1)", "Charge (batch 2)", "Await (Welcome x10, session 1)"],
+  "cleanup_after_done": {"BlindboxOpening": "absent", "OpenTenResults": "absent", "BlindboxCinematic stage": "absent", "camera": "Custom, FOV 70", "PocketGrove.Enabled": true, "TouchControlsEnabled": "false because Done returned to the open Shop (correct)"},
+  "not_observed": "Legendary and Mythical reveal presentations. Presentation-only previews started from the MCP command context are torn down between calls (camera ownership interrupt) and Mythical averages ~457 boxes. Use tests/StudioOpening.client.luau from Studio's own Command Bar to tour Legendary/Mythical."
+}
