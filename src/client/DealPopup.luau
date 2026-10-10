@@ -203,10 +203,17 @@ function Popup.create(
 			local pad = if compact then 14 else 20
 			local wellSize = if compact then 132 else 190
 			local buttonHeight = if compact then 52 else 60
+			-- Short safe areas: 8px margins and the card's 8px shadow must fit too, so tighten the
+			-- padding, then the box well, rather than clipping the card bottom and Buy's outline.
+			local room = size.Y - 24 - head - buttonHeight
+			if room - pad * 3 < wellSize then
+				pad = 10
+				wellSize = math.max(96, math.min(wellSize, room - pad * 3))
+			end
 			local height = head + pad + wellSize + pad + buttonHeight + pad
 			card.root.Size = UDim2.fromOffset(width, height)
 			card.root.Position =
-				UDim2.fromOffset((size.X - width) / 2, math.max(8, (size.Y - height) / 2))
+				UDim2.fromOffset((size.X - width) / 2, math.max(8, (size.Y - height - 8) / 2))
 			Kit.rect(header, 0, 0, width, head)
 			Kit.rect(divider, 0, head, width, 2)
 			local iconSize = if compact then 40 else 52
@@ -239,7 +246,7 @@ function Popup.create(
 			discount.TextSize = if compact then 13 else 16
 			local detailX = pad + wellSize + pad
 			Kit.rect(details, detailX, head + pad, width - detailX - pad, wellSize)
-			local scale = if compact then 0.78 else 1
+			local scale = math.min(if compact then 0.78 else 1, (wellSize - 8) / 136)
 			local rows: { GuiObject } = { collectionChip, name, prices, stockRow, note }
 			local heights = { 26, 30, 40, 22, 18 }
 			local gap = (wellSize - (26 + 30 + 40 + 22 + 18) * scale) / 4

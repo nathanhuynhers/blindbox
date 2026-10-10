@@ -47,6 +47,7 @@ export type Onboarding = {
 	update: (Types.Snapshot, string?, boolean) -> (),
 	layout: (Layout.Frame, boolean) -> (),
 	guide: () -> Guide?,
+	card: Frame,
 }
 local docked: { [string]: boolean } = { Shop = true, Display = true, Shelves = true }
 local questSteps = Tutorial.buy -- Welcome Box, Display, collect, buy.
@@ -452,6 +453,7 @@ function Onboarding.create(
 	scope.connect(skipButton.Activated, skip)
 
 	return {
+		card = card.root,
 		guide = function()
 			return if skipped then nil else current
 		end,

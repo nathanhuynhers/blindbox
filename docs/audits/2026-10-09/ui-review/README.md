@@ -14,6 +14,23 @@ Fixture callbacks recorded **zero gameplay requests**; no progression was grante
 | P2 | Desktop notifications obscure the Coin balance. | Open a desktop screen and show a normal error such as “You must be inside your own plot to edit your Display or Shelves.” The toast occupies the same top band as the balance. Reproduced with the real `Interface` at 1023×599. [Screenshot](desktop-notification.jpg). | Reserve a notification area that does not intersect the HUD, adapting to the toast's actual height. |
 | P3 | Android Hourly Deal loses its bottom border and padding. | Galaxy A06 landscape: the popup uses CoreUISafeInsets, giving 705×280 usable space. The fixed card is 600×286 at Y=8, ending at Y=294. Buy ends at Y=280, leaving its outline/drop and card bottom outside the visible region. The main Buy target itself remains reachable. [Screenshot](android-deal.jpg). | Size or scroll the card against its own safe height, retaining space for the button outline and bottom padding. |
 
+## Fixes (feat/ui-audit-fixes, 2026-10-09)
+
+Re-confirmed on `420204c` (after the HUD icon row) and fixed in the shared layout path.
+Bounds are native Studio GUI coordinates (inset space) at the real viewport size.
+
+| Defect | Root cause → change | Before → after |
+| --- | --- | --- |
+| P1 Collection | Details used a fixed 402px stack in a 297px body; chips were a fixed 112px and columns a fixed 4. → Details switch to the compact stack when the roomy one doesn't fit, the portrait absorbs leftover height, and the pane is a canvas that scrolls if even that overflows. Chip width and grid columns (`UILayout.columns`) come from the middle pane's width. | 1023×599: action Y 432–488 vs Body end 401 → **341–389** (drop 393). Missing chip ended under the preview → chips end at X 594, details start 611; grid 2×123px instead of 4×56px. 1365×768 roomy layout unchanged. A06 action 212–260 in a 272 body. |
+| P2 Goals | Phone kept three columns, leaving 20–33px names. → Phone puts goal and free box side by side and stacks the collection list full width below (body canvas scrolls). The progress title scales down (max 20/17pt) instead of truncating; it also truncated at 1023×599 desktop. | Names 20/33px → **444px** (iPhone 7) / **483px** (A06); "FREE BOX OF THE DAY" and "Complete your collections" `TextFits=true` at both phones and 1023×599. |
+| P2 Toast | Desktop toasts were anchored above the panel, centred, regardless of the coins pill. → `UILayout.toast` picks the band right of the coins pill (and a visible Welcome Quest card) and left of the HUD row, narrowing the toast and re-measuring its height; if it doesn't fit, it sits over the panel's bottom edge (as phone already did). | 1023×599: toast X 251–771 overlapping coins → **356–815** beside coins (ends 344), row starts 827. No intersections at 1365×768 (open and closed), A06 and iPhone 7. |
+| P3 Deal | Card height ignored the CoreUISafeInsets height. → On short safe areas padding tightens to 10, then the box well shrinks (min 96), leaving 8px margins plus the 8px shadow. | A06 (705×280 safe): card Y 8–294 → **8–264**, shadow 272, Buy drop 258. iPhone 7 (666×316) unchanged at 11–297. |
+
+After screenshots: [Collection + toast, 1023×599](after-small-desktop-collection-toast.jpg),
+[Goals, iPhone 7](after-mobile-goals.jpg), [Hourly Deal, Galaxy A06](after-android-deal.jpg).
+Viewports were set by sizing the Studio window, not device emulation, so no notch/home-bar
+insets or touch input were exercised.
+
 ## Code locations
 
 - Collection: `src/client/CollectionScreen.luau:147–211`; fixed desktop filter widths at 172,

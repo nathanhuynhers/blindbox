@@ -857,7 +857,7 @@ check(not joined(false), "brand-new player keeps onboarding uncovered")
 local ShopScreen = require("./ShopScreen")
 local ShelvesScreen = require("./ShelvesScreen")
 local Layout = require("./UILayout")
-for _, viewport in { { 705, 338 }, { 666, 374 }, { 1280, 720 } } do
+for _, viewport in { { 705, 338 }, { 666, 374 }, { 1023, 599 }, { 1280, 720 } } do
 	Engine.screen.X, Engine.screen.Y = viewport[1], viewport[2]
 	local menus = Interface.create(function() end)
 	menus.update(snapshot())
@@ -1006,6 +1006,81 @@ for _, viewport in { { 705, 338 }, { 666, 374 }, { 1280, 720 } } do
 	)
 	for index = 1, 3 do
 		check(within(shelves.root, "Shelf" .. index).Visible, "three visible Shelf tabs preserved")
+	end
+	-- UI audit 2026-10-09 regressions: Collection action reachable, chips clear of the details,
+	-- Goals collection names wide enough to read, toasts off the HUD.
+	local CollectionScreen = require("./CollectionScreen")
+	local GoalsScreen = require("./GoalsScreen")
+	data.owned["grove.star"], data.discovered["grove.star"] = 1, true
+	local collectionView = CollectionScreen.create(parent, ctx)
+	collectionView.layout(panel.width, panel.height, geometry.phone)
+	collectionView.route({ collection = "grove", figure = "grove.star" })
+	collectionView.update(data)
+	local details = within(collectionView.root, "FigureDetails")
+	local figureAction = within(details, "FigureAction")
+	check(details.Visible and figureAction.Size.Y.Offset >= 44, "Collection action keeps its target")
+	check(
+		figureAction.Position.Y.Offset + figureAction.Size.Y.Offset + 4
+			<= math.max(details.Size.Y.Offset, if details.CanvasSize then details.CanvasSize.Y.Offset else 0),
+		"Collection action reachable inside the clipping details"
+	)
+	if not geometry.phone then
+		check(
+			details.Position.Y.Offset + details.Size.Y.Offset
+				<= within(collectionView.root, "Body").Size.Y.Offset,
+			"Collection details stay inside the body"
+		)
+		local filterRow = within(collectionView.root, "Filters")
+		local chip = within(filterRow, "Filter_all").Size.X.Offset
+		check(
+			chip >= 44 and filterRow.Position.X.Offset + chip * 3 + 16 <= details.Position.X.Offset,
+			"Collection filters end before the details pane"
+		)
+	end
+	local goalsView = GoalsScreen.create(parent, ctx, function()
+		return 0
+	end)
+	goalsView.layout(panel.width, panel.height, geometry.phone)
+	goalsView.update(data)
+	for _, collection in Catalog.collections do
+		local row = within(goalsView.root, "Progress_" .. collection.id)
+		check(within(row, "Name").Size.X.Offset >= 100, "Goals collection name has room")
+	end
+	check(
+		within(within(goalsView.root, "FreeBox"), "Heading").Size.X.Offset >= 150,
+		"Goals free box heading has room"
+	)
+	for _, opened in { false, true } do
+		for _, toastHeight in { 52, 132 } do
+			local coinsRight = geometry.hud.x + 200
+			local toast = Layout.toast(geometry, opened, coinsRight, 520, function()
+				return toastHeight
+			end)
+			local function clear(rect)
+				return toast.x + toast.width <= rect.x
+					or rect.x + rect.width <= toast.x
+					or toast.y + toast.height <= rect.y
+					or rect.y + rect.height <= toast.y
+			end
+			local coinsPill = {
+				x = geometry.hud.x,
+				y = geometry.hud.y,
+				width = 200,
+				height = geometry.hud.height + 4,
+			}
+			-- The coins pill hides under an open phone sheet; the HUD row whenever a screen is open.
+			check(
+				(opened and geometry.phone) or clear(coinsPill),
+				"toast clears the coins pill"
+			)
+			if not opened then
+				check(
+					clear(geometry.daily) and clear(geometry.home) and clear(geometry.gear),
+					"toast clears the HUD row"
+				)
+			end
+			check(toast.y >= 0, "toast stays on screen")
+		end
 	end
 	scope.destroy()
 	parent:Destroy()

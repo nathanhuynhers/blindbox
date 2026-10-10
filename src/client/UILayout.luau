@@ -137,4 +137,47 @@ function Layout.panes(
 	return list, math.max(0, main), side
 end
 
+-- How many cells at least `minimum` wide fit across `width` with `gap` between them (1..most).
+function Layout.columns(width: number, minimum: number, gap: number, most: number): number
+	return math.clamp(math.floor((width + gap) / (minimum + gap)), 1, most)
+end
+
+-- Toast rect, at most `width` wide; `measure` gives its real height at a width. No screen
+-- open: centred above the dock. Desktop panel open: the top band right of the top-left HUD
+-- (`hudRight`) and left of the HUD row, narrowed to fit (never below 320) when its height
+-- fits there; otherwise over the panel's bottom edge (the phone sheet too).
+function Layout.toast(
+	frame: Frame,
+	opened: boolean,
+	hudRight: number,
+	width: number,
+	measure: (width: number) -> number
+): Rect
+	local x = math.floor((frame.width - width) / 2)
+	local height = measure(width)
+	if not opened then
+		return { x = x, y = frame.dock.y - 12 - height, width = width, height = height }
+	end
+	local left, right = hudRight + 12, frame.daily.x - 12
+	local bottom = frame.panel.y - 6
+	local band = math.min(width, right - left)
+	if frame.dockWhileOpen and band >= 320 then
+		local bandHeight = measure(band)
+		if bottom - 8 >= bandHeight then
+			return {
+				x = math.clamp(x, left, right - band),
+				y = bottom - bandHeight,
+				width = band,
+				height = bandHeight,
+			}
+		end
+	end
+	return {
+		x = x,
+		y = frame.panel.y + frame.panel.height - 12 - height,
+		width = width,
+		height = height,
+	}
+end
+
 return Layout

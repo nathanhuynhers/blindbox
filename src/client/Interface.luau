@@ -245,11 +245,17 @@ function Interface.create(
 			layoutScreen(current)
 		end
 		local toastWidth = math.min(520, geometry.width - 32)
-		local bottom = if not opened
-			then geometry.dock.y - 12
-			elseif geometry.dockWhileOpen then geometry.panel.y - 6
-			else geometry.panel.y + geometry.panel.height - 12
-		notices.place(geometry.width / 2, bottom, toastWidth)
+		local isOpen = opened
+		notices.place(toastWidth, function(measure)
+			-- Measured at show time: the coins pill widens with the balance, and a visible
+			-- Welcome Quest card shares the top band with it.
+			local hudRight = geometry.hud.x + hud.coins.AbsoluteSize.X / geometry.scale
+			local quest = tutorial.card
+			if quest.Visible then
+				hudRight = math.max(hudRight, quest.Position.X.Offset + quest.Size.X.Offset)
+			end
+			return Layout.toast(geometry, isOpen, hudRight, toastWidth, measure)
+		end)
 	end
 	local function refresh()
 		local state = snapshot

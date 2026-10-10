@@ -164,6 +164,11 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 	Kit.corner(progress, 22)
 	local progressTitle =
 		Kit.text(progress, "Title", "Complete your collections", 20, Style.display())
+	-- Shrinks to fit the narrow desktop column rather than truncating.
+	progressTitle.TextScaled = true
+	local titleSize = Instance.new("UITextSizeConstraint")
+	titleSize.MinTextSize = 12
+	titleSize.Parent = progressTitle
 	local progressTotal = Kit.text(progress, "Total", "", 13, nil, Style.muted)
 	progressTotal.TextXAlignment = Enum.TextXAlignment.Right
 	local rows: { Row } = {}
@@ -193,13 +198,20 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 	local function arrange()
 		local pad = if phone then 12 else 20
 		local gap = if phone then 10 else 16
-		local column = State.cells(width - pad * 2, 3, gap)
+		-- Phone: goal and free box side by side, progress stacked full width below them so
+		-- collection names and headings keep their width (the body canvas scrolls).
+		local column = State.cells(width - pad * 2, if phone then 2 else 3, gap)
 		local cardHeight = math.max(if phone then 330 else 360, height - 38)
 		local top = 16
+		local rowsBottom = 52 + math.max(0, #rows - 1) * 62 + 54
+		local progressX = if phone then pad else pad + (column + gap) * 2
+		local progressY = if phone then top + cardHeight + gap else top
+		local progressWidth = if phone then width - pad * 2 else column
+		local progressHeight = if phone then rowsBottom + 16 else cardHeight
 		Kit.rect(goal.root, pad, top, column, cardHeight)
 		Kit.rect(empty, pad + 18, top + 24, column - 36, 120)
 		Kit.rect(free.root, pad + column + gap, top, column, cardHeight)
-		Kit.rect(progress, pad + (column + gap) * 2, top, column, cardHeight)
+		Kit.rect(progress, progressX, progressY, progressWidth, progressHeight)
 		local inner = column - 36
 		-- Goal card
 		Kit.rect(goalHeading, 18, 18, inner - 110, 26)
@@ -229,9 +241,9 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 		featureIcon.Position = UDim2.new(0.5, 0, 0, math.floor(featureHeight / 2) - 18)
 		Kit.rect(featureText, 12, math.floor(featureHeight / 2) + 34, inner - 24, 40)
 		-- Progress list
-		local pinner = column - 32
+		local pinner = progressWidth - 32
 		Kit.rect(progressTitle, 16, 16, pinner - 60, 26)
-		progressTitle.TextSize = if phone then 17 else 20
+		titleSize.MaxTextSize = if phone then 17 else 20
 		Kit.rect(progressTotal, 16 + pinner - 60, 16, 60, 26)
 		for index, row in rows do
 			Kit.rect(row.button, 16, 52 + (index - 1) * 62, pinner, 54)
@@ -241,8 +253,7 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 		end
 		-- Include the last collection row even when the short-layout card is smaller
 		-- than its contents; checking only the card bounds truncates that target.
-		local progressBottom = 52 + math.max(0, #rows - 1) * 62 + 54
-		Kit.fit(body, top + math.max(cardHeight, progressBottom) + 22, height)
+		Kit.fit(body, progressY + math.max(progressHeight, rowsBottom) + 22, height)
 	end
 	local timer: thread? = nil
 	local visible = false

@@ -84,8 +84,8 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		card.button.LayoutOrder = index
 		cards[index] = card
 	end
-	-- Detail
-	local detail = Kit.frame(body, "FigureDetails")
+	-- Detail: scrolls only when even the compact stack is taller than the body.
+	local detail = Kit.canvas(body, "FigureDetails")
 	local rarityBar = Kit.frame(detail, "RarityBar", Style.track)
 	Kit.corner(rarityBar, 18)
 	local well = Kit.frame(rarityBar, "Portrait", Style.disabledFill)
@@ -145,6 +145,8 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		end
 	)
 	local width, height, phone = 0, 0, false
+	-- Compact details: the phone stack, also used on desktop when the roomy stack won't fit.
+	local compact = false
 	local cardHeight = 148
 	local function arrange()
 		local listWidth, middle, side
@@ -156,7 +158,10 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		list.layout(listWidth, height, phone)
 		Kit.rect(list.root, 0, 0, listWidth, height)
 		local pad = if phone then 10 else 16
-		local columns = if phone then 3 else 4
+		local gap = if phone then 8 else 10
+		local gridWidth = middle - pad * 2 - 16
+		local columns =
+			Layout.columns(gridWidth, if phone then 88 else 110, gap, if phone then 3 else 4)
 		cardHeight = if phone then 108 else 148
 		if phone then
 			chips.Parent = shell.chips
@@ -168,47 +173,56 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 			Kit.rect(chips, listWidth + pad, 12, middle - pad * 2, 44)
 			Kit.rect(grid, listWidth + pad, 66, middle - pad * 2, height - 66)
 		end
+		-- Desktop chips share the middle pane's width so none runs under the details pane.
+		local chipWidth = if phone then 76 else math.min(112, State.cells(middle - pad * 2, 3, 8))
 		for _, chip in filters do
-			chip.button.Size = UDim2.fromOffset(if phone then 76 else 112, 44)
+			chip.button.Size = UDim2.fromOffset(chipWidth, 44)
 		end
-		local cell = State.cells(middle - pad * 2 - 16, columns, if phone then 8 else 10)
-		gridLayout.CellPadding = UDim2.fromOffset(if phone then 8 else 10, if phone then 8 else 10)
+		local cell = State.cells(gridWidth, columns, gap)
+		gridLayout.CellPadding = UDim2.fromOffset(gap, gap)
 		gridLayout.CellSize = UDim2.fromOffset(cell, cardHeight)
 		for _, card in cards do
 			card.size(cell, cardHeight)
 		end
 		local x = listWidth + middle
 		Kit.rect(detail, x, 0, side, height)
-		local dpad = if phone then 12 else 18
+		-- Roomy: 252 fixed + a 150 portrait. Compact: 195 fixed; the portrait takes what is left.
+		compact = phone or height < 252 + 150
+		local dpad = if compact then 12 else 18
 		local inner = side - dpad * 2
-		local wellHeight = if phone then 84 else 150
-		local edge = if phone then 5 else 6
-		Kit.rect(rarityBar, dpad, if phone then 10 else 16, inner, wellHeight + edge)
+		local wellHeight = if compact
+			then math.clamp(height - 195, 56, if phone then 84 else 150)
+			else 150
+		local edge = if compact then 5 else 6
+		Kit.rect(rarityBar, dpad, if compact then 10 else 16, inner, wellHeight + edge)
 		Kit.rect(well, 0, 0, inner, wellHeight)
-		local y = (if phone then 10 else 16) + wellHeight + edge + (if phone then 10 else 14)
-		name.TextSize = if phone then 19 else 26
+		local y = (if compact then 10 else 16) + wellHeight + edge + (if compact then 10 else 14)
+		name.TextSize = if compact then 19 else 26
 		name.Position = UDim2.fromOffset(dpad, y)
-		name.Size = UDim2.fromOffset(0, if phone then 24 else 32)
-		pill.root.Position = UDim2.fromOffset(dpad, y + (if phone then 28 else 36))
-		y += if phone then 56 else 72
-		local statWidth = State.cells(inner, 3, if phone then 5 else 8)
+		name.Size = UDim2.fromOffset(0, if compact then 24 else 32)
+		pill.root.Position = UDim2.fromOffset(dpad, y + (if compact then 28 else 36))
+		y += if compact then 56 else 72
+		local statGap = if compact then 5 else 8
+		local statWidth = State.cells(inner, 3, statGap)
 		for index, stat in stats do
 			Kit.rect(
 				stat.root,
-				dpad + (index - 1) * (statWidth + (if phone then 5 else 8)),
+				dpad + (index - 1) * (statWidth + statGap),
 				y,
 				statWidth,
-				if phone then 46 else 58
+				if compact then 46 else 58
 			)
-			stat.label.TextSize = if phone then 11 else 12
-			stat.value.TextSize = if phone then 15 else 18
-			Kit.rect(stat.label, 8, if phone then 4 else 8, statWidth - 12, 16)
-			Kit.rect(stat.value, 8, if phone then 20 else 26, statWidth - 12, 22)
+			stat.label.TextSize = if compact then 11 else 12
+			stat.value.TextSize = if compact then 15 else 18
+			Kit.rect(stat.label, 8, if compact then 4 else 8, statWidth - 12, 16)
+			Kit.rect(stat.value, 8, if compact then 20 else 26, statWidth - 12, 22)
 		end
 		stats[2].label.Text = if phone then "Own" else "You own"
 		stats[3].label.Text = if phone then "Chance" else "Box chance"
-		y += if phone then 54 else 70
-		Kit.rect(action.button, dpad, y, inner, if phone then 48 else 56)
+		y += if compact then 54 else 70
+		local actionHeight = if compact then 48 else 56
+		Kit.rect(action.button, dpad, y, inner, actionHeight)
+		Kit.fit(detail, y + actionHeight + (if compact then 12 else 18), height)
 	end
 	local function update(snapshot: Types.Snapshot)
 		shell.update(snapshot)
@@ -273,12 +287,12 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		rarityBar.BackgroundColor3 = Style.rarity(data.rarity)
 		portrait.figure(if discovered then id else nil, true)
 		unknown.Visible = not discovered
-		unknown.TextSize = if phone then 40 else 72
+		unknown.TextSize = if compact then 40 else 72
 		name.Text = if discovered then data.name else "???"
 		pill.rarity(data.rarity)
 		local owned = snapshot.owned[id] or 0
 		stats[1].value.Text = State.amount(State.figureRate(snapshot, id))
-			.. (if phone then "/s" else " coins/s")
+			.. (if compact then "/s" else " coins/s")
 		stats[2].value.Text = if owned > 0 then "×" .. owned else "None yet"
 		stats[3].value.Text = State.percent(State.figureOdds(snapshot, id))
 		local displayed = State.displayed(snapshot, id)
@@ -286,17 +300,17 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		if displayed then
 			action.variant("mint")
 			action.label.FontFace = Style.display()
-			action.label.TextSize = if phone then 16 else 19
+			action.label.TextSize = if compact then 16 else 19
 			action.set("On your Display · View", true)
 		elseif not discovered or owned < 1 or free < 1 then
 			action.variant("white")
 			action.label.FontFace = Style.body(Enum.FontWeight.ExtraBold)
-			action.label.TextSize = if phone then 14 else 16
+			action.label.TextSize = if compact then 14 else 16
 			action.set("Find it in " .. State.collectionName(data.collection) .. " boxes", true)
 		else
 			action.variant("violet")
 			action.label.FontFace = Style.display()
-			action.label.TextSize = if phone then 17 else 21
+			action.label.TextSize = if compact then 17 else 21
 			action.set(
 				if targetSlot then "Put in slot " .. targetSlot else "Put on Display",
 				ctx.canAct()
