@@ -39,6 +39,28 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 	})
 	countdown.root.LayoutOrder = 1
 	local body = Kit.canvas(shell.body, "GoalsBody")
+	-- Short layouts scroll the reward buttons below the fold: a header cue scrolls to them.
+	local reveal: () -> () = function() end
+	local cue = Button.create(
+		shell.chips,
+		"ClaimCue",
+		{
+			variant = "gold",
+			text = "Claim below",
+			size = 15,
+			radius = 14,
+			drop = 3,
+			icon = "Gift",
+		},
+		ctx.scope,
+		ctx.effects,
+		function()
+			reveal()
+		end
+	)
+	cue.button.Size = UDim2.fromOffset(150, Style.target)
+	cue.button.LayoutOrder = 2
+	cue.button.Visible = false
 	-- Daily goal
 	local goal = Kit.card(body, "DailyGoal", Style.white, 22, 4)
 	local empty = Kit.text(
@@ -255,8 +277,46 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 		-- than its contents; checking only the card bounds truncates that target.
 		Kit.fit(body, progressY + math.max(progressHeight, rowsBottom) + 22, height)
 	end
-	local timer: thread? = nil
 	local visible = false
+	-- The first ready reward whose button sits below the visible part of the body, if any.
+	local function hiddenReward(): GuiObject?
+		local snapshot = ctx.snapshot()
+		if not snapshot or not visible then
+			return nil
+		end
+		local bottom = body.AbsolutePosition.Y + body.AbsoluteWindowSize.Y + 1
+		for _, target in
+			{
+				if goal.root.Visible and State.goal(snapshot) == "ready" then claim.button else nil,
+				if snapshot.dailyReady then open.button else nil,
+			}
+		do
+			if target and target.AbsolutePosition.Y + target.AbsoluteSize.Y > bottom then
+				return target
+			end
+		end
+		return nil
+	end
+	local function placeCue()
+		cue.button.Visible = hiddenReward() ~= nil
+	end
+	reveal = function()
+		local target = hiddenReward()
+		if target then
+			local shift = target.AbsolutePosition.Y
+				+ target.AbsoluteSize.Y
+				+ 12
+				- (body.AbsolutePosition.Y + body.AbsoluteWindowSize.Y)
+			local limit =
+				math.max(0, body.CanvasSize.Y.Offset - body.AbsoluteWindowSize.Y / ctx.scale())
+			body.CanvasPosition =
+				Vector2.new(0, math.clamp(body.CanvasPosition.Y + shift / ctx.scale(), 0, limit))
+		end
+		placeCue()
+	end
+	ctx.scope.connect(body:GetPropertyChangedSignal("CanvasPosition"), placeCue)
+	ctx.scope.connect(body:GetPropertyChangedSignal("AbsoluteWindowSize"), placeCue)
+	local timer: thread? = nil
 	local remaining = ""
 	local function stop()
 		if timer then
@@ -363,6 +423,7 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 			row.status.TextColor3 = if complete then Style.mintText else Style.muted
 			row.bar.set(f, t)
 		end
+		placeCue()
 	end
 	refresh = function()
 		local snapshot = ctx.snapshot()
@@ -388,6 +449,7 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 			if value then
 				tick()
 			end
+			placeCue()
 		end,
 	}
 end
