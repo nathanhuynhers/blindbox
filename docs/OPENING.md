@@ -188,8 +188,8 @@ finite nonnegative deltas only. Await and Result never time out. Normal mode kee
 render connection for floating/figure idle; reduced mode releases it at both prompts once
 the result guard expires.
 
-Redeem still shows the chosen figure directly: Enter -> Silhouette -> Reveal -> Result.
-It receives the same safe camera transition, restoration and authoritative metadata.
+Redemption is retired: the client never sends `Redeem`, and the result adapter returns no
+result for it (`tests/Opening.spec.luau`). Every current opening uses the sequence above.
 
 ## Production box and collection appearance
 

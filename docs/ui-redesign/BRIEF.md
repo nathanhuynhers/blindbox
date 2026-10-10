@@ -106,8 +106,10 @@ border) and still explain why ("Need 1,240 more").
   count for duplicates; buttons per the Decisions table. Keep Skip and the existing input/gamepad
   ownership of the opening.
 - **Display:** header chip with total "+N coins/s"; set-bonus banner (plain language, shows the
-  bonus amount); 6 slot cards (filled: figure, name, rate; empty: "+ Choose"; slot 4 locked: unlock
-  price button with affordability; 5–6 "Coming later", no action). Tapping a slot opens the picker
+  bonus amount); 6 slot cards (filled: figure, name, rate; empty: "+ Choose"; locked slots 4–6 unlock with
+  Coins in order: only the next one shows an unlock price button with affordability, later ones
+  say "Unlock slot N first"). *(The original brief had 5–6 "Coming later"; sequential coin
+  unlock superseded it.)* Tapping a slot opens the picker
   drawer: owned figures not already displayed, sorted by earnings, top one tagged BEST, Cancel.
   Filled slots offer Change/Remove.
 - **Collection:** left list; middle filter chips (All / Found / Missing with counts) + 4-column

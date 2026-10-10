@@ -3,7 +3,7 @@
 ## Current status
 
 The implemented candidate runs in **Blindbox Town** with open Player Plots, an authoritative
-Coin-generating Display, cosmetic Shelf Units, 43 figures across five collections, schema 13 in
+Coin-generating Display, cosmetic Shelf Units, 43 figures across five collections, schema 14 in
 the Economy2 namespace, and the merged economy, UI, audio and Welcome Quest work. See the
 [data model](DATA_MODEL.md) for current stores and supported upgrades. Scrap, recycling, redemption,
 the retired Showroom/Gallery runtime and teleport browsing are not part of the current game.

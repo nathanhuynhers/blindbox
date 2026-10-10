@@ -28,15 +28,35 @@ for _, name in { "Display", "Goals", "Shelves" } do
 		checked += 1
 		local root = host:WaitForChild(name)
 		if name == "Display" then
+			-- Sequential coin expansion: unlocked slots form a prefix, only the next locked slot
+			-- offers Unlock, and each later one points at its predecessor. Nothing is "Coming later".
+			local unlocked = 0
 			for slot = 1, DisplayConfig.maxSlots do
 				local card = find(root, "DisplaySlot" .. slot)
 				local locked = card:GetAttribute("Locked") == true
 				portrait(card, card:GetAttribute("FigureId") ~= "" and not locked)
-				if slot > 4 then
-					assert(locked, "Slots 5-6 stay Coming later")
-					assert(not (find(card, "Unlock") :: GuiObject).Visible, "No unlock for 5-6")
+				local unlock = (find(card, "Unlock") :: GuiObject).Visible
+				local hint = find(card, "Hint") :: TextLabel
+				assert(
+					DisplayConfig.unlockMethods[slot] == nil or DisplayConfig.unlockMethods[slot] == "Coins",
+					"Unknown unlock method for slot " .. slot
+				)
+				if not locked then
+					assert(unlocked == slot - 1, "Unlocked slots must be a prefix: slot " .. slot)
+					unlocked = slot
+					assert(not unlock, "Unlocked slot " .. slot .. " shows Unlock")
+				elseif slot == unlocked + 1 and DisplayConfig.unlockMethods[slot] == "Coins" then
+					assert(unlock, "Next locked slot " .. slot .. " must offer Unlock")
+				else
+					assert(not unlock, "Only the next locked slot offers Unlock, not " .. slot)
+					assert(
+						hint.Visible and hint.Text == "Unlock slot " .. (slot - 1) .. " first",
+						"Later locked slot " .. slot .. " must point at its predecessor: " .. hint.Text
+					)
 				end
+				assert(not hint.Visible or hint.Text ~= "Coming later", "No Coming later slots")
 			end
+			print(string.format("Display: %d of %d slots unlocked in order", unlocked, DisplayConfig.maxSlots))
 			local income = find(root, "Income"):FindFirstChild("Text") :: TextLabel
 			assert(string.match(income.Text, "^%+.+ coins/s$"), "Header income chip")
 			assert(find(root, "SetBonus"), "Set-bonus banner")

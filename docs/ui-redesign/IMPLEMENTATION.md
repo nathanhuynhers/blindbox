@@ -27,7 +27,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `CollectionList`, `FigureTile` | Shared collection list item (rail on phone); figure card/tile/pick/shelf variants, pooled and rebound |
 | `ShopScreen` | List, kept `BlindBoxPreview`, Open 1 box, free box, What's inside, Drop odds |
 | `CollectionScreen` | List, All/Found/Missing, 4-column grid, detail with Put on Display / On your Display · View / Find it in … boxes |
-| `DisplayScreen`, `DisplaySlot`, `DisplayPicker` | Income chip, set-bonus banner, 6 slots (slot 4 unlock, 5–6 Coming later), picker drawer sorted by earnings with BEST, Remove, Browse Collection, placing mode |
+| `DisplayScreen`, `DisplaySlot`, `DisplayPicker` | Income chip, set-bonus banner, 6 slots (4–6 unlock with Coins in order; only the next locked slot offers Unlock), picker drawer sorted by earnings with BEST, Remove, Browse Collection, placing mode |
 | `GoalsScreen` | Unclaimed daily goal (empty state after claim), free box chooser, collection progress, minute countdown from `nextDay` |
 | `ShelvesScreen` | Shelf tabs + prev/next, 3×3 cabinet, discovered-figure picker with collection chips, Clear spot |
 | `LoginScreen` | Daily Login (routed by `Interface` without a dock tile; HUD Daily button with a "!" badge and idle nudge): one card per `LoginRewards` day (claimed mint / today violet outline + TODAY / locked), wider gold final day, streak chip, Claim. Auto-opens once per session on the first ready snapshot when claimable, except for players who own no figures |
@@ -231,7 +231,9 @@ Paste the scripts in `tests/Studio*.client.luau` into the client Command Bar whe
    - Header income and set-bonus banner (on/off).
    - Tapping a slot opens the picker: BEST on top, Cancel works, a filled slot offers Remove.
    - Browse Collection → Put in slot N.
-   - Slot 4 Unlock is affordable, or disabled with the shortfall; slots 5–6 say Coming later.
+   - Only the next locked slot offers Unlock: affordable, or disabled with the shortfall (narrow
+     cards show the shortfall under the button); later locked slots say "Unlock slot N first".
+     Unlock 4, 5 and 6 in order.
    - Collection Put on Display with a full Display enters placing mode.
    - Filled slots show "N ready" as earnings bank. Collecting in the world (click or tap) shows a
      toast and resets only that figure's count. Other players' management prompts stay hidden.

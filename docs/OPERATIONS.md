@@ -160,12 +160,14 @@ checks in the [audit](GAME_AUDIT.md#system-by-system-audit); they do not sign of
     place figures on two accounts in different servers; within about 2.5 minutes both should
     appear on each server's board. Leave and confirm the final score is written. Disable API
     access and confirm the board stays on its last page or placeholders without errors in play.
-13. **Schema 13 migration:** in an isolated persistent place, load valid v6–v12 Economy2 test
+13. **Schema 14 migration:** in an isolated persistent place, load valid v6–v13 Economy2 test
     profiles and verify each version's required fields and defaults against the
     [data model](DATA_MODEL.md#authorized-progression-reset). For v6/v7, retain progress and
-    initialize `boxesOpened = 0`; for v8–v12, retain the saved counter. Confirm Welcome Quest
-    mapping from older records, v13 save/rejoin, and fail-closed behavior for invalid or future
-    records. Do not run an older writer alongside v13 servers: schema-12 code cannot read v13.
+    initialize `boxesOpened = 0`; for v8+, retain the saved counter. Confirm the v13 Welcome
+    Quest mapping from older records, that v6–v13 records start plaza `deals` at
+    `{window = -1}` with full stock, v14 save/rejoin, and fail-closed behavior for invalid or
+    future records (including a pre-v14 record that already carries `deals`). Do not run an
+    older writer alongside v14 servers: schema-13 code cannot read v14.
 14. **Shelf owned-copy rule:** with isolated test profiles, try zero, one and two owned copies
     across visible and offscreen units. Confirm a third placement is rejected, removal restores
     one choice immediately, and a failed swap changes neither figure. Load an intentionally
