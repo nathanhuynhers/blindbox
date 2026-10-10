@@ -341,12 +341,26 @@ if activePanel then
 		if target:IsA("GuiButton") and target.Selectable and visible(target) then
 			-- Sample the whole target (center, edge midpoints, corners inset 3px), not only its
 			-- center: a world control over one corner still steals taps (AQ01).
+			-- Hit tests follow UICorner rounding, so corner samples move inside the curve.
 			local position, size = target.AbsolutePosition, target.AbsoluteSize
+			local rounding = 0
+			local corner = target:FindFirstChildOfClass("UICorner")
+				or (target:FindFirstChild("Face") and target.Face:FindFirstChildOfClass("UICorner"))
+			if corner then
+				local short = math.min(size.X, size.Y)
+				rounding = math.min(
+					short / 2,
+					-- Offsets are design units; the Stage UIScale enlarges them on screen.
+					corner.CornerRadius.Scale * short + corner.CornerRadius.Offset * scale
+				)
+			end
 			for _, fraction in samples do
+				local edge = 3
+					+ (if fraction.X ~= 0.5 and fraction.Y ~= 0.5 then rounding * 0.3 else 0)
 				local point = position
 					+ Vector2.new(
-						math.clamp(size.X * fraction.X, 3, math.max(3, size.X - 3)),
-						math.clamp(size.Y * fraction.Y, 3, math.max(3, size.Y - 3))
+						math.clamp(size.X * fraction.X, edge, math.max(edge, size.X - edge)),
+						math.clamp(size.Y * fraction.Y, edge, math.max(edge, size.Y - edge))
 					)
 				local onScreen = true
 				local ancestor = target.Parent

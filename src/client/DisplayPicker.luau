@@ -117,9 +117,11 @@ function Picker.create(parent: Instance, ctx: Context.Context, callbacks: Callba
 		Kit.rect(browse.button, x, top, 150, 44)
 		Kit.rect(equip.button, pad + inner - 152, top, 152, 44)
 		Kit.rect(grid, pad - 11, top + 46, inner + 22, height - top - 48)
-		local columns = if phone then 4 else 6
-		cell = State.cells(inner - 12, columns, 10)
 		local tileHeight = if phone then 64 else 72
+		-- As many columns as leave ~96px beside the portrait for a two-line figure name.
+		local minCell = tileHeight - 18 + 22 + 96
+		local columns = math.clamp(math.floor((inner - 2) / (minCell + 10)), 2, 6)
+		cell = State.cells(inner - 12, columns, 10)
 		layout.CellSize = UDim2.fromOffset(cell, tileHeight)
 		for _, item in tiles do
 			item.size(cell, tileHeight)
