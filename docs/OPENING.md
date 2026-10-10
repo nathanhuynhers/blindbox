@@ -57,7 +57,9 @@ the camera, providing a stable ambient base. It re-asserts it over replicated
 day/night writes, and restores the latest town values when the camera is released.
 
 Short landscape screens use one shared safe-area/padding predicate through `OpeningConfig.compact`
-and `OpeningLayout`. The camera translates its position and aim toward world -X (its screen right
+and `OpeningLayout`: any landscape safe area under 680px tall, which includes short desktop
+windows (1023x599), because the stacked desktop result needs about 650px to keep its details
+block off the figure. The camera translates its position and aim toward world -X (its screen right
 is world -X), accounting for aspect ratio and result FOV, to put the figure beside the right column.
 The compact card retains odds, puts NEW/rarity above a bounded name, and uses three compact chip
 rows. Actions remain at least 44px tall, including the batch Next/Skip choices. Reduced-motion

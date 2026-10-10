@@ -15,6 +15,7 @@ local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
 local Icons = require(script.Parent.UIIcons)
+local Badge = require(script.Parent.UIBadge)
 local Layout = require(script.Parent.UILayout)
 local Scope = require(script.Parent.UIScope)
 local State = require(script.Parent.UIState)
@@ -45,7 +46,7 @@ export type Guide = {
 }
 export type Onboarding = {
 	update: (Types.Snapshot, string?, boolean) -> (),
-	layout: (Layout.Frame, boolean) -> (),
+	layout: (Layout.Frame, opened: boolean, coinsRight: number) -> (),
 	guide: () -> Guide?,
 	card: Frame,
 }
@@ -241,6 +242,7 @@ function Onboarding.create(
 	local page: string? = nil
 	local focused = false
 	local hideCard, dockHidden = false, false
+	local roomy = true -- Wide enough for the x10 reward chip beside the hint.
 	local last: Types.Snapshot? = nil
 	local shownStep: number? = nil
 
@@ -262,6 +264,11 @@ function Onboarding.create(
 	local text = Kit.text(card.face, "Hint", "", 17, Style.display())
 	text.TextWrapped = true
 	text.TextTruncate = Enum.TextTruncate.None
+	-- Scales down rather than overflowing when the card narrows to fit beside the coins.
+	text.TextScaled = true
+	local textSize = Instance.new("UITextSizeConstraint")
+	textSize.MinTextSize = 11
+	textSize.Parent = text
 	local reward = Kit.frame(card.face, "Reward", Style.gold)
 	Kit.round(reward)
 	Kit.stroke(reward, Style.ink, Style.outlineSmall)
@@ -296,18 +303,18 @@ function Onboarding.create(
 	local arrow = pointer(ring, "Pointer", 36)
 	arrow.Position = UDim2.new(0.5, 0, 0, -10)
 	loop(arrow, 0.5, { Position = UDim2.new(0.5, 0, 0, -22) })
-	local badge = Kit.frame(ring, "Callout", Style.gold)
-	badge.AnchorPoint = Vector2.new(1, 0.5)
-	badge.Position = UDim2.new(1, -8, 0, 4)
-	badge.Size = UDim2.fromOffset(0, 26)
-	badge.AutomaticSize = Enum.AutomaticSize.X
+	-- A shared pill (never truncates; it sizes to its text). Placed per target in render().
+	local callout = Badge.create(ring, "Callout", "", {
+		fill = Style.gold,
+		color = Style.ink,
+		height = 26,
+		size = 14,
+		font = Style.display(),
+		outline = Style.ink,
+		pad = 10,
+	})
+	local badge, badgeText = callout.root, callout.label
 	badge.ZIndex = 6
-	Kit.round(badge)
-	Kit.stroke(badge, Style.ink, Style.outlineSmall)
-	Kit.padding(badge, 0, 10, 0, 10)
-	local badgeText = Kit.text(badge, "Text", "", 14, Style.display())
-	badgeText.AutomaticSize = Enum.AutomaticSize.X
-	badgeText.Size = UDim2.fromScale(0, 1)
 	badgeText.ZIndex = 7
 
 	-- World pointer and glow on the displayed figure (owner-only, local).
@@ -414,10 +421,14 @@ function Onboarding.create(
 					elseif index == step then Style.gold
 					else Style.track
 			end
-			reward.Visible = quest
+			reward.Visible = quest and roomy
 			text.Text = guide.text
 		end
 		ring.Parent = target
+		-- A header Close sits at its clipping sheet's top edge: hang the badge below it instead.
+		local below = target ~= nil and target.Name == "Close"
+		badge.AnchorPoint = Vector2.new(1, if below then 0 else 0.5)
+		badge.Position = if below then UDim2.new(1, -8, 1, -4) else UDim2.new(1, -8, 0, 4)
 		-- An open desktop panel ends just above the dock, so the arrow would cover its buttons.
 		arrow.Visible = target ~= nil and label == nil and page == nil
 		badge.Visible = label ~= nil
@@ -481,16 +492,26 @@ function Onboarding.create(
 			end
 			render()
 		end,
-		layout = function(geometry: Layout.Frame, opened: boolean)
+		layout = function(geometry: Layout.Frame, opened: boolean, coinsRight: number)
 			-- Phone sheets cover the top band; the ring and its badge guide inside the screen.
 			hideCard = geometry.phone and opened
 			dockHidden = opened and not geometry.dockWhileOpen
-			local width = math.min(500, geometry.width - 32)
+			-- Desktop: in the top band between the coins pill and the HUD row (an open panel
+			-- leaves no room below). Phone, or a band too narrow: below the HUD instead.
+			local left, right = Layout.band(geometry, coinsRight)
+			-- ponytail: a desktop under ~1000px with a 7-digit balance mid-quest drops below
+			-- the HUD and can touch an open panel's header; shrink the card further if seen.
+			local below = geometry.phone or right - left < 320
+			local width = if below
+				then math.min(500, geometry.width - 32)
+				else math.min(500, right - left)
 			local height = if geometry.phone then 56 else 64
-			local y = if geometry.phone
-				then geometry.hud.y + geometry.hud.height + 8
-				else geometry.hud.y
-			Kit.rect(card.root, math.floor((geometry.width - width) / 2), y, width, height)
+			local y = if below then geometry.hud.y + geometry.hud.height + 8 else geometry.hud.y
+			local x = math.floor((geometry.width - width) / 2)
+			if not below then
+				x = math.clamp(x, left, right - width)
+			end
+			Kit.rect(card.root, x, y, width, height)
 			Kit.rect(caption, 14, 6, 112, 16)
 			for index, pip in pips do
 				Kit.rect(pip, 128 + (index - 1) * 14, 9, 10, 10)
@@ -506,8 +527,10 @@ function Onboarding.create(
 			)
 			Kit.rect(rewardIcon, 8, 7, 16, 16)
 			Kit.rect(rewardText, 28, 0, rewardWidth - 34, 30)
-			Kit.rect(text, 14, 22, width - 14 - skipWidth - rewardWidth - 28, height - 26)
-			text.TextSize = if geometry.phone then 15 else 17
+			roomy = width >= 420
+			local hintWidth = width - 14 - skipWidth - (if roomy then rewardWidth + 28 else 20)
+			Kit.rect(text, 14, 22, hintWidth, height - 26)
+			textSize.MaxTextSize = if geometry.phone then 15 else 17
 			render()
 		end,
 	}

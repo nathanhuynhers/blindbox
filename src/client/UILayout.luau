@@ -142,6 +142,12 @@ function Layout.columns(width: number, minimum: number, gap: number, most: numbe
 	return math.clamp(math.floor((width + gap) / (minimum + gap)), 1, most)
 end
 
+-- The free stretch of the top HUD band: right of the top-left HUD (which ends at `hudRight`)
+-- and left of the top-right Daily/Home/gear row.
+function Layout.band(frame: Frame, hudRight: number): (number, number)
+	return hudRight + 12, frame.daily.x - 12
+end
+
 -- Toast rect, at most `width` wide; `measure` gives its real height at a width. No screen
 -- open: centred above the dock. Desktop panel open: the top band right of the top-left HUD
 -- (`hudRight`) and left of the HUD row, narrowed to fit (never below 320) when its height
@@ -158,7 +164,7 @@ function Layout.toast(
 	if not opened then
 		return { x = x, y = frame.dock.y - 12 - height, width = width, height = height }
 	end
-	local left, right = hudRight + 12, frame.daily.x - 12
+	local left, right = Layout.band(frame, hudRight)
 	local bottom = frame.panel.y - 6
 	local band = math.min(width, right - left)
 	if frame.dockWhileOpen and band >= 320 then

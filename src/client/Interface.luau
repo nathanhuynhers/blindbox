@@ -196,6 +196,16 @@ function Interface.create(
 		ctx.send(action)
 	end)
 	local frame: Layout.Frame? = nil
+	-- Right edge of the coins pill in stage units; it widens with the balance.
+	local function coinsRight(): number
+		local geometry = frame
+		return if geometry then geometry.hud.x + hud.coins.AbsoluteSize.X / geometry.scale else 0
+	end
+	scope.connect(hud.coins:GetPropertyChangedSignal("AbsoluteSize"), function()
+		if frame then
+			tutorial.layout(frame, opened, coinsRight())
+		end
+	end)
 	local laidOut: { [string]: string } = {}
 	local function layoutScreen(id: string)
 		local geometry = frame
@@ -233,7 +243,7 @@ function Interface.create(
 		stage.Size = UDim2.fromScale(1 / scale, 1 / scale)
 		dim.Visible = opened
 		hud.layout(geometry, opened)
-		tutorial.layout(geometry, opened)
+		tutorial.layout(geometry, opened, coinsRight())
 		dock.layout(geometry.dock, geometry.phone)
 		dock.root.Visible = not opened or geometry.dockWhileOpen
 		local panel = geometry.panel
@@ -249,7 +259,7 @@ function Interface.create(
 		notices.place(toastWidth, function(measure)
 			-- Measured at show time: the coins pill widens with the balance, and a visible
 			-- Welcome Quest card shares the top band with it.
-			local hudRight = geometry.hud.x + hud.coins.AbsoluteSize.X / geometry.scale
+			local hudRight = coinsRight()
 			local quest = tutorial.card
 			if quest.Visible then
 				hudRight = math.max(hudRight, quest.Position.X.Offset + quest.Size.X.Offset)

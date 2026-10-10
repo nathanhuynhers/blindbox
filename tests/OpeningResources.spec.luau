@@ -382,6 +382,8 @@ local phoneGui = E.Instance.new("ScreenGui")
 phoneGui.AbsoluteSize = E.Vector2.new(666, 342)
 check(Config.compact(phoneGui.AbsoluteSize) and not Config.compact(E.Vector2.new(1280, 720)), "compact means short landscape")
 check(not Config.compact(E.Vector2.new(342, 666)), "portrait is never compact")
+-- A short desktop window: the stacked details would cover the figure (UI audit 2026-10-09).
+check(Config.compact(E.Vector2.new(1023, 599)) and Config.compact(E.Vector2.new(1100, 630)), "short desktop uses the side column")
 controller.destroy()
 check(E.connections == baseline, "all controller/render/camera connections released")
 

@@ -31,6 +31,17 @@ After screenshots: [Collection + toast, 1023×599](after-small-desktop-collectio
 Viewports were set by sizing the Studio window, not device emulation, so no notch/home-bar
 insets or touch input were exercised.
 
+### Follow-ups found while verifying (feat/ui-audit-followups)
+
+| Issue | Root cause → change | Before → after |
+| --- | --- | --- |
+| Welcome Quest card covered the coin balance on desktop | Card was a centred 500px strip at the coins' Y. → It now uses the same top band as toasts (`UILayout.band`: right of the measured coins pill, left of the HUD row), narrows to fit, re-places when the pill widens, and its hint scales instead of overflowing; under 420px it drops the x10 chip, under 320px it moves below the HUD. | 1023×599: card X 261–761 over coins ending ~344 → **353–815** (coins end 341, Daily starts 827, panel top 26 below the card's 20). 1365×768: 415–949. [Screenshot](after-small-desktop-quest-card.jpg). |
+| Opening result: name covered the figure at 1023×599 | The stacked desktop result puts a ~270px details block under a figure projecting to ~58% of the height; it needs ≈650px. The side-column switch was at a 500px safe height. → `OpeningLayout.compact` now switches below 680px. | Stacked Pebble Pip: 1100×630 failed, 1100×650 passed. After: `StudioOpeningLayout` passes at 1023×599, 1100×630, 1100×670, 1280×720, 1365×768, 705×338, 666×374. [Screenshot](after-small-desktop-opening.jpg). |
+| Phone "Close" quest badge read "Cl…" | The hand-built callout used `Kit.text`'s `TextTruncate.AtEnd`, which ellipsised on sub-pixel overflow, and it sat above the Close button where the sheet clips. → Reuses `UIBadge` (never truncates) and hangs below a header Close. | iPhone 7: label 24px wide showing "Cl…", straddling the sheet's top clip → badge Y 3–29 below the button (sheet top −52), label 32px, "Close" in full. [Screenshot](after-mobile-close-badge.jpg). |
+
+The after-fix opening runs used a Moon Moth pull; the Pebble Pip boundary above was measured
+before the change.
+
 ## Code locations
 
 - Collection: `src/client/CollectionScreen.luau:147–211`; fixed desktop filter widths at 172,

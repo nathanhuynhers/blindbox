@@ -2,8 +2,11 @@
 -- The camera and overlay must use the same device-safe rectangle, including its padding.
 local Layout = {}
 
+-- Landscape safe areas shorter than 680px use the right-hand column: the stacked desktop
+-- result puts a ~270px details block under a figure that projects to ~58% of the height, so
+-- it overlaps below ~650px (measured 1100x630 fails, 1100x650 clears).
 function Layout.compact(width: number, height: number): boolean
-	return height - 32 < 468 and width - 40 > height - 32
+	return height - 32 < 648 and width - 40 > height - 32
 end
 
 function Layout.cameraShift(width: number, height: number, distance: number, fov: number): number

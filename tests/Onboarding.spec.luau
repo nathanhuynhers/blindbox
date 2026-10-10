@@ -152,6 +152,21 @@ check(Engine.find(gui, "BuyBox").Visible and not gift.Visible, "no gift while th
 local display = snapshot(Tutorial.display, { ["grove.moth"] = 1 })
 ui.update(display)
 check(ring.Parent and ring.Parent.Name == "Close", "on phone the covered dock step starts by closing the sheet")
+check(Engine.find(ring, "Callout").AnchorPoint.Y == 0, "the Close badge hangs below, clear of the sheet's top edge")
+-- Short desktop: the card fits between the coins pill and the top-right row (UI audit 2026-10-09).
+Engine.screen.X, Engine.screen.Y = 1023, 599
+Engine.find(gui, "SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+local hud = Engine.find(gui, "Hud")
+local coins, daily = Engine.find(hud, "Coins"), Engine.find(hud, "DailyButton")
+-- The double does not auto-size: give the pill a real width and let the card re-place.
+coins.AbsoluteSize = Engine.Vector2.new(170, 52)
+coins:GetPropertyChangedSignal("AbsoluteSize"):Fire()
+check(
+	card.Position.Y.Offset == coins.Position.Y.Offset
+		and card.Position.X.Offset >= coins.Position.X.Offset + coins.AbsoluteSize.X + 12
+		and card.Position.X.Offset + card.Size.X.Offset <= daily.Position.X.Offset - 12,
+	"desktop quest card stays between the coins pill and the HUD row"
+)
 Engine.screen.X, Engine.screen.Y = 1280, 720
 Engine.find(gui, "SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
 check(ring.Parent and ring.Parent.Name == "DockDisplay", "desktop keeps the dock tile ringed while the Shop is open")
