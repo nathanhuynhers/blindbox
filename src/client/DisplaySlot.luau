@@ -118,12 +118,18 @@ function Slot.create(
 	local function place()
 		local compact = height < 170
 		narrow = width < 146
-		local image = if compact then 70 else 88
-		local top = if compact then 12 else 16
+		-- Narrow cards give long names (e.g. "Dreamcatcher Star") two lines and a smaller portrait.
+		local image = if compact then (if narrow then 58 else 70) else (if narrow then 76 else 88)
+		local top = if compact then (if narrow then 10 else 12) else (if narrow then 14 else 16)
 		Kit.rect(stage, (width - image) / 2, top, image, image)
 		local nameY = top + image + 2
-		Kit.rect(name, 6, nameY, width - 12, if compact then 18 else 20)
-		local rateY = nameY + (if compact then 20 else 22)
+		local nameHeight = if narrow
+			then (if compact then 30 else 34)
+			else (if compact then 18 else 20)
+		name.TextWrapped = narrow
+		name.TextSize = if narrow then 14 else 15
+		Kit.rect(name, 6, nameY, width - 12, nameHeight)
+		local rateY = nameY + nameHeight + 2
 		rate.root.Size = UDim2.fromOffset(0, if compact then 24 else 26)
 		rate.root.Position = UDim2.new(0.5, 0, 0, rateY)
 		Kit.rect(ready, 6, rateY + (if compact then 26 else 28), width - 12, 16)
