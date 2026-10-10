@@ -309,8 +309,12 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local welcomeTen = snapshot.step == Tutorial.reward
 		local quest = not snapshot.tutorialHidden and snapshot.step <= Tutorial.reward
 		giftAction = if welcomeTen then "WelcomeTen" else "Welcome"
+		-- Phone buttons are too narrow for the long label; the FREE! tag already says it is free.
 		gift.set(
-			if welcomeTen then "Open your FREE ×10" else "Open your free Welcome Box",
+			if welcomeTen
+				then "Open your FREE ×10"
+				elseif phone then "Open Welcome Box"
+				else "Open your free Welcome Box",
 			ctx.canAct()
 		)
 		-- The gift is the one obvious action; the paid box steps back while it waits.
