@@ -187,6 +187,7 @@ local function resizeTo(width, height, topLeft)
 	GuiService.TopbarInset = Engine.Rect.new(topLeft, 0, width, 48)
 	find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
 end
+check(gui.DisplayOrder > 0 and gui.DisplayOrder < 90, "menus render above TouchGui and below popups (AQ01)")
 local rowChecks = 0
 for _, case in {
 	{ 1280, 720, 104 }, { 1920, 1080, 104 }, { 1366, 768, 104 }, { 900, 560, 104 }, { 1024, 768, 104 },
@@ -238,8 +239,10 @@ for _, case in {
 	-- An open screen (phone sheet or desktop panel) hides the row, like the gear.
 	Engine.click(find("DockShop"))
 	check(not onScreen(find("DailyButton")) and not onScreen(find("HomeButton")) and not onScreen(find("SettingsButton")), label .. ": row hides while a screen is open")
+	check(GuiService.TouchControlsEnabled == false, label .. ": an open screen hides the thumbstick and Jump (AQ01)")
 	Engine.click(within(host("Shop"), "Close"))
 	check(onScreen(find("DailyButton")), label .. ": Close restores the row")
+	check(GuiService.TouchControlsEnabled == true, label .. ": Close returns the touch controls")
 	rowChecks += 1
 end
 check(rowChecks == 11, "every viewport ran")
@@ -399,6 +402,12 @@ check(collectionRoot:GetAttribute("Filter") == "found", "Found filter")
 check(collectionRoot:GetAttribute("FigureId") == "grove.moth", "first found figure selected")
 Engine.click(within(collection, "grove.star"))
 check(collectionRoot:GetAttribute("FigureId") == "grove.star", "card selects its figure")
+-- AQ03: the unit lives in the label; the value is always a short duplicate-adjusted rate.
+check(within(within(collection, "Stat1"), "Label").Text == "Earns coins", "desktop stat label names the unit")
+check(
+	within(within(collection, "Stat1"), "Value").Text == UI.rate(UI.figureRate(state, "grove.star")),
+	"income stat keeps its /s unit at every width"
+)
 check(within(within(collection, "grove.star"), "Owned").Visible, "owned count badge for duplicates")
 Engine.click(within(collection, "FigureAction"))
 check(last().action == "Place" and last().figure == "grove.star" and last().slot == 1, "Put on Display uses the first empty slot")
@@ -449,6 +458,48 @@ check(
 )
 Engine.click(within(within(display, "DisplaySlot4"), "Unlock"))
 check(last().action == "Expand", "unlock sends Expand")
+-- AQ02: bank on its own line; narrow cards stack the price and move the shortfall out of the
+-- button. Offsets are design units inside each card (the double does not measure text).
+state.coins = Economy.expansionCosts[4] - 35900
+state.earnings = { ["grove.star"] = 3851 }
+state.sequence += 1
+ui.update(state)
+local function cardChecks(label)
+	local slot1, slot4 = within(display, "DisplaySlot1"), within(display, "DisplaySlot4")
+	local rateText = within(slot1, "Rate"):FindFirstChild("Text").Text
+	check(rateText == UI.rate(UI.figureRate(state, "grove.star")), label .. ": rate badge shows only the rate")
+	check(within(slot1, "Ready").Visible and within(slot1, "Ready").Text == "3,851 ready", label .. ": bank on its own line")
+	local unlock = slot4:FindFirstChild("Unlock")
+	local short = within(slot4, "Shortfall")
+	local narrow = slot4.Size.X.Offset < 146
+	local fill = within(unlock, "Row"):FindFirstChildOfClass("UIListLayout").FillDirection
+	check(fill == (if narrow then Engine.Enum.FillDirection.Vertical else Engine.Enum.FillDirection.Horizontal), label .. ": price row direction")
+	check(within(unlock, "Detail").Text == (if narrow then "" else "Need 35.9K more"), label .. ": button detail")
+	check(short.Visible == narrow and (not narrow or short.Text == "Need 35.9K more"), label .. ": shortfall line")
+	local cardWidth, cardHeight = slot4.Size.X.Offset, slot4.Size.Y.Offset
+	for _, pair in { { unlock, slot4 }, { short, slot4 }, { within(slot1, "Ready"), slot1 }, { within(slot1, "FigureName"), slot1 } } do
+		local child, card = pair[1], pair[2]
+		local width, height = child.Size.X.Offset, child.Size.Y.Offset
+		local anchor = child.AnchorPoint or { X = 0, Y = 0 }
+		local x = card.Size.X.Offset * child.Position.X.Scale + child.Position.X.Offset - width * anchor.X
+		local y = child.Position.Y.Offset
+		check(x >= 0 and y >= 0 and x + width <= card.Size.X.Offset and y + height <= card.Size.Y.Offset, label .. ": " .. child.Name .. " inside its card")
+	end
+	check(unlock.Size.Y.Offset >= 44 and cardWidth > 0 and cardHeight > 0, label .. ": unlock keeps a 44px target")
+	return narrow
+end
+check(not cardChecks("desktop 1280x720"), "desktop Display cards are wide")
+for _, size in { { 666, 374 }, { 705, 338 }, { 899, 700 }, { 900, 700 }, { 901, 700 }, { 1000, 559 }, { 1000, 560 }, { 1000, 561 } } do
+	resizeTo(size[1], size[2], 96)
+	cardChecks(size[1] .. "x" .. size[2])
+end
+check(within(display, "DisplaySlot4").Size.X.Offset < 146, "phone Display cards use the narrow layout")
+resizeTo(1280, 720, 104)
+GuiService.TopbarInset = defaultInset
+state.earnings = {}
+state.coins = Economy.expansionCosts[4]
+state.sequence += 1
+ui.update(state)
 Engine.click(within(display, "DisplaySlot2"))
 check(displayRoot:GetAttribute("Target") == 2, "target set before back")
 Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonB })
@@ -806,6 +857,19 @@ for index, tile in tiles do
         local isNew = index == 2 or index == 4
         check(within(tile, "Sub").Text == (if isNew then "NEW! · " else "") .. Catalog.byId[ids[index]].rarity, "summary tiles retain correct NEW marks")
 end
+-- AQ04: every result can be named in full by tapping, hovering or selecting it.
+local caption = within(summaryGui, "Caption")
+check(caption.Text == "Tap a figure for its full name", "summary invites a tap for full names")
+for index, tile in tiles do
+	local figure = Catalog.byId[ids[index]]
+	local signal = if index % 3 == 0 then tile.SelectionGained elseif index % 3 == 1 then tile.Activated else tile.MouseEnter
+	signal:Fire({ UserInputType = { Name = "Touch" } })
+	check(string.find(caption.Text, figure.name .. " · ", 1, true) == 1, "result " .. index .. " names " .. figure.name .. " in full")
+	check(string.find(caption.Text, "×" .. confirmed.owned[ids[index]] .. " owned", 1, true) ~= nil, "caption shows the owned count")
+	check(tile:GetAttribute("Selected") == true, "the named result is highlighted")
+	check((index == 2 or index == 4) == (string.find(caption.Text, "NEW!", 1, true) ~= nil), "caption keeps NEW semantics")
+end
+check(#tiles == 10, "naming results keeps all ten tiles")
 pullSummary.destroy()
 pullSummary.destroy()
 check(not summaryFocus and not pullSummary.isOpen(), "summary teardown is idempotent and releases focus")
