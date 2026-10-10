@@ -211,7 +211,7 @@ for _, case in {
 	end
 	check(home.x - (daily.x + daily.width) >= 8 and gear.x - (home.x + home.width) >= 8, label .. ": thumb-safe gaps")
 	check(
-		gear.width == (if phone then 44 else 52)
+		gear.width == daily.width
 			and daily.width == (if phone then 50 else 64)
 			and home.width == daily.width
 			and gear.height == (if phone then 56 else 64),

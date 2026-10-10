@@ -76,7 +76,7 @@ border) and still explain why ("Need 1,240 more").
   top-bar buttons (respect `GuiService` top-bar inset). Top-right row **[Daily] [Home] [gear]**:
   matching rounded white tiles (ink stroke, hard drop shadow, 10px gaps). Daily and Home are
   glossy navigation icons over a "Daily" / "Home" label (64x64 desktop, 50x56 phone), because
-  icon-only buttons were hard to tell apart; the gear stays icon-only at the same height;
+  icon-only buttons were hard to tell apart; the gear is the same tile, icon-only;
   Daily carries the "!" Ready badge and an idle nudge (still with Motion Reduced). The row hides
   while any screen is open, like the gear. The gear opens a small popover holding the Motion
   preference (beside the row on short phones). Desktop also shows a Daily goal tracker card

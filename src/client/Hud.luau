@@ -88,7 +88,7 @@ function Hud.create(
 	end)
 	-- Top-right row [Daily] [Home] [gear]: one set of rounded white tiles with a hard ink
 	-- shadow that drops on press. Daily and Home are icon-over-label tiles like small dock
-	-- tiles, so they read at a glance; the gear stays icon-only. Daily sits furthest from the
+	-- tiles, so they read at a glance; the gear is the same tile, icon-only. Daily sits furthest from the
 	-- corner, where its badge and nudge catch the eye; the gear keeps the corner.
 	local right = Kit.frame(root, "Right")
 	local function roundButton(name: string, accessible: string, callback: () -> ()): Button.Button
@@ -242,7 +242,7 @@ function Hud.create(
 			place(daily, geometry.daily, dailyTile, phone)
 			place(home, geometry.home, homeTile, phone)
 			place(gear, geometry.gear, nil, phone)
-			gearIcon.Size = UDim2.fromOffset(if phone then 24 else 26, if phone then 24 else 26)
+			gearIcon.Size = UDim2.fromOffset(if phone then 26 else 30, if phone then 26 else 30)
 			tracker.layout(geometry.tracker.x, geometry.tracker.y, phone)
 			-- Below the row; on short phones beside it (left of Daily) rather than over it.
 			local menuSize = menu.root.Size

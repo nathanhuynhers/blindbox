@@ -86,7 +86,7 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 		end
 	)
 	chip.button.AnchorPoint = Vector2.new(1, 0)
-	chip.button.Size = UDim2.fromOffset(140, 44)
+	chip.button.Size = UDim2.fromOffset(132, 44)
 	local phone = false
 	local active, ready = false, false
 	local function visibility()
