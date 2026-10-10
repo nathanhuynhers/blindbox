@@ -61,6 +61,9 @@ function Slot.create(
 		size = 13,
 	})
 	rate.root.AnchorPoint = Vector2.new(0.5, 0)
+	-- Banked Coins get their own line so the rate badge never outgrows a narrow card.
+	local ready = Kit.text(button, "Ready", "", 12, Style.body(Enum.FontWeight.Heavy), Style.ink)
+	ready.TextXAlignment = Enum.TextXAlignment.Center
 	local plus = Kit.frame(button, "Add", Style.violet)
 	plus.AnchorPoint = Vector2.new(0.5, 0)
 	Kit.round(plus)
@@ -92,6 +95,11 @@ function Slot.create(
 		end
 	)
 	unlock.button.AnchorPoint = Vector2.new(0.5, 0)
+	-- Narrow cards move the shortfall out of the button onto its own wrapped line.
+	local short =
+		Kit.text(button, "Shortfall", "", 13, Style.body(Enum.FontWeight.ExtraBold), Style.muted)
+	short.TextXAlignment = Enum.TextXAlignment.Center
+	short.TextWrapped = true
 	ctx.scope.connect(button.Activated, function()
 		choose(index)
 		Sfx.play("select")
@@ -105,21 +113,40 @@ function Slot.create(
 		end
 	end)
 	local width, height = 160, 184
+	-- Below this card width "Unlock [coin price]" no longer fits on one row of the button.
+	local narrow = false
 	local function place()
 		local compact = height < 170
-		local image = if compact then 78 else 104
-		Kit.rect(stage, (width - image) / 2, if compact then 14 else 18, image, image)
-		local nameY = (if compact then 14 else 18) + image
-		Kit.rect(name, 6, nameY, width - 12, 20)
-		rate.root.Position = UDim2.new(0.5, 0, 0, nameY + 22)
+		narrow = width < 146
+		local image = if compact then 70 else 88
+		local top = if compact then 12 else 16
+		Kit.rect(stage, (width - image) / 2, top, image, image)
+		local nameY = top + image + 2
+		Kit.rect(name, 6, nameY, width - 12, if compact then 18 else 20)
+		local rateY = nameY + (if compact then 20 else 22)
+		rate.root.Size = UDim2.fromOffset(0, if compact then 24 else 26)
+		rate.root.Position = UDim2.new(0.5, 0, 0, rateY)
+		Kit.rect(ready, 6, rateY + (if compact then 26 else 28), width - 12, 16)
 		plus.Size = UDim2.fromOffset(if compact then 48 else 60, if compact then 48 else 60)
 		plus.Position = UDim2.new(0.5, 0, 0, if compact then 26 else 38)
 		local below = (if compact then 26 else 38) + (if compact then 48 else 60) + 10
 		Kit.rect(title, 6, below, width - 12, 22)
 		Kit.rect(hint, 6, below + 22, width - 12, 34)
-		lock.Position = UDim2.new(0.5, 0, 0, if compact then 26 else 40)
-		unlock.button.Position = UDim2.new(0.5, 0, 0, if compact then 76 else 92)
-		unlock.button.Size = UDim2.fromOffset(math.min(width - 16, 140), if compact then 52 else 56)
+		unlock.stack(narrow)
+		local buttonHeight = if compact then 52 else 56
+		local buttonY = if narrow
+			then (if compact then 56 else 70)
+			else (if compact then 76 else 92)
+		lock.Position = UDim2.new(
+			0.5,
+			0,
+			0,
+			if narrow then (if compact then 18 else 28) else (if compact then 26 else 40)
+		)
+		unlock.button.Position = UDim2.new(0.5, 0, 0, buttonY)
+		unlock.button.Size = UDim2.fromOffset(math.min(width - 16, 140), buttonHeight)
+		local shortY = buttonY + buttonHeight + 6
+		Kit.rect(short, 6, shortY, width - 12, math.max(16, height - shortY - 4))
 	end
 	return {
 		button = button,
@@ -176,18 +203,19 @@ function Slot.create(
 			stage.Visible = filled
 			name.Visible = filled
 			rate.root.Visible = filled
+			ready.Visible = false
 			if filled and figure then
 				name.Text = figure.name
+				rate.set(State.rate(State.figureRate(snapshot, id)))
 				-- Banked Coins are collected in the world (click or tap the figure).
-				local ready = State.earnings(snapshot, id)
-				rate.set(
-					State.rate(State.figureRate(snapshot, id))
-						.. (if ready > 0 then " · " .. State.compact(ready) .. " ready" else "")
-				)
+				local bank = State.earnings(snapshot, id)
+				ready.Visible = bank > 0
+				ready.Text = State.compact(bank) .. " ready"
 			end
 			plus.Visible = not locked and not filled
 			lock.Visible = locked
 			unlock.button.Visible = buyable
+			short.Visible = false
 			title.TextColor3 = Style.violetDark
 			hint.TextColor3 = Style.muted
 			if locked then
@@ -197,12 +225,14 @@ function Slot.create(
 				if buyable and price then
 					unlock.setPrice(State.compact(price))
 					local need = State.need(snapshot, price)
-					unlock.set("Unlock", ctx.canAct() and need == nil, need)
+					unlock.set("Unlock", ctx.canAct() and need == nil, if narrow then nil else need)
+					short.Visible = narrow and need ~= nil
+					short.Text = need or ""
 				end
 			elseif placing then
 				-- Placing a figure chosen in Collection: every unlocked slot is a target.
-				stage.Visible, name.Visible, rate.root.Visible, plus.Visible =
-					false, false, false, false
+				stage.Visible, name.Visible, rate.root.Visible, ready.Visible, plus.Visible =
+					false, false, false, false, false
 				title.Visible, hint.Visible = true, true
 				title.Text = "Place here"
 				hint.Text = if filled and figure then "Swaps out " .. figure.name else "Empty slot"

@@ -52,6 +52,8 @@ export type Button = {
 	set: (text: string, enabled: boolean, detail: string?) -> (),
 	variant: (Variant) -> (),
 	setPrice: (string) -> (),
+	-- Narrow buttons stack the label over its price instead of side by side.
+	stack: (boolean) -> (),
 	enabled: () -> boolean,
 }
 
@@ -222,6 +224,12 @@ function Button.create(
 			if price then
 				price.Text = value
 			end
+		end,
+		stack = function(vertical: boolean)
+			rowList.FillDirection = if vertical
+				then Enum.FillDirection.Vertical
+				else Enum.FillDirection.Horizontal
+			rowList.Padding = UDim.new(0, if vertical then 2 else 8)
 		end,
 		enabled = function()
 			return enabled
