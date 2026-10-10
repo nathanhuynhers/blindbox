@@ -80,6 +80,9 @@ function Interface.create(
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	-- Device-safe (notches) but under the top bar; the HUD reads TopbarInset to sit beside it.
 	gui.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
+	-- Above Roblox's TouchGui (DisplayOrder 0) so HUD/dock targets win the hit order; popups
+	-- (results, rewards, deals) stay above at 90-100.
+	gui.DisplayOrder = 10
 	gui.Parent = playerGui
 	local bounds = Kit.frame(gui, "SafeArea")
 	local stage = Kit.frame(bounds, "Stage")
@@ -206,6 +209,14 @@ function Interface.create(
 			tutorial.layout(frame, opened, coinsRight())
 		end
 	end)
+	local function setTouchControls(value: boolean)
+		if GuiService.TouchControlsEnabled ~= value then
+			GuiService.TouchControlsEnabled = value
+		end
+	end
+	scope.add(function()
+		setTouchControls(true)
+	end)
 	local laidOut: { [string]: string } = {}
 	local function layoutScreen(id: string)
 		local geometry = frame
@@ -242,6 +253,9 @@ function Interface.create(
 		uiScale.Scale = scale
 		stage.Size = UDim2.fromScale(1 / scale, 1 / scale)
 		dim.Visible = opened
+		-- An open screen owns touch input: hide the thumbstick/Jump so they cannot sit over or
+		-- steal taps from menu targets. Every exit (close, opening focus, destroy) re-runs this.
+		setTouchControls(not opened)
 		hud.layout(geometry, opened)
 		tutorial.layout(geometry, opened, coinsRight())
 		dock.layout(geometry.dock, geometry.phone)

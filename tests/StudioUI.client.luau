@@ -242,6 +242,11 @@ if coins.Visible then
 		"Coins pill must sit right of Roblox's top-bar buttons"
 	)
 end
+assert(gui.DisplayOrder > 0, "PocketGrove must render above Roblox's TouchGui")
+assert(
+	GuiService.TouchControlsEnabled == (open == nil),
+	"Touch controls must hide while a screen is open and return in the world"
+)
 if open then
 	local close = open:FindFirstChild("Close", true) :: GuiObject?
 	assert(close and visible(close), "Open screen needs its Close button")
@@ -319,27 +324,49 @@ local activePanel = if settings
 		and visible(settings)
 	then settings
 	else open
+local samples = {
+	Vector2.new(0.5, 0.5),
+	Vector2.new(0, 0),
+	Vector2.new(1, 0),
+	Vector2.new(0, 1),
+	Vector2.new(1, 1),
+	Vector2.new(0.5, 0),
+	Vector2.new(0.5, 1),
+	Vector2.new(0, 0.5),
+	Vector2.new(1, 0.5),
+}
+local hitPoints = 0
 if activePanel then
 	for _, target in activePanel:GetDescendants() do
 		if target:IsA("GuiButton") and target.Selectable and visible(target) then
-			local point = target.AbsolutePosition + target.AbsoluteSize / 2
-			local onScreen = true
-			local ancestor = target.Parent
-			while ancestor and ancestor ~= gui do
-				if ancestor:IsA("GuiObject") and ancestor.ClipsDescendants then
-					local origin, extent = ancestor.AbsolutePosition, ancestor.AbsoluteSize
-					if
-						point.X < origin.X
-						or point.Y < origin.Y
-						or point.X > origin.X + extent.X
-						or point.Y > origin.Y + extent.Y
-					then
-						onScreen = false
+			-- Sample the whole target (center, edge midpoints, corners inset 3px), not only its
+			-- center: a world control over one corner still steals taps (AQ01).
+			local position, size = target.AbsolutePosition, target.AbsoluteSize
+			for _, fraction in samples do
+				local point = position
+					+ Vector2.new(
+						math.clamp(size.X * fraction.X, 3, math.max(3, size.X - 3)),
+						math.clamp(size.Y * fraction.Y, 3, math.max(3, size.Y - 3))
+					)
+				local onScreen = true
+				local ancestor = target.Parent
+				while ancestor and ancestor ~= gui do
+					if ancestor:IsA("GuiObject") and ancestor.ClipsDescendants then
+						local origin, extent = ancestor.AbsolutePosition, ancestor.AbsoluteSize
+						if
+							point.X < origin.X
+							or point.Y < origin.Y
+							or point.X > origin.X + extent.X
+							or point.Y > origin.Y + extent.Y
+						then
+							onScreen = false
+						end
 					end
+					ancestor = ancestor.Parent
 				end
-				ancestor = ancestor.Parent
-			end
-			if onScreen then
+				if not onScreen then
+					continue
+				end
 				local first: GuiButton? = nil
 				for _, hit in player.PlayerGui:GetGuiObjectsAtPosition(point.X, point.Y) do
 					local at: Instance? = hit
@@ -355,12 +382,16 @@ if activePanel then
 					end
 				end
 				assert(
-					first == target,
-					"Obstructed control: "
-						.. target:GetFullName()
-						.. " behind "
-						.. (if first then first:GetFullName() else "no hit")
+					first ~= nil and (first == target or first:IsDescendantOf(target)),
+					string.format(
+						"Obstructed control at (%d,%d): %s behind %s",
+						point.X,
+						point.Y,
+						target:GetFullName(),
+						if first then first:GetFullName() else "no hit"
+					)
 				)
+				hitPoints += 1
 			end
 		end
 	end
@@ -385,8 +416,9 @@ else
 end
 print(
 	string.format(
-		"PASS: %d visible targets >= 44px, %d measured scrollers at UIScale %.2f, %d descendants (%s).",
+		"PASS: %d visible targets >= 44px, %d whole-target hit points, %d measured scrollers at UIScale %.2f, %d descendants (%s).",
 		buttons,
+		hitPoints,
 		scrolls,
 		scale,
 		count,
