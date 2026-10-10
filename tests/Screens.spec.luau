@@ -875,7 +875,12 @@ pullSummary.destroy()
 check(not summaryFocus and not pullSummary.isOpen(), "summary teardown is idempotent and releases focus")
 
 -- Teardown releases every connection, timer and instance.
+if not host("Shop").Visible then
+	Engine.click(find("DockShop"))
+end
+check(GuiService.TouchControlsEnabled == false, "an open screen holds the touch controls before teardown")
 ui.destroy()
+check(GuiService.TouchControlsEnabled == true, "teardown with a screen open returns the touch controls (AQ01)")
 Engine.click(homeButton)
 check(homeRequests == 1, "Home activation connection released on teardown")
 check(Engine.playerGui:FindFirstChild("PocketGrove") == nil, "UI destroyed")
