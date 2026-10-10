@@ -88,16 +88,59 @@ function Summary.create(focus: (boolean) -> (), effects: () -> boolean): Summary
 				Style.white
 			)
 			title.TextXAlignment = Enum.TextXAlignment.Center
+			-- Card names truncate on small screens: tapping, hovering or selecting a result
+			-- names it in full here (with rarity, NEW and how many you now own).
+			local caption = Kit.text(
+				root,
+				"Caption",
+				"Tap a figure for its full name",
+				17,
+				Style.body(Enum.FontWeight.ExtraBold),
+				Style.revealText
+			)
+			caption.TextXAlignment = Enum.TextXAlignment.Center
 			local tiles: { Tile.Tile } = {}
+			local views: { Tile.View } = {}
+			local chosen: number? = nil
+			local function choose(index: number)
+				local item = items[index]
+				local figure = Catalog.byId[item.figureId]
+				local owned = if snapshot then snapshot.owned[item.figureId] or 0 else 0
+				caption.Text = figure.name
+					.. " · "
+					.. figure.rarity
+					.. (if item.isNew then " · NEW!" else "")
+					.. (if owned > 1 then " · ×" .. owned .. " owned" else "")
+				caption.TextColor3 = Style.white
+				if chosen ~= index then
+					local previous = chosen
+					chosen = index
+					if previous then
+						views[previous].selected = false
+						tiles[previous].set(items[previous].figureId, views[previous])
+					end
+					views[index].selected = true
+					tiles[index].set(item.figureId, views[index])
+				end
+			end
 			for index, item in items do
 				local figure = Catalog.byId[item.figureId]
-				local tile = Tile.create(root, ctx, "card", function() end)
+				local tile = Tile.create(root, ctx, "card", function()
+					choose(index)
+				end)
 				tile.button.LayoutOrder = index
-				tile.set(item.figureId, {
+				views[index] = {
 					discovered = true,
 					sub = if item.isNew then "NEW! · " .. figure.rarity else figure.rarity,
 					subColor = if item.isNew then Style.violet else Style.muted,
-				})
+				}
+				tile.set(item.figureId, views[index])
+				scope.connect(tile.button.SelectionGained, function()
+					choose(index)
+				end)
+				scope.connect(tile.button.MouseEnter, function()
+					choose(index)
+				end)
 				tiles[index] = tile
 			end
 			-- Collection progress: what this batch completed and what is still out there.
@@ -164,7 +207,9 @@ function Summary.create(focus: (boolean) -> (), effects: () -> boolean): Summary
 				local width, height = root.AbsoluteSize.X, root.AbsoluteSize.Y
 				local columns = math.min(5, #tiles)
 				local rows = math.ceil(#tiles / columns)
-				local gap, pad, top, bottom = 12, 16, 64, 84
+				-- Short (phone) screens tighten the header so the cards and silhouettes stay legible.
+				local short = height < 420
+				local gap, pad, top, bottom = 12, 16, if short then 64 else 80, 84
 				-- The progress panel takes a right-hand column; the grid centres in the rest.
 				local side = if panel.Visible then math.clamp(width * 0.27, 200, 300) else 0
 				local area = width - (if panel.Visible then side + pad + gap else 0)
@@ -179,7 +224,16 @@ function Summary.create(focus: (boolean) -> (), effects: () -> boolean): Summary
 				-- Grid and panel centre together as one group.
 				local group = gridWidth + (if panel.Visible then gap + side else 0)
 				local x = math.max(pad, (width - group) / 2)
-				Kit.rect(title, pad, y - 52, width - pad * 2, 40)
+				title.TextSize = if short then 26 else 30
+				Kit.rect(
+					title,
+					pad,
+					y - (if short then 62 else 76),
+					width - pad * 2,
+					if short then 32 else 40
+				)
+				caption.TextSize = if short then 15 else 17
+				Kit.rect(caption, pad, y - (if short then 28 else 32), width - pad * 2, 20)
 				for index, tile in tiles do
 					local column, line = (index - 1) % columns, (index - 1) // columns
 					tile.size(card, card * 1.3)
@@ -192,8 +246,6 @@ function Summary.create(focus: (boolean) -> (), effects: () -> boolean): Summary
 					local perRow = if #discoveries > 9 then 5 elseif #discoveries > 6 then 4 else 3
 					local cellGap = 6
 					local lines = math.ceil(#discoveries / perRow)
-					-- Short (phone) screens tighten the header so the silhouettes stay legible.
-					local short = height < 420
 					local header = if short then 86 else 104
 					local room = gridHeight - header - 12
 					local cell = math.max(
