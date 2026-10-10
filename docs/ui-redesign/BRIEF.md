@@ -74,8 +74,9 @@ border) and still explain why ("Need 1,240 more").
   Close). Body below. Short heights scroll the body, never clip it.
 - **HUD:** Coins pill (coin glyph, balance, mint "+N/s" chip) top-left, placed right of the Roblox
   top-bar buttons (respect `GuiService` top-bar inset). Top-right row **[Daily] [Home] [gear]**:
-  matching round white buttons (ink stroke, hard drop shadow; 52px desktop, 44px with 10px gaps
-  on phone, icon-only with accessible names). Daily and Home use glossy navigation icon art;
+  matching rounded white tiles (ink stroke, hard drop shadow, 10px gaps). Daily and Home are
+  glossy navigation icons over a "Daily" / "Home" label (64x64 desktop, 50x56 phone), because
+  icon-only buttons were hard to tell apart; the gear stays icon-only at the same height;
   Daily carries the "!" Ready badge and an idle nudge (still with Motion Reduced). The row hides
   while any screen is open, like the gear. The gear opens a small popover holding the Motion
   preference (beside the row on short phones). Desktop also shows a Daily goal tracker card

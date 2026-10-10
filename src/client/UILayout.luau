@@ -17,7 +17,7 @@ export type Frame = {
 	height: number,
 	phone: boolean,
 	hud: Rect,
-	-- Top-right HUD row, left to right: Daily, Home, Settings gear.
+	-- Top-right HUD row, left to right: Daily, Home (icon + label tiles), Settings gear.
 	daily: Rect,
 	home: Rect,
 	gear: Rect,
@@ -58,12 +58,23 @@ local function dock(width: number, height: number, phone: boolean): Dock
 	}
 end
 
--- Square HUD buttons ending at `gearX`, `gap` apart (a thumb-safe gap on phone).
-local function row(gearX: number, y: number, size: number, gap: number): (Rect, Rect, Rect)
-	local function at(index: number): Rect
-		return { x = gearX - index * (size + gap), y = y, width = size, height = size }
-	end
-	return at(2), at(1), at(0)
+-- The HUD row ending with the gear at `gearX`: labelled Daily / Home tiles `tile` wide, the
+-- icon-only gear `gearWidth` wide, all `height` tall and `gap` apart (thumb-safe on phone).
+local function row(
+	gearX: number,
+	y: number,
+	tile: number,
+	gearWidth: number,
+	height: number,
+	gap: number
+): (Rect, Rect, Rect)
+	local homeX = gearX - gap - tile
+	return { x = homeX - gap - tile, y = y, width = tile, height = height }, {
+		x = homeX,
+		y = y,
+		width = tile,
+		height = height,
+	}, { x = gearX, y = y, width = gearWidth, height = height }
 end
 
 -- `topbar` is the free span between Roblox's own top-bar buttons, in pixels of the safe area.
@@ -76,7 +87,7 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 	if phone then
 		local hudX = math.max(8, left + 8)
 		local sheetX = if width - hudX - 8 >= 600 then hudX else 8
-		local daily, home, gear = row(right - 10 - 44, 8, 44, 10)
+		local daily, home, gear = row(right - 10 - 44, 8, 50, 44, 56, 10)
 		return {
 			scale = scale,
 			width = width,
@@ -98,7 +109,7 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 	local top, bottom = 84, bar.y - 26
 	local panelWidth = math.min(1280, width - margin * 2)
 	local panelHeight = math.min(640, bottom - top)
-	local daily, home, gear = row(right - 20 - 52, 18, 52, 10)
+	local daily, home, gear = row(right - 20 - 52, 18, 64, 52, 64, 10)
 	return {
 		scale = scale,
 		width = width,
@@ -108,7 +119,7 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 		daily = daily,
 		home = home,
 		gear = gear,
-		tracker = { x = right - 20 - 270, y = 82, width = 270, height = 0 },
+		tracker = { x = right - 20 - 270, y = gear.y + gear.height + 14, width = 270, height = 0 },
 		dock = bar,
 		panel = {
 			x = math.floor((width - panelWidth) / 2),
