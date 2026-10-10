@@ -32,6 +32,16 @@ check(
 	"no scheduled work/revisions for non-overflow"
 )
 Shelves.add(state.shelves)
+Plot.render(plot, state)
+check(not Plot.stepShowcase(plot, state, 50), "auto-scroll starts off")
+check(not Plot.stepShowcase(plot, state, 99), "off overflow never steps")
+check(plot.collection.autoLabel.Text == "AUTO: OFF", "sign shows off by default")
+visitor.Character:PivotTo(plot.transform * Engine.CFrame.new(100, 3, 0))
+check(not Plot.toggleShowcase(plot, visitor, 99.5), "distant toggle rejected")
+visitor.Character:PivotTo(plot.transform * Engine.CFrame.new(0, 3, 0))
+check(Plot.toggleShowcase(plot, owner, 99.9), "toggle switches auto on")
+check(not Plot.toggleShowcase(plot, visitor, 100), "toggle cooldown bounds repeats")
+check(plot.collection.autoLabel.Text == "AUTO: ON", "sign shows on")
 check(not Plot.stepShowcase(plot, state, 100), "four units start a full viewing interval")
 check(not Plot.stepShowcase(plot, state, 106.9), "slow configurable cadence")
 check(Plot.stepShowcase(plot, state, 107), "four units auto advance")
@@ -164,6 +174,9 @@ for index = 1, Config.maxShelfUnits do
 end
 check(plot.view.startIndex == start, "many units complete full loop")
 check(state.revision == 1, "auto leaves edit/profile state unchanged")
+check(Plot.toggleShowcase(plot, owner, 2000), "toggle switches auto off")
+check(not Plot.stepShowcase(plot, state, 3000), "toggled off never steps")
+check(plot.collection.autoLabel.Text == "AUTO: OFF", "sign shows off again")
 Plot.destroy(plot)
 check(
 	not plot.showcase.active and plot.showcase.editorToken == nil and plot.showcase.nextStep == nil,

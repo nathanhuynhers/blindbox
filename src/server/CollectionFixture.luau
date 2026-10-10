@@ -15,6 +15,7 @@ Fixture.palette = table.freeze({
 	diffuser = Color3.fromRGB(255, 237, 199),
 	light = Color3.fromRGB(255, 227, 180),
 	muted = Color3.fromRGB(163, 146, 122),
+	autoOn = Color3.fromRGB(184, 230, 168),
 })
 Fixture.style = table.freeze({ depth = 5, post = 0.55, board = 0.3, figureScale = 1 })
 Fixture.lighting = table.freeze({ dayBrightness = 0.35, nightBrightness = 0.9 })
@@ -33,6 +34,10 @@ export type Render = {
 	controls: { Control },
 	header: TextLabel,
 	navigation: boolean?,
+	-- Auto-scroll toggle plaque beside the header; one part is both sign and click target.
+	autoToggle: Part,
+	autoLabel: TextLabel,
+	autoplay: boolean,
 	awning: Model,
 	lights: { SurfaceLight },
 }
@@ -148,6 +153,14 @@ local function control(
 	hitbox.CanQuery = true
 	return { panel = panel, accents = accents }, hitbox
 end
+local function paintAuto(render: Render)
+	local enabled = render.navigation == true
+	render.autoToggle.Color = if not enabled
+		then palette.muted
+		elseif render.autoplay then palette.autoOn
+		else palette.sign
+	render.autoLabel.Text = if render.autoplay then "AUTO: ON" else "AUTO: OFF"
+end
 function Fixture.setNavigation(render: Render, enabled: boolean)
 	if render.navigation == enabled then
 		return
@@ -158,6 +171,11 @@ function Fixture.setNavigation(render: Render, enabled: boolean)
 			accent.Color = if enabled then palette.diffuser else palette.muted
 		end
 	end
+	paintAuto(render)
+end
+function Fixture.setAutoplay(render: Render, enabled: boolean)
+	render.autoplay = enabled
+	paintAuto(render)
 end
 function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): Render
 	local model = Instance.new("Model")
@@ -309,6 +327,32 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 	header.TextScaled = true
 	header.Text = "Shelves"
 	header.Parent = gui
+	-- Right of the header (+Z faces the viewer's right), on the Next arrow's side.
+	local autoToggle = piece(
+		model,
+		transform,
+		"AutoToggle",
+		Vector3.new(0.3, 2.2, 7.6),
+		Vector3.new(x - 2.2, top + 1.55, z + 13),
+		palette.sign
+	)
+	autoToggle.CanQuery = true
+	local autoGui = Instance.new("SurfaceGui")
+	autoGui.Name = "AutoSign"
+	autoGui.Face = Enum.NormalId.Left
+	autoGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	autoGui.CanvasSize = Vector2.new(600, 170)
+	autoGui.LightInfluence = 0.35
+	autoGui.Parent = autoToggle
+	local autoLabel = Instance.new("TextLabel")
+	autoLabel.Name = "State"
+	autoLabel.BackgroundTransparency = 1
+	autoLabel.Position = UDim2.fromScale(0.06, 0.16)
+	autoLabel.Size = UDim2.fromScale(0.88, 0.68)
+	autoLabel.Font = Enum.Font.GothamBlack
+	autoLabel.TextColor3 = palette.charcoal
+	autoLabel.TextScaled = true
+	autoLabel.Parent = autoGui
 	local awning = Fixture.awning
 	for _, side in { -1, 1 } do
 		piece(
@@ -372,6 +416,9 @@ function Fixture.create(parent: Instance, transform: CFrame, accent: Color3?): R
 		hitboxes = hitboxes,
 		header = header,
 		navigation = nil,
+		autoToggle = autoToggle,
+		autoLabel = autoLabel,
+		autoplay = false,
 		awning = canopy,
 		lights = lights,
 	}

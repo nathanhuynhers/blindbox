@@ -1126,8 +1126,8 @@ for _, node in fixtureNodes do
 	if node.ClassName == "TextLabel" then
 		worldText += 1
 		check(
-			node.Text == "Shelves",
-			"no physical index, zero-Coin copy or Previous/Next text remains"
+			node.Text == "Shelves" or node.Text == "AUTO: OFF",
+			"only the title and Auto toggle; no index, zero-Coin copy or Previous/Next text"
 		)
 	end
 	check(
@@ -1161,11 +1161,11 @@ for _, node in fixtureNodes do
 	end
 end
 check(
-	worldText == 1
+	worldText == 2
 		and lights == 9
 		and prompts == 1
-		and parts == 59 + Awning.partCount(3 * Geometry.shelfUnitPitch + CollectionFixture.awning.endMargin),
-	"one title, one management prompt, nine bounded row washes and fixed native-part budget"
+		and parts == 60 + Awning.partCount(3 * Geometry.shelfUnitPitch + CollectionFixture.awning.endMargin),
+	"title + Auto sign, one management prompt, nine bounded row washes and fixed native-part budget"
 )
 for position, unit in plot.physicalShelves do
 	local rows, anchors = 0, 0
@@ -1636,7 +1636,8 @@ check(
 	"clicking only changes runtime visibility, not shelf persistence or progression"
 )
 check(
-	collection.header.Text == "Shelves" and #descendants(collection.model) == #fixtureNodes,
+	-- +1: the Auto toggle's ClickDetector, attached by Plot.bind.
+	collection.header.Text == "Shelves" and #descendants(collection.model) == #fixtureNodes + 1,
 	"turning retains static header, furniture, trim and lighting"
 )
 local beforeRejected = plot.view.revision

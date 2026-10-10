@@ -261,7 +261,10 @@ owner's plot. The same exact footprint and vertical bound used by Display editin
 the plot disables mutations. Public physical carousel navigation keeps its separate perimeter margin.
 
 UI-05 adds a runtime server showcase: overflowing Shelves
-advance one unit every seven seconds through that same turn/render path. The existing shared
+advance one unit every seven seconds through that same turn/render path. The showcase starts
+**off** each join; an **AUTO: ON/OFF** plaque right of the Shelves header toggles it. The plaque
+uses the arrows' click reach and range check (owners and visitors), mutes with them at three or
+fewer units, has a short toggle cooldown, and is runtime-only like the carousel. The existing shared
 one-second scheduler checks viewing range only when a step is due; with nobody alive in the
 public navigation boundary, it waits another interval. At most three units have no scheduled
 step. Valid physical arrow presses (including presses during the turn cooldown) pause auto-scroll

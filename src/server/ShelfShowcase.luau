@@ -8,6 +8,9 @@ export type Controller = {
 	nextStep: number?,
 	idleUntil: number,
 	active: boolean,
+	-- Off until a viewer presses the physical Auto toggle; runtime-only like the carousel.
+	enabled: boolean,
+	toggledAt: number,
 }
 function Showcase.new(ownerId: number): Controller
 	return {
@@ -17,6 +20,8 @@ function Showcase.new(ownerId: number): Controller
 		nextStep = nil,
 		idleUntil = 0,
 		active = true,
+		enabled = false,
+		toggledAt = -math.huge,
 	}
 end
 -- This signal only pauses presentation. It grants no edit authority or progression.
@@ -47,9 +52,19 @@ function Showcase.browse(c: Controller, now: number)
 	c.idleUntil = math.max(c.idleUntil, now + Config.showcaseBrowseIdleSeconds)
 	c.nextStep = c.idleUntil
 end
+-- Short cooldown bounds repeated detector fires; returns whether the state flipped.
+function Showcase.toggle(c: Controller, now: number): boolean
+	if not c.active or now - c.toggledAt < Config.showcaseToggleCooldownSeconds then
+		return false
+	end
+	c.toggledAt = now
+	c.enabled = not c.enabled
+	c.nextStep = nil
+	return true
+end
 -- Called by the existing shared one-second scheduler; no plot-owned tasks/connections.
 function Showcase.due(c: Controller, count: number, now: number): boolean
-	if not c.active or count <= Config.visibleShelfUnits then
+	if not c.active or not c.enabled or count <= Config.visibleShelfUnits then
 		c.nextStep = nil
 		return false
 	end
