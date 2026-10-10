@@ -217,6 +217,8 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 			Kit.rect(stat.label, 8, if compact then 4 else 8, statWidth - 12, 16)
 			Kit.rect(stat.value, 8, if compact then 20 else 26, statWidth - 12, 22)
 		end
+		-- The unit lives in the label so the value stays a short "4.73/s" at every width.
+		stats[1].label.Text = if phone then "Earns" else "Earns coins"
 		stats[2].label.Text = if phone then "Own" else "You own"
 		stats[3].label.Text = if phone then "Chance" else "Box chance"
 		y += if compact then 54 else 70
@@ -291,8 +293,7 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		name.Text = if discovered then data.name else "???"
 		pill.rarity(data.rarity)
 		local owned = snapshot.owned[id] or 0
-		stats[1].value.Text = State.amount(State.figureRate(snapshot, id))
-			.. (if compact then "/s" else " coins/s")
+		stats[1].value.Text = State.rate(State.figureRate(snapshot, id))
 		stats[2].value.Text = if owned > 0 then "×" .. owned else "None yet"
 		stats[3].value.Text = State.percent(State.figureOdds(snapshot, id))
 		local displayed = State.displayed(snapshot, id)
