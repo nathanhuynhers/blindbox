@@ -1,0 +1,10 @@
+{
+  "rows": 2144,
+  "statuses": {
+    "Pass": 107,
+    "Blocked": 1933,
+    "Fail": 8,
+    "Not applicable": 96
+  },
+  "note": "Expanded blocked combinations are planning/acceptance entries, not executed tests. Each Pass names its limited check."
+}

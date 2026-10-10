@@ -1,0 +1,42 @@
+{
+  "duration": 1792.8933488000002,
+  "fps": {
+    "min": 0,
+    "median": 15.000494246823399,
+    "max": 60.00588023761144,
+    "first": 0,
+    "last": 15.002473846863039
+  },
+  "maxFrameMS": {
+    "min": 0,
+    "median": 68.50410252809525,
+    "max": 200.26279985904694,
+    "first": 0,
+    "last": 75.31660050153732
+  },
+  "memoryMB": {
+    "min": 2534.33984375,
+    "median": 2683.28515625,
+    "max": 2932.1953125,
+    "first": 2641.7109375,
+    "last": 2841.73828125
+  },
+  "instances": {
+    "min": 15341,
+    "median": 15809,
+    "max": 15826,
+    "first": 15352,
+    "last": 15809
+  },
+  "guiInstances": {
+    "min": 3729,
+    "median": 4180,
+    "max": 4197,
+    "first": 3740,
+    "last": 4180
+  },
+  "notes": [
+    "Initial fps=0 and maxFrameMS=0 are sampler initialization placeholders, not a measured gameplay freeze.",
+    "Editor single-client mixed viewport/menu sampling; no physical-device or loaded-server performance acceptance."
+  ]
+}

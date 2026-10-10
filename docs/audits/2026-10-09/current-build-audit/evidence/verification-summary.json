@@ -1,0 +1,42 @@
+{
+  "recordType": "Concise summary of executed tool outcomes; not reconstructed raw stdout",
+  "workingTreeSourceAndConfigDiff": "empty",
+  "whitespace": "git diff --check exit0",
+  "commands": [
+    {
+      "command": "wally install",
+      "outcome": "Host retry passed; lockfile content unchanged; no dependencies"
+    },
+    {
+      "command": "stylua --check src",
+      "outcome": "exit0; no formatting applied"
+    },
+    {
+      "command": "selene src",
+      "outcome": "Host retry exit0: 0 errors, 0 warnings, 0 parse errors; initial sandbox API fetch failed"
+    },
+    {
+      "command": "rojo build default.project.json -o build/audit-2026-10-09.rbxlx",
+      "outcome": "Host retry passed"
+    },
+    {
+      "command": "rojo sourcemap default.project.json -o sourcemap.json",
+      "outcome": "Host retry passed"
+    },
+    {
+      "command": "luau-lsp analyze --platform=roblox --sourcemap=sourcemap.json --definitions=build/tools/globalTypes.PluginSecurity.d.luau src",
+      "outcome": "Host exit0, no source diagnostics; watcher-registration warning; cached PluginSecurity superset definitions"
+    },
+    {
+      "command": "python tests/run.py build/tools/luau/luau.exe",
+      "outcome": "exit0, all suites passed; raw result in regression.txt; expected isolated cleanup fault is a test fixture"
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_*.py",
+      "outcome": "Host retry exit0, 30 tests passed, 2 ResourceWarning messages from synthetic HTTP-error cleanup; initial sandbox temp-permission errors preserved"
+    }
+  ],
+  "provisioning": "Pinned versions were already present; no incidental tool upgrades",
+  "rawFailureLogs": "static-and-python.json",
+  "buildSourceIdentity": "source-comparison.json"
+}

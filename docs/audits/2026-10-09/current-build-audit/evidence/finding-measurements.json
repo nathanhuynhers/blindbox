@@ -1,0 +1,2834 @@
+[
+  {
+    "group": "iphone7",
+    "screen": "Collection",
+    "viewport": [
+      666,
+      374
+    ],
+    "safe": [
+      0,
+      -58,
+      666,
+      374
+    ],
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73/s",
+        "scaled": false,
+        "bounds": [
+          39,
+          15
+        ],
+        "size": [
+          60,
+          22
+        ],
+        "wrapped": false,
+        "fits": true,
+        "textSize": 15,
+        "pos": [
+          428,
+          191
+        ]
+      }
+    ],
+    "ui": {
+      "ok": true
+    }
+  },
+  {
+    "group": "iphone7",
+    "screen": "Display",
+    "viewport": [
+      666,
+      374
+    ],
+    "safe": [
+      0,
+      -58,
+      666,
+      374
+    ],
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 3,851 ready",
+        "scaled": false,
+        "bounds": [
+          109,
+          13
+        ],
+        "size": [
+          109,
+          26
+        ],
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "pos": [
+          13.5,
+          180
+        ]
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot4.Unlock.Face.Content.Detail",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "Need 35.9K more",
+        "scaled": false,
+        "bounds": [
+          85,
+          13
+        ],
+        "size": [
+          85,
+          17
+        ],
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "pos": [
+          340.5,
+          171
+        ]
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.star.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sunbeam Sprite",
+        "scaled": false,
+        "bounds": [
+          58,
+          14
+        ],
+        "size": [
+          70,
+          20
+        ],
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "pos": [
+          99,
+          306
+        ]
+      }
+    ],
+    "ui": {
+      "ok": true
+    }
+  },
+  {
+    "group": "iphone7",
+    "screen": "Shop",
+    "viewport": [
+      666,
+      374
+    ],
+    "safe": [
+      0,
+      -58,
+      666,
+      374
+    ],
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.ShopPresentation.Shop.Face.Body.Product.ProductStage.BlindBoxPreview.ProjectedCollectionName",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "Pocket Grove",
+        "scaled": true,
+        "bounds": [
+          21,
+          8
+        ],
+        "size": [
+          23,
+          4
+        ],
+        "wrapped": true,
+        "fits": false,
+        "textSize": 18,
+        "pos": [
+          116.5,
+          83
+        ]
+      }
+    ],
+    "ui": {
+      "ok": true
+    }
+  },
+  {
+    "group": "iphone7",
+    "screen": "Shelves",
+    "viewport": [
+      666,
+      374
+    ],
+    "safe": [
+      0,
+      -58,
+      666,
+      374
+    ],
+    "scale": 1,
+    "labels": [],
+    "ui": {
+      "ok": false,
+      "error": "AssistantCommand:358: Obstructed control: Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.ShelvesPresentation.Shelves.Face.Body.Picker.Figures.grove.star behind Players.AsianBaconRoblox.PlayerGui.TouchGui.TouchControlFrame.JumpButton"
+    }
+  },
+  {
+    "group": "iphone7",
+    "screen": "Login",
+    "viewport": [
+      666,
+      374
+    ],
+    "safe": [
+      0,
+      -58,
+      666,
+      374
+    ],
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Claimed.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "CLAIMED",
+        "scaled": false,
+        "bounds": [
+          43,
+          12
+        ],
+        "size": [
+          43,
+          24
+        ],
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "pos": [
+          46.5,
+          198
+        ]
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Today.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "TODAY",
+        "scaled": false,
+        "bounds": [
+          34,
+          12
+        ],
+        "size": [
+          34,
+          24
+        ],
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "pos": [
+          41.5,
+          14
+        ]
+      }
+    ],
+    "ui": {
+      "ok": true
+    }
+  },
+  {
+    "group": "a06",
+    "screen": "Display",
+    "viewport": {
+      "1": 705,
+      "2": 338
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 705,
+      "4": 338
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 12.7K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 17,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.star.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sunbeam Sprite",
+        "scaled": false,
+        "bounds": {
+          "1": 58,
+          "2": 14
+        },
+        "pos": {
+          "1": 99,
+          "2": 306
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 79,
+          "2": 20
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone13",
+    "screen": "Display",
+    "viewport": {
+      "1": 749,
+      "2": 389
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 749,
+      "4": 389
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 12.9K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 20,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone16max",
+    "screen": "Display",
+    "viewport": {
+      "1": 831,
+      "2": 439
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 831,
+      "4": 439
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 13.2K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 177,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot4.Unlock.Face.Content.Detail",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "Need 35.9K more",
+        "scaled": false,
+        "bounds": {
+          "1": 85,
+          "2": 13
+        },
+        "pos": {
+          "1": 504.5,
+          "2": 171
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 85,
+          "2": 17
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.star.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sunbeam Sprite",
+        "scaled": false,
+        "bounds": {
+          "1": 58,
+          "2": 14
+        },
+        "pos": {
+          "1": 263,
+          "2": 306
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 70,
+          "2": 20
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "smalltablet",
+    "screen": "Display",
+    "viewport": {
+      "1": 959,
+      "2": 599
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 959,
+      "4": 599
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 13.6K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 75,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.star.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sunbeam Sprite",
+        "scaled": false,
+        "bounds": {
+          "1": 42,
+          "2": 14
+        },
+        "pos": {
+          "1": 154,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 45,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.star.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+29.34/s",
+        "scaled": false,
+        "bounds": {
+          "1": 41,
+          "2": 16
+        },
+        "pos": {
+          "1": 154,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 45,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.mushroom.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Mallow Cap",
+        "scaled": false,
+        "bounds": {
+          "1": 39,
+          "2": 14
+        },
+        "pos": {
+          "1": 285,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 45,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.mushroom.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+9.39/s",
+        "scaled": false,
+        "bounds": {
+          "1": 41,
+          "2": 16
+        },
+        "pos": {
+          "1": 285,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 45,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Acorn Dot",
+        "scaled": false,
+        "bounds": {
+          "1": 40,
+          "2": 14
+        },
+        "pos": {
+          "1": 416,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 45,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+6.03/s",
+        "scaled": false,
+        "bounds": {
+          "1": 41,
+          "2": 16
+        },
+        "pos": {
+          "1": 416,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 45,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sprout Scout",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 14
+        },
+        "pos": {
+          "1": 547,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 45,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+5.99/s",
+        "scaled": false,
+        "bounds": {
+          "1": 39,
+          "2": 16
+        },
+        "pos": {
+          "1": 547,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 45,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Pebble Pip",
+        "scaled": false,
+        "bounds": {
+          "1": 40,
+          "2": 14
+        },
+        "pos": {
+          "1": 678,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 45,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+4.73/s",
+        "scaled": false,
+        "bounds": {
+          "1": 40,
+          "2": 16
+        },
+        "pos": {
+          "1": 678,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 45,
+          "2": 22
+        }
+      }
+    ],
+    "ui": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Tools.ExecuteLuauTool:86: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.CommandExecution:54: AssistantCommand:357: Obstructed control: Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.EquipBest behind Players.AsianBaconRoblox.PlayerGui.TouchGui.TouchControlFrame.JumpButton"
+  },
+  {
+    "group": "ipad4x3",
+    "screen": "Display",
+    "viewport": {
+      "1": 1023,
+      "2": 768
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1023,
+      "4": 768
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 13.9K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 84,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.star.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sunbeam Sprite",
+        "scaled": false,
+        "bounds": {
+          "1": 48,
+          "2": 14
+        },
+        "pos": {
+          "1": 158,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 55,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.star.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+29.34/s",
+        "scaled": false,
+        "bounds": {
+          "1": 50,
+          "2": 16
+        },
+        "pos": {
+          "1": 158,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 55,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.mushroom.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Mallow Cap",
+        "scaled": false,
+        "bounds": {
+          "1": 48,
+          "2": 14
+        },
+        "pos": {
+          "1": 299,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 55,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sprout Scout",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 14
+        },
+        "pos": {
+          "1": 581,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 55,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Pebble Pip",
+        "scaled": false,
+        "bounds": {
+          "1": 46,
+          "2": 14
+        },
+        "pos": {
+          "1": 722,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 55,
+          "2": 20
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "largetablet",
+    "screen": "Display",
+    "viewport": {
+      "1": 1375,
+      "2": 1032
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1375,
+      "4": 1032
+    },
+    "scale": 1.07421875,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 14.2K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 128.69140625,
+          "2": 386.7265625
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 27.9296875
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "laptop",
+    "screen": "Display",
+    "viewport": {
+      "1": 1365,
+      "2": 768
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1365,
+      "4": 768
+    },
+    "scale": 1.06640625,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 14.7K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 127.35546875,
+          "2": 332.3046875
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 27.7265625
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "hd720",
+    "screen": "Display",
+    "viewport": {
+      "1": 1279,
+      "2": 720
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1279,
+      "4": 720
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 15.1K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 115,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "desktop",
+    "screen": "Display",
+    "viewport": {
+      "1": 1919,
+      "2": 1079
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1919,
+      "4": 1079
+    },
+    "scale": 1.4986110925674438,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 16.5K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 157,
+          "2": 19
+        },
+        "pos": {
+          "1": 177.76251220703125,
+          "2": 490.49169921875
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 157,
+          "2": 38.963890075683594
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "hires",
+    "screen": "Display",
+    "viewport": {
+      "1": 2560,
+      "2": 1440
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 2560,
+      "4": 1440
+    },
+    "scale": 2,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 16.6K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 213,
+          "2": 26
+        },
+        "pos": {
+          "1": 235.5,
+          "2": 674
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 213,
+          "2": 52
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "ultrawide",
+    "screen": "Display",
+    "viewport": {
+      "1": 3440,
+      "2": 1440
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 3440,
+      "4": 1440
+    },
+    "scale": 2,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 16.7K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 213,
+          "2": 26
+        },
+        "pos": {
+          "1": 569.5,
+          "2": 674
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 213,
+          "2": 52
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "a06",
+    "screen": "Collection",
+    "viewport": {
+      "1": 705,
+      "2": 338
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 705,
+      "4": 338
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73/s",
+        "scaled": false,
+        "bounds": {
+          "1": 39,
+          "2": 15
+        },
+        "pos": {
+          "1": 467,
+          "2": 178
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 15,
+        "size": {
+          "1": 60,
+          "2": 22
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone13",
+    "screen": "Collection",
+    "viewport": {
+      "1": 749,
+      "2": 388
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 749,
+      "4": 388
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73/s",
+        "scaled": false,
+        "bounds": {
+          "1": 39,
+          "2": 15
+        },
+        "pos": {
+          "1": 511,
+          "2": 191
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 15,
+        "size": {
+          "1": 60,
+          "2": 22
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone16max",
+    "screen": "Collection",
+    "viewport": {
+      "1": 830,
+      "2": 439
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 830,
+      "4": 439
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73/s",
+        "scaled": false,
+        "bounds": {
+          "1": 39,
+          "2": 15
+        },
+        "pos": {
+          "1": 592,
+          "2": 191
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 15,
+        "size": {
+          "1": 60,
+          "2": 22
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "smalltablet",
+    "screen": "Collection",
+    "viewport": {
+      "1": 959,
+      "2": 599
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 959,
+      "4": 599
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73/s",
+        "scaled": false,
+        "bounds": {
+          "1": 39,
+          "2": 15
+        },
+        "pos": {
+          "1": 623,
+          "2": 307
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 15,
+        "size": {
+          "1": 79,
+          "2": 22
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "ipad4x3",
+    "screen": "Collection",
+    "viewport": {
+      "1": 1023,
+      "2": 768
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1023,
+      "4": 768
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73 coins/s",
+        "scaled": false,
+        "bounds": {
+          "1": 47,
+          "2": 18
+        },
+        "pos": {
+          "1": 637,
+          "2": 388
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 18,
+        "size": {
+          "1": 90,
+          "2": 22
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "largetablet",
+    "screen": "Collection",
+    "viewport": {
+      "1": 1375,
+      "2": 1032
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1375,
+      "4": 1032
+    },
+    "scale": 1.07421875,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73 coins/s",
+        "scaled": false,
+        "bounds": {
+          "1": 95,
+          "2": 19
+        },
+        "pos": {
+          "1": 947.4609375,
+          "2": 472.6640625
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 18,
+        "size": {
+          "1": 96.6796875,
+          "2": 23.6328125
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "laptop",
+    "screen": "Collection",
+    "viewport": {
+      "1": 1365,
+      "2": 768
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1365,
+      "4": 768
+    },
+    "scale": 1.06640625,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73 coins/s",
+        "scaled": false,
+        "bounds": {
+          "1": 95,
+          "2": 19
+        },
+        "pos": {
+          "1": 940.5703125,
+          "2": 417.6171875
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 18,
+        "size": {
+          "1": 95.9765625,
+          "2": 23.4609375
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "hd720",
+    "screen": "Collection",
+    "viewport": {
+      "1": 1279,
+      "2": 720
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1279,
+      "4": 720
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73 coins/s",
+        "scaled": false,
+        "bounds": {
+          "1": 47,
+          "2": 18
+        },
+        "pos": {
+          "1": 880,
+          "2": 388
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 18,
+        "size": {
+          "1": 90,
+          "2": 22
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "desktop",
+    "screen": "Collection",
+    "viewport": {
+      "1": 1919,
+      "2": 1079
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1919,
+      "4": 1079
+    },
+    "scale": 1.4986110925674438,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73 coins/s",
+        "scaled": false,
+        "bounds": {
+          "1": 130,
+          "2": 26
+        },
+        "pos": {
+          "1": 1321.7750244140625,
+          "2": 610.3805541992188
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 18,
+        "size": {
+          "1": 134.875,
+          "2": 32.969444274902344
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "hires",
+    "screen": "Collection",
+    "viewport": {
+      "1": 2560,
+      "2": 1440
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 2560,
+      "4": 1440
+    },
+    "scale": 2,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73 coins/s",
+        "scaled": false,
+        "bounds": {
+          "1": 176,
+          "2": 36
+        },
+        "pos": {
+          "1": 1764,
+          "2": 834
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 18,
+        "size": {
+          "1": 180,
+          "2": 44
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "ultrawide",
+    "screen": "Collection",
+    "viewport": {
+      "1": 3440,
+      "2": 1440
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 3440,
+      "4": 1440
+    },
+    "scale": 2,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.CollectionPresentation.Collection.Face.Body.FigureDetails.Stat1.Value",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "4.73 coins/s",
+        "scaled": false,
+        "bounds": {
+          "1": 176,
+          "2": 36
+        },
+        "pos": {
+          "1": 2332,
+          "2": 834
+        },
+        "wrapped": false,
+        "fits": true,
+        "textSize": 18,
+        "size": {
+          "1": 180,
+          "2": 44
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "a06",
+    "screen": "Shop",
+    "viewport": {
+      "1": 705,
+      "2": 338
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 705,
+      "4": 338
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.ShopPresentation.Shop.Face.Body.Product.ProductStage.BlindBoxPreview.ProjectedCollectionName",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "Pocket Grove",
+        "scaled": true,
+        "bounds": {
+          "1": 21,
+          "2": 8
+        },
+        "pos": {
+          "1": 116.5,
+          "2": 83
+        },
+        "wrapped": true,
+        "fits": false,
+        "textSize": 18,
+        "size": {
+          "1": 23,
+          "2": 4
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone13",
+    "screen": "Shop",
+    "viewport": {
+      "1": 749,
+      "2": 388
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 749,
+      "4": 388
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.ShopPresentation.Shop.Face.Body.Product.ProductStage.BlindBoxPreview.ProjectedCollectionName",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "Pocket Grove",
+        "scaled": true,
+        "bounds": {
+          "1": 21,
+          "2": 8
+        },
+        "pos": {
+          "1": 116.5,
+          "2": 83
+        },
+        "wrapped": true,
+        "fits": false,
+        "textSize": 18,
+        "size": {
+          "1": 23,
+          "2": 4
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone16max",
+    "screen": "Shop",
+    "viewport": {
+      "1": 830,
+      "2": 439
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 830,
+      "4": 439
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.ShopPresentation.Shop.Face.Body.Product.ProductStage.BlindBoxPreview.ProjectedCollectionName",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "Pocket Grove",
+        "scaled": true,
+        "bounds": {
+          "1": 21,
+          "2": 8
+        },
+        "pos": {
+          "1": 280.5,
+          "2": 83
+        },
+        "wrapped": true,
+        "fits": false,
+        "textSize": 18,
+        "size": {
+          "1": 23,
+          "2": 4
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "smalltablet",
+    "screen": "Shop",
+    "viewport": {
+      "1": 959,
+      "2": 599
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 959,
+      "4": 599
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.ShopPresentation.Shop.Face.Body.Product.ProductStage.BlindBoxPreview.ProjectedCollectionName",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "Pocket Grove",
+        "scaled": true,
+        "bounds": {
+          "1": 24,
+          "2": 8
+        },
+        "pos": {
+          "1": 423,
+          "2": 203.5
+        },
+        "wrapped": true,
+        "fits": false,
+        "textSize": 18,
+        "size": {
+          "1": 30,
+          "2": 5
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "smalltablet",
+    "screen": "Goals",
+    "viewport": {
+      "1": 959,
+      "2": 599
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 959,
+      "4": 599
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.GoalsPresentation.Goals.Face.Body.GoalsBody.CollectionProgress.Progress_star.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "We Are All Stars",
+        "scaled": false,
+        "bounds": {
+          "1": 70,
+          "2": 15
+        },
+        "pos": {
+          "1": 701,
+          "2": 428
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 15,
+        "size": {
+          "1": 81,
+          "2": 20
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone13",
+    "screen": "Shelves",
+    "viewport": {
+      "1": 749,
+      "2": 388
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 749,
+      "4": 388
+    },
+    "scale": 1,
+    "labels": [],
+    "ui": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Tools.ExecuteLuauTool:86: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.CommandExecution:54: AssistantCommand:357: Obstructed control: Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.ShelvesPresentation.Shelves.Face.Body.Picker.Figures.grove.star behind Players.AsianBaconRoblox.PlayerGui.TouchGui.TouchControlFrame.JumpButton"
+  },
+  {
+    "group": "a06",
+    "screen": "Login",
+    "viewport": {
+      "1": 705,
+      "2": 338
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 705,
+      "4": 338
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Claimed.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "CLAIMED",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 12
+        },
+        "pos": {
+          "1": 49,
+          "2": 162
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 43,
+          "2": 24
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Today.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "TODAY",
+        "scaled": false,
+        "bounds": {
+          "1": 34,
+          "2": 12
+        },
+        "pos": {
+          "1": 44,
+          "2": 14
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 34,
+          "2": 24
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone13",
+    "screen": "Login",
+    "viewport": {
+      "1": 749,
+      "2": 388
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 749,
+      "4": 388
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Claimed.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "CLAIMED",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 12
+        },
+        "pos": {
+          "1": 52,
+          "2": 212
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 43,
+          "2": 24
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Today.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "TODAY",
+        "scaled": false,
+        "bounds": {
+          "1": 34,
+          "2": 12
+        },
+        "pos": {
+          "1": 47,
+          "2": 14
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 34,
+          "2": 24
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "iphone16max",
+    "screen": "Login",
+    "viewport": {
+      "1": 830,
+      "2": 439
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 830,
+      "4": 439
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Claimed.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "CLAIMED",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 12
+        },
+        "pos": {
+          "1": 210.5,
+          "2": 212
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 43,
+          "2": 24
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Today.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "TODAY",
+        "scaled": false,
+        "bounds": {
+          "1": 34,
+          "2": 12
+        },
+        "pos": {
+          "1": 205.5,
+          "2": 14
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 34,
+          "2": 24
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "smalltablet",
+    "screen": "Login",
+    "viewport": {
+      "1": 959,
+      "2": 599
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 959,
+      "4": 599
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Claimed.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "CLAIMED",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 12
+        },
+        "pos": {
+          "1": 105,
+          "2": 310
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 43,
+          "2": 24
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Today.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "TODAY",
+        "scaled": false,
+        "bounds": {
+          "1": 34,
+          "2": 12
+        },
+        "pos": {
+          "1": 100,
+          "2": 122
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 34,
+          "2": 24
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "ipad4x3",
+    "screen": "Login",
+    "viewport": {
+      "1": 1023,
+      "2": 768
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1023,
+      "4": 768
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.LoginPresentation.Login.Face.Body.LoginBody.Day1.Face.Claimed.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "CLAIMED",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 12
+        },
+        "pos": {
+          "1": 112.5,
+          "2": 370
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 12,
+        "size": {
+          "1": 43,
+          "2": 24
+        }
+      }
+    ],
+    "ui": "nil"
+  },
+  {
+    "group": "width899",
+    "screen": "Display",
+    "viewport": {
+      "1": 899,
+      "2": 700
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 899,
+      "4": 700
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 26.8K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 183,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot2.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+29.34/s · 155 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 100,
+          "2": 13
+        },
+        "pos": {
+          "1": 305,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 100,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot3.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+9.39/s · 49 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 88,
+          "2": 13
+        },
+        "pos": {
+          "1": 428,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 88,
+          "2": 26
+        }
+      }
+    ]
+  },
+  {
+    "group": "width900",
+    "screen": "Display",
+    "viewport": {
+      "1": 900,
+      "2": 700
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 900,
+      "4": 700
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 26.8K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 69,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot2.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+29.34/s · 220 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 100,
+          "2": 13
+        },
+        "pos": {
+          "1": 204,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 100,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot3.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+9.39/s · 70 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 88,
+          "2": 13
+        },
+        "pos": {
+          "1": 340,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 88,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Acorn Dot",
+        "scaled": false,
+        "bounds": {
+          "1": 33,
+          "2": 14
+        },
+        "pos": {
+          "1": 152,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 36,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+6.03/s",
+        "scaled": false,
+        "bounds": {
+          "1": 32,
+          "2": 16
+        },
+        "pos": {
+          "1": 152,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 36,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sprout Scout",
+        "scaled": false,
+        "bounds": {
+          "1": 33,
+          "2": 14
+        },
+        "pos": {
+          "1": 274,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 36,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+5.99/s",
+        "scaled": false,
+        "bounds": {
+          "1": 31,
+          "2": 16
+        },
+        "pos": {
+          "1": 274,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 36,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Pebble Pip",
+        "scaled": false,
+        "bounds": {
+          "1": 36,
+          "2": 14
+        },
+        "pos": {
+          "1": 396,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 36,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+4.73/s",
+        "scaled": false,
+        "bounds": {
+          "1": 32,
+          "2": 16
+        },
+        "pos": {
+          "1": 396,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 36,
+          "2": 22
+        }
+      }
+    ]
+  },
+  {
+    "group": "width901",
+    "screen": "Display",
+    "viewport": {
+      "1": 901,
+      "2": 700
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 901,
+      "4": 700
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 26.8K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 69,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot2.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+29.34/s · 318 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 100,
+          "2": 13
+        },
+        "pos": {
+          "1": 204,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 100,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot3.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+9.39/s · 101 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 94,
+          "2": 13
+        },
+        "pos": {
+          "1": 337,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 94,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Acorn Dot",
+        "scaled": false,
+        "bounds": {
+          "1": 33,
+          "2": 14
+        },
+        "pos": {
+          "1": 152,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 36,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+6.03/s",
+        "scaled": false,
+        "bounds": {
+          "1": 32,
+          "2": 16
+        },
+        "pos": {
+          "1": 152,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 36,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sprout Scout",
+        "scaled": false,
+        "bounds": {
+          "1": 33,
+          "2": 14
+        },
+        "pos": {
+          "1": 274,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 36,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+5.99/s",
+        "scaled": false,
+        "bounds": {
+          "1": 31,
+          "2": 16
+        },
+        "pos": {
+          "1": 274,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 36,
+          "2": 22
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Pebble Pip",
+        "scaled": false,
+        "bounds": {
+          "1": 36,
+          "2": 14
+        },
+        "pos": {
+          "1": 396,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 36,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Sub",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "+4.73/s",
+        "scaled": false,
+        "bounds": {
+          "1": 32,
+          "2": 16
+        },
+        "pos": {
+          "1": 396,
+          "2": 452
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 16,
+        "size": {
+          "1": 36,
+          "2": 22
+        }
+      }
+    ]
+  },
+  {
+    "group": "height559",
+    "screen": "Display",
+    "viewport": {
+      "1": 1000,
+      "2": 559
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1000,
+      "4": 559
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 26.8K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 192,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot2.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+29.34/s · 383 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 100,
+          "2": 13
+        },
+        "pos": {
+          "1": 331,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 100,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot3.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+9.39/s · 122 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 94,
+          "2": 13
+        },
+        "pos": {
+          "1": 468,
+          "2": 180
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 94,
+          "2": 26
+        }
+      }
+    ]
+  },
+  {
+    "group": "height560",
+    "screen": "Display",
+    "viewport": {
+      "1": 1000,
+      "2": 560
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1000,
+      "4": 560
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 26.9K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 81,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot2.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+29.34/s · 449 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 100,
+          "2": 13
+        },
+        "pos": {
+          "1": 231,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 100,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot3.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+9.39/s · 143 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 94,
+          "2": 13
+        },
+        "pos": {
+          "1": 379,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 94,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Acorn Dot",
+        "scaled": false,
+        "bounds": {
+          "1": 40,
+          "2": 14
+        },
+        "pos": {
+          "1": 157,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 51,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sprout Scout",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 14
+        },
+        "pos": {
+          "1": 294,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 51,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Pebble Pip",
+        "scaled": false,
+        "bounds": {
+          "1": 46,
+          "2": 14
+        },
+        "pos": {
+          "1": 431,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 51,
+          "2": 20
+        }
+      }
+    ]
+  },
+  {
+    "group": "height561",
+    "screen": "Display",
+    "viewport": {
+      "1": 1000,
+      "2": 561
+    },
+    "safe": {
+      "1": 0,
+      "2": -58,
+      "3": 1000,
+      "4": 561
+    },
+    "scale": 1,
+    "labels": [
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot1.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+10.95/s · 26.9K ready",
+        "scaled": false,
+        "bounds": {
+          "1": 110,
+          "2": 13
+        },
+        "pos": {
+          "1": 81,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 110,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot2.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+29.34/s · 579 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 100,
+          "2": 13
+        },
+        "pos": {
+          "1": 231,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 100,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.DisplaySlot3.Rate.Text",
+        "truncated": "Enum.TextTruncate.None",
+        "text": "+9.39/s · 185 ready",
+        "scaled": false,
+        "bounds": {
+          "1": 94,
+          "2": 13
+        },
+        "pos": {
+          "1": 379,
+          "2": 308
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 13,
+        "size": {
+          "1": 94,
+          "2": 26
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.acorn.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Acorn Dot",
+        "scaled": false,
+        "bounds": {
+          "1": 40,
+          "2": 14
+        },
+        "pos": {
+          "1": 157,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 51,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.sprout.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Sprout Scout",
+        "scaled": false,
+        "bounds": {
+          "1": 43,
+          "2": 14
+        },
+        "pos": {
+          "1": 294,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 51,
+          "2": 20
+        }
+      },
+      {
+        "path": "Players.AsianBaconRoblox.PlayerGui.PocketGrove.SafeArea.Stage.Screens.DisplayPresentation.Display.Face.Body.DisplayBody.Picker.Choices.grove.pebble.Face.Name",
+        "truncated": "Enum.TextTruncate.AtEnd",
+        "text": "Pebble Pip",
+        "scaled": false,
+        "bounds": {
+          "1": 46,
+          "2": 14
+        },
+        "pos": {
+          "1": 431,
+          "2": 430
+        },
+        "wrapped": false,
+        "fits": false,
+        "textSize": 14,
+        "size": {
+          "1": 51,
+          "2": 20
+        }
+      }
+    ]
+  }
+]

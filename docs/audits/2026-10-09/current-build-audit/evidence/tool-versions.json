@@ -1,0 +1,65 @@
+[
+  {
+    "exe": "rokit",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "rokit 1.2.0\n",
+    "stderr": ""
+  },
+  {
+    "exe": "wally",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "wally 0.3.2\n",
+    "stderr": ""
+  },
+  {
+    "exe": "stylua",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "stylua 2.5.2\n",
+    "stderr": ""
+  },
+  {
+    "exe": "selene",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "selene 0.31.0\n",
+    "stderr": ""
+  },
+  {
+    "exe": "rojo",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Rojo 7.7.0\n",
+    "stderr": ""
+  },
+  {
+    "exe": "luau-lsp",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "1.70.1\r\n",
+    "stderr": ""
+  },
+  {
+    "exe": "python",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Python 3.14.2\r\n",
+    "stderr": ""
+  }
+]

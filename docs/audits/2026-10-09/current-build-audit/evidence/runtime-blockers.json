@@ -1,0 +1,23 @@
+{
+  "presentationAttempt": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"sounds\":{\"29\":{\"id\":\"rbxassetid://9116394876\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"1\":{\"id\":\"rbxassetid://15675037413\",\"loaded\":true,\"name\":\"tab\",\"playing\":false},\"3\":{\"id\":\"rbxassetid://15675081158\",\"loaded\":true,\"name\":\"close\",\"playing\":false},\"2\":{\"id\":\"rbxassetid://10066914500\",\"loaded\":true,\"name\":\"denied\",\"playing\":false},\"5\":{\"id\":\"rbxassetid://15675055424\",\"loaded\":true,\"name\":\"open\",\"playing\":false},\"4\":{\"id\":\"rbxassetid://15675059323\",\"loaded\":true,\"name\":\"select\",\"playing\":false},\"7\":{\"id\":\"rbxassetid://15675032796\",\"loaded\":true,\"name\":\"click\",\"playing\":false},\"6\":{\"id\":\"rbxassetid://15675062723\",\"loaded\":true,\"name\":\"error\",\"playing\":false},\"9\":{\"id\":\"rbxassetid://9048764102\",\"loaded\":true,\"name\":\"complete\",\"playing\":false},\"8\":{\"id\":\"rbxassetid://9116394756\",\"loaded\":true,\"name\":\"results\",\"playing\":false},\"27\":{\"id\":\"rbxassetid://15675012262\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"17\":{\"id\":\"rbxassetid://9042946814\",\"loaded\":true,\"name\":\"Music_world\",\"playing\":true},\"13\":{\"id\":\"rbxassetid://10066947742\",\"loaded\":true,\"name\":\"unlock\",\"playing\":false},\"21\":{\"id\":\"rbxassetid://9048764286\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"11\":{\"id\":\"rbxassetid://9126073318\",\"loaded\":true,\"name\":\"goalReady\",\"playing\":false},\"23\":{\"id\":\"rbxassetid://9116395179\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"34\":{\"id\":\"rbxassetid://15675059323\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"28\":{\"id\":\"rbxassetid://9117624959\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"33\":{\"id\":\"rbxassetid://9119669295\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"32\":{\"id\":\"rbxassetid://9126073001\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"31\":{\"id\":\"rbxassetid://9116395089\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"30\":{\"id\":\"rbxassetid://9126076030\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"15\":{\"id\":\"rbxassetid://9120917813\",\"loaded\":true,\"name\":\"place\",\"playing\":false},\"18\":{\"id\":\"rbxassetid://9048764475\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"19\":{\"id\":\"rbxassetid://9120917438\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"25\":{\"id\":\"rbxassetid://9125635442\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"14\":{\"id\":\"rbxassetid://9119669618\",\"loaded\":true,\"name\":\"remove\",\"playing\":false},\"24\":{\"id\":\"rbxassetid://9126071458\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"16\":{\"id\":\"rbxassetid://9113849910\",\"loaded\":true,\"name\":\"collect\",\"playing\":false},\"26\":{\"id\":\"rbxassetid://9113564057\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"20\":{\"id\":\"rbxassetid://9126073953\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"12\":{\"id\":\"rbxassetid://9126075967\",\"loaded\":true,\"name\":\"coinLand\",\"playing\":false},\"22\":{\"id\":\"rbxassetid://9125644310\",\"loaded\":true,\"name\":\"Sound\",\"playing\":false},\"10\":{\"id\":\"rbxassetid://15675043410\",\"loaded\":true,\"name\":\"claim\",\"playing\":false}},\"camera\":\"Custom\",\"fov\":70,\"viewport\":\"1, 1\",\"clean\":true,\"gamepads\":[],\"queue\":0}"
+      }
+    ],
+    "isError": false
+  },
+  "nativePointer": "Two later pointer calls stalled for >45 seconds and were terminated; no activation pass",
+  "capture": "Three capture attempts stalled for >40 seconds and were terminated; no returned image",
+  "physicalHardware": "No connected touch/gamepad/console hardware",
+  "persistence": "PlaceId/GameId 0; no authorized isolated real store",
+  "recovery": {
+    "originalRestartViewport": "1, 1",
+    "deviceOverrideViewport": "1, 1",
+    "computerUse": "Computer Use app approval timed out",
+    "referenceBrowserLoopback": "net::ERR_CONNECTION_TIMED_OUT",
+    "referenceFile": "Rejected by browser URL policy; no bypass attempted",
+    "cleanup": "Isolated multiplayer EndTest completed; original audit place stopped/restored to Edit"
+  }
+}

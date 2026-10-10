@@ -1,0 +1,788 @@
+[
+  {
+    "hash": 382338321,
+    "path": "src/server/init.server.luau",
+    "length": 14732,
+    "match": true
+  },
+  {
+    "hash": 1918519697,
+    "path": "src/server/Awning.luau",
+    "length": 6332,
+    "match": true
+  },
+  {
+    "hash": 2168911992,
+    "path": "src/server/CollectionEconomy.luau",
+    "length": 11053,
+    "match": true
+  },
+  {
+    "hash": 4025346181,
+    "path": "src/server/CollectionFixture.luau",
+    "length": 10669,
+    "match": true
+  },
+  {
+    "hash": 2530946791,
+    "path": "src/server/DayNight.luau",
+    "length": 6160,
+    "match": true
+  },
+  {
+    "hash": 2495371135,
+    "path": "src/server/Deals.luau",
+    "length": 4745,
+    "match": true
+  },
+  {
+    "hash": 2295592506,
+    "path": "src/server/DisplayFixture.luau",
+    "length": 16546,
+    "match": true
+  },
+  {
+    "hash": 489777757,
+    "path": "src/server/Economy.luau",
+    "length": 5810,
+    "match": true
+  },
+  {
+    "hash": 383307486,
+    "path": "src/server/FigureSlots.luau",
+    "length": 3232,
+    "match": true
+  },
+  {
+    "hash": 4252605436,
+    "path": "src/server/HomeTeleport.luau",
+    "length": 1357,
+    "match": true
+  },
+  {
+    "hash": 2739830548,
+    "path": "src/server/Leaderboard.luau",
+    "length": 7258,
+    "match": true
+  },
+  {
+    "hash": 3383529753,
+    "path": "src/server/LeaderboardBoard.luau",
+    "length": 6353,
+    "match": true
+  },
+  {
+    "hash": 2669313791,
+    "path": "src/server/LeaderboardStats.luau",
+    "length": 1412,
+    "match": true
+  },
+  {
+    "hash": 2640875824,
+    "path": "src/server/LeaderboardStore.luau",
+    "length": 5714,
+    "match": true
+  },
+  {
+    "hash": 1056519093,
+    "path": "src/server/LegacyCosmetics.luau",
+    "length": 4346,
+    "match": true
+  },
+  {
+    "hash": 947940453,
+    "path": "src/server/LegacyShelfPages.luau",
+    "length": 3086,
+    "match": true
+  },
+  {
+    "hash": 987179391,
+    "path": "src/server/ModelAssets.luau",
+    "length": 6505,
+    "match": true
+  },
+  {
+    "hash": 1656162346,
+    "path": "src/server/MovementConfig.luau",
+    "length": 214,
+    "match": true
+  },
+  {
+    "hash": 204826788,
+    "path": "src/server/NightLights.luau",
+    "length": 2670,
+    "match": true
+  },
+  {
+    "hash": 1245576295,
+    "path": "src/server/Persistence.luau",
+    "length": 4522,
+    "match": true
+  },
+  {
+    "hash": 3929320629,
+    "path": "src/server/PlayerMovement.luau",
+    "length": 2407,
+    "match": true
+  },
+  {
+    "hash": 3670087113,
+    "path": "src/server/PlayerPlot.luau",
+    "length": 13394,
+    "match": true
+  },
+  {
+    "hash": 1271310566,
+    "path": "src/server/PlayerSpawn.luau",
+    "length": 1676,
+    "match": true
+  },
+  {
+    "hash": 1523605025,
+    "path": "src/server/PlazaFixture.luau",
+    "length": 8130,
+    "match": true
+  },
+  {
+    "hash": 4069868564,
+    "path": "src/server/PlotConfig.luau",
+    "length": 253,
+    "match": true
+  },
+  {
+    "hash": 423460334,
+    "path": "src/server/PlotFixture.luau",
+    "length": 13291,
+    "match": true
+  },
+  {
+    "hash": 2499947925,
+    "path": "src/server/PlotGeometry.luau",
+    "length": 3436,
+    "match": true
+  },
+  {
+    "hash": 34511455,
+    "path": "src/server/PlotSlots.luau",
+    "length": 796,
+    "match": true
+  },
+  {
+    "hash": 1400243525,
+    "path": "src/server/PlotStyle.luau",
+    "length": 480,
+    "match": true
+  },
+  {
+    "hash": 2665619971,
+    "path": "src/server/Profile.luau",
+    "length": 10500,
+    "match": true
+  },
+  {
+    "hash": 2822525491,
+    "path": "src/server/Protocol.luau",
+    "length": 5218,
+    "match": true
+  },
+  {
+    "hash": 2116598028,
+    "path": "src/server/Rules.luau",
+    "length": 20499,
+    "match": true
+  },
+  {
+    "hash": 1588628501,
+    "path": "src/server/Settings.luau",
+    "length": 509,
+    "match": true
+  },
+  {
+    "hash": 232666110,
+    "path": "src/server/ShelfShowcase.luau",
+    "length": 2025,
+    "match": true
+  },
+  {
+    "hash": 2670006800,
+    "path": "src/server/Shelves.luau",
+    "length": 11067,
+    "match": true
+  },
+  {
+    "hash": 2830105613,
+    "path": "src/server/ShopFixture.luau",
+    "length": 17043,
+    "match": true
+  },
+  {
+    "hash": 3531425363,
+    "path": "src/server/Storage.luau",
+    "length": 4711,
+    "match": true
+  },
+  {
+    "hash": 2201140519,
+    "path": "src/server/TownLayout.luau",
+    "length": 3085,
+    "match": true
+  },
+  {
+    "hash": 2931602034,
+    "path": "src/server/TownModels.luau",
+    "length": 5360,
+    "match": true
+  },
+  {
+    "hash": 4060684296,
+    "path": "src/server/TownPlacements.luau",
+    "length": 2841,
+    "match": true
+  },
+  {
+    "hash": 3813358429,
+    "path": "src/server/TownProps.luau",
+    "length": 26395,
+    "match": true
+  },
+  {
+    "hash": 2849151451,
+    "path": "src/server/TownStyle.luau",
+    "length": 2216,
+    "match": true
+  },
+  {
+    "hash": 1503411040,
+    "path": "src/server/Transactions.luau",
+    "length": 3173,
+    "match": true
+  },
+  {
+    "hash": 1494783071,
+    "path": "src/server/World.luau",
+    "length": 9826,
+    "match": true
+  },
+  {
+    "hash": 4174715360,
+    "path": "src/client/init.client.luau",
+    "length": 12972,
+    "match": true
+  },
+  {
+    "hash": 1508775019,
+    "path": "src/client/BlindBoxPreview.luau",
+    "length": 9685,
+    "match": true
+  },
+  {
+    "hash": 1513660116,
+    "path": "src/client/BlindBoxSkin.luau",
+    "length": 2601,
+    "match": true
+  },
+  {
+    "hash": 1855567243,
+    "path": "src/client/CoinBurst.luau",
+    "length": 8691,
+    "match": true
+  },
+  {
+    "hash": 1266292062,
+    "path": "src/client/CoinCounter.luau",
+    "length": 1765,
+    "match": true
+  },
+  {
+    "hash": 3873084044,
+    "path": "src/client/CollectionList.luau",
+    "length": 5182,
+    "match": true
+  },
+  {
+    "hash": 2201157152,
+    "path": "src/client/CollectionScreen.luau",
+    "length": 12528,
+    "match": true
+  },
+  {
+    "hash": 2111100682,
+    "path": "src/client/DealPopup.luau",
+    "length": 14167,
+    "match": true
+  },
+  {
+    "hash": 3295817725,
+    "path": "src/client/DealStalls.luau",
+    "length": 17088,
+    "match": true
+  },
+  {
+    "hash": 2357062788,
+    "path": "src/client/DisplayEarnings.luau",
+    "length": 12940,
+    "match": true
+  },
+  {
+    "hash": 1978048371,
+    "path": "src/client/DisplayInteraction.luau",
+    "length": 4946,
+    "match": true
+  },
+  {
+    "hash": 3970944170,
+    "path": "src/client/DisplayPicker.luau",
+    "length": 7151,
+    "match": true
+  },
+  {
+    "hash": 2130721089,
+    "path": "src/client/DisplayScreen.luau",
+    "length": 7003,
+    "match": true
+  },
+  {
+    "hash": 1557381158,
+    "path": "src/client/DisplaySlot.luau",
+    "length": 7863,
+    "match": true
+  },
+  {
+    "hash": 680270530,
+    "path": "src/client/Dock.luau",
+    "length": 4931,
+    "match": true
+  },
+  {
+    "hash": 3201325799,
+    "path": "src/client/FigureTile.luau",
+    "length": 7020,
+    "match": true
+  },
+  {
+    "hash": 3191470393,
+    "path": "src/client/GoalTracker.luau",
+    "length": 4192,
+    "match": true
+  },
+  {
+    "hash": 3715051340,
+    "path": "src/client/GoalsScreen.luau",
+    "length": 14367,
+    "match": true
+  },
+  {
+    "hash": 2482755810,
+    "path": "src/client/Hud.luau",
+    "length": 8689,
+    "match": true
+  },
+  {
+    "hash": 2346034894,
+    "path": "src/client/Interface.luau",
+    "length": 15611,
+    "match": true
+  },
+  {
+    "hash": 133478641,
+    "path": "src/client/LoginScreen.luau",
+    "length": 6852,
+    "match": true
+  },
+  {
+    "hash": 1559692639,
+    "path": "src/client/Music.luau",
+    "length": 4671,
+    "match": true
+  },
+  {
+    "hash": 2257574779,
+    "path": "src/client/NavigationConfig.luau",
+    "length": 1452,
+    "match": true
+  },
+  {
+    "hash": 2029917973,
+    "path": "src/client/Notifications.luau",
+    "length": 2540,
+    "match": true
+  },
+  {
+    "hash": 20264381,
+    "path": "src/client/OfflineEarnings.luau",
+    "length": 3525,
+    "match": true
+  },
+  {
+    "hash": 840829052,
+    "path": "src/client/Onboarding.luau",
+    "length": 19932,
+    "match": true
+  },
+  {
+    "hash": 1564878597,
+    "path": "src/client/OpeningAudio.luau",
+    "length": 8145,
+    "match": true
+  },
+  {
+    "hash": 717629129,
+    "path": "src/client/OpeningAudioConfig.luau",
+    "length": 5757,
+    "match": true
+  },
+  {
+    "hash": 867657230,
+    "path": "src/client/OpeningAudioSequence.luau",
+    "length": 7564,
+    "match": true
+  },
+  {
+    "hash": 900685991,
+    "path": "src/client/OpeningBox.luau",
+    "length": 9226,
+    "match": true
+  },
+  {
+    "hash": 578509102,
+    "path": "src/client/OpeningBoxSource.luau",
+    "length": 1036,
+    "match": true
+  },
+  {
+    "hash": 483173321,
+    "path": "src/client/OpeningCamera.luau",
+    "length": 2697,
+    "match": true
+  },
+  {
+    "hash": 2504037640,
+    "path": "src/client/OpeningCinematic.luau",
+    "length": 15822,
+    "match": true
+  },
+  {
+    "hash": 53862268,
+    "path": "src/client/OpeningConfig.luau",
+    "length": 14573,
+    "match": true
+  },
+  {
+    "hash": 604338126,
+    "path": "src/client/OpeningController.luau",
+    "length": 15236,
+    "match": true
+  },
+  {
+    "hash": 3344705641,
+    "path": "src/client/OpeningEffects.luau",
+    "length": 19940,
+    "match": true
+  },
+  {
+    "hash": 272081074,
+    "path": "src/client/OpeningFallbackBox.luau",
+    "length": 3788,
+    "match": true
+  },
+  {
+    "hash": 182227574,
+    "path": "src/client/OpeningFigure.luau",
+    "length": 2803,
+    "match": true
+  },
+  {
+    "hash": 1642471052,
+    "path": "src/client/OpeningFlight.luau",
+    "length": 8438,
+    "match": true
+  },
+  {
+    "hash": 4088479562,
+    "path": "src/client/OpeningFlightEffects.luau",
+    "length": 12814,
+    "match": true
+  },
+  {
+    "hash": 2705060748,
+    "path": "src/client/OpeningLayout.luau",
+    "length": 919,
+    "match": true
+  },
+  {
+    "hash": 4058905730,
+    "path": "src/client/OpeningLighting.luau",
+    "length": 2360,
+    "match": true
+  },
+  {
+    "hash": 1471499636,
+    "path": "src/client/OpeningResult.luau",
+    "length": 3652,
+    "match": true
+  },
+  {
+    "hash": 1376923610,
+    "path": "src/client/OpeningScope.luau",
+    "length": 1023,
+    "match": true
+  },
+  {
+    "hash": 2909782779,
+    "path": "src/client/OpeningState.luau",
+    "length": 4880,
+    "match": true
+  },
+  {
+    "hash": 3838996767,
+    "path": "src/client/OpeningView.luau",
+    "length": 8131,
+    "match": true
+  },
+  {
+    "hash": 1152011745,
+    "path": "src/client/PullSummary.luau",
+    "length": 8686,
+    "match": true
+  },
+  {
+    "hash": 1640878798,
+    "path": "src/client/RevealCard.luau",
+    "length": 13522,
+    "match": true
+  },
+  {
+    "hash": 1611506144,
+    "path": "src/client/ScreenShell.luau",
+    "length": 4833,
+    "match": true
+  },
+  {
+    "hash": 364441577,
+    "path": "src/client/Scroll.luau",
+    "length": 1086,
+    "match": true
+  },
+  {
+    "hash": 2544296004,
+    "path": "src/client/SettingsMenu.luau",
+    "length": 9037,
+    "match": true
+  },
+  {
+    "hash": 93209049,
+    "path": "src/client/Sfx.luau",
+    "length": 5379,
+    "match": true
+  },
+  {
+    "hash": 2445980552,
+    "path": "src/client/ShelfEditor.luau",
+    "length": 1405,
+    "match": true
+  },
+  {
+    "hash": 49561427,
+    "path": "src/client/ShelvesScreen.luau",
+    "length": 15472,
+    "match": true
+  },
+  {
+    "hash": 1139556714,
+    "path": "src/client/ShopKeeper.luau",
+    "length": 6384,
+    "match": true
+  },
+  {
+    "hash": 1878697444,
+    "path": "src/client/ShopLuck.luau",
+    "length": 6261,
+    "match": true
+  },
+  {
+    "hash": 3742905900,
+    "path": "src/client/ShopScreen.luau",
+    "length": 13624,
+    "match": true
+  },
+  {
+    "hash": 2896758575,
+    "path": "src/client/ShopTheme.luau",
+    "length": 2540,
+    "match": true
+  },
+  {
+    "hash": 231670455,
+    "path": "src/client/SoundManifest.luau",
+    "length": 8332,
+    "match": true
+  },
+  {
+    "hash": 2135953841,
+    "path": "src/client/UIBadge.luau",
+    "length": 3058,
+    "match": true
+  },
+  {
+    "hash": 903749293,
+    "path": "src/client/UIButton.luau",
+    "length": 7386,
+    "match": true
+  },
+  {
+    "hash": 3127293557,
+    "path": "src/client/UIContext.luau",
+    "length": 934,
+    "match": true
+  },
+  {
+    "hash": 1885566876,
+    "path": "src/client/UIIcons.luau",
+    "length": 3607,
+    "match": true
+  },
+  {
+    "hash": 1178949346,
+    "path": "src/client/UIKit.luau",
+    "length": 7221,
+    "match": true
+  },
+  {
+    "hash": 3442874135,
+    "path": "src/client/UILayout.luau",
+    "length": 5965,
+    "match": true
+  },
+  {
+    "hash": 1883487168,
+    "path": "src/client/UIPreview.luau",
+    "length": 3840,
+    "match": true
+  },
+  {
+    "hash": 4248267512,
+    "path": "src/client/UIProgress.luau",
+    "length": 1813,
+    "match": true
+  },
+  {
+    "hash": 74984439,
+    "path": "src/client/UIScope.luau",
+    "length": 946,
+    "match": true
+  },
+  {
+    "hash": 425070235,
+    "path": "src/client/UIState.luau",
+    "length": 23411,
+    "match": true
+  },
+  {
+    "hash": 4046672771,
+    "path": "src/client/UIStyle.luau",
+    "length": 4759,
+    "match": true
+  },
+  {
+    "hash": 1113650072,
+    "path": "src/client/WelcomeReward.luau",
+    "length": 5656,
+    "match": true
+  },
+  {
+    "hash": 2017992359,
+    "path": "src/shared/AssetIds.luau",
+    "length": 7523,
+    "match": true
+  },
+  {
+    "hash": 561687121,
+    "path": "src/shared/AssetManifest.luau",
+    "length": 3233,
+    "match": true
+  },
+  {
+    "hash": 1971974887,
+    "path": "src/shared/BlindBoxModel.luau",
+    "length": 2266,
+    "match": true
+  },
+  {
+    "hash": 3071770830,
+    "path": "src/shared/BlindBoxSpec.luau",
+    "length": 679,
+    "match": true
+  },
+  {
+    "hash": 4260565826,
+    "path": "src/shared/Catalog.luau",
+    "length": 8495,
+    "match": true
+  },
+  {
+    "hash": 714376384,
+    "path": "src/shared/DisplayConfig.luau",
+    "length": 383,
+    "match": true
+  },
+  {
+    "hash": 2098306345,
+    "path": "src/shared/FigureAssetEntries.luau",
+    "length": 8470,
+    "match": true
+  },
+  {
+    "hash": 2655204642,
+    "path": "src/shared/FigureAssets.luau",
+    "length": 995,
+    "match": true
+  },
+  {
+    "hash": 1259672113,
+    "path": "src/shared/FigureModel.luau",
+    "length": 5029,
+    "match": true
+  },
+  {
+    "hash": 795543814,
+    "path": "src/shared/Hello.luau",
+    "length": 57,
+    "match": true
+  },
+  {
+    "hash": 155721773,
+    "path": "src/shared/LoginRewards.luau",
+    "length": 1868,
+    "match": true
+  },
+  {
+    "hash": 1016131476,
+    "path": "src/shared/NavigationAssetIds.luau",
+    "length": 833,
+    "match": true
+  },
+  {
+    "hash": 4101672892,
+    "path": "src/shared/Rarity.luau",
+    "length": 2446,
+    "match": true
+  },
+  {
+    "hash": 101371525,
+    "path": "src/shared/ShelfConfig.luau",
+    "length": 1322,
+    "match": true
+  },
+  {
+    "hash": 952368483,
+    "path": "src/shared/Tutorial.luau",
+    "length": 759,
+    "match": true
+  },
+  {
+    "hash": 2640269933,
+    "path": "src/shared/Types.luau",
+    "length": 4723,
+    "match": true
+  }
+]
