@@ -506,7 +506,13 @@ function Onboarding.create(
 				then math.min(500, geometry.width - 32)
 				else math.min(500, right - left)
 			local height = if geometry.phone then 56 else 64
-			local y = if below then geometry.hud.y + geometry.hud.height + 8 else geometry.hud.y
+			-- Below both the coins pill and the taller HUD row (plus its 4px shadow).
+			local y = if below
+				then math.max(
+					geometry.hud.y + geometry.hud.height,
+					geometry.gear.y + geometry.gear.height + 4
+				) + 8
+				else geometry.hud.y
 			local x = math.floor((geometry.width - width) / 2)
 			if not below then
 				x = math.clamp(x, left, right - width)

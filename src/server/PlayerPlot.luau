@@ -208,11 +208,16 @@ function PlayerPlot.render(plot: Plot, state: Types.State)
 		end
 	end
 	FigureSlots.render(plot.shelves, shelfPlacements)
+	local reach = if visible.canNavigate then navigationDistance else 0
 	for _, hitbox in plot.hitboxes do
 		local detector = hitbox:FindFirstChildOfClass("ClickDetector")
 		if detector then
-			detector.MaxActivationDistance = if visible.canNavigate then navigationDistance else 0
+			detector.MaxActivationDistance = reach
 		end
+	end
+	local autoDetector = plot.collection.autoToggle:FindFirstChildOfClass("ClickDetector")
+	if autoDetector then
+		autoDetector.MaxActivationDistance = reach
 	end
 	DisplayFixture.setRate(plot.fixture, Rules.rate(state))
 	CollectionFixture.setNavigation(plot.collection, visible.canNavigate)
@@ -263,7 +268,27 @@ function PlayerPlot.turn(
 	Showcase.browse(plot.showcase, now)
 	return advance(plot, state, direction, now)
 end
+-- Presentation-only: any viewer in navigation range may switch the shared showcase on or off.
+function PlayerPlot.toggleShowcase(plot: Plot, actor: Player, now: number): boolean
+	if not PlayerPlot.canNavigate(plot, actor) or not Showcase.toggle(plot.showcase, now) then
+		return false
+	end
+	CollectionFixture.setAutoplay(plot.collection, plot.showcase.enabled)
+	return true
+end
 function PlayerPlot.bind(plot: Plot, onTurn: (Player, number) -> ())
+	local toggle = plot.collection.autoToggle
+	local autoDetector = Instance.new("ClickDetector")
+	autoDetector.MaxActivationDistance = 0 -- Enabled with the arrows when more than three shelves are owned.
+	autoDetector.Parent = toggle
+	table.insert(
+		plot.connections,
+		autoDetector.MouseClick:Connect(function(actor: Player)
+			if toggle:IsDescendantOf(plot.model) and autoDetector.Parent == toggle then
+				PlayerPlot.toggleShowcase(plot, actor, os.clock())
+			end
+		end)
+	)
 	for index, hitbox in plot.hitboxes do
 		local detector = Instance.new("ClickDetector")
 		detector.MaxActivationDistance = 0 -- Enabled by the next render only when more than three shelves are owned.

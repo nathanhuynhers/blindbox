@@ -142,8 +142,10 @@ check(
 )
 for _, name in { "DailyButton", "HomeButton" } do
 	local icon = within(within(find(name), "Face"), "Icon")
-	local label = within(find(name), "Label")
-	check(icon.Image ~= "" and icon.Visible and label.Text == "", name .. " shows its uploaded glossy icon, no label")
+	local caption = within(within(find(name), "Face"), "Caption")
+	local text = if name == "DailyButton" then "Daily" else "Home"
+	check(icon.Image ~= "" and icon.Visible and caption.Text == text and caption.Visible, name .. " shows its glossy icon over a text label")
+	check(icon.Position.Y.Offset + icon.Size.Y.Offset <= caption.Position.Y.Offset + 2, name .. " icon sits above its label")
 end
 check(find("Hud"):FindFirstChild("GearShadow", true) == nil, "the gear shares the row's button, not a separate shadow")
 local homeSounds = #Engine.sounds
@@ -204,12 +206,23 @@ for _, case in {
 	check(daily.x < home.x and home.x < gear.x and daily.y == gear.y and home.y == gear.y, label .. ": Daily, Home, gear left to right")
 	for _, button in { daily, home, gear } do
 		check(button.width * scale >= 44 and button.height * scale >= 44, label .. ": 44pt touch targets")
-		check(button.width == gear.width and button.height == gear.height, label .. ": one footprint for the set")
+		check(button.height == gear.height, label .. ": one height for the set")
 		check(button.x >= topLeft / scale and button.x + button.width <= designWidth, label .. ": row inside the safe area, right of the Roblox buttons")
 		check(button.y >= 0 and button.y + button.height + 4 <= designHeight, label .. ": row (with shadow) inside the safe height")
 	end
 	check(home.x - (daily.x + daily.width) >= 8 and gear.x - (home.x + home.width) >= 8, label .. ": thumb-safe gaps")
-	check(gear.width == (if phone then 44 else 52), label .. ": sized from the phone / desktop geometry")
+	check(
+		gear.width == daily.width
+			and daily.width == (if phone then 50 else 64)
+			and home.width == daily.width
+			and gear.height == (if phone then 56 else 64),
+		label .. ": labelled tiles sized from the phone / desktop geometry"
+	)
+	-- The Welcome Quest card (shown during the quest) never overlaps the row.
+	local quest = rect(find("Onboarding"))
+	for _, button in { daily, home, gear } do
+		check(apart(quest, { x = button.x, y = button.y, width = button.width, height = button.height + 4 }), label .. ": quest card clear of the row")
+	end
 	-- Ready badge: top-right of Daily, offset (6, -8); it must stay on screen and clear of Home.
 	check(daily.y - 8 >= 0 and daily.x + daily.width + 6 <= home.x - 2, label .. ": Ready badge stays on screen and off Home")
 	-- Coins pill budget: the widest pill (9-digit balance + "+12.5K/s" chip) is about 230 on

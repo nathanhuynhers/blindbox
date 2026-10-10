@@ -86,16 +86,17 @@ function Hud.create(
 		end
 		Sfx.play("select")
 	end)
-	-- Top-right row [Daily] [Home] [gear]: one set of round white buttons with a hard ink
-	-- shadow that drops on press. Daily sits furthest from the corner, where its badge and
-	-- nudge catch the eye; the gear keeps the corner.
+	-- Top-right row [Daily] [Home] [gear]: one set of rounded white tiles with a hard ink
+	-- shadow that drops on press. Daily and Home are icon-over-label tiles like small dock
+	-- tiles, so they read at a glance; the gear is the same tile, icon-only. Daily sits furthest from the
+	-- corner, where its badge and nudge catch the eye; the gear keeps the corner.
 	local right = Kit.frame(root, "Right")
 	local function roundButton(name: string, accessible: string, callback: () -> ()): Button.Button
 		local made = Button.create(right, name, {
 			variant = "raised",
 			text = "",
 			size = 14,
-			radius = 64,
+			radius = 16,
 			drop = 4,
 			silent = true,
 		}, ctx.scope, ctx.effects, callback)
@@ -103,20 +104,21 @@ function Hud.create(
 		made.button:SetAttribute("AccessibleName", accessible)
 		return made
 	end
-	-- Glossy navigation art; without an uploaded image the label shows alone, like the dock.
-	local function art(made: Button.Button, id: string): ImageLabel
+	type Tile = { icon: ImageLabel, caption: TextLabel }
+	-- Glossy navigation art over its label. Without an uploaded image the label shows alone.
+	local function art(made: Button.Button, id: string): Tile
 		local icon = Kit.image(made.face, "Icon", Navigation.image(id))
-		icon.AnchorPoint = Vector2.new(0.5, 0.5)
-		icon.Position = UDim2.fromScale(0.5, 0.5)
-		icon.Size = UDim2.fromScale(0.88, 0.88)
+		icon.AnchorPoint = Vector2.new(0.5, 0)
 		icon.Visible = icon.Image ~= ""
-		made.label.Text = if icon.Visible then "" else id
-		return icon
+		local caption = Kit.text(made.face, "Caption", id, 15, Style.display())
+		caption.TextXAlignment = Enum.TextXAlignment.Center
+		return { icon = icon, caption = caption }
 	end
 	local daily = roundButton("DailyButton", "Daily Login rewards", function()
 		ctx.navigate("Login")
 	end)
-	local dailyIcon = art(daily, "Daily")
+	local dailyTile = art(daily, "Daily")
+	local dailyIcon = dailyTile.icon
 	local dailyBadge = Badge.corner(daily.button, "Ready", {
 		fill = Style.alert,
 		color = Style.white,
@@ -128,7 +130,7 @@ function Hud.create(
 		goHome()
 		Sfx.play("select")
 	end)
-	art(home, "Home")
+	local homeTile = art(home, "Home")
 	-- Idle nudge on Daily while a reward waits. Rotating the icon never moves layout;
 	-- Motion Reduced keeps it still.
 	local loginReady = false
@@ -182,8 +184,22 @@ function Hud.create(
 	home.button.NextSelectionRight = gear.button
 	gear.button.NextSelectionLeft = home.button
 	local tracker = Tracker.create(right, ctx)
-	local function place(made: Button.Button, rect: Layout.Rect)
+	local function place(made: Button.Button, rect: Layout.Rect, tile: Tile?, phone: boolean)
 		Kit.rect(made.button, rect.x, rect.y, rect.width, rect.height)
+		if not tile then
+			return
+		end
+		-- Phone 50x56: 32px icon over a 12px label; desktop 64x64: 40px icon over 15px.
+		local iconSize, labelSize = if phone then 32 else 40, if phone then 12 else 15
+		tile.icon.Position = UDim2.new(0.5, 0, 0, 3)
+		tile.icon.Size = UDim2.fromOffset(iconSize, iconSize)
+		tile.caption.TextSize = labelSize
+		local labelHeight = labelSize + 2
+		if tile.icon.Visible then
+			Kit.rect(tile.caption, 0, rect.height - labelHeight - 5, rect.width, labelHeight)
+		else
+			Kit.rect(tile.caption, 0, 0, rect.width, rect.height)
+		end
 	end
 	local frame: Layout.Frame? = nil
 	local function follow()
@@ -223,10 +239,10 @@ function Hud.create(
 			-- The top-right row follows the gear: hidden while any screen is open.
 			coins.Visible = not (phone and opened)
 			coinShadow.Visible = coins.Visible
-			place(daily, geometry.daily)
-			place(home, geometry.home)
-			place(gear, geometry.gear)
-			gearIcon.Size = UDim2.fromOffset(if phone then 24 else 26, if phone then 24 else 26)
+			place(daily, geometry.daily, dailyTile, phone)
+			place(home, geometry.home, homeTile, phone)
+			place(gear, geometry.gear, nil, phone)
+			gearIcon.Size = UDim2.fromOffset(if phone then 26 else 30, if phone then 26 else 30)
 			tracker.layout(geometry.tracker.x, geometry.tracker.y, phone)
 			-- Below the row; on short phones beside it (left of Daily) rather than over it.
 			local menuSize = menu.root.Size
