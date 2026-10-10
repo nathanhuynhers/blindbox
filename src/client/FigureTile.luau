@@ -110,9 +110,11 @@ function Tile.create(
 		if kind == "pick" then
 			local image = height - 18
 			Kit.rect(bar, 6, 6, image, image)
-			Kit.rect(name, image + 14, 10, width - image - 22, 20)
-			Kit.rect(sub, image + 14, 32, width - image - 22, 22)
-			name.TextWrapped = false
+			-- Two lines so long names ("Reminiscence Star") stay whole beside the portrait.
+			name.TextSize = 13
+			name.TextWrapped = true
+			Kit.rect(name, image + 14, 6, width - image - 22, 30)
+			Kit.rect(sub, image + 14, 36, width - image - 22, 20)
 		elseif kind == "tile" then
 			Kit.rect(bar, 0, 0, width, height)
 			name.Visible, sub.Visible = false, false

@@ -207,6 +207,11 @@ function Goals.create(parent: Instance, ctx: Context.Context, now: () -> number)
 		local icon = List.icon(button, collection.id, collection.name, 38)
 		icon.Position = UDim2.fromOffset(10, 8)
 		local name = Kit.text(button, "Name", collection.name, 15)
+		-- Like the title: long names ("We Are All Stars") shrink in the narrow desktop column.
+		name.TextScaled = true
+		local nameSize = Instance.new("UITextSizeConstraint")
+		nameSize.MinTextSize, nameSize.MaxTextSize = 12, 15
+		nameSize.Parent = name
 		local status = Kit.text(button, "Status", "", 15)
 		status.TextXAlignment = Enum.TextXAlignment.Right
 		local bar = Progress.bar(button, "Progress", 8, Style.collection(collection.id).color)
