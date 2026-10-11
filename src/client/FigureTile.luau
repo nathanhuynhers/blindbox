@@ -1,6 +1,7 @@
 --!strict
 -- Figure tile/card: accent-wash well with the 3D portrait, rarity-coloured bottom bar, owned
 -- count "×N", "ON DISPLAY" and "BEST" tags. Undiscovered figures show "?" and "???".
+-- Shelf cards always show their count (copies left to place) and dim at zero.
 -- Kinds: "card" (Collection grid), "tile" (Shop contents), "shelf" (Shelves picker),
 -- "pick" (Display picker row). One instance is rebound across snapshots; never rebuilt.
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
@@ -10,6 +11,7 @@ local Badge = require(script.Parent.UIBadge)
 local Preview = require(script.Parent.UIPreview)
 local Context = require(script.Parent.UIContext)
 local Sfx = require(script.Parent.Sfx)
+local TweenService = game:GetService("TweenService")
 local Tile = {}
 
 export type Kind = "card" | "tile" | "shelf" | "pick"
@@ -24,6 +26,8 @@ export type View = {
 	enabled: boolean?,
 	-- Undiscovered figures show a grey silhouette instead of "?" (collection progress).
 	silhouette: boolean?,
+	-- Nothing left to use (no Shelf copies): muted but recognisable; taps skip the select sound.
+	dim: boolean?,
 }
 export type Tile = {
 	button: TextButton,
@@ -97,11 +101,19 @@ function Tile.create(
 	}, Vector2.new(1, 0), Vector2.new(-6, -10))
 	best.set("BEST")
 	local current: string? = nil
-	local enabled = true
+	local enabled, dim = true, false
+	local fade: Tween? = nil
 	ctx.scope.connect(button.Activated, function()
 		if current and enabled then
 			choose(current)
-			Sfx.play("select")
+			if not dim then
+				Sfx.play("select")
+			end
+		end
+	end)
+	ctx.scope.add(function()
+		if fade then
+			fade:Cancel()
 		end
 	end)
 	local width, height = 100, 100
@@ -178,27 +190,57 @@ function Tile.create(
 				"AccessibleName",
 				if view.discovered then figure.name .. ", " .. figure.rarity else "Not found yet"
 			)
+			local nextDim = view.dim == true
 			well.BackgroundColor3 = if view.discovered then accent.wash else Style.disabledFill
 			if kind == "pick" or kind == "shelf" then
-				well.BackgroundColor3 = accent.wash
+				well.BackgroundColor3 = if nextDim then Style.disabledFill else accent.wash
 			end
 			bar.BackgroundColor3 = if edged then tint else well.BackgroundColor3
 			local shape = view.discovered or view.silhouette == true
 			preview.figure(if shape then id else nil, view.discovered)
 			unknown.Visible = not shape
 			name.Text = if view.discovered then figure.name else "???"
+			name.TextColor3 = if nextDim then Style.muted else Style.ink
 			sub.Text = view.sub or ""
 			sub.TextColor3 = view.subColor or Style.muted
 			local selected = view.selected == true
-			stroke.Color = if selected then Style.violet else Style.ink
+			stroke.Color = if selected
+				then Style.violet
+				elseif nextDim then Style.disabledBorder
+				else Style.ink
 			shadow.BackgroundColor3 = if selected then Style.violet else Style.ink
 			face.BackgroundColor3 = if selected and kind == "shelf"
 				then Style.violetWash
 				else Style.white
 			button:SetAttribute("Selected", selected)
 			local owned = view.count or 0
-			count.root.Visible = owned > 1
+			count.root.Visible = owned > 1 or (kind == "shelf" and view.count ~= nil)
 			count.set("×" .. owned)
+			if nextDim then
+				count.paint(Style.disabledFill, Style.muted, Style.disabledBorder)
+			else
+				count.paint(Style.ink, Style.white, nil)
+			end
+			if nextDim ~= dim then
+				-- Fade the portrait only when availability flips; instant without effects.
+				dim = nextDim
+				local goal = if dim then 0.45 else 0
+				if fade then
+					fade:Cancel()
+					fade = nil
+				end
+				if ctx.effects() then
+					local tween = TweenService:Create(
+						preview.frame,
+						TweenInfo.new(0.18, Enum.EasingStyle.Quad),
+						{ ImageTransparency = goal }
+					)
+					fade = tween
+					tween:Play()
+				else
+					preview.frame.ImageTransparency = goal
+				end
+			end
 			onDisplay.root.Visible = view.onDisplay == true
 			best.root.Visible = view.best == true
 			enabled = view.enabled ~= false
