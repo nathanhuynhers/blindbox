@@ -250,15 +250,15 @@ assert(
 if open then
 	local close = open:FindFirstChild("Close", true) :: GuiObject?
 	assert(close and visible(close), "Open screen needs its Close button")
-	for _, name in { "DailyButton", "HomeButton", "SettingsButton" } do
+	for _, name in { "DailyButton", "HomeButton", "PlazaButton", "SettingsButton" } do
 		local button = stage:FindFirstChild(name, true) :: GuiObject?
 		assert(not button or not visible(button), name .. " must not obstruct a modal screen")
 	end
 else
-	-- Top-right HUD row [Daily][Home][gear]: 44px targets, 8px gaps, safe area and top bar,
+	-- Top-right HUD row [Daily][Home][Plaza][gear]: 44px targets, 8px gaps, safe area and top bar,
 	-- clear of the other HUD pieces, and first in the real hit order (TouchGui included).
 	local row: { GuiObject } = {}
-	for _, name in { "DailyButton", "HomeButton", "SettingsButton" } do
+	for _, name in { "DailyButton", "HomeButton", "PlazaButton", "SettingsButton" } do
 		local button = stage:FindFirstChild(name, true) :: GuiObject
 		assert(button and visible(button), name .. " must show in the world")
 		table.insert(row, button)
@@ -314,7 +314,7 @@ else
 			button.Name .. " is behind " .. (if first then first:GetFullName() else "no hit")
 		)
 	end
-	print("PASS: HUD row [Daily][Home][gear] targets, gaps, safe area and hit order")
+	print("PASS: HUD row [Daily][Home][Plaza][gear] targets, gaps, safe area and hit order")
 end
 -- Check actual PlayerGui hit order (including TouchGui), not just visual rectangles.
 -- Off-window scroll targets are covered by reachability above; check their input after scrolling.
