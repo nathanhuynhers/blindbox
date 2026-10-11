@@ -39,6 +39,8 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 	bannerAmount.TextXAlignment = Enum.TextXAlignment.Right
 	local target: number? = nil
 	local placing: string? = nil
+	-- The slot tapped while placing holds its ghost until the server replies.
+	local landing: { slot: number, id: string }? = nil
 	-- Display before an Equip Best request; its reply pops the slots that changed.
 	local equipping: Types.Snapshot? = nil
 	local refresh: () -> () = function() end
@@ -52,6 +54,7 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 			if placing then
 				if ctx.canAct() then
 					ctx.send("Place", placing, slot, nil)
+					landing = { slot = slot, id = placing }
 					placing = nil
 				end
 			else
@@ -141,6 +144,10 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 				placing = nil
 			end
 		end
+		if landing and ctx.canAct() then
+			-- Reply in (placed or rejected): the slot shows its real state again.
+			landing = nil
+		end
 		local before = equipping
 		if before and ctx.canAct() and snapshot.sequence ~= before.sequence then
 			-- A newer snapshot with pending cleared is the reply: pop changed cards in one wave.
@@ -176,7 +183,7 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 		root:SetAttribute("Target", target)
 		root:SetAttribute("Placing", placing)
 		for _, slot in slots do
-			slot.update(snapshot, { target = target, placing = placing })
+			slot.update(snapshot, { target = target, placing = placing, landing = landing })
 		end
 		picker.update(snapshot, target, placing)
 	end
@@ -196,7 +203,7 @@ function Display.create(parent: Instance, ctx: Context.Context): Context.Screen
 			refresh()
 		end,
 		route = function(route: Context.Route?)
-			equipping = nil
+			equipping, landing = nil, nil
 			placing = if route
 					and route.placing
 					and Catalog.byId[route.placing]
