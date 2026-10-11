@@ -1,7 +1,8 @@
 # Blindbox Town monetization product specification
 
-> **Design/research only — 2026-10-11.** Every purchase type, benefit, amount, duration and Robux
-> price below is a **recommendation, not approved**. No platform product IDs or approved prices
+> **Design/research only — 2026-10-11.** Except for the user-confirmed MN-22 Double & Claim flow, every purchase type, benefit,
+> amount, duration and Robux price below remains a **recommendation, not approved**. MN-22
+> pricing, platform type, fulfillment details and release are not approved. No platform product IDs or approved prices
 > exist in this specification. No gameplay, platform catalog, live pricing, publication or
 > production data changes are authorized by this document. Implementation must consume explicit
 > user decisions recorded in the decision table; it must not promote recommendations to defaults.
@@ -77,7 +78,7 @@ inventory, Display and expiry changes settle the preceding interval first; colle
 transfers existing whole Coins and **never multiplies a bank again**. Maximum proposed online
 factor is 17.6, a reason to hold higher tiers for pacing review.
 
-| Coin source | Permanent tiers / VIP rate / timed Coin effect | 2x offline entitlement |
+| Coin source | Permanent tiers / VIP rate / timed Coin effect | 2x offline claim purchase |
 | --- | --- | --- |
 | Online Display banks, including duplicate and themed effects | Yes, once during accrual | No |
 | Offline Display-derived reward | Yes; saved permanent factors and time overlap, as specified below | Yes, once |
@@ -145,7 +146,7 @@ not competitor research or claims about willingness to pay. No product IDs are a
 | Permanent Luck — MN-12 | Higher normalized Rare-or-better odds; pass | **Luck weight 2, permanent / 399** | No direct Coin grant; higher-rate figures can affect later R0 | G plus paid-random eligibility; once. One permanent tier proposed; no permanent Luck 4 pass | P/L; verified activation, no early pity guarantee; max with timed 4 | F: exact current odds and pity. Probability/disclosure/provenance systems; recommend late release |
 | Timed Luck — MN-11/12 | Temporary odds reweighting; two token DPs | **Luck 2 / Luck 4, each 30 min; 49 / 99** | No direct grant | G plus paid-random eligibility; repeatable; hide redundant Luck 2 for permanent Luck owner | P/T/L; wall time, max strength, no different-strength overlap; exact odds below | F; same dependencies as permanent Luck plus tokens/clock |
 | Timed combo — MN-11 | Coin 2 + Luck 2 together; token DP | **Both 30 min / 79** | C for Coin component | G plus paid-random eligibility; repeatable; do not offer if either component unusable/redundant | P/T/L; atomic compatible activation; shared timers, no extra power | F; both boost dependencies. Retained combo is not a reintroduction of excluded general bundles |
-| 2x offline — MN-22 | Double normal offline reward; **permanent pass recommended** | **0.5x → 1x before other modifiers**, same 6 h / 60 s; **249** | Offline Display reward only | G; once; ownership snapshot must precede qualifying absence. Current pending amount is not eligible for retroactive upgrade | P; no expiry; doubles computed normal reward once, then wallet limit; precise timing/rounding below | F: normal half rate and claims unchanged. Saved entitlement/rate snapshot, pending award identity and policy/provenance |
+| 2x offline — MN-22 | At login, the welcome-back screen shows the Coins earned offline and offers **Claim** or **Double & Claim** | Example: the screen shows **10,000 Coins**; Claim pays **10,000**, Double & Claim pays **20,000** for that return | The amount shown on this return screen | Positive unclaimed reward; one double claim per return; ordinary Claim stays free | Choosing Double & Claim starts the purchase flow; successful fulfillment pays the doubled amount and completes this claim | Existing offline reward calculation supplies the shown amount. Requires pending-claim and receipt recovery; price is a separate decision in D1 |
 
 ### Coin tier acquisition and value implications
 
@@ -283,63 +284,91 @@ nonzero Mythical chance to 0%, fabricate odds from client inventory, or hide own
 
 ## 2x offline earnings — MN-22
 
-**Recommend a permanent pass, not a per-return developer product.** It has a comprehensible future
-benefit and avoids selling a consumable against a mutable popup, creating pressure to pay before
-claiming, or accidentally charging again on rejoin. There is no paid double-claim button proposed.
-A per-return alternative remains unselected and would require a separately approved price,
-absence-bound receipt reservation, treatment of base claims while a receipt is pending, delayed
-delivery and compensation for an already claimed absence. It cannot silently share this pass design.
+**User-confirmed direction, 2026-10-11:** each return shows a welcome-back screen
+with the Coins gained while offline. The player chooses **Claim** for that shown amount, or
+**Double & Claim** to purchase and claim twice that amount for **this return**. The product is
+this optional claim choice on the screen. For example, 10,000 earned Coins presents a free
+10,000-Coin claim and a 20,000-Coin double claim. A repeatable developer product is recommended;
+its price, receipt-binding details and release remain separate undecided/unapproved decisions.
 
-**Timing:** use the saved `lastSeen` as the start of the absence, matching current behavior. At
-every durable checkpoint save the unmonetized Display rate/loadout inputs, verified Coin tier,
-VIP and offline entitlement state plus active Coin boost interval. These factors apply to the next
-absence from that checkpoint. Only an offline entitlement already verified and saved before that
-start doubles the reward. Buying during the absence, at the welcome-back popup or after it was
-created cannot affect that absence. Out-of-game ownership is reconciled on the next session and
-saved for the **next** absence. A delayed verification does not infer a purchase timestamp.
+**Player flow:** show “You earned N Coins while offline”, a free **Claim N** action and, where
+eligible, **Double & Claim 2N — [actual Robux price]**. No prompt opens automatically. Tapping
+Double & Claim explicitly starts the platform purchase; only successful server receipt fulfillment
+claims the doubled reward. Cancellation returns to the normal claim choice. No paid choice is
+shown for zero reward, an already claimed/doubled absence or an unavailable paid pathway.
+If the normal reward is zero (including an absence shorter than 60 seconds), the summary may
+show zero; its double purchase remains unavailable. Every subsequent qualifying absence can
+offer a new one-off double purchase. Previous purchases
+do not automatically double the next return, and one purchase cannot double an award repeatedly.
+
+**Normal reward calculation:** keep the saved `lastSeen` start, the existing six-hour accrual cap
+and 60-second minimum. Save the unmonetized Display rate/loadout inputs, verified permanent Coin
+tier/VIP factors and active Coin boost interval at durable checkpoints. Those existing earning
+modifiers determine N; there is **no saved offline ownership factor**. A double purchase is
+eligible after returning while the current positive reward is pending, not before the absence.
 
 Let `a=max(0, now-lastSeen)` and `d=min(a,21600)`. Unknown lastSeen, clock rollback, empty Display
-or `a<60` yields zero. No extension to six hours, no reduction of the 60-second minimum.
-For the saved rate R0 and saved permanent factors M,V:
+or `a<60` yields zero. For the saved R0, M and V:
 
 ```text
 I = integral over [lastSeen, lastSeen+d) of BC(t) dt
   = d + overlapSecondsWithSavedCoin2Boost
 normal = floor(min(coinLimit, 0.5 * R0 * M * V * I))
-award = min(coinLimit, normal * (2 if eligible saved offline entitlement else 1))
+freeClaimTotal = normal
+doubleClaimTotal = 2 * normal  # one verified purchase, this absence only
 ```
 
-Boost expiry may occur while away: include only the overlap inside the first six capped hours,
-not its state at return and not all six hours merely because a token was once active. Luck has no
-additional direct Coin factor; any figure/duplicate already obtained affects saved R0 once.
-Auto Collect contributes nothing here. Reconstruct R0 without paid rate multipliers so M/V/BC
-are not applied twice.
+Include only Coin boost overlap within the first six capped hours. A boost's state at return
+cannot apply it to the entire absence. Luck affects saved figures/duplicates and therefore R0
+once; Auto Collect adds nothing. Reconstruct R0 without paid rate factors so M/V/BC are not
+applied twice. Double & Claim multiplies the **already computed normal reward** once; it does
+not multiply the bonus again using Coin passes, VIP or a currently active boost.
 
-Conceptually the offline coefficient becomes `0.5*2=1` before the other modifiers. For whole
-Coins, recommend **double the normal floored reward**, rather than independently floor a raw 1x
-amount. Thus a raw normal 10.75 Coins yields normal 10 and paid 20, not 21. This guarantees exactly
-twice the normal advertised whole reward before safety/wallet limits; it can differ by one Coin
-from flooring the raw 1x calculation. Example: R0=100, one hour, M=2, V=1.1, boost active for the
-first 900 seconds: I=4,500; normal=495,000; offline pass=990,000. No boost: 396,000 / 792,000.
-Free, unmodified R0=100 for six hours: 1,080,000; pass alone: 2,160,000.
+For whole Coins, double the floored displayed N exactly: raw normal 10.75 yields free 10 or paid
+20, not 21. The purchase promise is exactly `2*N` for the amount already shown on the screen.
+Example: R0=100, one hour, M=2, V=1.1, Coin boost overlap
+900 seconds: I=4,500; normal=495,000; Double & Claim=990,000. No boost: 396,000 / 792,000.
+Free unmodified R0=100 for six hours: 1,080,000; that return's double purchase: 2,160,000.
 
-**Pending/claims:** freeze the computed whole amount, absence identity, applied factors and rate
-version when creating the award. Claims never re-evaluate today's ownership, current rate or
-boost expiry. Existing schema-14 `offlinePending` lacks this metadata: keep its recorded amount,
-claim once by the existing automatic/manual paths, and never retroactively double it. Migration
-must preserve it, not manufacture a reconstructed pre-floor balance. Auto-claim an older pending
-award once before creating the next one, as today; each award identity is consumed at most once.
-The join checkpoint/new pending and claim wallet/pending-clear must each be recoverable atomically
-under the lease. A failed/uncertain save cannot expose a spendable paid increment and then create
-it again on rejoin. Preserve replay and fast-hop protection.
+**Pending and receipt recommendation:** freeze N, absence/award identity, applied modifiers and
+rate version when the reward is computed. Before opening a prompt, durably reserve that exact
+award and its fixed extra N Coins. Never recompute N from current Display, ownership or popup
+age. Serialize normal claims and receipt fulfillment under the existing profile lease. Disable
+competing claim/double controls while the prompt/fulfillment is active; keep the normal free
+claim usable after cancellation or recovery. Popup dismissal outside an active purchase may use
+the existing normal claim; it never starts a purchase. Logout must not erase a purchase reservation.
 
-**Limits:** retain the current per-award Coin ceiling and current offline wallet-overflow rule;
-at claim transfer `min(award, coinLimit-wallet)` and clear the pending award. The mathematical
-double is limited by safety/wallet capacity, not secretly reduced by rounding a second time.
-Show the calculated normal/paid amount and any amount that cannot fit before manual Claim; warn
-that the excess is discarded. Rejoin auto-claims obey the same rule. This is distinct from
-Display banks, which retain overflow, and from real-money fixed pack grants, which must be
-reserved rather than lost. No price discount or bonus based on how long the popup is left open.
+If the base N is unclaimed when a valid receipt arrives, atomically claim N plus its extra N.
+If the base N was already claimed (including current rejoin auto-claim behavior), a delayed
+valid receipt credits **only the reserved extra N**, exactly once. Preserve the reservation after
+the popup closes and independently of a newer pending absence. Record base-claim status,
+double-fulfillment status and PurchaseId with the grant in one durable recovery operation.
+Replay, repeated clicks, lost replies and rejoining cannot produce 4N, repeat a bonus or charge
+the same absence twice. An already charged unexpected extra receipt cannot be silently discarded;
+block new prompts and recover it through an explicitly defined compensating grant/support path.
+
+**Receipt association prerequisite:** platform receipts do not contain the popup's award ID.
+Only one unresolved offline-double purchase may be outstanding per account; never associate a
+delayed receipt with whichever reward happens to be displayed now. Before implementation,
+specify/test an unambiguous durable reservation protocol, including cancelled/reopened prompts
+and receipts arriving out of order. If the association cannot be established, leave this product
+off sale and return the exception for design review. Do not acknowledge a receipt without saving
+its reserved benefit, or replace this purchase with an automatic permanent pass.
+
+**Legacy pending and limits:** preserve the exact existing schema-14 pending amount; do not
+reconstruct a pre-floor value or double it automatically. A still-unclaimed positive amount can
+be offered as N after assigning a durable award identity, subject to the same receipt protocol.
+Already claimed rewards cannot create a new offer; an existing reserved charged purchase still
+recovers its bonus. Unreserved old pending may auto-claim normally on rejoin, as today.
+
+Retain the normal offline safety/wallet limit behavior for the base claim, showing any clipping
+before Claim. Recommend offering Double & Claim only when the whole 2N will fit at prompt time.
+If capacity changes after charging, **do not discard the purchased extra N** or clamp it away at
+the per-award limit: use the shared reserved purchase-credit ledger and release it as wallet
+capacity becomes available. The normal accrual cap and numeric wallet guard are unchanged;
+there is no promise to pay beyond wallet capacity immediately. Purchased bonus credit is
+paid-assisted and subject to the same downstream money-to-random-box gating as purchased Coins.
+No paid claim deadline, expiring offer or resettable countdown is proposed.
 
 ## Verified Roblox requirements and proposed server treatment — MN-02
 
@@ -398,7 +427,8 @@ progress conversion loss. Keep paid grants and their downstream earning incremen
 | Path | Recommended treatment for eligible user | Restricted user / policy unknown |
 | --- | --- | --- |
 | Packs, Starter Coins, VIP daily extra | Fixed grant is paid-assisted; boxes purchased with it use paid-random checks | Hide/deny new economy offers. Delivered receipts retain value in paid-assisted balance/reserved credit; cannot spend it on random boxes |
-| Permanent/timed Coin bonus, VIP rate, offline double | Increment above the unmonetized earned reward is paid-assisted | Suppress paid effects on new accrual; earned baseline and existing earned rewards continue |
+| Permanent/timed Coin bonus, VIP rate | Increment above the unmonetized earned reward is paid-assisted | Suppress paid effects on new accrual; earned baseline and existing earned rewards continue |
+| Offline Double & Claim | Base N keeps its source labels; purchased extra N is paid-assisted; one award per receipt reservation | Hide/deny new double purchases; normal free Claim remains. An already charged bonus is recovered as assisted credit, not lost or spendable on restricted randomness |
 | Ordinary Single/Open 10/Deal using Coins | Paid-funded or paid-odds result is tagged assisted; normal paid-random disclosure | Permit only an independently earned spending path with base/free-pity odds; reject assisted funding and Luck. All-or-nothing preflight for ten boxes |
 | Paid Luck on Daily/Login/Welcome reward | Same L formula and item disclosure; result is assisted | Paid Luck off; free reward/guarantee still granted normally, no lost free claim |
 | Auto Open | Same ordinary spend/odds checks for each automated box | Conservatively disable new/running Auto Open pending validation of paid automation treatment; manual earned Single/Open 10 remain |
@@ -448,7 +478,7 @@ Active boost wall clocks still expire as disclosed; do not keep them running as 
 | Redundant/incompatible Luck | “This boost won't improve your current Luck. Your unused boost has been kept.” |
 | Receipt awaiting durable save | “Your purchase is being saved. It will be recovered if you reconnect. Don't purchase again to retry.” |
 | Auto Open stopped | “Auto Open stopped: [reason]. No further Coins will be spent. Select Start to resume.” |
-| Offline pass bought on return | “2x Offline Earnings applies to future absences. This return's reward stays X Coins.” |
+| Offline claim choice | “You earned N Coins while offline. Claim N for free, or purchase Double & Claim to receive 2N for this return.” |
 
 ## Shared fulfillment and implementation dependencies — MN-03
 
@@ -574,9 +604,9 @@ adds at most 3,500 fixed Coins across those seven daily claims, without improvin
 Do not imply VIP doubles existing Login rewards.
 
 Offline income adds 50% of the saved effective rate for up to six hours per qualifying absence;
-the offline pass doubles that normal amount, not the cap. At the three-Common themed R0≈16.14,
+a Double & Claim purchase doubles that return's displayed normal amount, not the cap. At the three-Common themed R0≈16.14,
 free six-hour reward is ~174K Coins, enough for eight Concepts boxes at full price but below one
-Prestige box; the offline pass alone is ~348K, enough for one Prestige box. Stronger loadouts
+Prestige box; a double purchase for that return is ~348K, enough for one Prestige box. Stronger loadouts
 change this sharply. Existing slot purchases total 4.44M Coins. Shelf purchases start at 50K,
 125K and 312.5K and grant no income; each first completion instead grants one free Shelf unit.
 Spending on Shelves or retaining a decorative Display makes progression slower than the optimizer,
@@ -610,9 +640,10 @@ Before any separately authorized implementation/launch, require:
   expiry; fixed grants unmultiplied; Auto Collect/manual/swap races conserve banks and tutorial rules.
 - Boost token/activation/replay, mixed strengths, combo atomicity, same-effect extension, 24-hour
   bound, logout, backward clock and partial offline overlap checks.
-- Offline 59/60 seconds, six-hour boundary, unknown/rollback lastSeen, saved-before-absence
-  eligibility, external pass purchase during absence, legacy pending, odd/fractional rounding,
-  wallet/safety limits and claim/rejoin/crash/uncertain-save recovery.
+- Offline 59/60 seconds, six-hour boundary, unknown/rollback lastSeen, legacy pending,
+  odd/fractional rounding and modifier composition; free vs double claim, cancellation, repeated
+  clicks, immutable award reservation, late receipt after base auto-claim, newer absences,
+  cancelled/reopened prompts, extra receipts, bonus overflow credit and crash/save recovery.
 - Durable paid receipt tests for duplicate/out-of-order/concurrent callbacks, lost replies,
   charged purchases without prompt state, overflow credit, disconnects and lease/save failure;
   no acknowledgement before confirmed benefit/marker persistence.
@@ -626,11 +657,12 @@ Before any separately authorized implementation/launch, require:
 ## Concise decision table — smallest remaining user choices
 
 The rules above resolve the detailed options as recommendations. The user need only settle these
-three bundles or name specific exceptions. **No bundle or individual product is approved yet.**
+three bundles or name specific exceptions. **MN-22's per-return Double & Claim benefit flow
+was confirmed by the user on 2026-10-11; no full bundle, platform type, price or release is approved.**
 
 | Decision | Recommendation to accept or amend | Status / implementation consequence |
 | --- | --- | --- |
-| D1 — Product benefits, values and entitlement model | Adopt matrix amounts/prices as proposed defaults; independent highest-owned Coin passes with full-price upgrades/no credit; fixed packs; lifetime once-per-account Starter; concrete two-benefit VIP; 48 movement; permanent offline pass with future-absence eligibility and exact double-after-normal-rounding | **Recommended, awaiting user decision.** No IDs/prices/catalog activation until explicit approval; an upgrade-credit requirement reopens MN-04 |
+| D1 — Product benefits, values and entitlement model | Adopt matrix amounts/prices as proposed defaults; independent highest-owned Coin passes with full-price upgrades/no credit; fixed packs; lifetime once-per-account Starter; concrete two-benefit VIP; 48 movement; user-confirmed return-screen Claim / Double & Claim flow; choose its purchase price separately | **MN-22 benefit flow user-confirmed; remaining catalog recommendations await decision.** No IDs/prices/catalog activation until explicit approval; offline DP/receipt protocol and price remain recommendations/unresolved; an upgrade-credit requirement reopens MN-04 |
 | D2 — Shared effects and paid-random boundary | Adopt C/L/T/G, normalized Rare-or-better Luck, unchanged pity/floors, elapsed wall-time tokens and overlap, earned/assisted lineage plus restricted-player earned path. Require validation of that path before economic/Luck launch | **Recommended, awaiting user decision; platform validation unresolved.** No Luck/pack/income implementation may silently use a simpler ungated wallet or odds formula |
 | D3 — Initial launch subset | Validate Auto Collect and movement first; Auto Open requires policy review; then Coin 2, Small/Medium, Starter, VIP and offline subject to shared foundation. Hold Coin 4/8, Large/Huge and all Luck/combo release for pacing/policy acceptance; keep every family documented | **Recommended, awaiting user decision.** Approving specifications does not approve all products for launch, implementation or publication |
 
