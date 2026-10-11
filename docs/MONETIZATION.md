@@ -1,272 +1,656 @@
-# Monetization plan and review worklist
+# Blindbox Town monetization product specification
 
-> **Status:** Consolidated planning reference, reviewed against repository sources on
-> 2026-10-11. Robux products, prices, balance and launch scope are not approved. This document
-> authorizes no implementation or publication. Grouped task prompts were prepared on 2026-10-11
-> in [Monetization task prompts](MONETIZATION_TASK_PROMPTS.md); unresolved product decisions remain open.
+> **Design/research only — 2026-10-11.** Every purchase type, benefit, amount, duration and Robux
+> price below is a **recommendation, not approved**. No platform product IDs or approved prices
+> exist in this specification. No gameplay, platform catalog, live pricing, publication or
+> production data changes are authorized by this document. Implementation must consume explicit
+> user decisions recorded in the decision table; it must not promote recommendations to defaults.
 
-This is the single planning reference for retained monetization ideas, dependencies, unresolved choices
-and future tasks. The [roadmap](ROADMAP.md) still governs scope and release gates;
-[economy](ECONOMY.md), [plots and shelves](PLAYER_PLOTS_AND_SHELVES.md),
-[architecture](ARCHITECTURE.md) and [data model](DATA_MODEL.md) remain authoritative for
-implemented behavior. Historical audit/backlog records retain their evidence and original IDs.
+This replaces the earlier idea-only worklist with reviewable product rules. Read with
+[game design](GAME_DESIGN.md), [economy](ECONOMY.md), [architecture](ARCHITECTURE.md),
+[data model](DATA_MODEL.md), [roadmap](ROADMAP.md) and [historical MVP](archive/MVP.md).
+Source is the baseline when historical planning differs. The retained families are in scope for
+specification; listing a family does not approve building or launching it.
 
-## Feature scope decisions
+<a id="feature-scope-decisions"></a>
 
-The user removed **Fast Open**, **Premium Multi Open**, and features **13–23** from the
-feature review list: Shelf, plot, Display and opening cosmetics; premium status cosmetics;
-rotating premium shop; bundles; storage upgrades; Pocket Pass; Collector Club subscription;
-and gifting. These are excluded from the monetization plan, rather than deferred candidates.
+## Scope and protected free loop
 
-The remaining features are Coin multipliers, Coin packs, Starter Pack, Auto Open, Auto Collect,
-movement speed upgrades, VIP, timed Coin boosts, permanent Luck, timed Luck/combo boosts,
-and a **2x offline earnings Coin bonus** added by the user.
-Starter Pack and VIP benefits must use retained features; removed cosmetic products must not
-return through those packages. Existing free/Coin-funded gameplay is unchanged.
+Keep earning Coins, buying randomized boxes, retaining duplicates, improving Display income and
+completing the **existing five collections / 43 figures** enjoyable without Robux. Do not increase
+box/slot/Shelf costs, reduce free earnings, weaken pity/rewards, reset progress, sell collection
+completion or require future content to justify a price.
 
-## Direction and guardrails
+**Excluded, not deferred candidates:** Fast Open, Premium Multi Open, Shelf/plot/Display/opening
+cosmetics, paid status cosmetics, rotating premium shop, general bundles, storage upgrades,
+Pocket Pass, Collector Club subscription and gifting. Starter Pack and VIP are the expressly
+retained packages; they may contain only retained benefits. Scrap, recycling/redemption, trading,
+variants, Secrets/Shinies, mastery, inventory limits and future collections are outside this task.
+Free Open 10 and Skip remain usable with no entitlement. No paid seventh Display slot, paid Shelf
+capacity, VIP-only figure or cosmetic benefit is proposed.
 
-Monetize the desire to keep collecting, opening and progressing.
-Purchases should support the loop: earn Coins, buy boxes, discover figures, improve Display
-income and complete collections. Existing cosmetic exhibits remain part of the free game.
+## Inspected source baseline
 
-- Preserve enjoyable free progression. Do not make existing collections artificially grindy to
-  force purchases, sell instant collection completion, or eliminate the reason to keep playing.
-- Keep important gameplay systems accessible without Robux. VIP and Starter Pack must remain optional.
-- Do not charge to repair frustrating controls, make batch skipping usable, or explain duplicates.
-- Shelves and their cosmetics generate no income. Paid earning capacity beyond the current six
-  Display slots needs separate economy and fairness review.
-- Preserve meaningful earned accomplishments.
-- Show truthful offer availability and timers; avoid misleading scarcity.
-- Review current Roblox requirements before implementing paid/randomized mechanics, including
-  Robux-purchasable Coins and Luck. This consolidation is not a platform-policy assessment.
-- Future content, variants, mastery, inventory limits, furniture and trading require separate
-  design scope; listing them here does not authorize those systems.
+Reviewed `AGENTS.md` and all seven requested planning references, plus the relevant source and
+tests listed below, on 2026-10-11. These are repository facts, not proof of current live deployment
+or closure of native acceptance gaps.
 
-## Implemented baseline to preserve
-
-In existing docs, **paid box**, **paid Shelf** and the Welcome Quest's paid-box step mean
-**Coin-funded**, not a Robux transaction. There are no implemented Robux products, gamepass
-entitlement checks, MarketplaceService purchase prompts or paid receipt handlers in `src`.
-Repository checks and previously recorded Studio checks do not close persistent, multiplayer
-or physical-device acceptance.
-
-| Area | Current behavior | Implication for monetization review |
+| System | Actual configuration/behavior to preserve | Evidence |
 | --- | --- | --- |
-| Collections | Five collections, 43 figures; four economic tiers | Use existing content and pacing as the starting point |
-| Box prices | Pocket Grove 1,500; Tidepool Tales 2,000; Concepts 20,000; Tender Echoes and We Are All Stars 200,000 Coins | Provisional economy tuning, not a Robux conversion |
-| Rarity/pity | Common through Mythical; five-tier base Legendary 1%, Mythical 0.1%; persisted, independent increasing-chance pity | Existing pity is free; paid Luck is a separate proposed modifier |
-| Duplicates | All copies retained; diminishing-return income enhancement; no ordinary total-copy cap | No paid storage product is planned |
-| Display | Three starting earning slots; sequential Coin unlocks to six at 40K / 400K / 4M; one earning placement per figure ID; one +10% themed-trio bonus | Keep free slot progression and server-owned income |
-| Collection | Owner steps on a plate or clicks/taps a figure; replacement attempts to collect the outgoing bank; Remove preserves it | Paid ongoing Auto Collect is distinct from implemented swap collection |
-| Offline Coins | Half of effective Display rate, at most six hours; absences under 60 seconds grant nothing | A 2x offline Coin bonus is planned under MN-22; no paid bonus is implemented |
-| Shelves | Three initial persistent units; nine positions each; three-unit physical viewport; first completion grants one unit; additional units cost `50,000 * 2.5^n` Coins, excluding free units; current cap 100 | Existing acquisition is not a Robux product; paid cosmetics are excluded |
-| Opening | Single and Open 10 through ordinary Coin purchases; skippable presentation and batch results; free Welcome x10 | Fast Open and Premium Multi Open are excluded; Auto Open remains a proposal |
-| Free rewards | 4,500 starting Coins, UTC daily Grove box, 1,000-Coin Display goal, looping seven-day Login rewards and one-time Welcome rewards | Account for all free grants before setting paid value |
-| Plaza deals | Three globally synchronized hourly discounted box offers; per-player persisted stock | Coin deals remain; a premium rotating shop is excluded |
-| Movement | Server-owned baseline 36 studs/second; no speed entitlement | Additional movement speed is only a future upgrade idea |
-| Cosmetics/status | Empty per-Shelf customization hooks; no customization catalog/store/editor; collection completion and global leaderboards exist | Paid cosmetic/status products are excluded |
-| Persistence | Economy2 schema 14; leases, validation and failure pauses; gameplay request receipts are transient | Durable paid fulfillment needs its own design; request receipts alone are insufficient |
+| Box prices / income scale | Grove 1,500; Tide 2,000; Concepts 20,000; Echo and Stars 200,000 Coins. Expected-figure payback parameters 180 / 180 / 550 / 850 seconds, **not time per box** | `src/server/Economy.luau`, `CollectionEconomy.luau` |
+| Rarity | Starter: Common 60%, Uncommon 30%, Rare 10%. Five-tier: 60%, 25%, 13.9%, 1%, 0.1%. Within-rarity weights currently all 1 | `Economy`, `CollectionEconomy`, `src/shared/Catalog.luau` |
+| Free pity | Legendary demand `1 + max(0,dL-40)*0.05`; Mythical `0.1 + max(0,dM-300)*0.0015`, in percentage points. Guarantees at dry counts 2,020 / 66,900 for the **next** box; Mythical wins simultaneous guarantees. Independent counters per collection; no former 8%/2% caps | `CollectionEconomy`, `tests/LinearPity.spec.luau` |
+| Duplicates / set | All copies retained; one earning placement per ID. Rate multiplier `1 + maximum*extra/(extra+curve)`. Maximum bonuses C/U/R/L/M = 0.6/0.9/1.25/1.5/3; curves 5/5/4/2/2. A distinct themed trio gives +10% total Display rate once | `Economy`, `Rules.luau`, `tests/Mvp.spec.luau` |
+| Display | Three free slots, sequential Coin unlocks to six at 40K / 400K / 4M. Each figure banks income; fractions/overflow retained. Plates/taps collect only the targeted figure. Replacement collects outgoing whole bank; Remove preserves it. Equip Best is free | `Rules`, `tests/DisplayReplacement.spec.luau`, `EquipBest.spec.luau` |
+| Shelves | Three initial units; nine positions each; three-unit viewport. One free unit per first collection completion; additional units `50,000*2.5^n`, excluding free units; current acquisition cap 100. Cosmetic, no income | `Rules`, `src/shared/ShelfConfig.luau`, `tests/Shelves.spec.luau` |
+| Offline | Saved Display including duplicate/set effects; 0.5x rate, six-hour cap, 60-second minimum. Unknown/rollback clock grants zero. Join auto-claims old pending, then computes new pending; claim clears it. Wallet overflow on offline claim is currently dropped | `Rules.offline/claimOffline`, `tests/Offline.spec.luau` |
+| Free opening/rewards | 4,500 starting Coins; UTC daily Grove box; 1,000-Coin distinct-three Display goal. Welcome U/R box is 75%/25%, then ten Grove boxes with Rare on the tenth if first nine miss. Coin-funded quest purchase is not Robux | `Rules`, `tests/Tutorial.spec.luau` |
+| Login | Seven-day loop: 500 / 1,000 / Grove box / 2,500 / 1,000 + Tide box / 4,000 / 5,000 + Concepts box. Missed day restarts at 1. Values remain source placeholders; unchanged here | `src/shared/LoginRewards.luau`, `tests/LoginRewards.spec.luau` |
+| Deals / openings | Three hourly globally synchronized stalls; 25% discount; three boxes per player per stall/hour. Ordinary Single and atomic Open 10 with sequential pity, free Skip and results | `Deals.luau`, `Rules`, `tests/Deals.spec.luau`, `Opening.spec.luau` |
+| Movement | Free server WalkSpeed **36 studs/s**, initial character and respawns. Older 16/20 planning values are not the baseline | `MovementConfig.luau`, `PlayerMovement.luau`, `tests/PlayerMovement.spec.luau` |
+| Persistence / purchases | Economy2 schema 14; validated upgrades from 6–13; leases and failure pauses. Gameplay receipts are transient, acknowledgements ordinarily in memory. No MarketplaceService, entitlement, paid receipt or PolicyService integration found in `src` | `Profile.luau`, `Persistence.luau`, `Storage.luau`, `init.server.luau`, `Transactions.luau`, `tests/SaveSafety.spec.luau`; source search |
 
-Exact formulas, safety guards and native acceptance checks remain in the implementation references.
-Secrets, Shinies, mastery, collection levels and Collection Score are ideas, not implemented
-rarity tiers or player progression fields. Current Mythical odds are not evidence of a Secret system.
+Historical MVP values (450 starting Coins, 150-Coin boxes, automatic wallet income and recycling)
+are superseded. The historical reset does not authorize another reset. Preserve current stores,
+catalog IDs, quantities, discovery, pity, Display/Shelves, rewards and pending balances.
 
-## Product idea catalog
+## Shared rules — recommendations for every product
 
-Every retained entry below is a proposal. No price, product type, tier or benefit has been
-finalized. Review tasks are indexed later in this doc.
+The following named rules are inherited by every matrix row. A row changes only the stated
+effect; there are no feature-specific receipt or stacking shortcuts.
 
-### Coin multipliers — MN-04
+**P — purchase/ownership.** Use passes for permanent entitlements, developer products (DP) for
+repeatable fixed grants and boost tokens. Verify pass ownership on the server with
+`UserOwnsGamePassAsync` at join and after a server-observed purchase event; client success is never
+proof. Preserve prior verified benefits on a transient refresh failure; grant no newly unverified
+benefit and disable new prompts until ready. Developer products use the shared server
+`ProcessReceipt` dispatcher and durable fulfillment described below. One platform prompt at a
+time; no automatic Robux purchases. Prompt authorization is separate from a delivered receipt:
+an already charged receipt must be recovered even if the player disconnects or policy changes.
+No entitlement is sold again in-game when owned, superseded or presently unusable.
 
-Permanent **2x / 4x / 8x Coins**, designed as upgrade tiers without accidentally multiplying
-together. Their intended value is more opportunities to open boxes as collection costs rise.
+**C — Coin composition.** Let `R0` be the current unmonetized Display rate after duplicates and
+the single themed-trio bonus. `M = max(1, owned Coin tiers)` is 1/2/4/8, never 2*4*8.
+`V = 1.10` with VIP, otherwise 1. `BC(t)` is 2 during an active Coin boost, otherwise 1.
+Online accrual is `R0*M*V*BC(t)`, apportioned to the same displayed figure banks. Entitlement,
+inventory, Display and expiry changes settle the preceding interval first; collection merely
+transfers existing whole Coins and **never multiplies a bank again**. Maximum proposed online
+factor is 17.6, a reason to hold higher tiers for pacing review.
 
-Decide separate passes versus an upgrade model, what each tier costs, how prior purchases are
-credited, and which Coin sources qualify. Online Display, offline income, daily/login rewards,
-starter grants and direct Coin packs cannot silently share an unspecified multiplier rule.
-Evaluate free and paid pacing, duplicates and themed bonuses together before setting prices.
-Define how these tiers interact with the separate 2x offline earnings bonus under MN-22.
-
-### Coin packs — MN-05
-
-Repeatable Small / Medium / Large / Huge packs. Amounts and Robux-to-Coin conversion remain TBD
-until earning rates, time per box and long-term progression are reviewed. Decide fixed versus
-progression-sensitive value and interaction with multipliers/boosts. Include paid currency used
-to buy randomized boxes in the policy review.
-
-### Starter Pack — MN-06
-
-A low-cost first purchase could combine Coins and a temporary boost.
-Do not lock an important gameplay figure behind it.
-Decide contents, price, eligibility, purchase limits and availability. Keep it distinct from the
-free Welcome Quest; boost benefits depend on the boost system existing first.
-
-### Auto Open — MN-07
-
-Automatically continue buying/opening boxes. Open 10 and usable skipping already exist without
-a Robux entitlement and remain unchanged. Fast Open and Premium Multi Open are excluded.
-
-Decide free/progression/premium access, automation behavior, and Auto Open stop
-conditions. Server purchases, affordability, cooldowns, pity and grants must remain authoritative.
-Skipping, interruptions and retries must never grant additional figures or spend twice.
-
-### Auto Collect — MN-08
-
-A future gamepass for ongoing collection of Display banks, deferred by the product backlog.
-It is separate from the free outgoing-bank collection on replacement. Decide cadence, eligible
-banks, online/offline behavior, entitlement handling and impact on the Welcome Quest.
-Reuse server-owned bank transfer rules, including fractions and wallet overflow. Preserve
-manual collection and distinguish collection convenience from an income multiplier.
-
-### Movement speed upgrade — MN-09
-
-The playtest backlog identifies extra speed as a future monetization/upgrade vector.
-No pass, benefit or price is defined. Decide whether this belongs in the product lineup,
-free versus premium acquisition, speed value, stacking and character lifecycle behavior.
-Use the existing server movement boundary if separately authorized.
-
-### VIP / Premium Collector — MN-10
-
-Possible permanent benefits: enhanced daily reward, small Coin bonus or small Luck bonus.
-Select the actual bundle and price; economic bonuses, Luck and improved daily grants are unresolved.
-VIP should feel prestigious and useful while normal progression remains enjoyable without it.
-
-### Timed boosts — MN-11
-
-Repeatable **2x Coins**, **2x Luck**, Super Luck, or Coin + Luck boosts in example
-**15 / 30 / 60 minute** durations. These could support continued play during the boost window.
-Decide activation, online time versus wall-clock expiry, logout handling, repeat-purchase behavior,
-stacking with permanent tiers/VIP and clear remaining-time presentation. Values are illustrative.
-
-### Luck and gamepass integration — MN-12
-
-Ideas: permanent **2x Luck**, **4x Luck / Super Luck**, temporary Super Luck and combined boosts.
-The playtest backlog's initial acquisition direction is gamepasses; exact products, tiers and
-values remain TBD, including whether permanent Luck should exist at all.
-
-Preserve the original **STRETCH-LOGIC-02 + STRETCH-UI-02** requirements:
-
-- Finalize the mathematical modifier and how it composes with existing pity before implementation.
-- Keep outcomes server-owned; never accept client-provided Luck or odds tables.
-- Keep probabilities valid and normalized, tuning configurable, and test all rarity tiers.
-- Show active Luck and its effect on odds clearly; distinguish paid Luck from free pity progress.
-- Integrate pass presentation without making the Shop feel dominated by paywalls.
-- Implement late, after core polish, product/tuning decisions and paid-random policy review.
-
-If future Shiny/Secret content is separately approved, decide whether Luck affects it; do not
-require those systems merely to review the present five-tier catalog.
-
-### 2x offline earnings Coin bonus — MN-22
-
-Double the Coins earned while offline. This is **2x the normal offline reward**, not twice the
-online Display rate. With the current free offline rate of 0.5x, the bonus would yield 1x the
-effective online Display rate before any other paid modifiers. The existing six-hour accrual
-cap and 60-second minimum absence remain the baseline; this feature increases Coins, not duration.
-
-Price and purchase type remain open: decide a permanent entitlement versus a per-return
-double-reward purchase, when eligibility is determined, and how it stacks with Coin multipliers,
-timed boosts and VIP. Resolve treatment of already pending earnings before implementation.
-The server must calculate and fulfill the reward using persisted offline state, with durable
-paid fulfillment and no repeat bonus from duplicate claims, retries or rejoining.
-
-## Economy dependencies — MN-01
-
-Current tiers, prices, rarity odds, duplicate value, pity, daily grants and free boxes are defined
-in the economy reference. Their tuning and actual free-player pacing still need acceptance;
-the old instruction to "define the economy" should not discard implemented systems.
-
-Before final pricing, review base/progression Coins per minute, time to earn each box, completion
-pull distributions, unlucky runs, duplicate income, free rewards, offline income and Display
-slot purchases. Compare proposed 2x/4x/8x tiers, packs, boosts and the 2x offline bonus
-against that baseline.
-Existing pacing simulations are idealized earning estimates, not retention or affordability proof.
-
-New collection content, mastery, variants and duplicate sinks remain separate game-design scope,
-not monetization tasks or prerequisites to reviewing the retained features.
-
-## Shared purchase foundation and verification — MN-02 / MN-03
-
-These are consolidated engineering prerequisites for future products, not an implemented service
-or a selected dependency. Determine product types and current platform support during design.
-
-- Review current paid-random requirements for the complete money-to-reward path: direct purchases,
-  paid Coins used for boxes, Luck, boosts and any randomized Starter Pack/VIP benefits.
-  Record applicable eligibility/restrictions and required disclosures before implementation.
-- Define a server-owned product catalog, verified entitlements, purchase/fulfillment lifecycle,
-  durable idempotency and recovery. Client purchase completion is not proof of a valid grant.
-- Keep prices, grants, multipliers, probabilities and authoritative state on the server. Replicate
-  only necessary public metadata and owner presentation state; validate and rate-limit requests.
-- Account for repeat delivery, disconnects, lost replies, failed saves, concurrent sessions and
-  purchases while storage is paused. Define when fulfillment is durably safe to acknowledge.
-- Extend the profile/schema deliberately where needed; preserve valid saves, existing leases,
-  fail-closed loads and Studio/live isolation. Transient gameplay receipts cannot be treated as
-  a durable real-money fulfillment ledger.
-- Keep modules focused, strict Luau and existing replication boundaries. Add no framework,
-  dependency, product ID, purchase prompt or live product as part of this planning work.
-
-Future implementation acceptance must include domain tests for grant/stacking/expiry/retry rules,
-Luau diagnostics, pinned formatting/lint/build checks, persistent recovery and native Studio
-behavior. Use multi-client tests for ownership, private state and remote isolation; test mobile,
-desktop and relevant gamepad purchase presentation.
-Record what actually ran and leave platform purchase/release acceptance explicit.
-
-## Priority decisions and review worklist
-
-The original idea bank's first candidates were **Coin multipliers, Coin packs, Starter Pack,
-opening convenience, then VIP**. Opening convenience now means Auto Open only.
-The historical audit's cosmetics-first recommendation is superseded by the user's removal
-of paid cosmetic products; its free-control and progression guardrails still apply.
-The [product backlog](PRODUCT_BACKLOG.md#later-separate-design-decisions) defers monetization
-until core-loop polish; the playtest backlog places Luck/gamepasses last.
-
-**The retained feature list is set for further review; execution order remains open.** Suggested
-review order is baseline and policy, then select the first products from the retained features
-and scope their shared purchase foundation. All candidates require a cost/benefit review before
-a separate implementation authorization.
-
-These IDs map to the [grouped task prompts](MONETIZATION_TASK_PROMPTS.md). They are not approved implementation
-tickets, and we do not need to implement every idea. A task can be selected, revised or deferred.
-
-| ID | Review/task area | Decision needed before an implementation prompt |
+| Coin source | Permanent tiers / VIP rate / timed Coin effect | 2x offline entitlement |
 | --- | --- | --- |
-| MN-01 | Free/paid economy and pricing | Accepted baseline, eligible Coin sources, modeled paid impact, price/value targets |
-| MN-02 | Platform/policy review | Current supported product types and requirements for each selected money-to-reward path |
-| MN-03 | Purchase foundation | Selected catalog, entitlement/fulfillment design, durable recovery, schema and test scope |
-| MN-04 | Coin multipliers | Tier acquisition/upgrades, stacking, qualifying income and prices |
-| MN-05 | Coin packs | Sizes, conversion/value model, multiplier interaction and prices |
-| MN-06 | Starter Pack | Contents, eligibility, limits, availability and price |
-| MN-07 | Auto Open | Free/premium access, automation and stop rules; existing Open 10/Skip remain unchanged |
-| MN-08 | Auto Collect | Eligible banks, cadence, entitlement and tutorial/offline behavior |
-| MN-09 | Movement upgrade | Include or defer; acquisition, speed, stacking and price |
-| MN-10 | VIP | Final benefits, economic bonuses, dependencies and price |
-| MN-11 | Timed boosts | Effects, durations, clocks, stacking, activation and prices |
-| MN-12 | Luck + presentation | Acquisition, formula, pity composition, normalized odds, disclosures and prices |
-| MN-22 | 2x offline earnings Coin bonus | Price, permanent versus per-return purchase, eligibility timing, stacking, pending-reward treatment and duplicate-claim recovery |
+| Online Display banks, including duplicate and themed effects | Yes, once during accrual | No |
+| Offline Display-derived reward | Yes; saved permanent factors and time overlap, as specified below | Yes, once |
+| Existing banks accrued before ownership/activation | No retroactive multiplier | No |
+| Starting 4,500; goal 1,000; Login Coins; existing fixed free grants | No | No |
+| Coin packs / Starter Pack Coins / VIP extra daily Coins | No, exact advertised fixed amount | No |
+| Box outcomes, prices, Display/Shelf acquisition costs | No Coin modifier changes these | No |
 
-Existing MN-01 through MN-12 IDs are preserved. MN-13 through MN-20 are retired following the
-feature removals; MN-21's future collection work is separate game-design scope and is no longer
-a monetization task. MN-22 tracks the newly added 2x offline bonus without reusing retired IDs.
+**L — Luck composition.** `L = max(1, verified permanent Luck, active timed Luck)` with a proposed
+ceiling of 4. Combo is the same Coin/Luck effects, not a third multiplier. VIP grants no Luck.
+The exact distribution and opening-path rules below are mandatory design inputs.
 
-The [prompt pack](MONETIZATION_TASK_PROMPTS.md) groups related products and includes separate
-Robux store design, UI implementation and end-to-end acceptance prompts. Its first task resolves
-player benefits, free-player behavior, product/value choices, dependencies and acceptance criteria
-before dependent implementation. Product decisions remain here; implementation and launch require
-their own authorized tasks.
+**T — boost lifecycle.** A receipt gives an unused token of the advertised effect/strength and
+15/30/60-minute duration; it does not secretly begin a timer while loading or offline. Tokens do
+not expire before activation. Activation is explicit, server-confirmed and durably consumes one
+token and records UTC integer start/expiry timestamps in the same profile operation. Clock is
+elapsed **wall time**, including logout, AFK, reconnect and server downtime. No pause/refund from
+logout. Use a non-decreasing server clock during a session, persist the last accepted timestamp,
+and fail closed on impossible/backward time instead of granting extra duration.
 
-## Consolidated sources and maintenance
+Same effect **and strength** activation extends `max(now, expiry)+duration`, with no increase in
+power. Queue further tokens when the resulting active remaining duration would exceed 24 hours;
+never consume a token partially or silently discard it. Different timed Luck strengths may not
+overlap: reject activation and keep the token until the current timed Luck expires. Buying an
+unused token is repeatable; buying is never required to keep a running timer. Disable purchases
+and activation of Luck 2 when permanent Luck 2 already makes it redundant. If permanent Luck is
+bought during a Luck 2 timer, warn that the timer adds no further odds; it still expires normally.
+This is not a 4x upgrade. Luck 4 remains useful above permanent Luck 2.
 
-| Source | Guidance brought into this document |
+Combo activation atomically extends compatible Coin 2 and Luck 2 timers; reject the whole
+activation if either is incompatible, redundant or over the duration bound. A Coin-only token
+and a combo's Coin component extend the **same** timer. An expired effect stops exactly at the
+boundary; delayed ticks integrate intervals split at expiry. Unused tokens survive logout;
+active clocks continue. Snapshots show unused tokens, actual active power and absolute expiry/
+remaining time; no resetting promotional countdowns.
+
+**G — gating.** All products require a ready loaded owner profile, healthy persistence and verified
+offer/entitlement state. Economy/Luck offers additionally require the policy-safe money-to-box
+path below. A cached client eligibility flag never authorizes purchase, activation or rolling.
+No automatic pack upsell when Coins run out. Display exact benefits, full actual platform price,
+limits, expiry/stacking and odds impact before the user confirms a prompt.
+
+**F — free player.** Existing grants, odds/pity, rates, slots, Shelves, manual collection, Single,
+Open 10, Skip, Equip Best and movement 36 remain unchanged. Unowned automation is off; unowned
+rate/Luck factors are 1; offline remains 0.5x. Progression can reach every current figure without
+buying any retained product. Paid convenience must not be used as a reason to make manual play worse.
+
+## Concrete product matrix
+
+**All prices below are proposed default Robux list prices for review, not approved prices or live
+configuration.** Actual user prices must later come from platform product information, including
+regional pricing; benefits do not scale with Robux spent. These are economy-based value hypotheses,
+not competitor research or claims about willingness to pay. No product IDs are assigned.
+
+| Family / ID | Player benefit; proposed type | Amount / tier / duration; proposed Robux price | Eligible Coin source | Eligibility, limit, ownership/upgrade | Activation, expiry and stacking | Free behavior; dependencies |
+| --- | --- | --- | --- | --- | --- | --- |
+| Permanent Coins — MN-04 | Faster earnings; three independent passes | 2x **149**; 4x **399**; 8x **999** | C: online and offline Display only | G; once per pass; direct purchase of any tier, no prerequisite. Highest owned wins. Full-price upgrades, no automatic prior-purchase credit | P; starts after verification/old-rate settlement, permanent; max tier with V and BC | F; durable offline snapshots, income integration, policy/provenance. Recommend initial review of 2x only; hold 4x/8x release |
+| Coin packs — MN-05 | Immediate, fixed wallet value; four repeatable DPs | Small **15,000 / 49**; Medium **60,000 / 149**; Large **240,000 / 499**; Huge **1,200,000 / 1,999** | Fixed purchased Coins, no rate modifiers | G; repeatable, one pending prompt; no progression scaling or per-player daily stock. Disable prompt if full grant will not fit | P; receipt durably credits exact amount, no expiry/upgrade/stack multiplier; unexpected overflow becomes reserved purchase credit, never lost | F; no rate reduction; durable receipt/overflow ledger and paid-Coin route gating. Hold Large/Huge release with high Coin tiers |
+| Starter Pack — MN-06 | One modest first package; pass conferring one lifetime bundle claim | **7,500 Coins + one Coin 2 token, 15 min / 49** | Coins fixed; token follows C/T | G; available once per account regardless of account age, prior Robux purchases or collection progress; no artificial countdown. Verified ownership plus durable claim marker prevents repeats | P; Coins awarded once after durable fulfillment; token waits for manual activation. No pass upgrade; C/T | F; Welcome rewards unchanged, no figure grant. Shared pass reconciliation, one-time bundle grant, boosts and policy gating |
+| Auto Open — MN-07 | Repeat ordinary purchases without repeated clicks; pass | Single-box automation, minimum **3 s** between starts and current presentation completion; **199** | No new Coins or income multiplier | G; owned pass, explicit Start, chosen collection and run budget; stop rules below | P; permanent capability, session runs only; no faster reveal or extra batch mode | F: Single/Open 10/Skip remain free. Existing transactions/pity/results, server cadence and ordinary policy checks |
+| Auto Collect — MN-08 | Collect displayed banks while online; pass | **1-second** server cadence / **149** | Existing online Display banks only; transfer, not accrual | G; owned pass and opt-in saved toggle; tutorial rule below. Only owner's occupied/unlocked slots | P; permanent, online only; no proximity requirement for this automation; no multiplier; preserves fractions/overflow | F: plates/taps and outgoing swap collection unchanged. Shared bank helper, session scheduler, tutorial protection |
+| Movement — MN-09 | Optional extra movement; pass | WalkSpeed **48 studs/s** (36 + 12) / **49** | None | Ready profile / verified pass; once. Toggle to 36 remains available | P; permanent; highest eligible movement value, never additive across entitlements; apply initial character/late Humanoid/respawn | F: **36** retained. PlayerMovement boundary and device/collision acceptance; no VIP speed benefit |
+| VIP — MN-10 | Two actual economic benefits; pass | **+10% Display-derived rate + 500 fixed Coins with each existing daily Grove claim / 199** | C for rate; fixed extra 500 excluded from C | G; once; daily supplement shares the existing UTC claim marker, no independent repeat. Buying after today's daily claim starts supplement next UTC day | P; permanent, V=1.10; no Luck, automation, movement, extra slots, exclusive figures or cosmetics | F: same daily box/goal/Login/Welcome. Rate composition, atomic daily supplement, policy/provenance |
+| Timed Coins — MN-11 | Temporary 2x Display earnings; three DPs granting tokens | **2x, 15 / 30 / 60 min; 29 / 49 / 79** | C, including capped offline time overlap | G; repeatable tokens; ownership not permanent | P/T; same Coin timer, durations extend, not powers; M*V*BC | F; receipt/token ledger, expiry integration, offline overlap |
+| Permanent Luck — MN-12 | Higher normalized Rare-or-better odds; pass | **Luck weight 2, permanent / 399** | No direct Coin grant; higher-rate figures can affect later R0 | G plus paid-random eligibility; once. One permanent tier proposed; no permanent Luck 4 pass | P/L; verified activation, no early pity guarantee; max with timed 4 | F: exact current odds and pity. Probability/disclosure/provenance systems; recommend late release |
+| Timed Luck — MN-11/12 | Temporary odds reweighting; two token DPs | **Luck 2 / Luck 4, each 30 min; 49 / 99** | No direct grant | G plus paid-random eligibility; repeatable; hide redundant Luck 2 for permanent Luck owner | P/T/L; wall time, max strength, no different-strength overlap; exact odds below | F; same dependencies as permanent Luck plus tokens/clock |
+| Timed combo — MN-11 | Coin 2 + Luck 2 together; token DP | **Both 30 min / 79** | C for Coin component | G plus paid-random eligibility; repeatable; do not offer if either component unusable/redundant | P/T/L; atomic compatible activation; shared timers, no extra power | F; both boost dependencies. Retained combo is not a reintroduction of excluded general bundles |
+| 2x offline — MN-22 | Double normal offline reward; **permanent pass recommended** | **0.5x → 1x before other modifiers**, same 6 h / 60 s; **249** | Offline Display reward only | G; once; ownership snapshot must precede qualifying absence. Current pending amount is not eligible for retroactive upgrade | P; no expiry; doubles computed normal reward once, then wallet limit; precise timing/rounding below | F: normal half rate and claims unchanged. Saved entitlement/rate snapshot, pending award identity and policy/provenance |
+
+### Coin tier acquisition and value implications
+
+Recommend **independent passes with highest-tier-wins**, rather than a repeatable developer product
+pretending to be an upgrade with account-specific credit. A new player can buy 8x directly. An owner
+of 2x pays the full 399 proposed Robux for 4x: cumulative spend 548; 2x→4x→8x totals 1,547,
+versus 999 direct. This disadvantage must be explicit before the upgrade prompt. Hide lower/equal
+offers once superseded, but a lower pass bought outside the game never removes a higher entitlement.
+There is no refund, trade-in, discounted difference or multiplied ownership implied by this model.
+
+This uses platform pass ownership directly; full-price upgrades may frustrate existing buyers.
+If the user requires purchase credit, reopen MN-04 before implementation: approve a staged
+durable entitlement/upgrade catalog with specified duplicate-receipt compensation and off-platform
+offer handling. Do not simulate a discount by granting invented Robux, silently price a pass by
+profile state, or use a repeatable paid receipt that can charge again for no benefit.
+
+Packs are fixed across the game's four economic tiers so their promise remains exact at delayed
+receipt delivery; no rate-sensitive or selected-box quote is needed. Their proposed value is:
+
+| Pack | Coins per proposed Robux | Full-price boxes: Grove / Tide / Concepts / Prestige | Other existing Coin sinks |
+| --- | ---: | --- | --- |
+| Small | 306.12 | 10 / 7 + 1,000 Coins / 0 + 15,000 / 0 + 15,000 | Below slot 4 and first purchased Shelf |
+| Medium | 402.68 | 40 / 30 / 3 / 0 + 60,000 | Can fund slot 4 or one 50K Shelf, not both from this grant alone |
+| Large | 480.96 | 160 / 120 / 12 / 1 + 40,000 | Less than slot 5; can fund several earlier sinks |
+| Huge | 600.30 | 800 / 600 / 60 / 6 | Below slot 6; can fund slots 4+5 but not 6 |
+
+Box counts describe purchasing power, **not guaranteed discoveries or completion**. Deals reduce
+the Coin price only when offered and in stock; packs grant no deal refresh or stock bypass. At
+75%-price Prestige deals Huge buys eight boxes, subject to three-per-stall hourly stock. Fixed
+packs have poor late-game time value and strong early-game skip value; recommend testing Small/
+Medium first, not making early free play slower to improve their sale. Starter Pack Coins buy five
+Grove boxes; its 15-minute token has rate-dependent value `R0*M*V*900` additional Coins if fully
+used with a stable Display. It is not advertised as a fixed total Coin saving.
+
+### Auto Open, Auto Collect and movement behavior
+
+**Auto Open:** ordinary full-price `Buy` Singles only in this proposal. Ordinary manual Open 10
+remains free and atomic; no premium bulk purchase, auto deal sniping or free-reward claiming.
+Player chooses collection, a finite run limit (default 10, configurable 1–100) and optionally a
+Coin reserve; show the maximum run cost before Start. One transaction in flight. Server recomputes
+price, affordability/reserve, policy, copy guards, cooldown and current pity for every box. Next
+start is at least three seconds after the previous start and only after its existing opening/
+result flow completes or the player uses existing free Skip. Client presentation completion
+cannot override the server cadence or grant a figure. Never require a new paid skip.
+
+Stop immediately before the next spend on Stop, run budget completion, insufficient spendable
+Coins, reserve violation, collection change, user leaving the opening flow, disconnect/death,
+policy/entitlement uncertainty, copy safety guard, stale transaction or storage pause. A transaction
+already committed still shows its result; Stop never reverses or repeats it. Preserve last settings
+only, not a running job. Resume requires explicit Start, including after funds arrive from Auto
+Collect, respawn, AFK reconnect or rejoin. Timeouts reconcile/retry the same request ID; they cannot
+mint a second purchase. No offline box spending and no automatic Robux prompt.
+
+<a id="auto-collect--mn-08"></a>
+
+**Auto Collect:** once per second after normal settlement, transfer whole Coins from the owner's
+currently displayed unlocked slots only, through the existing bank helper. No empty/locked slot,
+visitor, Shelf, inventory-only bank, offlinePending or removed figure is a target. Distance and
+living-character checks remain on manual collection; authorized automation can operate anywhere
+while that owner's online profile/lease is ready, including respawn. It pauses on storage failure,
+lease uncertainty and full wallet; residual fractions/overflow remain in the original banks.
+Serialize with manual/swap collection so the same bank amount cannot pay twice.
+
+Automatic transfers do not advance the Welcome Quest. Disable automation during its collection
+lesson until the player performs a genuine plate/tap collection; skipping guidance does not skip
+the lesson's reward stage. Once enabled it does not need to be restarted after ordinary respawn,
+but a rejoin waits for a ready session and entitlement verification. The toggle never changes
+R0, payout rate or offline reward; it is a collection convenience, not new earning capacity.
+
+**Movement:** use `max(36, eligible selected movement benefits)`; this catalog has just 48 for the
+movement pass and no VIP speed component. Owned users can select the free 36. No stacking with
+Coin/Luck/timers, no jump or teleport benefit, no speed writes in opening teardown. Resolve on
+initial character, late Humanoid, respawn and verified entitlement change. A 140-stud trip is
+approximately 3.89 s at 36 or 2.92 s at 48; a 340-stud trip is 9.44 vs 7.08 s, excluding terrain
+and acceleration. This is a modest optional convenience; retain existing free Home/Plaza actions.
+
+<a id="luck-and-gamepass-integration--mn-12"></a>
+
+## Exact Luck recommendation — MN-12
+
+**Definition:** multiply the **weight** of each Rare/Legendary/Mythical rarity by L, then normalize
+the distribution. Common and Uncommon weights are unchanged. This does not literally multiply
+the final chance of every desirable outcome by L.
+
+1. Compute the existing pity distribution `p[r]` in fractions totaling 1, with exactly the current
+   warm-ups, increments, high-demand budget sharing and guarantee priority.
+2. If a pity guarantee is due, use its existing 100% rarity distribution unchanged. Luck never
+   changes the guarantee thresholds, priority, persisted progress or independent resets.
+3. Otherwise, set `a[r]=L` for Rare/Legendary/Mythical and `a[r]=1` for Common/Uncommon.
+   `Z=sum(p[r]*a[r])`; `q[r]=p[r]*a[r]/Z`. Only existing nonzero rarity buckets participate.
+4. For figure i in rarity r, `Pr(i)=q[r]*weight[i]/sum(weights in r)`. Luck does not change
+   within-rarity weights or favor undiscovered IDs. Duplicates remain possible and useful.
+5. If the opening has a minimum-rarity reward floor, remove buckets below the floor and
+   renormalize the remaining `q` before the figure draw. Preserve the existing reward guarantee.
+6. Advance counters exactly once per successfully granted box using its actual resulting rarity.
+   Failed, stopped and replayed requests advance nothing. Resolve a batch sequentially, never
+   roll ten outcomes from one unchanged pity distribution.
+
+| Pool at no pity | Luck weight | Common | Uncommon | Rare | Legendary | Mythical |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Grove/Tide | 1 | 60% | 30% | 10% | — | — |
+| Grove/Tide | 2 | 54.545455% | 27.272727% | 18.181818% | — | — |
+| Grove/Tide | 4 | 46.153846% | 23.076923% | 30.769231% | — | — |
+| Concepts/Echo/Stars | 1 | 60% | 25% | 13.9% | 1% | 0.1% |
+| Concepts/Echo/Stars | 2 | 52.173913% | 21.739130% | 24.173913% | 1.739130% | 0.173913% |
+| Concepts/Echo/Stars | 4 | 41.379310% | 17.241379% | 38.344828% | 2.758621% | 0.275862% |
+
+For standard base odds, `Z=1+0.15*(L-1)`. Luck 2 Mythical is `0.001*2/1.15`, an approximately
+1.739x chance, not 2x or a guarantee. With no intervening pity changes, ten rolls at that chance
+give `1-(1-0.0017391304)^10 ≈ 1.7256%` chance of at least one Mythical; ordinary batches actually
+update pity each roll. At dry counts dL=100, dM=500, existing pity gives L=4%, M=0.4% and Rare
+about 13.436603%; with Luck 2 the normalizer is about 1.178366 and the Mythical chance about
+0.67891%. If both pity demands exhaust the high-tier budget, reweighting L/M equally preserves
+their ratio and cannot resurrect zero lower buckets. A guaranteed Echo Legendary still splits
+100% by its two equal weights: 50% each, not a guaranteed particular Legendary.
+
+**Opening paths:** for an eligible user, apply the same active L to ordinary Single/Open 10,
+Coin deal openings, Daily, Login box rewards and Welcome rewards. Free rewards do not receive
+different hidden Luck semantics. Welcome U/R under Luck 2 becomes 60% U / 40% R after its floor;
+under Luck 4, 42.857143% U / 57.142857% R. The Welcome tenth-box Rare guarantee still grants
+Rare if needed; it does not become a Legendary/Mythical in the three-tier pool. For a restricted
+or policy-unknown user, paid Luck is suppressed on **every** path; existing free pity and Welcome
+guarantees stay in force. A paid-Luck-enhanced free reward is a paid-assisted outcome for lineage
+and disclosure, even when no Coins are spent on that claim.
+
+**Disclosure recommendation:** call it “2x Luck weights” with Rare-or-better explanation and actual
+odds, or use a plain “Luck” title rather than promise twice every final probability. Before a Luck
+purchase show all existing pools' base/current/new rarity and individual odds, affected paths,
+expiry and stacking. Before a box spend show the current owner-specific itemized percentages in
+a labeled “Odds details” control. Batch details explain conditional odds for each successive roll,
+guarantee priority and changing pity; do not advertise current first-roll odds as the ten-roll
+distribution. Auto Open refreshes odds after each result and expiry, with details accessible while
+running. Use sufficient decimal precision plus the documented rounding disclaimer. Never round a
+nonzero Mythical chance to 0%, fabricate odds from client inventory, or hide owned outcomes.
+
+## 2x offline earnings — MN-22
+
+**Recommend a permanent pass, not a per-return developer product.** It has a comprehensible future
+benefit and avoids selling a consumable against a mutable popup, creating pressure to pay before
+claiming, or accidentally charging again on rejoin. There is no paid double-claim button proposed.
+A per-return alternative remains unselected and would require a separately approved price,
+absence-bound receipt reservation, treatment of base claims while a receipt is pending, delayed
+delivery and compensation for an already claimed absence. It cannot silently share this pass design.
+
+**Timing:** use the saved `lastSeen` as the start of the absence, matching current behavior. At
+every durable checkpoint save the unmonetized Display rate/loadout inputs, verified Coin tier,
+VIP and offline entitlement state plus active Coin boost interval. These factors apply to the next
+absence from that checkpoint. Only an offline entitlement already verified and saved before that
+start doubles the reward. Buying during the absence, at the welcome-back popup or after it was
+created cannot affect that absence. Out-of-game ownership is reconciled on the next session and
+saved for the **next** absence. A delayed verification does not infer a purchase timestamp.
+
+Let `a=max(0, now-lastSeen)` and `d=min(a,21600)`. Unknown lastSeen, clock rollback, empty Display
+or `a<60` yields zero. No extension to six hours, no reduction of the 60-second minimum.
+For the saved rate R0 and saved permanent factors M,V:
+
+```text
+I = integral over [lastSeen, lastSeen+d) of BC(t) dt
+  = d + overlapSecondsWithSavedCoin2Boost
+normal = floor(min(coinLimit, 0.5 * R0 * M * V * I))
+award = min(coinLimit, normal * (2 if eligible saved offline entitlement else 1))
+```
+
+Boost expiry may occur while away: include only the overlap inside the first six capped hours,
+not its state at return and not all six hours merely because a token was once active. Luck has no
+additional direct Coin factor; any figure/duplicate already obtained affects saved R0 once.
+Auto Collect contributes nothing here. Reconstruct R0 without paid rate multipliers so M/V/BC
+are not applied twice.
+
+Conceptually the offline coefficient becomes `0.5*2=1` before the other modifiers. For whole
+Coins, recommend **double the normal floored reward**, rather than independently floor a raw 1x
+amount. Thus a raw normal 10.75 Coins yields normal 10 and paid 20, not 21. This guarantees exactly
+twice the normal advertised whole reward before safety/wallet limits; it can differ by one Coin
+from flooring the raw 1x calculation. Example: R0=100, one hour, M=2, V=1.1, boost active for the
+first 900 seconds: I=4,500; normal=495,000; offline pass=990,000. No boost: 396,000 / 792,000.
+Free, unmodified R0=100 for six hours: 1,080,000; pass alone: 2,160,000.
+
+**Pending/claims:** freeze the computed whole amount, absence identity, applied factors and rate
+version when creating the award. Claims never re-evaluate today's ownership, current rate or
+boost expiry. Existing schema-14 `offlinePending` lacks this metadata: keep its recorded amount,
+claim once by the existing automatic/manual paths, and never retroactively double it. Migration
+must preserve it, not manufacture a reconstructed pre-floor balance. Auto-claim an older pending
+award once before creating the next one, as today; each award identity is consumed at most once.
+The join checkpoint/new pending and claim wallet/pending-clear must each be recoverable atomically
+under the lease. A failed/uncertain save cannot expose a spendable paid increment and then create
+it again on rejoin. Preserve replay and fast-hop protection.
+
+**Limits:** retain the current per-award Coin ceiling and current offline wallet-overflow rule;
+at claim transfer `min(award, coinLimit-wallet)` and clear the pending award. The mathematical
+double is limited by safety/wallet capacity, not secretly reduced by rounding a second time.
+Show the calculated normal/paid amount and any amount that cannot fit before manual Claim; warn
+that the excess is discarded. Rejoin auto-claims obey the same rule. This is distinct from
+Display banks, which retain overflow, and from real-money fixed pack grants, which must be
+reserved rather than lost. No price discount or bonus based on how long the popup is left open.
+
+## Verified Roblox requirements and proposed server treatment — MN-02
+
+Primary sources below were accessed **2026-10-11**. Requirements are distinguished from project
+recommendations; this review is not approval from Roblox for a particular implementation.
+
+**Platform requirements:** paid random items include direct Robux purchases, random outcomes bought
+with Robux-purchasable currency, and probability modifiers such as Luck. Disclose possible final
+outcomes and actual numerical percentage odds before spending; provide a clearly labeled details
+view where necessary, normalized probabilities and appropriate precision/rounding disclosure.
+Explain paid odds modifiers before purchase and dynamically update the active odds. Use
+`PolicyService:GetPolicyInfoForPlayerAsync`; when `ArePaidRandomItemsRestricted` is true, block the
+paid random generator, including the indirect currency path. Unpaid earnable alternatives are a
+documented treatment. Trading restrictions use `IsPaidItemTradingAllowed`; this game retains no
+trading. See [paid random items policy](https://create.roblox.com/docs/production/monetization/paid-random-items).
+
+[Roblox's May 26, 2026 clarification](https://devforum.roblox.com/t/clarifying-requirements-for-paid-random-items/4654622/1)
+also describes outcomes purchased directly or indirectly and distinguishes genuinely earnable
+paths where the random outcome cannot be bought. Coin denomination is not an exemption. The
+original announcement was verified through the search index; direct opening returned a bot check,
+so Creator Hub is the principal readable policy reference. Do not treat community replies as policy.
+
+**Purchase platform:** [passes](https://create.roblox.com/docs/production/monetization/passes) support
+a one-time fee for privileges; [developer products](https://create.roblox.com/docs/production/monetization/developer-products)
+are suited to repeat purchases such as currency and potions, with server receipt handling and
+creator-owned user purchase history. [MarketplaceService](https://create.roblox.com/docs/reference/engine/classes/MarketplaceService#ProcessReceipt)
+documents `ProcessReceipt`, `PurchaseGranted`/`NotProcessedYet`, non-deterministic pending-receipt
+order and no timed retry for legacy ProcessReceipt. Do not grant from `PromptProductPurchaseFinished`.
+The newer `BindReceiptHandler` API also exists; recommend the documented ProcessReceipt flow for
+this small catalog, one dispatcher, and do not register competing handlers for the same products.
+[Roblox's purchasing/data guide](https://create.roblox.com/docs/cloud-services/data-stores/player-data-purchasing)
+describes saving the benefit and PurchaseId before acknowledging fulfillment; its sample is
+guidance, not a requirement to replace this repo's lease system with a framework.
+
+[PolicyService reference](https://create.roblox.com/docs/reference/engine/classes/PolicyService)
+provides the per-player lookup/error boundary. Do not substitute a hard-coded country/age list,
+VPN assumptions, parent consent inferred by the game, or a client flag for its result.
+[Regional pricing](https://create.roblox.com/docs/production/monetization/regional-pricing)
+documents runtime product information for user-specific displayed prices. The design prices above
+remain proposed defaults; implementation must display the actual platform price, not hard-code
+this table into a store. There is no subscription or commerce-product selection here.
+
+### Project gating recommendation: preserve a genuinely earned route
+
+Do **not** launch packs, Luck, VIP or any Coin rate product with the current single undifferentiated
+wallet and no policy checks. Hiding only the Robux prompt is insufficient: the server must gate
+box spending, odds modifiers and paid-derived funds after purchase too. Removing all Coin boxes
+for restricted players would damage the free loop and is not the recommendation.
+
+Recommend a persisted distinction between **earned** and **paid-assisted** Coins/figure quantities,
+with one visible total and clearly disclosed spendable amount when restrictions apply. This is a
+design dependency, not an implemented second currency or approved schema. Initialize all valid
+pre-monetization balances, banks, owned quantities and pending rewards as earned; no wipe or
+progress conversion loss. Keep paid grants and their downstream earning increments traceable.
+
+| Path | Recommended treatment for eligible user | Restricted user / policy unknown |
+| --- | --- | --- |
+| Packs, Starter Coins, VIP daily extra | Fixed grant is paid-assisted; boxes purchased with it use paid-random checks | Hide/deny new economy offers. Delivered receipts retain value in paid-assisted balance/reserved credit; cannot spend it on random boxes |
+| Permanent/timed Coin bonus, VIP rate, offline double | Increment above the unmonetized earned reward is paid-assisted | Suppress paid effects on new accrual; earned baseline and existing earned rewards continue |
+| Ordinary Single/Open 10/Deal using Coins | Paid-funded or paid-odds result is tagged assisted; normal paid-random disclosure | Permit only an independently earned spending path with base/free-pity odds; reject assisted funding and Luck. All-or-nothing preflight for ten boxes |
+| Paid Luck on Daily/Login/Welcome reward | Same L formula and item disclosure; result is assisted | Paid Luck off; free reward/guarantee still granted normally, no lost free claim |
+| Auto Open | Same ordinary spend/odds checks for each automated box | Conservatively disable new/running Auto Open pending validation of paid automation treatment; manual earned Single/Open 10 remain |
+| Auto Collect / movement | No new reward or odds; transfer source labels unchanged / deterministic movement | Can remain available for earned-bank convenience / movement. They cannot route assisted Coins into random openings |
+| Previously paid-derived figures/duplicates | Their income retains provenance | A later policy change does not erase ownership/discovery. Earned copies keep the unassisted earning route; assisted-only income cannot finance restricted randomness |
+
+**Lineage closure recommendation:** for each earning ID retain total and earned-only quantity.
+Calculate the earned component from earned copies using the unchanged duplicate curve; the
+difference from paid copies/paid modifiers is assisted. An assisted-only ID has zero earned
+income component. Allocate any trio bonus using a corresponding earned-only valid Display
+projection, not a trio created solely by paid figures. Assisted money spent on a slot/Shelf must
+not turn its resulting earning-capacity increment into clean money. Track unlock provenance or
+calculate earned income against the earning slots unlocked by earned funding. Shelves themselves
+earn nothing. Preserve existing earned Display placement/acquisition rather than retroactively
+tainting it. Mixed spending is labeled assisted if any assisted value is necessary; prefer earned
+funding only when the player selects that route and can afford the **whole** spend. Free grants
+fund the same current boxes, Display and Shelves without a monetization entitlement.
+
+This conservative project treatment of indirect bonus income, paid automation and lineage is an
+**inference/recommendation**, not a claim that Roblox specifies this exact ledger algorithm or
+has certified it. Before shipping, validate that the chosen earned-only path and migrated paid
+history satisfy current platform guidance, including paid-assisted roll history advancing shared
+pity before a later earned opening. Preserve the existing shared counters; this specification
+does not authorize resetting them or silently introducing separate free/paid pity. If platform
+validation requires a different pity/provenance boundary, return that concrete exception for
+design review before implementation. If the earned route cannot be demonstrated, keep affected products
+off sale; do not close the earned path or call Coin packs exempt. Restriction changes at join and
+while active must stop future assisted rolls. Unknown policy fails closed for paid pathways,
+with retry/backoff, while already demonstrably earned, unmodified play stays usable.
+
+**Server order:** acquire validated profile/lease → obtain per-player policy/ownership → calculate
+approved offer availability → authorize prompt or activation → on each spend recheck current
+policy, funding provenance, actual active odds and safety limits → atomically spend/roll/grant/
+advance pity/tag result. Perform yielding lookups before the non-yielding mutation, then revalidate
+the same session/revision/policy generation. A client cannot supply amount, price, rate, odds,
+duration, provenance, receipt ID or eligibility. Disable paid paths during an unresolved policy
+refresh; on becoming restricted suspend paid Luck, preserve unused tokens and stop Auto Open.
+Active boost wall clocks still expire as disclosed; do not keep them running as hidden modifiers.
+
+| Situation | Proposed user message |
 | --- | --- |
-| Original `MONETIZATION.md` idea bank | Retained product families, economy dependencies, guardrails and open questions; user scope decisions above supersede removed ideas |
-| [Product backlog](PRODUCT_BACKLOG.md) | Core-polish deferral; Auto Open, Auto Collect and Robux multiplier candidates; separate cost/benefit scope |
-| [Playtest backlog](PRODUCT_BACKLOG_PLAYTEST_2026-10-05.md) | Movement upgrade idea; STRETCH-LOGIC-02 / STRETCH-UI-02 Luck requirements and late ordering |
-| [Game audit](GAME_AUDIT.md#14-monetization) | No live monetization audited; free-control guardrails retained; cosmetics-first recommendation superseded |
-| [Economy](ECONOMY.md) | Manual/swap collection, offline behavior, free rewards, Coin purchases, odds/pity/duplicates and pacing evidence limits |
-| [Plots and shelves](PLAYER_PLOTS_AND_SHELVES.md) | Cosmetic/economic split, Shelf acquisition, completion reward, customization hooks and excluded kiosk/capacity work |
-| [Game design](GAME_DESIGN.md), [roadmap](ROADMAP.md), [historical MVP](archive/MVP.md) | Current experience, scope boundary, acceptance gates and historical monetization exclusion |
-| [Architecture](ARCHITECTURE.md), [data model](DATA_MODEL.md), [opening](OPENING.md) | Server/replication/persistence boundaries and existing free Open 10/Skip behavior |
+| Restricted economic/Luck offer | “This purchase isn't available for your account. You can still earn Coins and open boxes through gameplay.” |
+| Assisted Coins cannot buy a box | “These Coins can't be used for random boxes on your account. Earned Coins available: X; this box costs Y.” |
+| Policy lookup unavailable | “We couldn't verify this purchase's availability. Please try again. Your earned Coins and free rewards are still available.” |
+| Luck suppressed after restriction | “Paid Luck is unavailable for your account. Free odds, pity and reward guarantees still apply.” |
+| Boost activation | “Activate 2x Coins for 30 minutes? The timer continues while you're offline. Same boosts add time, not strength.” |
+| Redundant/incompatible Luck | “This boost won't improve your current Luck. Your unused boost has been kept.” |
+| Receipt awaiting durable save | “Your purchase is being saved. It will be recovered if you reconnect. Don't purchase again to retry.” |
+| Auto Open stopped | “Auto Open stopped: [reason]. No further Coins will be spent. Select Start to resume.” |
+| Offline pass bought on return | “2x Offline Earnings applies to future absences. This return's reward stays X Coins.” |
 
-Maintain future monetization decisions and product tasks here. Other active docs should link
-here for planning rather than duplicate product specifications. Keep implemented formulas and
-system contracts in their existing references; keep historical audit evidence unchanged.
+## Shared fulfillment and implementation dependencies — MN-03
+
+Recommend one server-only catalog with effect definitions, approved decision version and later
+assigned platform IDs. A product stays unavailable while its decision is Recommended/Unresolved,
+its ID is unassigned or its dependencies are unverified. No automatic use of these prices or
+example types. Public display metadata may replicate; authoritative grants/odds/rates stay server-side.
+
+For repeatable purchases, serialize fulfillment under the existing profile lease; verify the
+platform receipt's player/product and allowlist mapping. Use PurchaseId as the durable key and
+save the exact benefit, provenance and processed marker in the **same recoverable aggregate**.
+Only acknowledge PurchaseGranted after confirmed durability, including reconciliation of a lost
+save response. Do not separately mark a receipt processed before saving the grant. Failed load,
+expired lease, unknown product, unavailable player or storage failure leaves it unacknowledged
+for recovery. A duplicate receipt returns the recorded fulfillment without another grant.
+Do not rely on callback ordering or the 64 transient gameplay receipts. Monitor unresolved
+fulfillment; rejoining can trigger platform recovery, a local timer is not a promise of platform retry.
+
+Passes use platform ownership as the entitlement authority, not a client receipt. Starter's
+one-time Coins/token claim additionally requires a durable profile marker and benefit grant.
+If a pass purchase succeeds outside the game, reconcile its capability/claim on next join; do
+not deny an already owned benefit merely because an in-game prompt was not observed. Economic
+benefits are suppressed where policy requires, without deleting ownership or their saved value.
+
+Never discard charged pack Coins because a wallet fills between prompt and receipt. Store the
+remainder as reserved purchase credit and release whole Coins when capacity becomes available,
+without another receipt grant or multiplier. This is separate from ordinary free bank/offline
+limit behavior. Recommend no external sale of consumable products at initial release; whether
+external sales are later enabled, every real receipt must still be recoverable without a transient
+in-game prompt reservation. No gifting/trading or limited-stock marketing is added.
+
+Future schema work needs bounded, validated/deep-copied receipts/credit, unused tokens, timers,
+verified offline snapshots, pending award identity and Coin/figure/unlock provenance. Decide a
+receipt-ledger retention/partition strategy that cannot forget still-replayable purchases; do not
+prune to the last 64. Preserve valid Economy2 progress and strict decoding. Test older valid schema
+upgrades and mixed-server compatibility; coordinate a separately authorized release barrier or
+compatibility bridge before new paid fields are written. Do not silently reset corrupt data or
+change store namespace. No schema number or migration implementation is approved here.
+
+## Pacing evidence and value risks — MN-01
+
+**Existing tool, reproduced 2026-10-11:** `tests/run.py` generated isolated copies of the current
+modules, then `tests/EconomySimulation.luau` ran with the repo's standalone Luau executable.
+300 seeded runs; actual Rules/CollectionEconomy; strongest Display with themed alternatives;
+buy useful sequential slots when cost ≤20 target boxes; 30 Grove + 30 Tide before Concepts,
+then Echo, then Stars, stopping each high-tier collection at its first Mythical. Instant
+collection; no reveal/menu delay, free rewards, offline time or Shelf purchases.
+
+| Existing route: time within tier to first Mythical | Median | p90 | Median boxes |
+| --- | ---: | ---: | ---: |
+| Concepts | 5.06 h | 6.83 h | 484 |
+| Echo | 4.28 h | 6.02 h | 438 |
+| Stars | 1.59 h | 2.59 h | 439 |
+
+The third collection is already faster because earlier Mythicals/duplicates fund it. These
+results do not support making Stars more expensive as a monetization task. Neither the 550/850
+payback parameter nor a guaranteed-rarity threshold is a player's time-to-box promise.
+
+**One-box affordability, calculated from source, no wallet balance:**
+
+| Earned Display fixture | Free | Coin 2 | Coin 4 | Coin 8 |
+| --- | ---: | ---: | ---: | ---: |
+| Three copies of weakest Grove Common, one ID earning; next Grove box | 297.54 s | 148.77 s | 74.38 s | 37.19 s |
+| Three distinct Grove Commons + themed trio; next Grove box | 92.95 s | 46.47 s | 23.24 s | 11.62 s |
+| One Concepts Mythical, no duplicate/set; first 200K Prestige box | 304.75 s | 152.38 s | 76.19 s | 38.09 s |
+
+These are continuous rate waits before whole-bank collection rounding or movement/reveal time.
+Buying a tier changes future accrual, not already banked amounts. A fresh 4,500 wallet already
+buys three Grove or two Tide boxes, but cannot buy Concepts or Prestige. The free Welcome Box
+guarantees at least an Uncommon (minimum ~9.39 Coins/s); its x10 gives at least one Rare. This
+mitigates the duplicate-only fixture without paid intervention. Do not price Starter as the only
+solution to an unlucky first three ordinary purchases.
+
+**Completion comparison simulation:** see the table below. Research extends the existing tool's
+strongest-Display and slot-purchase strategy using isolated actual modules; only hypothetical
+Coin accrual and the proposed normalized Luck wrapper are changed. 300 seeded runs per scenario,
+seed 97531 reset per scenario; complete Grove → Tide → Concepts → Echo → Stars, all 43 existing
+figures. Three seconds of equal single-opening interaction time added per box, earning during
+that time, then any affordability wait. No free rewards/deals/offline time or Shelf spending;
+instant bank collection and optimal Display. Coin 2/4/8 are constant owned factors. Luck 2 is
+constant permanent; the 17.6/Luck 4 case is a stress bound assuming continuously renewed boosts,
+not one 30-minute purchase or a quoted Robux cost. No other economy tuning changes.
+
+| Scenario | All 43 complete, median / p90 | Concepts complete, median / p90 | Echo complete, median / p90 | Stars complete, median / p90 |
+| --- | --- | --- | --- | --- |
+| Free | 11.359 / 13.997 h | 5.157 / 7.139 h | 4.387 / 5.931 h | 1.616 / 2.511 h |
+| Coin 2 | 5.680 / 6.999 h | 2.578 / 3.569 h | 2.194 / 2.965 h | 0.808 / 1.256 h |
+| Coin 4 | 2.869 / 3.526 h | 1.289 / 1.785 h | 1.097 / 1.483 h | 0.418 / 0.661 h |
+| Coin 8 | 1.664 / 2.068 h | 0.658 / 0.937 h | 0.559 / 0.822 h | 0.397 / 0.631 h |
+| Coin 2 + permanent Luck 2 | 4.347 / 5.561 h | 1.969 / 2.841 h | 1.711 / 2.324 h | 0.650 / 0.972 h |
+| Coin 17.6 + Luck 4 stress bound | 0.768 / 1.113 h | 0.251 / 0.456 h | 0.229 / 0.459 h | 0.227 / 0.419 h |
+
+Within-tier medians do not add to the median of whole-route totals. Completion pulls:
+
+| Collection | Free / Coin-only median, p90 | Luck 2 median, p90 | Luck 4 stress median, p90 |
+| --- | --- | --- | --- |
+| Grove | 15, 25 | 14, 24 | 15, 26 |
+| Tide | 15, 27 | 13, 21 | 15, 27 |
+| Concepts | 469, 773 | 365, 628 | 241, 485 |
+| Echo | 434, 732 | 363, 595 | 257, 533 |
+| Stars | 476, 757 | 385, 612 | 272, 503 |
+
+For the completion route, free first-Mythical medians/p90 are Concepts 5.157/7.139 h,
+Echo 4.306/5.837 h and Stars 1.610/2.511 h. Coin 2 + Luck 2 yields 1.969/2.841,
+1.702/2.324 and 0.646/0.972 h. These differ from the original first-Mythical tool because
+the route completes each collection and includes the three-second delay. Research completed
+one full six-scenario run; its successful output is the evidence reported here.
+
+Free and Coin-only scenarios use paired draw streams and the same pull counts: Coin tiers
+accelerate affordability, not collection probability. Luck changes both the draw distribution and
+future earning loadout; it does not divide completion times or pull counts by the named factor.
+p90 is an unlucky modeled percentile, not the guarantee threshold, a maximum or observed retention.
+Full completion needs the missing ordinary items as well as a Mythical; high Luck can delay a
+remaining Common, so no “faster guaranteed completion” promise is valid.
+
+**Free rewards and sinks excluded from simulations, explicitly accounted for:** one successful
+seven-day Login cycle gives 14,000 Coins plus Grove/Tide/Concepts boxes (23,500 full-price Coin
+equivalent). Seven UTC daily Grove claims add seven boxes (10,500 equivalent); seven completed
+goals add 7,000 Coins. Together 54,500 equivalent over that week, conditional on each claim/goal;
+boxes are random outcomes, not liquid Coins or guaranteed completion. Starting Coins add 4,500
+once; Welcome adds 11 boxes with its floors, not eleven wallet grants. VIP's proposed supplement
+adds at most 3,500 fixed Coins across those seven daily claims, without improving their box odds.
+Do not imply VIP doubles existing Login rewards.
+
+Offline income adds 50% of the saved effective rate for up to six hours per qualifying absence;
+the offline pass doubles that normal amount, not the cap. At the three-Common themed R0≈16.14,
+free six-hour reward is ~174K Coins, enough for eight Concepts boxes at full price but below one
+Prestige box; the offline pass alone is ~348K, enough for one Prestige box. Stronger loadouts
+change this sharply. Existing slot purchases total 4.44M Coins. Shelf purchases start at 50K,
+125K and 312.5K and grant no income; each first completion instead grants one free Shelf unit.
+Spending on Shelves or retaining a decorative Display makes progression slower than the optimizer,
+while rewards/deals/offline income make it faster. No simulation here is a universal session budget.
+
+**Recommendation from evidence:** preserve current free tuning; start product validation with
+convenience, Coin 2 and modest fixed grants. Keep Coin 4/8, Large/Huge packs and Luck/combo on hold
+for launch until the user accepts their completion acceleration and policy dependencies. The
+stress combination can compress existing content substantially; adding variants/collections or
+weakening free progression is not an authorized remedy. Price hypotheses need later real player
+acceptance and spending data; current simulations cannot determine conversion or a fair market price.
+
+## Verification and future acceptance
+
+**PASS, 2026-10-11:** twelve focused existing suites run against isolated source-generated modules:
+Mvp, LinearPity, Offline, SaveSafety, Tutorial, LoginRewards, Deals, DisplayReplacement, EquipBest,
+PlayerMovement, Shelves and Opening. They cover existing distributions/guarantees, duplicate rates,
+bank conservation, offline limits/replays, free claims, progression, persistence and movement.
+Existing pacing tool reproduced; research extension results above. These tests do not test an
+implemented paid system; none exists. **PASS:** document link/path and numerical consistency checks.
+**NOT RUN:** live purchases, receipts, PolicyService emulation, native DataStore, multi-client,
+physical-device playtests or monetized player studies. **N/A:** gameplay implementation, product
+creation, price edits, publishing and production data mutation in this task.
+
+Before any separately authorized implementation/launch, require:
+
+- Deterministic odds tests at L=1/2/4 for every current pool, all pity boundaries, both guarantees,
+  high-demand overlap, weighted items, reward floors, sequential batches and expiry between rolls;
+  all probabilities valid/normalized and displayed from the authoritative distribution.
+- Coin composition/settlement tests before/after ownership, duplicate grants, replacements and
+  expiry; fixed grants unmultiplied; Auto Collect/manual/swap races conserve banks and tutorial rules.
+- Boost token/activation/replay, mixed strengths, combo atomicity, same-effect extension, 24-hour
+  bound, logout, backward clock and partial offline overlap checks.
+- Offline 59/60 seconds, six-hour boundary, unknown/rollback lastSeen, saved-before-absence
+  eligibility, external pass purchase during absence, legacy pending, odd/fractional rounding,
+  wallet/safety limits and claim/rejoin/crash/uncertain-save recovery.
+- Durable paid receipt tests for duplicate/out-of-order/concurrent callbacks, lost replies,
+  charged purchases without prompt state, overflow credit, disconnects and lease/save failure;
+  no acknowledgement before confirmed benefit/marker persistence.
+- Restricted/allowed/error policy emulation on all money-to-box paths, mixed balances,
+  paid-derived duplicate/slot income, free rewards with paid Luck, policy changes while Auto Open
+  runs and outside-game ownership. Verify paid products remain unavailable until the earned route
+  is shown safe; no country/age guess and no backdoor via a Deal or batch request.
+- Existing [quality gates](qa/QUALITY_GATES.md), native device/input and multi-client purchase/
+  odds/expiry presentation, isolated persistent tests and separately authorized release review.
+
+## Concise decision table — smallest remaining user choices
+
+The rules above resolve the detailed options as recommendations. The user need only settle these
+three bundles or name specific exceptions. **No bundle or individual product is approved yet.**
+
+| Decision | Recommendation to accept or amend | Status / implementation consequence |
+| --- | --- | --- |
+| D1 — Product benefits, values and entitlement model | Adopt matrix amounts/prices as proposed defaults; independent highest-owned Coin passes with full-price upgrades/no credit; fixed packs; lifetime once-per-account Starter; concrete two-benefit VIP; 48 movement; permanent offline pass with future-absence eligibility and exact double-after-normal-rounding | **Recommended, awaiting user decision.** No IDs/prices/catalog activation until explicit approval; an upgrade-credit requirement reopens MN-04 |
+| D2 — Shared effects and paid-random boundary | Adopt C/L/T/G, normalized Rare-or-better Luck, unchanged pity/floors, elapsed wall-time tokens and overlap, earned/assisted lineage plus restricted-player earned path. Require validation of that path before economic/Luck launch | **Recommended, awaiting user decision; platform validation unresolved.** No Luck/pack/income implementation may silently use a simpler ungated wallet or odds formula |
+| D3 — Initial launch subset | Validate Auto Collect and movement first; Auto Open requires policy review; then Coin 2, Small/Medium, Starter, VIP and offline subject to shared foundation. Hold Coin 4/8, Large/Huge and all Luck/combo release for pacing/policy acceptance; keep every family documented | **Recommended, awaiting user decision.** Approving specifications does not approve all products for launch, implementation or publication |
+
+Record each future response with decision/date, any exceptions and approved benefit/price version.
+“Retained”, “recommended”, a planning price or a task prompt is not approval. A dependent task must
+stop only the dependent portion if a decision is still missing, and surface the missing decision;
+it must not select a product price/type/upgrade/clock/Luck/offline model without authorization.
+
+Keep original work IDs: MN-01 economy/pacing; MN-02 policy; MN-03 foundation; MN-04 Coins;
+MN-05 packs; MN-06 Starter; MN-07 Auto Open; MN-08 Auto Collect; MN-09 movement; MN-10 VIP;
+MN-11 timed boosts; MN-12 Luck; MN-22 offline. MN-13–20 remain retired, and MN-21 future collection
+work remains separate. [Grouped task prompts](MONETIZATION_TASK_PROMPTS.md) must consume this
+decision table; they do not approve or supersede it.
+
+## Sources and maintenance
+
+[Product backlog](PRODUCT_BACKLOG.md), [playtest backlog](PRODUCT_BACKLOG_PLAYTEST_2026-10-05.md),
+[game audit](GAME_AUDIT.md) and [plots/Shelves](PLAYER_PLOTS_AND_SHELVES.md) retain their historical
+evidence. The cosmetics-first monetization idea is superseded by the user's exclusions, and its
+free-control guardrails remain. Current source configuration and the inspected tests establish
+the baseline; official links above establish platform guidance as of the access date. Recheck
+platform requirements before implementation and before release. No competitor prices, invented
+approved IDs or undisclosed new gameplay assumptions are used as authority.
