@@ -1,8 +1,9 @@
 # Blind Box game design
 
 Current direction is [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
-The accepted [historical MVP](archive/MVP.md) established the core loop; the current candidate still needs
-native storage, multiplayer and physical-device acceptance. Final art remains a proposal;
+The accepted [historical MVP](archive/MVP.md) established the core loop. Blind Box is now live
+(owner confirmation, October 11, 2026); documented native storage, multiplayer and physical-device
+acceptance still needs release verification. Final art remains a proposal;
 first-completion Shelf rewards are implemented as described in the [plot reference](PLAYER_PLOTS_AND_SHELVES.md).
 
 Open boxes, discover original collectibles, choose active Display earners, earn Coins, collect

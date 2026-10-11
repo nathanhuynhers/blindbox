@@ -1,16 +1,18 @@
 # Full-game testing and release
 
-The economy redesign uses fresh `BlindBox_Economy2_Studio` /
+The economy redesign established `BlindBox_Economy2_Studio` /
 `BlindBox_Economy2_Live` stores; the current profile schema is 14. Valid Economy2 schemas 6–13
 upgrade as specified in the [data model](DATA_MODEL.md). Run the
 [current economy acceptance checklist](ECONOMY.md#verification-record-and-acceptance-checklist) for
-variable prices, duplicates, soft pity and the authorized progression reset.
+variable prices, duplicates and soft pity. The earlier authorized reset is historical;
+production updates must preserve existing Economy2 progression.
 
-The user accepted the MVP. The expanded game is a **closed-test candidate**, not published or
-verified in live Roblox servers. Existing recorded checks and MVP playtesting are not proof that
-the current engine, mobile, multiplayer or real DataStore release gates pass.
+Blind Box is **live**, as confirmed by the owner on October 11, 2026. Existing recorded checks
+and MVP playtesting are not proof that every current engine, mobile, multiplayer or real DataStore
+release gate passes. Use [DEPLOYMENT.md](DEPLOYMENT.md) for production releases, backup/recovery
+and rollback; see the [save safety audit](SAVE_SAFETY_AUDIT.md) for findings and remaining gates.
 
-This checklist covers the current economy/storage candidate and open Plot/Shelf architecture.
+This checklist covers the current economy/storage implementation and open Plot/Shelf architecture.
 Also run the [plot and multiplayer checklist](PLOT_SHELF_IMPLEMENTATION.md).
 
 ## Run now
@@ -63,8 +65,8 @@ rojo build default.project.json -o RobloxWorkspace.rbxlx
 python tests/run.py build/tools/luau/luau.exe
 ```
 
-Standalone Luau 0.739 is present in the ignored build/tools path. Any separately installed
-compatible Luau executable can be supplied to the harness. Luau Language Server 1.70.0 analysis
+Standalone Luau 0.739 was used from an existing ignored build/tools installation; a fresh worktree
+may lack that executable. Supply its actual local path to the harness. Luau Language Server 1.70.1 analysis
 uses the generated sourcemap and the locally installed Roblox definition file. The agent ran
 that check; formatting/lint are not substitutes for it. Selene used its cached Roblox API file.
 
@@ -73,6 +75,9 @@ The regression suite runs actual domain, request, schema and storage-transform c
 - Economy/inventory/request assertions, including mixed requests.
 - Full-game/persistence fault checks: expansion, legacy cosmetic migration, daily/goal claims, migration, corrupt
   payloads, competing leases, stale writers, uncertain committed replies, retries and release.
+- Production save safety: populated schemas 6–14, all missing required fields, sparse deal
+  arrays, incompatible writers, failed loads, uncertain autosave-to-final-release, callback
+  conflicts, bounded close, rejoin and cancelled handoff.
 - Scroll-content/lifecycle assertions with engine property/signal shims; these verify the
   sizing logic, not actual Roblox layout rendering.
 - Invalid economy/catalog startup fixtures.
@@ -162,7 +167,7 @@ checks in the [audit](GAME_AUDIT.md#system-by-system-audit); they do not sign of
     access and confirm the board stays on its last page or placeholders without errors in play.
 13. **Schema 14 migration:** in an isolated persistent place, load valid v6–v13 Economy2 test
     profiles and verify each version's required fields and defaults against the
-    [data model](DATA_MODEL.md#authorized-progression-reset). For v6/v7, retain progress and
+    [data model](DATA_MODEL.md#historical-authorized-progression-reset). For v6/v7, retain progress and
     initialize `boxesOpened = 0`; for v8+, retain the saved counter. Confirm the v13 Welcome
     Quest mapping from older records, that v6–v13 records start plaza `deals` at
     `{window = -1}` with full stock, v14 save/rejoin, and fail-closed behavior for invalid or
@@ -189,7 +194,8 @@ closed; they are never replaced with defaults. No paid receipts or cross-player 
 
 Leases last 120 seconds. Autosaves run about every 30 seconds; gameplay stops after 85 seconds
 without a confirmed renewal or immediately on a save failure. Bounded retries use the same
-snapshot and save generation. A response lost after commit is reconciled using the writer token
+snapshot and save generation, including across retry batches. Final release first confirms any
+pending ordinary autosave, then saves current state. A response lost after commit is reconciled using the writer token
 and generation; an expired or replaced owner cannot write. Display and shelf mutations never yield.
 
 Action replies acknowledge **in-memory progress**. A hard crash may roll progress back to the
@@ -211,11 +217,13 @@ just-clicked action was durably saved. Offline earnings are computed once on loa
 - Rehearse recovery in the private test experience: snapshot an expendable profile, inject a
   bad version, confirm load is blocked, restore the inspected test record only while no session
   owns it, then verify inventory/claim conservation. This rehearsal is still pending.
-- Before public release, pass the above tests, choose an eight-player cap, retain a known-good place
-  version, confirm live/Studio store isolation, and review progression-loss behavior. Restart
-  servers on incompatible schema changes; never run an older writer against a newer schema.
-- Public publishing requires the user's separate release instruction. Nothing was published
-  or monetized during implementation. Rolling back code must preserve valid stored schemas;
+- Before production updates, pass the above tests, retain a known-good place version, confirm
+  target universe/place and store isolation, and review progression-loss behavior. An incompatible
+  schema/content release requires the coordinated maintenance or tested bridge procedure in
+  [DEPLOYMENT.md](DEPLOYMENT.md#incompatible-migration-or-content-release); restarting after
+  publishing alone leaves an unsafe mixed-version window.
+- This audit did not publish or restart servers; a release requires a separate instruction.
+  Rolling back code must preserve valid stored schemas;
   data rollback is a distinct, reviewed action, not a side effect of reverting the place.
 
 Recorded native single-client checks for parts of the expanded candidate are linked from the

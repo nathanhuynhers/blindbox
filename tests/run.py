@@ -143,6 +143,7 @@ run("PlotEngine", "ShelfShowcase.spec")
 run("PlotEngine", "CollectionPlates.spec")
 run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
+run("SaveSafety.spec")
 if requested:
     raise SystemExit(0)
 fixtures = [

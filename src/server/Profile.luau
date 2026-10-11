@@ -319,8 +319,12 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			count += 1
 			bought[stall :: number] = value :: number
 		end
-		if count ~= #bought then
-			return nil
+		-- The length operator can choose a border inside a sparse table. Validate
+		-- every index, so holes cannot become fresh stock or invalid future saves.
+		for stall = 1, count do
+			if bought[stall] == nil then
+				return nil
+			end
 		end
 		-- Dense up to the configured stalls, so a purchase never leaves a hole in the array.
 		for stall = count + 1, Economy.deals.stalls do

@@ -2,7 +2,7 @@
 
 Current schema: **14**, written to `BlindBox_Economy2_Studio` and
 `BlindBox_Economy2_Live`. The decoder accepts valid Economy2 schemas 6–14; 6–13 upgrade to 14
-on the normal save path. Schemas 1–5, future versions and malformed records fail closed. Existing
+in the acquisition UpdateAsync as well as the normal save path. Schemas 1–5, future versions and malformed records fail closed. Existing
 catalog figure IDs are unchanged. The prior audit reviewed schema 12 before the Welcome Quest
 merge; it is now an upgrade source, not the written format.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
@@ -61,11 +61,14 @@ safety guards, **not product-design progression maximums**. Raising them require
 performance review before introducing acquisition. Oversized data blocks loading without a
 default reset or truncated save. Legacy inputs are also bounded before allocation.
 
-## Authorized progression reset
+<a id="authorized-progression-reset"></a>
 
-The user requested a fresh start. Settings now select `BlindBox_Economy2_Studio` and
+## Historical authorized progression reset
+
+The user previously requested a fresh start. Settings established `BlindBox_Economy2_Studio` and
 `BlindBox_Economy2_Live`. Old namespaces are not read or overwritten, and schemas 1-5 are not
-accepted in these new stores. There is no Scrap conversion or legacy progression migration.
+accepted in these stores. There is no Scrap conversion or legacy progression migration.
+This is historical context, not authorization to reset live Economy2 records during updates.
 
 A fresh profile has 4,500 Coins, no owned/discovered figures, empty pity, three unlocked Display
 slots, three empty Shelf Units and `boxesOpened = 0`. The first three Starter purchases remain fully random.
@@ -105,7 +108,7 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 ## Storage and runtime boundaries
 
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
-Store names change as described above; native UpdateAsync leases, generations, retries and
+Store names remain those established above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
 schema-14 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first).
 Wallet and banks save atomically in one aggregate.
@@ -148,9 +151,11 @@ exists for the global leaderboard. The global leaderboard OrderedDataStores
 rebuildable presentation index keyed by UserId string. They are never read back into a profile,
 so they cannot corrupt or roll back progress.
 
-Deploy with coordinated server replacement. Rolling back Settings restores the old namespace,
-not progress made in Economy2. A rollback that preserves new progress must support schema 14;
-older (schema-13) code cannot read v14 saves.
+Deploy using [the production runbook](DEPLOYMENT.md). Never roll back Settings to a retired
+namespace. A rollback that preserves current progress must support schema 14 and every saved
+catalog ID; older schema-13 code cannot read v14 saves. Publishing and then restarting alone
+does not prevent mixed-version overlap. Incompatible releases require a verified drain and
+maintenance barrier or a tested compatibility bridge before the new writer is enabled.
 
 ## Daily Login streak (v11)
 
