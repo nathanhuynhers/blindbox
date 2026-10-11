@@ -234,10 +234,19 @@ function Economy.roll(
 	value: number,
 	collection: string,
 	pity: { [string]: Types.Pity },
-	minimum: Rarity.Id?
+	minimum: Rarity.Id?,
+	forcedRarity: string?
 ): string
 	assert(value >= 0 and value < 1, "Roll must be in [0, 1)")
 	local buckets = Economy.buckets(collection, pity)
+	-- Server-only debug injection retains the actual within-rarity figure weights.
+	if forcedRarity then
+		assert(
+			Config.buckets[Config.collections[collection].buckets][forcedRarity],
+			"Ineligible rarity"
+		)
+		buckets = { [forcedRarity] = 100 }
+	end
 	local floor = if minimum then table.find(Rarity.order, minimum) or 1 else 1
 	local total = 0
 	for index, rarity in Rarity.order do

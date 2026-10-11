@@ -6,12 +6,14 @@ Generated copies live in ignored build/tests. No production test grants or test 
 from pathlib import Path
 import subprocess
 import sys
+import re
 
 root = Path(__file__).resolve().parents[1]
 requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.spec.
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "AdminTypes": "shared", "AdminConfig": "server", "AdminProtocol": "server", "AdminOverrides": "server", "AdminService": "server", "AdminClient": "client",
     "AfkConfig": "shared", "AfkIdle": "shared", "AfkReconnect": "server",
     "Storage": "server", "Settings": "server", "AfkClient": "client",
     "ShelfShowcase": "server", "ShelfEditor": "client",
@@ -34,6 +36,7 @@ modules = {
 }
 # Redesigned UI: the real components, screens and Interface run on tests/UIEngine.luau.
 ui = [
+	"AdminConsole",
     "AfkNotice",
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
@@ -62,6 +65,8 @@ for name, folder in modules.items():
         source = source.replace("require(script.Parent.BlindBoxPreview)", "Engine.BoxPreview")
         source = source.replace("require(script.Parent.Sfx)", "Engine.Sfx")
         source = source.replace("--!strict", UI_PRELUDE, 1)
+    if name == "AdminConsole":
+        source = source.replace("--!strict", '--!strict\nlocal os = {date = function(_, timestamp) return tostring(timestamp) end}', 1)
     if name == "Storage":
         source = source.replace("--!strict", '--!strict\nlocal Engine = require("./AfkEngine")\nlocal game, task, os, warn = Engine.game, Engine.task, Engine.os, Engine.warn', 1)
     if name == "AfkClient":
@@ -144,6 +149,25 @@ run("PlotEngine", "CollectionPlates.spec")
 run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
 run("SaveSafety.spec")
+run("Admin.spec", "AdminClient.spec", "AdminUI.spec")
+# Exercise missing authorization with the actual resolver/service, not a parallel policy mock.
+if not requested or "AdminDisabled.spec" in requested:
+    for index, owner_value in enumerate(("0", '"unconfigured"')):
+        fixture = out / f"admin-disabled-{index}"
+        fixture.mkdir(exist_ok=True)
+        for helper in ("OpeningEngine", "OpeningVisualEngine"):
+            (fixture / f"{helper}.luau").write_text((out / f"{helper}.luau").read_text(encoding="utf-8"), encoding="utf-8")
+        for name in modules:
+            source = (out / f"{name}.luau").read_text(encoding="utf-8")
+            if name == "AdminConfig":
+                source, changed = re.subn(r"ownerUserId\s*=\s*[\d_]+", "ownerUserId = " + owner_value, source, count=1)
+                assert changed == 1, "Owner-config fixture could not find configured UserId"
+            (fixture / f"{name}.luau").write_text(source, encoding="utf-8")
+        spec = fixture / "AdminDisabled.spec.luau"
+        spec.write_text((root / "tests/AdminDisabled.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+        result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
+        if result.returncode:
+            raise SystemExit(result.returncode)
 if requested:
     raise SystemExit(0)
 fixtures = [

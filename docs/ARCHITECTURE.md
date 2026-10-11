@@ -17,6 +17,12 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 
 ## Server ownership
 
+The owner-only [Admin Control Center](ADMIN_CONTROL_CENTER.md) adds one validated `Admin`
+RemoteFunction and a server command registry. It uses the existing loaded sessions, Rules mutation
+paths, Storage lease/save lifecycle and CollectionEconomy rolling logic; no parallel data/economy
+service or schema is introduced. AdminConfig contains the explicit numeric owner identity.
+One-opening overrides are server-only, temporary and consumed inside preflighted openings.
+
 - `init.server.luau`: reserves fixed plot slots before profile load, owns player lifecycle and
   remotes, validates ready sessions, sends private owner snapshots and runs the existing income clock.
 - `PlotConfig`/`PlotSlots`: eight finite locations; unique pending/active allocation and explicit release.

@@ -22,6 +22,7 @@ local UIState = require(script.UIState)
 local Sfx = require(script.Sfx)
 local Music = require(script.Music)
 local AfkClient = require(script.AfkClient)
+local AdminConsole = require(script.AdminConsole)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
@@ -34,6 +35,7 @@ local shelfEditor = ShelfEditor.create(function(isOpen, token)
 	shelfEditorRemote:FireServer(isOpen, token)
 end)
 local current: Types.Snapshot? = nil
+local adminFocused = false
 local pending: Types.Intent? = nil
 local beforeRequest: Types.Snapshot? = nil
 local opening: OpeningController.Controller? = nil
@@ -87,6 +89,7 @@ local function request(
 	local state = current
 	if
 		not state
+		or adminFocused
 		or not state.ready
 		or pending
 		or (opening and opening.isActive())
@@ -126,7 +129,7 @@ local function request(
 	intentRemote:FireServer(intent)
 end
 ui = Interface.create(request, function(destination)
-	if afk and afk.blocked() then
+	if adminFocused or (afk and afk.blocked()) then
 		return
 	end
 	-- The server picks the spot; the remote names the place, never a position.
@@ -212,6 +215,7 @@ local displayInteraction = DisplayInteraction.create(
 		local state = current
 		if
 			state
+			and not adminFocused
 			and state.ready
 			and not (opening and opening.isActive())
 			and not summary.isOpen()
@@ -254,7 +258,13 @@ table.insert(
 				Music.play("world")
 			end
 			local offlineCoins, away = UIState.offline(state)
-			if offlineCoins and state.ready and not pending and not offline.isOpen() then
+			if
+				offlineCoins
+				and state.ready
+				and not pending
+				and not offline.isOpen()
+				and not adminFocused
+			then
 				offline.show(offlineCoins, away)
 				Sfx.play("open")
 			end
@@ -382,6 +392,7 @@ table.insert(
 			state
 			and state.ready
 			and state.step == Tutorial.reward
+			and not adminFocused
 			and not welcomeShown
 			and not pending
 			and not (opening and opening.isActive())
@@ -398,8 +409,28 @@ table.insert(
 		end
 	end)
 )
+local adminPanel = AdminConsole.create(remotes:WaitForChild("Admin") :: RemoteFunction, function()
+	return current ~= nil
+		and current.ready
+		and not pending
+		and not (opening and opening.isActive())
+		and #batch == 0
+		and not results
+		and not summary.isOpen()
+		and not offline.isOpen()
+		and not welcome.isOpen()
+		and not deal.isOpen()
+		and not (afk and afk.blocked())
+end, function(value)
+	adminFocused = value
+	if value then
+		ui.closeScreen()
+	end
+	ui.openingFocus(value)
+end)
 syncRemote:FireServer()
 script.Destroying:Connect(function()
+	adminPanel.destroy()
 	if afk then
 		afk.destroy()
 	end

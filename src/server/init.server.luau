@@ -29,6 +29,8 @@ local Leaderboard = require(script.Leaderboard)
 local DayNight = require(script.DayNight)
 local TownModels = require(script.TownModels)
 local TownPlacements = require(script.TownPlacements)
+local AdminService = require(script.AdminService)
+local AdminTypes = require(ReplicatedStorage.Shared.AdminTypes)
 local world = World.create()
 local productionModels = ModelAssets.publish()
 local dayNight = DayNight.start(Lighting)
@@ -80,13 +82,9 @@ local homeRemote = remote("Home")
 local plazaRemote = remote("Plaza")
 local shelfEditorRemote = remote("ShelfEditor")
 local afkRemote = remote("AfkReconnect")
-local studioGrantCoinsRemote: RemoteFunction? = nil
-if RunService:IsStudio() then
-	local studioRemote = Instance.new("RemoteFunction")
-	studioRemote.Name = "StudioGrantCoins"
-	studioRemote.Parent = folder
-	studioGrantCoinsRemote = studioRemote
-end
+local adminRemote = Instance.new("RemoteFunction")
+adminRemote.Name = "Admin"
+adminRemote.Parent = folder
 folder.Parent = ReplicatedStorage
 -- Current plaza deal window and its length. Studio playtests may shorten it with the
 -- StudioDealWindowSeconds attribute on ServerStorage; live servers always use the config.
@@ -220,6 +218,121 @@ local afk = AfkReconnect.create({
 		warn("AFK reconnect", player.UserId, message)
 	end,
 })
+-- Admin callbacks below are non-yielding; target lookup, mutation and receipt commit
+-- share the ordinary session state. Storage remains the only persistence writer.
+local function adminTarget(userId: number): AdminService.Target?
+	local player = Players:GetPlayerByUserId(userId)
+	local session = if player then sessions[player] else nil
+	if not session then
+		return nil
+	end
+	local storage = session.storage
+	return {
+		state = session.transaction.state,
+		plot = session.plot.index,
+		ready = not shuttingDown
+			and not storage.closed
+			and storage.ready
+			and not storage.transferring
+			and os.clock() < storage.safeUntil,
+		saveStatus = storage.status,
+		persistent = storage.handle ~= nil,
+		transferring = storage.transferring,
+	}
+end
+local adminRandom = Random.new() -- dry runs do not consume the ordinary opening RNG stream
+local admin = AdminService.create({
+	now = os.clock,
+	wall = os.time,
+	token = function()
+		return HttpService:GenerateGUID(false)
+	end,
+	random = function()
+		return math.min(adminRandom:NextNumber(), 0.9999999999999999)
+	end,
+	target = adminTarget,
+	players = function()
+		local result: { AdminTypes.PlayerRow } = {}
+		for _, player in Players:GetPlayers() do
+			local session = sessions[player]
+			local target = adminTarget(player.UserId)
+			table.insert(result, {
+				userId = player.UserId,
+				username = player.Name,
+				displayName = player.DisplayName,
+				plot = if session then session.plot.index else nil,
+				ready = target ~= nil and target.ready,
+			})
+		end
+		table.sort(result, function(a, b)
+			return a.username < b.username
+		end)
+		return result
+	end,
+	changed = function(userId)
+		local player = Players:GetPlayerByUserId(userId)
+		local session = if player then sessions[player] else nil
+		if not player or not session then
+			return
+		end
+		if session.storage.handle and not session.storage.busy then
+			session.storage.status = "Autosave pending"
+		end
+		send(player, session, nil)
+		PlayerPlot.render(session.plot, session.transaction.state)
+	end,
+	teleport = function(actorId, targetId)
+		local actor, target =
+			Players:GetPlayerByUserId(actorId), Players:GetPlayerByUserId(targetId)
+		local session = if actor then sessions[actor] else nil
+		local actorData = adminTarget(actorId)
+		local character = if target then target.Character else nil
+		local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
+		local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
+		if
+			not actor
+			or not actorData
+			or not actorData.ready
+			or not session
+			or not root
+			or not root:IsA("BasePart")
+			or not humanoid
+			or humanoid.Health <= 0
+		then
+			return false, "Both players need a ready session and a living character."
+		end
+		local ok, nextTime = HomeTeleport.travel(
+			actor,
+			root.CFrame * CFrame.new(3, 0, 3),
+			session.homeTime,
+			os.clock()
+		)
+		session.homeTime = nextTime
+		return ok, if ok then "Teleported to player." else "Teleport unavailable; wait or respawn."
+	end,
+	kick = function(userId, reason)
+		local player = Players:GetPlayerByUserId(userId)
+		if not player then
+			return false, "Player has left."
+		end
+		player:Kick(reason)
+		return true, "Player kicked. Normal departure saves their profile."
+	end,
+	log = function(row)
+		print("BlindBox Admin", HttpService:JSONEncode(row))
+	end,
+})
+adminRemote.OnServerInvoke = function(player: Player, raw: unknown): AdminTypes.Reply
+	local ok, result = pcall(admin.receive, player.UserId, raw)
+	if not ok then
+		warn("Admin request failed; refresh before continuing.")
+		return {
+			ok = false,
+			message = "Internal error. Refresh authoritative state before continuing.",
+		}
+	end
+	return result
+end
 local function closeStorage(storage: Storage.Session)
 	closing += 1
 	local ok = Storage.close(storage)
@@ -229,6 +342,7 @@ local function closeStorage(storage: Storage.Session)
 	closing -= 1
 end
 local function remove(player: Player)
+	admin.remove(player.UserId)
 	afk.remove(player)
 	local binding = movement[player]
 	if binding then
@@ -476,48 +590,6 @@ table.insert(
 		end
 	)
 )
-if studioGrantCoinsRemote then
-	studioGrantCoinsRemote.OnServerInvoke = function(
-		player: Player,
-		rawAmount: unknown
-	): (boolean, string, number?)
-		local session = sessions[player]
-		if
-			not RunService:IsStudio()
-			or not session
-			or shuttingDown
-			or not session.storage.ready
-			or session.storage.transferring
-			or os.clock() >= session.storage.safeUntil
-		then
-			return false, "Your Studio session is not ready.", nil
-		end
-		if
-			typeof(rawAmount) ~= "number"
-			or rawAmount ~= rawAmount
-			or rawAmount == math.huge
-			or rawAmount == -math.huge
-			or rawAmount % 1 ~= 0
-			or rawAmount < 1
-			or rawAmount > Economy.coinLimit
-		then
-			return false, "Coin amount must be a positive whole number within the Coin limit.", nil
-		end
-		local state = session.transaction.state
-		Rules.settle(state, os.clock())
-		local granted = math.min(rawAmount, Economy.coinLimit - state.coins)
-		if granted < 1 then
-			return false, "Your wallet is already at the Coin limit.", state.coins
-		end
-		state.coins += granted
-		state.revision += 1
-		if session.storage.handle and not session.storage.busy then
-			session.storage.status = "Autosave pending"
-		end
-		send(player, session, nil)
-		return true, string.format("Granted %d Studio Coins.", granted), state.coins
-	end
-end
 table.insert(
 	connections,
 	intentRemote.OnServerEvent:Connect(function(player: Player, raw: unknown)
@@ -542,7 +614,10 @@ table.insert(
 			math.floor(os.time() / 86400),
 			PlayerPlot.access(session.plot, player),
 			nil,
-			(dealClock())
+			(dealClock()),
+			function(collection, value)
+				return admin.consume(player.UserId, collection, value)
+			end
 		)
 		if not reply then
 			return
@@ -597,6 +672,7 @@ table.insert(
 				end
 			end
 		end
+		admin.step()
 		afk.step()
 		for player, session in sessions do
 			send(player, session, nil)

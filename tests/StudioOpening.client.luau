@@ -1,8 +1,7 @@
 --!strict
 -- Paste into Studio's CLIENT Command Bar during Play. Never mapped by Rojo.
 -- Choose a figure or tour a collection/all collections with Open / Continue for each figure.
--- Set COINS_TO_GRANT above zero for an optional Studio-only Coin grant.
-local COINS_TO_GRANT = 1_000_000 -- Leave at 0 to grant nothing.
+-- Use the owner-only Admin console Economy section for optional fixture Coins.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
@@ -13,18 +12,6 @@ assert(player, "Run in the CLIENT Command Bar during Play")
 local playerGui = player:WaitForChild("PlayerGui")
 assert(not playerGui:FindFirstChild("OpeningPreview"), "Exit the existing fixture first")
 assert(not playerGui:FindFirstChild("BlindboxOpening"), "Finish the real opening first")
-assert(COINS_TO_GRANT >= 0 and COINS_TO_GRANT % 1 == 0, "COINS_TO_GRANT must be a whole number")
-if COINS_TO_GRANT > 0 then
-	local grantRemote = ReplicatedStorage:WaitForChild("Remotes")
-		:WaitForChild("StudioGrantCoins", 5) :: RemoteFunction?
-	assert(
-		grantRemote,
-		"Studio Coin grant is unavailable; sync the latest server code and restart Play"
-	)
-	local ok, message, balance = grantRemote:InvokeServer(COINS_TO_GRANT)
-	assert(ok, message)
-	print(string.format("%s New balance: %d Coins.", message, balance))
-end
 local source = player.PlayerScripts:WaitForChild("Client")
 local Controller = require(source:WaitForChild("OpeningController") :: ModuleScript)
 local Config = require(source:WaitForChild("OpeningConfig") :: ModuleScript)

@@ -276,6 +276,125 @@ function Rules.loginStreak(state: Types.State, day: number): number
 	return if state.lastLoginDay == day - 1 then state.loginStreak + 1 else 1
 end
 -- Every check that can refuse opening `count` boxes; run before any mutation.
+-- Shared by normal openings and administrative grants. Callers preflight the whole batch.
+function Rules.grantFigure(state: Types.State, id: string, quantity: number)
+	state.owned[id] = (state.owned[id] or 0) + quantity
+	state.discovered[id] = true
+end
+-- Server callers supply validated integers. Reject before settling, never clamp an admin request.
+function Rules.adminCoins(
+	state: Types.State,
+	mode: string,
+	amount: number,
+	now: number
+): (boolean, string)
+	local balance = if mode == "GrantCoins"
+		then state.coins + amount
+		elseif mode == "RemoveCoins" then state.coins - amount
+		else amount
+	if balance < 0 or balance > Economy.coinLimit then
+		return false, "Balance would exceed wallet bounds."
+	end
+	Rules.settle(state, now)
+	state.coins = balance
+	state.revision += 1
+	return true, "Coin balance updated."
+end
+function Rules.adminFigures(
+	state: Types.State,
+	ids: { string },
+	quantity: number,
+	remove: boolean,
+	now: number
+): (boolean, string)
+	local banks = 0
+	local elapsed = math.max(0, now - state.time)
+	local bonus = if Rules.bonus(state) > 0 then 1 + Economy.setBonus else 1
+	for _, id in ids do
+		local owned = state.owned[id] or 0
+		if
+			not Catalog.byId[id]
+			or (remove and owned < quantity)
+			or (not remove and owned > Economy.copyLimit - quantity)
+		then
+			return false, "Inventory quantity would exceed bounds."
+		end
+		if remove and owned == quantity then
+			local accrued = if table.find(state.display.slots, id)
+				then elapsed * Rules.figureRate(state, id) * bonus
+				else 0
+			banks += math.floor(math.min(Economy.coinLimit, (state.earnings[id] or 0) + accrued))
+		end
+	end
+	if banks > Economy.coinLimit - state.coins then
+		return false, "Spend Coins first so final-copy banks can be collected safely."
+	end
+	Rules.settle(state, now) -- settle the old duplicate rates and Display bonus first
+	for _, id in ids do
+		if remove then
+			local remaining = (state.owned[id] or 0) - quantity
+			if remaining > 0 then
+				state.owned[id] = remaining
+			else
+				state.owned[id] = nil
+			end
+			if remaining == 0 then
+				transferBank(state, id)
+				-- Schema requires earnings to reference owned IDs. Confirmed final-copy removal
+				-- collects every whole Coin and forfeits only the sub-Coin remainder.
+				state.earnings[id] = nil
+				for slot, placed in state.display.slots do
+					if placed == id then
+						state.display.slots[slot] = ""
+					end
+				end
+			end
+		else
+			Rules.grantFigure(state, id, quantity)
+		end
+	end
+	-- Permanent discoveries, Shelf rewards, goal high-water marks and earnings are retained.
+	Shelves.reconcile(state.shelves, state.owned, state.discovered)
+	if state.shelves.legacyOverflow then
+		for _, entry in state.shelves.legacyOverflow do
+			for slot, id in entry.placements do
+				if not state.owned[id] then
+					entry.placements[slot] = nil
+				end
+			end
+		end
+	end
+	Rules.grantShelves(state)
+	state.revision += 1
+	return true, if remove then "Figures removed; placements reconciled." else "Figures granted."
+end
+function Rules.adminPity(
+	state: Types.State,
+	collection: string,
+	rarity: string,
+	amount: number
+): (boolean, string)
+	local config = Economy.collections[collection]
+	if not config or not config.pity then
+		return false, "This box has no pity counters."
+	end
+	if rarity ~= "Legendary" and rarity ~= "Mythical" then
+		return false, "Unknown pity counter."
+	end
+	if amount < 0 or amount > Economy.counterLimit or amount % 1 ~= 0 then
+		return false, "Invalid pity progress."
+	end
+	local pity: Types.Pity = state.pityByGroup[config.group]
+		or { legendaryDryRolls = 0, mythicalDryRolls = 0 }
+	if rarity == "Legendary" then
+		pity.legendaryDryRolls = amount
+	else
+		pity.mythicalDryRolls = amount
+	end
+	state.pityByGroup[config.group] = pity
+	state.revision += 1
+	return true, "Pity counter updated."
+end
 local function canOpen(
 	state: Types.State,
 	collection: string,
@@ -298,30 +417,33 @@ local function canOpen(
 end
 -- Cannot fail once canOpen passed, so a multi-box grant is all-or-nothing. With `floor`, the
 -- last box is rolled at that minimum rarity only when no earlier box reached it.
+export type RollOverride = (collection: string, value: number) -> string?
 local function open(
 	state: Types.State,
 	collection: string,
 	count: number,
 	rolls: { number },
-	floor: Rarity.Id?
+	floor: Rarity.Id?,
+	override: RollOverride?
 ): ({ string }, number)
 	local figures: { string } = {}
 	local fresh = 0
 	local rank = if floor then table.find(Rarity.order, floor) or 1 else 1
 	local reached = floor == nil
 	for index = 1, count do
-		local id = Rules.roll(
-			rolls[index],
-			collection,
-			state,
-			if index == count and not reached then floor else nil
-		)
+		local forced = if override then override(collection, rolls[index]) else nil
+		local id = forced
+			or Rules.roll(
+				rolls[index],
+				collection,
+				state,
+				if index == count and not reached then floor else nil
+			)
 		reached = reached or (table.find(Rarity.order, Catalog.byId[id].rarity) or 0) >= rank
 		if not state.discovered[id] then
 			fresh += 1
 		end
-		state.owned[id] = (state.owned[id] or 0) + 1
-		state.discovered[id] = true
+		Rules.grantFigure(state, id, 1)
 		CollectionEconomy.advance(state.pityByGroup, collection, id)
 		figures[index] = id
 	end
@@ -338,7 +460,8 @@ function Rules.mutate(
 	roll: number | { number },
 	day: number?,
 	now: number?,
-	window: number?
+	window: number?,
+	override: RollOverride?
 ): (boolean, string, string?, { string }?)
 	local action, id = intent.action, intent.figure or ""
 	local rolls = if type(roll) == "number" then { roll } else roll
@@ -384,7 +507,7 @@ function Rules.mutate(
 		if not allowed then
 			return false, refusal, nil
 		end
-		local figures, fresh = open(state, collection, count, rolls)
+		local figures, fresh = open(state, collection, count, rolls, nil, override)
 		id = figures[1]
 		if action == "Daily" then
 			state.lastDailyDay = today
