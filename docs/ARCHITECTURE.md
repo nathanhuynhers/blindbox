@@ -82,6 +82,10 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   repaired state follows the normal save path.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
+- `AfkReconnect`/`AfkClient`/`AfkIdle`: server-timed public-server idle reconnect, fresh client
+  confirmations, a frozen saved/released profile handoff and conditional lease recovery.
+  `AfkConfig` centralizes tuning; `AfkNotice` reuses the existing UI tokens. See the
+  [handoff, security limits and published checks](AFK_RECONNECT.md).
 
 `Intent`, `State` and `RequestState` retain their profile transaction roles. The parameterless
 `Home` event is separate because returning to a plot is non-persistent and needs no revision,
@@ -161,7 +165,8 @@ composes dedicated HUD, navigation, book/details, shop, Display controls (`Displ
 goals and `ShelvesScreen`, a minimal owner editor with three-unit selection and carousel controls
 and an owned-figure picker. Native nearby prompts route to the existing Display and Shelves screens;
 they do not send mutation requests. Exhausted figures remain non-actionable using the existing tile state.
-There is no visit directory or teleport callback.
+There is no visit directory. Automatic AFK teleports have a separate bounded lifecycle
+and do not alter normal snapshot or plot initialization.
 `Onboarding` presents the Welcome Quest from the server-owned `step` (schema 13, shared
 `Tutorial` ids): Welcome Box → Display → collect → paid box → free x10, then an optional Shelves
 tip. `Rules` advances the stage only from the action each stage teaches (see

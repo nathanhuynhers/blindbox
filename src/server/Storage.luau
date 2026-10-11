@@ -16,6 +16,9 @@ export type Session = {
 	nextSave: number,
 	busy: boolean,
 	closed: boolean,
+	transferring: boolean,
+	released: boolean,
+	pendingRelease: Types.Profile?,
 }
 local Storage = {}
 local studioPersistence = Settings.studioPersistence
@@ -45,6 +48,9 @@ function Storage.open(userId: number): (Session?, string)
 			nextSave = math.huge,
 			busy = false,
 			closed = false,
+			transferring = false,
+			released = false,
+			pendingRelease = nil,
 		},
 			""
 	end
@@ -71,6 +77,9 @@ function Storage.open(userId: number): (Session?, string)
 				nextSave = os.clock() + Persistence.saveSeconds,
 				busy = false,
 				closed = false,
+				transferring = false,
+				released = false,
+				pendingRelease = nil,
 			},
 				""
 		end
@@ -94,8 +103,13 @@ function Storage.flush(session: Session, release: boolean): boolean
 	if session.ready then
 		Rules.settle(session.state, os.clock())
 	end
-	session.state.lastSeen = os.time()
-	local snapshot = Profile.encode(session.state)
+	if not session.pendingRelease then
+		session.state.lastSeen = os.time()
+		if release then
+			session.pendingRelease = Profile.encode(session.state)
+		end
+	end
+	local snapshot: Types.Profile = session.pendingRelease or Profile.encode(session.state)
 	session.status = "Saving..."
 	local saved = false
 	for attempt = 1, 3 do
@@ -116,19 +130,27 @@ function Storage.flush(session: Session, release: boolean): boolean
 		end
 	end
 	if saved then
+		if release then
+			session.released = true
+		end
 		-- Do not award time spent paused after a failed save.
-		if not session.ready then
+		if not session.ready and not session.transferring then
 			session.state.time = os.clock()
 		end
-		session.ready = not session.closed and os.clock() < session.safeUntil
-		session.status = if session.ready then "Saved" else "Saving paused. Rejoin to reconnect."
+		session.ready = not session.closed
+			and not session.transferring
+			and os.clock() < session.safeUntil
+		session.status = if session.transferring
+			then "Moving to a new server..."
+			elseif session.ready then "Saved"
+			else "Saving paused. Rejoin to reconnect."
 	end
 	session.nextSave = os.clock() + (if saved then Persistence.saveSeconds else 5)
 	session.busy = false
 	return saved
 end
 function Storage.step(session: Session, now: number)
-	if session.closed then
+	if session.closed or session.transferring then
 		return
 	end
 	if now >= session.safeUntil then
@@ -139,6 +161,80 @@ function Storage.step(session: Session, now: number)
 		-- flush sets busy before its first yield; at most one write per profile.
 		task.spawn(Storage.flush, session, false)
 	end
+end
+function Storage.prepareTeleport(session: Session): boolean
+	if
+		session.closed
+		or session.transferring
+		or not session.handle
+		or not session.ready
+		or os.clock() >= session.safeUntil
+	then
+		return false
+	end
+	-- This barrier is set before yielding. All authoritative action paths check it.
+	session.transferring = true
+	local deadline = os.clock() + 10
+	while session.busy and not session.closed and os.clock() < deadline do
+		task.wait(0.1)
+	end
+	if session.closed or session.busy or not session.ready or os.clock() >= session.safeUntil then
+		return false
+	end
+	Rules.settle(session.state, os.clock())
+	session.ready = false
+	return Storage.flush(session, true)
+end
+function Storage.recoverTeleport(session: Session): boolean
+	if session.closed then
+		return false
+	end
+	if not session.transferring then
+		return session.ready
+	end
+	if session.busy then
+		-- Never race an unresolved autosave or handoff write with a reclaim.
+		local deadline = os.clock() + 10
+		while session.busy and not session.closed and os.clock() < deadline do
+			task.wait(0.1)
+		end
+	end
+	if session.closed or session.busy then
+		return false
+	end
+	local handle = session.handle
+	if not handle then
+		return false
+	end
+	session.busy = true
+	local resumed = false
+	for attempt = 1, 3 do
+		local started = os.clock()
+		local ok, message = Persistence.resume(update, handle, os.time())
+		session.status = message
+		if ok then
+			session.safeUntil = started + Persistence.safeSeconds
+			resumed = true
+			break
+		end
+		if attempt < 3 then
+			task.wait(attempt)
+		end
+	end
+	if resumed then
+		-- No offline award in the source. Resume active banks from the frozen boundary,
+		-- then advance lastSeen on the next normal save. Nothing was paid twice.
+		if session.pendingRelease then
+			Rules.settle(session.state, os.clock())
+		else
+			session.state.time = os.clock()
+		end
+		session.transferring, session.released, session.pendingRelease = false, false, nil
+		session.ready = not session.closed and os.clock() < session.safeUntil
+		session.nextSave = os.clock() -- Persist any catch-up income promptly.
+	end
+	session.busy = false
+	return resumed
 end
 function Storage.close(session: Session): boolean
 	if session.closed then
@@ -155,6 +251,11 @@ function Storage.close(session: Session): boolean
 	end
 	if session.busy then
 		return false
+	end
+	if session.released then
+		-- The immutable handoff checkpoint is already saved and unlocked. A departed
+		-- source must never write over the destination's newly acquired generation.
+		return true
 	end
 	return Storage.flush(session, true)
 end

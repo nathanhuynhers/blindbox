@@ -21,6 +21,7 @@ local DealStalls = require(script.DealStalls)
 local UIState = require(script.UIState)
 local Sfx = require(script.Sfx)
 local Music = require(script.Music)
+local AfkClient = require(script.AfkClient)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
@@ -28,6 +29,7 @@ local syncRemote = remotes:WaitForChild("RequestState") :: RemoteEvent
 local homeRemote = remotes:WaitForChild("Home") :: RemoteEvent
 local plazaRemote = remotes:WaitForChild("Plaza") :: RemoteEvent
 local shelfEditorRemote = remotes:WaitForChild("ShelfEditor") :: RemoteEvent
+local afkRemote = remotes:WaitForChild("AfkReconnect") :: RemoteEvent
 local shelfEditor = ShelfEditor.create(function(isOpen, token)
 	shelfEditorRemote:FireServer(isOpen, token)
 end)
@@ -52,6 +54,7 @@ local sentAt = 0
 local sequence = -1
 local ui: Interface.Interface
 local deal: DealPopup.Controller
+local afk: AfkClient.Controller? = nil
 -- Sounds for confirmed replies. Box results sound through the opening; failures play "error".
 local feedback: { [string]: string } = {
 	Place = "Figure displayed",
@@ -82,7 +85,13 @@ local function request(
 	window: number?
 )
 	local state = current
-	if not state or not state.ready or pending or (opening and opening.isActive()) then
+	if
+		not state
+		or not state.ready
+		or pending
+		or (opening and opening.isActive())
+		or (afk and afk.blocked())
+	then
 		return
 	end
 	local shelfAction = string.sub(action, 1, 5) == "Shelf" or action == "BuyShelf"
@@ -117,6 +126,9 @@ local function request(
 	intentRemote:FireServer(intent)
 end
 ui = Interface.create(request, function(destination)
+	if afk and afk.blocked() then
+		return
+	end
 	-- The server picks the spot; the remote names the place, never a position.
 	if destination == "Plaza" then
 		plazaRemote:FireServer()
@@ -186,6 +198,11 @@ local function choose(choice: string, result: OpeningResult.Result)
 	end
 end
 opening = OpeningController.create(ui.openingFocus, ui.message, choose)
+afk = AfkClient.create(afkRemote, function()
+	-- An AFK handoff waits for confirmed requests and every reveal/batch animation.
+	-- A static summary/reward popup requires no action to keep the profile safe.
+	return pending ~= nil or (opening ~= nil and opening.isActive()) or #batch > 0 or results ~= nil
+end, ui.message)
 local connections: { RBXScriptConnection } = {}
 local displayInteraction = DisplayInteraction.create(
 	ui.openDisplay,
@@ -216,6 +233,9 @@ table.insert(
 		if state.sequence > sequence then
 			sequence = state.sequence
 			current = state
+			if state.ready and afk then
+				afk.ready()
+			end
 			shelfEditor.receive(state.shelfEditorToken)
 			if
 				previous
@@ -380,6 +400,9 @@ table.insert(
 )
 syncRemote:FireServer()
 script.Destroying:Connect(function()
+	if afk then
+		afk.destroy()
+	end
 	for _, connection in connections do
 		connection:Disconnect()
 	end
