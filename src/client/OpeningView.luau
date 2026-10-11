@@ -1,6 +1,5 @@
 --!strict
--- Opening overlay: Tap to Open, Skip, input hint and the transition curtain stay as they were;
--- the end result panel is the Reveal card (RevealCard).
+-- Opening overlay controls and transition curtain; the result panel is the Reveal card.
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Style = require(script.Parent.UIStyle)
 local UIScope = require(script.Parent.UIScope)
@@ -117,6 +116,9 @@ function View.create(
 	local chainedOut = result.sequence ~= nil
 	local buttonLimit = Instance.new("UISizeConstraint")
 	buttonLimit.MaxSize, buttonLimit.Parent = Vector2.new(400, 54), primary
+	-- Reserve the hint's full height plus a gap above it. A screen-relative hint height
+	-- can grow behind the fixed-height button on taller mobile and desktop screens.
+	local hintHeight, hintGap = 24, 8
 	local function layout()
 		local compact = Config.compact(gui.AbsoluteSize)
 		-- The bottom scrim was tinting the mobile toy back into a silhouette. Keep the
@@ -125,10 +127,11 @@ function View.create(
 		shade.Size = if compact then UDim2.fromScale(0.52, 1) else UDim2.fromScale(1, 0.55)
 		gradient.Rotation = if compact then 0 else 90
 		local center = if compact then 0.77 else 0.5
-		primary.AnchorPoint, primary.Position = Vector2.new(0.5, 1), UDim2.new(center, 0, 1, -24)
+		primary.AnchorPoint, primary.Position =
+			Vector2.new(0.5, 1), UDim2.new(center, 0, 1, -(hintHeight + hintGap))
 		primary.Size = if compact then UDim2.new(0.4, 0, 0, 50) else UDim2.new(0.72, 0, 0, 54)
 		hint.Position = UDim2.fromScale(center, 1)
-		hint.Size = UDim2.fromScale(if compact then 0.45 else 1, 0.05)
+		hint.Size = UDim2.new(if compact then 0.45 else 1, 0, 0, hintHeight)
 		card.layout(compact)
 	end
 	layout()
