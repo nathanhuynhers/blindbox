@@ -22,7 +22,7 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `UIBadge`, `UIProgress`, `UIIcons` | Pills/chips/rarity pill/corner badges; bar and segments; frame-drawn icons including the coin glyph |
 | `ScreenShell` | Panel/sheet, 76px header (56 phone): nav icon, title, subtitle, right chips, round Close; phone coins chip |
 | `Dock` | Five tiles, active raised on violet wash, Display/Shop/Goals badges |
-| `Hud`, `SettingsMenu`, `GoalTracker` | Coins pill beside `GuiService.TopbarInset`; top-right `[Daily][Home][gear]` row (`UILayout` `daily`/`home`/`gear` rects, `UIButton` "raised" variant); gear popover with Motion and saved Sound effects / Music volume sliders; desktop goal card / phone "Goal · Claim" chip |
+| `Hud`, `SettingsMenu`, `GoalTracker` | Coins pill beside `GuiService.TopbarInset`, ending in a small green Store **+** (44px hit area); top-right `[STORE][Daily][Home][Plaza][gear]` row (`UILayout` `store`/`daily`/`home`/`plaza`/`gear` rects, `UIButton` "raised" variant; STORE is a candy tile the same size as the others); gear popover with Motion and saved Sound effects / Music volume sliders; desktop goal card / phone "Goal · Claim" chip |
 | `Sfx`, `Music`, `SoundManifest` | Client sounds and background music: one manifest of IDs and levels ([game soundpack](../SOUND.md)) |
 | `CollectionList`, `FigureTile` | Shared collection list item (rail on phone); figure card/tile/pick/shelf variants, pooled and rebound |
 | `ShopScreen` | List, kept `BlindBoxPreview`, Open 1 box, free box, What's inside, Drop odds |
@@ -31,9 +31,10 @@ those came from the merged economy redesign. The client sends no `Recycle`, `Red
 | `GoalsScreen` | Unclaimed daily goal (empty state after claim), free box chooser, collection progress, minute countdown from `nextDay` |
 | `ShelvesScreen` | Shelf tabs + prev/next, 3×3 cabinet, discovered-figure picker with collection chips, Clear spot |
 | `LoginScreen` | Daily Login (routed by `Interface` without a dock tile; HUD Daily button with a "!" badge and idle nudge): one card per `LoginRewards` day (claimed mint / today violet outline + TODAY / locked), wider gold final day, streak chip, Claim. Auto-opens once per session on the first ready snapshot when claimable, except for players who own no figures |
+| `StoreScreen`, `StoreCatalog` | Robux Store ([MONETIZATION_STORE.md](MONETIZATION_STORE.md)), routed like Login with a `tab` route: candy tabs (Starter & VIP, Upgrades, Boosts, Coins, My Perks; L1/R1 switch tabs), product cards, Starter banner, Coin Multiplier tiers, product sheet (B closes it first). Copy follows approved D1. **Buying is not switched on**: every product says Coming soon and the screen sends nothing until the P02 purchase foundation exists. `Store.chip` puts the STORE chip in the Coin Shop header |
 | `RevealCard` | End-of-opening card: NEW (first discovery only), name + rarity pill, chips, owned count, Put on Display / Swap, Open another (price or shortfall), Keep |
 | `OpeningView` | Kept Tap to Open, Skip, hint and curtain; the Result panel is now `RevealCard` |
-| `OfflineEarnings` | Welcome-back card (white card, gold Claim) for offline Display Coins; Claim or tapping outside sends `ClaimOffline` |
+| `OfflineEarnings` | Welcome-back card (candy header, "Your Display earned N Coins…", gold Claim with the amount, "Free") for offline Display Coins; Claim or tapping outside sends `ClaimOffline`. Double & Claim joins it when purchases exist |
 | `OpeningController` | Kept phases, camera, Skip and input ownership; adds an optional `choose` callback (runs after the session fully closes), a Reveal model on `present`, and `refresh` for live affordability |
 | Kept as-is | Opening cinematic/audio/state/box modules, `BlindBoxPreview` (now on `UIKit`), `BlindBoxSkin`, `ShopTheme` (3D box only), `UIPreview`, `UIScope`, `Scroll` (now scale-aware), `NavigationConfig` (simplified), `Notifications` (restyled) |
 
@@ -261,3 +262,8 @@ Paste the scripts in `tests/Studio*.client.luau` into the client Command Bar whe
       on descendant growth.
     - Also watch the Developer Console memory for steady instance counts.
 13. **Two clients:** each player's HUD, Display and Shelves reflect only their own snapshot.
+14. **Robux Store:**
+    - STORE opens Starter & VIP, the Coins + opens Coins, the Coin Shop STORE chip and the plot
+      Upgrade Station (E) open Starter & VIP / Upgrades.
+    - Tabs, cards, tiers and sheets at desktop and phone; every product says Coming soon; nothing
+      is sent; B closes a sheet before the Store; L1/R1 switch tabs.

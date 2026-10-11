@@ -14,6 +14,7 @@ local TownProps = require("./TownProps")
 local TownPlacements = require("./TownPlacements")
 local NightLights = require("./NightLights")
 local ShopFixture = require("./ShopFixture")
+local UpgradeStation = require("./UpgradeStation")
 local PlotStyle = require("./PlotStyle")
 local LeaderboardBoard = require("./LeaderboardBoard")
 local Awning = require("./Awning")
@@ -961,6 +962,88 @@ check(
 	shop.model:GetAttribute("Night") == false and shop.window.LightInfluence == 1 and not shop.halos[1].Visible,
 	"Shop returns to its day look at dawn"
 )
+end
+-- Upgrade Station: front corner on the Shelves side, clear of every other plot fixture.
+do
+	local function extents(part)
+		local half = part.Size / 2
+		local total = Engine.Vector3.new(0, 0, 0)
+		for _, axis in { { part.CFrame.RightVector, half.X }, { part.CFrame.UpVector, half.Y }, { part.CFrame.LookVector, half.Z } } do
+			local v = plot.transform:VectorToObjectSpace(axis[1])
+			total = total + Engine.Vector3.new(math.abs(v.X), math.abs(v.Y), math.abs(v.Z)) * axis[2]
+		end
+		return total
+	end
+	local function box(parts)
+		local minX, maxX, minZ, maxZ = math.huge, -math.huge, math.huge, -math.huge
+		for _, piece in parts do
+			local at = localPosition(plot.transform, piece.Position)
+			local extent = extents(piece)
+			minX, maxX = math.min(minX, at.X - extent.X), math.max(maxX, at.X + extent.X)
+			minZ, maxZ = math.min(minZ, at.Z - extent.Z), math.max(maxZ, at.Z + extent.Z)
+		end
+		return minX, maxX, minZ, maxZ
+	end
+	local station = plot.station
+	local stationParts = descendantParts(station.model)
+	check(#stationParts == 5, "five-part Upgrade Station (base, body, marquee, topper, prompt anchor)")
+	for _, piece in stationParts do
+		check(piece.Anchored and piece.CanTouch == false, "Upgrade Station parts are anchored and never touch-enabled: " .. piece.Name)
+	end
+	local solid = {}
+	for _, piece in stationParts do
+		if piece.Name ~= "OpenStore" then
+			table.insert(solid, piece)
+		end
+	end
+	local minX, maxX, minZ, maxZ = box(solid)
+	local walkable = Config.width / 2 - PlotFixture.style.floorInset
+	check(
+		maxX <= walkable and minZ >= -walkable and minX > Config.pathWidth / 2 + 2,
+		string.format("Upgrade Station stays on the floor, off the arch path: X %.1f..%.1f, Z %.1f..%.1f", minX, maxX, minZ, maxZ)
+	)
+	check(minZ > PlotFixture.arch.z + 2, "Upgrade Station sits behind the arch line")
+	-- Clear (with 2 studs to walk around) of every other fixture's parts on the plot.
+	local others = {}
+	for _, piece in descendantParts(plot.model) do
+		if not piece:IsDescendantOf(station.model) and piece.CanCollide then
+			table.insert(others, piece)
+		end
+	end
+	local compared = 0
+	for _, piece in others do
+		local at = localPosition(plot.transform, piece.Position)
+		local extent = extents(piece)
+		-- The plot floor and its trim span the whole plot; only standing fixtures can collide.
+		if extent.Y > 0.6 and extent.X < 20 and extent.Z < 20 then
+			local apart = at.X + extent.X < minX - 2
+				or at.X - extent.X > maxX + 2
+				or at.Z + extent.Z < minZ - 2
+				or at.Z - extent.Z > maxZ + 2
+			compared += 1
+			check(apart, "Upgrade Station keeps clear of " .. (piece.Parent and piece.Parent.Name or "?") .. "." .. piece.Name)
+		end
+	end
+	check(compared >= 40, "clearance compared the plot's standing fixtures: " .. compared)
+	local facing = plot.transform:VectorToObjectSpace(UpgradeStation.frame(plot.transform).LookVector)
+	check(facing.X < -0.8 and facing.Z < -0.4, "Upgrade Station faces the plot centre and the arch")
+	local openAt = localPosition(plot.transform, station.parts.OpenStore.Position)
+	check(openAt.Y < 1 and openAt.X < minX + 1, "Upgrades prompt anchor sits low in front of the cabinet")
+	for _, node in station.model:GetDescendants() do
+		check(not node:IsA("Light"), "Upgrade Station adds no Light instances to the night-light budget")
+	end
+	check(station.model:GetAttribute("Night") == false and station.window.LightInfluence == 1, "Upgrade Station starts in its day look")
+	NightLights.set(true)
+	check(
+		station.model:GetAttribute("Night") == true
+			and station.window.LightInfluence == 0
+			and station.sign.LightInfluence == 0
+			and station.bulbs[1].BackgroundColor3 == UpgradeStation.palette.bulbOn,
+		"window and marquee glow with the plot's night controller"
+	)
+	NightLights.set(false)
+	check(station.model:GetAttribute("Night") == false and station.sign.LightInfluence == 1, "Upgrade Station returns to day at dawn")
+	print(string.format("Upgrade Station footprint: X %.1f..%.1f, Z %.1f..%.1f", minX, maxX, minZ, maxZ))
 end
 -- UI-04 decorative plot lights: painted string lights under both awnings, marquee bulbs on the
 -- arch beam and a doorway glow pool, all switched by the plot's existing night controller.

@@ -17,7 +17,9 @@ export type Frame = {
 	height: number,
 	phone: boolean,
 	hud: Rect,
-	-- Top-right HUD row, left to right: Daily, Home, Plaza (icon + label tiles), Settings gear.
+	-- Top-right HUD row, left to right: Store (candy tile, same size), Daily, Home, Plaza (icon +
+	-- label tiles), Settings gear.
+	store: Rect,
 	daily: Rect,
 	home: Rect,
 	plaza: Rect,
@@ -84,13 +86,15 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 	if phone then
 		local hudX = math.max(8, left + 8)
 		local sheetX = if width - hudX - 8 >= 600 then hudX else 8
-		local daily, home, plaza, gear = row(right - 10, 8, 50, 56, 10)
+		-- 8px gaps (still thumb-safe) leave the Store tile room beside a wide Coins pill.
+		local daily, home, plaza, gear = row(right - 10, 8, 50, 56, 8)
 		return {
 			scale = scale,
 			width = width,
 			height = height,
 			phone = true,
 			hud = { x = hudX, y = 8, width = 0, height = 44 },
+			store = { x = daily.x - 8 - 50, y = 8, width = 50, height = 56 },
 			daily = daily,
 			home = home,
 			plaza = plaza,
@@ -119,6 +123,8 @@ function Layout.frame(pixelWidth: number, pixelHeight: number, topbar: Topbar): 
 		height = height,
 		phone = false,
 		hud = { x = math.max(16, left + 10), y = 14, width = 0, height = 52 },
+		-- The Store tile matches the row's tiles.
+		store = { x = daily.x - 10 - 64, y = 18, width = 64, height = 64 },
 		daily = daily,
 		home = home,
 		plaza = plaza,
@@ -158,9 +164,9 @@ function Layout.columns(width: number, minimum: number, gap: number, most: numbe
 end
 
 -- The free stretch of the top HUD band: right of the top-left HUD (which ends at `hudRight`)
--- and left of the top-right Daily/Home/gear row.
+-- and left of the top-right Store/Daily/Home/Plaza/gear row.
 function Layout.band(frame: Frame, hudRight: number): (number, number)
-	return hudRight + 12, frame.daily.x - 12
+	return hudRight + 12, frame.store.x - 12
 end
 
 -- Toast rect, at most `width` wide; `measure` gives its real height at a width. No screen

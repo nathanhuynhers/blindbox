@@ -18,6 +18,7 @@ local List = require(script.Parent.CollectionList)
 local Tile = require(script.Parent.FigureTile)
 local BoxPreview = require(script.Parent.BlindBoxPreview)
 local ShopLuck = require(script.Parent.ShopLuck)
+local Store = require(script.Parent.StoreScreen)
 local Shop = {}
 
 local largest = 0
@@ -34,6 +35,8 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		subtitle = "Every box holds one figure from its collection",
 	})
 	local root, body = shell.root, shell.body
+	-- The only Robux element here: a quiet way into the Store. No upsell beside Coin prices.
+	Store.chip(shell.chips, ctx).LayoutOrder = 1
 	local selected = Catalog.collections[1].id
 	local refresh: () -> () = function() end
 	local list = List.create(body, ctx, function(id)

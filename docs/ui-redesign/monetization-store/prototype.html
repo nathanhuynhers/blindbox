@@ -1,0 +1,808 @@
+<title>Blindbox Robux Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: control bar + one scaled game frame (design units = Roblox UI offsets) + spec notes.
+   Single deliberate look: the game's plum-outline UI turned up for the store — candy pastel
+   gradients, soft sunbursts, sparkles, a peeking blind-box buddy, stroked Fredoka and green Robux buttons. */
+:root{
+  --ink:#2B1F4A; --ink-deep:#120C22; --muted:#5C5276; --surface:#FFFDF9; --surface2:#F6F2FC; --divider:#ECE5F6; --track:#E2DAEF;
+  --white:#FFFFFF; --violet:#6B4EE6; --violet-hi:#9B82FF; --violet-dark:#4B32C3; --violet-wash:#EFE8FF;
+  --pink:#FF8DC0; --pink-hi:#FFC2DD; --peach:#FFC9A3; --orange:#FFA64D; --orange-hi:#FFCB8A;
+  --gold:#FFC83D; --gold-hi:#FFE38F; --coin-ring:#C98A00; --gold-wash:#FFF6DA;
+  --mint:#DDF3E6; --mint-ink:#174F36; --mint-text:#1E6B47; --mint-fill:#3BA272; --mint-hi:#7DE0AE;
+  --rbx:#2CBF5E; --rbx-hi:#6BEA94; --rbx-dark:#16893F;
+  --red:#FF5C7A; --red-dark:#D02B50; --alert-wash:#FDE7EA; --blush:#FF9FB8;
+  --dis-fill:#EDE8F5; --dis-border:#B9AFCB;
+  --dim:rgba(35,24,61,.55); --world-sky:#CBE5F3; --world-grass:#A6CE86; --world-path:#EFDDBD;
+  --page:#E9E3F3; --fixture:#B4541A; --fixture-wash:#FFF0E3;
+  --display:'Fredoka','Trebuchet MS',system-ui,sans-serif; --body:'Nunito','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--ink);font-family:var(--body);margin:0;padding-inline:16px;padding-block:16px 40px}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance}
+.page{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.top{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline}
+.top h1{font-size:28px}
+.top p{margin:0;color:var(--muted);font-weight:700;max-width:72ch}
+.fixture-banner{background:var(--fixture-wash);border:2px dashed var(--fixture);color:#7A3410;border-radius:12px;padding:8px 12px;font-weight:800;font-size:13px;line-height:1.4}
+.controls{display:flex;flex-wrap:wrap;gap:10px 16px;background:var(--surface);border:3px solid var(--ink);border-radius:18px;box-shadow:0 4px 0 var(--ink);padding:12px}
+.ctl{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ctl label,.ctl .lbl{font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ctl select{font:800 14px var(--body);color:var(--ink);background:var(--white);border:2px solid var(--ink);border-radius:10px;padding:6px 8px;min-height:36px;max-width:100%}
+.ctl .checks{display:flex;gap:12px;flex-wrap:wrap}
+.ctl .checks label{text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink);display:flex;gap:6px;align-items:center;font-weight:800}
+.stage-wrap{background:#1c1530;border-radius:18px;padding:12px;overflow:hidden}
+.stage-meta{color:#d9d0ee;font-size:12px;font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.scaler{position:relative;margin:0 auto}
+.frame{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;background:var(--world-sky);font-family:var(--body);color:var(--ink)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.note{background:var(--surface);border:2px solid var(--ink);border-radius:14px;padding:12px 14px;min-width:0}
+.note h3{font-size:17px;margin-bottom:6px}
+.note p,.note li{font-size:14px;line-height:1.45;font-weight:700;color:var(--muted)}
+.note ul{margin:0;padding-left:18px}
+.note code{font-size:12.5px;background:var(--surface2);padding:1px 4px;border-radius:4px;color:var(--ink)}
+
+/* ---------- in-frame game UI ---------- */
+.abs{position:absolute}
+.world-grass{position:absolute;left:0;right:0;bottom:0;height:40%;background:var(--world-grass)}
+.world-path{position:absolute;left:22%;width:56%;bottom:16%;height:28%;border-radius:50%;background:var(--world-path);border-bottom:14px solid #D2B488}
+.dimmer{position:absolute;inset:0;background:var(--dim)}
+.inset-band{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.18) 0 6px,rgba(0,0,0,.08) 6px 12px);z-index:50;pointer-events:none}
+.topbar-mock{position:absolute;border-radius:12px;background:rgba(30,30,40,.55);color:#fff;font:800 10px var(--body);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.1}
+.stroke{paint-order:stroke fill;-webkit-text-stroke:5px var(--ink);color:#fff;letter-spacing:.01em}
+.stroke-s{paint-order:stroke fill;-webkit-text-stroke:3.5px var(--ink);color:#fff}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;white-space:nowrap}
+.coins-pill{display:flex;align-items:center;gap:10px;height:52px;padding:0 6px 0 10px;background:var(--white);border:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);border-radius:26px;font-family:var(--display);font-size:24px;font-weight:600}
+.rate{font:900 14px var(--body);color:var(--mint-text);background:var(--mint);border-radius:12px;padding:4px 9px}
+.plus{width:30px;height:30px;margin:0 4px;outline-offset:7px;border-radius:50%;border:3px solid var(--ink);background:linear-gradient(180deg,var(--rbx-hi),var(--rbx) 55%,var(--rbx-dark));box-shadow:inset 0 3px 0 rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0}
+.boost-chip{height:44px;padding:0 12px 0 6px;background:linear-gradient(180deg,#fff,var(--violet-wash));border:3px solid var(--ink);font:900 15px var(--body);box-shadow:0 3px 0 var(--ink);cursor:pointer;gap:6px}
+.tile{position:absolute;background:var(--white);border:3px solid var(--ink);border-radius:16px;box-shadow:0 4px 0 var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:900 12px var(--body);padding:0}
+.tile i{display:block;border-radius:9px;background:var(--surface2);border:2px solid var(--track)}
+.storebtn{position:absolute;padding:0;border:0;background:none;cursor:pointer}
+.storebtn .face{position:absolute;inset:0;border-radius:22px;border:3px solid var(--ink);background:linear-gradient(160deg,var(--pink-hi),var(--pink) 50%,var(--violet-hi));box-shadow:0 5px 0 var(--ink),inset 0 4px 0 rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.storebtn .face::before{content:"";position:absolute;inset:-40%;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.3) 0 12deg,transparent 12deg 30deg);animation:spin 16s linear infinite}
+.storebtn .face svg{position:relative}
+.storebtn .lab{position:absolute;left:50%;transform:translateX(-50%);font:700 18px var(--display);white-space:nowrap}
+.storebtn .spark{position:absolute;top:-8px;right:-8px}
+.dock{position:absolute;display:flex}
+.dock .d{background:var(--white);border:3px solid var(--ink);border-radius:18px;box-shadow:0 4px 0 var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font:900 15px var(--body);gap:4px}
+.dock .d.on{background:var(--violet-wash);transform:translateY(-6px)}
+.dock .d i{width:44%;aspect-ratio:1;border-radius:12px;background:var(--surface2);border:2px solid var(--track);display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shine{0%,70%{transform:translateX(-120%) skewX(-20deg)}100%{transform:translateX(320%) skewX(-20deg)}}
+@keyframes twinkle{0%,100%{transform:scale(.7);opacity:.6}50%{transform:scale(1.1);opacity:1}}
+@keyframes peek{0%,80%,100%{transform:translateY(0)}88%{transform:translateY(-4px)}}
+
+/* store panel */
+.panel{position:absolute;border:4px solid var(--ink);border-radius:30px;box-shadow:0 8px 0 var(--ink);background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
+.panel.phone{border-radius:22px;box-shadow:none}
+.shdr{position:relative;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:0 14px 0 16px;background:linear-gradient(100deg,var(--violet-hi),var(--pink) 55%,var(--peach));border-bottom:4px solid var(--ink);overflow:hidden}
+.shdr::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 30%,rgba(255,255,255,.45) 0 2px,transparent 3px) 0 0/38px 30px,radial-gradient(circle at 70% 70%,rgba(255,255,255,.35) 0 2.5px,transparent 3.5px) 0 0/52px 40px;pointer-events:none}
+.shdr .title{font:700 34px var(--display);line-height:1;position:relative;letter-spacing:.02em}
+.shdr .sub{font:800 13px var(--body);color:#fff;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 0 rgba(43,31,74,.6)}
+.shdr .ttl{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.buddy{position:relative;align-self:flex-end;margin-bottom:-6px;flex-shrink:0;animation:peek 5s ease-in-out infinite}
+.xbtn{position:relative;width:48px;height:48px;border-radius:50%;border:3px solid var(--ink);background:linear-gradient(180deg,#FF8FA5,var(--red) 55%,var(--red-dark));box-shadow:0 4px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;padding:0}
+.hchip{position:relative;height:44px;padding:0 12px;border:3px solid var(--ink);background:var(--white);font:600 16px var(--display);box-shadow:0 3px 0 var(--ink);cursor:pointer;color:var(--ink)}
+.sbody{flex:1;display:flex;min-height:0;background:#F6F0FF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='6' cy='6' r='2.4' fill='%23EADFFF'/%3E%3Cpath d='M28 22l1.6 3.6 3.6 1.6-3.6 1.6L28 32.4l-1.6-3.6-3.6-1.6 3.6-1.6z' fill='%23F7DDF0'/%3E%3C/svg%3E")}
+.tabs{flex-shrink:0;display:flex;flex-direction:column;gap:10px;padding:12px 12px 12px 12px;overflow:auto;scrollbar-width:none}
+.tab{position:relative;display:flex;align-items:center;gap:10px;min-height:58px;padding:6px 12px 6px 8px;border:3px solid var(--ink);border-radius:20px;background:linear-gradient(180deg,var(--c1),var(--c2));box-shadow:0 4px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.5);cursor:pointer;text-align:left;width:100%}
+.tab .ic{width:40px;height:40px;border-radius:14px;background:rgba(255,255,255,.9);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tab .nm{font:700 18px var(--display);line-height:1.05}
+.tab.on{transform:translateX(6px);box-shadow:0 4px 0 var(--ink),0 0 0 4px #fff,inset 0 3px 0 rgba(255,255,255,.5)}
+.tab .badge{position:absolute;top:-8px;right:-6px;min-width:24px;height:24px;border-radius:12px;background:var(--red);border:2px solid var(--ink);font:900 12px var(--body);color:#fff;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.tabs.icons{padding:10px 8px 10px 8px;gap:6px}
+.tabs.icons .tab{flex-direction:column;justify-content:center;gap:1px;padding:3px 2px;min-height:50px}
+.tabs.icons .tab .ic{width:30px;height:30px;border-radius:10px}
+.tabs.icons .tab .nm{font-size:11px;-webkit-text-stroke-width:2.5px}
+.tabs.icons .tab.on{transform:translateX(4px)}
+.content{flex:1;min-width:0;overflow:auto;padding:14px 16px 22px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin;scrollbar-color:var(--track) transparent}
+.shead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.shead h3{font:700 22px var(--display)}
+.shead .hint{font:800 13px var(--body);color:var(--muted)}
+.grid{display:grid;gap:14px}
+.pcard{position:relative;display:flex;flex-direction:column;border:3px solid var(--ink);border-radius:24px;background:var(--white);box-shadow:0 6px 0 var(--ink);cursor:pointer;text-align:left;padding:0;min-width:0;transition:transform .12s}
+.pcard:hover{transform:translateY(-3px)}
+.reduced .pcard:hover{transform:none}
+.pc-top{position:relative;height:var(--th,118px);border-radius:21px 21px 0 0;background:linear-gradient(180deg,var(--c1),var(--c2));border-bottom:3px solid var(--ink);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.burst{position:absolute;left:50%;top:50%;width:260%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none}
+.burst::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.34) 0 10deg,transparent 10deg 24deg);border-radius:50%;animation:spin 26s linear infinite}
+.sp{position:absolute;pointer-events:none;animation:twinkle 2.4s ease-in-out infinite}
+.reduced .burst::before,.reduced .storebtn .face::before,.reduced .sp,.reduced .buddy{animation:none}
+.pc-top svg.art{position:relative;filter:drop-shadow(0 4px 0 rgba(43,31,74,.3))}
+.ribbon{position:absolute;top:10px;left:-6px;padding:3px 10px 3px 12px;background:var(--red);border:2.5px solid var(--ink);border-radius:0 12px 12px 0;font:700 12px var(--display);color:#fff;z-index:2;white-space:nowrap;box-shadow:0 2px 0 var(--ink)}
+.ribbon.gold{background:var(--gold);color:var(--ink)}
+.ribbon.mint{background:var(--mint-fill)}
+.ribbon.violet{background:var(--violet)}
+.ribbon.grey{background:var(--dis-border);color:var(--ink)}
+.invb{position:absolute;top:8px;right:8px;min-width:34px;height:30px;border-radius:15px;background:var(--white);border:2.5px solid var(--ink);font:700 15px var(--display);display:flex;align-items:center;justify-content:center;gap:3px;padding:0 7px;z-index:2}
+.pc-body{padding:9px 12px 4px;display:flex;flex-direction:column;gap:3px;flex:1}
+.pc-name{font:700 19px var(--display);line-height:1.1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pc-ben{font:800 13px var(--body);color:var(--muted);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pc-foot{padding:6px 10px 12px}
+.gbtn{position:relative;overflow:hidden;width:100%;min-height:48px;border:3px solid var(--ink);border-radius:18px;background:linear-gradient(180deg,var(--rbx-hi),var(--rbx) 50%,var(--rbx-dark));box-shadow:0 4px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;gap:7px;font:700 20px var(--display);cursor:pointer;padding:0 12px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.gbtn::after{content:"";position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:shine 3.6s ease-in-out infinite}
+.reduced .gbtn::after{display:none}
+.gbtn:active{transform:translateY(4px);box-shadow:inset 0 3px 0 rgba(255,255,255,.5)}
+.reduced .gbtn:active{transform:none}
+.gbtn.big{min-height:60px;font-size:24px;border-radius:22px}
+.gbtn.gold{background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,#E8A800)}
+.gbtn.violet{background:linear-gradient(180deg,var(--violet-hi),var(--violet) 55%,var(--violet-dark))}
+.gbtn.white{background:var(--white);box-shadow:0 4px 0 var(--ink)}
+.gbtn.white::after,.gbtn.gold::after{display:none}
+.gbtn[disabled]{background:var(--dis-fill);border-color:var(--dis-border);box-shadow:none;cursor:not-allowed;color:var(--muted)}
+.gbtn[disabled]::after{display:none}
+.gbtn[disabled] .stroke-s,.gbtn[disabled] .stroke{-webkit-text-stroke:0;color:var(--muted)}
+.stamp{width:100%;min-height:48px;border-radius:18px;border:3px dashed var(--mint-fill);background:var(--mint);color:var(--mint-ink);font:700 17px var(--display);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 8px;text-align:center;line-height:1.1}
+.stamp.grey{border-color:var(--dis-border);background:var(--dis-fill);color:var(--muted)}
+.stamp.wait{border-color:var(--violet);background:var(--violet-wash);color:var(--violet-dark)}
+.stamp.warn{border-color:#C98A00;background:var(--gold-wash);color:#6B4A00}
+.stamp.err{border-color:var(--red-dark);background:var(--alert-wash);color:#8A1426}
+.chipsel{display:flex;gap:6px}
+.chipsel button{flex:1;min-height:44px;border:3px solid var(--ink);border-radius:14px;background:var(--white);font:700 16px var(--display);cursor:pointer;color:var(--ink);padding:0 4px}
+.chipsel button.on{background:linear-gradient(180deg,var(--orange-hi),var(--orange));box-shadow:inset 0 3px 0 rgba(255,255,255,.45)}
+.hero{position:relative;display:flex;align-items:center;gap:16px;border:3px solid var(--ink);border-radius:26px;box-shadow:0 6px 0 var(--ink);background:linear-gradient(110deg,var(--pink),var(--pink-hi) 45%,var(--gold-hi));overflow:hidden;padding:14px 18px;min-height:150px;cursor:pointer;text-align:left}
+.hero .burst{left:16%;width:120%}
+.hero h3{font:700 30px var(--display)}
+.hero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.hchipw{height:32px;padding:0 10px;border-radius:16px;background:rgba(255,255,255,.92);border:2.5px solid var(--ink);font:800 14px var(--body);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.tierwrap{border:3px solid var(--ink);border-radius:26px;box-shadow:0 6px 0 var(--ink);background:linear-gradient(180deg,#FFF6DA,#FFE3B0);padding:12px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.tiers{display:grid;gap:12px}
+.tier{position:relative;border:3px solid var(--ink);border-radius:20px;background:var(--white);box-shadow:0 4px 0 var(--ink);padding:8px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;min-width:0}
+.medal{width:62px;height:62px;border-radius:50%;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;font:700 24px var(--display);box-shadow:inset 0 4px 0 rgba(255,255,255,.6),0 3px 0 var(--ink)}
+.perkrow{display:flex;align-items:center;gap:12px;border:3px solid var(--ink);border-radius:20px;background:var(--white);box-shadow:0 4px 0 var(--ink);padding:8px 12px;min-height:72px}
+.perkrow .tx{flex:1;min-width:0}
+.perkrow .nm{font:700 18px var(--display);line-height:1.1}
+.perkrow .sm{font:800 13px var(--body);color:var(--muted)}
+.bar{height:12px;border-radius:6px;background:var(--track);border:2px solid var(--ink);overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--gold))}
+.sw{width:72px;height:44px;border-radius:22px;border:3px solid var(--ink);background:var(--dis-fill);position:relative;cursor:pointer;flex-shrink:0;padding:0}
+.sw::after{content:"";position:absolute;top:4px;left:4px;width:30px;height:30px;border-radius:50%;background:var(--white);border:2px solid var(--ink);transition:left .12s}
+.sw.on{background:var(--mint-fill)} .sw.on::after{left:32px}
+.reduced .sw::after{transition:none}
+.sbtn{min-height:44px;border:3px solid var(--ink);border-radius:14px;padding:0 14px;font:700 16px var(--display);cursor:pointer;box-shadow:0 3px 0 var(--ink);background:linear-gradient(180deg,var(--orange-hi),var(--orange));white-space:nowrap;color:var(--ink)}
+.sbtn.violet{background:linear-gradient(180deg,var(--violet-hi),var(--violet));color:#fff}
+.sbtn.white{background:var(--white)}
+.sect{font:900 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:2px 2px -6px}
+.empty{padding:18px 12px;text-align:center;color:var(--muted);font-weight:800;display:flex;flex-direction:column;align-items:center;gap:8px}
+
+/* product sheet */
+.sheetbg{position:absolute;inset:0;background:rgba(35,24,61,.45);z-index:20;display:flex;align-items:center;justify-content:center}
+.sheet{position:relative;display:flex;border:4px solid var(--ink);border-radius:28px;box-shadow:0 8px 0 var(--ink);background:var(--surface);overflow:hidden}
+.sheet .left{position:relative;flex-shrink:0;background:linear-gradient(180deg,var(--c1),var(--c2));border-right:4px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;gap:8px;padding:10px}
+.sheet .right{flex:1;min-width:0;display:flex;flex-direction:column}
+.sheet .scroll{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
+.sheet .foot{flex-shrink:0;padding:10px 16px 14px;border-top:3px solid var(--divider);display:flex;flex-direction:column;gap:6px;background:var(--white)}
+.sheet h3{font:700 28px var(--display);line-height:1.05}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{height:26px;padding:0 10px;border-radius:13px;font:900 12px var(--body);background:var(--white);border:2px solid var(--ink);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.tag.fx{border:2px dashed var(--fixture);color:#7A3410;background:var(--fixture-wash)}
+.box{background:var(--white);border:2.5px solid var(--divider);border-radius:16px;padding:10px 12px}
+.box h4{margin:0 0 6px;font:900 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.box p{margin:0;font-size:14px;font-weight:700;line-height:1.4}
+.box ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.box li{display:flex;gap:8px;font-size:14px;font-weight:800;line-height:1.3;align-items:flex-start}
+.box li svg{flex-shrink:0;margin-top:1px}
+.box.warn{border-color:#E8B23A;background:var(--gold-wash)}
+.odds{width:100%;border-collapse:collapse;font:800 13px var(--body);font-variant-numeric:tabular-nums}
+.odds th,.odds td{padding:3px 4px;text-align:right;border-bottom:1.5px solid var(--divider);white-space:nowrap}
+.odds th:first-child,.odds td:first-child{text-align:left;white-space:normal}
+.odds th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.calc{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.msg{font-size:13px;font-weight:800;line-height:1.35;display:flex;gap:6px;align-items:flex-start}
+.msg.muted{color:var(--muted)} .msg.ok{color:var(--mint-text)} .msg.err{color:#8A1426} .msg.wait{color:var(--violet-dark)}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid var(--violet-wash);border-top-color:var(--violet);animation:spin .9s linear infinite;flex-shrink:0}
+.skel{display:inline-block;height:16px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.4),rgba(255,255,255,.9),rgba(255,255,255,.4));background-size:200% 100%;animation:sh 1.4s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.reduced .spin,.reduced .skel{animation:none}
+.toast{position:absolute;left:50%;transform:translateX(-50%);background:linear-gradient(180deg,#fff,var(--mint));border:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);border-radius:18px;padding:10px 16px;font:700 17px var(--display);display:flex;gap:8px;align-items:center;z-index:40;max-width:80%}
+.native{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:45}
+.native .nbox{width:360px;max-width:86%;background:#F2F2F4;border-radius:10px;padding:16px;font-family:system-ui,sans-serif;color:#222;display:flex;flex-direction:column;gap:10px;border:1px solid #999}
+.native .nbox b{font-size:15px}
+.native .nbox small{color:#555;font-size:12px}
+.native .nrow{display:flex;gap:8px;flex-wrap:wrap}
+.native .nrow button{flex:1;min-height:40px;border-radius:6px;border:1px solid #888;background:#fff;font:600 14px system-ui;cursor:pointer;color:#222}
+.native .nrow button.p{background:#3a3a44;color:#fff}
+.dialog{position:relative;z-index:30;border:4px solid var(--ink);border-radius:26px;box-shadow:0 8px 0 var(--ink);background:var(--surface);padding:16px;display:flex;flex-direction:column;gap:10px;overflow:auto}
+button:focus-visible,select:focus-visible,[role="button"]:focus-visible{outline:4px solid var(--violet);outline-offset:2px}
+.anno{position:absolute;background:var(--fixture);color:#fff;font:900 11px var(--body);padding:3px 7px;border-radius:8px;z-index:60;pointer-events:none;white-space:nowrap}
+.prompt3d{position:absolute;display:flex;align-items:center;gap:8px;background:rgba(20,20,26,.72);border-radius:10px;padding:6px 12px 6px 6px;color:#fff;font:700 14px system-ui,sans-serif}
+.prompt3d .k{width:38px;height:38px;border-radius:8px;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font:800 18px system-ui}
+.prompt3d small{display:block;font-weight:600;font-size:11px;opacity:.85}
+</style>
+
+<div class="page">
+  <div class="top">
+    <h1>Robux Store prototype · v2</h1>
+    <p>Blindbox Town P07, reconciled with the P01 spec (master 2a004b2). Try the three ways in (green + on Coins, the STORE button, the plot Upgrade Station), the cards, product sheets, the purchase flow, boosts and the welcome-back Double &amp; Claim.</p>
+  </div>
+  <div class="fixture-banner">Non-live preview. Robux prices and amounts are <b>P01 proposals</b> from docs/MONETIZATION.md, not approved and not platform data. At runtime every price comes from Roblox for the viewing player. Only the per-return Double &amp; Claim flow is user-confirmed, and its price is still TBD. Nothing here calls Roblox.</div>
+
+  <div class="controls" role="group" aria-label="Prototype controls">
+    <div class="ctl"><label for="vp">Viewport</label>
+      <select id="vp">
+        <option value="d1">Desktop 1280×720 (D2)</option>
+        <option value="d0">Short desktop 1000×600</option>
+        <option value="m1">Phone 667×375 (M1)</option>
+        <option value="m2">Phone 844×390, notch insets (M2)</option>
+      </select></div>
+    <div class="ctl"><label for="view">Screen</label>
+      <select id="view">
+        <option value="world">Entry 1+2: HUD (+ on Coins, STORE button)</option>
+        <option value="machine">Entry 3: plot Upgrade Station</option>
+        <option value="store">Robux Store</option>
+        <option value="shop">Coin Shop + Auto Open setup</option>
+        <option value="opening">Opening with Auto Open running</option>
+        <option value="offline">Welcome back: Claim / Double &amp; Claim</option>
+      </select></div>
+    <div class="ctl"><label for="sim">Open product's state</label>
+      <select id="sim">
+        <option value="">(fixture default)</option>
+        <option value="loading">Loading price/ownership</option>
+        <option value="available">Available</option>
+        <option value="owned">Owned (verified)</option>
+        <option value="superseded">Lower tier (superseded)</option>
+        <option value="claimed">Starter already claimed</option>
+        <option value="redundant">Redundant (won't help)</option>
+        <option value="restricted">Restricted on this account</option>
+        <option value="unavailable">Unavailable (policy lookup/config)</option>
+        <option value="nofit">Coins won't fit wallet</option>
+        <option value="prompting">Native prompt open</option>
+        <option value="cancelled">Cancelled</option>
+        <option value="verifying">Saving purchase</option>
+        <option value="delayed">Delayed / recovering</option>
+        <option value="granted">Confirmed grant</option>
+        <option value="failed">Failed, retry</option>
+      </select></div>
+    <div class="ctl"><label for="price">Prices</label>
+      <select id="price">
+        <option value="p01">P01 proposed</option>
+        <option value="long">Long localized (7 digits)</option>
+        <option value="loading">Not loaded yet</option>
+      </select></div>
+    <div class="ctl"><span class="lbl">Options</span>
+      <div class="checks">
+        <label><input type="checkbox" id="launch"> D3 launch subset only</label>
+        <label><input type="checkbox" id="longText"> Long labels</label>
+        <label><input type="checkbox" id="reduced"> Reduced motion</label>
+        <label><input type="checkbox" id="slow"> Slow delivery</label>
+        <label><input type="checkbox" id="anno" checked> Annotations</label>
+      </div></div>
+  </div>
+
+  <div class="stage-wrap">
+    <div class="stage-meta"><span id="meta"></span><span>Hatched bands = device safe-area insets. Grey blocks = Roblox top-bar / platform UI.</span></div>
+    <div class="scaler" id="scaler"><div class="frame" id="frame"></div></div>
+  </div>
+  <div class="notes" id="notes"></div>
+</div>
+
+<script>
+(() => {
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+// ---------- icons & art (stand-ins for a glossy Store.* art set) ----------
+const I = {
+  robux: (s = 16, c = 'currentColor', st = '') => `<svg width="${s}" height="${s}" viewBox="0 0 20 20" aria-hidden="true">${st ? `<path d="M10 1.8 17.2 6v8L10 18.2 2.8 14V6z" fill="none" stroke="${st}" stroke-width="5.5" stroke-linejoin="round"/>` : ''}<path d="M10 1.8 17.2 6v8L10 18.2 2.8 14V6z" fill="none" stroke="${c}" stroke-width="2.6" stroke-linejoin="round"/><rect x="7.3" y="7.3" width="5.4" height="5.4" rx="1" fill="${c}"/></svg>`,
+  coin: (s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"/><circle cx="14" cy="14" r="6.5" fill="none" stroke="#C98A00" stroke-width="2.2"/></svg>`,
+  check: (s = 16, c = '#1E6B47') => `<svg width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" fill="none" stroke="${c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  dot: (s = 16, c = '#FF8DC0') => `<svg width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13.5S2.5 10 2.5 6.4A2.9 2.9 0 0 1 8 5a2.9 2.9 0 0 1 5.5 1.4C13.5 10 8 13.5 8 13.5z" fill="${c}" stroke="#2B1F4A" stroke-width="1.4"/></svg>`,
+  info: (s = 16, c = '#5C5276') => `<svg width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="${c}" stroke-width="2"/><path d="M8 7v4.2M8 4.6v.1" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  close: (s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4 4 14" stroke="#2B1F4A" stroke-width="7" stroke-linecap="round"/><path d="M4 4l10 10M14 4 4 14" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>`,
+  plus: (s = 20) => `<svg width="${s}" height="${s}" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="#2B1F4A" stroke-width="7.5" stroke-linecap="round"/><path d="M10 3v14M3 10h14" stroke="#fff" stroke-width="3.8" stroke-linecap="round"/></svg>`,
+  clock: (s = 14, c = '#4B32C3') => `<svg width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="${c}" stroke-width="2"/><path d="M8 4.5V8l2.4 1.6" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round"/></svg>`,
+  spark: (s = 16, c = '#fff') => `<svg width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0.8l1.8 5.4L15.2 8l-5.4 1.8L8 15.2 6.2 9.8 0.8 8l5.4-1.8z" fill="${c}" stroke="#2B1F4A" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+};
+// Cute faces: little eyes + blush on the art, matching the collectible-town tone.
+const face = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})"><circle cx="-4" cy="0" r="1.9" fill="#2B1F4A"/><circle cx="4" cy="0" r="1.9" fill="#2B1F4A"/><circle cx="-3.4" cy="-.7" r=".6" fill="#fff"/><circle cx="4.6" cy="-.7" r=".6" fill="#fff"/><ellipse cx="-7" cy="3" rx="2" ry="1.2" fill="#FF9FB8" opacity=".9"/><ellipse cx="7" cy="3" rx="2" ry="1.2" fill="#FF9FB8" opacity=".9"/><path d="M-1.6 2.6q1.6 1.6 3.2 0" fill="none" stroke="#2B1F4A" stroke-width="1.2" stroke-linecap="round"/></g>`;
+const ART = {
+  gift: '<rect x="8" y="20" width="32" height="22" rx="5" fill="#FF8FB1" stroke="#2B1F4A" stroke-width="3"/><rect x="5" y="13" width="38" height="10" rx="4" fill="#FFB3C9" stroke="#2B1F4A" stroke-width="3"/><path d="M24 13v29" stroke="#FFC83D" stroke-width="5"/><path d="M24 13c-4-8-14-6-10 0M24 13c4-8 14-6 10 0" fill="none" stroke="#2B1F4A" stroke-width="3"/>' + face(15, 31, .9),
+  crown: '<path d="M7 36 9 15l9 9 6-12 6 12 9-9 2 21z" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/><rect x="7" y="35" width="34" height="6" rx="2" fill="#C98A00" stroke="#2B1F4A" stroke-width="3"/>' + face(24, 28, .9),
+  coins1: '<ellipse cx="24" cy="36" rx="13" ry="5" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><circle cx="24" cy="22" r="13" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/>' + face(24, 22, 1),
+  coins2: '<ellipse cx="15" cy="37" rx="11" ry="4.5" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><ellipse cx="15" cy="32" rx="11" ry="4.5" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><circle cx="31" cy="24" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/>' + face(31, 24, .9),
+  coins3: '<ellipse cx="13" cy="39" rx="10" ry="4" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><ellipse cx="13" cy="34" rx="10" ry="4" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><ellipse cx="13" cy="29" rx="10" ry="4" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><ellipse cx="35" cy="39" rx="10" ry="4" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><ellipse cx="35" cy="34" rx="10" ry="4" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><circle cx="24" cy="17" r="11" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/>' + face(24, 17, .85),
+  chest: '<path d="M6 22h36v18a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" fill="#E0A0C0" stroke="#2B1F4A" stroke-width="3"/><path d="M6 22c0-9 8-13 18-13s18 4 18 13z" fill="#FFC2DD" stroke="#2B1F4A" stroke-width="3"/><circle cx="13" cy="15" r="5" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"/><circle cx="25" cy="11" r="5" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"/><circle cx="36" cy="15" r="5" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"/>' + face(24, 32, 1),
+  clover: '<g fill="#2B1F4A" stroke="#2B1F4A" stroke-width="6"><circle cx="18" cy="17" r="8"/><circle cx="30" cy="17" r="8"/><circle cx="18" cy="29" r="8"/><circle cx="30" cy="29" r="8"/></g><g fill="#5FD39A"><circle cx="18" cy="17" r="8"/><circle cx="30" cy="17" r="8"/><circle cx="18" cy="29" r="8"/><circle cx="30" cy="29" r="8"/></g><circle cx="24" cy="23" r="7" fill="#7DE0AE"/><path d="M27 35c2 4 5 6 9 7" fill="none" stroke="#2B1F4A" stroke-width="3" stroke-linecap="round"/>' + face(24, 23, .8),
+  clover4: '<g fill="#2B1F4A" stroke="#2B1F4A" stroke-width="6"><circle cx="18" cy="17" r="8"/><circle cx="30" cy="17" r="8"/><circle cx="18" cy="29" r="8"/><circle cx="30" cy="29" r="8"/></g><g fill="#B9A6FF"><circle cx="18" cy="17" r="8"/><circle cx="30" cy="17" r="8"/><circle cx="18" cy="29" r="8"/><circle cx="30" cy="29" r="8"/></g><circle cx="24" cy="23" r="7" fill="#D7CCFF"/><path d="M38 4l1.4 3.4L43 9l-3.6 1.4L38 14l-1.4-3.6L33 9l3.6-1.6z" fill="#FFC83D" stroke="#2B1F4A" stroke-width="1.6"/>' + face(24, 23, .8),
+  moon: '<path d="M30 8a16 16 0 1 0 10 25A13 13 0 0 1 30 8z" fill="#C9B9FF" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/><circle cx="37" cy="12" r="2.5" fill="#FFC83D" stroke="#2B1F4A" stroke-width="1.2"/><path d="M14 26q2-2 4 0M20 26q2-2 4 0" fill="none" stroke="#2B1F4A" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="13" cy="30" rx="2" ry="1.2" fill="#FF9FB8"/><ellipse cx="25" cy="30" rx="2" ry="1.2" fill="#FF9FB8"/>',
+  auto: '<rect x="8" y="17" width="26" height="24" rx="6" fill="#FF9FC4" stroke="#2B1F4A" stroke-width="3"/><path d="M8 24h26" stroke="#2B1F4A" stroke-width="3"/><path d="M21 17v7" stroke="#FFC83D" stroke-width="4"/><path d="M34 8a13 13 0 0 1 6 13" fill="none" stroke="#2B1F4A" stroke-width="3.5" stroke-linecap="round"/><path d="M42.5 15.5l-2.5 6-5-3.5" fill="none" stroke="#2B1F4A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>' + face(21, 32, .85),
+  magnet: '<path d="M12 10v14a12 12 0 0 0 24 0V10h-8v14a4 4 0 0 1-8 0V10z" fill="#FF7E9C" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/><rect x="12" y="10" width="8" height="6" fill="#ECE5F6" stroke="#2B1F4A" stroke-width="3"/><rect x="28" y="10" width="8" height="6" fill="#ECE5F6" stroke="#2B1F4A" stroke-width="3"/>' + face(24, 30, .7),
+  shoe: '<path d="M8 30c0-8 4-14 8-16l4 8 8 2c6 1 12 3 12 8v4H8z" fill="#9AD6FF" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/><path d="M8 36h32" stroke="#2B1F4A" stroke-width="3"/><path d="M1 20h7M0 26h6M3 32h4" stroke="#2B1F4A" stroke-width="3" stroke-linecap="round"/>' + face(27, 28, .7),
+  hour: '<path d="M14 8h20M14 40h20M16 8c0 10 16 10 16 16s-16 6-16 16M32 8c0 10-16 10-16 16s16 6 16 16" fill="#FFF1C7" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/><path d="M19 36c2-4 8-4 10 0z" fill="#FFC83D"/>',
+  bolt2: '<circle cx="24" cy="24" r="17" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><path d="M26 9 17 25h7l-3 13 10-17h-7z" fill="#fff" stroke="#2B1F4A" stroke-width="2.6" stroke-linejoin="round"/>',
+  combo: '<circle cx="18" cy="27" r="12" fill="#FFC83D" stroke="#2B1F4A" stroke-width="3"/><g fill="#2B1F4A" stroke="#2B1F4A" stroke-width="5.0"><circle cx="31" cy="13" r="5.5"/><circle cx="39" cy="13" r="5.5"/><circle cx="31" cy="21" r="5.5"/><circle cx="39" cy="21" r="5.5"/></g><g fill="#5FD39A"><circle cx="31" cy="13" r="5.5"/><circle cx="39" cy="13" r="5.5"/><circle cx="31" cy="21" r="5.5"/><circle cx="39" cy="21" r="5.5"/></g>' + face(18, 27, .8),
+  bag: '<path d="M9 18h30l-2.5 23h-25z" fill="#C9B9FF" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/><path d="M17 18v-3a7 7 0 0 1 14 0v3" fill="none" stroke="#2B1F4A" stroke-width="3"/><path d="M24 23.5 29.5 26.7v6.4L24 36.3l-5.5-3.2v-6.4z" fill="#fff" stroke="#2B1F4A" stroke-width="2.2" stroke-linejoin="round"/>',
+  check: '<circle cx="24" cy="24" r="16" fill="#DDF3E6" stroke="#2B1F4A" stroke-width="3"/><path d="M16 24.5l5.5 5.5L32 18.5" fill="none" stroke="#1E6B47" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>',
+  up: '<path d="M24 6 40 24H31v16H17V24H8z" fill="#9B82FF" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/>' + face(24, 30, .75),
+  // Blind-box buddy: a placeholder for real Peeka art (shape, colours and expression TBD by the art pass).
+  buddy: '<rect x="8" y="16" width="32" height="28" rx="8" fill="#FFB3D1" stroke="#2B1F4A" stroke-width="3"/><path d="M6 14h36v7H6z" fill="#FF8DC0" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/><path d="M24 14c-3-7-11-6-8-1M24 14c3-7 11-6 8-1" fill="#FFC83D" stroke="#2B1F4A" stroke-width="2.5"/><text x="24" y="40" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="700" font-size="7" fill="#fff" stroke="#2B1F4A" stroke-width="2" paint-order="stroke">?</text>' + face(24, 29, 1.15),
+};
+const svgArt = (k, s, style = '') => `<svg class="art" width="${s}" height="${s}" viewBox="0 0 48 48" aria-hidden="true" ${style ? `style="${style}"` : ''}>${ART[k]}</svg>`;
+const sparkles = () => `<span class="sp" style="left:12%;top:16%">${I.spark(14)}</span><span class="sp" style="right:14%;top:58%;animation-delay:.8s">${I.spark(11)}</span><span class="sp" style="left:20%;bottom:12%;animation-delay:1.5s">${I.spark(9, '#FFF6DA')}</span>`;
+const burst = () => `<span class="burst"></span>`;
+
+// ---------- catalog: P01 proposals (docs/MONETIZATION.md product matrix), not approved ----------
+const CATS = [
+  { id: 'featured', name: 'Starter & VIP', short: 'VIP', art: 'gift', c1: '#FFD3E6', c2: '#FF8DC0' },
+  { id: 'upgrades', name: 'Upgrades', short: 'Upgrade', art: 'up', c1: '#DCD2FF', c2: '#9B82FF' },
+  { id: 'boosts', name: 'Boosts', short: 'Boosts', art: 'hour', c1: '#FFE0BC', c2: '#FFA64D' },
+  { id: 'coins', name: 'Coins', short: 'Coins', art: 'coins2', c1: '#FFF0B8', c2: '#FFC83D' },
+  { id: 'perks', name: 'My Perks', short: 'Perks', art: 'check', c1: '#C8F3DC', c2: '#4FCB8E' },
+];
+const P = {
+  starter: { cat: 'featured', type: 'Pass · one-time bundle', art: 'gift', c1: '#FFC2DD', c2: '#FFE38F', name: 'Starter Pack', price: 49,
+    ben: '7,500 Coins + a 15-min 2x Coins boost', gets: ['7,500 Coins, added once', '2x Coins boost token, 15 min (start it when you like)'], rules: ['Once per account. No countdown, no deadline.', 'No figures or cosmetics. The free Welcome Quest is separate.'] },
+  vip: { cat: 'featured', type: 'Permanent pass', art: 'crown', c1: '#FFF0B8', c2: '#FFC2DD', name: 'VIP', price: 199, ribbon: ['FOREVER', 'violet'],
+    ben: '+10% Display income and +500 Coins each daily box', gets: ['+10% Display Coins, online and offline', '+500 Coins with each daily free Grove box claim'], rules: ['Bought after today’s daily claim? The +500 starts tomorrow (UTC).', 'No Luck, speed, figures or cosmetics. Normal play is unchanged without it.'] },
+  coin2: { cat: 'upgrades', tier: 0, type: 'Permanent pass', art: 'bolt2', c1: '#FFF0B8', c2: '#FFC83D', name: '2x Coins', price: 149, ben: 'Double your Display income forever', gets: ['2x Display Coins, online and offline'] },
+  coin4: { cat: 'upgrades', tier: 1, type: 'Permanent pass', art: 'bolt2', c1: '#FFE0BC', c2: '#FFA64D', name: '4x Coins', price: 399, ben: '4x Display income forever', gets: ['4x Display Coins, online and offline'], held: true },
+  coin8: { cat: 'upgrades', tier: 2, type: 'Permanent pass', art: 'bolt2', c1: '#FFD3E6', c2: '#FF8DC0', name: '8x Coins', price: 999, ben: '8x Display income forever', gets: ['8x Display Coins, online and offline'], held: true },
+  luck: { cat: 'upgrades', type: 'Permanent pass', art: 'clover', c1: '#C8F3DC', c2: '#5FD39A', name: 'Lucky Charm', price: 399, ribbon: ['LUCK ×2', 'mint'], held: true, odds: 2,
+    ben: 'Rarer figures more often (Luck ×2 weights)', gets: ['Rare, Legendary and Mythical weights ×2, then normalized', 'Works on every box, including free rewards'], rules: ['Not a guarantee. Free pity and guarantees are unchanged.', 'A timed Super Luck ×4 still beats it while active.'] },
+  autoOpen: { cat: 'upgrades', type: 'Permanent pass', art: 'auto', c1: '#FFD3E6', c2: '#FF9FC4', name: 'Auto Open', price: 199,
+    ben: 'Keeps opening your chosen box for you', gets: ['Opens one box at a time, at least 3 s apart', 'You pick how many (1–100) and a Coin reserve'], rules: ['Set up and start it in the Shop. Stop any time.', 'Open 1, Open 10 and Skip stay free.'] },
+  autoCollect: { cat: 'upgrades', type: 'Permanent pass', art: 'magnet', c1: '#FFD3E6', c2: '#FF7E9C', name: 'Auto Collect', price: 149,
+    ben: 'Collects your Display Coins every second', gets: ['Collects every second while you’re in the game', 'Switch it on or off any time'], rules: ['Never raises your income. Plates and taps still work.', 'Waits until you finish the Welcome Quest collecting step.'] },
+  speed: { cat: 'upgrades', type: 'Permanent pass', art: 'shoe', c1: '#D6EEFF', c2: '#9AD6FF', name: 'Speedy Shoes', price: 49,
+    ben: 'Walk speed 36 → 48', gets: ['Walk speed 48 instead of 36', 'Switch back to 36 any time'], rules: ['Everyone keeps speed 36 for free.'] },
+  offline: { cat: 'upgrades', info: true, type: 'On your welcome-back screen', art: 'moon', c1: '#E6DEFF', c2: '#C9B9FF', name: 'Double & Claim',
+    ben: 'Double what your Display earned while you were away', gets: ['Offered each time you come back with offline Coins'], rules: ['Claim stays free. Double & Claim pays 2× for that return only.'] },
+  bCoins: { cat: 'boosts', type: 'Timed boost token', art: 'bolt2', c1: '#FFF0B8', c2: '#FFA64D', name: '2x Coins Boost', durs: [[15, 29], [30, 49], [60, 79]],
+    ben: '2x Display Coins while it runs', gets: ['2x Display Coins (counts offline time too)'], rules: ['Buying adds a token to My Perks. It starts when you press Activate.', 'The timer runs in real time, even when you’re offline.', 'Same boost again adds time, not strength (up to 24h).'] },
+  bLuck2: { cat: 'boosts', type: 'Timed boost token', art: 'clover', c1: '#C8F3DC', c2: '#5FD39A', name: 'Luck ×2 Boost', durs: [[30, 49]], held: true, odds: 2,
+    ben: 'Luck ×2 weights for 30 min', gets: ['Luck ×2 weights on every box for 30 min'], rules: ['Hidden if your Lucky Charm already gives ×2.', 'Different Luck strengths can’t overlap; the token waits.'] },
+  bLuck4: { cat: 'boosts', type: 'Timed boost token', art: 'clover4', c1: '#E6DEFF', c2: '#9B82FF', name: 'Super Luck ×4', durs: [[30, 99]], held: true, odds: 4, ribbon: ['STRONGEST', 'violet'],
+    ben: 'Luck ×4 weights for 30 min', gets: ['Luck ×4 weights on every box for 30 min'], rules: ['Not a guarantee. You see the exact odds before you buy.'] },
+  bCombo: { cat: 'boosts', type: 'Timed boost token', art: 'combo', c1: '#FFF0B8', c2: '#7DE0AE', name: 'Coins + Luck', durs: [[30, 79]], held: true,
+    ben: '2x Coins and Luck ×2 together, 30 min', gets: ['2x Coins and Luck ×2 for 30 min'], rules: ['Adds time to the same timers as the single boosts. Not offered if either part can’t help.'] },
+  packS: { cat: 'coins', type: 'Coin pack', art: 'coins1', c1: '#FFF6DA', c2: '#FFE38F', name: 'Coin Pouch', coins: 15000, price: 49, ben: '15,000 Coins', gets: ['15,000 Coins added once'] },
+  packM: { cat: 'coins', type: 'Coin pack', art: 'coins2', c1: '#FFF6DA', c2: '#FFC83D', name: 'Coin Stack', coins: 60000, price: 149, ben: '60,000 Coins', gets: ['60,000 Coins added once'] },
+  packL: { cat: 'coins', type: 'Coin pack', art: 'coins3', c1: '#FFF0B8', c2: '#FFA64D', name: 'Coin Sack', coins: 240000, price: 499, ben: '240,000 Coins', gets: ['240,000 Coins added once'], held: true },
+  packH: { cat: 'coins', type: 'Coin pack', art: 'chest', c1: '#FFE0BC', c2: '#FF8DC0', name: 'Treasure Chest', coins: 1200000, price: 1999, ben: '1,200,000 Coins', gets: ['1,200,000 Coins added once'], held: true },
+};
+for (const [k, p] of Object.entries(P)) p.key = k;
+const TIER = ['coin2', 'coin4', 'coin8'];
+const ODDS = { // P01 "Exact Luck recommendation" table, odds with no pity
+  1: { grove: [60, 30, 10, null, null], prestige: [60, 25, 13.9, 1, 0.1] },
+  2: { grove: [54.545455, 27.272727, 18.181818, null, null], prestige: [52.173913, 21.73913, 24.173913, 1.73913, 0.173913] },
+  4: { grove: [46.153846, 23.076923, 30.769231, null, null], prestige: [41.37931, 17.241379, 38.344828, 2.758621, 0.275862] },
+};
+
+const S = { vp: 'd1', view: 'world', cat: 'featured', open: null, dur: 30, sim: {}, price: 'p01', launch: false, long: false, reduced: false, slow: false, anno: true,
+  owned: { coin2: true, autoOpen: true, speed: true }, toggles: { autoCollect: true, speed: true }, inv: { bCoins: 2 }, active: { bLuck2: 24 }, claimed: false,
+  toast: null, prompt: null, confirm: null, autoSetup: false, runs: 10, reserve: true, off: 'offer', offN: 10000 };
+
+const fmt = (n) => S.price === 'long' ? n.toLocaleString('de-DE') : n.toLocaleString('en-US');
+function priceOf(p) {
+  if (S.price === 'loading') return null;
+  let n = p.price; if (p.durs) n = (p.durs.find((d) => d[0] === S.dur) || p.durs[0])[1];
+  return S.price === 'long' ? n * 1013 + 1234 : n;
+}
+const pseudo = (s) => S.long ? `[${s} ẍẍẍẍ ẍẍẍ]` : s;
+const visible = (p) => !(S.launch && p.held);
+const topTier = () => TIER.reduce((m, k, i) => (S.owned[k] || S.sim[k] === 'owned') ? i : m, -1);
+function stateOf(p) {
+  if (S.sim[p.key]) return S.sim[p.key];
+  if (S.price === 'loading' && !p.info) return 'loading';
+  if (p.key === 'starter' && S.claimed) return 'claimed';
+  if (p.tier !== undefined) { const top = topTier(); if (top >= p.tier) return top === p.tier ? 'owned' : 'superseded'; }
+  if (S.owned[p.key]) return 'owned';
+  if (p.key === 'bLuck2' && S.owned.luck) return 'redundant';
+  return 'available';
+}
+
+// ---------- geometry (mirrors UILayout.frame) ----------
+const VPS = { d1: { w: 1280, h: 720, inL: 0, inR: 0 }, d0: { w: 1000, h: 600, inL: 0, inR: 0 }, m1: { w: 667, h: 375, inL: 0, inR: 0 }, m2: { w: 844, h: 390, inL: 44, inR: 34 } };
+function geom() {
+  const v = VPS[S.vp]; const sw = v.w - v.inL - v.inR, H = v.h;
+  const phone = H < 560 || sw < 900; const topbarRight = phone ? 64 : 112;
+  if (phone) {
+    const hudX = Math.max(8, topbarRight + 8); const sheetX = sw - hudX - 8 >= 600 ? hudX : 8;
+    return { v, sw, H, phone, topbarRight, hudX, panel: { x: sheetX, y: 6, w: sw - sheetX - 8, h: H - 14 }, header: 58, tile: { w: 50, h: 56, gap: 10, top: 8, right: 10 }, store: 58 };
+  }
+  const margin = Math.min(64, Math.max(16, sw * 0.05)); const dockY = H - 20 - 94, top = 84, bottom = dockY - 26;
+  const pw = Math.min(1280, sw - margin * 2), ph = Math.min(640, bottom - top);
+  return { v, sw, H, phone, topbarRight, hudX: Math.max(16, topbarRight + 10), panel: { x: Math.floor((sw - pw) / 2), y: top + Math.floor((bottom - top - ph) / 2), w: pw, h: ph }, header: ph < 420 ? 66 : 78, tile: { w: 64, h: 64, gap: 10, top: 18, right: 20 }, store: 76 };
+}
+const anno = (x, y, t, right) => S.anno ? `<div class="anno" style="${right ? 'right' : 'left'}:${x}px;top:${y}px">${esc(t)}</div>` : '';
+
+// ---------- HUD ----------
+function coinsPill(g) {
+  const ph = g.phone;
+  return `<div class="abs coins-pill" style="left:${g.hudX}px;top:${ph ? 8 : 14}px;${ph ? 'height:50px;font-size:20px;gap:8px;padding-right:3px' : ''}">${I.coin(ph ? 24 : 30)}<span>12,480</span><span class="rate">+35/s</span><button class="plus" data-act="openStore" data-c="coins" aria-label="Get more Coins with Robux">${I.plus(14)}</button></div>`;
+}
+function boostChip(g) {
+  const live = Object.entries(S.active).filter(([, m]) => m); if (!live.length) return '';
+  const y = g.phone ? 8 + 50 + 12 : 14 + 52 + 12;
+  const txt = live.length > 1 ? `${live.length} boosts · ${Math.min(...live.map((e) => e[1]))}m` : `${P[live[0][0]].name.replace(' Boost', '')} · ${live[0][1]}m`;
+  return `<button class="abs pill boost-chip" data-act="openStore" data-c="perks" style="left:${g.hudX}px;top:${y}px">${svgArt('hour', 30)} ${esc(txt)}</button>`;
+}
+function hudRow(g) {
+  const t = g.tile; const right = g.sw - t.right; let out = '';
+  ['Daily', 'Home', 'Plaza', ''].forEach((lb, i) => {
+    const x = right - t.w - (3 - i) * (t.w + t.gap);
+    out += `<div class="tile" style="left:${x}px;top:${t.top}px;width:${t.w}px;height:${t.h}px;${g.phone ? 'font-size:10px;border-radius:14px' : ''}">${lb ? `<i style="width:${g.phone ? 24 : 30}px;height:${g.phone ? 24 : 30}px"></i>${lb}` : `<i style="width:26px;height:26px;border-radius:50%"></i>`}</div>`;
+  });
+  const s = g.store; const sx = right - 4 * (t.w + t.gap) - s - (g.phone ? 4 : 6);
+  out += `<button class="storebtn" data-act="openStore" data-c="featured" aria-label="Open Store" style="left:${sx}px;top:${t.top - (g.phone ? 0 : 2)}px;width:${s}px;height:${s}px"><span class="face">${svgArt('buddy', g.phone ? 44 : 60)}</span><span class="spark sp">${I.spark(g.phone ? 16 : 20, '#FFE38F')}</span><span class="lab stroke-s" style="bottom:${g.phone ? -10 : -12}px;font-size:${g.phone ? 15 : 19}px">STORE</span></button>`;
+  return { html: out, storeX: sx };
+}
+function dock(g, active) {
+  const ph = g.phone; const item = ph ? 68 : 100, ih = ph ? 70 : 94, gap = ph ? 8 : 12; const total = item * 5 + gap * 4;
+  const x = Math.floor((g.sw - total) / 2), y = g.H - (ph ? 10 : 20) - ih;
+  return `<div class="dock" style="left:${x}px;top:${y}px;gap:${gap}px">${['Collection', 'Display', 'Shop', 'Goals', 'Shelves'].map((n) => `<div class="d ${n === active ? 'on' : ''}" style="width:${item}px;height:${ih}px;${ph ? 'font-size:12px;border-radius:14px' : ''}"><i></i>${n}</div>`).join('')}</div>`;
+}
+const world = () => `<div class="world-grass"></div><div class="world-path"></div>`;
+const topbar = (g) => `<div class="topbar-mock" style="left:12px;top:${g.phone ? 8 : 18}px;width:${g.topbarRight - 16}px;height:44px">Roblox<br>buttons</div>`;
+
+// ---------- buttons/states ----------
+function rbxBtn(p, big, act = 'buy', label = '') {
+  const n = priceOf(p);
+  const priceHtml = n == null ? `<span class="skel" style="width:54px"></span>` : `<span class="stroke-s">${fmt(n)}</span>`;
+  return `<button class="gbtn ${big ? 'big' : ''}" data-act="${act}" data-k="${p.key}" aria-label="${esc((label || 'Buy ' + p.name) + (n == null ? ', price loading' : `, ${n} Robux`))}" ${n == null ? 'disabled' : ''}>${label ? `<span class="stroke-s">${esc(label)}</span>` : ''}${I.robux(big ? 22 : 18, '#fff', '#2B1F4A')}${priceHtml}</button>`;
+}
+// Card footer: the state as a stamp, else a price button. Coin packs prompt straight from the card; others open their sheet.
+function cardFoot(p) {
+  const st = stateOf(p);
+  if (p.info) return `<button class="gbtn white" data-act="view" data-v="offline"><span>See how it works</span></button>`;
+  const m = {
+    loading: `<button class="gbtn" disabled><span class="skel" style="width:70px"></span></button>`,
+    owned: ['autoCollect', 'speed'].includes(p.key) ? `<div class="stamp">${I.check(18)} OWNED · ${S.toggles[p.key] ? 'ON' : 'OFF'}</div>` : `<div class="stamp">${I.check(18)} OWNED</div>`,
+    superseded: `<div class="stamp grey">Included in ${topTier() >= 0 ? P[TIER[topTier()]].name : 'a higher tier'}</div>`,
+    claimed: `<div class="stamp">${I.check(18)} CLAIMED</div>`,
+    redundant: `<div class="stamp grey">Lucky Charm covers this</div>`,
+    restricted: `<div class="stamp grey">Not available</div>`,
+    unavailable: `<div class="stamp grey">Try again later</div>`,
+    nofit: `<div class="stamp grey">Wallet too full</div>`,
+    prompting: `<div class="stamp wait"><span class="spin"></span> In Roblox window</div>`,
+    verifying: `<div class="stamp wait"><span class="spin"></span> Saving…</div>`,
+    delayed: `<div class="stamp warn">${I.clock(16, '#6B4A00')} Arriving soon</div>`,
+    failed: `<div class="stamp err">Didn’t go through</div>`,
+  }[st];
+  return m || rbxBtn(p, false, p.cat === 'coins' ? 'buy' : 'open');
+}
+function ribbonFor(p) {
+  const st = stateOf(p);
+  if (st === 'owned' || st === 'claimed') return `<span class="ribbon mint">OWNED</span>`;
+  if (p.held && !S.launch && S.anno) return `<span class="ribbon grey">HELD · D3</span>`;
+  if (p.cat === 'coins' && p.key !== 'packS') {
+    // Ratio from the prices actually shown; hidden until they load.
+    const a = priceOf(P.packS), b = priceOf(p); if (a == null || b == null) return '';
+    const r = Math.round((p.coins / b / (P.packS.coins / a) - 1) * 100);
+    return r > 0 ? `<span class="ribbon ${p.key === 'packH' ? '' : 'gold'}">+${r}% COINS PER R$</span>` : '';
+  }
+  if (p.key === 'starter') return `<span class="ribbon">ONCE PER ACCOUNT</span>`;
+  return p.ribbon ? `<span class="ribbon ${p.ribbon[1]}">${p.ribbon[0]}</span>` : '';
+}
+function card(p, th = 118, artS = 82) {
+  const inv = S.inv[p.key] ? `<span class="invb">×${S.inv[p.key]}</span>` : '';
+  const act = S.active[p.key] ? `<span class="invb" style="left:8px;right:auto;top:auto;bottom:8px;background:var(--violet-wash)">${I.clock(14)} ${S.active[p.key]}m</span>` : '';
+  const durs = p.durs && p.durs.length > 1 ? `<div class="chipsel" role="group" aria-label="Boost length" style="padding:0 10px">${p.durs.map((d) => `<button data-act="dur" data-d="${d[0]}" class="${S.dur === d[0] ? 'on' : ''}">${d[0]}m</button>`).join('')}</div>` : '';
+  return `<div class="pcard" data-act="open" data-k="${p.key}" role="button" tabindex="0" aria-label="${esc(p.name)} details">
+    ${ribbonFor(p)}<div class="pc-top" style="--c1:${p.c1};--c2:${p.c2};--th:${th}px">${burst()}${sparkles()}${svgArt(p.art, artS)}${inv}${act}</div>
+    <div class="pc-body"><div class="pc-name">${esc(pseudo(p.name))}</div><div class="pc-ben">${esc(pseudo(p.ben))}</div></div>${durs}
+    <div class="pc-foot">${cardFoot(p)}</div></div>`;
+}
+
+// ---------- store ----------
+function storeContent(g, cw) {
+  const ph = g.phone; const cols = (min) => Math.max(1, Math.min(4, Math.floor((cw + 14) / (min + 14))));
+  const grid = (list, min, th, a) => `<div class="grid" style="grid-template-columns:repeat(${cols(min)},minmax(0,1fr))">${list.filter(visible).map((p) => card(p, th, a)).join('')}</div>`;
+  const head = (t, hint) => `<div class="shead"><h3>${esc(pseudo(t))}</h3>${hint ? `<span class="hint">${esc(hint)}</span>` : ''}</div>`;
+  if (S.cat === 'featured') {
+    const s = P.starter; const st = stateOf(s);
+    const hero = `<div class="hero" data-act="open" data-k="starter" role="button" tabindex="0" aria-label="Starter Pack details" style="${ph ? 'min-height:118px;padding:10px 12px;gap:10px' : ''}">${burst()}${sparkles()}${ribbonFor(s)}
+      ${svgArt('gift', ph ? 84 : 128, 'position:relative;flex-shrink:0;filter:drop-shadow(0 5px 0 rgba(43,31,74,.3))')}
+      <div style="position:relative;flex:1;min-width:0"><h3 class="stroke" style="${ph ? 'font-size:22px' : ''}">${esc(pseudo('Starter Pack'))}</h3>
+      <div class="chips"><span class="hchipw">${I.coin(18)} 7,500 Coins</span><span class="hchipw">${svgArt('bolt2', 20)} 2x Coins · 15 min</span></div></div>
+      <div style="position:relative;width:${ph ? 130 : 190}px;flex-shrink:0">${st === 'available' ? rbxBtn(s, !ph, 'open') : cardFoot(s)}</div></div>`;
+    return head('Featured') + hero + grid([P.vip, P.autoCollect, P.bCoins], ph ? 170 : 200, ph ? 92 : 112, ph ? 64 : 80);
+  }
+  if (S.cat === 'upgrades') {
+    const tiers = TIER.map((k) => P[k]).filter(visible);
+    const medal = [['#F2C9A0', '#D9925E'], ['#F3F6FB', '#B7C2D6'], ['#FFE38F', '#FFC83D']];
+    const tierHtml = `<div class="tierwrap">${burst()}<div class="shead" style="position:relative"><h3 class="stroke" style="font-size:24px">${esc(pseudo('Coin Multiplier'))}</h3><span class="hint">Highest one wins. They never stack.</span></div>
+      <div class="tiers" style="position:relative;grid-template-columns:repeat(${tiers.length},minmax(0,1fr))">${tiers.map((p) => {
+        const st = stateOf(p);
+        return `<div class="tier" data-act="open" data-k="${p.key}" role="button" tabindex="0" aria-label="${p.name} details"><span class="medal stroke" style="background:linear-gradient(180deg,${medal[p.tier][0]},${medal[p.tier][1]});${ph ? 'width:48px;height:48px;font-size:19px' : ''}">${['2x', '4x', '8x'][p.tier]}</span><span style="font:800 13px var(--body);color:var(--muted)">Display Coins</span>${st === 'available' || st === 'loading' ? rbxBtn(p, false, 'open') : cardFoot(p)}</div>`;
+      }).join('')}</div></div>`;
+    return tierHtml + head('Helpers & Luck') + grid([P.autoOpen, P.autoCollect, P.speed, P.luck, P.offline], ph ? 170 : 200, ph ? 86 : 104, ph ? 60 : 74);
+  }
+  if (S.cat === 'boosts') {
+    const n = Object.values(S.active).filter(Boolean).length;
+    return head('Boosts', 'Buy now, activate when you’re ready') + (n ? `<div class="perkrow" style="background:linear-gradient(90deg,#fff,var(--violet-wash))">${svgArt('hour', 40)}<div class="tx"><div class="nm">${n} boost${n > 1 ? 's' : ''} running</div><div class="sm">Timers run in real time, even while you’re offline</div></div><button class="sbtn violet" data-act="cat" data-c="perks">My Perks</button></div>` : '') +
+      grid([P.bCoins, P.bLuck2, P.bLuck4, P.bCombo], ph ? 170 : 200, ph ? 86 : 104, ph ? 60 : 74);
+  }
+  if (S.cat === 'coins') return head('Coin packs', 'Coins go straight to your balance') + grid([P.packS, P.packM, P.packL, P.packH], ph ? 170 : 190, ph ? 92 : 118, ph ? 66 : 88) +
+    `<div class="msg muted">${I.info(16)}<span>Packs don’t change box odds, and Coin multipliers don’t apply to them. Ribbons compare Coins per Robux using the prices Roblox shows you.</span></div>`;
+  return perks();
+}
+function perks() {
+  const rows = [];
+  const act = Object.entries(S.active).filter(([, m]) => m);
+  if (act.length) rows.push(`<div class="sect">Active now</div>` + act.map(([k, m]) => `<div class="perkrow">${svgArt(P[k].art, 44)}<div class="tx"><div class="nm">${esc(pseudo(P[k].name))}</div><div class="sm">${m}m left · ends 4:${String(12 + (m % 40)).padStart(2, '0')} PM</div><div class="bar"><i style="width:${Math.min(100, (m / 30) * 100)}%"></i></div></div></div>`).join(''));
+  const inv = Object.entries(S.inv).filter(([, n]) => n);
+  if (inv.length) rows.push(`<div class="sect">Ready to activate</div>` + inv.map(([k, n]) => `<div class="perkrow">${svgArt(P[k].art, 44)}<div class="tx"><div class="nm">${esc(pseudo(P[k].name))} ×${n}</div><div class="sm">Tokens never expire before you use them</div></div><button class="sbtn" data-act="activate" data-k="${k}">Activate</button></div>`).join(''));
+  const arriving = Object.keys(S.sim).filter((k) => ['verifying', 'delayed'].includes(S.sim[k]));
+  if (arriving.length) rows.push(`<div class="sect">Arriving</div>` + arriving.map((k) => `<div class="perkrow">${svgArt(P[k].art, 44)}<div class="tx"><div class="nm">${esc(P[k].name)}</div><div class="sm">${S.sim[k] === 'delayed' ? 'Your purchase is being saved. It will be recovered if you reconnect.' : 'Saving your purchase…'}</div></div><span class="spin"></span></div>`).join(''));
+  const owned = Object.values(P).filter((p) => ['owned', 'claimed'].includes(stateOf(p)));
+  if (owned.length) rows.push(`<div class="sect">Owned</div>` + owned.map((p) => {
+    const tog = ['autoCollect', 'speed'].includes(p.key) ? `<button class="sw ${S.toggles[p.key] ? 'on' : ''}" data-act="toggle" data-k="${p.key}" role="switch" aria-checked="${!!S.toggles[p.key]}" aria-label="${p.name}"></button>` : p.key === 'autoOpen' ? `<button class="sbtn violet" data-act="view" data-v="shop">Set up</button>` : '';
+    const sub = p.key === 'speed' ? (S.toggles.speed ? 'On · speed 48' : 'Off · speed 36') : p.key === 'autoCollect' ? (S.toggles.autoCollect ? 'On · collecting every second' : 'Off') : p.ben;
+    return `<div class="perkrow">${svgArt(p.art, 44)}<div class="tx"><div class="nm">${esc(pseudo(p.name))}</div><div class="sm">${esc(sub)}</div></div>${tog}</div>`;
+  }).join(''));
+  return rows.join('') || `<div class="empty">${svgArt('buddy', 72)}Nothing here yet. Anything you buy shows up here.</div>`;
+}
+function store(g) {
+  const pn = g.panel, ph = g.phone; const icons = ph || pn.w < 1000; const tabW = icons ? (ph ? 78 : 92) : 208;
+  const cw = pn.w - 8 - tabW - (ph ? 20 : 32) - 10;
+  const tokens = Object.values(S.inv).reduce((a, b) => a + b, 0);
+  const tabs = `<nav class="tabs ${icons ? 'icons' : ''}" style="width:${tabW}px" aria-label="Store categories">${CATS.map((c) => `<button class="tab ${c.id === S.cat ? 'on' : ''}" data-act="cat" data-c="${c.id}" aria-label="${c.name}" aria-current="${c.id === S.cat}" style="--c1:${c.c1};--c2:${c.c2}"><span class="ic">${svgArt(c.art, icons ? 24 : 32)}</span><span class="nm stroke-s">${esc(pseudo(icons ? c.short : c.name))}</span>${c.id === 'perks' && tokens ? `<span class="badge" aria-label="${tokens} boosts ready">${tokens}</span>` : ''}</button>`).join('')}</nav>`;
+  return `<section class="panel ${ph ? 'phone' : ''}" style="left:${pn.x}px;top:${pn.y}px;width:${pn.w}px;height:${pn.h}px" aria-label="Robux Store">
+    <div class="shdr" style="height:${g.header}px;${ph ? 'gap:8px;padding:0 8px 0 10px' : ''}"><span class="buddy">${svgArt('buddy', ph ? 50 : 70)}</span>
+      <div class="ttl"><span class="title stroke" style="${ph ? 'font-size:26px' : ''}">${esc(pseudo('STORE'))}</span>${ph ? '' : `<span class="sub">${esc(pseudo('Treats for Robux · Boxes are in the Shop for Coins'))}</span>`}</div>
+      <span class="pill hchip" style="cursor:default;${ph ? 'height:40px;font-size:15px;padding:0 9px' : ''}">${I.coin(20)} ${ph ? '12.4K' : '12,480'}</span>
+      ${ph ? '' : `<button class="pill hchip" data-act="view" data-v="shop">${svgArt('coins1', 24)} Coin Shop</button>`}
+      <button class="xbtn" data-act="close" aria-label="Close Store" style="${ph ? 'width:44px;height:44px' : ''}">${I.close()}</button></div>
+    <div class="sbody">${tabs}<div class="content" style="${ph ? 'padding:10px 10px 18px;gap:10px' : ''}">${storeContent(g, cw)}</div></div>
+    ${S.open ? sheet(g) : ''}${S.confirm ? confirmDlg(g) : ''}</section>`;
+}
+
+// ---------- product sheet ----------
+function oddsTable(L) {
+  const pct = (v) => v == null ? '—' : (v < 1 ? v.toFixed(3) : v.toFixed(2)) + '%';
+  const row = (lbl, a, b) => `<tr><td>${lbl}</td>${a.map((v, i) => `<td>${pct(v)}${v != null ? `<br><span style="color:var(--mint-text)">${pct(b[i])}</span>` : ''}</td>`).join('')}</tr>`;
+  return `<div style="overflow-x:auto"><table class="odds"><tr><th>Box</th><th>Com</th><th>Unc</th><th>Rare</th><th>Leg</th><th>Myth</th></tr>${row('Grove / Tide', ODDS[1].grove, ODDS[L].grove)}${row('Concepts / Echo / Stars', ODDS[1].prestige, ODDS[L].prestige)}</table></div>
+  <p style="margin:6px 0 0;font:800 12px var(--body);color:var(--muted)">Top: now (no pity). Green: with Luck ×${L}. Rare, Legendary and Mythical weights ×${L}, then normalized. Pity guarantees unchanged. Rounded; every box’s “Odds details” shows your live odds.</p>`;
+}
+function sheetFoot(p) {
+  const st = stateOf(p);
+  const msg = (cls, icon, t) => `<div class="msg ${cls}">${icon}<span>${t}</span></div>`;
+  if (p.info) return `<button class="gbtn violet big" data-act="view" data-v="offline"><span class="stroke-s">Preview welcome back</span></button>`;
+  switch (st) {
+    case 'loading': return msg('muted', '<span class="spin"></span>', 'Getting your price from Roblox…') + `<button class="gbtn big" disabled><span class="skel" style="width:90px"></span></button>`;
+    case 'owned': return msg('ok', I.check(16), 'You own this. It’s active on your account.') + (p.key === 'autoOpen' ? `<button class="gbtn violet big" data-act="view" data-v="shop"><span class="stroke-s">Set up in Shop</span></button>` : '');
+    case 'superseded': return msg('ok', I.check(16), `Included in your ${topTier() >= 0 ? P[TIER[topTier()]].name : 'higher tier'}. Nothing to buy.`);
+    case 'claimed': return msg('ok', I.check(16), 'Claimed. Its Coins and boost were delivered.');
+    case 'redundant': return msg('muted', I.info(16), 'This boost won’t improve your current Luck.');
+    case 'restricted': return msg('muted', I.info(16), 'This purchase isn’t available for your account. You can still earn Coins and open boxes through gameplay.');
+    case 'unavailable': return msg('muted', I.info(16), 'We couldn’t verify this purchase’s availability. Please try again. Your earned Coins and free rewards are still available.') + `<button class="gbtn white" data-act="retry"><span>Try again</span></button>`;
+    case 'nofit': return msg('muted', I.info(16), 'These Coins won’t fit in your wallet right now. Spend some Coins first.');
+    case 'prompting': return msg('wait', '<span class="spin"></span>', 'Finish or cancel in the Roblox window.') + `<button class="gbtn big" disabled><span>Waiting…</span></button>`;
+    case 'verifying': return msg('wait', '<span class="spin"></span>', 'Your purchase is being saved. Don’t purchase again to retry.') + `<button class="gbtn big" disabled><span>Saving…</span></button>`;
+    case 'delayed': return msg('wait', I.clock(16, '#6B4A00'), 'Your purchase is being saved. It will be recovered if you reconnect. Don’t purchase again to retry. You can keep playing.') + `<button class="gbtn white" data-act="check"><span>Check again</span></button>`;
+    case 'cancelled': return msg('muted', I.info(16), 'Purchase cancelled. You weren’t charged.') + rbxBtn(p, true, 'buy', 'Buy');
+    case 'failed': return msg('err', I.info(16, '#8A1426'), 'Roblox couldn’t complete the purchase. You weren’t charged.') + rbxBtn(p, true, 'buy', 'Try again');
+    case 'granted': return msg('ok', I.check(16), p.durs ? 'Delivered to My Perks. Activate it when you’re ready.' : p.cat === 'coins' ? 'Delivered! Coins added.' : 'Delivered!') + (p.durs ? `<button class="gbtn violet big" data-act="activate" data-k="${p.key}"><span class="stroke-s">Activate now</span></button>` : p.cat === 'coins' ? rbxBtn(p, true, 'buy', 'Buy again') : '');
+    default: {
+      const pre = p.tier > 0 && topTier() >= 0 && topTier() < p.tier ? msg('muted', I.info(16), `Full price. You already own ${P[TIER[topTier()]].name}; tiers don’t give credit toward each other.`) : '';
+      return pre + rbxBtn(p, true, 'buy', p.durs ? `Buy ${S.dur} min` : 'Buy');
+    }
+  }
+}
+function sheet(g) {
+  const p = P[S.open]; const ph = g.phone; const pn = g.panel;
+  const w = ph ? pn.w - 8 : Math.min(760, pn.w - 80), h = ph ? pn.h - 8 : Math.min(pn.h - 24, 470);
+  const li = (t) => `<li>${I.check(16)}<span>${esc(pseudo(t))}</span></li>`;
+  let blocks = `<div class="box"><h4>You get</h4><ul>${p.gets.map(li).join('')}</ul></div>`;
+  if (p.durs && p.durs.length > 1) blocks += `<div class="box"><h4>Length</h4><div class="chipsel">${p.durs.map((d) => `<button data-act="dur" data-d="${d[0]}" class="${S.dur === d[0] ? 'on' : ''}">${d[0]} min</button>`).join('')}</div></div>`;
+  if (p.tier !== undefined) blocks += `<div class="box"><h4>How tiers work</h4><p>Each tier is its own pass. Only your highest one applies (2x + 8x = 8x). It boosts Display income online and offline, not packs, rewards or daily Coins.</p></div>`;
+  if (p.odds) blocks += `<div class="box"><h4>Odds with Luck ×${p.odds}</h4>${oddsTable(p.odds)}</div>`;
+  if (p.rules) blocks += `<div class="box"><h4>Good to know</h4><ul>${p.rules.map((r) => `<li>${I.dot(16)}<span>${esc(pseudo(r))}</span></li>`).join('')}</ul></div>`;
+  if (p.cat === 'coins') blocks += `<div class="box"><div class="calc"><span>You pay</span><span>${I.robux(14)} ${priceOf(p) == null ? '…' : fmt(priceOf(p))}</span><span>You get</span><span>${I.coin(14)} ${fmt(p.coins)}</span></div></div>`;
+  const tags = `<div class="tags"><span class="tag">${esc(p.type)}</span>${p.info ? '<span class="tag" style="border-color:var(--mint-fill)">User-confirmed flow</span>' : '<span class="tag fx">P01 proposal</span>'}${p.held ? '<span class="tag" style="background:var(--dis-fill)">Held for launch (D3)</span>' : ''}</div>`;
+  return `<div class="sheetbg" data-act="closeSheet"><div class="sheet" role="dialog" aria-label="${esc(p.name)}" style="width:${w}px;height:${h}px;${ph ? 'border-radius:20px' : ''}" data-stop="1">
+    <div class="left" style="width:${ph ? 150 : 250}px;--c1:${p.c1};--c2:${p.c2}">${burst()}${sparkles()}${svgArt(p.art, ph ? 96 : 150)}${S.inv[p.key] ? `<span class="hchipw" style="position:relative">You have ×${S.inv[p.key]}</span>` : ''}</div>
+    <div class="right"><div class="scroll"><div style="display:flex;gap:10px;align-items:flex-start"><div style="flex:1;min-width:0"><h3 style="${ph ? 'font-size:22px' : ''}">${esc(pseudo(p.name))}</h3>${tags}</div><button class="xbtn" data-act="closeSheet" aria-label="Back to Store" style="width:44px;height:44px">${I.close(16)}</button></div>
+    <p style="margin:0;font:800 15px var(--body)">${esc(pseudo(p.ben))}</p>${blocks}</div><div class="foot">${sheetFoot(p)}</div></div></div></div>`;
+}
+function confirmDlg(g) {
+  const p = P[S.confirm]; const w = Math.min(440, g.panel.w - 24); const d = p.durs.length > 1 ? S.dur : p.durs[0][0];
+  return `<div class="sheetbg" style="z-index:25"><div class="dialog" role="dialog" aria-label="Activate boost" style="width:${w}px;max-height:${g.panel.h - 16}px">
+    <div style="display:flex;gap:12px;align-items:center">${svgArt(p.art, 56)}<h3 style="font-size:24px">Activate ${esc(p.name)}?</h3></div>
+    <p style="margin:0;font:800 15px var(--body);line-height:1.4">${d} minutes. The timer continues while you’re offline. Same boosts add time, not strength.</p>
+    <div style="display:flex;gap:10px"><button class="gbtn white" data-act="cancelConfirm"><span>Not now</span></button><button class="gbtn violet" data-act="doActivate" data-k="${p.key}" data-d="${d}"><span class="stroke-s">Activate</span></button></div></div></div>`;
+}
+
+// ---------- other screens ----------
+function worldView(g) {
+  const row = hudRow(g);
+  return world() + topbar(g) + coinsPill(g) + boostChip(g) + row.html + dock(g, '') +
+    anno(g.hudX + (g.phone ? 150 : 200), g.phone ? 58 : 72, 'Entry 1: green + opens Store → Coins') +
+    anno(Math.max(4, row.storeX - (g.phone ? 70 : 50)), g.tile.top + g.store + (g.phone ? 34 : 40), 'Entry 2: STORE opens Store → Starter & VIP');
+}
+function machineView(g) {
+  const ph = g.phone; const W = g.sw, H = g.H;
+  const s = ph ? 0.62 : 1; const mx = W * 0.56, my = H * (ph ? 0.2 : 0.18);
+  const bulbs = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => `<circle cx="${36 + i * 24}" cy="30" r="5" fill="#FFF6DA" stroke="#2B1F4A" stroke-width="2"/>`).join('');
+  const machine = `<svg class="abs" style="left:${mx - 120 * s}px;top:${my}px" width="${240 * s}" height="${380 * s}" viewBox="0 0 240 380" aria-label="Upgrade Station concept">
+    <ellipse cx="120" cy="364" rx="112" ry="14" fill="rgba(43,31,74,.25)"/>
+    <rect x="34" y="70" width="172" height="286" rx="30" fill="#FFB3D1" stroke="#2B1F4A" stroke-width="6"/>
+    <path d="M34 150h172M34 210h172" stroke="#FF8DC0" stroke-width="10" opacity=".55"/>
+    <rect x="18" y="20" width="204" height="64" rx="22" fill="#9B82FF" stroke="#2B1F4A" stroke-width="6"/>${bulbs}
+    <text x="120" y="70" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="700" font-size="30" fill="#fff" stroke="#2B1F4A" stroke-width="6" paint-order="stroke">UPGRADES</text>
+    <rect x="56" y="104" width="128" height="112" rx="22" fill="#FFF6DA" stroke="#2B1F4A" stroke-width="6"/>
+    <g transform="translate(72 112) scale(2)">${ART.buddy}</g>
+    <rect x="58" y="230" width="124" height="34" rx="14" fill="#FFC83D" stroke="#2B1F4A" stroke-width="5"/>
+    <text x="120" y="254" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="700" font-size="17" fill="#fff" stroke="#2B1F4A" stroke-width="4" paint-order="stroke">POWER-UPS!</text>
+    <circle cx="86" cy="300" r="21" fill="#2CBF5E" stroke="#2B1F4A" stroke-width="5"/><path d="M86 289v22M75 300h22" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+    <g transform="translate(124 282) scale(1.15)">${ART.coins1}</g>
+    <path d="M120 0l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#FFE38F" stroke="#2B1F4A" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="40" y="342" width="160" height="20" rx="9" fill="#C9965A" stroke="#2B1F4A" stroke-width="5"/></svg>`;
+  const prompt = `<div class="prompt3d" style="left:${mx + 90 * s}px;top:${my + 220 * s}px"><span class="k">E</span><span>Upgrades<small>Upgrade Station</small></span></div>`;
+  const map = ph ? '' : `<svg class="abs" style="left:24px;bottom:24px" width="250" height="236" viewBox="-60 -58 120 116" aria-label="Plot top-down map">
+    <rect x="-52" y="-50" width="104" height="100" rx="8" fill="#FFFDF9" stroke="#2B1F4A" stroke-width="2"/>
+    <rect x="-18" y="30" width="36" height="12" rx="2" fill="#C9B9FF" stroke="#2B1F4A"/><text x="0" y="38.5" font-size="6" text-anchor="middle" font-weight="800" fill="#2B1F4A">Display</text>
+    <rect x="34" y="-22" width="12" height="36" rx="2" fill="#E0B070" stroke="#2B1F4A"/><text x="40" y="-25" font-size="5.5" text-anchor="middle" font-weight="800" fill="#2B1F4A">Shelves</text>
+    <rect x="-46" y="-4" width="16" height="18" rx="2" fill="#F28DB2" stroke="#2B1F4A"/><text x="-38" y="-7" font-size="5.5" text-anchor="middle" font-weight="800" fill="#2B1F4A">Box Shop</text>
+    <circle cx="-18" cy="-28" r="5" fill="#DDF3E6" stroke="#2B1F4A"/><text x="-18" y="-35" font-size="5.5" text-anchor="middle" font-weight="800" fill="#2B1F4A">Spawn</text>
+    <rect x="-11" y="-52" width="22" height="5" fill="#C9965A" stroke="#2B1F4A"/><text x="0" y="-55" font-size="5.5" text-anchor="middle" font-weight="800" fill="#2B1F4A">Arch → plaza (−Z)</text>
+    <rect x="33" y="-44" width="12" height="10" rx="2" fill="#FF8DC0" stroke="#2B1F4A" stroke-width="1.5"/><circle cx="39" cy="-39" r="10" fill="none" stroke="#D02B50" stroke-width="1.5" stroke-dasharray="2 2"/>
+    <text x="27" y="-46" font-size="5.5" text-anchor="end" font-weight="900" fill="#D02B50">Upgrade Station →</text>
+    <text x="0" y="5" font-size="5" text-anchor="middle" fill="#5C5276">open centre</text></svg>`;
+  return `<div style="position:absolute;inset:0;background:linear-gradient(180deg,#CBE5F3,#E6F3FA)"></div><div class="world-grass" style="height:46%"></div>
+    <div style="position:absolute;left:-10%;right:-10%;bottom:-8%;height:52%;background:#E8C99A;border-top:10px solid #C9965A;transform:perspective(500px) rotateX(38deg);transform-origin:bottom"></div>` +
+    machine + prompt + map + topbar(g) + coinsPill(g) + hudRow(g).html +
+    anno(mx - 120 * s, my - 22, 'Entry 3: owner-only E prompt opens Store → Upgrades') + (ph ? '' : anno(24, H - 290, 'Proposed spot: front corner on the Shelves side (local X≈+40, Z≈−40)'));
+}
+function shopView(g) {
+  const pn = g.panel, ph = g.phone; const listW = ph ? 64 : 230;
+  return world() + `<div class="dimmer"></div>` + topbar(g) + (ph ? '' : coinsPill(g)) + (ph ? '' : dock(g, 'Shop')) +
+  `<section class="panel ${ph ? 'phone' : ''}" style="left:${pn.x}px;top:${pn.y}px;width:${pn.w}px;height:${pn.h}px;border-width:3px;border-radius:${ph ? 22 : 28}px">
+    <div style="height:${ph ? 56 : 76}px;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:0 ${ph ? 8 : 16}px 0 18px;border-bottom:2px solid var(--divider)"><div style="flex:1;min-width:0"><h2 style="font-size:${ph ? 24 : 30}px">Shop</h2>${ph ? '' : '<div style="font:700 14px var(--body);color:var(--muted)">Every box holds one figure from its collection</div>'}</div>
+    <button class="storebtn" data-act="openStore" data-c="featured" aria-label="Open Store" style="position:relative;width:${ph ? 108 : 132}px;height:44px"><span class="face" style="border-radius:16px;box-shadow:0 3px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.6);gap:4px">${svgArt('buddy', 32)}<span class="stroke-s" style="position:relative;font:700 17px var(--display)">STORE</span></span></button>
+    <button class="xbtn" aria-label="Close Shop" style="width:${ph ? 44 : 48}px;height:${ph ? 44 : 48}px;background:var(--ink);box-shadow:none">${I.close()}</button></div>
+    <div style="flex:1;display:flex;min-height:0"><div style="width:${listW}px;background:var(--surface2);border-right:2px solid var(--divider);padding:10px;display:flex;flex-direction:column;gap:8px">${['Pocket Grove', 'Tidepool Tales', 'Concepts', 'Tender Echoes', 'We Are All Stars'].map((n, i) => `<div style="display:flex;align-items:center;gap:8px;min-height:${ph ? 44 : 50}px;${i === 0 ? 'background:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:0 3px 0 var(--ink);padding:0 6px' : 'padding:0 8px'}"><span style="width:36px;height:36px;border-radius:10px;border:2px solid var(--ink);background:${['#E4F1DA', '#DCEEF7', '#F7E1EA', '#FCEADB', '#E1E5F8'][i]};display:flex;align-items:center;justify-content:center;font:600 13px var(--display);flex-shrink:0">${n.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>${ph ? '' : `<span style="font:600 16px var(--display)">${n}</span>`}</div>`).join('')}</div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:${ph ? 6 : 10}px;padding:${ph ? 8 : 14}px;overflow:auto">
+      <div style="width:${ph ? 120 : 190}px;height:${ph ? 64 : 140}px;border-radius:20px;background:#E4F1DA;border:2px dashed #4F8A3F;display:flex;align-items:center;justify-content:center;font:800 13px var(--body);color:#2C4E23;flex-shrink:0">3D box preview</div>
+      <h3 style="font-size:${ph ? 18 : 24}px">Pocket Grove box</h3>
+      <div style="width:100%;max-width:330px;display:flex;flex-direction:column;gap:8px">
+        <button class="gbtn gold" style="min-height:52px">Open 1 box ${I.coin(18)} 1,500</button>
+        <button class="gbtn gold" style="min-height:44px;font-size:17px">Open 10 boxes ${I.coin(16)} 15K</button>
+        ${stateOf(P.autoOpen) === 'owned' ? `<button class="gbtn violet" data-act="autoSetup" style="min-height:44px;font-size:17px"><span class="stroke-s">Auto Open…</span></button>` : ''}
+      </div></div>
+    ${ph ? '' : `<div style="width:320px;border-left:2px solid var(--divider);background:var(--surface2);padding:12px;display:flex;flex-direction:column;gap:10px"><div class="box"><h4>Drop odds · yours now</h4><div class="calc"><span>Rare</span><span>18.18% <span style="color:var(--muted)">· base 10%</span></span></div><div class="tags" style="margin-top:8px"><span class="tag" style="border-color:var(--mint-fill)">${I.clock(12)}&nbsp;Luck ×2 boost · 24m</span><span class="tag">Luck building (free)</span></div></div><button class="gbtn white" style="min-height:44px;font-size:16px">Odds details</button></div>`}
+    </div>${S.autoSetup ? autoSetup(g) : ''}</section>` +
+    anno(pn.x + pn.w - (ph ? 260 : 310), pn.y + (ph ? 50 : 70), 'Coin Shop’s only Robux link: the STORE chip') +
+    anno(pn.x + listW + 16, pn.y + pn.h - 26, 'Unaffordable box = plain “Need N more”; never a Robux upsell');
+}
+function autoSetup(g) {
+  const ph = g.phone; const w = Math.min(460, g.panel.w - 20); const cost = S.runs * 1500;
+  return `<div class="sheetbg"><div class="dialog" role="dialog" aria-label="Auto Open setup" style="width:${w}px;max-height:${g.panel.h - 12}px;${ph ? 'padding:10px 14px;gap:6px' : ''}">
+    <div style="display:flex;gap:10px;align-items:center">${svgArt('auto', ph ? 36 : 48)}<h3 style="font-size:${ph ? 20 : 24}px;flex:1">Auto Open · Pocket Grove</h3><button class="xbtn" data-act="autoSetup" aria-label="Close" style="width:44px;height:44px">${I.close(16)}</button></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><b style="font:700 17px var(--display)">How many boxes</b><div style="display:flex;align-items:center;gap:6px"><button class="sbtn white" data-act="runs" data-d="-1" aria-label="Fewer">−</button><span style="font:700 22px var(--display);min-width:42px;text-align:center">${S.runs}</span><button class="sbtn white" data-act="runs" data-d="1" aria-label="More">+</button></div></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span><b style="font:700 17px var(--display)">Keep a reserve</b><br><span style="font:800 13px var(--body);color:var(--muted)">Stop before going under ${I.coin(12)} 5,000</span></span><button class="sw ${S.reserve ? 'on' : ''}" data-act="reserveT" role="switch" aria-checked="${S.reserve}" aria-label="Keep a reserve"></button></div>
+    <div class="box warn" style="padding:6px 10px"><p style="font-size:13px">Spends up to ${I.coin(13)} <b>${cost.toLocaleString('en-US')}</b> (${S.runs} × 1,500). Stops when you press Stop, when it’s done, when you can’t afford the next box, or if you leave.</p></div>
+    <button class="gbtn violet" data-act="view" data-v="opening" style="min-height:${ph ? 46 : 52}px"><span class="stroke-s">Start Auto Open</span></button></div></div>`;
+}
+function openingView(g) {
+  const ph = g.phone;
+  return `<div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,#5a4690,#1d1435)"></div>
+  <div style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:${ph ? 110 : 170}px;height:${ph ? 110 : 170}px;border-radius:24px;background:#C9B9FF;border:4px solid #2B1F4A;box-shadow:0 10px 0 #120C22"></div>
+  <div class="abs pill" style="right:${ph ? 12 : 24}px;top:${ph ? 10 : 20}px;height:54px;padding:0 6px 0 10px;background:#fff;border:3px solid var(--ink);box-shadow:0 4px 0 #120C22;font:600 17px var(--display);gap:8px">${svgArt('auto', 32)} Auto Open · 3 / ${S.runs}<button class="sbtn" style="background:linear-gradient(180deg,#FF8FA5,var(--red));min-height:44px" data-act="view" data-v="shop"><span class="stroke-s">X · Stop</span></button></div>
+  <button class="abs" style="left:50%;transform:translateX(-50%);bottom:${ph ? 14 : 34}px;min-height:48px;padding:0 24px;border-radius:24px;border:3px solid var(--ink);background:#fff;font:600 20px var(--display);box-shadow:0 4px 0 #120C22;color:var(--ink)">B · Skip</button>` +
+  anno(ph ? 12 : 24, ph ? 72 : 84, 'Stop always visible; Skip (B) unchanged; next box ≥3 s after the last one starts', true);
+}
+function offlineView(g) {
+  const ph = g.phone; const N = S.offN, st = S.off;
+  const w = Math.min(ph ? 600 : 560, g.sw - 24), h = Math.min(ph ? 236 : 300, g.H - 16);
+  const busy = st === 'prompting' || st === 'verifying';
+  const free = `<button class="gbtn gold big" data-act="offClaim" ${busy || st === 'granted' ? 'disabled' : ''} aria-label="Claim ${N} Coins free"><span class="stroke-s">Claim</span>${I.coin(22)}<span class="stroke-s">${fmt(N)}</span></button><div style="text-align:center;font:800 13px var(--body);color:var(--muted)">Free</div>`;
+  const dbl = st === 'hidden' ? '' : `<div style="position:relative"><span class="ribbon" style="top:-12px;left:auto;right:-6px;border-radius:12px">2× THIS RETURN</span><button class="gbtn big" data-act="offDouble" ${busy || st === 'granted' ? 'disabled' : ''} aria-label="Double and Claim ${N * 2} Coins for Robux" style="flex-direction:column;gap:0;min-height:72px"><span class="stroke-s" style="font-size:20px">Double &amp; Claim ${fmt(N * 2)}</span><span style="display:flex;gap:5px;align-items:center;font-size:17px">${I.robux(16, '#fff', '#2B1F4A')}<span class="stroke-s">TBD</span></span></button></div>`;
+  const note = { prompting: ['wait', '<span class="spin"></span>', 'Finish or cancel in the Roblox window.'], verifying: ['wait', '<span class="spin"></span>', 'Your purchase is being saved. It will be recovered if you reconnect. Don’t purchase again to retry.'], cancelled: ['muted', I.info(16), 'Purchase cancelled. You weren’t charged. Claim is still free.'], granted: ['ok', I.check(16), `Yay! +${fmt(N * 2)} Coins claimed!`] }[st];
+  return world() + topbar(g) + `<div class="dimmer"></div><div class="abs" style="left:${(g.sw - w) / 2}px;top:${(g.H - h) / 2}px;width:${w}px;height:${h}px;border:4px solid var(--ink);border-radius:28px;box-shadow:0 8px 0 var(--ink);background:var(--surface);overflow:hidden;display:flex;flex-direction:column">
+    <div class="shdr" style="height:${ph ? 54 : 72}px;background:linear-gradient(100deg,#9B82FF,#C9B9FF 50%,#FFE38F)"><span class="buddy">${svgArt('moon', ph ? 42 : 56)}</span><span class="title stroke" style="font-size:${ph ? 24 : 30}px;flex:1">Welcome back!</span></div>
+    <div style="flex:1;overflow:auto;padding:${ph ? '10px 16px' : '18px 22px'};display:flex;flex-direction:column;gap:${ph ? 8 : 14}px">
+      <p style="margin:0;text-align:center;font:800 ${ph ? 14 : 16}px var(--body);color:var(--muted)">Your Display earned <b style="color:var(--ink)">${fmt(N)} Coins</b> while you were away (3h 12m).</p>
+      <div style="display:grid;grid-template-columns:${dbl ? '1fr 1fr' : '1fr'};gap:14px;align-items:start;${dbl ? '' : 'max-width:300px;margin:0 auto;width:100%'}"><div style="display:flex;flex-direction:column;gap:4px">${free}</div>${dbl ? `<div style="display:flex;flex-direction:column;gap:4px">${dbl}</div>` : ''}</div>
+      ${note ? `<div class="msg ${note[0]}" style="justify-content:center">${note[1]}<span>${note[2]}</span></div>` : ''}
+    </div></div>` + anno((g.sw - w) / 2 + 8, (g.H - h) / 2 - 22, 'Claim is selected first (gamepad A); tapping outside = free Claim (not during a purchase)');
+}
+
+// ---------- render ----------
+function render() {
+  const g = geom(); const frame = $('#frame'), scaler = $('#scaler');
+  frame.style.width = g.v.w + 'px'; frame.style.height = g.v.h + 'px'; frame.classList.toggle('reduced', S.reduced);
+  const sc = Math.min(1, (scaler.parentElement.clientWidth - 24) / g.v.w);
+  frame.style.transform = `scale(${sc})`; scaler.style.width = g.v.w * sc + 'px'; scaler.style.height = g.v.h * sc + 'px';
+  $('#meta').textContent = `${g.v.w}×${g.v.h}${g.v.inL ? ` · insets L${g.v.inL}/R${g.v.inR}` : ''} · ${g.phone ? 'phone sheet (dock hidden)' : `desktop panel ${g.panel.w}×${g.panel.h}`} · preview scale ${sc.toFixed(2)}`;
+  const safe = (inner) => `<div class="abs" style="left:${g.v.inL}px;top:0;width:${g.sw}px;height:${g.H}px">${inner}</div>`;
+  let html;
+  if (S.view === 'store') html = world() + `<div class="dimmer"></div>` + safe(topbar(g) + (g.phone ? '' : coinsPill(g) + dock(g, '')) + store(g));
+  else if (S.view === 'world') html = safe(worldView(g));
+  else if (S.view === 'machine') html = safe(machineView(g));
+  else if (S.view === 'shop') html = safe(shopView(g));
+  else if (S.view === 'opening') html = safe(openingView(g));
+  else html = safe(offlineView(g));
+  if (g.v.inL) html += `<div class="inset-band" style="left:0;width:${g.v.inL}px"></div>`;
+  if (g.v.inR) html += `<div class="inset-band" style="right:0;width:${g.v.inR}px"></div>`;
+  if (S.prompt) html += `<div class="native" role="dialog" aria-label="Platform purchase prompt"><div class="nbox"><small>PLATFORM PROMPT · drawn by Roblox, not by the game</small><b>${esc(S.prompt.label)}</b><span style="font-size:14px">Price from Roblox: ${esc(S.prompt.price)}</span><div class="nrow"><button data-act="nCancel">Cancel</button><button class="p" data-act="nBuy">Buy (simulate)</button></div><div class="nrow"><button data-act="nFail">Simulate error</button></div></div></div>`;
+  if (S.toast) html += `<div class="toast" style="top:${g.phone ? 70 : 20}px">${I.spark(20, '#FFE38F')}<span>${esc(S.toast)}</span></div>`;
+  frame.innerHTML = html;
+  notes();
+}
+function notes() {
+  const v = {
+    world: ['Entries 1 + 2', '<ul><li><b>Green +</b> sits inside the Coins pill (44px+ hit area) and opens Store → Coins. It never pulses or badges and doesn’t change when Coins run low (P01 rule G).</li><li><b>STORE button</b>: a bigger candy tile with the blind-box buddy, a twinkle and a slow sunburst (all still with Reduced Motion), left of the Daily/Home/Plaza row. Opens Store → Starter &amp; VIP. No “!” badge.</li><li>Boost chip under Coins only while a boost runs; opens My Perks.</li></ul>'],
+    machine: ['Entry 3 · Upgrade Station', '<ul><li>A rounded candy-pink arcade cabinet with a violet bulb marquee, the buddy in a window and a green + button. No capsule dome or spinning reels, so it doesn’t look like a paid random machine.</li><li>Owner-only native prompt “E · Upgrades” (12 studs, no hold) opens Store → Upgrades, like the Box Shop prompt.</li><li>About 14 native parts plus SurfaceGuis; night glow from unlit SurfaceGuis, no Light instances. It raises the 184-part plot budget, so it needs its own world task.</li></ul>'],
+    store: ['Robux Store', '<ul><li>Candy-coloured chunky tabs; the selected one sticks out with a white halo. The buddy peeks over the header.</li><li>Cards: pastel sunburst top, sparkles, art with little faces, factual ribbons and a green Robux button. <b>Coin packs</b> prompt straight from the card; every other card opens its sheet first because it has rules to read.</li><li>Ribbons: ONCE PER ACCOUNT, OWNED, FOREVER, LUCK ×2, +N% COINS PER R$ (computed from the prices Roblox shows).</li><li>Green = Robux, gold = Coins, violet = automation.</li></ul>'],
+    shop: ['Coin Shop', '<ul><li>Box flow unchanged. The STORE chip is a fourth way in.</li><li>Owned Auto Open adds “Auto Open…”, which opens setup: box count 1–100 (default 10), optional reserve, and the maximum spend shown before Start.</li></ul>'],
+    opening: ['Auto Open running', '<ul><li>Opening focus hides the main UI, so the Store never shows during a cinematic.</li><li>Stop is a separate red button that is always visible. X is the proposed binding, verified in P08; Skip keeps B.</li></ul>'],
+    offline: ['Welcome back · Double &amp; Claim (user-confirmed)', '<ul><li>“Your Display earned N Coins…”, then a free gold <b>Claim N</b> and a green <b>Double &amp; Claim 2N</b> with the Roblox price.</li><li>While the prompt is open or the purchase is saving, both are disabled (P01). After a cancel, Claim works again.</li><li>Double is hidden when the reward is 0, already claimed, restricted, or 2N won’t fit the wallet.</li><li>A late receipt after the free Claim credits only the extra N, shown as a toast.</li></ul><p><button class="sbtn white" data-act="offReset">Reset</button> <button class="sbtn white" data-act="offHide">Toggle “double unavailable”</button></p>'],
+  }[S.view];
+  $('#notes').innerHTML = `<div class="note"><h3>${v[0]}</h3>${v[1]}</div><div class="note"><h3>Try</h3><ul><li>Store → Coins → tap a green price: platform prompt → Buy → Saving → Delivered. Tick “Slow delivery” for recovery.</li><li>Open 2x Coins Boost, buy it, then Activate (the confirmation uses P01’s timer copy).</li><li>Upgrades → 4x: the sheet warns about full-price upgrades.</li><li>Lucky Charm and Luck boosts show P01’s exact odds table.</li><li>“D3 launch subset” hides held products. “Open product’s state” drives the open sheet.</li></ul></div>`;
+}
+
+// ---------- interactions ----------
+let timer = null;
+const flash = (t) => { S.toast = t; render(); setTimeout(() => { S.toast = null; render(); }, 2200); };
+function prompt(p) {
+  S.sim[p.key] = 'prompting'; S.prompt = { key: p.key, label: p.durs ? `${p.name} · ${S.dur} min` : p.name, price: priceOf(p) == null ? '…' : fmt(priceOf(p)) + ' Robux' };
+}
+function finish(result) {
+  const key = S.prompt.key; S.prompt = null;
+  if (key === '__offline') {
+    if (result !== 'buy') { S.off = 'cancelled'; return render(); }
+    S.off = 'verifying'; render(); clearTimeout(timer); timer = setTimeout(() => { S.off = 'granted'; render(); }, 1600); return;
+  }
+  if (result === 'cancel') { S.sim[key] = 'cancelled'; return render(); }
+  if (result === 'fail') { S.sim[key] = 'failed'; return render(); }
+  S.sim[key] = 'verifying'; render(); clearTimeout(timer);
+  timer = setTimeout(() => { if (S.slow) { S.sim[key] = 'delayed'; render(); } else grant(key); }, 1600);
+}
+function grant(key) {
+  const p = P[key];
+  if (p.durs) { S.inv[key] = (S.inv[key] || 0) + 1; S.sim[key] = 'granted'; return flash(`${p.name} added to My Perks`); }
+  if (p.cat === 'coins') { S.sim[key] = 'granted'; return flash(`+${p.coins.toLocaleString('en-US')} Coins!`); }
+  if (key === 'starter') { S.claimed = true; S.inv.bCoins = (S.inv.bCoins || 0) + 1; delete S.sim[key]; return flash('Starter Pack delivered: 7,500 Coins + boost'); }
+  S.owned[key] = true; delete S.sim[key]; flash(`${p.name} is yours!`);
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act;
+  if (a === 'closeSheet' && b.classList.contains('sheetbg') && e.target.closest('[data-stop]')) return; // click inside the sheet, not the backdrop
+  if (a === 'open' && e.target.closest('button') && e.target.closest('button') !== b) return; // inner buttons handle themselves
+  if (a === 'cat') { S.cat = b.dataset.c; S.open = null; }
+  else if (a === 'open') { S.open = b.dataset.k; $('#sim').value = S.sim[S.open] || ''; }
+  else if (a === 'closeSheet') S.open = null;
+  else if (a === 'buy') prompt(P[b.dataset.k]);
+  else if (a === 'nBuy') return finish('buy');
+  else if (a === 'nCancel') return finish('cancel');
+  else if (a === 'nFail') return finish('fail');
+  else if (a === 'dur') S.dur = +b.dataset.d;
+  else if (a === 'retry') delete S.sim[S.open];
+  else if (a === 'check') { const k = S.open; S.sim[k] = 'verifying'; render(); return setTimeout(() => grant(k), 1200); }
+  else if (a === 'activate') S.confirm = b.dataset.k;
+  else if (a === 'cancelConfirm') S.confirm = null;
+  else if (a === 'doActivate') { const k = b.dataset.k; S.inv[k] = Math.max(0, (S.inv[k] || 0) - 1); S.active[k] = (S.active[k] || 0) + +b.dataset.d; if (S.sim[k] === 'granted') delete S.sim[k]; S.confirm = null; return flash(`${P[k].name} active · ${S.active[k]} min left`); }
+  else if (a === 'toggle') S.toggles[b.dataset.k] = !S.toggles[b.dataset.k];
+  else if (a === 'view') { S.view = b.dataset.v; S.open = null; S.autoSetup = false; $('#view').value = S.view; }
+  else if (a === 'openStore') { S.view = 'store'; S.cat = b.dataset.c || 'featured'; S.open = null; $('#view').value = 'store'; }
+  else if (a === 'close') { S.view = 'world'; S.open = null; $('#view').value = 'world'; }
+  else if (a === 'autoSetup') S.autoSetup = !S.autoSetup;
+  else if (a === 'runs') S.runs = Math.max(1, Math.min(100, S.runs + +b.dataset.d));
+  else if (a === 'reserveT') S.reserve = !S.reserve;
+  else if (a === 'offClaim') return flash(`+${S.offN.toLocaleString('en-US')} Coins claimed`);
+  else if (a === 'offDouble') { S.off = 'prompting'; S.prompt = { key: '__offline', label: `Double & Claim ${(S.offN * 2).toLocaleString('en-US')} Coins`, price: 'TBD' }; }
+  else if (a === 'offReset') S.off = 'offer';
+  else if (a === 'offHide') S.off = S.off === 'hidden' ? 'offer' : 'hidden';
+  render();
+});
+document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role="button"][data-act]')) { e.preventDefault(); e.target.click(); } });
+$('#vp').onchange = (e) => { S.vp = e.target.value; render(); };
+$('#view').onchange = (e) => { S.view = e.target.value; S.open = null; S.autoSetup = false; render(); };
+$('#sim').onchange = (e) => { const k = S.open; if (!k) return; if (e.target.value) S.sim[k] = e.target.value; else delete S.sim[k]; render(); };
+$('#price').onchange = (e) => { S.price = e.target.value; render(); };
+$('#launch').onchange = (e) => { S.launch = e.target.checked; render(); };
+$('#longText').onchange = (e) => { S.long = e.target.checked; render(); };
+$('#reduced').onchange = (e) => { S.reduced = e.target.checked; render(); };
+$('#slow').onchange = (e) => { S.slow = e.target.checked; };
+$('#anno').onchange = (e) => { S.anno = e.target.checked; render(); };
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) { S.reduced = true; $('#reduced').checked = true; }
+addEventListener('resize', render);
+render();
+})();
+</script>

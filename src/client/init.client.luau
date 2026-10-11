@@ -225,6 +225,10 @@ local displayInteraction = DisplayInteraction.create(
 			ui.closeScreen()
 			deal.show(stall)
 		end
+	end,
+	-- The plot's Upgrade Station opens the Robux Store on Upgrades.
+	function()
+		ui.openStore("upgrades")
 	end
 )
 local shopKeeper = ShopKeeper.create(ui.effects)

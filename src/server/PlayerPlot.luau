@@ -3,6 +3,7 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local DisplayFixture = require(script.Parent.DisplayFixture)
 local CollectionFixture = require(script.Parent.CollectionFixture)
 local ShopFixture = require(script.Parent.ShopFixture)
+local UpgradeStation = require(script.Parent.UpgradeStation)
 local TownPlacements = require(script.Parent.TownPlacements)
 local PlotFixture = require(script.Parent.PlotFixture)
 local PlotStyle = require(script.Parent.PlotStyle)
@@ -33,6 +34,7 @@ export type Plot = {
 	spawnPad: Model,
 	fixture: DisplayFixture.Render,
 	shop: ShopFixture.Render,
+	station: UpgradeStation.Render,
 	-- Swaps the part-built Peeka for the uploaded shopkeeper whenever that model is ready.
 	shopkeeper: TownPlacements.Placement,
 	displayCapacity: number,
@@ -73,6 +75,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 	local fixture = DisplayFixture.create(model, transform, accent)
 	local collection = CollectionFixture.create(model, transform, accent)
 	local shop = ShopFixture.create(model, transform)
+	local station = UpgradeStation.create(model, transform)
 	local plot: Plot = {
 		model = model,
 		ownerId = player.UserId,
@@ -92,6 +95,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		physicalShelves = collection.units,
 		fixture = fixture,
 		shop = shop,
+		station = station,
 		shopkeeper = TownPlacements.add(
 			ShopFixture.shopkeeper.kind,
 			shop.keeperAt,
@@ -112,6 +116,7 @@ function PlayerPlot.create(player: Player, index: number): Plot
 		DisplayFixture.setNight(fixture, enabled)
 		CollectionFixture.setNight(collection, enabled)
 		ShopFixture.setNight(shop, enabled)
+		UpgradeStation.setNight(station, enabled)
 		PlotFixture.setNight(entrance, enabled)
 	end)
 	table.insert(

@@ -17,12 +17,15 @@ local input = Engine.services.UserInputService
 local opened = 0
 local shelvesOpened = 0
 local shopOpened = 0
+local storeOpened = 0
 local control = Interaction.create(function()
 	opened += 1
 end, function()
 	shelvesOpened += 1
 end, function()
 	shopOpened += 1
+end, nil, function()
+	storeOpened += 1
 end)
 local plot = Plot.create(owner, 1)
 local session = Transactions.new(0)
@@ -69,6 +72,34 @@ check(
 	shopTarget.Transparency == 1 and not shopTarget.CanCollide and not shopTarget.CanQuery,
 	"Shop prompt anchor is invisible and nonblocking"
 )
+-- Upgrade Station: owner-only E prompt that opens the Robux Store (no purchase path).
+local stationTarget = plot.station.model:FindFirstChild("OpenStore")
+local stationPrompt = stationTarget:FindFirstChildOfClass("ProximityPrompt")
+check(
+	stationPrompt.Name == "OpenStorePrompt"
+		and stationPrompt.KeyboardKeyCode == Engine.Enum.KeyCode.E
+		and stationPrompt.ActionText == "Upgrades"
+		and stationPrompt.ObjectText == "Upgrade Station"
+		and stationPrompt.MaxActivationDistance == 12
+		and stationPrompt.HoldDuration == 0
+		and stationPrompt.RequiresLineOfSight == false
+		and stationPrompt.Enabled,
+	"E · Upgrades matches the plot's other prompts"
+)
+check(
+	stationTarget.Transparency == 1 and not stationTarget.CanCollide and not stationTarget.CanQuery,
+	"Upgrade Station prompt anchor is invisible and nonblocking"
+)
+owner.Character:PivotTo(stationTarget.CFrame)
+prompts.PromptShown:fire(stationPrompt)
+check(stationPrompt.Enabled, "the owner keeps their own Upgrade Station prompt")
+prompts.PromptTriggered:fire(stationPrompt, owner)
+check(storeOpened == 1 and shopOpened == 0 and opened == 0, "nearby owner opens only the Store")
+prompts.PromptTriggered:fire(stationPrompt, guest)
+check(storeOpened == 1, "another actor cannot open the Store from this plot")
+owner.Character:PivotTo(stationTarget.CFrame + Engine.Vector3.new(12.01, 0, 0))
+prompts.PromptTriggered:fire(stationPrompt, owner)
+check(storeOpened == 1, "far Upgrade Station trigger ignored")
 check(
 	prompt.KeyboardKeyCode == Engine.Enum.KeyCode.E and prompt.ActionText == "Manage Display",
 	"E clearly manages Display"
@@ -208,6 +239,15 @@ check(
 )
 control.update()
 check(not otherShopPrompt.Enabled, "snapshot refresh never re-enables another plot's Shop prompt")
+local otherStationTarget = other.station.model:FindFirstChild("OpenStore")
+local otherStationPrompt = otherStationTarget:FindFirstChildOfClass("ProximityPrompt")
+owner.Character:PivotTo(otherStationTarget.CFrame)
+prompts.PromptShown:fire(otherStationPrompt)
+prompts.PromptTriggered:fire(otherStationPrompt, owner)
+check(
+	not otherStationPrompt.Enabled and storeOpened == 1,
+	"visitors see no Upgrade Station prompt on another plot"
+)
 local liveConnections = Engine.connections
 for _ = 1, 40 do
 	Plot.render(plot, Rules.new(0))
@@ -220,7 +260,10 @@ for _, instance in plot.model:GetDescendants() do
 		promptCount += 1
 	end
 end
-check(promptCount == 3, "one Display, one Shelves and one Shop prompt remain after rerenders")
+check(
+	promptCount == 4,
+	"one Display, Shelves, Shop and Upgrade Station prompt remain after rerenders"
+)
 Plot.destroy(plot)
 prompts.PromptTriggered:fire(prompt, owner)
 check(opened == 3, "destroyed plot prompt cannot reopen")

@@ -24,6 +24,7 @@ local Display = require(script.Parent.DisplayScreen)
 local Goals = require(script.Parent.GoalsScreen)
 local Shelves = require(script.Parent.ShelvesScreen)
 local Login = require(script.Parent.LoginScreen)
+local Store = require(script.Parent.StoreScreen)
 local Onboarding = require(script.Parent.Onboarding)
 local Sfx = require(script.Parent.Sfx)
 local ShelfEditor = require(script.Parent.ShelfEditor)
@@ -37,6 +38,8 @@ export type Interface = {
 	openDisplay: () -> (),
 	openShelves: () -> (),
 	openShop: () -> (),
+	-- Robux Store on a tab ("featured", "upgrades", ...): HUD +, STORE tile, plot Upgrade Station.
+	openStore: (tab: string) -> (),
 	-- Closes the open screen, if any (the Welcome Quest's first placement reveals the world).
 	closeScreen: () -> (),
 	coinLanded: () -> (),
@@ -129,6 +132,12 @@ function Interface.create(
 	loginHost.SelectionGroup = true
 	loginHost.Visible = false
 	hosts.Login = loginHost
+	-- The Robux Store is routed the same way: the HUD STORE tile, the Coins + and the plot's
+	-- Upgrade Station open it on a tab.
+	local storeHost = Kit.frame(screensRoot, "StorePresentation")
+	storeHost.SelectionGroup = true
+	storeHost.Visible = false
+	hosts.Store = storeHost
 	local notices = Notifications.create(stage, scope)
 	local navigate: (string, Context.Route?) -> () = function() end
 	local close: () -> () = function() end
@@ -177,6 +186,7 @@ function Interface.create(
 		Goals = Goals.create(hosts.Goals, ctx, now),
 		Shelves = Shelves.create(hosts.Shelves, ctx),
 		Login = Login.create(hosts.Login, ctx),
+		Store = Store.create(hosts.Store, ctx),
 	}
 	local hud = Hud.create(stage, ctx, function(value: boolean)
 		effects = value
@@ -416,6 +426,9 @@ function Interface.create(
 					end
 				elseif key == Enum.KeyCode.ButtonB then
 					back()
+				elseif opened and screens[current].cycle then
+					local cycle = screens[current].cycle :: (number) -> ()
+					cycle(if key == Enum.KeyCode.ButtonR1 then 1 else -1)
 				elseif opened then
 					local index = table.find(Navigation.pages, current) or 1
 					local step = if key == Enum.KeyCode.ButtonR1 then 1 else -1
@@ -467,6 +480,11 @@ function Interface.create(
 		openShop = function()
 			if canAct() and not opened then
 				navigate("Shop")
+			end
+		end,
+		openStore = function(tab: string)
+			if canAct() and not opened then
+				navigate("Store", { tab = tab })
 			end
 		end,
 		closeScreen = function()

@@ -1,9 +1,9 @@
 # Blindbox Town monetization product specification
 
-> **Design/research only — 2026-10-11.** Except for the user-confirmed MN-22 Double & Claim flow, every purchase type, benefit,
-> amount, duration and Robux price below remains a **recommendation, not approved**. MN-22
-> pricing, platform type, fulfillment details and release are not approved. No platform product IDs or approved prices
-> exist in this specification. No gameplay, platform catalog, live pricing, publication or
+> **Design/research only — 2026-10-11.** The user approved decision D1 (product benefits,
+> amounts, entitlement model and the matrix's default list prices) and the MN-22 Double & Claim
+> flow on 2026-10-11. D2, D3, MN-22 pricing, platform types, fulfillment details and release
+> remain **recommendations, not approved**. No platform product IDs exist in this specification. No gameplay, platform catalog, live pricing, publication or
 > production data changes are authorized by this document. Implementation must consume explicit
 > user decisions recorded in the decision table; it must not promote recommendations to defaults.
 
@@ -657,12 +657,13 @@ Before any separately authorized implementation/launch, require:
 ## Concise decision table — smallest remaining user choices
 
 The rules above resolve the detailed options as recommendations. The user need only settle these
-three bundles or name specific exceptions. **MN-22's per-return Double & Claim benefit flow
-was confirmed by the user on 2026-10-11; no full bundle, platform type, price or release is approved.**
+three bundles or name specific exceptions. **D1 and MN-22's per-return Double & Claim benefit
+flow were approved by the user on 2026-10-11; D2, D3, the MN-22 price, platform types and
+release are not approved.**
 
 | Decision | Recommendation to accept or amend | Status / implementation consequence |
 | --- | --- | --- |
-| D1 — Product benefits, values and entitlement model | Adopt matrix amounts/prices as proposed defaults; independent highest-owned Coin passes with full-price upgrades/no credit; fixed packs; lifetime once-per-account Starter; concrete two-benefit VIP; 48 movement; user-confirmed return-screen Claim / Double & Claim flow; choose its purchase price separately | **MN-22 benefit flow user-confirmed; remaining catalog recommendations await decision.** No IDs/prices/catalog activation until explicit approval; offline DP/receipt protocol and price remain recommendations/unresolved; an upgrade-credit requirement reopens MN-04 |
+| D1 — Product benefits, values and entitlement model | Adopt matrix amounts/prices as proposed defaults; independent highest-owned Coin passes with full-price upgrades/no credit; fixed packs; lifetime once-per-account Starter; concrete two-benefit VIP; 48 movement; user-confirmed return-screen Claim / Double & Claim flow; choose its purchase price separately | **Approved by the user, 2026-10-11** (benefits, amounts, entitlement model and the matrix's proposed default list prices). The MN-22 purchase price, offline DP/receipt protocol and all product IDs remain undecided. Approval does not activate a catalog: live prices come from platform product info, and no product goes on sale before D2, the P02 foundation and a separate release decision. The Robux Store UI shows these benefits with buying switched off |
 | D2 — Shared effects and paid-random boundary | Adopt C/L/T/G, normalized Rare-or-better Luck, unchanged pity/floors, elapsed wall-time tokens and overlap, earned/assisted lineage plus restricted-player earned path. Require validation of that path before economic/Luck launch | **Recommended, awaiting user decision; platform validation unresolved.** No Luck/pack/income implementation may silently use a simpler ungated wallet or odds formula |
 | D3 — Initial launch subset | Validate Auto Collect and movement first; Auto Open requires policy review; then Coin 2, Small/Medium, Starter, VIP and offline subject to shared foundation. Hold Coin 4/8, Large/Huge and all Luck/combo release for pacing/policy acceptance; keep every family documented | **Recommended, awaiting user decision.** Approving specifications does not approve all products for launch, implementation or publication |
 

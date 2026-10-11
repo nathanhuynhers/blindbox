@@ -255,6 +255,8 @@ Engine.Color3 = Visual.Color3
 Engine.Vector3 = Visual.Vector3
 Engine.NumberSequence = Visual.NumberSequence
 Engine.NumberSequenceKeypoint = Visual.NumberSequenceKeypoint
+Engine.ColorSequence = Visual.ColorSequence
+Engine.ColorSequenceKeypoint = Visual.NumberSequenceKeypoint
 Engine.Font = {
 	new = function(family, weight)
 		return { Family = family, Weight = weight }

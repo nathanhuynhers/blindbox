@@ -148,7 +148,9 @@ with no additional lights. The runtime fixture budget increases by those twelve 
 plot; the contact suite counts 153 BaseParts including awning wedges and click targets at six slots
 (figure asset geometry excluded). World and light budgets are unchanged. The plot Shop
 (`ShopFixture`, 19 kiosk parts plus an 8-part Peeka stand-in) later raised the budget to 184,
-measured at 180 with click targets; it adds no lights, remotes or listeners on the server. Its
+measured at 180 with click targets; it adds no lights, remotes or listeners on the server. The
+Upgrade Station (`UpgradeStation`, 5 parts) raised it to 189; its prompt only opens the client
+Robux Store. Its
 uploaded shopkeeper is a `TownPlacements` spot: the module caches ready templates so plots made
 after loading swap at once, and plot teardown removes the spot. The client `ShopKeeper` polls
 every 0.5 s and binds `RenderStepped` only while a shopkeeper is within 40 studs.

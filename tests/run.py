@@ -19,7 +19,7 @@ modules = {
     "ShelfShowcase": "server", "ShelfEditor": "client",
     "MovementConfig": "server", "PlayerMovement": "server",
     "Rarity": "shared",
-    "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "ShopFixture": "server", "FigureSlots": "server", "World": "server",
+    "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "ShopFixture": "server", "UpgradeStation": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
     "Types": "shared", "Tutorial": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
     "CollectionEconomy": "server", "Deals": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
@@ -41,7 +41,7 @@ ui = [
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
     "ShopScreen", "ShopLuck", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
-    "GoalsScreen", "ShelvesScreen", "LoginScreen", "RevealCard", "Onboarding", "Interface",
+    "GoalsScreen", "ShelvesScreen", "LoginScreen", "StoreCatalog", "StoreScreen", "RevealCard", "Onboarding", "Interface",
 ]
 for name in ui:
     modules[name] = "client"
@@ -52,6 +52,7 @@ UI_PRELUDE = "\n".join([
     "local Color3, UDim2, UDim, Vector2, Rect = Engine.Color3, Engine.UDim2, Engine.UDim, Engine.Vector2, Engine.Rect",
     "local Font, TweenInfo, Vector3 = Engine.Font, Engine.TweenInfo, Engine.Vector3",
     "local NumberSequence, NumberSequenceKeypoint = Engine.NumberSequence, Engine.NumberSequenceKeypoint",
+    "local ColorSequence, ColorSequenceKeypoint = Engine.ColorSequence, Engine.ColorSequenceKeypoint",
 ])
 for name, folder in modules.items():
     source = (root / "src" / folder / f"{name}.luau").read_text(encoding="utf-8-sig")
@@ -102,7 +103,7 @@ for name, folder in modules.items():
         source = source.replace("--!strict", '--!strict\nlocal Engine = require("./PlotEngine")\nlocal game, workspace, CFrame, Vector3 = Engine.game, Engine.workspace, Engine.CFrame, Engine.Vector3\nlocal task = {spawn = function() end, wait = function() end}\nlocal typeof = function(value) return if type(value) == "table" and getmetatable(value) == getmetatable(Vector3.zero) then "Vector3" else type(value) end')
     if name == "Scroll":
         source = source.replace("--!strict", "--!strict\nlocal Enum = {AutomaticSize={None=0},ScrollingDirection={Y=1},ScrollBarInset={ScrollBar=1}}\nlocal UDim2 = {fromOffset=function(x,y) return {X={Offset=x},Y={Offset=y}} end}")
-    if name in ("PlotFixture", "ShopFixture", "CollectionFixture", "DisplayFixture", "PlotGeometry", "PlayerPlot", "HomeTeleport", "World", "FigureSlots", "PlotStyle", "Awning", "NightLights", "TownStyle", "TownLayout", "TownProps", "PlazaFixture", "LeaderboardBoard", "DayNight"):
+    if name in ("PlotFixture", "ShopFixture", "UpgradeStation", "CollectionFixture", "DisplayFixture", "PlotGeometry", "PlayerPlot", "HomeTeleport", "World", "FigureSlots", "PlotStyle", "Awning", "NightLights", "TownStyle", "TownLayout", "TownProps", "PlazaFixture", "LeaderboardBoard", "DayNight"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./PlotEngine")\nlocal Instance, Vector3, Color3, CFrame, UDim2, workspace = Engine.Instance, Engine.Vector3, Engine.Color3, Engine.CFrame, Engine.UDim2, Engine.workspace\nlocal Enum, Vector2, UDim, warn = Engine.Enum, Engine.Vector2, Engine.UDim, Engine.warn\nlocal NumberRange, NumberSequence = Engine.NumberRange, Engine.NumberSequence')
         source = source.replace('local FigureModel = require(game:GetService("ReplicatedStorage").Shared.FigureModel)', 'local FigureModel = Engine.FigureModel')
         if name == "PlayerPlot":

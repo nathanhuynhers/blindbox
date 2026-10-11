@@ -6,7 +6,8 @@ local Prompts = game:GetService("ProximityPromptService")
 local Scope = require(script.Parent.UIScope)
 local UIState = require(script.Parent.UIState)
 local Interaction = {}
-local prompts = { "ManageDisplayPrompt", "ManageShelvesPrompt", "OpenShopPrompt" }
+local prompts =
+	{ "ManageDisplayPrompt", "ManageShelvesPrompt", "OpenShopPrompt", "OpenStorePrompt" }
 
 local function ownPlot(): Instance?
 	local plots = workspace:FindFirstChild("PlayerPlots")
@@ -26,6 +27,8 @@ local function promptTarget(name: string): BasePart?
 		fixtureName, targetName = "CollectionFixture", "ManageShelves"
 	elseif name == "OpenShopPrompt" then
 		fixtureName, targetName = "ShopFixture", "OpenShop"
+	elseif name == "OpenStorePrompt" then
+		fixtureName, targetName = "UpgradeStation", "OpenStore"
 	else
 		return nil
 	end
@@ -46,7 +49,8 @@ function Interaction.create(
 	openDisplay: () -> (),
 	openShelves: (() -> ())?,
 	openShop: (() -> ())?,
-	openDeal: ((number) -> ())?
+	openDeal: ((number) -> ())?,
+	openStore: (() -> ())?
 ): { update: (number?) -> (), destroy: () -> () }
 	local scope = Scope.create()
 	local function ownConnection(connection: RBXScriptConnection)
@@ -91,7 +95,7 @@ function Interaction.create(
 	end))
 	ownConnection(Prompts.PromptShown:Connect(function(prompt: ProximityPrompt)
 		if table.find(prompts, prompt.Name) then
-			-- Owner only: hide another plot's management or Shop prompt on this client.
+			-- Owner only: hide another plot's management, Shop or Upgrade Station prompt here.
 			if prompt.Parent ~= promptTarget(prompt.Name) then
 				prompt.Enabled = false
 			end
@@ -125,6 +129,10 @@ function Interaction.create(
 			elseif prompt.Name == "ManageShelvesPrompt" then
 				if openShelves then
 					openShelves()
+				end
+			elseif prompt.Name == "OpenStorePrompt" then
+				if openStore then
+					openStore()
 				end
 			elseif openShop then
 				openShop()

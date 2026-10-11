@@ -111,9 +111,10 @@ surface; the only thing in the doorway is a flush 0.12-stud oak deck. It also ad
 noncolliding three-ring **spawn pad** on the open right floor (local X=-18, Z=-28) and striped
 **awnings**: one above the Display sign that resizes with Display capacity, and one above the
 Shelves header. Neither awning enters the horizontal expansion zones or the open center/right.
-An active plot has a 184-part runtime fixture budget (180 BaseParts including awning wedges,
-collection plates, click targets and the plot Shop at six Display slots; figure asset geometry
-and the uploaded shopkeeper excluded).
+An active plot has a 189-part runtime fixture budget, raised from 184 for the Upgrade Station's 5
+parts. The plot spec measures 177 at six Display slots, including awning wedges, collection
+plates, click targets, the plot Shop and the Upgrade Station; figure asset geometry and the
+uploaded shopkeeper are excluded.
 
 ### Peeka's Box Shop (plot Shop)
 
@@ -140,6 +141,21 @@ front of the counter and opens the existing Shop screen through the same client 
 Display and Shelves prompts: owner only (other plots' prompts are hidden on each client), living
 character, distance and ancestry rechecked, pending requests and opening focus respected. It adds
 no remote, store backend or purchase path.
+
+### Upgrade Station
+
+Every active plot has an **Upgrade Station** (`UpgradeStation`) in the front corner on the
+Shelves side: footprint centre at local X=38, Z=-38 (about X 33.5..42.5, Z -42.8..-33.2), turned
+60 degrees so its front faces the plot centre and the arch. It is a candy-pink arcade cabinet
+with a violet "UPGRADES" marquee with bulbs, a window showing a blind-box buddy, a gold
+"POWER-UPS!" plate, a green + button and a gold topper ball. It has no capsule dome, crank or
+reels, so it never reads as a paid random machine. Five native parts (base, body, marquee,
+topper, prompt anchor) carry it; SurfaceGuis paint the rest. At dusk the window and marquee
+glow through unlit SurfaceGuis, with no Light instances.
+
+A native **E · Upgrades** prompt (object text "Upgrade Station", 12 studs, no hold) opens the
+client's Robux Store on its Upgrades tab, owner only, with the same routing and checks as the
+Box Shop prompt. It adds no remote, purchase path or pricing.
 
 ### Spawning
 

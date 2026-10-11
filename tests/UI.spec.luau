@@ -322,6 +322,19 @@ local phone = Layout.frame(844, 390, { left = 96, right = 844 })
 check(phone.phone and phone.scale == 1 and not phone.dockWhileOpen, "phone landscape")
 check(phone.panel.x == 104 and phone.panel.width == 732 and phone.panel.height == 376, "phone sheet")
 check(phone.dock.width == 372 and phone.dock.y == 390 - 10 - 70, "phone dock 68x70")
+check(
+	reference.store.x == reference.daily.x - 10 - 64
+		and reference.store.width == reference.daily.width
+		and reference.store.height == reference.daily.height
+		and reference.store.y == reference.daily.y,
+	"desktop STORE tile matches the 64px row tiles, left of Daily"
+)
+check(
+	phone.store.x == phone.daily.x - 8 - 50 and phone.store.width == 50 and phone.store.height == 56,
+	"phone STORE tile matches the 50x56 row, 8px gaps"
+)
+local _, bandRight = Layout.band(reference, 300)
+check(bandRight == reference.store.x - 12, "the free top band ends before the STORE tile")
 for _, viewport in
 	{ { 900, 560 }, { 1024, 600 }, { 1024, 768 }, { 1280, 720 }, { 1366, 768 }, { 1920, 1080 }, { 2560, 1440 }, { 3440, 1440 } }
 do

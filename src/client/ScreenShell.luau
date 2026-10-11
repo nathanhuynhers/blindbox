@@ -14,6 +14,7 @@ local Shell = {}
 export type Options = { id: string, title: string, subtitle: string, coins: boolean? }
 export type Shell = {
 	root: Frame,
+	header: Frame,
 	body: Frame,
 	chips: Frame,
 	title: TextLabel,
@@ -108,6 +109,7 @@ function Shell.create(parent: Instance, ctx: Context.Context, options: Options):
 	end)
 	return {
 		root = root,
+		header = header,
 		body = body,
 		chips = chips,
 		title = title,

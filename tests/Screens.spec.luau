@@ -219,6 +219,14 @@ for _, case in {
 		rect(find("DailyButton")), rect(find("HomeButton")), rect(find("PlazaButton")), rect(find("SettingsButton"))
 	local row = { daily, home, plaza, gear }
 	check(onScreen(find("DailyButton")) and onScreen(find("HomeButton")) and onScreen(find("PlazaButton")) and onScreen(find("SettingsButton")), label .. ": row shows with no screen open")
+	-- STORE: a candy tile at the row's left end, the same size as the row's tiles.
+	local store = rect(find("StoreButton"))
+	check(onScreen(find("StoreButton")), label .. ": STORE shows with no screen open")
+	check(store.x + store.width + 8 <= daily.x, label .. ": STORE sits left of Daily with a thumb-safe gap")
+	check(store.width == daily.width and store.height == daily.height and store.y == daily.y, label .. ": STORE matches the row tiles")
+	check(math.abs(store.y + store.height / 2 - (daily.y + daily.height / 2)) <= 0.5 and store.y >= 0, label .. ": STORE centred on the row")
+	local plus = find("StorePlus")
+	check(plus.Size.X.Offset * scale >= 44 and plus.Size.Y.Offset * scale >= 44, label .. ": Coins + keeps a 44pt target")
 	check(
 		daily.x < home.x and home.x < plaza.x and plaza.x < gear.x and daily.y == gear.y and home.y == gear.y and plaza.y == gear.y,
 		label .. ": Daily, Home, Plaza, gear left to right"
@@ -242,31 +250,32 @@ for _, case in {
 	)
 	-- The Welcome Quest card (shown during the quest) never overlaps the row.
 	local quest = rect(find("Onboarding"))
-	for _, button in row do
+	for _, button in { store, daily, home, plaza, gear } do
 		check(apart(quest, { x = button.x, y = button.y, width = button.width, height = button.height + 4 }), label .. ": quest card clear of the row")
 	end
 	-- Ready badge: top-right of Daily, offset (6, -8); it must stay on screen and clear of Home.
 	check(daily.y - 8 >= 0 and daily.x + daily.width + 6 <= home.x - 2, label .. ": Ready badge stays on screen and off Home")
 	-- Coins pill budget: the widest pill (9-digit balance + "+12.5K/s" chip) is about 230 on
-	-- phone and 290 on desktop (the double does not measure text).
+	-- phone and 290 on desktop, plus the green + slot (28 / 34 + 10 gap - 6 trimmed padding).
+	-- The double does not measure text.
 	local coins = rect(within(find("Hud"), "Coins"))
-	local coinsRight = coins.x + (if phone then 230 else 290)
+	local coinsRight = coins.x + (if phone then 262 else 328)
 	if phone then
-		check(daily.x >= coinsRight + 8, label .. ": row clears the Coins pill")
+		check(store.x >= coinsRight + 8, label .. ": row clears the Coins pill")
 		-- The goal chip sits under the row, right-aligned, beside (never under) the quest card.
 		local chip = rect(within(find("Hud"), "GoalChip"))
 		check(chip.y >= gear.y + gear.height + 4 + 6 and chip.x + chip.width == gear.x + gear.width, label .. ": goal chip under the row, right-aligned")
 		check(chip.width >= 120 and chip.height >= 44 and chip.y + chip.height <= designHeight, label .. ": goal chip is a full target on screen")
 		check(apart(chip, quest), label .. ": goal chip clear of the quest card")
 	else
-		check(daily.x >= coinsRight + 8, label .. ": row clears the Coins pill")
+		check(store.x >= coinsRight + 8, label .. ": row clears the Coins pill")
 		local card = rect(within(find("Hud"), "GoalTracker"))
 		check(card.y >= gear.y + gear.height + 4 + 6, label .. ": tracker card below the row and its shadow")
 	end
 	Engine.click(find("SettingsButton"))
 	local settings = rect(find("Settings"))
 	check(find("Settings").Visible, label .. ": gear opens settings")
-	for _, button in row do
+	for _, button in { store, daily, home, plaza, gear } do
 		check(apart(settings, { x = button.x, y = button.y, width = button.width, height = button.height + 4 }), label .. ": settings popover clear of the row")
 	end
 	check(
@@ -276,7 +285,7 @@ for _, case in {
 	Engine.click(find("SettingsCatcher"))
 	-- An open screen (phone sheet or desktop panel) hides the row, like the gear.
 	Engine.click(find("DockShop"))
-	check(not onScreen(find("DailyButton")) and not onScreen(find("HomeButton")) and not onScreen(find("SettingsButton")), label .. ": row hides while a screen is open")
+	check(not onScreen(find("DailyButton")) and not onScreen(find("HomeButton")) and not onScreen(find("SettingsButton")) and not onScreen(find("StoreButton")), label .. ": row hides while a screen is open")
 	check(GuiService.TouchControlsEnabled == false, label .. ": an open screen hides the thumbstick and Jump (AQ01)")
 	Engine.click(within(host("Shop"), "Close"))
 	check(onScreen(find("DailyButton")), label .. ": Close restores the row")
@@ -786,6 +795,126 @@ Engine.click(within(login, "Close"))
 Engine.screen.X, Engine.screen.Y = 1280, 720
 find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
 state.loginReady, state.loginStreak = false, 1
+
+-- Robux Store: STORE tile, Coins +, Coin Shop chip and the Upgrade Station route; tabs, cards,
+-- product sheet, gamepad, phone sheet and reuse. Buying is not switched on: nothing is sent.
+local store = host("Store")
+local storeRequests = #requests
+local function selected(tab)
+	return within(store, "StoreTab_" .. tab):GetAttribute("Selected") == true
+end
+check(find("StoreButton"):GetAttribute("AccessibleName") == "Open the Robux Store", "STORE tile has an accessible name")
+check(find("StorePlus"):GetAttribute("AccessibleName") == "Get more Coins in the Store", "Coins + has an accessible name")
+check(
+	find("StoreButton").NextSelectionRight == find("DailyButton") and find("DailyButton").NextSelectionLeft == find("StoreButton"),
+	"gamepad walks STORE, then Daily"
+)
+Engine.click(find("StoreButton"))
+check(store.Visible and selected("featured") and find("Backdrop").Visible, "STORE opens the Store on Starter & VIP")
+check(within(store, "Hero_starter").Visible and not within(store, "Card_pouch").Visible, "Starter banner shows; other tabs' cards hide")
+check(find("Dock").Visible and not onScreen(find("StoreButton")), "desktop keeps the dock and hides the HUD row")
+Engine.click(within(store, "Close"))
+check(not store.Visible, "Close leaves the Store")
+Engine.click(find("StorePlus"))
+check(
+	store.Visible and selected("coins") and within(store, "Card_pouch").Visible and within(store, "Footnote").Visible,
+	"Coins + opens the Coins tab"
+)
+Engine.click(within(store, "StoreTab_upgrades"))
+check(
+	selected("upgrades")
+		and within(store, "CoinTiers").Visible
+		and within(store, "Tier_coins8").Visible
+		and within(store, "Card_doubleClaim").Visible
+		and not within(store, "Footnote").Visible,
+	"Upgrades shows the Coin Multiplier tiers and helpers"
+)
+Engine.click(within(store, "StoreTab_perks"))
+check(within(store, "PerksEmpty").Visible and not within(store, "CoinTiers").Visible, "My Perks starts empty")
+-- Nothing is for sale yet: every card and tier says Coming soon (Double & Claim lives elsewhere).
+local stamps = 0
+for _, node in store:GetDescendants() do
+	if node:IsA("TextLabel") then
+		check(not string.find(node.Text, "Buy", 1, true), "no Buy control before purchases exist: " .. node.Text)
+	end
+	if node.Name == "Stamp" then
+		stamps += 1
+		local text = within(node, "Text").Text
+		check(text == "Coming soon" or text == "On welcome back", "stamp says Coming soon: " .. text)
+	end
+end
+check(stamps >= 20, "every card, tier and the banner carries a stamp")
+local names = {}
+for _, node in store:GetDescendants() do
+	local name = node.Name
+	if string.find(name, "^Card_") or string.find(name, "^Featured_") or string.find(name, "^Tier_") or string.find(name, "^Hero_") then
+		check(names[name] == nil, "Store card names are unique: " .. name)
+		names[name] = true
+	end
+end
+Engine.click(within(store, "StoreTab_boosts"))
+Engine.click(within(store, "Card_boostCoins"))
+local sheet = within(store, "ProductSheet")
+check(sheet.Visible and within(sheet, "SheetTitle").Text == "2x Coins Boost", "a card opens its product sheet")
+local rows = 0
+for _, node in within(sheet, "SheetBody"):GetChildren() do
+	if node.Name == "Row" then
+		rows += 1
+	end
+end
+check(rows == 4, "the sheet lists what you get and the boost rules")
+check(within(within(sheet, "SheetFooter"), "Text").Text == "Coming soon", "the sheet footer is not a Buy button")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonB })
+check(not sheet.Visible and store.Visible, "B closes the sheet first")
+Engine.click(within(store, "StoreTab_upgrades"))
+Engine.click(within(store, "Card_doubleClaim"))
+check(within(within(sheet, "SheetFooter"), "Text").Text == "On welcome back", "Double & Claim points to the welcome-back screen")
+Engine.click(within(sheet, "SheetClose"))
+check(not sheet.Visible, "the sheet's Close returns to the Store")
+Engine.click(within(store, "Tier_coins4"))
+check(sheet.Visible and within(sheet, "SheetTitle").Text == "4x Coins", "a tier opens its sheet")
+Engine.click(within(store, "StoreTab_featured"))
+check(not sheet.Visible and selected("featured"), "switching tabs closes the sheet")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonR1 })
+check(store.Visible and selected("upgrades"), "R1 moves to the next Store tab, not the next dock page")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonL1 })
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonL1 })
+check(store.Visible and selected("perks"), "L1 wraps around the Store tabs")
+Engine.bound.CollectibleMenu("", Engine.Enum.UserInputState.Begin, { KeyCode = Engine.Enum.KeyCode.ButtonB })
+check(not store.Visible, "B closes the Store when no sheet is open")
+Engine.click(find("DockShop"))
+Engine.click(within(host("Shop"), "StoreChip"))
+check(store.Visible and selected("featured") and not host("Shop").Visible, "the Coin Shop's STORE chip opens the Store")
+Engine.click(within(store, "CoinShopChip"))
+check(host("Shop").Visible and not store.Visible, "the Store's Coin Shop chip returns to boxes")
+Engine.click(within(host("Shop"), "Close"))
+ui.pending(true)
+ui.openStore("upgrades")
+check(not store.Visible, "pending work blocks the Upgrade Station route")
+ui.pending(false)
+ui.openStore("upgrades")
+check(store.Visible and selected("upgrades"), "the Upgrade Station opens the Store on Upgrades")
+Engine.click(within(store, "Close"))
+check(#requests == storeRequests, "browsing the Store sends nothing")
+local storeCount, storeConnections = Engine.alive(gui), Engine.connections
+for _ = 1, 25 do
+	Engine.click(find("StoreButton"))
+	Engine.click(within(store, "Featured_vip"))
+	Engine.click(within(sheet, "SheetClose"))
+	Engine.click(within(store, "Hero_starter"))
+	Engine.click(within(store, "Close"))
+end
+check(not sheet.Visible, "closing the Store closes its sheet")
+check(Engine.alive(gui) == storeCount and Engine.connections == storeConnections, "no growth across Store and sheet open/close")
+Engine.screen.X, Engine.screen.Y = 844, 390
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
+Engine.click(find("StoreButton"))
+check(store.Visible and not find("Dock").Visible, "phone shows the Store as a sheet")
+check(within(within(store, "StoreTab_featured"), "Label").Text == "VIP", "phone uses the short icon-rail tab labels")
+check(not within(store, "CoinShopChip").Visible, "phone header drops the Coin Shop chip")
+Engine.click(within(store, "Close"))
+Engine.screen.X, Engine.screen.Y = 1280, 720
+find("SafeArea"):GetPropertyChangedSignal("AbsoluteSize"):Fire()
 
 -- Rotate between phone and desktop after claim, with no new snapshot.
 Engine.screen.X, Engine.screen.Y = 844, 390

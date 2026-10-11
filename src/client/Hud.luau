@@ -1,7 +1,7 @@
 --!strict
--- World HUD: Coins pill (balance + income chip) right of Roblox's menu buttons, the top-right
--- Daily / Home / Plaza / settings row with the settings popover, and the daily goal tracker. Nothing
--- else covers the world.
+-- World HUD: Coins pill (balance + income chip + green Store "+") right of Roblox's menu
+-- buttons, the top-right STORE / Daily / Home / Plaza / settings row with the settings popover,
+-- and the daily goal tracker. Nothing else covers the world.
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
@@ -23,6 +23,8 @@ export type Hud = {
 	coins: TextButton,
 	home: TextButton,
 	plaza: TextButton,
+	store: TextButton,
+	plus: TextButton,
 	daily: TextButton,
 	gear: TextButton,
 	menu: Menu.Menu,
@@ -53,7 +55,7 @@ function Hud.create(
 	coins.Parent = root
 	Kit.round(coins)
 	Kit.stroke(coins, Style.ink)
-	Kit.padding(coins, 0, 12, 0, 10)
+	Kit.padding(coins, 0, 6, 0, 10)
 	Kit.list(coins, Enum.FillDirection.Horizontal, 10, Enum.VerticalAlignment.Center)
 	local coin = Icons.create(coins, "Coin", Style.ink, 30)
 	coin.LayoutOrder = 1
@@ -69,6 +71,39 @@ function Hud.create(
 		size = 14,
 	})
 	rate.root.LayoutOrder = 3
+	-- Green "+" (Robux green): opens the Store on its Coins tab. A small circle in a narrow slot
+	-- keeps the pill airy; the transparent 44px hit area overhangs the slot. It never pulses or
+	-- badges, and does not change when Coins run low.
+	local plusSlot = Kit.frame(coins, "PlusSlot")
+	plusSlot.LayoutOrder = 4
+	local plus = Instance.new("TextButton")
+	plus.Name = "StorePlus"
+	plus.Text = ""
+	plus.AutoButtonColor = false
+	plus.BackgroundTransparency = 1
+	plus.AnchorPoint = Vector2.new(0.5, 0.5)
+	plus.Position = UDim2.fromScale(0.5, 0.5)
+	plus.Size = UDim2.fromOffset(Style.target, Style.target)
+	plus.ZIndex = 3
+	plus:SetAttribute("AccessibleName", "Get more Coins in the Store")
+	plus.Parent = plusSlot
+	local plusDisc = Kit.frame(plus, "Disc", Style.robux)
+	plusDisc.AnchorPoint = Vector2.new(0.5, 0.5)
+	plusDisc.Position = UDim2.fromScale(0.5, 0.5)
+	plusDisc.ZIndex = 3
+	Kit.round(plusDisc)
+	Kit.stroke(plusDisc, Style.ink, Style.outlineSmall)
+	local plusFill = Instance.new("UIGradient")
+	plusFill.Rotation = 90
+	plusFill.Color = ColorSequence.new(Style.robuxLight, Style.robuxDark)
+	plusFill.Parent = plusDisc
+	local plusIcon = Icons.create(plusDisc, "Plus", Style.white, 16)
+	plusIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+	plusIcon.Position = UDim2.fromScale(0.5, 0.5)
+	plusIcon.ZIndex = 4
+	ctx.scope.connect(plus.Activated, function()
+		ctx.navigate("Store", { tab = "coins" })
+	end)
 	ctx.scope.connect(coins.Activated, function()
 		local snapshot = ctx.snapshot()
 		if snapshot then
@@ -181,10 +216,48 @@ function Hud.create(
 		menu.set(not menu.open())
 		Sfx.play("select")
 	end)
+	-- STORE: a candy tile at the row's left end, the row's size. Frame-drawn gift until Store art
+	-- exists.
+	local store = Button.create(
+		right,
+		"StoreButton",
+		{
+			variant = "raised",
+			text = "",
+			size = 14,
+			radius = 16,
+			drop = 4,
+		},
+		ctx.scope,
+		ctx.effects,
+		function()
+			ctx.navigate("Store", { tab = "featured" })
+		end
+	)
+	store.button.ZIndex = 2
+	store.button:SetAttribute("AccessibleName", "Open the Robux Store")
+	local storeFill = Instance.new("UIGradient")
+	storeFill.Rotation = 45
+	storeFill.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Style.candyPinkLight),
+		ColorSequenceKeypoint.new(0.5, Style.candyPink),
+		ColorSequenceKeypoint.new(1, Style.candyViolet),
+	})
+	storeFill.Parent = store.face
+	local storeIcon = Icons.create(store.face, "Gift", Style.gold, 34)
+	storeIcon.AnchorPoint = Vector2.new(0.5, 0)
+	local storeCaption = Kit.text(store.face, "Caption", "STORE", 16, Style.display(), Style.white)
+	storeCaption.TextXAlignment = Enum.TextXAlignment.Center
+	local storeStroke = Instance.new("UIStroke")
+	storeStroke.Color = Style.ink
+	storeStroke.Thickness = 2.5
+	storeStroke.Parent = storeCaption
 	local gearIcon = Icons.create(gear.face, "Gear", Style.ink, 26)
 	gearIcon.AnchorPoint = Vector2.new(0.5, 0.5)
 	gearIcon.Position = UDim2.fromScale(0.5, 0.5)
 	-- Gamepad: left/right walks the row in reading order.
+	store.button.NextSelectionRight = daily.button
+	daily.button.NextSelectionLeft = store.button
 	daily.button.NextSelectionRight = home.button
 	home.button.NextSelectionLeft = daily.button
 	home.button.NextSelectionRight = plaza.button
@@ -234,6 +307,8 @@ function Hud.create(
 		coins = coins,
 		home = home.button,
 		plaza = plaza.button,
+		store = store.button,
+		plus = plus,
 		daily = daily.button,
 		gear = gear.button,
 		menu = menu,
@@ -243,11 +318,27 @@ function Hud.create(
 			coins.Position = UDim2.fromOffset(geometry.hud.x, geometry.hud.y)
 			coins.Size = UDim2.fromOffset(0, geometry.hud.height)
 			coin.Size = UDim2.fromOffset(if phone then 24 else 30, if phone then 24 else 30)
+			local slot, disc = if phone then 28 else 34, if phone then 26 else 30
+			plusSlot.Size = UDim2.fromOffset(slot, geometry.hud.height)
+			plusDisc.Size = UDim2.fromOffset(disc, disc)
+			plusIcon.Size = UDim2.fromOffset(if phone then 13 else 15, if phone then 13 else 15)
 			amount.TextSize = if phone then 19 else 24
 			-- Phone sheets carry their own coins chip; the HUD hides under an open sheet.
 			-- The top-right row follows the gear: hidden while any screen is open.
 			coins.Visible = not (phone and opened)
 			coinShadow.Visible = coins.Visible
+			place(store, geometry.store, nil, phone)
+			local storeIconSize = if phone then 28 else 34
+			storeIcon.Position = UDim2.new(0.5, 0, 0, if phone then 6 else 6)
+			storeIcon.Size = UDim2.fromOffset(storeIconSize, storeIconSize)
+			storeCaption.TextSize = if phone then 13 else 15
+			Kit.rect(
+				storeCaption,
+				0,
+				geometry.store.height - (if phone then 20 else 22),
+				geometry.store.width,
+				if phone then 16 else 18
+			)
 			place(daily, geometry.daily, dailyTile, phone)
 			place(home, geometry.home, homeTile, phone)
 			place(plaza, geometry.plaza, plazaTile, phone)
@@ -261,7 +352,7 @@ function Hud.create(
 				menu.place(geometry.gear.x + geometry.gear.width - menuSize.X.Offset, below)
 			else
 				menu.place(
-					math.max(8, geometry.daily.x - 10 - menuSize.X.Offset),
+					math.max(8, geometry.store.x - 10 - menuSize.X.Offset),
 					math.max(8, math.min(geometry.gear.y, geometry.height - menuSize.Y.Offset - 8))
 				)
 			end
