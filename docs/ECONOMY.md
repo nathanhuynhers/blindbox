@@ -132,8 +132,9 @@ Duplicate copies enhance one bank's earning rate, not multiple collection target
 
 The server checks exact-target proximity (20 studs for figure taps/clicks), living character, ownership, session readiness
 and rate limits. Clients cannot supply collection amounts or authorize collection through remotes.
-Paid auto-collect remains a future gamepass; no entitlement checks, product IDs or purchase prompts
-are implemented. Replacement uses the same server-only bank transfer as manual collection, without
+No entitlement checks, product IDs or purchase prompts are implemented. Future Auto Collect is
+tracked as **MN-08** in the [monetization plan](MONETIZATION.md#auto-collect--mn-08).
+Replacement uses the same server-only bank transfer as manual collection, without
 advancing the Welcome Quest collection stage. Validation, settlement, transfer, swap and one revision
 update remain non-yielding; rejected Place requests do not settle or mutate gameplay state, and
 transaction receipts prevent retry collection.
@@ -152,7 +153,8 @@ The client shows a welcome-back popup with the amount and absence; Claim or tapp
 the `ClaimOffline` intent through the normal transaction path (token bucket, revision, receipts).
 The client never supplies an amount. Claiming zeroes the pending amount in the same aggregate as
 the wallet, so replays and second claims pay nothing; anything above the Coin limit is dropped.
-Robux multipliers and paid boosts are not implemented.
+Robux multipliers and paid boosts are not implemented; proposals and decisions are maintained
+in the [monetization plan](MONETIZATION.md).
 
 ## Plaza stall deals (hourly)
 

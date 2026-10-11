@@ -20,6 +20,10 @@ live servers require a successful persistent load. See [architecture](docs/ARCHI
 [testing and release setup](docs/OPERATIONS.md). The candidate is not published; recorded
 single-client Studio checks do not complete persistent, multiplayer or physical-device acceptance.
 
+All future monetization ideas and review tasks are consolidated in the
+[monetization plan](docs/MONETIZATION.md). Products, pricing and implementation scope remain open
+for review before task prompts are written.
+
 ## Setup and checks
 Run these commands from the repository root with Rokit on PATH:
 

@@ -1,429 +1,272 @@
-# Monetization
+# Monetization plan and review worklist
+
+> **Status:** Consolidated planning reference, reviewed against repository sources on
+> 2026-10-11. Robux products, prices, balance and launch scope are not approved. This document
+> authorizes no implementation or publication. Grouped task prompts were prepared on 2026-10-11
+> in [Monetization task prompts](MONETIZATION_TASK_PROMPTS.md); unresolved product decisions remain open.
+
+This is the single planning reference for retained monetization ideas, dependencies, unresolved choices
+and future tasks. The [roadmap](ROADMAP.md) still governs scope and release gates;
+[economy](ECONOMY.md), [plots and shelves](PLAYER_PLOTS_AND_SHELVES.md),
+[architecture](ARCHITECTURE.md) and [data model](DATA_MODEL.md) remain authoritative for
+implemented behavior. Historical audit/backlog records retain their evidence and original IDs.
+
+## Feature scope decisions
+
+The user removed **Fast Open**, **Premium Multi Open**, and features **13–23** from the
+feature review list: Shelf, plot, Display and opening cosmetics; premium status cosmetics;
+rotating premium shop; bundles; storage upgrades; Pocket Pass; Collector Club subscription;
+and gifting. These are excluded from the monetization plan, rather than deferred candidates.
+
+The remaining features are Coin multipliers, Coin packs, Starter Pack, Auto Open, Auto Collect,
+movement speed upgrades, VIP, timed Coin boosts, permanent Luck, timed Luck/combo boosts,
+and a **2x offline earnings Coin bonus** added by the user.
+Starter Pack and VIP benefits must use retained features; removed cosmetic products must not
+return through those packages. Existing free/Coin-funded gameplay is unchanged.
+
+## Direction and guardrails
+
+Monetize the desire to keep collecting, opening and progressing.
+Purchases should support the loop: earn Coins, buy boxes, discover figures, improve Display
+income and complete collections. Existing cosmetic exhibits remain part of the free game.
+
+- Preserve enjoyable free progression. Do not make existing collections artificially grindy to
+  force purchases, sell instant collection completion, or eliminate the reason to keep playing.
+- Keep important gameplay systems accessible without Robux. VIP and Starter Pack must remain optional.
+- Do not charge to repair frustrating controls, make batch skipping usable, or explain duplicates.
+- Shelves and their cosmetics generate no income. Paid earning capacity beyond the current six
+  Display slots needs separate economy and fairness review.
+- Preserve meaningful earned accomplishments.
+- Show truthful offer availability and timers; avoid misleading scarcity.
+- Review current Roblox requirements before implementing paid/randomized mechanics, including
+  Robux-purchasable Coins and Luck. This consolidation is not a platform-policy assessment.
+- Future content, variants, mastery, inventory limits, furniture and trading require separate
+  design scope; listing them here does not authorize those systems.
+
+## Implemented baseline to preserve
+
+In existing docs, **paid box**, **paid Shelf** and the Welcome Quest's paid-box step mean
+**Coin-funded**, not a Robux transaction. There are no implemented Robux products, gamepass
+entitlement checks, MarketplaceService purchase prompts or paid receipt handlers in `src`.
+Repository checks and previously recorded Studio checks do not close persistent, multiplayer
+or physical-device acceptance.
+
+| Area | Current behavior | Implication for monetization review |
+| --- | --- | --- |
+| Collections | Five collections, 43 figures; four economic tiers | Use existing content and pacing as the starting point |
+| Box prices | Pocket Grove 1,500; Tidepool Tales 2,000; Concepts 20,000; Tender Echoes and We Are All Stars 200,000 Coins | Provisional economy tuning, not a Robux conversion |
+| Rarity/pity | Common through Mythical; five-tier base Legendary 1%, Mythical 0.1%; persisted, independent increasing-chance pity | Existing pity is free; paid Luck is a separate proposed modifier |
+| Duplicates | All copies retained; diminishing-return income enhancement; no ordinary total-copy cap | No paid storage product is planned |
+| Display | Three starting earning slots; sequential Coin unlocks to six at 40K / 400K / 4M; one earning placement per figure ID; one +10% themed-trio bonus | Keep free slot progression and server-owned income |
+| Collection | Owner steps on a plate or clicks/taps a figure; replacement attempts to collect the outgoing bank; Remove preserves it | Paid ongoing Auto Collect is distinct from implemented swap collection |
+| Offline Coins | Half of effective Display rate, at most six hours; absences under 60 seconds grant nothing | A 2x offline Coin bonus is planned under MN-22; no paid bonus is implemented |
+| Shelves | Three initial persistent units; nine positions each; three-unit physical viewport; first completion grants one unit; additional units cost `50,000 * 2.5^n` Coins, excluding free units; current cap 100 | Existing acquisition is not a Robux product; paid cosmetics are excluded |
+| Opening | Single and Open 10 through ordinary Coin purchases; skippable presentation and batch results; free Welcome x10 | Fast Open and Premium Multi Open are excluded; Auto Open remains a proposal |
+| Free rewards | 4,500 starting Coins, UTC daily Grove box, 1,000-Coin Display goal, looping seven-day Login rewards and one-time Welcome rewards | Account for all free grants before setting paid value |
+| Plaza deals | Three globally synchronized hourly discounted box offers; per-player persisted stock | Coin deals remain; a premium rotating shop is excluded |
+| Movement | Server-owned baseline 36 studs/second; no speed entitlement | Additional movement speed is only a future upgrade idea |
+| Cosmetics/status | Empty per-Shelf customization hooks; no customization catalog/store/editor; collection completion and global leaderboards exist | Paid cosmetic/status products are excluded |
+| Persistence | Economy2 schema 14; leases, validation and failure pauses; gameplay request receipts are transient | Durable paid fulfillment needs its own design; request receipts alone are insufficient |
+
+Exact formulas, safety guards and native acceptance checks remain in the implementation references.
+Secrets, Shinies, mastery, collection levels and Collection Score are ideas, not implemented
+rarity tiers or player progression fields. Current Mythical odds are not evidence of a Secret system.
+
+## Product idea catalog
+
+Every retained entry below is a proposal. No price, product type, tier or benefit has been
+finalized. Review tasks are indexed later in this doc.
+
+### Coin multipliers — MN-04
+
+Permanent **2x / 4x / 8x Coins**, designed as upgrade tiers without accidentally multiplying
+together. Their intended value is more opportunities to open boxes as collection costs rise.
+
+Decide separate passes versus an upgrade model, what each tier costs, how prior purchases are
+credited, and which Coin sources qualify. Online Display, offline income, daily/login rewards,
+starter grants and direct Coin packs cannot silently share an unspecified multiplier rule.
+Evaluate free and paid pacing, duplicates and themed bonuses together before setting prices.
+Define how these tiers interact with the separate 2x offline earnings bonus under MN-22.
+
+### Coin packs — MN-05
+
+Repeatable Small / Medium / Large / Huge packs. Amounts and Robux-to-Coin conversion remain TBD
+until earning rates, time per box and long-term progression are reviewed. Decide fixed versus
+progression-sensitive value and interaction with multipliers/boosts. Include paid currency used
+to buy randomized boxes in the policy review.
+
+### Starter Pack — MN-06
+
+A low-cost first purchase could combine Coins and a temporary boost.
+Do not lock an important gameplay figure behind it.
+Decide contents, price, eligibility, purchase limits and availability. Keep it distinct from the
+free Welcome Quest; boost benefits depend on the boost system existing first.
 
-> **Status:** Idea bank / planning document. Nothing in this document should be treated as finalized pricing, balance, or launch scope.
+### Auto Open — MN-07
+
+Automatically continue buying/opening boxes. Open 10 and usable skipping already exist without
+a Robux entitlement and remain unchanged. Fast Open and Premium Multi Open are excluded.
 
-Terminology follows [Player Plots and Shelves](PLAYER_PLOTS_AND_SHELVES.md): Display is the
-only Coin-generating placement system; Shelves are cosmetic exhibits on open Player Plots.
-That document is the current source for Shelf capacity, viewport behavior, paid acquisition and
-the one-unit first-completion reward. Display slots 4–6 unlock sequentially with Coins.
-Every paid mechanic below is an unapproved idea, not current behavior or permission to build it.
-
-## Monetization Philosophy
-
-Blind Box should monetize the player's desire to **keep collecting, opening, progressing, decorating, and showing off their collection**.
-
-The goal is not to sell players a way to skip the game. Purchases should generally let players enjoy more of the core loop:
-
-**Earn coins -> buy blind boxes -> open collectibles -> chase rare pulls -> complete/master collections -> display and flex collectibles -> progress to harder collections.**
-
-A purchase like an 8x coin multiplier is useful because it lets a committed player open more boxes and chase more collectibles. A purchase that instantly completes a collection would undermine the reason to keep playing.
-
-The current five collections span starter through prestige tiers. Future collections may add
-different pacing or chase goals only after separate economy and product review.
-
----
-
-## Core Monetization Ideas
-
-### Coin Multipliers
-
-Permanent progression upgrades:
-
-- **2x Coins**
-- **4x Coins**
-- **8x Coins**
-
-These should be designed as upgrade tiers rather than unintentionally stacking into extreme multipliers. Exact pricing is TBD.
-
-Long-term value increases as later collections become substantially more expensive.
-
-### Coin Packs
-
-Repeatable direct coin purchases:
-
-- Small Coin Pack
-- Medium Coin Pack
-- Large Coin Pack
-- Huge Coin Pack
-
-Exact Robux-to-coin conversion should not be finalized until the long-term economy and expected box grind times are established.
-
-### Luck
-
-Potential rarity-focused upgrades:
-
-- **2x Luck**
-- **4x Luck / Super Luck**
-- Temporary Super Luck boosts (15 / 30 / 60 minutes)
-- Combined Coin + Luck boosts
-
-Paid luck must be designed alongside the final rarity system, pity system, and Roblox requirements for paid randomized items.
-
-### Opening Convenience
-
-High-value purchases for serious collectors:
-
-- **Fast Open**
-- **Auto Open**
-- **Multi Open x3**
-- Potential x5 / x10 Multi Open upgrades
-
-These become increasingly useful when players are opening hundreds or thousands of boxes while chasing Secrets, variants, mastery, or duplicates.
-
-### Storage
-
-Potential collector progression purchases:
-
-- +50 Storage
-- +250 Storage
-- Large / effectively unlimited storage tier
-
-Whether inventory should actually be limited is still TBD. Storage monetization should only exist if inventory management improves the game rather than creating an artificial annoyance.
-
----
-
-## VIP / Premium Collector
-
-Potential permanent VIP pass containing a combination of:
-
-- VIP name or chat tag
-- Exclusive shelf cosmetics
-- Exclusive opening animation
-- Small coin bonus
-- Small luck bonus
-- Enhanced daily reward
-- Exclusive display cosmetics
-- Collector badge/title
-
-VIP should feel prestigious and useful without becoming mandatory for normal progression.
-
----
-
-## Starter Pack
-
-A low-cost, high-value first purchase intended to convert a new player into a paying player.
-
-Potential contents:
-
-- Coins
-- Temporary boost
-- Exclusive cosmetic
-- Exclusive furniture/display item
-- Special opening effect
-
-Avoid locking an important gameplay collectible behind the Starter Pack.
-
----
-
-## Timed Boosts
-
-Repeatable boosts that encourage players to continue playing during the boost window:
-
-- 2x Coins for 15 / 30 / 60 minutes
-- 2x Luck for 15 / 30 / 60 minutes
-- Super Luck
-- Coin + Luck combo boost
-
-These are especially interesting because the purchase creates a reason to remain in-game and actively grind rather than simply skipping progression.
-
----
-
-## Plot and Shelf Cosmetics
-
-Future shelf customization could support skins, materials, colors, backgrounds, lighting,
-trim, decorations, effects and collection styling. Only empty data hooks exist today. No
-cosmetic catalog, furniture system, purchase flow or customization UI is in the current scope.
-
-Additional individual Shelf Units already add nine cosmetic positions each without expanding
-the three physical viewport structures or generating income. Players acquire them through the
-implemented Coin purchase curve or first collection completion. Customization would belong to
-each persistent unit; this idea bank defines no Robux product or product-design maximum.
-
-Potential Display cosmetics include pedestal/trim skins and subtle effects. The current cap
-is six economic slots, starting with three; slots 4–6 use the implemented sequential Coin unlocks.
-Any extra earning capacity beyond that requires a
-separate economy/fairness review.
-
-Plot and shelf visual themes may become future expression options visible to walking visitors.
-Theme selection, paid themes and final environment styling are not implemented.
-
----
-
-## Opening Cosmetics
-
-Opening boxes should support cosmetic customization without affecting pull outcomes.
-
-Potential purchases:
-
-- Confetti opening
-- Star opening
-- Lightning opening
-- Celestial opening
-- Sakura opening
-- Portal opening
-- Custom box-opening animations
-
-Rare pulls paired with premium opening effects should create strong screenshot/video moments.
-
----
-
-## Daily / Rotating Shop
-
-Eventually add a rotating shop containing a mixture of:
-
-- Coin-purchasable items
-- Premium furniture
-- Shelf themes
-- Opening effects
-- Display effects
-- Limited cosmetics
-- Boosts
-- Bundles
-
-Rotations should provide a reason to check the shop regularly without relying on misleading scarcity or fake timers.
-
----
-
-## Bundles
-
-Potential bundles:
-
-- Collection Launch Bundle
-- Coin + Boost Bundle
-- Shelf Decoration Bundle
-- New Player Bundle
-- Event Bundle
-- Seasonal Bundle
-- Collector Bundle
-
-Bundles should generally combine systems the player already wants rather than contain mandatory progression.
-
----
-
-## Pocket Pass
-
-Potential seasonal progression system once the game has enough content and a reliable update cadence.
-
-### Free Track
-
-Possible rewards:
-
-- Coins
-- Blind boxes
-- Furniture
-- Boosts
-- Opening effects
-- Cosmetics
-
-### Premium Track
-
-Possible rewards:
-
-- Additional boxes
-- Premium furniture
-- Exclusive shelf cosmetics
-- Exclusive opening animation
-- Premium boosts
-- Seasonal cosmetic collectibles
-
-Do not build this until the core game has enough content to sustain seasons.
-
----
-
-## Collector Club / Subscription
-
-Potential future monthly subscription.
-
-Possible benefits:
-
-- Monthly cosmetic
-- Daily reward improvement
-- Monthly coin allowance
-- Small convenience bonuses
-- Exclusive shelf/Display cosmetics
-- Subscriber title
-
-This should only be considered after retention data shows that players already return consistently.
-
----
-
-## Gifting / Social Monetization
-
-Potential future systems:
-
-- Gift another player a boost
-- Gift coin packs
-- Gift eligible passes/products where technically supported
-- Send cosmetic gifts
-- Purchase a gift bundle for a friend
-
-Social gifting could fit especially well with open plots and walk-in social viewing.
-
----
-
-## Social Status / Flex Monetization
-
-Players should be able to show their collecting accomplishments without needing paid power.
-
-Potential visible status:
-
-- Collection Score
-- Number of Secrets
-- Number of Shinies / special variants
-- Collections completed
-- Collections mastered
-- Rare titles
-- Premium shelf themes
-- Animated pedestals
-- Player aura
-- Collector nameplate
-- Special opening effects
-
-Example profile/display:
-
-> **ULTIMATE COLLECTOR**  
-> Collection Score: 18,492  
-> Secrets: 7  
-> Shinies: 31  
-> Collections Mastered: 4
-
-Social visibility increases the value of cosmetic purchases while keeping collection accomplishments meaningful.
-
----
-
-## High-End / Whale Cosmetics
-
-Potential premium purchases for highly invested players:
-
-- Elaborate animated shelf themes
-- Premium animated shelf stands and cosmetic Display skins
-- Premium opening animations
-- Possible premium Shelf cosmetics (a separate, unapproved product design)
-- Exclusive cosmetic effects
-- Prestige nameplates/titles
-
-These should primarily provide personalization and status, not exclusive power.
-
----
-
-## Collection Design That Supports Monetization
-
-Monetization depends on the collection system having long-term depth.
-
-Future collections should progressively introduce:
-
-- More expensive boxes
-- Approximately 1% chase collectibles
-- Approximately 0.1% Secret collectibles
-- Potential ultra-rare prestige collectibles
-- Useful duplicates
-- Collection mastery
-- Shiny / special variants
-- Long-term completion goals
-
-The game should not rely solely on making every new box more expensive. New collections should also introduce new goals, mechanics, visuals, or progression layers.
-
-### Possible Long-Term Collection Layers
-
-A collectible can eventually have multiple progression states:
-
-1. First discovery
-2. Duplicate count
-3. Star/mastery levels
-4. Shiny or alternate variant
-5. Display customization
-
-A completed collection can still have additional goals:
-
-- Base Collection: 12/12
-- Mastery: 67%
-- Shinies: 3/12
-- Secret: 0/1
-- Collection Level: 8
-
-This gives committed players reasons to keep opening boxes even after discovering every standard collectible.
-
----
-
-## Initial Monetization Priorities
-
-When monetization implementation begins, prioritize a small number of scalable systems rather than building everything at once.
-
-### First Candidates
-
-1. **2x / 4x / 8x Coin Multipliers**
-2. **Coin Packs**
-3. **Starter Pack**
-4. **Opening Convenience (Fast / Multi / Auto Open)**
-5. **VIP / Collector Pass**
-
-Storage should only be added if inventory limits make sense for gameplay.
-
-Luck monetization should wait until rarity odds, Secrets, pity behavior, and paid-random-item compliance are fully designed.
-
-Shelf cosmetics may become a monetization pillar after the physical exhibit and final art make them desirable.
-
----
-
-## Economy Dependency
-
-Do **not** finalize Robux prices or coin-pack conversion rates yet.
-
-Before final pricing, define:
-
-- Base coins earned per minute
-- Progression-based earning rates
-- Box prices by collection tier
-- Expected time to earn one box
-- Expected pulls required to complete a standard collection
-- Secret rarity targets
-- Duplicate value
-- Mastery requirements
-- Shiny/variant odds
-- Pity behavior
-- Daily rewards
-- Free box/open allowances
-- Effects of 2x / 4x / 8x multipliers
-
-The economy must remain enjoyable for free players while giving paying players meaningful acceleration.
-
----
-
-## Guardrails
-
-- Do not sell instant collection completion.
-- Do not make paid progression eliminate the core gameplay loop.
-- Do not make normal free progression intentionally miserable just to force purchases.
-- Do not lock the game's most important gameplay systems exclusively behind Robux.
-- Cosmetic purchases should remain valuable through social visibility and walk-in plot viewing.
-- Randomized purchases involving Robux or Robux-purchasable currency must follow Roblox's applicable paid-random-item requirements.
-- Luck boosts must be considered part of the randomized-item design and compliance work.
-- Advertised limited offers and timers must reflect the real availability of the offer.
-
----
-
-## Open Questions
-
-- Exact Robux pricing for 2x / 4x / 8x Coins
-- Whether multiplier tiers are separate passes or upgradeable tiers
-- Whether permanent Luck should exist
-- Whether inventory/storage should be limited
-- Whether Multi Open is progression-unlocked, premium, or both
-- Whether Auto Open should be premium
-- How pity interacts with paid Luck
-- Whether Shiny odds can be modified by Luck
-- Whether any future duplicate sink should exist without undoing permanent duplicate income
-- Whether VIP includes economic bonuses
-- What the first premium shelf theme should be
-- When Pocket Pass becomes viable
-- Whether a subscription makes sense after launch
-
----
-
-## Current Direction
-
-The current game has five collections across four economic tiers. The immediate goal is **not**
-to make existing collections artificially grindy. Future collections can add new price bands,
-chase items, variants or mastery only after their own design and balance review.
-
-Monetization should become more compelling naturally as the collection ecosystem gains depth.
+Decide free/progression/premium access, automation behavior, and Auto Open stop
+conditions. Server purchases, affordability, cooldowns, pity and grants must remain authoritative.
+Skipping, interruptions and retries must never grant additional figures or spend twice.
+
+### Auto Collect — MN-08
+
+A future gamepass for ongoing collection of Display banks, deferred by the product backlog.
+It is separate from the free outgoing-bank collection on replacement. Decide cadence, eligible
+banks, online/offline behavior, entitlement handling and impact on the Welcome Quest.
+Reuse server-owned bank transfer rules, including fractions and wallet overflow. Preserve
+manual collection and distinguish collection convenience from an income multiplier.
+
+### Movement speed upgrade — MN-09
+
+The playtest backlog identifies extra speed as a future monetization/upgrade vector.
+No pass, benefit or price is defined. Decide whether this belongs in the product lineup,
+free versus premium acquisition, speed value, stacking and character lifecycle behavior.
+Use the existing server movement boundary if separately authorized.
+
+### VIP / Premium Collector — MN-10
+
+Possible permanent benefits: enhanced daily reward, small Coin bonus or small Luck bonus.
+Select the actual bundle and price; economic bonuses, Luck and improved daily grants are unresolved.
+VIP should feel prestigious and useful while normal progression remains enjoyable without it.
+
+### Timed boosts — MN-11
+
+Repeatable **2x Coins**, **2x Luck**, Super Luck, or Coin + Luck boosts in example
+**15 / 30 / 60 minute** durations. These could support continued play during the boost window.
+Decide activation, online time versus wall-clock expiry, logout handling, repeat-purchase behavior,
+stacking with permanent tiers/VIP and clear remaining-time presentation. Values are illustrative.
+
+### Luck and gamepass integration — MN-12
+
+Ideas: permanent **2x Luck**, **4x Luck / Super Luck**, temporary Super Luck and combined boosts.
+The playtest backlog's initial acquisition direction is gamepasses; exact products, tiers and
+values remain TBD, including whether permanent Luck should exist at all.
+
+Preserve the original **STRETCH-LOGIC-02 + STRETCH-UI-02** requirements:
+
+- Finalize the mathematical modifier and how it composes with existing pity before implementation.
+- Keep outcomes server-owned; never accept client-provided Luck or odds tables.
+- Keep probabilities valid and normalized, tuning configurable, and test all rarity tiers.
+- Show active Luck and its effect on odds clearly; distinguish paid Luck from free pity progress.
+- Integrate pass presentation without making the Shop feel dominated by paywalls.
+- Implement late, after core polish, product/tuning decisions and paid-random policy review.
+
+If future Shiny/Secret content is separately approved, decide whether Luck affects it; do not
+require those systems merely to review the present five-tier catalog.
+
+### 2x offline earnings Coin bonus — MN-22
+
+Double the Coins earned while offline. This is **2x the normal offline reward**, not twice the
+online Display rate. With the current free offline rate of 0.5x, the bonus would yield 1x the
+effective online Display rate before any other paid modifiers. The existing six-hour accrual
+cap and 60-second minimum absence remain the baseline; this feature increases Coins, not duration.
+
+Price and purchase type remain open: decide a permanent entitlement versus a per-return
+double-reward purchase, when eligibility is determined, and how it stacks with Coin multipliers,
+timed boosts and VIP. Resolve treatment of already pending earnings before implementation.
+The server must calculate and fulfill the reward using persisted offline state, with durable
+paid fulfillment and no repeat bonus from duplicate claims, retries or rejoining.
+
+## Economy dependencies — MN-01
+
+Current tiers, prices, rarity odds, duplicate value, pity, daily grants and free boxes are defined
+in the economy reference. Their tuning and actual free-player pacing still need acceptance;
+the old instruction to "define the economy" should not discard implemented systems.
+
+Before final pricing, review base/progression Coins per minute, time to earn each box, completion
+pull distributions, unlucky runs, duplicate income, free rewards, offline income and Display
+slot purchases. Compare proposed 2x/4x/8x tiers, packs, boosts and the 2x offline bonus
+against that baseline.
+Existing pacing simulations are idealized earning estimates, not retention or affordability proof.
+
+New collection content, mastery, variants and duplicate sinks remain separate game-design scope,
+not monetization tasks or prerequisites to reviewing the retained features.
+
+## Shared purchase foundation and verification — MN-02 / MN-03
+
+These are consolidated engineering prerequisites for future products, not an implemented service
+or a selected dependency. Determine product types and current platform support during design.
+
+- Review current paid-random requirements for the complete money-to-reward path: direct purchases,
+  paid Coins used for boxes, Luck, boosts and any randomized Starter Pack/VIP benefits.
+  Record applicable eligibility/restrictions and required disclosures before implementation.
+- Define a server-owned product catalog, verified entitlements, purchase/fulfillment lifecycle,
+  durable idempotency and recovery. Client purchase completion is not proof of a valid grant.
+- Keep prices, grants, multipliers, probabilities and authoritative state on the server. Replicate
+  only necessary public metadata and owner presentation state; validate and rate-limit requests.
+- Account for repeat delivery, disconnects, lost replies, failed saves, concurrent sessions and
+  purchases while storage is paused. Define when fulfillment is durably safe to acknowledge.
+- Extend the profile/schema deliberately where needed; preserve valid saves, existing leases,
+  fail-closed loads and Studio/live isolation. Transient gameplay receipts cannot be treated as
+  a durable real-money fulfillment ledger.
+- Keep modules focused, strict Luau and existing replication boundaries. Add no framework,
+  dependency, product ID, purchase prompt or live product as part of this planning work.
+
+Future implementation acceptance must include domain tests for grant/stacking/expiry/retry rules,
+Luau diagnostics, pinned formatting/lint/build checks, persistent recovery and native Studio
+behavior. Use multi-client tests for ownership, private state and remote isolation; test mobile,
+desktop and relevant gamepad purchase presentation.
+Record what actually ran and leave platform purchase/release acceptance explicit.
+
+## Priority decisions and review worklist
+
+The original idea bank's first candidates were **Coin multipliers, Coin packs, Starter Pack,
+opening convenience, then VIP**. Opening convenience now means Auto Open only.
+The historical audit's cosmetics-first recommendation is superseded by the user's removal
+of paid cosmetic products; its free-control and progression guardrails still apply.
+The [product backlog](PRODUCT_BACKLOG.md#later-separate-design-decisions) defers monetization
+until core-loop polish; the playtest backlog places Luck/gamepasses last.
+
+**The retained feature list is set for further review; execution order remains open.** Suggested
+review order is baseline and policy, then select the first products from the retained features
+and scope their shared purchase foundation. All candidates require a cost/benefit review before
+a separate implementation authorization.
+
+These IDs map to the [grouped task prompts](MONETIZATION_TASK_PROMPTS.md). They are not approved implementation
+tickets, and we do not need to implement every idea. A task can be selected, revised or deferred.
+
+| ID | Review/task area | Decision needed before an implementation prompt |
+| --- | --- | --- |
+| MN-01 | Free/paid economy and pricing | Accepted baseline, eligible Coin sources, modeled paid impact, price/value targets |
+| MN-02 | Platform/policy review | Current supported product types and requirements for each selected money-to-reward path |
+| MN-03 | Purchase foundation | Selected catalog, entitlement/fulfillment design, durable recovery, schema and test scope |
+| MN-04 | Coin multipliers | Tier acquisition/upgrades, stacking, qualifying income and prices |
+| MN-05 | Coin packs | Sizes, conversion/value model, multiplier interaction and prices |
+| MN-06 | Starter Pack | Contents, eligibility, limits, availability and price |
+| MN-07 | Auto Open | Free/premium access, automation and stop rules; existing Open 10/Skip remain unchanged |
+| MN-08 | Auto Collect | Eligible banks, cadence, entitlement and tutorial/offline behavior |
+| MN-09 | Movement upgrade | Include or defer; acquisition, speed, stacking and price |
+| MN-10 | VIP | Final benefits, economic bonuses, dependencies and price |
+| MN-11 | Timed boosts | Effects, durations, clocks, stacking, activation and prices |
+| MN-12 | Luck + presentation | Acquisition, formula, pity composition, normalized odds, disclosures and prices |
+| MN-22 | 2x offline earnings Coin bonus | Price, permanent versus per-return purchase, eligibility timing, stacking, pending-reward treatment and duplicate-claim recovery |
+
+Existing MN-01 through MN-12 IDs are preserved. MN-13 through MN-20 are retired following the
+feature removals; MN-21's future collection work is separate game-design scope and is no longer
+a monetization task. MN-22 tracks the newly added 2x offline bonus without reusing retired IDs.
+
+The [prompt pack](MONETIZATION_TASK_PROMPTS.md) groups related products and includes separate
+Robux store design, UI implementation and end-to-end acceptance prompts. Its first task resolves
+player benefits, free-player behavior, product/value choices, dependencies and acceptance criteria
+before dependent implementation. Product decisions remain here; implementation and launch require
+their own authorized tasks.
+
+## Consolidated sources and maintenance
+
+| Source | Guidance brought into this document |
+| --- | --- |
+| Original `MONETIZATION.md` idea bank | Retained product families, economy dependencies, guardrails and open questions; user scope decisions above supersede removed ideas |
+| [Product backlog](PRODUCT_BACKLOG.md) | Core-polish deferral; Auto Open, Auto Collect and Robux multiplier candidates; separate cost/benefit scope |
+| [Playtest backlog](PRODUCT_BACKLOG_PLAYTEST_2026-10-05.md) | Movement upgrade idea; STRETCH-LOGIC-02 / STRETCH-UI-02 Luck requirements and late ordering |
+| [Game audit](GAME_AUDIT.md#14-monetization) | No live monetization audited; free-control guardrails retained; cosmetics-first recommendation superseded |
+| [Economy](ECONOMY.md) | Manual/swap collection, offline behavior, free rewards, Coin purchases, odds/pity/duplicates and pacing evidence limits |
+| [Plots and shelves](PLAYER_PLOTS_AND_SHELVES.md) | Cosmetic/economic split, Shelf acquisition, completion reward, customization hooks and excluded kiosk/capacity work |
+| [Game design](GAME_DESIGN.md), [roadmap](ROADMAP.md), [historical MVP](archive/MVP.md) | Current experience, scope boundary, acceptance gates and historical monetization exclusion |
+| [Architecture](ARCHITECTURE.md), [data model](DATA_MODEL.md), [opening](OPENING.md) | Server/replication/persistence boundaries and existing free Open 10/Skip behavior |
+
+Maintain future monetization decisions and product tasks here. Other active docs should link
+here for planning rather than duplicate product specifications. Keep implemented formulas and
+system contracts in their existing references; keep historical audit evidence unchanged.

@@ -25,6 +25,8 @@ required. Public deployment, paid mechanics and trading remain outside the autho
 - [Game soundpack](SOUND.md) — sound manifest, asset sources, hooks and listening checks.
 - [Operations](OPERATIONS.md) — current release and multi-client verification.
 - [Product backlog](PRODUCT_BACKLOG.md) — remaining product work; entries are not authorization.
+- [Monetization plan](MONETIZATION.md) — consolidated product ideas, dependencies, open decisions
+  and review worklist for future task prompts; paid implementation remains separate scope.
 - [Archived milestones 0–6](archive/ROADMAP_MILESTONES.md) — historical planning only.
 
 Final art and Shelf customization remain proposals. Paid Shelf acquisition and one free Shelf Unit
