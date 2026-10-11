@@ -18,6 +18,7 @@ export type Session = {
 	closed: boolean,
 	transferring: boolean,
 	released: boolean,
+	pendingSave: Types.Profile?,
 	pendingRelease: Types.Profile?,
 }
 local Storage = {}
@@ -50,6 +51,7 @@ function Storage.open(userId: number): (Session?, string)
 			closed = false,
 			transferring = false,
 			released = false,
+			pendingSave = nil,
 			pendingRelease = nil,
 		},
 			""
@@ -79,6 +81,7 @@ function Storage.open(userId: number): (Session?, string)
 				closed = false,
 				transferring = false,
 				released = false,
+				pendingSave = nil,
 				pendingRelease = nil,
 			},
 				""
@@ -95,6 +98,11 @@ function Storage.flush(session: Session, release: boolean): boolean
 	if session.busy then
 		return false
 	end
+	-- Confirm the previous autosave's generation with its original snapshot before a
+	-- final write changes release mode. A committed save may have lost every reply.
+	if release and session.pendingSave and not Storage.flush(session, false) then
+		return false
+	end
 	local handle = session.handle
 	if not handle then
 		return true
@@ -103,13 +111,18 @@ function Storage.flush(session: Session, release: boolean): boolean
 	if session.ready then
 		Rules.settle(session.state, os.clock())
 	end
-	if not session.pendingRelease then
+	if not session.pendingRelease and not session.pendingSave then
 		session.state.lastSeen = os.time()
 		if release then
 			session.pendingRelease = Profile.encode(session.state)
 		end
 	end
-	local snapshot: Types.Profile = session.pendingRelease or Profile.encode(session.state)
+	local snapshot: Types.Profile = session.pendingRelease
+		or session.pendingSave
+		or Profile.encode(session.state)
+	if not release then
+		session.pendingSave = snapshot
+	end
 	session.status = "Saving..."
 	local saved = false
 	for attempt = 1, 3 do
@@ -132,6 +145,8 @@ function Storage.flush(session: Session, release: boolean): boolean
 	if saved then
 		if release then
 			session.released = true
+		else
+			session.pendingSave = nil
 		end
 		-- Do not award time spent paused after a failed save.
 		if not session.ready and not session.transferring then
@@ -229,7 +244,10 @@ function Storage.recoverTeleport(session: Session): boolean
 		else
 			session.state.time = os.clock()
 		end
-		session.transferring, session.released, session.pendingRelease = false, false, nil
+		-- Reclaim reconciles retained/committed ownership. The next save must encode
+		-- current memory, not replay an autosave from before the handoff barrier.
+		session.transferring, session.released, session.pendingRelease, session.pendingSave =
+			false, false, nil, nil
 		session.ready = not session.closed and os.clock() < session.safeUntil
 		session.nextSave = os.clock() -- Persist any catch-up income promptly.
 	end

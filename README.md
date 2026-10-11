@@ -8,7 +8,7 @@ a Coin-generating Display and persistent cosmetic Shelf Units; nearby players ca
 browse, while only the owner can edit. See the canonical
 [Player Plots, Display and Shelves](docs/PLAYER_PLOTS_AND_SHELVES.md) direction for exact behavior.
 
-Profiles currently write schema **13** in `BlindBox_Economy2_Studio` and
+Profiles currently write schema **14** in `BlindBox_Economy2_Studio` and
 `BlindBox_Economy2_Live`. See the [data model](docs/DATA_MODEL.md) for supported upgrades and
 fail-closed cases. The catalog contains 43 figures across Pocket Grove, Tidepool Tales,
 Concepts, Tender Echoes and We Are All Stars. Scrap, recycling and redemption are removed. The
@@ -17,8 +17,9 @@ economy redesign and UI redesign are merged into `master`.
 Open `RobloxWorkspace.rbxlx` in Studio to try it. Studio defaults to **unsaved preview**;
 live servers require a successful persistent load. See [architecture](docs/ARCHITECTURE.md),
 [economy](docs/ECONOMY.md), [roadmap](docs/ROADMAP.md), and
-[testing and release setup](docs/OPERATIONS.md). The candidate is not published; recorded
-single-client Studio checks do not complete persistent, multiplayer or physical-device acceptance.
+[testing setup](docs/OPERATIONS.md) and [production deployment workflow](docs/DEPLOYMENT.md).
+Blind Box is live (owner confirmation, October 11, 2026). Recorded single-client Studio checks
+do not complete persistent, multiplayer or physical-device acceptance for future releases.
 
 ## Setup and checks
 Run these commands from the repository root with Rokit on PATH:

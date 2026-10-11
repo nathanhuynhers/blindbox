@@ -2,15 +2,16 @@
 
 ## Current status
 
-The implemented candidate runs in **Blindbox Town** with open Player Plots, an authoritative
+The live game runs in **Blindbox Town** (owner confirmation, October 11, 2026) with open Player Plots, an authoritative
 Coin-generating Display, cosmetic Shelf Units, 43 figures across five collections, schema 14 in
 the Economy2 namespace, and the merged economy, UI, audio and Welcome Quest work. See the
 [data model](DATA_MODEL.md) for current stores and supported upgrades. Scrap, recycling, redemption,
 the retired Showroom/Gallery runtime and teleport browsing are not part of the current game.
 
-Automated and recorded single-client checks do not close the remaining release gate. Native
+Automated and recorded single-client checks do not close future update release gates. Native
 multi-client, device/input, persistent DataStore, rendering and performance acceptance are still
-required. Public deployment, paid mechanics and trading remain outside the authorized scope.
+required where relevant. This audit does not authorize publishing or restarting live servers;
+follow [the manual production runbook](DEPLOYMENT.md). Paid mechanics and trading remain outside scope.
 
 ## Sources of truth
 

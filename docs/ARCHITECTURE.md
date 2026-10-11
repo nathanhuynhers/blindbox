@@ -6,9 +6,10 @@ and explicit figure income units/weights. `CollectionEconomy` validates configur
 prices, base rates, current odds, rolls and duplicate multipliers. `Rules` owns atomic mutations,
 income settlement and unique Display placement. See [economy](ECONOMY.md).
 
-The user accepted the MVP and authorized the full-game roadmap. The new candidate implements
-that feature set; real storage, device and multi-client acceptance are still pending. See
-[roadmap](ROADMAP.md) and [operations](OPERATIONS.md). No package/framework dependency was added.
+The user accepted the MVP and authorized the full-game roadmap. Blind Box is live (owner
+confirmation, October 11, 2026); documented storage, device and multi-client acceptance gaps
+still apply to release verification. See [roadmap](ROADMAP.md), [operations](OPERATIONS.md),
+and [production deployment](DEPLOYMENT.md). No package/framework dependency was added.
 
 The active world uses fixed open Player Plots, earning Display and cosmetic Shelf Units.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md) and [current data model](DATA_MODEL.md).
@@ -77,7 +78,8 @@ The former separate Gallery/room runtime has been removed, not retained as an al
 - `Profile`: schema-14 validation/deep copies of pity, per-figure earnings, Display, Shelves,
   rewards, audio settings, Welcome Quest state and plaza stall stock. Valid Economy2 schemas 6–13 upgrade as
   [specified in the data model](DATA_MODEL.md); unsupported or corrupt records fail closed.
-  New save namespaces implement the authorized reset; retired legacy adapters are not invoked.
+  Economy2 namespaces were established by the historical authorized reset; live updates preserve
+  them. Retired legacy adapters are not invoked.
   Shelf decode removes unowned/excess placements in stable unit and numeric row/slot order so
   repaired state follows the normal save path.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
@@ -149,7 +151,9 @@ See [data model](DATA_MODEL.md) for validation and [operations](OPERATIONS.md) f
 Every load/acquire, save and release uses UpdateAsync. Lease tokens are unique per join. Leases
 last 120 seconds, renew with 30-second autosaves, and local gameplay pauses after 85 seconds
 without confirmed renewal. Save generations plus writer tokens reconcile responses lost after
-commit. Snapshots are cloned before yielding; one write at a time runs for each profile.
+commit. Snapshots are cloned before yielding and retained across uncertain retry batches; final
+release first confirms a pending autosave, then writes the latest state. One write at a time
+runs for each profile.
 
 Normal action replies acknowledge in-memory results, not durable storage. Daily claim markers
 and grants are saved in the same aggregate; after a crash both roll back together to the last
