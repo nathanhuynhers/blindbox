@@ -123,11 +123,11 @@ creator user `103346374`.
 
 ## Navigation image import and missing images
 
-Rojo does not upload the PNG files under `assets/ui/navigation/`. The HUD Daily and Home icons
-(`Navigation.Daily` / `Navigation.Home`, rendered by `assets/ui/navigation/hud_icons.py` in
-Blender) were uploaded through `scripts/upload_assets.py` (aliases `navigation_daily`,
-`navigation_home`), so their `NavigationAssetIds` fields stay empty and resolve to the generated
-IDs. Without any ID the button shows its "Daily" / "Home" label instead. If a navigation semantic
+Rojo does not upload the PNG files under `assets/ui/navigation/`. The HUD Daily, Home and Plaza
+icons (`Navigation.Daily` / `.Home` / `.Plaza`, rendered by `assets/ui/navigation/hud_icons.py`
+in Blender) were uploaded through `scripts/upload_assets.py` (aliases `navigation_daily`,
+`navigation_home`, `navigation_plaza`), so their `NavigationAssetIds` fields stay empty and
+resolve to the generated IDs. Without any ID the tile shows only its text label. If a navigation semantic
 key has no generated asset ID and no valid entry in `src/shared/NavigationAssetIds.luau`,
 `AssetManifest.resolve()` returns an empty string and the icon intentionally does not render. The
 runtime icon hierarchy, sizing and transparency are not a substitute for a Roblox-hosted image.

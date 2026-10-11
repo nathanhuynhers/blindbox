@@ -1,6 +1,6 @@
 --!strict
 -- World HUD: Coins pill (balance + income chip) right of Roblox's menu buttons, the top-right
--- Daily / Home / settings row with the settings popover, and the daily goal tracker. Nothing
+-- Daily / Home / Plaza / settings row with the settings popover, and the daily goal tracker. Nothing
 -- else covers the world.
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Style = require(script.Parent.UIStyle)
@@ -22,6 +22,7 @@ export type Hud = {
 	root: Frame,
 	coins: TextButton,
 	home: TextButton,
+	plaza: TextButton,
 	daily: TextButton,
 	gear: TextButton,
 	menu: Menu.Menu,
@@ -34,7 +35,7 @@ function Hud.create(
 	parent: Instance,
 	ctx: Context.Context,
 	setMotion: (boolean) -> (),
-	goHome: () -> ()
+	travel: (destination: "Home" | "Plaza") -> ()
 ): Hud
 	local root = Kit.frame(parent, "Hud")
 	root.ZIndex = 30
@@ -86,10 +87,10 @@ function Hud.create(
 		end
 		Sfx.play("select")
 	end)
-	-- Top-right row [Daily] [Home] [gear]: one set of rounded white tiles with a hard ink
-	-- shadow that drops on press. Daily and Home are icon-over-label tiles like small dock
-	-- tiles, so they read at a glance; the gear is the same tile, icon-only. Daily sits furthest from the
-	-- corner, where its badge and nudge catch the eye; the gear keeps the corner.
+	-- Top-right row [Daily] [Home] [Plaza] [gear]: one set of rounded white tiles with a hard ink
+	-- shadow that drops on press. Daily, Home and Plaza are icon-over-label tiles like small
+	-- dock tiles, so they read at a glance; the gear is the same tile, icon-only. Daily sits
+	-- furthest from the corner, where its badge and nudge catch the eye; the gear keeps it.
 	local right = Kit.frame(root, "Right")
 	local function roundButton(name: string, accessible: string, callback: () -> ()): Button.Button
 		local made = Button.create(right, name, {
@@ -127,10 +128,15 @@ function Hud.create(
 		outline = Style.ink,
 	}, Vector2.new(1, 0), Vector2.new(6, -8))
 	local home = roundButton("HomeButton", "Return Home to your plot", function()
-		goHome()
+		travel("Home")
 		Sfx.play("select")
 	end)
 	local homeTile = art(home, "Home")
+	local plaza = roundButton("PlazaButton", "Go to the town Plaza", function()
+		travel("Plaza")
+		Sfx.play("select")
+	end)
+	local plazaTile = art(plaza, "Plaza")
 	-- Idle nudge on Daily while a reward waits. Rotating the icon never moves layout;
 	-- Motion Reduced keeps it still.
 	local loginReady = false
@@ -181,8 +187,10 @@ function Hud.create(
 	-- Gamepad: left/right walks the row in reading order.
 	daily.button.NextSelectionRight = home.button
 	home.button.NextSelectionLeft = daily.button
-	home.button.NextSelectionRight = gear.button
-	gear.button.NextSelectionLeft = home.button
+	home.button.NextSelectionRight = plaza.button
+	plaza.button.NextSelectionLeft = home.button
+	plaza.button.NextSelectionRight = gear.button
+	gear.button.NextSelectionLeft = plaza.button
 	local tracker = Tracker.create(right, ctx)
 	local function place(made: Button.Button, rect: Layout.Rect, tile: Tile?, phone: boolean)
 		Kit.rect(made.button, rect.x, rect.y, rect.width, rect.height)
@@ -225,6 +233,7 @@ function Hud.create(
 		root = root,
 		coins = coins,
 		home = home.button,
+		plaza = plaza.button,
 		daily = daily.button,
 		gear = gear.button,
 		menu = menu,
@@ -241,9 +250,10 @@ function Hud.create(
 			coinShadow.Visible = coins.Visible
 			place(daily, geometry.daily, dailyTile, phone)
 			place(home, geometry.home, homeTile, phone)
+			place(plaza, geometry.plaza, plazaTile, phone)
 			place(gear, geometry.gear, nil, phone)
 			gearIcon.Size = UDim2.fromOffset(if phone then 26 else 30, if phone then 26 else 30)
-			tracker.layout(geometry.tracker.x, geometry.tracker.y, phone)
+			tracker.layout(geometry.tracker, phone)
 			-- Below the row; on short phones beside it (left of Daily) rather than over it.
 			local menuSize = menu.root.Size
 			local below = geometry.gear.y + geometry.gear.height + 10

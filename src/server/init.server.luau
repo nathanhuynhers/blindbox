@@ -72,6 +72,7 @@ local intentRemote = remote("Intent")
 local stateRemote = remote("State")
 local syncRemote = remote("RequestState")
 local homeRemote = remote("Home")
+local plazaRemote = remote("Plaza")
 local shelfEditorRemote = remote("ShelfEditor")
 local studioGrantCoinsRemote: RemoteFunction? = nil
 if RunService:IsStudio() then
@@ -305,6 +306,19 @@ table.insert(
 		end
 		local _, nextRequest =
 			HomeTeleport.request(player, session.plot, session.homeTime, os.clock())
+		session.homeTime = nextRequest
+	end)
+)
+local plazaTarget = HomeTeleport.plazaTarget(world.spawn)
+table.insert(
+	connections,
+	plazaRemote.OnServerEvent:Connect(function(player: Player)
+		local session = sessions[player]
+		if not session or shuttingDown then
+			return
+		end
+		local _, nextRequest =
+			HomeTeleport.travel(player, plazaTarget, session.homeTime, os.clock())
 		session.homeTime = nextRequest
 	end)
 )

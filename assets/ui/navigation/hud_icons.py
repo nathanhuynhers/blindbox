@@ -1,9 +1,9 @@
-"""Render the HUD Daily and Home icons to match the glossy navigation icon set.
+"""Render the HUD Daily, Home and Plaza icons to match the glossy navigation icon set.
 
-  blender -b --factory-startup --python assets/ui/navigation/hud_icons.py -- [daily|home|all] [preview|final]
+  blender -b --factory-startup --python assets/ui/navigation/hud_icons.py -- [daily|home|plaza|all] [preview|final]
 
 final writes transparent 1254x1254 PNGs next to this file (daily_navigation_icon.png,
-home_navigation_icon.png), the same framing as the five dock icons. preview renders at 400px and
+home_navigation_icon.png, plaza_navigation_icon.png), the same framing as the five dock icons. preview renders at 400px and
 writes phone-size checks (32 and 44px) into build/hud_icons/ (ignored scratch).
 
 Look: chunky bevelled toy shapes, glossy coat, lavender/violet and white with warm wood and gold
@@ -34,6 +34,8 @@ WOOD = "#D7A06A"
 WOOD_DARK = "#A86E3E"
 GOLD = "#FFCF4D"
 PINK = "#FF9CC6"
+WATER = "#9FD6FF"
+PETAL = "#FFB8D9"
 
 
 def srgb(hexstr):
@@ -283,7 +285,32 @@ def build_home():
     sparkle("Sparkle2", 0.25, (-1.42, -0.2, 2.0), mat(LILAC, rough=0.2))
 
 
-ICONS = {"daily": build_daily, "home": build_home}
+def build_plaza():
+    """The town plaza: a tiered fountain on a round paved plinth, a sakura tree and a lamp."""
+    up = (0, 0, 0)
+    # Plinth like the other icons' bases: deep violet under a pale paving disc.
+    cylinder("Base", 1.4, 0.24, (0, 0, -0.02), mat(DEEP), rot=up, bevel=0.08)
+    cylinder("Paving", 1.31, 0.2, (0, 0, 0.14), mat(LILAC), rot=up, bevel=0.07)
+    # Fountain basin with water, a column, an upper bowl and a gold star finial.
+    cylinder("Basin", 1.05, 0.5, (0.05, -0.05, 0.47), mat(WHITE), rot=up, bevel=0.12)
+    cylinder("Water", 0.88, 0.12, (0.05, -0.05, 0.7), mat(WATER, rough=0.08), rot=up, bevel=0.05)
+    cylinder("Column", 0.2, 0.8, (0.05, -0.05, 1.1), mat(WHITE), rot=up, bevel=0.06)
+    cylinder("Bowl", 0.55, 0.2, (0.05, -0.05, 1.5), mat(LAVENDER), rot=up, bevel=0.08)
+    ball("Spout", 0.26, (0.05, -0.05, 1.7), mat(WATER, rough=0.08), scale=(1, 1, 0.8))
+    slab("Finial", star_points(0.3), 0.14, (0.05, -0.05, 2.08), mat(GOLD), bevel=0.05)
+    # Sakura tree behind on the left: wood trunk, three petal puffs.
+    cylinder("Trunk", 0.13, 1.0, (-1.0, 0.6, 0.7), mat(WOOD_DARK), rot=up, bevel=0.03)
+    for i, (x, y, z, r) in enumerate(((-1.0, 0.6, 1.5, 0.48), (-1.32, 0.55, 1.25, 0.34), (-0.68, 0.55, 1.3, 0.34))):
+        ball(f"Bloom{i}", r, (x, y, z), mat(PETAL))
+    # Lamp post on the right with a warm glowing lamp.
+    cylinder("Post", 0.1, 1.4, (1.1, 0.3, 0.9), mat(DEEP), rot=up, bevel=0.03)
+    ball("Lamp", 0.25, (1.1, 0.3, 1.68), mat(GOLD, emit=1.5))
+    cylinder("Cap", 0.22, 0.1, (1.1, 0.3, 1.94), mat(DEEP), rot=up, bevel=0.04)
+    sparkle("Sparkle1", 0.28, (1.75, -0.2, 1.2), mat(LILAC, rough=0.2))
+    sparkle("Sparkle2", 0.24, (-1.5, -0.2, 2.15), mat(LILAC, rough=0.2))
+
+
+ICONS = {"daily": build_daily, "home": build_home, "plaza": build_plaza}
 
 
 # ------------------------------------------------------------------ render

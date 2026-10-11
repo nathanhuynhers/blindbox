@@ -51,7 +51,7 @@ end
 
 function Interface.create(
 	send: (string, string?, number?, string?, number?) -> (),
-	home: (() -> ())?,
+	travel: ((destination: "Home" | "Plaza") -> ())?,
 	shelfEditor: ShelfEditor.Controller?
 ): Interface
 	local scope = Scope.create()
@@ -183,9 +183,9 @@ function Interface.create(
 		if not value then
 			interruptCoins()
 		end
-	end, function()
-		if canAct() and home then
-			home()
+	end, function(destination)
+		if canAct() and travel then
+			travel(destination)
 		end
 	end)
 	local dock = Dock.create(stage, ctx, function(id)

@@ -2,7 +2,7 @@
 -- Paste the navigation Roblox Image asset IDs here after Creator Hub or Studio finishes
 -- importing and moderating the PNGs. Use digits only; do not add rbxassetid://.
 -- Empty strings fall back to the asset pipeline's generated ID (AssetIds), and never to
--- placeholder artwork. Daily and Home (HUD) were uploaded through that pipeline.
+-- placeholder artwork. Daily, Home and Plaza (HUD) were uploaded through that pipeline.
 local ids: { [string]: string } = {
 	Collection = "85346109397714",
 	Display = "75697262694573",
@@ -11,6 +11,7 @@ local ids: { [string]: string } = {
 	Shelves = "105035552322317",
 	Daily = "",
 	Home = "",
+	Plaza = "",
 }
 
 local NavigationAssetIds = { ids = ids }

@@ -66,11 +66,15 @@ local function snapshot()
 	}
 end
 local requests = {}
-local homeRequests = 0
+local homeRequests, plazaRequests = 0, 0
 local ui = Interface.create(function(action, figure, slot, choice, volume)
 	table.insert(requests, { action = action, figure = figure, slot = slot, choice = choice, volume = volume })
-end, function()
-	homeRequests += 1
+end, function(destination)
+	if destination == "Plaza" then
+		plazaRequests += 1
+	elseif destination == "Home" then
+		homeRequests += 1
+	end
 end)
 local gui = Engine.playerGui:FindFirstChild("PocketGrove")
 check(gui ~= nil and gui.ResetOnSpawn == false, "one persistent ScreenGui")
@@ -138,25 +142,35 @@ check(
 	homeButton:GetAttribute("AccessibleName") == "Return Home to your plot"
 		and find("DailyButton"):GetAttribute("AccessibleName") == "Daily Login rewards"
 		and find("SettingsButton"):GetAttribute("AccessibleName") == "Settings",
-	"icon-only HUD buttons keep accessible names"
+	"HUD buttons keep accessible names"
 )
-for _, name in { "DailyButton", "HomeButton" } do
+for name, text in { DailyButton = "Daily", HomeButton = "Home", PlazaButton = "Plaza" } do
 	local icon = within(within(find(name), "Face"), "Icon")
 	local caption = within(within(find(name), "Face"), "Caption")
-	local text = if name == "DailyButton" then "Daily" else "Home"
 	check(icon.Image ~= "" and icon.Visible and caption.Text == text and caption.Visible, name .. " shows its glossy icon over a text label")
 	check(icon.Position.Y.Offset + icon.Size.Y.Offset <= caption.Position.Y.Offset + 2, name .. " icon sits above its label")
 end
 check(find("Hud"):FindFirstChild("GearShadow", true) == nil, "the gear shares the row's button, not a separate shadow")
 local homeSounds = #Engine.sounds
 Engine.click(homeButton)
-check(homeRequests == 1 and Engine.sounds[homeSounds + 1] == "select", "Home activation sends one request and selects")
+check(homeRequests == 1 and plazaRequests == 0 and Engine.sounds[homeSounds + 1] == "select", "Home activation sends one Home request and selects")
+local plazaButton = find("PlazaButton")
+check(plazaButton:GetAttribute("AccessibleName") == "Go to the town Plaza", "Plaza has an accessible name")
+local plazaSounds = #Engine.sounds
+Engine.click(plazaButton)
+check(plazaRequests == 1 and homeRequests == 1 and Engine.sounds[plazaSounds + 1] == "select", "Plaza activation sends one Plaza request and selects")
+ui.pending(true)
+Engine.click(plazaButton)
+check(plazaRequests == 1, "pending work blocks Plaza travel like Home")
+ui.pending(false)
 check(
 	find("DailyButton").NextSelectionRight == homeButton
-		and homeButton.NextSelectionRight == find("SettingsButton")
-		and find("SettingsButton").NextSelectionLeft == homeButton
+		and homeButton.NextSelectionRight == plazaButton
+		and plazaButton.NextSelectionRight == find("SettingsButton")
+		and find("SettingsButton").NextSelectionLeft == plazaButton
+		and plazaButton.NextSelectionLeft == homeButton
 		and homeButton.NextSelectionLeft == find("DailyButton"),
-	"gamepad walks Daily, Home, Settings in order"
+	"gamepad walks Daily, Home, Plaza, Settings in order"
 )
 
 -- Top-right HUD row [Daily][Home][gear] at desktop, tablet and phone landscape sizes:
@@ -201,26 +215,34 @@ for _, case in {
 	local phone = height < 560 or width < 900
 	local scale = if phone then 1 else math.clamp(math.min(width / 1280, height / 720), 1, 2)
 	local designWidth, designHeight = width / scale, height / scale
-	local daily, home, gear = rect(find("DailyButton")), rect(find("HomeButton")), rect(find("SettingsButton"))
-	check(onScreen(find("DailyButton")) and onScreen(find("HomeButton")) and onScreen(find("SettingsButton")), label .. ": row shows with no screen open")
-	check(daily.x < home.x and home.x < gear.x and daily.y == gear.y and home.y == gear.y, label .. ": Daily, Home, gear left to right")
-	for _, button in { daily, home, gear } do
+	local daily, home, plaza, gear =
+		rect(find("DailyButton")), rect(find("HomeButton")), rect(find("PlazaButton")), rect(find("SettingsButton"))
+	local row = { daily, home, plaza, gear }
+	check(onScreen(find("DailyButton")) and onScreen(find("HomeButton")) and onScreen(find("PlazaButton")) and onScreen(find("SettingsButton")), label .. ": row shows with no screen open")
+	check(
+		daily.x < home.x and home.x < plaza.x and plaza.x < gear.x and daily.y == gear.y and home.y == gear.y and plaza.y == gear.y,
+		label .. ": Daily, Home, Plaza, gear left to right"
+	)
+	for _, button in row do
 		check(button.width * scale >= 44 and button.height * scale >= 44, label .. ": 44pt touch targets")
 		check(button.height == gear.height, label .. ": one height for the set")
 		check(button.x >= topLeft / scale and button.x + button.width <= designWidth, label .. ": row inside the safe area, right of the Roblox buttons")
 		check(button.y >= 0 and button.y + button.height + 4 <= designHeight, label .. ": row (with shadow) inside the safe height")
 	end
-	check(home.x - (daily.x + daily.width) >= 8 and gear.x - (home.x + home.width) >= 8, label .. ": thumb-safe gaps")
+	for index = 2, #row do
+		check(row[index].x - (row[index - 1].x + row[index - 1].width) >= 8, label .. ": thumb-safe gaps")
+	end
 	check(
 		gear.width == daily.width
 			and daily.width == (if phone then 50 else 64)
 			and home.width == daily.width
+			and plaza.width == daily.width
 			and gear.height == (if phone then 56 else 64),
 		label .. ": labelled tiles sized from the phone / desktop geometry"
 	)
 	-- The Welcome Quest card (shown during the quest) never overlaps the row.
 	local quest = rect(find("Onboarding"))
-	for _, button in { daily, home, gear } do
+	for _, button in row do
 		check(apart(quest, { x = button.x, y = button.y, width = button.width, height = button.height + 4 }), label .. ": quest card clear of the row")
 	end
 	-- Ready badge: top-right of Daily, offset (6, -8); it must stay on screen and clear of Home.
@@ -230,9 +252,12 @@ for _, case in {
 	local coins = rect(within(find("Hud"), "Coins"))
 	local coinsRight = coins.x + (if phone then 230 else 290)
 	if phone then
+		check(daily.x >= coinsRight + 8, label .. ": row clears the Coins pill")
+		-- The goal chip sits under the row, right-aligned, beside (never under) the quest card.
 		local chip = rect(within(find("Hud"), "GoalChip"))
-		check(chip.x <= daily.x - 8 and chip.y == daily.y, label .. ": goal chip sits left of the row")
-		check(chip.x - chip.width >= coinsRight + 8, label .. ": goal chip clears the Coins pill")
+		check(chip.y >= gear.y + gear.height + 4 + 6 and chip.x + chip.width == gear.x + gear.width, label .. ": goal chip under the row, right-aligned")
+		check(chip.width >= 120 and chip.height >= 44 and chip.y + chip.height <= designHeight, label .. ": goal chip is a full target on screen")
+		check(apart(chip, quest), label .. ": goal chip clear of the quest card")
 	else
 		check(daily.x >= coinsRight + 8, label .. ": row clears the Coins pill")
 		local card = rect(within(find("Hud"), "GoalTracker"))
@@ -241,7 +266,7 @@ for _, case in {
 	Engine.click(find("SettingsButton"))
 	local settings = rect(find("Settings"))
 	check(find("Settings").Visible, label .. ": gear opens settings")
-	for _, button in { daily, home, gear } do
+	for _, button in row do
 		check(apart(settings, { x = button.x, y = button.y, width = button.width, height = button.height + 4 }), label .. ": settings popover clear of the row")
 	end
 	check(
@@ -895,7 +920,8 @@ check(GuiService.TouchControlsEnabled == false, "an open screen holds the touch 
 ui.destroy()
 check(GuiService.TouchControlsEnabled == true, "teardown with a screen open returns the touch controls (AQ01)")
 Engine.click(homeButton)
-check(homeRequests == 1, "Home activation connection released on teardown")
+Engine.click(plazaButton)
+check(homeRequests == 1 and plazaRequests == 1, "Home and Plaza connections released on teardown")
 check(Engine.playerGui:FindFirstChild("PocketGrove") == nil, "UI destroyed")
 check(Engine.bound.CollectibleMenu == nil, "gamepad binding released")
 check(Engine.pending() == 0, "no timers survive teardown")

@@ -1205,6 +1205,15 @@
     "sha256": "7c95388382ef91794a6ec681fc1fa05d91092489d2a4ff2cc65f62f0e9fa4ff7",
     "source": "assets/ui/navigation/home_navigation_icon.png"
   },
+  "Navigation.Plaza": {
+    "assetId": "81238250710213",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fb89b927bef91951e3a785b18da5aee3fdee37c3a872836c401b95e0f633dadf",
+    "source": "assets/ui/navigation/plaza_navigation_icon.png"
+  },
   "Town.SakuraPetal": {
     "assetId": "110930105901678",
     "assetType": "Image",

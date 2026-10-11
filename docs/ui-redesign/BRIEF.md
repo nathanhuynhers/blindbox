@@ -73,15 +73,16 @@ border) and still explain why ("Need 1,240 more").
   76px (nav icon 56px, title 30px, one-line subtitle, optional right-side chip, round 48px ink
   Close). Body below. Short heights scroll the body, never clip it.
 - **HUD:** Coins pill (coin glyph, balance, mint "+N/s" chip) top-left, placed right of the Roblox
-  top-bar buttons (respect `GuiService` top-bar inset). Top-right row **[Daily] [Home] [gear]**:
-  matching rounded white tiles (ink stroke, hard drop shadow, 10px gaps). Daily and Home are
-  glossy navigation icons over a "Daily" / "Home" label (64x64 desktop, 50x56 phone), because
-  icon-only buttons were hard to tell apart; the gear is the same tile, icon-only;
+  top-bar buttons (respect `GuiService` top-bar inset). Top-right row **[Daily] [Home] [Plaza] [gear]**:
+  matching rounded white tiles (ink stroke, hard drop shadow, 10px gaps). Daily, Home and Plaza
+  (teleport to the town plaza; fountain icon) are glossy navigation icons over a text label
+  (64x64 desktop, 50x56 phone), because icon-only buttons were hard to tell apart; the gear
+  is the same tile, icon-only;
   Daily carries the "!" Ready badge and an idle nudge (still with Motion Reduced). The row hides
   while any screen is open, like the gear. The gear opens a small popover holding the Motion
   preference (beside the row on short phones). Desktop also shows a Daily goal tracker card
   under the row (title, 3-segment progress, Claim when ready); phone collapses it to a
-  "Goal · Claim" chip left of the row.
+  "Goal · Claim" chip under the row, right-aligned (the quest card then sits left of it).
 - **Dock:** 5 tiles (Collection, Display, Shop, Goals, Shelves), 100×94 desktop / 68×70 phone, icon
   + label, active = violet wash + raised. Badges: Display "N empty" (unlocked empty slots),
   Shop "FREE" (daily box ready), Goals count (claimable rewards). Phone dock sits between the

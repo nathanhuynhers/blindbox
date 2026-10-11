@@ -7,13 +7,14 @@ local Button = require(script.Parent.UIButton)
 local Progress = require(script.Parent.UIProgress)
 local State = require(script.Parent.UIState)
 local Context = require(script.Parent.UIContext)
+local Layout = require(script.Parent.UILayout)
 local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Tracker = {}
 
 export type Tracker = {
 	card: Frame,
 	chip: TextButton,
-	layout: (x: number, y: number, phone: boolean) -> (),
+	layout: (Layout.Rect, phone: boolean) -> (),
 	update: (Types.Snapshot) -> (),
 }
 
@@ -85,8 +86,6 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 			ctx.send("Goal", nil, nil, nil)
 		end
 	)
-	chip.button.AnchorPoint = Vector2.new(1, 0)
-	chip.button.Size = UDim2.fromOffset(132, 44)
 	local phone = false
 	local active, ready = false, false
 	local function visibility()
@@ -100,10 +99,10 @@ function Tracker.create(parent: Instance, ctx: Context.Context): Tracker
 	return {
 		card = card.root,
 		chip = chip.button,
-		layout = function(x: number, y: number, nextPhone: boolean)
+		layout = function(rect: Layout.Rect, nextPhone: boolean)
 			phone = nextPhone
-			card.root.Position = UDim2.fromOffset(x, y)
-			chip.button.Position = UDim2.fromOffset(x, y)
+			card.root.Position = UDim2.fromOffset(rect.x, rect.y)
+			Kit.rect(chip.button, rect.x, rect.y, rect.width, rect.height)
 			visibility()
 		end,
 		update = function(snapshot: Types.Snapshot)

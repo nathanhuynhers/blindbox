@@ -502,8 +502,10 @@ function Onboarding.create(
 			-- ponytail: a desktop under ~1000px with a 7-digit balance mid-quest drops below
 			-- the HUD and can touch an open panel's header; shrink the card further if seen.
 			local below = geometry.phone or right - left < 320
+			-- Below the HUD it sits on the left, clear of the goal card / chip under the row.
+			local belowX = if geometry.phone then 8 else geometry.hud.x
 			local width = if below
-				then math.min(500, geometry.width - 32)
+				then math.min(500, geometry.tracker.x - 8 - belowX)
 				else math.min(500, right - left)
 			local height = if geometry.phone then 56 else 64
 			-- Below both the coins pill and the taller HUD row (plus its 4px shadow).
@@ -513,7 +515,7 @@ function Onboarding.create(
 					geometry.gear.y + geometry.gear.height + 4
 				) + 8
 				else geometry.hud.y
-			local x = math.floor((geometry.width - width) / 2)
+			local x = if below then belowX else math.floor((geometry.width - width) / 2)
 			if not below then
 				x = math.clamp(x, left, right - width)
 			end

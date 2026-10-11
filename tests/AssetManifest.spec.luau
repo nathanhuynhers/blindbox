@@ -33,8 +33,9 @@ expect(Assets.Navigation.Goals, "Navigation.Goals")
 expect(Assets.Navigation.Shelves, "Navigation.Shelves")
 expect(Assets.Navigation.Daily, "Navigation.Daily")
 expect(Assets.Navigation.Home, "Navigation.Home")
+expect(Assets.Navigation.Plaza, "Navigation.Plaza")
 expect(Assets.Models.BlindBoxBase, "Models.BlindBoxBase")
-for _, navigationId in { "Collection", "Display", "Shop", "Goals", "Shelves", "Daily", "Home" } do
+for _, navigationId in { "Collection", "Display", "Shop", "Goals", "Shelves", "Daily", "Home", "Plaza" } do
 	local configured = NavigationIds.ids[navigationId]
 	assert(
 		configured == "" or string.match(configured, "^[1-9]%d*$"),

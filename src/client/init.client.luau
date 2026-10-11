@@ -26,6 +26,7 @@ local intentRemote = remotes:WaitForChild("Intent") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("State") :: RemoteEvent
 local syncRemote = remotes:WaitForChild("RequestState") :: RemoteEvent
 local homeRemote = remotes:WaitForChild("Home") :: RemoteEvent
+local plazaRemote = remotes:WaitForChild("Plaza") :: RemoteEvent
 local shelfEditorRemote = remotes:WaitForChild("ShelfEditor") :: RemoteEvent
 local shelfEditor = ShelfEditor.create(function(isOpen, token)
 	shelfEditorRemote:FireServer(isOpen, token)
@@ -115,8 +116,13 @@ local function request(
 	sentAt = os.clock()
 	intentRemote:FireServer(intent)
 end
-ui = Interface.create(request, function()
-	homeRemote:FireServer()
+ui = Interface.create(request, function(destination)
+	-- The server picks the spot; the remote names the place, never a position.
+	if destination == "Plaza" then
+		plazaRemote:FireServer()
+	else
+		homeRemote:FireServer()
+	end
 end, shelfEditor)
 summary = PullSummary.create(ui.openingFocus, ui.effects)
 -- Closing the popup any way claims; a dropped claim re-opens it on the next snapshot.

@@ -135,5 +135,6 @@ return {
 	["Models.WeAreAllStars.Wishing"] = "112630885709193",
 	["Navigation.Daily"] = "100827043771835",
 	["Navigation.Home"] = "82764315087705",
+	["Navigation.Plaza"] = "81238250710213",
 	["Town.SakuraPetal"] = "110930105901678",
 } :: { [string]: string }

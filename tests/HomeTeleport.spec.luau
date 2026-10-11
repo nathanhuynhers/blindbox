@@ -90,4 +90,21 @@ missingRoot.Parent = nil
 local withoutRoot = HomeTeleport.request(owner, ownPlot, 22, 24)
 check(not withoutRoot, "missing HumanoidRootPart is rejected")
 
-print(string.format("PASS: %d Home teleport authority, cooldown and invalid-state checks", checks))
+missingRoot.Parent = character
+
+-- Plaza: a server-only target from the plaza spawn pad, sharing Home's cooldown.
+local pad = { CFrame = Engine.CFrame.lookAt(Engine.Vector3.new(0, 1, -31), Engine.Vector3.new(0, 1, 0)) }
+local plazaTarget = HomeTeleport.plazaTarget(pad)
+check(plazaTarget.Position.Y == 5 and plazaTarget.Position.Z == -31, "plaza target stands 4 studs above the pad")
+root.Position = Engine.Vector3.new(40, 5, -20)
+local toPlaza, plazaAt = HomeTeleport.travel(owner, plazaTarget, -math.huge, 30)
+check(toPlaza and plazaAt == 30 and landed == plazaTarget and root.Position.Z == -31, "Plaza moves to the server target")
+check(root.AssemblyLinearVelocity.Magnitude == 0, "Plaza clears velocity")
+local backHome = HomeTeleport.request(owner, ownPlot, plazaAt, 30.5)
+check(not backHome and root.Position.Z == -31, "Home right after Plaza shares the cooldown")
+local again = HomeTeleport.travel(owner, plazaTarget, plazaAt, 30.5)
+check(not again, "Plaza spam is rate bounded")
+owner.Character:FindFirstChildOfClass("Humanoid").Health = 0
+check(not HomeTeleport.travel(owner, plazaTarget, plazaAt, 40), "dead character cannot travel to the Plaza")
+
+print(string.format("PASS: %d Home / Plaza teleport authority, cooldown and invalid-state checks", checks))

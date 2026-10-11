@@ -208,6 +208,12 @@
       "displayName": "Navigation Home Icon",
       "assetType": "Image"
     },
+    "navigation_plaza": {
+      "key": "Navigation.Plaza",
+      "source": "assets/ui/navigation/plaza_navigation_icon.png",
+      "displayName": "Navigation Plaza Icon",
+      "assetType": "Image"
+    },
     "pocket_grove_corner_top_left": {
       "key": "Collection.PocketGrove.CornerTopLeft",
       "source": "assets/ui/collection/pocket-grove/pocket_grove_corner_top_left.png",

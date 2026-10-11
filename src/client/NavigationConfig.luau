@@ -1,6 +1,6 @@
 --!strict
--- The five dock destinations, in dock order, and their glossy icon art (plus the HUD Daily
--- and Home buttons, which share the art set but are not dock pages).
+-- The five dock destinations, in dock order, and their glossy icon art (plus the HUD Daily,
+-- Home and Plaza buttons, which share the art set but are not dock pages).
 local Assets = require(game:GetService("ReplicatedStorage").Shared.AssetManifest)
 local NavigationAssetIds = require(game:GetService("ReplicatedStorage").Shared.NavigationAssetIds)
 local Config = {}
@@ -26,7 +26,8 @@ end
 Config.items = table.freeze(items)
 Config.pages = table.freeze(pages)
 
-local hud: { [string]: string } = { Daily = "Navigation.Daily", Home = "Navigation.Home" }
+local hud: { [string]: string } =
+	{ Daily = "Navigation.Daily", Home = "Navigation.Home", Plaza = "Navigation.Plaza" }
 
 -- Empty when the art is not uploaded yet; callers then show the label alone.
 function Config.image(id: string): string
