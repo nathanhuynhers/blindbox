@@ -813,6 +813,18 @@ local card = RevealCard.create(root, scope, "echo.feather-hush", true, 1, functi
 	return false
 end)
 card.set(UI.reveal(reveal, "echo.feather-hush", true, 1))
+check(card.root:IsA("Frame"), "reveal keeps native UI instead of a quality-limited CanvasGroup")
+local revealName = within(card.root, "FigureName")
+card.fade(1)
+check(revealName.TextTransparency == 1 and card.choices.skip.BackgroundTransparency == 1, "fade hides text and backgrounds including initially hidden choices")
+card.fade(0.5)
+check(revealName.TextTransparency == 0.5 and revealName.BackgroundTransparency == 1, "partial fade preserves transparent label backgrounds")
+card.set(UI.reveal(reveal, "echo.feather-hush", true, 1))
+check(revealName.TextTransparency == 0.5, "snapshot refresh preserves reveal fade without compounding")
+card.layout(true)
+card.layout(false)
+card.fade(0)
+check(revealName.TextTransparency == 0 and revealName.TextStrokeTransparency == 1, "fade restores text styling after responsive reparenting")
 check(within(root, "NewBadge").Visible, "NEW only for a first discovery")
 check(card.choices.display.Visible and card.first() == card.choices.display, "Put on Display leads")
 check(

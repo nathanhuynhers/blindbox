@@ -14,11 +14,12 @@ local State = require(script.Parent.UIState)
 local Card = {}
 
 export type Card = {
-	root: CanvasGroup,
+	root: Frame,
 	choices: { [string]: TextButton },
 	first: () -> TextButton,
 	set: (State.Reveal?) -> (),
 	layout: (compact: boolean) -> (),
+	fade: (transparency: number) -> (),
 }
 
 function Card.create(
@@ -31,8 +32,12 @@ function Card.create(
 	rarity: string?
 ): Card
 	local figure = Catalog.byId[figureId]
-	local root = Instance.new("CanvasGroup")
+	-- CanvasGroup flattens text into a quality-limited texture, blurring this full-screen
+	-- card at lower graphics levels. Keep native UI and fade its properties directly.
+	local root = Instance.new("Frame")
 	root.Name = "Result"
+	root.BorderSizePixel = 0
+	root.ClipsDescendants = true
 	root.BackgroundTransparency = 1
 	root.Size = UDim2.fromScale(1, 1)
 	root.ZIndex = 5
@@ -298,7 +303,59 @@ function Card.create(
 			block.Size = UDim2.new(1, 0, 0, keepY + 44)
 		end
 	end
+	local transparency = 0
+	local fades: { (number) -> () } = {}
+	local function fade(value: number)
+		value = math.clamp(value, 0, 1)
+		if value == transparency then
+			return
+		end
+		transparency = value
+		for _, apply in fades do
+			apply(value)
+		end
+	end
+	local function captureFade()
+		table.clear(fades)
+		for _, object in root:GetDescendants() do
+			if object:IsA("GuiObject") then
+				local background = object.BackgroundTransparency
+				table.insert(fades, function(value)
+					object.BackgroundTransparency = background + (1 - background) * value
+				end)
+			end
+			if object:IsA("TextLabel") then
+				local label = object
+				local text, stroke = label.TextTransparency, label.TextStrokeTransparency
+				table.insert(fades, function(value)
+					label.TextTransparency = text + (1 - text) * value
+					label.TextStrokeTransparency = stroke + (1 - stroke) * value
+				end)
+			elseif object:IsA("TextButton") then
+				local button = object
+				local text, stroke = button.TextTransparency, button.TextStrokeTransparency
+				table.insert(fades, function(value)
+					button.TextTransparency = text + (1 - text) * value
+					button.TextStrokeTransparency = stroke + (1 - stroke) * value
+				end)
+			elseif object:IsA("ImageLabel") then
+				local image = object.ImageTransparency
+				table.insert(fades, function(value)
+					object.ImageTransparency = image + (1 - image) * value
+				end)
+			elseif object:IsA("UIStroke") then
+				local stroke = object.Transparency
+				table.insert(fades, function(value)
+					object.Transparency = stroke + (1 - stroke) * value
+				end)
+			end
+		end
+	end
 	local function set(next: State.Reveal?)
+		-- Snapshot updates can change button styling during the reveal. Capture the new
+		-- unfaded style, then reapply the current fade so it never compounds or flashes.
+		local previous = transparency
+		fade(0)
 		model = next
 		local reveal = model
 		display.button.Visible = reveal ~= nil and reveal.place ~= nil
@@ -329,10 +386,13 @@ function Card.create(
 			another.set("Open another", reveal.another.need == nil, reveal.another.need)
 		end
 		place()
+		captureFade()
+		fade(previous)
 	end
 	set(nil)
 	return {
 		root = root,
+		fade = fade,
 		choices = { display = display.button, another = another.button, keep = keep, skip = skip },
 		first = function()
 			local reveal = model

@@ -153,9 +153,7 @@ function View.create(
 				and (phase == "Reveal" or phase == "Result" or phase == "Closing")
 			local ready = phase == "Result" and state.elapsed >= State.resultGuard
 			card.root.Visible, shade.Visible = final, final or phase == "Await"
-			card.root.GroupTransparency = if phase == "Reveal"
-				then 1 - math.clamp((p - 0.35) / 0.65, 0, 1)
-				else 0
+			card.fade(if phase == "Reveal" then 1 - math.clamp((p - 0.35) / 0.65, 0, 1) else 0)
 			for _, choice in card.choices do
 				choice.Active = ready
 				choice.Selectable = ready

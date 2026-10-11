@@ -43,6 +43,14 @@ current quantity. The cinematic never rolls, sends a remote, charges or grants.
 | OpeningAudio | Session-owned non-positional Sound layers, mix envelopes, load deadlines, bounded voices and teardown |
 | OpeningScope | Idempotent reverse-order cleanup; one cleanup failure cannot prevent the rest |
 
+The reveal card uses native Frames/TextLabels and fades their individual transparency properties.
+Do not wrap it in a CanvasGroup: Roblox flattens that full-screen UI into a texture whose quality
+is limited by the client's graphics setting, making result text blurry at low/automatic quality
+and on large displays. Desktop text comparisons passed across Studio engine levels 01–21.
+Player graphics 1, medium and 10, original-pixel 2560×1440 and compact-device acceptance
+remain incomplete; see the [text clarity audit](audits/2026-10-11/text-clarity/README.md)
+for the actual native coverage and MCP capture limitations.
+
 The main presentation is no longer a ViewportFrame. Every stage object is made by the local
 client under `Workspace.BlindboxCinematic`, at the configured isolated origin (0, 10000, 0).
 It contains a dark compact studio enclosure, a porcelain plinth and three studio lights.
