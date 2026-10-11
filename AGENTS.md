@@ -53,6 +53,14 @@
 - Formatting, linting, and building do not prove type correctness or runtime behavior. Check Luau Language Server diagnostics and use Studio playtests for behavioral changes, including multi-client tests for replication/remotes.
 - Report what changed, checks actually run, and any remaining manual checks. Never claim a Studio playtest was run unless it was.
 
+## Change-aware quality gates
+
+- Before implementation, classify the affected systems and choose the **union** of applicable checks in [the change-aware quality gates](docs/qa/QUALITY_GATES.md). This is the verification router, not a reason to run unrelated tests on every change.
+- For UI, HUD, opening presentation or 3D framing changes, use the [device and visual acceptance matrix](docs/qa/DEVICE_TEST_MATRIX.md). Verify relevant desktop and landscape phone viewports, state variations and supported inputs; follow the existing feature-specific Studio checks.
+- For figure/model changes, apply the figure runbook's build, reference-image and runtime presentation gates. Uploaded figure assets are not equivalent to publishing a new live game version.
+- Separate **PASS**, **FAIL**, **NOT RUN**, and **N/A** in completion reports. Never claim screenshots, Studio sessions, physical-device tests or live behavior you did not observe. Say **implemented; verification pending** when required runtime or visual checks were unavailable.
+- Treat live publishing and any production data mutation as separate release activities. Do not reset production progress, test destructive data migrations on real profiles or deploy a new place version without an explicit release instruction; review schema and mixed-server compatibility before any authorized release.
+
 ## Working style and session hygiene
 
 - Work autonomously and keep intermediate updates concise. Do not repeatedly summarize files, restate the plan, or narrate routine actions.
