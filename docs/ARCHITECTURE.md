@@ -33,8 +33,8 @@ The former separate Gallery/room runtime has been removed, not retained as an al
   striped awnings for Display/Shelves. `PlotStyle.accent(ownerId)` is the single accent accessor.
 - `PlayerSpawn`: binds a loaded player to their plot's server-computed spawn `CFrame` for the
   current character, respawns and reloads; unbound on leave.
-- `MovementConfig`/`PlayerMovement`: server-only baseline WalkSpeed (20 studs/second for
-  LOGIC-03 playtesting), bound before profile loading for initial characters and every respawn.
+- `MovementConfig`/`PlayerMovement`: server-only baseline WalkSpeed (36 studs/second, raised
+  from the LOGIC-03 playtest value of 20 so crossing town is quick), bound before profile loading for initial characters and every respawn.
   A character-owned ChildAdded watcher handles late Humanoids without polling or waits and
   disconnects on success, removal, replacement or unbind. No modifiers or movement entitlements
   exist. Future server-owned speed resolution belongs in PlayerMovement. Opening input/camera
