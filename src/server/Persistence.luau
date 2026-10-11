@@ -166,4 +166,34 @@ function Persistence.save(
 	handle.generation = nextGeneration
 	return true, "Saved"
 end
+-- Reclaim a cancelled handoff only if nobody else has acquired the profile. A released
+-- generation may have committed even when every response was lost. Never rewrite data.
+function Persistence.resume(update: Update, handle: Handle, wall: number): (boolean, string)
+	local ok, result = pcall(update, handle.key, function(raw: unknown): unknown
+		local old = record(raw)
+		if not old or old.writer ~= handle.token then
+			return nil
+		end
+		local retained = old.token == handle.token
+			and old.generation == handle.generation
+			and old.expires > wall
+		local released = old.token == ""
+			and (old.generation == handle.generation or old.generation == handle.generation + 1)
+		-- Also reconcile a lost response to this very resume operation.
+		local resumed = old.token == handle.token
+			and old.generation == handle.generation + 1
+			and old.expires > wall
+		if not retained and not released and not resumed then
+			return nil
+		end
+		old.token, old.expires = handle.token, wall + Persistence.leaseSeconds
+		return old
+	end)
+	local value = if ok then record(result) else nil
+	if not value or value.token ~= handle.token or value.writer ~= handle.token then
+		return false, "Profile handoff recovery unavailable. Progress is paused; please rejoin."
+	end
+	handle.generation = value.generation
+	return true, "Saved"
+end
 return Persistence

@@ -8,9 +8,12 @@ import subprocess
 import sys
 
 root = Path(__file__).resolve().parents[1]
+requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.spec.
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "AfkConfig": "shared", "AfkIdle": "shared", "AfkReconnect": "server",
+    "Storage": "server", "Settings": "server", "AfkClient": "client",
     "ShelfShowcase": "server", "ShelfEditor": "client",
     "MovementConfig": "server", "PlayerMovement": "server",
     "Rarity": "shared",
@@ -31,6 +34,7 @@ modules = {
 }
 # Redesigned UI: the real components, screens and Interface run on tests/UIEngine.luau.
 ui = [
+    "AfkNotice",
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
     "ShopScreen", "ShopLuck", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
@@ -58,6 +62,10 @@ for name, folder in modules.items():
         source = source.replace("require(script.Parent.BlindBoxPreview)", "Engine.BoxPreview")
         source = source.replace("require(script.Parent.Sfx)", "Engine.Sfx")
         source = source.replace("--!strict", UI_PRELUDE, 1)
+    if name == "Storage":
+        source = source.replace("--!strict", '--!strict\nlocal Engine = require("./AfkEngine")\nlocal game, task, os, warn = Engine.game, Engine.task, Engine.os, Engine.warn', 1)
+    if name == "AfkClient":
+        source = source.replace("--!strict", '--!strict\nlocal Engine = require("./AfkEngine")\nlocal game, os, Enum = Engine.game, Engine.os, Engine.Enum', 1)
     for dependency in modules:
         for expression in (
             f'script.Parent.{dependency}',
@@ -100,7 +108,7 @@ for name, folder in modules.items():
 
 # Exercise the exact production owner-snapshot send function, with only its I/O context injected.
 bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
-send = bootstrap[bootstrap.index("local function send("):bootstrap.index("local function closeStorage(")]
+send = bootstrap[bootstrap.index("local function send("):bootstrap.index("local afk = AfkReconnect.create(")]
 sender = '\n'.join(f'local {name} = require("./{name}")' for name in
                    ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals"))
 sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
@@ -114,6 +122,8 @@ def run(*names: str) -> None:
         (out / f"{name}.luau").write_text((root / "tests" / f"{name}.luau").read_text(encoding="utf-8"), encoding="utf-8")
     for name in names:
         if name.endswith(".spec"):
+            if requested and name not in requested:
+                continue
             result = subprocess.run([sys.argv[1], str(out / f"{name}.luau")], cwd=root)
             if result.returncode:
                 raise SystemExit(result.returncode)
@@ -132,6 +142,9 @@ run("PlotEngine", "HomeTeleport.spec")
 run("PlotEngine", "ShelfShowcase.spec")
 run("PlotEngine", "CollectionPlates.spec")
 run("PlotEngine", "ShopKeeper.spec")
+run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
+if requested:
+    raise SystemExit(0)
 fixtures = [
     ('id = "grove.pebble"', 'id = "unknown"', "Invalid economy reference"),
     ('weight = 1', 'weight = 0', "Invalid income units/weight"),

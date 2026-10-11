@@ -5,6 +5,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
+local TeleportService = game:GetService("TeleportService")
+local AfkReconnect = require(script.AfkReconnect)
+local AfkConfig = require(ReplicatedStorage.Shared.AfkConfig)
 local Types = require(ReplicatedStorage.Shared.Types)
 local Rules = require(script.Rules)
 local Economy = require(script.Economy)
@@ -44,6 +47,8 @@ type Session = {
 	syncTime: number,
 	homeTime: number,
 	spawn: PlayerSpawn.Binding?,
+	afkPosition: Vector3?,
+	afkCharacter: Model?,
 }
 local plots = PlotSlots.new(PlotConfig.maxPlots)
 local sessions: { [Player]: Session } = {}
@@ -74,6 +79,7 @@ local syncRemote = remote("RequestState")
 local homeRemote = remote("Home")
 local plazaRemote = remote("Plaza")
 local shelfEditorRemote = remote("ShelfEditor")
+local afkRemote = remote("AfkReconnect")
 local studioGrantCoinsRemote: RemoteFunction? = nil
 if RunService:IsStudio() then
 	local studioRemote = Instance.new("RemoteFunction")
@@ -98,7 +104,9 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	session.sequence += 1
 	local state = session.transaction.state
 	local day = math.floor(os.time() / 86400)
-	Rules.refreshDay(state, day)
+	if not session.storage.transferring then
+		Rules.refreshDay(state, day)
+	end
 	local snapshot: Types.Snapshot = {
 		shelfEditorToken = session.plot.showcase.editorToken,
 		shelves = Shelves.publicView(state.shelves, session.plot.view),
@@ -132,7 +140,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		goalReward = Economy.goalReward,
 		nextDay = (day + 1) * 86400,
 		saveStatus = session.storage.status,
-		ready = session.storage.ready,
+		ready = session.storage.ready and not session.storage.transferring,
 		bonus = Rules.bonus(state),
 		offlinePending = state.offlinePending,
 		offlineSeconds = state.offlineSeconds,
@@ -142,6 +150,76 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 	}
 	stateRemote:FireClient(player, snapshot, reply)
 end
+local afk = AfkReconnect.create({
+	now = os.clock,
+	token = function()
+		return HttpService:GenerateGUID(false)
+	end,
+	spawn = function(work)
+		task.spawn(work)
+	end,
+	available = function(player)
+		local session = sessions[player]
+		return not RunService:IsStudio()
+			and game.PlaceId > 0
+			and game.PrivateServerId == ""
+			and not shuttingDown
+			and player.Parent == Players
+			and session ~= nil
+			and session.storage.handle ~= nil
+			and session.storage.ready
+			and not session.storage.transferring
+			and os.clock() < session.storage.safeUntil
+	end,
+	prepare = function(player)
+		local session = sessions[player]
+		if not session or shuttingDown or player.Parent ~= Players then
+			return false
+		end
+		return Storage.prepareTeleport(session.storage)
+	end,
+	recover = function(player)
+		local session = sessions[player]
+		if not session or shuttingDown or player.Parent ~= Players then
+			return false
+		end
+		local resumed = Storage.recoverTeleport(session.storage)
+		if sessions[player] == session and player.Parent == Players then
+			send(player, session, nil)
+		end
+		return resumed
+	end,
+	teleport = function(player, token, call)
+		local session = sessions[player]
+		assert(
+			session
+				and not shuttingDown
+				and player.Parent == Players
+				and session.storage.transferring
+				and session.storage.released,
+			"Profile handoff is not ready"
+		)
+		local options = Instance.new("TeleportOptions")
+		-- Unspecified instance + no reservation uses public matchmaking for this place.
+		options.ShouldReserveServer = false
+		options:SetTeleportData({ afkReconnect = true, token = token, call = call })
+		local ok, message = pcall(function()
+			TeleportService:TeleportAsync(game.PlaceId, { player }, options)
+		end)
+		options:Destroy()
+		if not ok then
+			error(message)
+		end
+	end,
+	notify = function(player, phase, token)
+		if player.Parent == Players then
+			afkRemote:FireClient(player, phase, token)
+		end
+	end,
+	log = function(player, message)
+		warn("AFK reconnect", player.UserId, message)
+	end,
+})
 local function closeStorage(storage: Storage.Session)
 	closing += 1
 	local ok = Storage.close(storage)
@@ -151,6 +229,7 @@ local function closeStorage(storage: Storage.Session)
 	closing -= 1
 end
 local function remove(player: Player)
+	afk.remove(player)
 	local binding = movement[player]
 	if binding then
 		movement[player] = nil
@@ -211,14 +290,19 @@ local function added(player: Player)
 		syncTime = -math.huge,
 		homeTime = -math.huge,
 		spawn = nil,
+		afkPosition = nil,
+		afkCharacter = nil,
 	}
 	sessions[player] = session
+	afk.add(player)
 	PlayerPlot.bind(session.plot, function(actor, direction)
+		afk.activity(actor)
 		if
 			sessions[player] ~= session
 			or not sessions[actor]
 			or shuttingDown
 			or not session.storage.ready
+			or session.storage.transferring
 			or os.clock() >= session.storage.safeUntil
 		then
 			return
@@ -230,12 +314,16 @@ local function added(player: Player)
 		end
 	end)
 	PlayerPlot.bindCollectors(session.plot, function(actor, slot, figure)
+		if actor == player then
+			afk.activity(player)
+		end
 		local now = os.clock()
 		if
 			actor ~= player
 			or sessions[player] ~= session
 			or shuttingDown
 			or not storage.ready
+			or storage.transferring
 			or now >= storage.safeUntil
 		then
 			return
@@ -258,6 +346,7 @@ local function added(player: Player)
 				and player.Parent == Players
 				and not shuttingDown
 				and storage.ready
+				and not storage.transferring
 				and os.clock() < storage.safeUntil
 			then transaction.state
 			else nil
@@ -268,6 +357,49 @@ local function added(player: Player)
 	send(player, session, nil)
 end
 local connections: { RBXScriptConnection } = {}
+table.insert(
+	connections,
+	afkRemote.OnServerEvent:Connect(function(player: Player, raw: unknown)
+		afk.receive(player, raw)
+	end)
+)
+table.insert(
+	connections,
+	TeleportService.TeleportInitFailed:Connect(
+		function(
+			player: Instance,
+			result: Enum.TeleportResult,
+			message: string,
+			placeId: number,
+			options: Instance
+		)
+			if
+				not player:IsA("Player")
+				or placeId ~= game.PlaceId
+				or not options
+				or not options:IsA("TeleportOptions")
+			then
+				return
+			end
+			local ok, data = pcall(function(): unknown
+				return options:GetTeleportData()
+			end)
+			if ok and typeof(data) == "table" then
+				local value = data :: { [string]: unknown }
+				if
+					value.afkReconnect == true
+					and typeof(value.token) == "string"
+					and typeof(value.call) == "number"
+				then
+					if AfkConfig.debug then
+						print("AFK teleport failure", player.UserId, result.Name, message)
+					end
+					afk.failed(player, value.token, value.call)
+				end
+			end
+		end
+	)
+)
 table.insert(connections, Players.PlayerAdded:Connect(added))
 table.insert(connections, Players.PlayerRemoving:Connect(remove))
 -- Production figure templates load asynchronously; swap placeholders as each becomes ready.
@@ -291,7 +423,11 @@ table.insert(
 			return
 		end
 		session.syncTime = now
-		if session.storage.ready and now < session.storage.safeUntil then
+		if
+			session.storage.ready
+			and not session.storage.transferring
+			and now < session.storage.safeUntil
+		then
 			Rules.settle(session.transaction.state, now)
 		end
 		send(player, session, nil)
@@ -300,8 +436,9 @@ table.insert(
 table.insert(
 	connections,
 	homeRemote.OnServerEvent:Connect(function(player: Player)
+		afk.activity(player)
 		local session = sessions[player]
-		if not session or shuttingDown then
+		if not session or shuttingDown or session.storage.transferring then
 			return
 		end
 		local _, nextRequest =
@@ -313,8 +450,9 @@ local plazaTarget = HomeTeleport.plazaTarget(world.spawn)
 table.insert(
 	connections,
 	plazaRemote.OnServerEvent:Connect(function(player: Player)
+		afk.activity(player)
 		local session = sessions[player]
-		if not session or shuttingDown then
+		if not session or shuttingDown or session.storage.transferring then
 			return
 		end
 		local _, nextRequest =
@@ -326,6 +464,7 @@ table.insert(
 	connections,
 	shelfEditorRemote.OnServerEvent:Connect(
 		function(player: Player, rawOpen: unknown, rawToken: unknown)
+			afk.activity(player)
 			local session = sessions[player]
 			if not session or shuttingDown or not session.plot.active then
 				return
@@ -348,6 +487,7 @@ if studioGrantCoinsRemote then
 			or not session
 			or shuttingDown
 			or not session.storage.ready
+			or session.storage.transferring
 			or os.clock() >= session.storage.safeUntil
 		then
 			return false, "Your Studio session is not ready.", nil
@@ -381,11 +521,13 @@ end
 table.insert(
 	connections,
 	intentRemote.OnServerEvent:Connect(function(player: Player, raw: unknown)
+		afk.activity(player)
 		local session = sessions[player]
 		if
 			not session
 			or shuttingDown
 			or not session.storage.ready
+			or session.storage.transferring
 			or os.clock() >= session.storage.safeUntil
 		then
 			return
@@ -435,8 +577,19 @@ table.insert(
 		elapsed = 0
 		local now = os.clock()
 		for player, session in sessions do
+			local character = player.Character
+			local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
+			if root and root:IsA("BasePart") then
+				if
+					session.afkCharacter ~= character
+					or (session.afkPosition and (root.Position - session.afkPosition).Magnitude > 1)
+				then
+					afk.activity(player)
+				end
+				session.afkPosition, session.afkCharacter = root.Position, character
+			end
 			Storage.step(session.storage, now)
-			if session.storage.ready then
+			if session.storage.ready and not session.storage.transferring then
 				Rules.settle(session.transaction.state, now)
 				Leaderboard.observe(player.UserId, session.transaction.state, now)
 				if now < session.storage.safeUntil then
@@ -444,6 +597,7 @@ table.insert(
 				end
 			end
 		end
+		afk.step()
 		for player, session in sessions do
 			send(player, session, nil)
 		end
@@ -451,6 +605,7 @@ table.insert(
 )
 game:BindToClose(function()
 	shuttingDown = true
+	afk.destroy()
 	for player, binding in movement do
 		PlayerMovement.unbind(binding)
 		movement[player] = nil
