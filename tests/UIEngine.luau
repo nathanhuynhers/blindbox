@@ -409,6 +409,7 @@ Engine.Sfx = {
 Engine.Preview = {
 	create = function(parent)
 		local frame = new("ViewportFrame")
+		frame.Name = "Portrait"
 		frame.Parent = parent
 		local preview = {
 			frame = frame,

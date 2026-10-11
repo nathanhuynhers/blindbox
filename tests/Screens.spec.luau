@@ -654,8 +654,18 @@ check(
 	"placing on a shelf sends the spot and shelf"
 )
 local shelfRequests = #requests
-Engine.click(within(within(shelves, "Figures"), "grove.moth"))
+local moth = within(within(shelves, "Figures"), "grove.moth")
+Engine.click(moth)
 check(#requests == shelfRequests, "exhausted owned figure cannot send ShelfPlace")
+check(
+	string.find(within(find("Notification"), "Message").Text, "Moon Moth", 1, true) ~= nil,
+	"exhausted figure tap explains why"
+)
+check(within(within(moth, "Owned"), "Text").Text == "×0" and within(moth, "Owned").Visible, "shelf badge shows ×0")
+check(within(moth, "Portrait").ImageTransparency > 0, "exhausted shelf card dims")
+local star = within(within(shelves, "Figures"), "grove.star")
+check(within(within(star, "Owned"), "Text").Text == "×1", "shelf badge counts copies left, not owned")
+check(within(star, "Portrait").ImageTransparency == 0, "available shelf card stays bright")
 check(not within(shelves, "PreviousShelves"):GetAttribute("Enabled"), "prev disabled with exactly three shelves")
 state.shelves.visible[1].placements["row:2/slot:2"] = "grove.star"
 state.shelfAvailable["grove.star"] = 0

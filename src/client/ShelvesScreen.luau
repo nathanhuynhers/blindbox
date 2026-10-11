@@ -267,9 +267,36 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		end
 		-- Grows to the largest filter shown (bounded by the catalog) and is reused after.
 		local created = Tile.create(grid, ctx, "shelf", function(id)
-			if selectedShelf ~= "" then
-				ctx.send("ShelfPlace", id, selectedSpot, selectedShelf)
+			local snapshot = ctx.snapshot()
+			if selectedShelf == "" or not snapshot then
+				return
 			end
+			local unit: Types.VisibleShelf? = nil
+			for _, visible in snapshot.shelves.visible do
+				if visible.id == selectedShelf then
+					unit = visible
+				end
+			end
+			if unit and unit.placements[slotIds[selectedSpot]] == id then
+				return -- Already in this spot.
+			end
+			-- The server enforces this too; the client only explains it.
+			if State.shelfAvailable(snapshot, id) <= 0 then
+				local owned = snapshot.owned[id] or 0
+				local name = Catalog.byId[id].name
+				ctx.message(
+					if owned == 1
+						then "Your only " .. name .. " is already on a Shelf. Clear its spot to move it."
+						else string.format(
+							"All %d copies of %s are on your Shelves. Clear a spot to free one.",
+							owned,
+							name
+						)
+				)
+				Sfx.play("denied")
+				return
+			end
+			ctx.send("ShelfPlace", id, selectedSpot, selectedShelf)
 		end)
 		created.button.LayoutOrder = index
 		created.size(cell, cellHeight)
@@ -447,12 +474,20 @@ function Shelves.create(parent: Instance, ctx: Context.Context): Context.Screen
 		for index = 1, math.max(#owned, #picks) do
 			local id = owned[index]
 			if id then
-				pick(index).set(id, {
+				-- The badge counts copies left to place across every Shelf, not copies owned.
+				local available = State.shelfAvailable(snapshot, id)
+				local tile = pick(index)
+				tile.set(id, {
 					discovered = true,
 					selected = id == current,
-					count = snapshot.owned[id] or 0,
-					enabled = canAct and State.shelfAvailable(snapshot, id) > 0,
+					count = available,
+					enabled = canAct,
+					dim = available <= 0,
 				})
+				tile.button:SetAttribute(
+					"AccessibleName",
+					string.format("%s, %d left to place", Catalog.byId[id].name, available)
+				)
 			elseif picks[index] then
 				picks[index].set(nil, { discovered = false })
 			end

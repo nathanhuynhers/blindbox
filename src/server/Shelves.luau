@@ -350,7 +350,11 @@ function Shelves.mutate(
 		if target.placements[slot] ~= figure then
 			local available = Shelves.availability(state.shelves, state.owned)
 			if (available[figure] or 0) <= 0 then
-				return false, "All owned copies are already on your Shelves.", nil
+				return false,
+					"All your copies of "
+						.. Catalog.byId[figure].name
+						.. " are already on your Shelves.",
+					nil
 			end
 		end
 		target.placements[slot] = figure

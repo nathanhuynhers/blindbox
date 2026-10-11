@@ -15,7 +15,15 @@ local Preview = require(script.Parent.UIPreview)
 local Sfx = require(script.Parent.Sfx)
 local Slot = {}
 
-export type Mode = { target: number?, placing: string? }
+-- landing: the slot just tapped while placing, which keeps its ghost until the reply lands.
+export type Mode = {
+	target: number?,
+	placing: string?,
+	landing: { slot: number, id: string }?,
+}
+-- Ghost previews of the figure being placed: ~45% opaque with a faint lavender cast.
+local GHOST_TRANSPARENCY = 0.55
+local GHOST_TINT = Color3.fromRGB(226, 216, 255)
 export type Slot = {
 	button: TextButton,
 	size: (width: number, height: number) -> (),
@@ -52,6 +60,17 @@ function Slot.create(
 	Kit.rect(number, 8, 4, 40, 16)
 	local stage = Kit.frame(button, "Portrait")
 	local portrait = Preview.create(stage, ctx.scope, true)
+	local ghostStage = Kit.frame(button, "Ghost")
+	ghostStage.Visible = false
+	local ghost = Preview.create(ghostStage, ctx.scope, true)
+	ghost.frame.ImageTransparency = 1
+	ghost.frame.ImageColor3 = GHOST_TINT
+	-- Under the ghost: "Place here" for an empty slot, "Swaps out X" for a filled one.
+	local swap =
+		Kit.text(button, "GhostHint", "", 13, Style.body(Enum.FontWeight.Bold), Style.muted)
+	swap.TextXAlignment = Enum.TextXAlignment.Center
+	swap.TextYAlignment = Enum.TextYAlignment.Top
+	swap.TextWrapped = true
 	local name = Kit.text(button, "FigureName", "", 15)
 	name.TextXAlignment = Enum.TextXAlignment.Center
 	local rate = Badge.create(button, "Rate", "", {
@@ -107,11 +126,53 @@ function Slot.create(
 	local scale = Instance.new("UIScale")
 	scale.Parent = button
 	local tween: Tween? = nil
+	local ghostTween: Tween? = nil
+	local ghostId: string? = nil
 	ctx.scope.add(function()
 		if tween then
 			tween:Cancel()
 		end
+		if ghostTween then
+			ghostTween:Cancel()
+		end
 	end)
+	-- Fades the ghost in (fresh figure) or out; instant when Motion is off.
+	local function setGhost(id: string?)
+		if id == ghostId then
+			return
+		end
+		local appearing = id ~= nil
+		ghostId = id
+		if ghostTween then
+			ghostTween:Cancel()
+			ghostTween = nil
+		end
+		if id then
+			ghost.figure(id, true)
+			ghost.frame.ImageTransparency = 1
+			ghostStage.Visible = true
+		end
+		local goal = if appearing then GHOST_TRANSPARENCY else 1
+		if not ctx.effects() then
+			ghost.frame.ImageTransparency = goal
+			ghostStage.Visible = appearing
+			return
+		end
+		local nextTween = TweenService:Create(
+			ghost.frame,
+			TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{ ImageTransparency = goal }
+		)
+		ghostTween = nextTween
+		if not appearing then
+			nextTween.Completed:Connect(function(state)
+				if state == Enum.PlaybackState.Completed then
+					ghostStage.Visible = false
+				end
+			end)
+		end
+		nextTween:Play()
+	end
 	local width, height = 160, 184
 	-- Below this card width "Unlock [coin price]" no longer fits on one row of the button.
 	local narrow = false
@@ -122,7 +183,9 @@ function Slot.create(
 		local image = if compact then (if narrow then 58 else 70) else (if narrow then 76 else 88)
 		local top = if compact then (if narrow then 10 else 12) else (if narrow then 14 else 16)
 		Kit.rect(stage, (width - image) / 2, top, image, image)
+		Kit.rect(ghostStage, (width - image) / 2, top, image, image)
 		local nameY = top + image + 2
+		Kit.rect(swap, 6, nameY + 2, width - 12, math.max(16, height - nameY - 6))
 		local nameHeight = if narrow
 			then (if compact then 30 else 34)
 			else (if compact then 18 else 20)
@@ -191,8 +254,17 @@ function Slot.create(
 			local buyable = price ~= nil and index == snapshot.unlocked + 1
 			local filled = not locked and id ~= ""
 			local targeted = mode.target == index
-			local placing = mode.placing ~= nil and not locked
+			local landing = mode.landing
+			-- Placing a figure chosen in Collection: every unlocked slot is a target.
+			local preview = if locked
+				then nil
+				elseif mode.placing then mode.placing
+				elseif landing and landing.slot == index then landing.id
+				else nil
+			local placing = preview ~= nil
+			setGhost(preview)
 			button:SetAttribute("FigureId", id)
+			button:SetAttribute("Ghost", preview)
 			button:SetAttribute("Locked", locked)
 			button:SetAttribute("Targeted", targeted)
 			local figure = Catalog.byId[id]
@@ -222,6 +294,7 @@ function Slot.create(
 			lock.Visible = locked
 			unlock.button.Visible = buyable
 			short.Visible = false
+			swap.Visible = placing
 			title.TextColor3 = Style.violetDark
 			hint.TextColor3 = Style.muted
 			if locked then
@@ -236,12 +309,11 @@ function Slot.create(
 					short.Text = need or ""
 				end
 			elseif placing then
-				-- Placing a figure chosen in Collection: every unlocked slot is a target.
+				-- The ghost stands in for the slot's contents; the small line says what happens.
 				stage.Visible, name.Visible, rate.root.Visible, ready.Visible, plus.Visible =
 					false, false, false, false, false
-				title.Visible, hint.Visible = true, true
-				title.Text = "Place here"
-				hint.Text = if filled and figure then "Swaps out " .. figure.name else "Empty slot"
+				title.Visible, hint.Visible = false, false
+				swap.Text = if filled and figure then "Swaps out " .. figure.name else "Place here"
 			elseif filled then
 				title.Visible, hint.Visible = false, false
 			else
@@ -255,14 +327,13 @@ function Slot.create(
 				"Slot "
 					.. index
 					.. ": "
-					.. (
-						if locked
-							then (if buyable
-								then "locked, unlock available"
-								else string.lower(State.lockedText(snapshot, index)))
-							elseif figure then figure.name
-							else "empty"
-					)
+					.. (if locked
+						then (if buyable
+							then "locked, unlock available"
+							else string.lower(State.lockedText(snapshot, index)))
+						elseif figure then figure.name
+						else "empty")
+					.. (if preview then ", place " .. Catalog.byId[preview].name .. " here" else "")
 			)
 		end,
 	}
