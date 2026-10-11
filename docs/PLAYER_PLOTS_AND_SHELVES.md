@@ -318,9 +318,10 @@ Completing a collection does not unlock a room, skin, currency, trophy, plaque o
 derived presentation, not stored grants; they are retired with the old plot geometry.
 
 Each persistent Shelf Unit has an empty `customization` map for a future versioned extension. No customization
-catalog, ownership, purchase, skin editor, furniture or arbitrary property API exists. Potential
-future shelf skins, materials, colors, backgrounds, lighting, trim, decorations, effects and
-collection styling need separate definitions and authorization.
+catalog, ownership, purchase, skin editor, furniture or arbitrary property API exists. Paid
+cosmetic products have been removed from the
+[monetization plan](MONETIZATION.md#feature-scope-decisions). Any future non-monetized
+customization work still requires separate definitions and authorization.
 
 ## Scope and placeholder structure
 

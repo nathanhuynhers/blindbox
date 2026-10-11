@@ -77,7 +77,8 @@ These are the current discrete follow-up tasks from playtesting. Each numbered i
     - Offline earnings should generate at a reduced rate of about 0.5x normal online earnings to prevent abuse; exact tuning can be adjusted during economy balancing.
     - Offline earnings stop accumulating after 6 hours (`Economy.offlineMaxSeconds`).
     - On return, show how much was earned.
-    - The player claims normally; Robux multipliers and monetization are deferred to a later phase.
+    - The player claims normally; future paid behavior is tracked in the
+      [consolidated monetization plan](MONETIZATION.md).
 
 11. [x] **Remove finished Daily Goals** — completed and manually accepted. See [verification](PLAYTEST_INTERACTIONS.md).
     - After a Daily Goal is completed and claimed, remove it from the HUD instead of leaving the "Claimed" card there.
@@ -193,7 +194,9 @@ implemented systems or authorize future work.
 
 - **Variants/colorways:** potentially make duplicate pulls exciting, but this requires revisiting the quantity-stack data model and individual-copy identity.
 - **Trading:** do not implement casually. It requires a separate design for identity, atomic two-profile transfers, replay/duplication prevention, recovery, and economy impact.
-- **Gamepasses and monetization:** defer all gamepass-related features (Auto Open, Auto Collect, Robux multipliers) and monetization systems until after core gameplay loop polish is complete. Design and implement only after the core experience is compelling and current Roblox policy is validated for any paid/randomized mechanics. Plan scope separately with full cost/benefit analysis.
+- **Gamepasses and monetization:** all product ideas, core-polish deferral, policy/economy gates
+  and future task decisions now live in the [consolidated monetization plan](MONETIZATION.md).
+  Review that document before writing task prompts; this backlog authorizes no paid implementation.
 
 ## Product principles
 

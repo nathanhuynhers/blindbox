@@ -98,8 +98,8 @@ Paired with **UI-01**.
 
 - Increase the game's baseline movement speed so normal traversal feels faster.
 - Do **not** add sprinting in this task.
-- Keep the implementation centralized/configurable because additional movement speed is planned as a
-  future monetization/upgrade vector.
+- Keep the implementation centralized/configurable. The future movement monetization/upgrade
+  idea is tracked as **MN-09** in the [monetization plan](MONETIZATION.md).
 - Exact final speed can be tuned through playtesting.
 
 ### LOGIC-04 — Physical plot Shop interaction
@@ -585,15 +585,10 @@ stretch feature is being implemented together with its player-facing experience.
 
 ### STRETCH-LOGIC-02 — Luck system and gamepass integration
 
-**This should be one of the last systems implemented in this backlog.**
-
-- Add a server-authoritative Luck modifier that improves box outcomes while preserving valid,
-  normalized probabilities.
-- Initial acquisition direction is through gamepasses; exact products, tiers and values are still TBD.
-- Define how Luck composes with the existing pity system before shipping it.
-- Never trust a client-provided Luck value or odds table.
-- Keep tuning configurable and test the effect across all rarity tiers.
-- Do not begin final implementation until the gamepass/tuning decisions are set.
+Consolidated with **STRETCH-UI-02** as **MN-12** in the
+[monetization plan](MONETIZATION.md#luck-and-gamepass-integration--mn-12), including the original
+authority, probability, tuning and pity requirements. Keep this system late in the backlog;
+product/tuning decisions and the policy review must precede implementation.
 
 ## Stretch UI / design
 
@@ -610,12 +605,9 @@ Paired with **STRETCH-LOGIC-01**.
 
 ### STRETCH-UI-02 — Luck presentation
 
-Paired with **STRETCH-LOGIC-02**.
-
-- After the Luck rules are finalized, show active Luck and its effect on box odds in a clear,
-  aesthetically consistent way.
-- Integrate gamepass presentation without making the core Shop feel paywall-heavy.
-- Keep pity and Luck visually distinct so players can understand both systems.
+Paired with **STRETCH-LOGIC-02**; both are now tracked under **MN-12** in the
+[monetization plan](MONETIZATION.md#luck-and-gamepass-integration--mn-12). That document owns the
+Luck/odds presentation requirements and the review decisions for future task prompts.
 
 ---
 

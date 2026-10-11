@@ -21,6 +21,10 @@ live servers require a successful persistent load. See [architecture](docs/ARCHI
 Blind Box is live (owner confirmation, October 11, 2026). Recorded single-client Studio checks
 do not complete persistent, multiplayer or physical-device acceptance for future releases.
 
+All future monetization ideas and review tasks are consolidated in the
+[monetization plan](docs/MONETIZATION.md). Products, pricing and implementation scope remain open
+for review before task prompts are written.
+
 ## Setup and checks
 Run these commands from the repository root with Rokit on PATH:
 
