@@ -25,7 +25,7 @@ local baseline = E.connections
 player.Character = character()
 local first = humanoid(player.Character)
 local binding = Movement.bind(player)
-check(Config.baselineWalkSpeed == 20 and table.isfrozen(Config), "single frozen playtest config")
+check(Config.baselineWalkSpeed == 36 and table.isfrozen(Config), "single frozen movement config")
 check(first.WalkSpeed == Config.baselineWalkSpeed, "existing initial character configured immediately")
 check(binding.humanoidAdded == nil and E.connections == baseline + 2, "ready character releases watcher")
 first.WalkSpeed = 23
