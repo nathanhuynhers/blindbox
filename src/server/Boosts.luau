@@ -225,28 +225,25 @@ function Boosts.overlap(timer: Types.Timer?, first: number, last: number): numbe
 		else 0
 end
 -- Caller owns durable commit and readiness. All preflight precedes either timer mutation.
-function Boosts.activate(
+local function plan(
 	record: Types.Record,
-	request: Types.Request,
+	token: PurchaseTypes.TokenId,
 	wall: number,
-	permanent: number
-): (boolean, string)
-	local previous = record.activations[request.id]
-	if previous then
-		return previous.token == request.token, "Replay"
-	end
+	permanent: number,
+	atCapacity: boolean
+): (string, Types.Timer?, Types.Timer?)
 	if not integer(wall, 100000000000) or wall == 0 or wall < record.lastClock then
-		return false, "ClockUnavailable"
+		return "ClockUnavailable", nil, nil
 	end
-	local benefit = Config.tokenBenefits[request.token]
-	if not benefit or (record.tokens[request.token] or 0) < 1 then
-		return false, "NoToken"
+	local benefit = Config.tokenBenefits[token]
+	if not benefit or (record.tokens[token] or 0) < 1 then
+		return "NoToken", nil, nil
 	end
-	if count(record.activations) >= Boosts.maxMarkers then
-		return false, "Capacity"
+	if atCapacity then
+		return "Capacity", nil, nil
 	end
 	if benefit.luck == 2 and permanent >= 2 then
-		return false, "RedundantLuck"
+		return "RedundantLuck", nil, nil
 	end
 	local function extended(timer: Types.Timer?, strength: number): Types.Timer?
 		local active = Boosts.active(timer, wall)
@@ -266,7 +263,37 @@ function Boosts.activate(
 	local coin = if benefit.coins > 1 then extended(record.coin, benefit.coins) else nil
 	local luck = if benefit.luck > 1 then extended(record.luck, benefit.luck) else nil
 	if (benefit.coins > 1 and not coin) or (benefit.luck > 1 and not luck) then
-		return false, "IncompatibleOrQueued"
+		return "IncompatibleOrQueued", nil, nil
+	end
+	return "Ready", coin, luck
+end
+function Boosts.activationReasons(
+	record: Types.Record,
+	wall: number,
+	permanent: number
+): { [PurchaseTypes.TokenId]: string }
+	local reasons: { [PurchaseTypes.TokenId]: string } = {}
+	local full = count(record.activations) >= Boosts.maxMarkers
+	for token in record.tokens do
+		local id: PurchaseTypes.TokenId = token :: PurchaseTypes.TokenId
+		reasons[id] = (plan(record, id, wall, permanent, full))
+	end
+	return reasons
+end
+function Boosts.activate(
+	record: Types.Record,
+	request: Types.Request,
+	wall: number,
+	permanent: number
+): (boolean, string)
+	local previous = record.activations[request.id]
+	if previous then
+		return previous.token == request.token, "Replay"
+	end
+	local reason, coin, luck =
+		plan(record, request.token, wall, permanent, count(record.activations) >= Boosts.maxMarkers)
+	if reason ~= "Ready" then
+		return false, reason
 	end
 	if coin then
 		record.coin = coin

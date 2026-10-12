@@ -1,7 +1,7 @@
 --!strict
--- Provisional, presentation-only boundary. No platform IDs, remotes or gameplay writes.
--- Backend integration must project verified fields here; see STORE_PRESENTATION_HANDOFF.md.
+-- Presentation-only boundary. StoreProjection maps verified owner contracts here.
 local Presentation = {}
+local PurchaseTypes = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 export type Availability =
 	"loading"
 	| "available"
@@ -24,6 +24,9 @@ export type Outcome =
 	| "cancelled"
 	| "failed"
 export type Offer = {
+	benefit: string?,
+	buyAllowed: boolean?,
+	package: PurchaseTypes.PackageState?,
 	availability: Availability,
 	priceText: string?, -- localized platform metadata, never a catalog fallback
 	priceLoading: boolean?,
@@ -62,6 +65,10 @@ export type Automation = {
 	reason: string?,
 }
 export type Input = {
+	modifiers: string?,
+	odds: { [string]: number }?,
+	baseOdds: { [string]: number }?,
+	luckOfferOdds: { [number]: { [string]: number } }?,
 	fixture: boolean,
 	now: number, -- server UTC observation; fixtures use their own clock
 	offers: { [string]: Offer },
@@ -108,6 +115,83 @@ function Presentation.offer(input: Input, key: string, minutes: number?): Offer
 	end
 	return input.offers[key] or { availability = "unconfigured", outcome = "idle" }
 end
+-- Wall-clock observations alone never rebuild controls or reset confirmation.
+function Presentation.signature(input: Input): string
+	local parts = {
+		tostring(input.fixture),
+		tostring(input.promptActive),
+		tostring(input.ownershipReady),
+		tostring(input.longLabels),
+		input.modifiers or "",
+	}
+	local function offer(key: string, value: Offer)
+		table.insert(
+			parts,
+			key
+				.. ":"
+				.. value.availability
+				.. ":"
+				.. value.outcome
+				.. ":"
+				.. (value.priceText or "")
+				.. ":"
+				.. tostring(value.buyAllowed)
+				.. ":"
+				.. tostring(value.toggle)
+				.. ":"
+				.. tostring(value.hidden)
+				.. ":"
+				.. (value.reason or "")
+				.. ":"
+				.. (value.benefit or "")
+		)
+	end
+	local keys: { string } = {}
+	for key in input.offers do
+		table.insert(keys, key)
+	end
+	table.sort(keys)
+	for _, key in keys do
+		offer(key, input.offers[key])
+	end
+	for _, minutes in { 15, 30, 60 } do
+		if input.coinDurations[minutes] then
+			offer(tostring(minutes), input.coinDurations[minutes])
+		end
+	end
+	for _, token in input.tokens do
+		table.insert(parts, `{token.key}:{token.count}:{token.activation}`)
+	end
+	for _, timer in input.timers do
+		table.insert(parts, `{timer.key}:{timer.endsAt}:{timer.suppressed}`)
+	end
+	if input.automation then
+		table.insert(
+			parts,
+			`{input.automation.status}:{input.automation.completed}:{input.automation.reason}`
+		)
+	end
+	local ids: { string } = {}
+	for id in pairs(input.odds or {}) do
+		table.insert(ids, id)
+	end
+	table.sort(ids)
+	for _, id in ids do
+		table.insert(parts, id .. ":" .. tostring((input.odds or {})[id]))
+	end
+	for _, key in keys do
+		local value = input.offers[key]
+		if value.package then
+			table.insert(
+				parts,
+				tostring(value.package.dailySupplementAvailable)
+					.. ":"
+					.. tostring(value.package.assistedCredit)
+			)
+		end
+	end
+	return table.concat(parts, "|")
+end
 
 function Presentation.view(input: Input, key: string, minutes: number?): View
 	local offer = Presentation.offer(input, key, minutes)
@@ -136,7 +220,8 @@ function Presentation.view(input: Input, key: string, minutes: number?): View
 		stamp, note =
 			"Checking ownership…", "Checking your ownership and availability. Please wait."
 	elseif offer.availability == "owned" then
-		stamp, note = "OWNED", "You own this. It's active on your account."
+		stamp, note =
+			"OWNED", "Ownership is verified. Check your active modifiers and settings below."
 		if offer.toggle ~= nil then
 			stamp ..= if offer.toggle then " · ON" else " · OFF"
 			note = if offer.toggle then "Your setting is on." else "Your setting is off."
@@ -169,7 +254,11 @@ function Presentation.view(input: Input, key: string, minutes: number?): View
 		if offer.priceLoading or not offer.priceText then
 			stamp, note = "Getting price…", "Getting your price from Roblox…"
 		else
-			stamp, note = "Buying disabled", "Buying is not switched on."
+			stamp, note =
+				if offer.buyAllowed then offer.priceText else "Buying disabled",
+				if offer.buyAllowed
+					then "Confirm this purchase in the Roblox window."
+					else "Buying is not switched on."
 		end
 	end
 	if offer.outcome == "cancelled" then
@@ -186,7 +275,19 @@ function Presentation.view(input: Input, key: string, minutes: number?): View
 	if key == "doubleClaim" then
 		stamp, note =
 			"On welcome back",
-			"Double & Claim covers this return only. Claim always stays free. Price TBD."
+			"Double & Claim covers this return only. Claim always stays free. Check its price on welcome back."
+	end
+	if offer.reason and not pending then
+		note = offer.reason
+	end
+	local package = offer.package
+	if package and key == "vip" then
+		note ..= ` Actual VIP Display factor: ×{package.appliedVipFactor}. Daily extra: {package.dailyCoins or 0} Coins. {if package.dailySupplementAvailable
+			then "Available with your daily box."
+			else "The next eligible daily box carries the extra Coins."}`
+	elseif package and package.confirmed and package.assistedCredit > 0 then
+		note =
+			"Delivery saved. Purchased Coins are protected credit; they aren't spendable yet. Check My Perks for unused tokens."
 	end
 	if input.promptActive and not pending then
 		note ..= " Another purchase prompt is active."
@@ -215,7 +316,7 @@ function Presentation.view(input: Input, key: string, minutes: number?): View
 	return {
 		stamp = stamp,
 		note = note,
-		price = if input.fixture then price else nil,
+		price = if input.fixture or offer.buyAllowed then price else nil,
 		pending = pending,
 	}
 end

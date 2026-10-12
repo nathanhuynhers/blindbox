@@ -44,6 +44,10 @@ export type PackageState = {
 	creditUsable: boolean,
 }
 export type ProductState = {
+	confirmedDeliveries: number?,
+	grant: Grant?,
+	coinTier: number?,
+	benefits: { [string]: number }?,
 	key: string,
 	kind: PlatformKind?,
 	platformId: number?,
@@ -55,6 +59,8 @@ export type ProductState = {
 	package: PackageState?,
 }
 export type Snapshot = {
+	recoveryProduct: string?,
+	tokenBenefits: { [TokenId]: { coins: number, luck: number, seconds: number } }?,
 	sequence: number,
 	ready: boolean,
 	ledgerStatus: string,

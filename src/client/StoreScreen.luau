@@ -1,8 +1,9 @@
 --!strict
 -- Robux Store (docs/ui-redesign/MONETIZATION_STORE.md): candy tabs, product cards, the Coin
--- Multiplier tier panel and a product sheet. Buying is not switched on yet: there is no
--- purchase wiring: the typed presentation boundary never sends anything or starts purchases.
+-- Multiplier tier panel and a product sheet. P02 owns all native prompts and grants.
 local GuiService = game:GetService("GuiService")
+local FigureCatalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
+local State = require(script.Parent.UIState)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
@@ -107,6 +108,7 @@ local function stamp(parent: Instance, text: string): Stamp
 end
 
 type Card = {
+	benefit: TextLabel,
 	root: TextButton,
 	key: string,
 	footer: Stamp,
@@ -162,6 +164,7 @@ local function card(
 		key = product.key,
 		footer = footer,
 		name = name,
+		benefit = benefit,
 		layout = function(width: number, height: number, phone: boolean)
 			Kit.rect(shadow, 0, 6, width, height)
 			Kit.rect(face, 0, 0, width, height)
@@ -225,6 +228,7 @@ local function hero(
 		key = product.key,
 		footer = footer,
 		name = title,
+		benefit = benefit,
 		layout = function(width: number, height: number, phone: boolean)
 			Kit.rect(shadow, 0, 6, width, height)
 			Kit.rect(face, 0, 0, width, height)
@@ -433,6 +437,8 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 	local footer = Kit.frame(panel.face, "SheetFooter", Style.white)
 	local footerLine = Kit.frame(footer, "Line", Style.divider)
 	local footerStamp = stamp(footer, soon)
+	local purchase = button(footerStamp.root, "Purchase", "Confirm purchase in Roblox")
+	purchase.Size = UDim2.fromScale(1, 1)
 	local footerNote =
 		Kit.text(footer, "Note", "", 13, Style.body(Enum.FontWeight.ExtraBold), Style.muted)
 	footerNote.TextWrapped = true
@@ -442,6 +448,46 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 	local current: Catalog.Product? = nil
 	local returnFocus: GuiObject? = nil
 	local duration = 30
+	local controlStamp = ""
+	local function controlSignature(): string
+		if not current then
+			return ""
+		end
+		local value = input()
+		local offer = Presentation.offer(value, current.key, duration)
+		local parts = {
+			current.key,
+			tostring(duration),
+			offer.availability,
+			offer.outcome,
+			tostring(offer.buyAllowed),
+			tostring(offer.toggle),
+			offer.benefit or "",
+			value.modifiers or "",
+		}
+		for _, token in value.tokens do
+			if token.product == current.key then
+				table.insert(parts, `{token.key}:{token.count}:{token.activation}`)
+			end
+		end
+		if current.key == "autoOpen" and value.automation then
+			table.insert(
+				parts,
+				`{value.automation.status}:{value.automation.completed}:{value.automation.reason}`
+			)
+		end
+		if
+			current.key == "luck"
+			or current.key == "boostLuck2"
+			or current.key == "boostLuck4"
+			or current.key == "boostCombo"
+		then
+			for _, figure in FigureCatalog.figures do
+				table.insert(parts, tostring(if value.odds then value.odds[figure.id] else nil))
+			end
+		end
+		return table.concat(parts, "|")
+	end
 	local controls = Scope.create()
 	ctx.scope.add(function()
 		controls.destroy()
@@ -562,20 +608,43 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 		local view = Presentation.view(input(), current.key, duration)
 		footerStamp.label.Text = view.stamp
 		footerStamp.label.TextScaled, footerStamp.label.TextWrapped = true, true
+		local offer = Presentation.offer(input(), current.key, duration)
+		purchase.Active = offer.buyAllowed == true and ctx.commerce ~= nil
+		purchase.Selectable = purchase.Active
+		footerStamp.root.BackgroundColor3 = if purchase.Active
+			then Style.mint
+			else Style.disabledFill
 		footerNote.Text = if input().fixture
 			then "PREVIEW ONLY · Buying disabled"
-			else "Buying disabled · Prices come from Roblox"
+			else "Prices come from Roblox · Native confirmation required"
 		local status = body:FindFirstChild("PresentationStatus") :: TextLabel?
 		if status then
 			status.Text = view.note
 		end
+		local promise = body:FindFirstChild("ProductPromise") :: TextLabel?
+		if promise then
+			promise.Text = current.kind .. " · " .. (offer.benefit or current.benefit)
+		end
 	end
 	local view: Sheet
+	ctx.scope.connect(purchase.Activated, function()
+		if
+			current
+			and ctx.commerce
+			and Presentation.offer(input(), current.key, duration).buyAllowed
+		then
+			ctx.commerce.purchase(current.key, duration)
+		end
+	end)
 	view = {
 		root = root,
 		refresh = refresh,
 		reconcile = function()
 			if not shown or not current then
+				return
+			end
+			if controlStamp == controlSignature() then
+				refresh()
 				return
 			end
 			local key = current.key
@@ -611,9 +680,30 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 				order += 1
 				return order
 			end
-			paragraph(product.kind .. " · " .. product.benefit, nextOrder())
+			paragraph(
+				product.kind
+					.. " · "
+					.. (Presentation.offer(input(), key, duration).benefit or product.benefit),
+				nextOrder()
+			)
+			rows[#rows].Name = "ProductPromise"
 			paragraph(Presentation.view(input(), key, duration).note, nextOrder())
 			rows[#rows].Name = "PresentationStatus"
+			if ctx.commerce and Presentation.view(input(), key, duration).pending then
+				local recovery = button(body, "CheckPurchase", "Check purchase recovery")
+				recovery.Text, recovery.FontFace, recovery.TextSize =
+					"Check again", Style.display(), 16
+				recovery.BackgroundTransparency, recovery.BackgroundColor3 = 0, Style.white
+				recovery.Size, recovery.LayoutOrder = UDim2.new(1, -8, 0, 44), nextOrder()
+				Kit.corner(recovery, 12)
+				Kit.stroke(recovery, Style.ink, Style.outlineSmall)
+				table.insert(rows, recovery)
+				controls.connect(recovery.Activated, function()
+					if ctx.commerce then
+						ctx.commerce.refresh()
+					end
+				end)
+			end
 			if key == "boostCoins" then
 				heading("CHOOSE TOKEN LENGTH", nextOrder())
 				local lengths = Kit.frame(body, "Lengths")
@@ -648,8 +738,43 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 					paint()
 				end
 			end
+			if
+				key == "luck"
+				or key == "boostLuck2"
+				or key == "boostLuck4"
+				or key == "boostCombo"
+			then
+				local projected = input().luckOfferOdds
+				local proposed = if projected
+					then projected[if key == "boostLuck4" then 4 else 2]
+					else nil
+				local base, odds = input().baseOdds, input().odds
+				heading("YOUR NEXT BOX · BASE / CURRENT / WITH THIS LUCK", nextOrder())
+				if base and odds and proposed then
+					for _, collection in FigureCatalog.collections do
+						paragraph(collection.name, nextOrder())
+						for _, figure in FigureCatalog.figures do
+							if figure.collection == collection.id then
+								paragraph(
+									`{figure.name}: {State.percent(base[figure.id] or 0)} / {State.percent(
+										odds[figure.id] or 0
+									)} / {State.percent(proposed[figure.id] or 0)}`,
+									nextOrder()
+								)
+							end
+						end
+					end
+				else
+					paragraph(
+						"Your exact itemized odds are unavailable. This Luck offer cannot be purchased yet.",
+						nextOrder()
+					)
+				end
+			end
 			heading("YOU GET", nextOrder())
-			for _, text in product.gets do
+			local promise = Presentation.offer(input(), key, duration).benefit
+			local promised: { string } = if promise then { promise } else product.gets
+			for _, text in promised do
 				row(text, "Check", nextOrder(), Style.mintText)
 			end
 			heading("GOOD TO KNOW", nextOrder())
@@ -667,7 +792,7 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 					paragraph(text, nextOrder())
 				end
 				paragraph(
-					"These are specification examples, not your current odds. Current and proposed itemized odds for every pool must come from the server before buying. Luck changes weights, never guarantees; pity and reward floors still apply. Buying stays disabled.",
+					"These are specification examples, not your current odds. Your itemized odds above come from the server. Luck changes weights, never guarantees; pity and reward floors still apply. Each box in a batch updates pity.",
 					nextOrder()
 				)
 			end
@@ -679,12 +804,12 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 			then
 				heading("ACTIVATION", nextOrder())
 				paragraph(
-					"Activate from My Perks after confirmed delivery. The timer continues while you're offline. Same boosts add time, not strength. Different Luck strengths cannot overlap. Redundant or incompatible tokens are kept; activation is disabled here.",
+					"Activate from My Perks after confirmed delivery. The timer continues while you're offline. Same boosts add time, not strength. Different Luck strengths cannot overlap. Redundant or incompatible tokens are kept; confirm activation to start a timer.",
 					nextOrder()
 				)
 			end
 			if key == "autoOpen" then
-				heading("AUTO OPEN SETUP · PRESENTATION ONLY", nextOrder())
+				heading("AUTO OPEN", nextOrder())
 				local auto = input().automation
 				paragraph(
 					if auto
@@ -693,11 +818,21 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 					nextOrder()
 				)
 				paragraph(
-					"Start / Stop is disabled in this preview. Stops when requested, finished, unaffordable or leaving. No further Coins are spent after stopping; select Start to resume. Open 10 and Skip stay free.",
+					"Choose your collection, budget and reserve in the Coin Shop. Stops when requested, finished, unaffordable or leaving. No further Coins are spent after stopping; select Start to resume. Open 10 and Skip stay free.",
 					nextOrder()
 				)
 			end
-			local setup = PerkControls.create(body, controls, ctx.effects, input(), key)
+			local setup = PerkControls.create(
+				body,
+				controls,
+				ctx.effects,
+				input(),
+				key,
+				ctx.commerce,
+				function()
+					ctx.navigate("Shop", { automation = true })
+				end
+			)
 			if setup then
 				setup.LayoutOrder = nextOrder()
 				table.insert(rows, setup)
@@ -708,6 +843,7 @@ local function sheet(parent: Instance, ctx: Context.Context, input: () -> Presen
 				else "Buying isn't switched on yet. Prices will come from Roblox."
 			arrange()
 			refresh()
+			controlStamp = controlSignature()
 			GuiService.SelectedObject = close
 			body.CanvasPosition = Vector2.new(0, 0)
 		end,
@@ -867,6 +1003,14 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 		return input
 	end)
 	local function open(key: string)
+		if
+			ctx.commerce
+			and (key == "pouch" or key == "stack" or key == "sack" or key == "chest")
+			and Presentation.offer(input, key).buyAllowed
+		then
+			ctx.commerce.purchase(key, nil)
+			return
+		end
 		sheetView.open(key)
 		Sfx.play("open")
 	end
@@ -1111,6 +1255,8 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 	end
 
 	local visible = false
+	local signature = ""
+	local dirty = true
 	local function refresh()
 		local unused = 0
 		for _, token in input.tokens do
@@ -1122,7 +1268,7 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 		end
 		noticeText.Text = if input.fixture
 			then "PREVIEW ONLY · Illustrative prices · No purchases or rewards"
-			else "Opening soon! Look around; buying isn't switched on yet."
+			else input.modifiers or "Checking your Store offers…"
 		for _, view in views do
 			local cards = table.clone(view.cards)
 			if view.hero then
@@ -1133,6 +1279,8 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 				made.footer.label.TextScaled, made.footer.label.TextWrapped = true, true
 				made.name.Text = Catalog.products[made.key].name
 					.. (if input.longLabels then " · Collector presentation preview" else "")
+				made.benefit.Text = Presentation.offer(input, made.key).benefit
+					or Catalog.products[made.key].benefit
 			end
 			if view.tiers then
 				view.tiers.refresh(input)
@@ -1143,8 +1291,15 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 	local screen: PresentationScreen = {
 		root = root :: GuiObject,
 		present = function(nextInput: Presentation.Input)
+			local nextSignature = Presentation.signature(nextInput)
+			dirty = dirty or signature ~= nextSignature
+			signature = nextSignature
 			input = nextInput
+			if not visible or not dirty then
+				return
+			end
 			observedNow = input.now
+			dirty = false
 			perks.update(input)
 			sheetView.reconcile()
 			refresh()
@@ -1196,6 +1351,15 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 		shown = function(value: boolean)
 			visible = value
 			if value then
+				observedNow = input.now
+				if dirty then
+					dirty = false
+					perks.update(input)
+					arrange()
+				end
+				if ctx.commerce then
+					ctx.commerce.refresh()
+				end
 				refresh()
 				perks.tick(input.now)
 			end

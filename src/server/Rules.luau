@@ -170,6 +170,11 @@ function Rules.boostView(state: Types.State): BoostTypes.View
 		coin = if coin then table.clone(coin) else nil,
 		luck = if luck then table.clone(luck) else nil,
 		coinRemaining = if coin then math.max(0, coin.expires - wall) else 0,
+		activationReasons = Boosts.activationReasons(
+			state.boosts,
+			math.floor(wall),
+			state.luckModifiers.verifiedPermanent
+		),
 		luckRemaining = if luck then math.max(0, luck.expires - wall) else 0,
 		coinFactor = Rules.earningFactors(state).timedCoinFactor,
 		luckWeight = Rules.luck(state),

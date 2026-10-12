@@ -1,5 +1,13 @@
 # Purchase and entitlement foundation (P02)
 
+**P08 update (2026-10-12):** the Store and MN-22 share one client controller. `PurchaseJournal`
+adds strict status-only records under `Prompt_<UserId>` in the existing sidecar before a native
+prompt. It closes the pre-receipt reconnect gap without changing the version-1 grant aggregate.
+Older purchase servers ignore those records and must be excluded before sales activation.
+Historical fixed-grant statements below about not needing a reservation concern grant authority;
+the new journal retains unresolved prompt/UI obligations. See the
+[P08 contract, evidence and P09 handoff](audits/MONETIZATION_STORE_P08_2026-10-12.md).
+
 P06 consumes this foundation with additive optional package feedback and the existing reserved
 delivery hook for Starter's pass claim. See [exact contract changes and P08 handoff](PACKAGES.md).
 The sole dispatcher/protocol and version-1 sidecar are preserved; all products remain disabled.

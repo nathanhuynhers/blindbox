@@ -145,7 +145,7 @@ function Perks.create(parent: Instance, owner: Scope.Scope, open: (string) -> ()
 						"Token_" .. token.key,
 						`{product.name} · ×{token.count} · {token.minutes} min`,
 						token.activation
-							.. "\nActivation is disabled until backend wiring is complete.",
+							.. "\nConfirm activation to start its clock; the timer continues offline.",
 						"Activation details",
 						token.product
 					)
@@ -172,6 +172,9 @@ function Perks.create(parent: Instance, owner: Scope.Scope, open: (string) -> ()
 			for _, tab in { "featured", "upgrades" } do
 				local section = Catalog.sections[Catalog.tab(tab)]
 				local keys = table.clone(section.cards)
+				if section.hero then
+					table.insert(keys, section.hero)
+				end
 				if section.tiers then
 					for _, key in section.tiers do
 						table.insert(keys, key)
@@ -179,7 +182,10 @@ function Perks.create(parent: Instance, owner: Scope.Scope, open: (string) -> ()
 				end
 				for _, key in keys do
 					local offer = Presentation.offer(input, key)
-					if offer.availability ~= "owned" or root:FindFirstChild("Owned_" .. key) then
+					if
+						(offer.availability ~= "owned" and offer.availability ~= "claimed")
+						or root:FindFirstChild("Owned_" .. key)
+					then
 						continue
 					end
 					if not owned then

@@ -8,6 +8,7 @@ local Luck = require(script.Parent.LuckModifiers)
 local Protocol = require(script.Parent.BoostProtocol)
 local CoinModifiers = require(script.Parent.CoinModifiers)
 local BoostTypes = require(game:GetService("ReplicatedStorage").Shared.BoostTypes)
+local PurchaseTypes = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 local Runtime = {}
 export type Commit = (Storage.Session, boolean) -> boolean
 export type Eligibility = {
@@ -30,6 +31,44 @@ function Runtime.ready(storage: Storage.Session, now: number): boolean
 		and storage.pendingRelease == nil
 		and not storage.state.boostCommitPending
 		and now < storage.safeUntil
+end
+-- Store preflight consumes the same validated policy boundary as activation.
+function Runtime.purchaseEligible(
+	storage: Storage.Session,
+	product: Config.Product,
+	eligibility: Eligibility,
+	now: number
+): boolean
+	if
+		not storage.handle
+		or not Runtime.ready(storage, now)
+		or not Runtime.allowed(eligibility)
+	then
+		return false
+	end
+	if product.key == "luck" then
+		return product.kind == "Pass"
+	end
+	local grant = product.grant
+	if not grant or grant.coins ~= 0 or product.kind ~= "DeveloperProduct" then
+		return false
+	end
+	local found = false
+	for token, amount in grant.tokens do
+		local benefit = Config.tokenBenefits[token :: PurchaseTypes.TokenId]
+		if
+			not benefit
+			or (storage.state.boosts.tokens[token :: PurchaseTypes.TokenId] or 0)
+				> 1000000 - amount
+		then
+			return false
+		end
+		if benefit.luck == 2 and storage.state.luckModifiers.verifiedPermanent >= 2 then
+			return false
+		end
+		found = true
+	end
+	return found
 end
 function Runtime.sync(
 	storage: Storage.Session,
