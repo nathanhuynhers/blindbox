@@ -18,7 +18,11 @@ Server product modules can call the returned runtime's `ownership(userId, produc
 `(Ownership, fresh)` and `claimPass` for a once-only bundle promise. Neither is a remote.
 Missing sessions return Unknown/false. Product implementations must still check readiness and
 settle preceding income intervals before changing effective benefits; no effect observer is
-wired by this task. Never use the client's reported ownership as server authority.
+wired by P02 itself. P03A adds the optional non-yielding `ownershipChanged(userId)` dependency
+and third `PurchaseRuntime.start` argument, called immediately after verification for the
+current session. Consumers can read `ownership` inside it and settle before applying changes;
+late results after removal cannot notify a replacement session. Never use the client's reported
+ownership as server authority. See [Coin modifier and P05 integration contract](COIN_MODIFIERS.md).
 
 `PurchaseAvailability` combines configuration, profile readiness, ledger health/capacity,
 ownership, highest owned Coin tier, outstanding prompt and product integration eligibility.

@@ -7,6 +7,7 @@ local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
 local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
+local CoinModifiers = require(script.Parent.CoinModifiers)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -25,7 +26,13 @@ function Profile.encode(state: Types.State): Types.Profile
 		pity[group] = table.clone(counters)
 	end
 	return {
-		schemaVersion = 14,
+		schemaVersion = state.schemaVersion,
+		earningInputs = if state.schemaVersion >= 15
+			then (if state.earningInputs
+				then table.clone(state.earningInputs)
+				else { permanentTier = state.earningFactors.permanentTier })
+			else nil,
+		convenience = if state.schemaVersion >= 15 then table.clone(state.convenience) else nil,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -68,6 +75,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 12
 			and data.schemaVersion ~= 13
 			and data.schemaVersion ~= 14
+			and data.schemaVersion ~= 15
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -93,6 +101,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"sfxVolume",
 			"musicVolume",
 			"deals",
+			"earningInputs",
+			"convenience",
 		})
 	then
 		return nil
@@ -112,6 +122,35 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		return nil
 	end
 	local state = Rules.new(now)
+	if data.schemaVersion == 15 then
+		if typeof(data.earningInputs) ~= "table" then
+			return nil
+		end
+		local inputs = data.earningInputs :: { [string]: unknown }
+		if
+			not fields(inputs, { "permanentTier" })
+			or not CoinModifiers.validTier(inputs.permanentTier)
+		then
+			return nil
+		end
+		state.schemaVersion = 15
+		state.earningInputs = { permanentTier = inputs.permanentTier :: number }
+		if typeof(data.convenience) ~= "table" then
+			return nil
+		end
+		local preferences = data.convenience :: { [string]: unknown }
+		if
+			not fields(preferences, { "autoCollect", "movement" })
+			or typeof(preferences.autoCollect) ~= "boolean"
+			or typeof(preferences.movement) ~= "boolean"
+		then
+			return nil
+		end
+		state.convenience =
+			{ autoCollect = preferences.autoCollect, movement = preferences.movement }
+	elseif data.earningInputs ~= nil or data.convenience ~= nil then
+		return nil
+	end
 	state.coins, state.step = data.coins :: number, data.step :: number
 	for id, count in data.owned :: { [string]: unknown } do
 		if
@@ -297,7 +336,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	end
 	-- v6-v13 predate plaza stall deals (Rules.new: no window, full stock). v14 requires the
 	-- record; a stale window is harmless because Deals.refresh drops it before any use or save.
-	if data.schemaVersion == 14 then
+	if (data.schemaVersion :: number) >= 14 then
 		local deals = data.deals
 		if typeof(deals) ~= "table" then
 			return nil

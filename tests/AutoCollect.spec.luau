@@ -146,4 +146,4 @@ collect.destroy()
 now += 10
 state.earnings["grove.pebble"] = 99
 check(collect.step() == 0, "destroyed collector stays inert")
-print(`PASS: {checks} Auto Collect checks (actual bank helper exposed only in test fixture)`)
+print(`PASS: {checks} Auto Collect checks (actual shared Rules.transferBank)`)

@@ -9,9 +9,8 @@ No platform identity, sale, live place version or production profile was changed
 Read with [monetization decisions](MONETIZATION.md#concise-decision-table--smallest-remaining-user-choices),
 [purchase interfaces](PURCHASE_FOUNDATION.md), [opening](OPENING.md),
 [AFK handoff](AFK_RECONNECT.md), [quality gates](qa/QUALITY_GATES.md) and
-[device matrix](qa/DEVICE_TEST_MATRIX.md). The local decision table still records D2 as
-pending. P03A reports subsequent D2 approval with the policy/earned-lineage validation
-gate; consume the reconciled decision table at integration. Either way, this task supplies
+[device matrix](qa/DEVICE_TEST_MATRIX.md). The merged decision table records full D2
+approval with the policy/earned-lineage validation gate. This task supplies
 no policy/lineage implementation and `policyAllowed` must remain false until upstream
 validation authorizes the ordinary randomized purchase and paid automation treatment.
 P02 remains unconfigured and off sale. Ownership is Unknown in that configuration.
@@ -56,8 +55,8 @@ P02 remains unconfigured and off sale. Ownership is Unknown in that configuratio
 
 ## Exact shared-file requirements for P03A
 
-P03A reports these contracts implemented in worktree 17cb; they are **not merged in
-this worktree**. Merge the shared work before wiring the modules:
+P03A's shared contracts from commit `9c57d5d` are now merged alongside these modules.
+The remaining bootstrap wiring must consume them as follows:
 
 1. Export `Rules.transferBank(state: Types.State, id: string): number` as the exact
    existing helper. No settlement, quest change or revision in this export. Do not
@@ -226,9 +225,9 @@ Existing movement unbind remains owned by player lifecycle.
 
 Selected union: UI/input and opening lifecycle, gameplay/security, Display ownership,
 bank conservation, storage/AFK and migration compatibility at shared integration.
-The added suites are registered in tests/run.py. Its generated test-only Rules export
-exposes the actual existing private helper until P03A's export merges; it contains no
-replacement transfer formula. Production Modules are used with injected services and
+The added suites are registered in tests/run.py. The temporary generated test-only
+Rules export was removed during the merge; Auto Collect tests now call P03A's real
+server export directly. Production modules are used with injected services and
 engine/UI doubles. Tests are not mapped into Rojo or installed as production grants.
 
 PASS: pinned `rokit install --no-trust-check` and `wally install`; `stylua src`,
@@ -248,6 +247,12 @@ close/scroll changes, the affected suites and full-source static checks passed a
 43 Auto Open, 32 Auto Collect, 29 service, 41 client/control, 14 opening bridge,
 9 confirmed-result delivery and 31 movement checks. These are isolated module/engine-double checks, not integrated
 feature runtime tests. FAIL: none outstanding.
+
+Merge verification, October 11, 2026: full-source pinned formatting/lint, Rojo
+sourcemap/build, Luau diagnostics and the complete merged standalone suite passed.
+This includes P03A's 191 Coin modifier checks and all six convenience suites against
+the real exported bank helper. Both tasks' test registrations were retained. These
+passes do not complete the bootstrap/native acceptance listed below.
 
 Required **NOT RUN** acceptance after merging/wiring: native two-client callback owner
 isolation and replication, real P02 ownership refresh/revocation, manual/automatic/swap

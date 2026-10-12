@@ -58,7 +58,8 @@ local function reward(coins: number, token: Types.TokenId?): Types.Grant
 	end
 	return table.freeze({ coins = coins, tokens = table.freeze(tokens) })
 end
--- D1 approved 2026-10-11. Platform types, IDs, D2 and D3 are still undecided.
+-- D1/D2 approved 2026-10-11; D2 policy/lineage validation is still pending.
+-- Platform types, IDs and D3 remain undecided. No product is enabled by design approval.
 add("coins_2", 149, true, nil, 2)
 add("coins_4", 399, true, nil, 4)
 add("coins_8", 999, true, nil, 8)
@@ -81,7 +82,7 @@ add("combo_boost", 79, false, reward(0, "Combo2_30"), nil)
 add("offline_double", nil, false, nil, nil)
 local Config = {
 	products = table.freeze(products),
-	-- D1 token promises only. Activation/clock/stacking semantics await D2.
+	-- D1 token promises only. Approved D2 activation/clock/stacking await P04 implementation.
 	tokenBenefits = table.freeze({
 		Coins2_15 = table.freeze({ coins = 2, luck = 1, seconds = 900 }),
 		Coins2_30 = table.freeze({ coins = 2, luck = 1, seconds = 1800 }),

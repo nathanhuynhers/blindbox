@@ -94,6 +94,10 @@ One-opening overrides are server-only, temporary and consumed inside preflighted
   `PurchaseRuntime`/`PurchaseLedger`: disabled P02 purchase foundation; server verification,
   private typed state and atomic durable receipt + reserved reward sidecar. No wallet release,
   gameplay effects or client wiring. See [purchase integration contract](PURCHASE_FOUNDATION.md).
+- `CoinModifiers`/`CoinModifierRuntime`: highest verified configured Coin tier, explicit earning
+  factor/source resolution and old-rate settlement. Paid activation stays gated on D2 policy/
+  lineage validation. Schema 15 checkpoints and owner snapshot/P05 hooks are documented in
+  [Coin modifier contract](COIN_MODIFIERS.md); no Store purchase wiring or P03B fulfillment.
 - `AfkReconnect`/`AfkClient`/`AfkIdle`: server-timed public-server idle reconnect, fresh client
   confirmations, a frozen saved/released profile handoff and conditional lease recovery.
   `AfkConfig` centralizes tuning; `AfkNotice` reuses the existing UI tokens. See the

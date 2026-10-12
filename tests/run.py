@@ -15,6 +15,8 @@ out.mkdir(parents=True, exist_ok=True)
 modules = {
     "ConvenienceTypes": "shared", "AutoOpen": "server", "AutoCollect": "server",
     "ConvenienceProtocol": "server", "ConvenienceService": "server", "ConvenienceClient": "client", "ConveniencePresentation": "client", "ConvenienceResults": "client",
+	"CoinModifiers": "server",
+	"CoinModifierRuntime": "server",
     "PurchaseTypes": "shared", "PurchaseConfig": "server", "PurchaseProtocol": "server",
     "PurchaseLedger": "server", "Entitlements": "server", "PurchaseAvailability": "server", "PurchaseService": "server",
     "AdminTypes": "shared", "AdminConfig": "server", "AdminProtocol": "server", "AdminOverrides": "server", "AdminService": "server", "AdminClient": "client",
@@ -61,10 +63,6 @@ UI_PRELUDE = "\n".join([
 ])
 for name, folder in modules.items():
     source = (root / "src" / folder / f"{name}.luau").read_text(encoding="utf-8-sig")
-    if name == "Rules" and "Rules.transferBank =" not in source and "function Rules.transferBank" not in source:
-        # Integration-pending fixture: expose the ACTUAL private shared helper only in
-        # ignored generated tests. No duplicate transfer implementation or live export.
-        source = source.replace("return Rules", "Rules.transferBank = transferBank\nreturn Rules")
     if name in ("CoinBurst", "DisplayEarnings"):
         source = source.replace("--!strict", '--!strict\nlocal Engine = require("./CoinEngine")\nlocal game, workspace, Instance, Enum, task, os, warn = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task, Engine.os, Engine.warn\nlocal Color3, Vector3, Vector2, CFrame, UDim2, UDim, TweenInfo = Engine.Color3, Engine.Vector3, Engine.Vector2, Engine.CFrame, Engine.UDim2, Engine.UDim, Engine.TweenInfo\nlocal ColorSequence, NumberRange, NumberSequence, NumberSequenceKeypoint = Engine.ColorSequence, Engine.NumberRange, Engine.NumberSequence, Engine.NumberSequenceKeypoint')
         source = source.replace("require(script.Parent.UIIcons)", "Engine.Icons")
@@ -123,7 +121,7 @@ for name, folder in modules.items():
 
 # Exercise the exact production owner-snapshot send function, with only its I/O context injected.
 bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
-send = bootstrap[bootstrap.index("local function send("):bootstrap.index("local afk = AfkReconnect.create(")]
+send = bootstrap[bootstrap.index("local function send("):bootstrap.index("-- P02 invokes")]
 sender = '\n'.join(f'local {name} = require("./{name}")' for name in
                    ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals"))
 sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
@@ -171,6 +169,7 @@ run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
 run("SaveSafety.spec")
 run("Purchases.spec")
+run("CoinModifiers.spec")
 run("Admin.spec", "AdminClient.spec", "AdminUI.spec")
 # Exercise missing authorization with the actual resolver/service, not a parallel policy mock.
 if not requested or "AdminDisabled.spec" in requested:
