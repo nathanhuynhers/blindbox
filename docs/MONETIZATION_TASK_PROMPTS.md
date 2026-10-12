@@ -4,9 +4,14 @@ Prepared 2026-10-11 from the [monetization plan](MONETIZATION.md) and the user's
 and addition of 2x offline earnings. These are copy-ready prompts for future tasks, not evidence
 of implementation or authorization to run them during this documentation task.
 
-Each text block is a complete prompt. Product rules stay in `docs/MONETIZATION.md`; approved
-design decisions should be recorded there before dependent implementation. All product IDs,
-Robux prices, pack amounts, benefit values and unresolved purchase types remain undecided.
+Each text block is a complete prompt. Product rules and approval status stay in
+`docs/MONETIZATION.md`. D1 benefits/amounts/default list prices and the per-return Double & Claim
+flow are approved there; D2/D3, the offline purchase price, platform types/receipt protocol and
+release remain unresolved. No prompt can override that decision table. The P07 design is approved
+and its UI is implemented with buying disabled; P08 now concerns remaining purchase integration.
+
+The former combined P03 is split into P03A (earning tiers) and P03B (this return's Double & Claim).
+This keeps normal income modifiers separate from the one-off purchase of a displayed reward.
 
 ## Grouping and execution order
 
@@ -14,23 +19,48 @@ Robux prices, pack amounts, benefit values and unresolved purchase types remain 
 | --- | --- | --- | --- |
 | P01 | Product rules, economy/value and platform review | MN-01, MN-02; decisions for all retained products | Current repository and user review |
 | P02 | Shared purchases, entitlements and durable fulfillment | MN-03 | Approved P01 contracts |
-| P03 | Permanent Coin tiers and 2x offline earnings | MN-04, MN-22 | P01, P02 |
-| P04 | Permanent Luck and timed Coin/Luck/combo boosts | MN-11, MN-12 | P01, P02, P03's modifier interface |
+| P03A | Permanent Coin tiers and normal earning snapshots | MN-04 | Approved relevant P01 rules, P02 |
+| P03B | Per-return offline Double & Claim | MN-22 | P02; approved normal-award/snapshot contract, including P03A/P04 effects where applicable |
+| P04 | Permanent Luck and timed Coin/Luck/combo boosts | MN-11, MN-12 | Approved relevant P01 rules, P02, P03A's modifier interface |
 | P05 | Auto Open, Auto Collect and movement upgrade | MN-07, MN-08, MN-09 | P01, P02; existing gameplay paths |
-| P06 | Coin packs, Starter Pack and VIP | MN-05, MN-06, MN-10 | P01, P02; required benefits from P03–P05 |
-| P07 | Central Robux store UI design | All retained features | P01 for final copy; labelled fixtures can be designed earlier |
-| P08 | Store UI implementation and purchase integration | P07 design plus MN-03/product presentation | Approved P07; P02–P06 contracts |
-| P09 | End-to-end monetization acceptance | All retained features | Implemented P02–P06 and P08 |
+| P06 | Coin packs, Starter Pack and VIP | MN-05, MN-06, MN-10 | Approved relevant P01 rules, P02; P03A/P04 benefit interfaces |
+| P07 | Central Robux store UI design | All retained features | Already approved/implemented with buying off; use the existing design for refinements |
+| P08 | Store purchase integration | P07 design plus MN-03/product presentation | Approved P07; P02–P06 contracts, including P03B |
+| P09 | End-to-end monetization acceptance | All retained features | Implemented P02–P06, P03B and P08 |
 
-Run P01 first. P07 can then establish the design before feature implementation; P02–P06 build
-the shared backend and grouped products, followed by P08 and P09. P04 stays late relative to
-core gameplay polish, as required by the existing Luck backlog. Dependencies describe sequencing,
-not a request to run multiple agents or make unrelated changes together.
+Finish only the remaining P01 decisions; do not reopen the approved offline flow. P02 establishes
+the foundation, P03A supplies the earnings interface, and P04 composes timed modifiers. P03B,
+P05 and P06 consume those contracts, followed by final P08 integration and P09. P04 stays late
+relative to core gameplay polish, as required by the existing Luck backlog.
+
+### Parallel work and suggested assignment
+
+These are workflow recommendations, not a claim that one model is universally better. Given the
+user's UI preference, use Claude for visual design/polish and Codex for logic, integration and tests.
+
+| Work | Suggested agent | Parallel conditions |
+| --- | --- | --- |
+| Remaining P01 decisions | Codex or Claude, with user decisions recorded explicitly | Can run alongside isolated P07 visual refinement |
+| P02 foundation | Codex | Can run alongside P07 refinements or P08 presentation-only work using agreed fixtures; purchase wiring waits |
+| P03A earning tiers + P05 convenience | Codex | Possible after P02 if shared interfaces are fixed; separate runtime files and one integration owner |
+| P04 Luck/boosts | Codex | Needs P03A's resolver; avoid concurrent edits to Rules/CollectionEconomy/Profile with other economy tasks |
+| P03B offline claims + P06 packages/VIP | Codex | Possible after foundation/benefit contracts are fixed, with isolated branches and one owner for shared profile/receipt integration |
+| P07 visual polish / P08 store presentation | Claude preferred; Codex can implement approved design | Can overlap backend work using fixed contracts/fixtures; existing approved UI must be preserved |
+| P08 real purchase wiring | Codex, with Claude for visual review | Integrate after required product endpoints and state contracts exist |
+| P09 acceptance | Codex for automated/runtime checks; Claude for visual review | Read-only checks can overlap on a stable build; one owner fixes shared code, and Studio sessions run one at a time |
+
+Use separate branches/worktrees for parallel code changes. Worktrees isolate edits, not contracts:
+assign one writer/integrator for `Types`, `Protocol`, `Rules`, `Profile`, persistence, server/client
+init, shared purchase dispatch and modifier interfaces. Do not let two tasks rewrite these files
+in the same checkout or run competing Studio/Rojo sessions against the same place. If file ownership
+cannot be separated, run the overlapping implementation sequentially. Merge and reverify before
+dependent integration. UI-only fixture work must not pretend the backend or platform purchase passed.
 
 The remaining eleven player-facing features are Coin multipliers, Coin packs, Starter Pack,
 Auto Open, Auto Collect, movement speed upgrade, VIP, timed Coin boosts, permanent Luck,
 timed Luck/combo boosts and 2x offline earnings. Timed Coin/Luck effects share an implementation;
-Coin/offline modifiers share earnings rules; Coin packs/Starter Pack/VIP share configured benefits.
+Normal offline income shares earning rules; the Double & Claim purchase has its own award/receipt
+lifecycle. Coin packs/Starter Pack/VIP share configured benefits.
 Convenience passes share entitlement integration but retain separate runtime modules.
 
 Fast Open, Premium Multi Open, paid Shelf/plot/Display/opening/status cosmetics, premium rotating
@@ -69,9 +99,9 @@ Resolve these choices into reviewable recommendations:
 - Coin pack values, Starter Pack eligibility/contents, and the actual non-cosmetic VIP benefits.
 - Auto Open cadence, supported ordinary purchase mode and stop/resume behavior; Auto Collect rules.
 - Movement benefit and stacking without lowering the current free movement speed.
-- Permanent entitlement versus per-return purchase for 2x offline earnings. It doubles the normal
-  offline reward: current 0.5x becomes 1x before other modifiers, with the same six-hour cap and
-  60-second minimum. Define eligibility timing, pending rewards, rounding and modifier composition.
+- Offline Double & Claim is already confirmed: free Claim N or paid Double & Claim 2N for this
+  return's displayed amount. Do not reopen a permanent-pass alternative. Resolve only outstanding
+  price/platform/receipt details and shared-effect decisions; preserve the approved claim flow.
 
 Verify current official Roblox Creator/platform documentation for selected purchase types,
 receipts/entitlements, paid randomized items, applicable per-player restrictions and odds disclosure,
@@ -131,15 +161,18 @@ Studio/service checks where available. Report exactly what ran and what remains 
 Document the purchase contracts and persistence changes in the relevant existing system references.
 ```
 
-## P03 — Coin multipliers and 2x offline earnings
+## P03A — Coin multipliers and normal earning snapshots
 
 ```text
-Implement permanent Coin tiers and the 2x offline earnings bonus as one coherent earnings task.
-Read AGENTS.md, docs/MONETIZATION.md (MN-04/MN-22), docs/MONETIZATION_TASK_PROMPTS.md (P01–P03),
+Implement the approved permanent Coin tiers and the normal earning snapshot contract.
+Read AGENTS.md, docs/MONETIZATION.md (MN-04 and the decision table),
+docs/MONETIZATION_TASK_PROMPTS.md (P01/P02/P03A),
 docs/GAME_DESIGN.md, docs/archive/MVP.md, docs/ROADMAP.md, docs/ECONOMY.md, docs/ARCHITECTURE.md,
 docs/DATA_MODEL.md and docs/AFK_RECONNECT.md. Inspect actual earning/claim paths and tests first.
-Require approved source eligibility, tier/upgrade, stacking and offline purchase-type decisions
-from P01, and use P02's purchase/entitlement contracts. Do not invent prices, product IDs or stacking.
+Use P02's purchase/entitlement contracts. D1 is recorded as approved; D2 shared effects still need
+an explicit decision before dependent implementation. Continue independent scaffolding/tests;
+do not invent product IDs, stacking rules or approvals. Classify the affected gates using
+docs/qa/QUALITY_GATES.md before implementation.
 
 Implement 2x/4x/8x as the approved effective tier model, avoiding accidental multiplication of all
 owned tiers. Centralize earnings modifier resolution so later timed boosts/VIP can compose with it.
@@ -148,24 +181,77 @@ Settle elapsed online earnings at the previous effective rate before any modifie
 or ends; buying a multiplier cannot retroactively multiply existing banked Coins. Preserve unique
 Display placement, duplicates, themed bonuses, per-figure banks, fractions and wallet safety limits.
 
-Implement 2x offline Coins as twice the ordinary eligible offline reward. The current free rate is
-0.5 of effective online Display income, so this feature alone raises that to 1.0, not 2.0. Keep the
-six-hour cap and 60-second minimum. Use server-owned saved time and state; never accept a client
-duration, reward amount or multiplier. Apply the approved rules for other modifiers, eligibility
-during absence and pending earnings. Handle AFK reconnect/save-release handoffs without double accrual.
+Provide the approved server-owned saved earning inputs for the ordinary offline reward, including
+the unmonetized rate and eligible permanent factors. Integrate with P04's time-overlap contract
+only when approved/implemented; never apply return-time boost state to an entire absence.
+Keep the existing six-hour cap and 60-second minimum and handle AFK save/release safely.
+Do not implement the paid Double & Claim action here or create an offline pass/factor; P03B
+consumes the ordinary displayed reward as a separate one-off purchase.
 
-If P01 selects a permanent entitlement, grant the doubled offline amount once under the approved
-entitlement timing. If P01 selects a per-return purchase, use P02's durable receipt path and identify
-the eligible return reward robustly: delayed receipts, a normal claim before fulfillment, repeated
-claims and rejoining must not lose or duplicate the purchased bonus. Implement only the selected
-model. Preserve the existing free claim/tap-outside flow and leftover pending-reward recovery.
-
-Expose owner-visible effective modifiers and an honest base/bonus/total offline breakdown for P08;
+Expose owner-visible effective modifiers and the normal offline reward contract for P03B/P08;
 do not build the whole shop. Test tier combinations, source eligibility, mid-interval changes,
 rounding/overflow, offline boundaries, pending reward handling, reconnects, receipt replay and
 save failures. Update economy/data contracts as needed without changing unrelated tuning.
 Run repository-required checks, Luau diagnostics and relevant persistent/multi-client Studio checks;
-clearly separate automated results from remaining native/platform acceptance.
+Report PASS, FAIL, NOT RUN and N/A under the change-aware quality gates. Review schema/mixed-server
+compatibility where affected; do not publish or mutate production profiles.
+```
+
+## P03B — Offline Double & Claim for this return
+
+```text
+Implement the user-confirmed offline Double & Claim flow for Blindbox Town (MN-22).
+Read AGENTS.md, docs/MONETIZATION.md's MN-22 section and decision table,
+docs/MONETIZATION_TASK_PROMPTS.md (P02/P03A/P03B), docs/GAME_DESIGN.md, docs/archive/MVP.md,
+docs/ROADMAP.md, docs/ECONOMY.md, docs/ARCHITECTURE.md, docs/DATA_MODEL.md,
+docs/AFK_RECONNECT.md and docs/ui-redesign/MONETIZATION_STORE.md. Inspect current offline
+calculation, pending claims, profile leases, receipt foundation and OfflineEarnings UI first.
+Choose the union of applicable gates in docs/qa/QUALITY_GATES.md; use the device matrix for UI.
+
+The approved behavior is a purchase choice for one return, not a permanent pass or an automatic
+change to offline accrual. When the welcome-back screen shows N Coins, offer free Claim N and
+paid Double & Claim 2N. Example: 10,000 shown means 10,000 free or 20,000 after successful paid
+fulfillment. Double the displayed whole-Coin N exactly: raw normal 10.75 shows 10 and pays 20,
+not 21. A later absence needs a new optional purchase; this purchase grants no future entitlement.
+
+Use the existing server-computed normal reward and approved earning/saved modifier contracts.
+Preserve the six-hour accrual cap, 60-second minimum and ordinary free claim/rejoin behavior.
+Do not multiply Coin tiers, VIP or boosts a second time after computing N. Do not redesign
+normal offline tuning or implement unapproved D2 effect/provenance rules. Where needed, use
+P03A/P04's approved normal earning snapshot and boost-overlap contract before final integration.
+
+Use P02's shared durable receipt path. The offline price, platform purchase type and receipt
+association details are not yet approved: prepare the concrete reservation/recovery design and
+continue independent fixtures/tests, but do not invent them or enable purchases prematurely.
+The recommended repeatable developer product is not permission to create a product or go live.
+
+Freeze N and a stable award identity when the reward is computed. Durably reserve that exact
+award and extra N before a purchase prompt. Receipt association must survive cancellation,
+reopening, logout, delayed/out-of-order delivery and a newer return: never attach a receipt to
+whichever popup is currently visible. Specify an unambiguous protocol; platform receipts do
+not carry the popup's award ID. Permit only one unresolved offline purchase per account.
+
+If base N is still unclaimed, a verified receipt claims N plus extra N once. If base N already
+claimed normally or auto-claimed on rejoin, fulfill only the reserved extra N once. Commit
+grant/base-claim/double-fulfillment/receipt state durably together, or retain a recoverable
+obligation before acknowledgement. Replays and repeated clicks cannot pay 4N. Unexpected extra
+charged receipts need explicit recovery, never silent discard. Preserve legacy pending amounts.
+Apply approved wallet-cap/paid-credit handling so capacity changes cannot destroy purchased value.
+
+Preserve the approved existing UI. Wire Claim and Double & Claim through the shared purchase
+contract; do not duplicate P08's native prompt launcher or store infrastructure. Show the actual
+platform price only when configured/eligible. Never auto-prompt, offer a zero/claimed reward,
+or treat a client purchase-completion callback as grant authority. Disable competing actions
+while purchase/fulfillment is active; cancellation restores free Claim. Closing the popup cannot
+erase a reservation, and free dismissal must not consume a charged bonus or start a purchase.
+Coordinate with the P08 UI owner rather than concurrently rewriting OfflineEarnings.
+
+Test normal/cancelled/successful claims, rounding, zero rewards, repeat delivery, delayed receipts
+after free claim/rejoin, newer awards, full wallet, failed saves, lost replies, competing sessions,
+legacy upgrades and AFK handoff. Verify owner isolation with two Studio clients and the changed
+popup across required viewports/inputs where available. Review schema and mixed-server safety.
+Report PASS/FAIL/NOT RUN/N/A, distinguishing fixtures from real platform/persistent/device tests.
+Do not create live products, publish, change production data or claim verification not performed.
 ```
 
 ## P04 — Luck and timed Coin/Luck boosts
@@ -176,7 +262,7 @@ Read AGENTS.md, docs/MONETIZATION.md (MN-11/MN-12), docs/MONETIZATION_TASK_PROMP
 docs/GAME_DESIGN.md, docs/archive/MVP.md, docs/ROADMAP.md, docs/ECONOMY.md, docs/ARCHITECTURE.md
 and docs/DATA_MODEL.md. Inspect CollectionEconomy, Rules, pity/odds projections, income settlement,
 ShopLuck and applicable tests. Core gameplay polish and P01's approved Luck/boost specification
-must precede final implementation. Use P02 for fulfillment and P03's earnings modifier interface.
+must precede final implementation. Use P02 for fulfillment and P03A's earnings modifier interface.
 
 Implement only approved Luck tiers/formulas and boost SKUs. The illustrative 2x/4x Luck and
 15/30/60-minute durations are not permission to select final values. Make permanent Luck, timed
@@ -248,7 +334,7 @@ Studio checks, recording what is still blocked or untested.
 ```text
 Implement Coin packs, Starter Pack and VIP using shared configured grants and benefits.
 Read AGENTS.md, docs/MONETIZATION.md (MN-05/MN-06/MN-10), docs/MONETIZATION_TASK_PROMPTS.md
-(P01/P02/P03/P04/P06), docs/GAME_DESIGN.md, docs/archive/MVP.md, docs/ROADMAP.md, docs/ECONOMY.md,
+(P01/P02/P03A/P04/P06), docs/GAME_DESIGN.md, docs/archive/MVP.md, docs/ROADMAP.md, docs/ECONOMY.md,
 docs/ARCHITECTURE.md and docs/DATA_MODEL.md. Inspect reward/profile paths and the implemented
 foundation/modifier interfaces. Require approved contents, eligibility, limits, Coin-source
 rules and purchase types; do not invent amounts, prices or VIP perks.
@@ -311,11 +397,10 @@ data/TBD in mockups until P01 supplies them, and specify platform-sourced price 
 
 Design product cards/details and category navigation, tier comparison and ownership, boost
 duration/stacking explanation, Starter eligibility/claimed state, VIP benefit list, and a clear
-explanation of the 2x offline bonus. If its purchase type is still unresolved, provide labelled
-permanent-pass and per-return alternatives rather than silently choosing. For the per-return
-variant, design a secondary action on the existing offline popup with base/bonus/total Coins,
-while keeping the ordinary free Claim prominent and usable. For a permanent pass, show ownership
-and the applied bonus. Show active boosts and Auto Open/Auto Collect controls/status where useful.
+explanation of the confirmed per-return Double & Claim choice. Keep the ordinary free Claim
+prominent and show N versus 2N for the displayed return reward. There is no permanent offline
+pass alternative. Preserve the already approved design; price/platform/fulfillment details
+remain explicit unresolved inputs. Show active boosts and automation controls/status where useful.
 
 Specify every relevant state: loading price/ownership, available, owned, lower/superseded tier,
 already claimed, ineligible/restricted, unavailable configuration/service, native purchase prompt,
