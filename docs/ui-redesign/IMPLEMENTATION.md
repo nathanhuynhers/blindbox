@@ -142,6 +142,12 @@ moderation failures. Construction emits one warning per missing ID.
 
 ## Automated checks
 
+The Store presentation extension uses a provisional typed adapter, isolated test fixtures and
+local setup/activation demonstrations. Buying remains disabled and the existing entry points and
+free offline Claim remain intact. See [Store presentation handoff](STORE_PRESENTATION_HANDOFF.md)
+for the backend field/event requirements, fixture workflow and **pending native device matrix**.
+The previous P07 Studio evidence below does not verify the new states.
+
 `python tests/run.py <abs path>/build/tools/luau/luau.exe` runs:
 
 - `UI.spec` (projections, formatting, layout geometry, nav and 3D themes, scope).

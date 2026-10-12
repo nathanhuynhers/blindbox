@@ -88,7 +88,17 @@ local boostRules = {
 	"The timer runs in real time, even while you're offline",
 	"The same boost again adds time, not strength",
 }
-local packRules = { "Coins go straight to your balance", "Packs don't change box odds" }
+local packRules = {
+	"Coins go straight to your balance",
+	"Packs don't change box odds",
+	"Coin multipliers never apply to packs",
+}
+
+-- Exact specification examples, never fabricated player-specific odds. D2 remains unresolved.
+Catalog.luckExamples = table.freeze({
+	"Grove / Tide — Common, Uncommon, Rare:\nBase: 60%, 30%, 10%\nLuck ×2: 54.545455%, 27.272727%, 18.181818%\nLuck ×4: 46.153846%, 23.076923%, 30.769231%",
+	"Concepts / Echo / Stars — Common, Uncommon, Rare, Legendary, Mythical:\nBase: 60%, 25%, 13.9%, 1%, 0.1%\nLuck ×2: 52.173913%, 21.739130%, 24.173913%, 1.739130%, 0.173913%\nLuck ×4: 41.379310%, 17.241379%, 38.344828%, 2.758621%, 0.275862%",
+})
 
 local function product(fields: Product): Product
 	return table.freeze(fields)

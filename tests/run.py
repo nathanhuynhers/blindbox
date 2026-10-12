@@ -41,7 +41,7 @@ ui = [
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
     "ShopScreen", "ShopLuck", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
-    "GoalsScreen", "ShelvesScreen", "LoginScreen", "StoreCatalog", "StoreScreen", "RevealCard", "Onboarding", "Interface",
+    "GoalsScreen", "ShelvesScreen", "LoginScreen", "StoreCatalog", "StorePresentation", "StorePerks", "StorePerkControls", "StoreScreen", "OfflineEarnings", "RevealCard", "Onboarding", "Interface",
 ]
 for name in ui:
     modules[name] = "client"
@@ -137,6 +137,10 @@ def run(*names: str) -> None:
 
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("CoinEngine", "CoinCounter.spec")
+fixture_source = (root / "tests/StoreFixtures.luau").read_text(encoding="utf-8")
+fixture_source = fixture_source.replace('require(script.Parent.StorePresentation)', 'require("./StorePresentation")')
+(out / "StoreFixtures.luau").write_text(fixture_source, encoding="utf-8")
+run("StorePresentation.spec")
 run("PlayerMovement.spec")
 run("PityProgress.spec")
 run("LinearPity.spec")

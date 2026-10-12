@@ -348,9 +348,16 @@ The client never sends a price, amount, odds, duration or purchase result.
 
 Art is frame-drawn (UIIcons and stroked glyphs) until the Store illustration set exists. The
 sunbursts, sparkles and buddy faces from the prototype need that art set and are not built.
-Purchase states (§10), prices, My Perks lists, the HUD boost chip, Auto Open setup/Stop and
-Double & Claim need the P02 purchase foundation and the product tasks; the handoff in §12 still
-applies to them.
+Purchase-state presentation (§10), preview prices, My Perks lists, local Auto Open setup/Stop
+demonstrations and Double & Claim fixture states are now implemented behind the client-only
+typed presentation adapter. Buying and real activation/settings remain disabled; authoritative
+data and purchase wiring, the HUD boost chip and Coin Shop automation integration need the
+purchase foundation. See [Store presentation handoff](STORE_PRESENTATION_HANDOFF.md) for the
+provisional inputs, isolated fixtures, remaining wiring and verification status.
+
+The checks below are **historical P07 shell evidence**. They do not verify this presentation
+extension; its native visual/device matrix remains pending because no Studio session was
+connected during the extension task.
 
 **Checks run:** see the completion report. Stylua, Selene, Luau type analysis, the Rojo build and
 the full `tests/run.py` suite pass. Studio (desktop 1529×730 and the 667×375 SafeArea preview)
