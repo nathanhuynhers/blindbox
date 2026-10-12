@@ -13,6 +13,8 @@ requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.sp
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "PurchaseTypes": "shared", "PurchaseConfig": "server", "PurchaseProtocol": "server",
+    "PurchaseLedger": "server", "Entitlements": "server", "PurchaseAvailability": "server", "PurchaseService": "server",
     "AdminTypes": "shared", "AdminConfig": "server", "AdminProtocol": "server", "AdminOverrides": "server", "AdminService": "server", "AdminClient": "client",
     "AfkConfig": "shared", "AfkIdle": "shared", "AfkReconnect": "server",
     "Storage": "server", "Settings": "server", "AfkClient": "client",
@@ -122,6 +124,12 @@ sender += 'local function dealClock() return Deals.window(os.time()), Economy.de
 sender += send + '\nreturn send\nend\n'
 (out / "SnapshotSender.luau").write_text(sender, encoding="utf-8")
 
+# Test the actual adapter's profile/lease readiness boundary, without native services.
+purchase_runtime = (root / "src/server/PurchaseRuntime.luau").read_text(encoding="utf-8")
+readiness = purchase_runtime[purchase_runtime.index("local function ready("):purchase_runtime.index("local service = Service.create(")]
+(out / "PurchaseReadiness.luau").write_text(
+    "return function(Players, sessionFor, os)\n" + readiness + "\nreturn ready\nend\n", encoding="utf-8")
+
 def run(*names: str) -> None:
     """Copy test files into build/tests and run each spec; stop on the first failure."""
     for name in names:
@@ -150,6 +158,7 @@ run("PlotEngine", "CollectionPlates.spec")
 run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
 run("SaveSafety.spec")
+run("Purchases.spec")
 run("Admin.spec", "AdminClient.spec", "AdminUI.spec")
 # Exercise missing authorization with the actual resolver/service, not a parallel policy mock.
 if not requested or "AdminDisabled.spec" in requested:

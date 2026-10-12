@@ -190,7 +190,9 @@ Native UpdateAsync callbacks validate before writing and do not yield, following
 UpdateAsync contract](https://create.roblox.com/docs/cloud-services/data-stores#update-data).
 They acquire/renew a unique session token, validate existing data, and commit the whole profile.
 The starter grant only occurs for a confirmed absent key. Unknown/corrupt/newer schemas fail
-closed; they are never replaced with defaults. No paid receipts or cross-player transfers exist.
+closed; they are never replaced with defaults. The disabled [P02 purchase foundation](PURCHASE_FOUNDATION.md)
+stores paid receipt markers with reserved rewards in a separate atomic sidecar; no paid reward
+enters the gameplay wallet, no sales are enabled, and no cross-player transfers exist.
 
 Leases last 120 seconds. Autosaves run about every 30 seconds; gameplay stops after 85 seconds
 without a confirmed renewal or immediately on a save failure. Bounded retries use the same

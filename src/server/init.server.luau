@@ -20,6 +20,7 @@ local ShelfShowcase = require(script.ShelfShowcase)
 local PlotSlots = require(script.PlotSlots)
 local PlotConfig = require(script.PlotConfig)
 local Storage = require(script.Storage)
+local PurchaseRuntime = require(script.PurchaseRuntime)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
 local PlayerSpawn = require(script.PlayerSpawn)
@@ -86,6 +87,10 @@ local adminRemote = Instance.new("RemoteFunction")
 adminRemote.Name = "Admin"
 adminRemote.Parent = folder
 folder.Parent = ReplicatedStorage
+local purchases = PurchaseRuntime.start(folder, function(player: Player): Storage.Session?
+	local session = sessions[player]
+	return if session and not shuttingDown then session.storage else nil
+end)
 -- Current plaza deal window and its length. Studio playtests may shorten it with the
 -- StudioDealWindowSeconds attribute on ServerStorage; live servers always use the config.
 local function dealClock(): (number, number)
@@ -342,6 +347,7 @@ local function closeStorage(storage: Storage.Session)
 	closing -= 1
 end
 local function remove(player: Player)
+	purchases.remove(player.UserId)
 	admin.remove(player.UserId)
 	afk.remove(player)
 	local binding = movement[player]
@@ -408,6 +414,7 @@ local function added(player: Player)
 		afkCharacter = nil,
 	}
 	sessions[player] = session
+	task.spawn(purchases.add, player.UserId)
 	afk.add(player)
 	PlayerPlot.bind(session.plot, function(actor, direction)
 		afk.activity(actor)
@@ -681,6 +688,7 @@ table.insert(
 )
 game:BindToClose(function()
 	shuttingDown = true
+	purchases.destroy()
 	afk.destroy()
 	for player, binding in movement do
 		PlayerMovement.unbind(binding)

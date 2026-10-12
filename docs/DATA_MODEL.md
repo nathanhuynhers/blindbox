@@ -7,6 +7,11 @@ catalog figure IDs are unchanged. The prior audit reviewed schema 12 before the 
 merge; it is now an upgrade source, not the written format.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
+The disabled P02 purchase foundation adds a separate version-1 durable receipt/reward sidecar,
+not fields or a migration in this schema. See [purchase ledger and compatibility](PURCHASE_FOUNDATION.md#durable-fulfillment-and-compatibility).
+Reserved purchased value cannot yet be transferred into this wallet. Offline award authority
+and consumption/lineage schemas remain future integration work requiring mixed-server review.
+
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
 shared `Rarity.Id` type: Common, Uncommon, Rare, Legendary or Mythical. Catalog startup rejects
 unknown labels. The economy reset introduces permanent duplicates and persisted pity. Figure assignments are unchanged. See [rarity architecture and future content](RARITY.md).
