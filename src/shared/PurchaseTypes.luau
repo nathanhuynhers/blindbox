@@ -24,6 +24,25 @@ export type Result = {
 		| "State",
 	reason: string,
 }
+export type PackageState = {
+	eligible: boolean,
+	eligibilityReason: string,
+	confirmed: boolean,
+	claimed: boolean,
+	coins: number?,
+	token: TokenId?,
+	tokenSeconds: number?,
+	vipFactor: number?,
+	dailyCoins: number?,
+	dailyClaimed: boolean?,
+	dailySupplementAvailable: boolean?,
+	appliedVipFactor: number,
+	fulfilledCoins: number,
+	fulfilledTokens: number,
+	assistedCredit: number,
+	walletCredited: number,
+	creditUsable: boolean,
+}
 export type ProductState = {
 	key: string,
 	kind: PlatformKind?,
@@ -33,6 +52,7 @@ export type ProductState = {
 	ownership: Ownership,
 	ownershipFresh: boolean,
 	fulfillment: "None" | "Pending" | "Reserved" | "Recovering",
+	package: PackageState?,
 }
 export type Snapshot = {
 	sequence: number,

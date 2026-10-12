@@ -13,6 +13,7 @@ requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.sp
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "PackageGrants": "server", "PackageRuntime": "server",
     "BoostTypes": "shared", "Boosts": "server", "LuckModifiers": "server", "BoostRuntime": "server", "BoostProtocol": "server",
     "OfflineTypes": "shared", "OfflineAwards": "server", "OfflinePurchase": "server", "OfflineRuntime": "server",
     "OfflinePurchaseClient": "client",
@@ -137,6 +138,12 @@ purchase_runtime = (root / "src/server/PurchaseRuntime.luau").read_text(encoding
 readiness = purchase_runtime[purchase_runtime.index("local function ready("):purchase_runtime.index("local service = Service.create(")]
 (out / "PurchaseReadiness.luau").write_text(
     "return function(Players, sessionFor, os)\n" + readiness + "\nreturn ready\nend\n", encoding="utf-8")
+prompt_start = purchase_runtime.index("prompt = function(userId, product)") + len("prompt = ")
+prompt_end = purchase_runtime.index("-- Intentionally closed", prompt_start)
+prompt_source = purchase_runtime[prompt_start:prompt_end].strip().removesuffix(",")
+(out / "PurchasePrompt.luau").write_text(
+    "return function(Players, sessionFor, os, MarketplaceService, Enum, integration, ready)\nreturn "
+    + prompt_source + "\nend\n", encoding="utf-8")
 
 def run(*names: str) -> None:
     """Copy test files into build/tests and run each spec; stop on the first failure."""
@@ -178,6 +185,7 @@ run("UIEngine", "OfflineDoubleClient.spec")
 run("CoinModifiers.spec")
 run("LuckBoosts.spec")
 run("BoostPersistence.spec")
+run("Packages.spec", "PackagePersistence.spec")
 run("Admin.spec", "AdminClient.spec", "AdminUI.spec")
 # Exercise missing authorization with the actual resolver/service, not a parallel policy mock.
 if not requested or "AdminDisabled.spec" in requested:

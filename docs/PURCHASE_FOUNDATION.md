@@ -1,5 +1,9 @@
 # Purchase and entitlement foundation (P02)
 
+P06 consumes this foundation with additive optional package feedback and the existing reserved
+delivery hook for Starter's pass claim. See [exact contract changes and P08 handoff](PACKAGES.md).
+The sole dispatcher/protocol and version-1 sidecar are preserved; all products remain disabled.
+
 Implemented 2026-10-11; native verification pending. Consumes approved P01 D1 and P07.
 All twenty product variants have **nil platform types/IDs**, `salesEnabled = false` and
 `integrationReady = false`. No launch subset was selected. No products, sales, place version

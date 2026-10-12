@@ -26,6 +26,8 @@ local CoinModifiers = require(script.CoinModifiers)
 local CoinModifierRuntime = require(script.CoinModifierRuntime)
 local BoostRuntime = require(script.BoostRuntime)
 local OfflineRuntime = require(script.OfflineRuntime)
+local PackageRuntime = require(script.PackageRuntime)
+local PackageGrants = require(script.PackageGrants)
 local OfflineAwards = require(script.OfflineAwards)
 local Protocol = require(script.Protocol)
 local World = require(script.World)
@@ -57,6 +59,7 @@ type Session = {
 	syncTime: number,
 	homeTime: number,
 	boostRequestTime: number,
+	starterRetryAt: number,
 	spawn: PlayerSpawn.Binding?,
 	afkPosition: Vector3?,
 	afkCharacter: Model?,
@@ -115,12 +118,45 @@ end, function(userId)
 		ownershipChanged(userId)
 	end
 end, {
-	eligible = offlineIntegration.eligible,
-	prepare = offlineIntegration.prepare,
+	eligible = function(userId, product)
+		local player = Players:GetPlayerByUserId(userId)
+		local owner = if player then purchaseSession(player) else nil
+		return if PackageGrants.supports(product.key)
+			then owner ~= nil and PackageRuntime.eligible(owner, product, os.clock())
+			else offlineIntegration.eligible(userId, product)
+	end,
+	prepare = function(userId, product)
+		if not PackageGrants.supports(product.key) then
+			return offlineIntegration.prepare(userId, product)
+		end
+		local player = Players:GetPlayerByUserId(userId)
+		local owner = if player then purchaseSession(player) else nil
+		return owner ~= nil and PackageRuntime.eligible(owner, product, os.clock())
+	end,
 	fulfill = offlineIntegration.fulfill,
+	packageState = function(userId, product)
+		if not PackageGrants.supports(product.key) then
+			return nil
+		end
+		local player = Players:GetPlayerByUserId(userId)
+		local owner = if player then purchaseSession(player) else nil
+		if not owner then
+			return nil
+		end
+		local view = PackageGrants.view(
+			owner.state,
+			product.key,
+			owner.handle ~= nil and BoostRuntime.ready(owner, os.clock()),
+			PackageRuntime.eligible(owner, product, os.clock()),
+			math.floor(os.time() / 86400)
+		)
+		view.eligibilityReason = PackageRuntime.reason(owner, product, os.clock())
+		return view
+	end,
 	deliverReserved = function(userId, key, entry)
 		-- Only token-only immutable grants belong to P04. Mixed Starter is separate.
-		if entry.grant.coins ~= 0 or next(entry.grant.tokens) == nil then
+		local package = PackageGrants.supports(entry.product)
+		if not package and (entry.grant.coins ~= 0 or next(entry.grant.tokens) == nil) then
 			return nil
 		end
 		local player = Players:GetPlayerByUserId(userId)
@@ -128,7 +164,9 @@ end, {
 		if not owner or not player then
 			return false
 		end
-		local saved = BoostRuntime.fulfill(owner, key, entry, os.clock())
+		local saved = if package
+			then PackageRuntime.fulfill(owner, key, entry, os.clock())
+			else BoostRuntime.fulfill(owner, key, entry, os.clock())
 		if purchaseSession(player) == owner and purchaseChanged then
 			purchaseChanged(player)
 		end
@@ -228,7 +266,10 @@ local function refreshCoinModifiers(player: Player, session: Session, now: numbe
 	local boostsChanged = BoostRuntime.sync(storage, PurchaseConfig.products, function(key)
 		return purchases.ownership(player.UserId, key)
 	end, { policy = "Unknown", lineageValidated = false, disclosureReady = false }, os.time(), now)
-	if changed or boostsChanged then
+	local vipChanged = PackageRuntime.sync(storage, PurchaseConfig.products, function(key)
+		return purchases.ownership(player.UserId, key)
+	end, false, now)
+	if changed or boostsChanged or vipChanged then
 		if storage.handle then
 			storage.status = "Autosave pending"
 		end
@@ -501,6 +542,7 @@ local function added(player: Player)
 		syncTime = -math.huge,
 		homeTime = -math.huge,
 		boostRequestTime = -math.huge,
+		starterRetryAt = -math.huge,
 		spawn = nil,
 		afkPosition = nil,
 		afkCharacter = nil,
@@ -738,6 +780,7 @@ table.insert(
 			end
 		end
 		local beforeRevision = session.transaction.state.revision
+		local beforeDaily = session.transaction.state.lastDailyDay
 		local reply, changed = Transactions.process(
 			session.transaction,
 			raw,
@@ -754,6 +797,24 @@ table.insert(
 		)
 		if not reply then
 			return
+		end
+		if
+			changed
+			and session.transaction.state.vipOwned
+			and session.transaction.state.lastDailyDay ~= beforeDaily
+		then
+			local saved = PackageRuntime.commitDaily(session.storage, os.clock())
+			if sessions[player] ~= session then
+				return
+			end
+			if not saved then
+				send(player, session, {
+					id = reply.id,
+					ok = false,
+					message = "Your daily reward is being saved. Reconnect to recover it.",
+				})
+				return
+			end
 		end
 		if changed then
 			if typeof(raw) == "table" then
@@ -786,6 +847,26 @@ table.insert(
 		local now = os.clock()
 		for player, session in sessions do
 			refreshCoinModifiers(player, session, now)
+			-- P02 ownership observers stay non-yielding. Durable Starter reconciliation
+			-- runs separately at a bounded retry cadence and survives a failed save.
+			if
+				now >= session.starterRetryAt
+				and session.storage.ready
+				and not purchases.busy(player.UserId)
+				and not (
+					session.storage.state.packages and session.storage.state.packages.starterClaim
+				)
+			then
+				local owned, fresh = purchases.ownership(player.UserId, "starter")
+				if owned == "Owned" and fresh then
+					session.starterRetryAt = now + 30
+					task.spawn(function()
+						if sessions[player] == session and not shuttingDown then
+							purchases.claimPass(player.UserId, "starter")
+						end
+					end)
+				end
+			end
 			local character = player.Character
 			local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
 			if root and root:IsA("BasePart") then

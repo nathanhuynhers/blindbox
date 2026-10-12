@@ -2,6 +2,7 @@
 local Rarity = require(script.Parent.Rarity)
 local BoostTypes = require(script.Parent.BoostTypes)
 local OfflineTypes = require(script.Parent.OfflineTypes)
+local PurchaseTypes = require(script.Parent.PurchaseTypes)
 export type Figure = {
 	id: string,
 	name: string,
@@ -72,6 +73,18 @@ export type CoinModifierView = {
 	ownershipFresh: boolean,
 	reason: string,
 }
+export type PackageRecord = {
+	assistedCredit: number,
+	starterClaim: string?,
+	deliveries: {
+		[string]: {
+			product: string,
+			platformId: number,
+			kind: "Pass" | "DeveloperProduct",
+			grant: PurchaseTypes.Grant,
+		},
+	},
+}
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
@@ -108,6 +121,7 @@ export type Profile = {
 	convenience: ConveniencePreferences?,
 	boosts: BoostTypes.Record?,
 	offlineData: OfflineTypes.Record?,
+	packages: PackageRecord?,
 }
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
 export type State = Profile & {
@@ -120,6 +134,8 @@ export type State = Profile & {
 	boosts: BoostTypes.Record,
 	luckModifiers: BoostTypes.LuckView,
 	paidBoostsAllowed: boolean,
+	vipOwned: boolean,
+	vipAllowed: boolean,
 	boostClockValid: boolean,
 	boostCommitPending: boolean,
 	offlineCommitPending: boolean,

@@ -1,12 +1,16 @@
 # Persistent data model
 
 Default new-profile schema: **14**, written to `BlindBox_Economy2_Studio` and
-`BlindBox_Economy2_Live`. The decoder also supports forward-only **15/16/17** described
-below. It accepts valid Economy2 schemas 6–17; 6–13 upgrade to 14
+`BlindBox_Economy2_Live`. The decoder also supports forward-only **15/16/17/18** described
+below. It accepts valid Economy2 schemas 6–18; 6–13 upgrade to 14
 in the acquisition UpdateAsync as well as the normal save path. Schemas 1–5, future versions and malformed records fail closed. Existing
 catalog figure IDs are unchanged. The prior audit reviewed schema 12 before the Welcome Quest
 merge; it is now an upgrade source, not the written format.
 See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
+
+P06 adds gated forward-only **v18** package credit/delivery records and a lifetime Starter marker,
+committed with existing boost inventory and VIP daily claims. Old readers reject v18. No paid
+wallet transfer, sale or release is enabled. See [package schema and P08 handoff](PACKAGES.md).
 
 The disabled P02 purchase foundation adds a separate version-1 durable receipt/reward sidecar,
 not fields or a migration in this schema. See [purchase ledger and compatibility](PURCHASE_FOUNDATION.md#durable-fulfillment-and-compatibility).
@@ -20,7 +24,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | New profiles14; applied inputs/preferences15; boost operations16; positive offline award/retained record17. Valid6–13 upgrade to14; unsupported versions fail closed |
+| schemaVersion | New profiles14; applied inputs/preferences15; boost operations16; positive offline award/retained record17; package delivery/VIP daily credit18. Valid6–13 upgrade to14; unsupported versions fail closed |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -146,7 +150,7 @@ See [award/receipt protocol candidate, release review and integration handoff](O
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names remain those established above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-14/v15/v16/v17 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first;
+schema-14/v15/v16/v17/v18 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first;
 v15 is used after an applied-input/preference change; v16 after a token operation; v17 on an offline award).
 Wallet and banks save atomically in one aggregate.
 Replacement collects as many outgoing whole Coins as the wallet accepts; residual fractions and

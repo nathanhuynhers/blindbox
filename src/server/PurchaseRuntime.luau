@@ -13,6 +13,7 @@ export type Integration = {
 	prepare: (number, Config.Product) -> boolean,
 	fulfill: (Ledger.Receipt, Config.Product) -> boolean?,
 	deliverReserved: ((number, string, Ledger.Entry) -> boolean?)?,
+	packageState: ((number, Config.Product) -> Types.PackageState?)?,
 }
 local Runtime = {}
 function Runtime.start(
@@ -47,6 +48,7 @@ function Runtime.start(
 		prepare = if integration then integration.prepare else nil,
 		fulfill = if integration then integration.fulfill else nil,
 		deliverReserved = if integration then integration.deliverReserved else nil,
+		packageState = if integration then integration.packageState else nil,
 		now = os.clock,
 		ready = ready,
 		update = function(key, transform)
@@ -78,6 +80,14 @@ function Runtime.start(
 				or not ready(userId)
 				or Players:GetPlayerByUserId(userId) ~= player
 				or sessionFor(player) ~= profile
+			then
+				return false
+			end
+			-- Metadata lookup yields. Recheck policy/capacity immediately before the native prompt.
+			if
+				not integration
+				or not integration.eligible(userId, product)
+				or not ready(userId)
 			then
 				return false
 			end

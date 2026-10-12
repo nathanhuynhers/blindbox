@@ -1,5 +1,10 @@
 # Implemented architecture
 
+P06 adds server-only `PackageGrants`/`PackageRuntime` through P02's committed delivery and verified
+ownership interfaces. Fixed paid value stays protected credit; Starter token/marker and VIP daily
+supplement commit coherently. See [package boundaries and P08 handoff](PACKAGES.md). Paid use and
+release remain disabled.
+
 `src/shared/Rarity.luau` owns public rarity identity/order/type/palette. Server
 `Economy` defines reusable economic tiers, bucket/pity/duplicate profiles, collection references
 and explicit figure income units/weights. `CollectionEconomy` validates configuration and derives

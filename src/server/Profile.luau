@@ -1,5 +1,6 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
+local PurchaseTypes = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Rules = require(script.Parent.Rules)
@@ -10,6 +11,7 @@ local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local CoinModifiers = require(script.Parent.CoinModifiers)
 local Boosts = require(script.Parent.Boosts)
 local OfflineAwards = require(script.Parent.OfflineAwards)
+local PackageGrants = require(script.Parent.PackageGrants)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -23,6 +25,10 @@ local function fields(value: { [string]: unknown }, allowed: { string }): boolea
 	return true
 end
 function Profile.encode(state: Types.State): Types.Profile
+	assert(
+		state.schemaVersion < 18 or (state.packages ~= nil and state.offlineData ~= nil),
+		"Incomplete package aggregate"
+	)
 	local pity: { [string]: Types.Pity } = {}
 	for group, counters in state.pityByGroup do
 		pity[group] = table.clone(counters)
@@ -54,6 +60,9 @@ function Profile.encode(state: Types.State): Types.Profile
 		earningInputs = inputs,
 		convenience = if state.schemaVersion >= 15 then table.clone(state.convenience) else nil,
 		boosts = if state.schemaVersion >= 16 then Boosts.copy(state.boosts) else nil,
+		packages = if state.schemaVersion >= 18 and state.packages
+			then PackageGrants.copy(state.packages)
+			else nil,
 		offlineData = if state.schemaVersion >= 17 and state.offlineData
 			then OfflineAwards.copy(state.offlineData, state.offlinePending)
 			else nil,
@@ -102,6 +111,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 15
 			and data.schemaVersion ~= 16
 			and data.schemaVersion ~= 17
+			and data.schemaVersion ~= 18
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -131,6 +141,7 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"convenience",
 			"boosts",
 			"offlineData",
+			"packages",
 		})
 	then
 		return nil
@@ -204,6 +215,30 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		end
 		state.boosts = boosts
 	elseif data.boosts ~= nil then
+		return nil
+	end
+	if (data.schemaVersion :: number) >= 18 then
+		local packages = PackageGrants.decode(data.packages)
+		if not packages then
+			return nil
+		end
+		state.packages = packages
+		if
+			packages.starterClaim
+			and (state.boosts.tokens["Coins2_15" :: PurchaseTypes.TokenId] or 0) == 0
+		then
+			local activated = false
+			for _, activation in state.boosts.activations do
+				if activation.token == "Coins2_15" then
+					activated = true
+					break
+				end
+			end
+			if not activated then
+				return nil
+			end
+		end
+	elseif data.packages ~= nil then
 		return nil
 	end
 	state.coins, state.step = data.coins :: number, data.step :: number

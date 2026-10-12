@@ -12,6 +12,7 @@ local Shelves = require(script.Parent.Shelves)
 local Deals = require(script.Parent.Deals)
 local CoinModifiers = require(script.Parent.CoinModifiers)
 local Boosts = require(script.Parent.Boosts)
+local PackageGrants = require(script.Parent.PackageGrants)
 local OfflineAwards = require(script.Parent.OfflineAwards)
 local LuckModifiers = require(script.Parent.LuckModifiers)
 local BoostTypes = require(game:GetService("ReplicatedStorage").Shared.BoostTypes)
@@ -30,6 +31,8 @@ function Rules.new(now: number): Types.State
 		boosts = Boosts.empty(),
 		luckModifiers = LuckModifiers.free(),
 		paidBoostsAllowed = false,
+		vipOwned = false,
+		vipAllowed = false,
 		boostClockValid = false,
 		boostCommitPending = false,
 		offlineCommitPending = false,
@@ -237,6 +240,22 @@ function Rules.setCoinModifiers(
 		state.revision += 1
 	end
 	state.coinModifiers = table.clone(view)
+	return changed
+end
+-- Verified VIP applies once. Settle the old rate before any ownership/policy change.
+function Rules.setVip(state: Types.State, owned: boolean, allowed: boolean, now: number): boolean
+	local applied = owned and allowed
+	local factor = if applied then 1.1 else 1
+	local changed = state.vipOwned ~= owned or state.vipAllowed ~= applied
+	if changed then
+		Rules.settle(state, now)
+		state.vipOwned, state.vipAllowed = owned, applied
+		state.earningFactors.vipFactor = factor
+		if applied then
+			state.schemaVersion = math.max(16, state.schemaVersion)
+		end
+		state.revision += 1
+	end
 	return changed
 end
 -- P05's validated owner adapter owns readiness/entitlement checks. Preferences alone grant nothing.
@@ -701,6 +720,9 @@ function Rules.mutate(
 			if state.lastDailyDay >= today then
 				return false, "Come back after the next daily reset.", nil
 			end
+			if not PackageGrants.dailyCapacity(state) then
+				return false, "Your daily reward is waiting for purchase credit space.", nil
+			end
 		elseif state.coins < price * count then
 			return false, "Not enough Coins yet.", nil
 		end
@@ -713,6 +735,7 @@ function Rules.mutate(
 		id = figures[1]
 		if action == "Daily" then
 			state.lastDailyDay = today
+			PackageGrants.daily(state)
 		else
 			state.coins -= price * count
 		end

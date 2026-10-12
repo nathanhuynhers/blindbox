@@ -24,6 +24,8 @@ export type Dependencies = {
 	-- Fixed grants transfer only from immutable committed P02 entries. nil keeps
 	-- unsupported bundles reserved; false defers acknowledgement until recovery.
 	deliverReserved: ((number, string, Ledger.Entry) -> boolean?)?,
+	-- Additive owner-only product feedback. It cannot authorize a prompt or grant.
+	packageState: ((number, Config.Product) -> Types.PackageState?)?,
 }
 type Session = {
 	entitlements: Entitlements.State,
@@ -98,6 +100,7 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 				eligible = eligible,
 			})
 			table.insert(states, {
+				package = if deps.packageState then deps.packageState(userId, product) else nil,
 				key = product.key,
 				kind = product.kind,
 				platformId = product.platformId,
@@ -470,14 +473,21 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 			kind = "Pass",
 			grant = product.grant,
 		})
+		local delivered: boolean? = nil
+		if record and deps.deliverReserved then
+			local marker = "pass:" .. tostring(product.platformId)
+			local ok, value = pcall(deps.deliverReserved, userId, marker, record.entries[marker])
+			delivered = if ok then value else false
+		end
 		session.working = false
 		if record then
-			session.ledger, session.ledgerStatus = record, "Ready"
+			session.ledger, session.ledgerStatus =
+				record, if delivered == false then "Recovering" else "Ready"
 		else
 			session.ledgerStatus = "Recovering"
 		end
 		send(userId, session, nil)
-		return record ~= nil
+		return record ~= nil and delivered ~= false
 	end
 	return api
 end
