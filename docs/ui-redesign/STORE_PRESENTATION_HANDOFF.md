@@ -15,7 +15,32 @@ existing call signature and returns the normal Screen plus `present(input)` and 
 The current Interface continues to use the existing shell and entry points; it supplies no Store
 purchase data. Default cards remain Coming soon. Fixture data lives under `tests`, outside Rojo.
 
-The later integrator should project the backend's final public contract into these client types
+During the merge into master, P02 commit `7c2c41f` became available. Its implemented wire
+contract is [PurchaseTypes](../../src/shared/PurchaseTypes.luau), documented in
+[Purchase foundation](../PURCHASE_FOUNDATION.md#ui-integration-contract). This merge keeps both
+tasks intact and does not connect purchases. Use that existing contract for the later boundary;
+do not introduce a competing purchase remote or modify the global gameplay snapshot.
+
+P02's `PurchaseState` event supplies owner-only sequenced snapshots and optional results.
+Subscribe before requesting State; discard older sequence values within a connection. Project
+`products[].available/reason`, `ownership/ownershipFresh`, `fulfillment`, `ready`, `ledgerStatus`
+and `promptProduct` into presentation readiness, loading, availability and prompt states. Use
+the P02-to-P07 product-key mapping in its integration table, including the three separate Coin
+boost variants. Price lookup uses configured platform identity and the viewing player's runtime
+metadata, never P02's planning defaults. The configured catalog remains off sale with nil IDs.
+
+`PromptOpened` maps to prompting; `AwaitingReceipt` remains pending; `Recovering` remains
+recovery. **Reserved is saved value awaiting gameplay integration, not delivered Coins, an
+activated perk or a completed offline claim.** Keep it in Arriving and use explicit delivery-
+pending copy when wiring the adapter. Aggregate reserved tokens are not yet activatable tokens.
+Owned plus fresh confirms platform ownership; it does not prove a Starter bundle's gameplay
+delivery. Rejected or Cancelled must not imply “weren't charged” without a confirmed no-purchase
+result. P02 does not yet expose active timers, settings, automation jobs, policy-specific
+eligibility, gameplay delivery acknowledgement or a configured offline offer; those inputs and
+the final adapter subscription remain outstanding. Its `OfflineAward` is a future server input,
+not a client purchase payload.
+
+The later integrator should project the backend's public contract into these client types
 in one focused boundary, rather than making the backend adopt these provisional names:
 
 | Presentation input | Required authoritative source / meaning |
@@ -108,6 +133,7 @@ persistence, monetary fulfillment and release checks are outside this change's o
 | Pinned `rokit install`; `wally install` | PASS | Successful after allowing tool caches outside the worktree; zero dependencies retained. |
 | Store presentation fixtures | PASS | 499 assertions: state/price separation, no requests/grants, duration selection, bounded setup/cost, hidden reflow, timers, offline locks/free Claim and teardown. Engine double does not render. |
 | Existing Screens / UI / Scroll specs | PASS | 2,345 / 1,291 / 6 checks: free flows, navigation, device geometry and lifecycle regression. Geometry in a double is not native visual acceptance. |
+| Merged purchase foundation regression | PASS | 105 `Purchases.spec` assertions after the clean merge; both suites retained in `tests/run.py`. This is isolated foundation evidence, not a real purchase. |
 | `stylua src`; `stylua --check src` | PASS | Final source formatting check returned success. |
 | `selene src` | PASS | 0 errors, 0 warnings, 0 parse errors; API-cache access required outside the sandbox. |
 | `rojo build default.project.json -o RobloxWorkspace.rbxlx` | PASS | Pinned Rojo build succeeded; generated output remains ignored. |
@@ -128,6 +154,6 @@ native matrix and wire the final approved backend contract in a separate integra
 
 FAIL: none remaining in the final checks. Initial lint/type issues were corrected and rerun.
 The automated command was
-`python tests/run.py C:/Users/natha/Documents/RobloxWorkspace/build/tools/luau/luau.exe StorePresentation.spec Screens.spec UI.spec Scroll.spec`.
+`python tests/run.py C:/Users/natha/Documents/RobloxWorkspace/build/tools/luau/luau.exe StorePresentation.spec Screens.spec UI.spec Scroll.spec Purchases.spec`.
 No broader economy/persistence suite or real-purchase test was claimed. No new native visual
 evidence exists for these states; the supplied Studio fixture/check scripts are unrun tools.
