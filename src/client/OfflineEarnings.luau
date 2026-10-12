@@ -18,7 +18,7 @@ export type Popup = {
 	present: (Presentation.OfflineInput) -> (),
 }
 
-function Offline.create(effects: () -> boolean, claim: () -> ()): Popup
+function Offline.create(effects: () -> boolean, claim: () -> (), purchase: (() -> boolean)?): Popup
 	local open: (() -> ())? = nil
 	local input: Presentation.OfflineInput? = nil
 	local paint: (() -> ())? = nil
@@ -43,6 +43,15 @@ function Offline.create(effects: () -> boolean, claim: () -> ()): Popup
 	return {
 		present = function(nextInput: Presentation.OfflineInput)
 			input = nextInput
+			if
+				nextInput.claimed
+				and nextInput.outcome ~= "prompting"
+				and nextInput.outcome ~= "saving"
+				and nextInput.outcome ~= "recovering"
+			then
+				close()
+				return
+			end
 			if paint then
 				paint()
 			end
@@ -111,14 +120,36 @@ function Offline.create(effects: () -> boolean, claim: () -> ()): Popup
 				price = true,
 			}, scope, effects, done)
 			button.setPrice(coins)
-			local double = Button.create(face, "DoubleClaim", {
-				variant = "mint",
-				text = "Double & Claim",
-				size = 18,
-				radius = 18,
-				drop = 4,
-				detail = "2× this return · Price TBD",
-			}, scope, effects, function() end)
+			local double = Button.create(
+				face,
+				"DoubleClaim",
+				{
+					variant = "mint",
+					text = "Double & Claim",
+					size = 18,
+					radius = 18,
+					drop = 4,
+					detail = "2× this return · Price TBD",
+				},
+				scope,
+				effects,
+				function()
+					if
+						blocked
+						or not input
+						or input.fixture
+						or not input.buyAllowed
+						or not input.priceText
+						or not purchase
+					then
+						return
+					end
+					blocked = true
+					if not purchase() then
+						blocked = false
+					end
+				end
+			)
 			double.set("Double & Claim", false, "Price TBD · Buying disabled")
 			local status = Kit.text(
 				face,
@@ -175,8 +206,14 @@ function Offline.create(effects: () -> boolean, claim: () -> ()): Popup
 					double.button.Visible = offer.eligible
 					double.set(
 						`Double & Claim {offer.doubleText}`,
-						false,
-						"2× this return · Price TBD"
+						not offer.fixture
+							and not blocked
+							and offer.buyAllowed == true
+							and offer.priceText ~= nil
+							and purchase ~= nil,
+						if offer.priceText
+							then `2× this return · {offer.priceText}`
+							else "2× this return · Price TBD"
 					)
 				else
 					-- Production has no authoritative numeric 2N/eligibility contract yet.

@@ -11,6 +11,10 @@ local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
 local Deals = require(script.Parent.Deals)
 local CoinModifiers = require(script.Parent.CoinModifiers)
+local Boosts = require(script.Parent.Boosts)
+local OfflineAwards = require(script.Parent.OfflineAwards)
+local LuckModifiers = require(script.Parent.LuckModifiers)
+local BoostTypes = require(game:GetService("ReplicatedStorage").Shared.BoostTypes)
 local Rules = {
 	rates = CollectionEconomy.rates,
 	odds = CollectionEconomy.odds({}),
@@ -23,6 +27,14 @@ function Rules.new(now: number): Types.State
 		schemaVersion = 14,
 		earningFactors = CoinModifiers.free(),
 		convenience = { autoCollect = false, movement = false },
+		boosts = Boosts.empty(),
+		luckModifiers = LuckModifiers.free(),
+		paidBoostsAllowed = false,
+		boostClockValid = false,
+		boostCommitPending = false,
+		offlineCommitPending = false,
+		boostWall = 0,
+		boostTime = now,
 		coinModifiers = {
 			verifiedTier = 1,
 			appliedTier = 1,
@@ -99,24 +111,108 @@ function Rules.refreshDay(state: Types.State, day: number)
 	state.goalProgress = math.max(state.goalProgress, math.min(3, count))
 end
 function Rules.rate(state: Types.State): number
-	return Rules.baseRate(state) * CoinModifiers.factor(state.earningFactors, "Display")
+	return Rules.baseRate(state) * CoinModifiers.factor(Rules.earningFactors(state), "Display")
 end
 function Rules.baseRate(state: Types.State): number
 	return subtotal(state) + Rules.bonus(state)
 end
 function Rules.settle(state: Types.State, now: number)
 	local elapsed = math.max(0, now - state.time)
+	local first = state.boostWall + math.max(0, state.time - state.boostTime)
 	state.time = math.max(state.time, now)
+	local inputs = table.clone(state.earningFactors)
+	inputs.timedCoinFactor = 1
+	local eligible = state.paidBoostsAllowed
+		and state.boostClockValid
+		and not state.boostCommitPending
+	local weighted = elapsed
+		+ (if eligible then Boosts.overlap(state.boosts.coin, first, first + elapsed) else 0)
 	local multiplier = (if Rules.bonus(state) > 0 then 1 + Economy.setBonus else 1)
-		* CoinModifiers.factor(state.earningFactors, "Display")
+		* CoinModifiers.factor(inputs, "Display")
 	for _, id in state.display.slots do
 		if id ~= "" then
 			state.earnings[id] = math.min(
 				Economy.coinLimit,
-				(state.earnings[id] or 0) + elapsed * Rules.figureRate(state, id) * multiplier
+				(state.earnings[id] or 0) + weighted * Rules.figureRate(state, id) * multiplier
 			)
 		end
 	end
+end
+function Rules.boostNow(state: Types.State): number
+	return state.boostWall + math.max(0, state.time - state.boostTime)
+end
+function Rules.earningFactors(state: Types.State): Types.EarningFactors
+	local inputs = table.clone(state.earningFactors)
+	inputs.timedCoinFactor = if state.paidBoostsAllowed
+			and state.boostClockValid
+			and not state.boostCommitPending
+		then Boosts.active(state.boosts.coin, Rules.boostNow(state))
+		else 1
+	return inputs
+end
+function Rules.luck(state: Types.State): number
+	if not state.paidBoostsAllowed or not state.boostClockValid or state.boostCommitPending then
+		return 1
+	end
+	return math.max(
+		state.luckModifiers.permanent,
+		Boosts.active(state.boosts.luck, Rules.boostNow(state))
+	)
+end
+function Rules.boostView(state: Types.State): BoostTypes.View
+	local wall = Rules.boostNow(state)
+	local coin, luck = state.boosts.coin, state.boosts.luck
+	return {
+		tokens = table.clone(state.boosts.tokens),
+		coin = if coin then table.clone(coin) else nil,
+		luck = if luck then table.clone(luck) else nil,
+		coinRemaining = if coin then math.max(0, coin.expires - wall) else 0,
+		luckRemaining = if luck then math.max(0, luck.expires - wall) else 0,
+		coinFactor = Rules.earningFactors(state).timedCoinFactor,
+		luckWeight = Rules.luck(state),
+		clockValid = state.boostClockValid,
+		paidAllowed = state.paidBoostsAllowed,
+		redundantLuck = state.luckModifiers.verifiedPermanent >= 2
+			and Boosts.active(luck, wall) == 2,
+	}
+end
+-- Server UTC observation. Rollback suppresses paid effects before any unscheduled settlement;
+-- projected wall time never decreases, and no token gets extra duration from a clock reversal.
+function Rules.syncBoosts(
+	state: Types.State,
+	view: BoostTypes.LuckView,
+	allowed: boolean,
+	wall: number,
+	now: number
+): boolean
+	local previousValid = state.boostClockValid
+	local valid = wall > 0
+		and wall <= 100000000000
+		and wall % 1 == 0
+		and wall >= state.boosts.lastClock
+	if not valid then
+		state.boostClockValid = false
+	end
+	Rules.settle(state, now)
+	local projected = Rules.boostNow(state)
+	local changed = state.paidBoostsAllowed ~= allowed
+		or state.luckModifiers.permanent ~= view.permanent
+		or state.luckModifiers.verifiedPermanent ~= view.verifiedPermanent
+		or previousValid ~= valid
+	state.boostClockValid = valid
+	state.paidBoostsAllowed = allowed
+	state.luckModifiers = table.clone(view)
+	if valid then
+		state.boostWall = math.max(projected, wall)
+		state.boostTime = state.time
+		if state.schemaVersion >= 16 then
+			state.boosts.lastClock = math.max(state.boosts.lastClock, math.floor(state.boostWall))
+		end
+	end
+	if changed then
+		state.revision += 1
+	end
+	return changed
 end
 -- Non-yielding server boundary. P02 verification must complete before calling this;
 -- lifecycle/policy checks belong to the caller. Banks are settled using the OLD inputs.
@@ -136,7 +232,7 @@ function Rules.setCoinModifiers(
 		Rules.settle(state, now)
 		state.earningFactors.permanentTier = view.appliedTier
 		if view.appliedTier > 1 then
-			state.schemaVersion = 15
+			state.schemaVersion = math.max(state.schemaVersion, 15)
 		end
 		state.revision += 1
 	end
@@ -158,7 +254,7 @@ function Rules.setConveniencePreference(state: Types.State, key: string, enabled
 	else
 		return false
 	end
-	state.schemaVersion = 15
+	state.schemaVersion = math.max(state.schemaVersion, 15)
 	state.revision += 1
 	return true
 end
@@ -193,8 +289,12 @@ function Rules.collect(state: Types.State, slot: number, id: string): (boolean, 
 	end
 	return true, string.format("Collected %d Coins!", amount)
 end
--- Moves pending offline Coins to the wallet; anything past the Coin limit is dropped.
+-- Modern awards retain overflow/source labels and reservation claim status.
+-- Legacy pending keeps the existing free claim/cap behavior until its join calculation.
 function Rules.claimOffline(state: Types.State): number
+	if state.offlineData then
+		return OfflineAwards.claim(state)
+	end
 	local amount = math.min(state.offlinePending, Economy.coinLimit - state.coins)
 	state.coins += amount
 	state.offlinePending, state.offlineSeconds = 0, 0
@@ -204,19 +304,28 @@ end
 -- this absence at the saved Display's rate. Nothing changes a Display while its owner is away.
 function Rules.offline(state: Types.State, wall: number, paidEffectsAllowed: boolean?)
 	Rules.claimOffline(state)
-	local away = math.min(wall - state.lastSeen, Economy.offlineMaxSeconds)
+	local validWall = wall > 0 and wall <= 100000000000 and wall % 1 == 0
+	local away = if validWall then math.min(wall - state.lastSeen, Economy.offlineMaxSeconds) else 0
 	-- Unknown last save (0) or a clock behind it awards nothing.
-	if state.lastSeen > 0 and away >= Economy.offlineMinSeconds then
+	if
+		state.lastSeen > 0
+		and away >= Economy.offlineMinSeconds
+		and wall >= state.boosts.lastClock
+	then
 		local inputs = CoinModifiers.free()
+		local overlap = 0
 		if paidEffectsAllowed == true and state.earningInputs then
 			inputs.permanentTier = state.earningInputs.permanentTier
+			inputs.vipFactor = state.earningInputs.vipFactor or 1
+			overlap =
+				Boosts.overlap(state.earningInputs.timedCoin, state.lastSeen, state.lastSeen + away)
 		end
 		-- One final floor. P04 must integrate approved timer overlap over this capped interval
 		-- before rounding, not substitute the timer's current/join-time factor.
 		state.offlinePending = math.floor(
 			math.min(
 				Economy.coinLimit,
-				away
+				(away + overlap)
 					* Rules.baseRate(state)
 					* CoinModifiers.factor(inputs, "OfflineDisplay")
 					* Economy.offlineRate
@@ -224,10 +333,23 @@ function Rules.offline(state: Types.State, wall: number, paidEffectsAllowed: boo
 		)
 		state.offlineSeconds = if state.offlinePending > 0 then away else 0
 	end
-	state.lastSeen = wall
+	-- P04 computed and floored N above. Never rerun its formula when claiming/doubling.
+	if state.offlinePending > 0 or state.offlineData then
+		OfflineAwards.freeze(state, "display-boost-overlap-v1")
+		state.schemaVersion = math.max(17, state.schemaVersion)
+	end
+	if validWall then
+		state.lastSeen = if state.schemaVersion >= 16
+			then math.max(state.lastSeen, wall, state.boosts.lastClock)
+			else wall
+	end
 	-- Lease acquisition re-encodes before this calculation. Preserve its saved checkpoint
 	-- until now; subsequent live saves checkpoint current verified/applied inputs instead.
 	state.earningInputs = nil
+	-- Restored active timers continue in UTC; ownership/policy must be reconciled separately.
+	state.boostWall = math.max(if validWall then wall else state.lastSeen, state.boosts.lastClock)
+	state.boostTime = state.time
+	state.boostClockValid = validWall and wall >= state.boosts.lastClock
 end
 -- Highest-income loadout for the unlocked slots and its Rules.rate. Income is the subtotal,
 -- times (1 + setBonus) once any collection shows three distinct figures, so an optimum is either
@@ -305,7 +427,9 @@ function Rules.roll(
 		value,
 		collection or Economy.dailyCollection,
 		if state then state.pityByGroup else {},
-		minimum
+		minimum,
+		nil,
+		if state then Rules.luck(state) else 1
 	)
 end
 function Rules.expansionCost(state: Types.State): number

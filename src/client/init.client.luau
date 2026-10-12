@@ -15,6 +15,7 @@ local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
 local PullSummary = require(script.PullSummary)
 local OfflineEarnings = require(script.OfflineEarnings)
+local OfflinePurchaseBinding = require(script.OfflinePurchaseBinding)
 local WelcomeReward = require(script.WelcomeReward)
 local DealPopup = require(script.DealPopup)
 local DealStalls = require(script.DealStalls)
@@ -140,10 +141,15 @@ ui = Interface.create(request, function(destination)
 	end
 end, shelfEditor)
 summary = PullSummary.create(ui.openingFocus, ui.effects)
--- Closing the popup any way claims; a dropped claim re-opens it on the next snapshot.
+-- Outside tap claims free only while purchase/fulfillment is idle.
+local doublePurchase: (() -> boolean)? = nil
 local offline = OfflineEarnings.create(ui.effects, function()
 	request("ClaimOffline")
+end, function()
+	return doublePurchase ~= nil and doublePurchase()
 end)
+local offlinePurchase = OfflinePurchaseBinding.create(remotes, UIState.number, offline.present)
+doublePurchase = offlinePurchase.purchase
 local welcome = WelcomeReward.create(ui.effects, function()
 	request("WelcomeTen")
 end)
@@ -204,7 +210,11 @@ opening = OpeningController.create(ui.openingFocus, ui.message, choose)
 afk = AfkClient.create(afkRemote, function()
 	-- An AFK handoff waits for confirmed requests and every reveal/batch animation.
 	-- A static summary/reward popup requires no action to keep the profile safe.
-	return pending ~= nil or (opening ~= nil and opening.isActive()) or #batch > 0 or results ~= nil
+	return pending ~= nil
+		or offlinePurchase.busy()
+		or (opening ~= nil and opening.isActive())
+		or #batch > 0
+		or results ~= nil
 end, ui.message)
 local connections: { RBXScriptConnection } = {}
 local displayInteraction = DisplayInteraction.create(
@@ -262,6 +272,9 @@ table.insert(
 				Music.play("world")
 			end
 			local offlineCoins, away = UIState.offline(state)
+			if state.offlineAward then
+				offlinePurchase.award(state.offlineAward)
+			end
 			if
 				offlineCoins
 				and state.ready
@@ -366,6 +379,7 @@ table.insert(
 	connections,
 	RunService.Heartbeat:Connect(function()
 		local now = os.clock()
+		offlinePurchase.step()
 		if pending and now - sentAt > 3 then
 			sentAt = now
 			ui.message("Waiting for server… recovering the same request.")
@@ -445,6 +459,7 @@ script.Destroying:Connect(function()
 		opening.destroy()
 	end
 	summary.destroy()
+	offlinePurchase.destroy()
 	offline.destroy()
 	welcome.destroy()
 	deal.destroy()

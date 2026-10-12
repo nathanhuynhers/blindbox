@@ -52,10 +52,15 @@ for source PlayerRemoving. Teleport data carries only an AFK flag and attempt
 correlation metadata; it carries no profile, currency, inventory or lease secret.
 
 Autosaves and all purchase/reward/collection paths stay blocked during handoff.
+MN-22 additionally blocks AFK confirmation/preflight during an active P02 prompt or
+fulfillment. Cancelled reservations remain in schema17 through the normal checkpoint;
+destination base auto-claim and delayed extra-N receipt recovery are independent. See
+[offline award/receipt contract](OFFLINE_DOUBLE_CLAIM.md). These additions were verified
+with Storage/Persistence fixtures; native AFK/purchase behavior remains pending.
 Source PlayerRemoving skips a second write after a confirmed release, preventing a
 stale source from overwriting its destination. Existing atomic grants and retry
-receipts remain unchanged. There are currently no paid purchase/receipt systems;
-future yielding grants must honor the same transfer barrier before integration.
+receipts remain unchanged. P02/MN-22/boost receipt adapters now honor the same transfer
+barrier and retain obligations through handoff; actual paid use remains disabled.
 
 On arrival, active banks retain their fractions and overflow. Offline earnings
 consider only elapsed time **after** the frozen checkpoint: the existing minimum

@@ -8,6 +8,8 @@ local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
 local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local CoinModifiers = require(script.Parent.CoinModifiers)
+local Boosts = require(script.Parent.Boosts)
+local OfflineAwards = require(script.Parent.OfflineAwards)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -25,14 +27,36 @@ function Profile.encode(state: Types.State): Types.Profile
 	for group, counters in state.pityByGroup do
 		pity[group] = table.clone(counters)
 	end
+	local inputs: Types.EarningInputs? = nil
+	if state.schemaVersion >= 15 then
+		local checkpoint: Types.EarningInputs = if state.earningInputs
+			then table.clone(state.earningInputs)
+			else { permanentTier = state.earningFactors.permanentTier }
+		if state.schemaVersion >= 16 then
+			checkpoint.vipFactor = checkpoint.vipFactor or 1
+			if state.earningInputs then
+				checkpoint.timedCoin = if state.earningInputs.timedCoin
+					then table.clone(state.earningInputs.timedCoin)
+					else nil
+			else
+				checkpoint.vipFactor = state.earningFactors.vipFactor
+				checkpoint.timedCoin = if state.paidBoostsAllowed
+						and state.boostClockValid
+						and state.boosts.coin
+					then table.clone(state.boosts.coin)
+					else nil
+			end
+		end
+		inputs = checkpoint
+	end
 	return {
 		schemaVersion = state.schemaVersion,
-		earningInputs = if state.schemaVersion >= 15
-			then (if state.earningInputs
-				then table.clone(state.earningInputs)
-				else { permanentTier = state.earningFactors.permanentTier })
-			else nil,
+		earningInputs = inputs,
 		convenience = if state.schemaVersion >= 15 then table.clone(state.convenience) else nil,
+		boosts = if state.schemaVersion >= 16 then Boosts.copy(state.boosts) else nil,
+		offlineData = if state.schemaVersion >= 17 and state.offlineData
+			then OfflineAwards.copy(state.offlineData, state.offlinePending)
+			else nil,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
 		pityByGroup = pity,
@@ -76,6 +100,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 13
 			and data.schemaVersion ~= 14
 			and data.schemaVersion ~= 15
+			and data.schemaVersion ~= 16
+			and data.schemaVersion ~= 17
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -103,6 +129,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"deals",
 			"earningInputs",
 			"convenience",
+			"boosts",
+			"offlineData",
 		})
 	then
 		return nil
@@ -122,19 +150,37 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		return nil
 	end
 	local state = Rules.new(now)
-	if data.schemaVersion == 15 then
+	if (data.schemaVersion :: number) >= 15 then
 		if typeof(data.earningInputs) ~= "table" then
 			return nil
 		end
 		local inputs = data.earningInputs :: { [string]: unknown }
 		if
-			not fields(inputs, { "permanentTier" })
-			or not CoinModifiers.validTier(inputs.permanentTier)
+			not fields(
+				inputs,
+				if (data.schemaVersion :: number) >= 16
+					then { "permanentTier", "vipFactor", "timedCoin" }
+					else { "permanentTier" }
+			) or not CoinModifiers.validTier(inputs.permanentTier)
 		then
 			return nil
 		end
-		state.schemaVersion = 15
-		state.earningInputs = { permanentTier = inputs.permanentTier :: number }
+		state.schemaVersion = data.schemaVersion :: number
+		local checkpoint: Types.EarningInputs = { permanentTier = inputs.permanentTier :: number }
+		if (data.schemaVersion :: number) >= 16 then
+			if inputs.vipFactor ~= 1 and inputs.vipFactor ~= 1.1 then
+				return nil
+			end
+			checkpoint.vipFactor = inputs.vipFactor :: number
+			if inputs.timedCoin ~= nil then
+				local timer = Boosts.timer(inputs.timedCoin, true)
+				if not timer then
+					return nil
+				end
+				checkpoint.timedCoin = timer
+			end
+		end
+		state.earningInputs = checkpoint
 		if typeof(data.convenience) ~= "table" then
 			return nil
 		end
@@ -149,6 +195,15 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		state.convenience =
 			{ autoCollect = preferences.autoCollect, movement = preferences.movement }
 	elseif data.earningInputs ~= nil or data.convenience ~= nil then
+		return nil
+	end
+	if (data.schemaVersion :: number) >= 16 then
+		local boosts = Boosts.decode(data.boosts)
+		if not boosts then
+			return nil
+		end
+		state.boosts = boosts
+	elseif data.boosts ~= nil then
 		return nil
 	end
 	state.coins, state.step = data.coins :: number, data.step :: number
@@ -293,7 +348,29 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		end
 		state.lastSeen, state.offlinePending =
 			data.lastSeen :: number, data.offlinePending :: number
+		if state.schemaVersion >= 16 and state.earningInputs and state.earningInputs.timedCoin then
+			local timer = state.earningInputs.timedCoin
+			local saved = state.boosts.coin
+			if
+				not saved
+				or timer.started ~= saved.started
+				or timer.expires ~= saved.expires
+				or timer.strength ~= saved.strength
+				or timer.started > state.lastSeen
+			then
+				return nil
+			end
+		end
 	elseif data.lastSeen ~= nil or data.offlinePending ~= nil then
+		return nil
+	end
+	if state.schemaVersion >= 17 then
+		local offlineData = OfflineAwards.decode(data.offlineData, state.offlinePending)
+		if not offlineData then
+			return nil
+		end
+		state.offlineData = offlineData
+	elseif data.offlineData ~= nil then
 		return nil
 	end
 	-- v6-v10 predate the login streak (Rules.new: never claimed). v11+ requires a consistent pair.

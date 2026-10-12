@@ -24,6 +24,10 @@ local PurchaseRuntime = require(script.PurchaseRuntime)
 local PurchaseConfig = require(script.PurchaseConfig)
 local CoinModifiers = require(script.CoinModifiers)
 local CoinModifierRuntime = require(script.CoinModifierRuntime)
+local BoostRuntime = require(script.BoostRuntime)
+local OfflineRuntime = require(script.OfflineRuntime)
+local OfflineAwards = require(script.OfflineAwards)
+local Protocol = require(script.Protocol)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
 local PlayerSpawn = require(script.PlayerSpawn)
@@ -52,6 +56,7 @@ type Session = {
 	sequence: number,
 	syncTime: number,
 	homeTime: number,
+	boostRequestTime: number,
 	spawn: PlayerSpawn.Binding?,
 	afkPosition: Vector3?,
 	afkCharacter: Model?,
@@ -86,19 +91,50 @@ local homeRemote = remote("Home")
 local plazaRemote = remote("Plaza")
 local shelfEditorRemote = remote("ShelfEditor")
 local afkRemote = remote("AfkReconnect")
+local boostRequest = remote("BoostActivate")
+local boostResult = remote("BoostResult")
 local adminRemote = Instance.new("RemoteFunction")
 adminRemote.Name = "Admin"
 adminRemote.Parent = folder
 folder.Parent = ReplicatedStorage
 local ownershipChanged: ((number) -> ())? = nil
-local purchases = PurchaseRuntime.start(folder, function(player: Player): Storage.Session?
+local purchaseChanged: ((Player) -> ())? = nil
+local function purchaseSession(player: Player): Storage.Session?
 	local session = sessions[player]
 	return if session and not shuttingDown then session.storage else nil
+end
+local offlineIntegration = OfflineRuntime.create(purchaseSession, function(player)
+	if purchaseChanged then
+		purchaseChanged(player)
+	end
+end)
+local purchases = PurchaseRuntime.start(folder, function(player: Player): Storage.Session?
+	return purchaseSession(player)
 end, function(userId)
 	if ownershipChanged then
 		ownershipChanged(userId)
 	end
-end)
+end, {
+	eligible = offlineIntegration.eligible,
+	prepare = offlineIntegration.prepare,
+	fulfill = offlineIntegration.fulfill,
+	deliverReserved = function(userId, key, entry)
+		-- Only token-only immutable grants belong to P04. Mixed Starter is separate.
+		if entry.grant.coins ~= 0 or next(entry.grant.tokens) == nil then
+			return nil
+		end
+		local player = Players:GetPlayerByUserId(userId)
+		local owner = if player then purchaseSession(player) else nil
+		if not owner or not player then
+			return false
+		end
+		local saved = BoostRuntime.fulfill(owner, key, entry, os.clock())
+		if purchaseSession(player) == owner and purchaseChanged then
+			purchaseChanged(player)
+		end
+		return saved
+	end,
+})
 -- Current plaza deal window and its length. Studio playtests may shorten it with the
 -- StudioDealWindowSeconds attribute on ServerStorage; live servers always use the config.
 local function dealClock(): (number, number)
@@ -119,8 +155,18 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		Rules.refreshDay(state, day)
 	end
 	local snapshot: Types.Snapshot = {
+		offlineAward = OfflineAwards.view(
+			state,
+			session.storage.ready
+				and not session.storage.busy
+				and session.storage.pendingSave == nil
+		),
 		coinModifiers = table.clone(state.coinModifiers),
-		earningFactors = table.clone(state.earningFactors),
+		earningFactors = Rules.earningFactors(state),
+		luckModifiers = table.clone(state.luckModifiers),
+		boosts = Rules.boostView(state),
+		rarityOdds = CollectionEconomy.rarityOdds(state.pityByGroup, Rules.luck(state)),
+		freePityOdds = CollectionEconomy.odds(state.pityByGroup),
 		shelfEditorToken = session.plot.showcase.editorToken,
 		shelves = Shelves.publicView(state.shelves, session.plot.view),
 		shelfAvailable = Shelves.availability(state.shelves, state.owned),
@@ -137,7 +183,7 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		rates = CollectionEconomy.effectiveRates(state.owned),
 		baseRates = Rules.rates,
 		nextRates = CollectionEconomy.effectiveRates(state.owned, true),
-		odds = CollectionEconomy.odds(state.pityByGroup),
+		odds = CollectionEconomy.odds(state.pityByGroup, Rules.luck(state)),
 		pityProgress = CollectionEconomy.pityProgress(state.pityByGroup),
 		baseOdds = Rules.odds,
 		prices = Rules.prices,
@@ -165,6 +211,12 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 end
 -- P02 invokes this immediately after verified ownership changes. A paused/frozen profile
 -- defers the change until the ordinary loop resumes; it must not alter a handoff checkpoint.
+purchaseChanged = function(player)
+	local session = sessions[player]
+	if session then
+		send(player, session, nil)
+	end
+end
 local function refreshCoinModifiers(player: Player, session: Session, now: number)
 	local storage = session.storage
 	if shuttingDown then
@@ -173,7 +225,10 @@ local function refreshCoinModifiers(player: Player, session: Session, now: numbe
 	local changed = CoinModifierRuntime.sync(storage, PurchaseConfig.products, function(key)
 		return purchases.ownership(player.UserId, key)
 	end, CoinModifiers.effectsValidated, now)
-	if changed then
+	local boostsChanged = BoostRuntime.sync(storage, PurchaseConfig.products, function(key)
+		return purchases.ownership(player.UserId, key)
+	end, { policy = "Unknown", lineageValidated = false, disclosureReady = false }, os.time(), now)
+	if changed or boostsChanged then
 		if storage.handle then
 			storage.status = "Autosave pending"
 		end
@@ -207,6 +262,7 @@ local afk = AfkReconnect.create({
 			and session.storage.handle ~= nil
 			and session.storage.ready
 			and not session.storage.transferring
+			and not purchases.busy(player.UserId)
 			and os.clock() < session.storage.safeUntil
 	end,
 	prepare = function(player)
@@ -444,6 +500,7 @@ local function added(player: Player)
 		sequence = 0,
 		syncTime = -math.huge,
 		homeTime = -math.huge,
+		boostRequestTime = -math.huge,
 		spawn = nil,
 		afkPosition = nil,
 		afkCharacter = nil,
@@ -572,6 +629,29 @@ for _, player in Players:GetPlayers() do
 end
 table.insert(
 	connections,
+	boostRequest.OnServerEvent:Connect(function(player: Player, raw: unknown)
+		local session = sessions[player]
+		local now = os.clock()
+		if shuttingDown or not session or now - session.boostRequestTime < 1 then
+			return
+		end
+		session.boostRequestTime = now
+		-- Policy integration supplies current server eligibility here before paid effects can run.
+		local result = BoostRuntime.activate(
+			session.storage,
+			raw,
+			{ policy = "Unknown", lineageValidated = false, disclosureReady = false },
+			os.time(),
+			now
+		)
+		if sessions[player] == session and not shuttingDown and result then
+			boostResult:FireClient(player, result)
+			send(player, session, nil)
+		end
+	end)
+)
+table.insert(
+	connections,
 	syncRemote.OnServerEvent:Connect(function(player: Player)
 		local session = sessions[player]
 		local now = os.clock()
@@ -645,6 +725,17 @@ table.insert(
 			or os.clock() >= session.storage.safeUntil
 		then
 			return
+		end
+		if purchases.busy(player.UserId) then
+			local intent = Protocol.parse(raw)
+			if intent and intent.action == "ClaimOffline" then
+				send(player, session, {
+					id = intent.id,
+					ok = false,
+					message = "Finish or cancel the purchase before claiming.",
+				})
+				return
+			end
 		end
 		local beforeRevision = session.transaction.state.revision
 		local reply, changed = Transactions.process(

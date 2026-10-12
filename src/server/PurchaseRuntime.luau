@@ -7,11 +7,19 @@ local Config = require(script.Parent.PurchaseConfig)
 local Service = require(script.Parent.PurchaseService)
 local Storage = require(script.Parent.Storage)
 local Types = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
+local Ledger = require(script.Parent.PurchaseLedger)
+export type Integration = {
+	eligible: (number, Config.Product) -> boolean,
+	prepare: (number, Config.Product) -> boolean,
+	fulfill: (Ledger.Receipt, Config.Product) -> boolean?,
+	deliverReserved: ((number, string, Ledger.Entry) -> boolean?)?,
+}
 local Runtime = {}
 function Runtime.start(
 	folder: Folder,
 	sessionFor: (Player) -> Storage.Session?,
-	ownershipChanged: ((number) -> ())?
+	ownershipChanged: ((number) -> ())?,
+	integration: Integration?
 )
 	local request = Instance.new("RemoteEvent")
 	request.Name, request.Parent = "PurchaseRequest", folder
@@ -36,6 +44,9 @@ function Runtime.start(
 	end
 	local service = Service.create({
 		ownershipChanged = ownershipChanged,
+		prepare = if integration then integration.prepare else nil,
+		fulfill = if integration then integration.fulfill else nil,
+		deliverReserved = if integration then integration.deliverReserved else nil,
 		now = os.clock,
 		ready = ready,
 		update = function(key, transform)
@@ -79,8 +90,8 @@ function Runtime.start(
 		end,
 		-- Intentionally closed until separately approved product integrations register
 		-- authoritative policy, lineage, capacity and disclosure preflight here.
-		eligible = function(_userId, _product)
-			return false
+		eligible = function(userId, product)
+			return integration ~= nil and integration.eligible(userId, product)
 		end,
 		send = function(userId, snapshot: Types.Snapshot, result: Types.Result?)
 			local player = Players:GetPlayerByUserId(userId)
@@ -144,6 +155,7 @@ function Runtime.start(
 			service.remove(userId)
 		end,
 		claimPass = service.claimPass,
+		busy = service.busy,
 		ownership = service.ownership,
 		destroy = function()
 			alive = false

@@ -1,7 +1,8 @@
 # Persistent data model
 
-Current schema: **14**, written to `BlindBox_Economy2_Studio` and
-`BlindBox_Economy2_Live`. The decoder accepts valid Economy2 schemas 6–14; 6–13 upgrade to 14
+Default new-profile schema: **14**, written to `BlindBox_Economy2_Studio` and
+`BlindBox_Economy2_Live`. The decoder also supports forward-only **15/16/17** described
+below. It accepts valid Economy2 schemas 6–17; 6–13 upgrade to 14
 in the acquisition UpdateAsync as well as the normal save path. Schemas 1–5, future versions and malformed records fail closed. Existing
 catalog figure IDs are unchanged. The prior audit reviewed schema 12 before the Welcome Quest
 merge; it is now an upgrade source, not the written format.
@@ -9,8 +10,9 @@ See [canonical direction](PLAYER_PLOTS_AND_SHELVES.md).
 
 The disabled P02 purchase foundation adds a separate version-1 durable receipt/reward sidecar,
 not fields or a migration in this schema. See [purchase ledger and compatibility](PURCHASE_FOUNDATION.md#durable-fulfillment-and-compatibility).
-Reserved purchased value cannot yet be transferred into this wallet. Offline award authority
-and consumption/lineage schemas remain future integration work requiring mixed-server review.
+Assisted purchased value cannot yet be transferred into this undifferentiated wallet.
+MN-22's variable award/receipt authority lives in schema17's profile aggregate instead of
+the fixed-grant sidecar. Paid consumption/lineage remains gated; mixed-server review is required.
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
 shared `Rarity.Id` type: Common, Uncommon, Rare, Legendary or Mythical. Catalog startup rejects
@@ -18,7 +20,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 
 | Field | Meaning |
 | --- | --- |
-| schemaVersion | 14 written; valid 6-13 upgrade; unsupported versions block loading/writing |
+| schemaVersion | New profiles14; applied inputs/preferences15; boost operations16; positive offline award/retained record17. Valid6–13 upgrade to14; unsupported versions fail closed |
 | coins | Integer in 0..1,000,000,000,000; no Scrap field |
 | earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
@@ -34,7 +36,7 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | boxesOpened | Lifetime boxes opened, integer 0..1,000,000,000 (`Rules.boxesOpenedLimit`); presentation only |
 | shelfRewards | Known collection IDs to true: collections whose first completion already granted a free Shelf Unit (v9+; required) |
 | lastSeen | UTC `os.time()` of the last save, integer 0..100,000,000,000; 0 = unknown (new or upgraded), awards nothing (v10; required) |
-| offlinePending | Whole offline Coins not yet claimed, integer 0..1,000,000,000,000; auto-claimed on the next join (v10; required) |
+| offlinePending | Whole offline Coins not yet claimed, integer0..1,000,000,000,000; auto-claimed on join. In v17 it matches the frozen unclaimed N; reservations/credits survive that auto-claim |
 | sfxVolume / musicVolume | Player audio settings, whole percent 0..100 of the default mix (100 = default); set only by the validated `SetVolume` intent; presentation only (v12; required) |
 | deals | Plaza stall stock `{window, bought}`: the deal window index (-1 = none yet) and a dense array of boxes bought per stall in that window, integers 0..1,000,000, at most 16 stalls (v14; required) |
 
@@ -121,11 +123,31 @@ All records are strictly validated/copied. Old readers reject v15, requiring a r
 or compatibility bridge before enabling its writer. No namespace/reset is introduced. See
 [P03A compatibility and P05 integration contract](COIN_MODIFIERS.md#offline-checkpoint-and-schema-compatibility).
 
+Luck/timed boost implementation adds gated forward-only **v16**. `boosts` stores unused tokens,
+UTC Coin/Luck timers, the last accepted clock and durable delivery/activation markers. The
+v16 `earningInputs` checkpoint adds a VIP factor and an optional eligible saved Coin timer;
+ordinary offline N integrates only that timer's overlap inside the first capped absence, then
+floors once. Token/timer operations persist their marker and value together; unconfirmed saves
+freeze gameplay. Valid older profiles retain all progress, v15/v16 never downgrade, and free
+profiles keep v14. Old readers reject v16, so its writer requires a release barrier or tested
+bridge. Paid application remains off pending policy/earned-lineage/disclosure validation.
+See [Luck/boost contracts and shared integration handoff](LUCK_BOOSTS.md).
+
+MN-22 adds forward-only **v17** on a positive normal offline award (or retained offline record).
+`offlineData` freezes whole N and an account-local serial/id, calculation version, source labels,
+base claim status, permanent product/award bindings, one unresolved reservation, receipt markers,
+charged exceptions and earned/assisted credits. Strict decode/copy preserves v16 boost checkpoints.
+Ordinary rejoin auto-claims base N but retains reserved extra N for delayed receipts. Grant, claim,
+fulfillment, receipt and overflow credit share one profile snapshot. Current gates keep purchases
+disabled. Old readers reject v17: **even free returns now require a coordinated reader/writer
+release barrier before shipping this branch**. Never downgrade, erase credits or change stores.
+See [award/receipt protocol candidate, release review and integration handoff](OFFLINE_DOUBLE_CLAIM.md).
+
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names remain those established above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-14/v15 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first;
-v15 is used only after the new applied-input/preference change).
+schema-14/v15/v16/v17 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first;
+v15 is used after an applied-input/preference change; v16 after a token operation; v17 on an offline award).
 Wallet and banks save atomically in one aggregate.
 Replacement collects as many outgoing whole Coins as the wallet accepts; residual fractions and
 overflow remain in `earnings` under the outgoing ID. This uses the existing schema and does not

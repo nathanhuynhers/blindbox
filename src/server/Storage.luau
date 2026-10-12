@@ -112,7 +112,11 @@ function Storage.flush(session: Session, release: boolean): boolean
 		Rules.settle(session.state, os.clock())
 	end
 	if not session.pendingRelease and not session.pendingSave then
-		session.state.lastSeen = os.time()
+		-- UTC timer checkpoints must not step backwards during a save. Offline detects a
+		-- return before this boundary and awards zero rather than extending paid effects.
+		session.state.lastSeen = if session.state.schemaVersion >= 16
+			then math.max(os.time(), session.state.boosts.lastClock)
+			else os.time()
 		if release then
 			session.pendingRelease = Profile.encode(session.state)
 		end
@@ -143,6 +147,8 @@ function Storage.flush(session: Session, release: boolean): boolean
 		end
 	end
 	if saved then
+		session.state.boostCommitPending = false
+		session.state.offlineCommitPending = false
 		if release then
 			session.released = true
 		else

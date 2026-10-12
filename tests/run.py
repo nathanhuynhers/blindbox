@@ -13,6 +13,9 @@ requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.sp
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "BoostTypes": "shared", "Boosts": "server", "LuckModifiers": "server", "BoostRuntime": "server", "BoostProtocol": "server",
+    "OfflineTypes": "shared", "OfflineAwards": "server", "OfflinePurchase": "server", "OfflineRuntime": "server",
+    "OfflinePurchaseClient": "client",
     "ConvenienceTypes": "shared", "AutoOpen": "server", "AutoCollect": "server",
     "ConvenienceProtocol": "server", "ConvenienceService": "server", "ConvenienceClient": "client", "ConveniencePresentation": "client", "ConvenienceResults": "client",
 	"CoinModifiers": "server",
@@ -75,7 +78,7 @@ for name, folder in modules.items():
         source = source.replace("--!strict", UI_PRELUDE, 1)
     if name == "AdminConsole":
         source = source.replace("--!strict", '--!strict\nlocal os = {date = function(_, timestamp) return tostring(timestamp) end}', 1)
-    if name == "Storage":
+    if name in ("Storage", "OfflineRuntime"):
         source = source.replace("--!strict", '--!strict\nlocal Engine = require("./AfkEngine")\nlocal game, task, os, warn = Engine.game, Engine.task, Engine.os, Engine.warn', 1)
     if name == "AfkClient":
         source = source.replace("--!strict", '--!strict\nlocal Engine = require("./AfkEngine")\nlocal game, os, Enum = Engine.game, Engine.os, Engine.Enum', 1)
@@ -123,7 +126,7 @@ for name, folder in modules.items():
 bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
 send = bootstrap[bootstrap.index("local function send("):bootstrap.index("-- P02 invokes")]
 sender = '\n'.join(f'local {name} = require("./{name}")' for name in
-                   ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals"))
+                   ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals", "OfflineAwards"))
 sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
 sender += 'local function dealClock() return Deals.window(os.time()), Economy.deals.windowSeconds end\n'
 sender += send + '\nreturn send\nend\n'
@@ -169,7 +172,12 @@ run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
 run("SaveSafety.spec")
 run("Purchases.spec")
+run("OfflineDouble.spec")
+run("OfflineDoublePurchase.spec")
+run("UIEngine", "OfflineDoubleClient.spec")
 run("CoinModifiers.spec")
+run("LuckBoosts.spec")
+run("BoostPersistence.spec")
 run("Admin.spec", "AdminClient.spec", "AdminUI.spec")
 # Exercise missing authorization with the actual resolver/service, not a parallel policy mock.
 if not requested or "AdminDisabled.spec" in requested:
@@ -189,6 +197,38 @@ if not requested or "AdminDisabled.spec" in requested:
         result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
         if result.returncode:
             raise SystemExit(result.returncode)
+if not requested or "BoostActivation.spec" in requested:
+    # Fixture-only gate lift; source/catalog remain disabled. Use actual modules and Storage
+    # failure injection to exercise successful and lost-reply durable activations.
+    fixture = out / "boost-validated-fixture"
+    fixture.mkdir(exist_ok=True)
+    for file in out.glob("*.luau"):
+        source = file.read_text(encoding="utf-8")
+        if file.name == "Boosts.luau":
+            source, changed = re.subn(r"effectsValidated\s*=\s*false", "effectsValidated = true", source, count=1)
+            assert changed == 1
+        (fixture / file.name).write_text(source, encoding="utf-8")
+    spec = fixture / "BoostActivation.spec.luau"
+    spec.write_text((root / "tests/BoostActivation.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+    result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
+    if result.returncode:
+        raise SystemExit(result.returncode)
+if not requested or "OfflineDoubleStorage.spec" in requested:
+    # Review-candidate association gates lifted in ignored copies only; source stays false.
+    fixture = out / "offline-validated-fixture"
+    fixture.mkdir(exist_ok=True)
+    for file in out.glob("*.luau"):
+        source = file.read_text(encoding="utf-8")
+        if file.name == "OfflineRuntime.luau":
+            for gate in ("associationApproved", "paidPathValidated"):
+                source, changed = re.subn(gate + r"\s*=\s*false", gate + " = true", source, count=1)
+                assert changed == 1
+        (fixture / file.name).write_text(source, encoding="utf-8")
+    spec = fixture / "OfflineDoubleStorage.spec.luau"
+    spec.write_text((root / "tests/OfflineDoubleStorage.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
+    result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
+    if result.returncode:
+        raise SystemExit(result.returncode)
 if requested:
     raise SystemExit(0)
 fixtures = [

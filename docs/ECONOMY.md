@@ -146,7 +146,9 @@ validation still required; production effects remain disabled and free tuning is
 Highest verified configured 2/4/8 wins for new Display accrual and the saved normal offline
 reward. Fixed grants and existing banks are excluded. See [the modifier/snapshot/checkpoint
 contract](COIN_MODIFIERS.md) for source rules, old-rate settlement and the separate offline
-authorization boundary. P03B Double & Claim and P04 timer overlap are separate tasks.
+authorization boundary. P04 timer overlap is implemented behind validation gates; MN-22
+consumes its already floored normal N. See [Luck/boost contracts](LUCK_BOOSTS.md) and
+[offline award/receipt contract](OFFLINE_DOUBLE_CLAIM.md).
 
 Displayed figures keep earning while their owner is offline, Coin only. Server `Economy` tuning:
 `offlineRate = 0.5` (fraction of the full online Display rate, including duplicates and the set
@@ -159,9 +161,12 @@ saved Display. An unknown `lastSeen` (0) or a clock behind it awards nothing.
 The client shows a welcome-back popup with the amount and absence; Claim or tapping outside sends
 the `ClaimOffline` intent through the normal transaction path (token bucket, revision, receipts).
 The client never supplies an amount. Claiming zeroes the pending amount in the same aggregate as
-the wallet, so replays and second claims pay nothing; anything above the Coin limit is dropped.
-Robux multipliers and paid boosts are not implemented; proposals and decisions are maintained
-in the [monetization plan](MONETIZATION.md).
+the wallet/credit, so replays and second claims pay nothing. Legacy pending uses the previous
+wallet cap behavior. New frozen awards retain earned overflow in profile credit. Purchased
+extra N remains assisted credit, never clipped or multiplied again; its usable transfer is
+gated on the approved lineage/policy path. Price/type/association are unresolved and sales
+remain off. No paid effect is enabled by this implementation. Product decisions remain in
+the [monetization plan](MONETIZATION.md).
 
 ## Plaza stall deals (hourly)
 

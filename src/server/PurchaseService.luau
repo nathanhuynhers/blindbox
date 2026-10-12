@@ -17,6 +17,13 @@ export type Dependencies = {
 	send: (number, Types.Snapshot, Types.Result?) -> (),
 	-- Non-yielding server observer after P02 verification commits. Never a client ownership signal.
 	ownershipChanged: ((number) -> ())?,
+	-- Variable return awards reserve in the leased profile before the sole prompt.
+	prepare: ((number, Config.Product) -> boolean)?,
+	-- Returns nil to use P02 fixed-grant sidecar; false defers; true confirms profile delivery.
+	fulfill: ((Ledger.Receipt, Config.Product) -> boolean?)?,
+	-- Fixed grants transfer only from immutable committed P02 entries. nil keeps
+	-- unsupported bundles reserved; false defers acknowledgement until recovery.
+	deliverReserved: ((number, string, Ledger.Entry) -> boolean?)?,
 }
 type Session = {
 	entitlements: Entitlements.State,
@@ -32,6 +39,8 @@ type Session = {
 	requests: { [string]: { action: string, product: string?, result: Types.Result } },
 	requestCount: number,
 	nextRefresh: number,
+	deliveryCursor: number,
+	deliveryFailed: boolean,
 }
 local Service = {}
 function Service.create(deps: Dependencies, products: { Config.Product })
@@ -131,6 +140,33 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 				session.ledger = record
 			end
 			session.ledgerStatus = if record then "Ready" else "Recovering"
+			if record and deps.deliverReserved then
+				local keys: { string } = {}
+				for key in record.entries do
+					table.insert(keys, key)
+				end
+				table.sort(keys)
+				local last = math.min(#keys, session.deliveryCursor + 15)
+				for index = session.deliveryCursor, last do
+					if sessions[userId] ~= session or not deps.ready(userId) then
+						session.deliveryFailed = true
+						break
+					end
+					local key = keys[index]
+					local ok, delivered =
+						pcall(deps.deliverReserved, userId, key, record.entries[key])
+					if not ok or delivered == false then
+						session.deliveryFailed = true
+					end
+				end
+				session.deliveryCursor = last + 1
+				if session.deliveryCursor > #keys then
+					session.ledgerStatus = if session.deliveryFailed then "Recovering" else "Ready"
+					session.deliveryCursor, session.deliveryFailed = 1, false
+				else
+					session.ledgerStatus = "Recovering"
+				end
+			end
 		end
 		for _, product in products do
 			if sessions[userId] ~= session or not deps.ready(userId) then
@@ -169,6 +205,8 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 			requests = {},
 			requestCount = 0,
 			nextRefresh = -math.huge,
+			deliveryCursor = 1,
+			deliveryFailed = false,
 		}
 		sessions[userId] = session
 		refresh(userId, session)
@@ -190,6 +228,10 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		if session then
 			refresh(userId, session)
 		end
+	end
+	function api.busy(userId: number): boolean
+		local session = sessions[userId]
+		return session ~= nil and (session.prompt ~= nil or session.working)
 	end
 	function api.request(userId: number, raw: unknown)
 		local session = sessions[userId]
@@ -263,7 +305,15 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 					else
 						session.prompt, session.awaiting, session.promptReceipt =
 							product.key, false, false
-						local ok, opened = pcall(deps.prompt, userId, product)
+						local ok, opened = pcall(function()
+							if deps.prepare and not deps.prepare(userId, product) then
+								return false
+							end
+							if sessions[userId] ~= session or not deps.ready(userId) then
+								return false
+							end
+							return deps.prompt(userId, product)
+						end)
 						if ok and opened then
 							result.status, result.reason = "PromptOpened", "PlatformPrompt"
 						elseif ok then
@@ -283,6 +333,10 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		local session = sessions[userId]
 		local product = byId(id, kind)
 		if not session or not product then
+			return
+		end
+		if kind == "DeveloperProduct" and session.prompt ~= product.key then
+			-- A late close event from an earlier join cannot lock a newer return.
 			return
 		end
 		if kind == "Pass" then
@@ -320,7 +374,7 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		end
 		local product = byId(receipt.productId, "DeveloperProduct")
 		-- Recovery ignores sales, policy, price, wallet space and transient prompt state.
-		if not product or not product.grant then
+		if not product or (not product.grant and not deps.fulfill) then
 			return false
 		end
 		local session = sessions[receipt.userId]
@@ -328,6 +382,30 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 			return false
 		end
 		session.working = true
+		if deps.fulfill then
+			local ok, fulfilled = pcall(deps.fulfill, receipt, product)
+			if not ok or fulfilled ~= nil then
+				session.working = false
+				local confirmed = ok and fulfilled == true
+				if confirmed and session.prompt == product.key then
+					session.promptReceipt = true
+					if session.awaiting then
+						session.prompt, session.awaiting = nil, false
+					end
+				end
+				send(receipt.userId, session, {
+					id = receipt.purchaseId,
+					product = product.key,
+					status = if confirmed then "Verified" else "Recovering",
+					reason = if confirmed then "DurableProfileFulfillment" else "SaveUnconfirmed",
+				})
+				return confirmed
+			end
+		end
+		if not product.grant then
+			session.working = false
+			return false
+		end
 		local record =
 			Ledger.commit(deps.update, receipt.userId, "receipt:" .. receipt.purchaseId, {
 				product = product.key,
@@ -335,10 +413,18 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 				kind = "DeveloperProduct",
 				grant = product.grant,
 			})
+		local delivery: boolean? = nil
+		if record and deps.deliverReserved then
+			local key = "receipt:" .. receipt.purchaseId
+			local ok, delivered =
+				pcall(deps.deliverReserved, receipt.userId, key, record.entries[key])
+			delivery = if ok then delivered else false
+		end
 		session.working = false
 		if record then
-			session.ledger, session.ledgerStatus = record, "Ready"
-			if session.prompt == product.key then
+			session.ledger, session.ledgerStatus =
+				record, if delivery == false then "Recovering" else "Ready"
+			if delivery ~= false and session.prompt == product.key then
 				session.promptReceipt = true
 				if session.awaiting then
 					session.prompt, session.awaiting = nil, false
@@ -350,10 +436,13 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		send(receipt.userId, session, {
 			id = receipt.purchaseId,
 			product = product.key,
-			status = if record then "Reserved" else "Recovering",
+			status = if not record or delivery == false
+				then "Recovering"
+				elseif delivery then "Verified"
+				else "Reserved",
 			reason = if record then "DurableRewardReserved" else "SaveUnconfirmed",
 		})
-		return record ~= nil
+		return record ~= nil and delivery ~= false
 	end
 	-- Server-only once-per-account bundle reconciliation. Product modules decide when
 	-- to invoke this; pass events and clients cannot mint a grant.

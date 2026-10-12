@@ -98,6 +98,19 @@ One-opening overrides are server-only, temporary and consumed inside preflighted
   factor/source resolution and old-rate settlement. Paid activation stays gated on D2 policy/
   lineage validation. Schema 15 checkpoints and owner snapshot/P05 hooks are documented in
   [Coin modifier contract](COIN_MODIFIERS.md); no Store purchase wiring or P03B fulfillment.
+- `Boosts`/`BoostRuntime`/`LuckModifiers`/`BoostProtocol`: gated permanent Luck, durable unused
+  tokens and atomic UTC Coin/Luck/combo activation. CollectionEconomy supplies one normalized
+  roll/disclosure distribution; Rules integrates Coin expiry and saved offline overlap.
+  P02 owns reserved-entry recovery, and per-player policy/lineage/disclosure must be validated
+  before paid use. See [timer, snapshot, schema and integration contracts](LUCK_BOOSTS.md).
+`OfflineAwards`/`OfflinePurchase`/`OfflineRuntime` own MN-22's frozen N, claims, durable reservation
+and variable receipt/profile fulfillment. They consume the normal Rules/P04 output without another
+earning multiplier. P02 remains the sole native launcher; its optional profile hook and committed
+fixed-entry recovery observer compose the offline and boost adapters. Owner-only `offlineAward`
+excludes bindings/receipts. `OfflinePurchaseClient`/`OfflinePurchaseBinding` project exact N/2N,
+eligible platform pricing and purchase mutex states into the existing OfflineEarnings card.
+Schema17 and the reviewed candidate association are documented in [the integration handoff](OFFLINE_DOUBLE_CLAIM.md).
+
 - `AfkReconnect`/`AfkClient`/`AfkIdle`: server-timed public-server idle reconnect, fresh client
   confirmations, a frozen saved/released profile handoff and conditional lease recovery.
   `AfkConfig` centralizes tuning; `AfkNotice` reuses the existing UI tokens. See the

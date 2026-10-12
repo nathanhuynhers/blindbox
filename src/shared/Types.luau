@@ -1,5 +1,7 @@
 --!strict
 local Rarity = require(script.Parent.Rarity)
+local BoostTypes = require(script.Parent.BoostTypes)
+local OfflineTypes = require(script.Parent.OfflineTypes)
 export type Figure = {
 	id: string,
 	name: string,
@@ -58,7 +60,11 @@ export type DealView = {
 }
 -- Verified server inputs. Timed overlap is supplied by P04 as intervals, not a saved current power.
 export type EarningFactors = { permanentTier: number, vipFactor: number, timedCoinFactor: number }
-export type EarningInputs = { permanentTier: number }
+export type EarningInputs = {
+	permanentTier: number,
+	vipFactor: number?,
+	timedCoin: BoostTypes.Timer?,
+}
 export type ConveniencePreferences = { autoCollect: boolean, movement: boolean }
 export type CoinModifierView = {
 	verifiedTier: number,
@@ -100,6 +106,8 @@ export type Profile = {
 	-- v15 checkpoint of the effective permanent tier at lastSeen, never proof of current ownership.
 	earningInputs: EarningInputs?,
 	convenience: ConveniencePreferences?,
+	boosts: BoostTypes.Record?,
+	offlineData: OfflineTypes.Record?,
 }
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
 export type State = Profile & {
@@ -109,14 +117,27 @@ export type State = Profile & {
 	earningFactors: EarningFactors,
 	coinModifiers: CoinModifierView,
 	convenience: ConveniencePreferences,
+	boosts: BoostTypes.Record,
+	luckModifiers: BoostTypes.LuckView,
+	paidBoostsAllowed: boolean,
+	boostClockValid: boolean,
+	boostCommitPending: boolean,
+	offlineCommitPending: boolean,
+	boostWall: number,
+	boostTime: number,
 }
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 -- Private owner presentation only: build-up toward a rarity guarantee; odds resolve priority.
 export type PityProgress = { Legendary: number, Mythical: number }
 export type Snapshot = {
+	offlineAward: OfflineTypes.View?,
 	-- Owner-only verified and actually applied benefits; no Store wiring implied.
 	coinModifiers: CoinModifierView?,
 	earningFactors: EarningFactors?,
+	luckModifiers: BoostTypes.LuckView?,
+	boosts: BoostTypes.View?,
+	rarityOdds: { [string]: { [string]: number } }?,
+	freePityOdds: { [string]: number }?,
 	-- Runtime owner-only acknowledgement of the Shelf editor's showcase pause.
 	shelfEditorToken: number?,
 	shelves: ShelfView,

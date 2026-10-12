@@ -124,8 +124,9 @@ mark consumed before wallet commit or release directly through ordinary transien
 Boost activation has the same requirement for token consumption + timer. Do not enable sales
 while reserved value has no approved, implemented usable delivery path.
 
-Existing Economy2 schema 14, schemas 6–13 upgrades, namespaces, offlinePending and all player
-progress are unchanged. Older game servers cannot overwrite this sidecar, and its grants cannot
+At the P02 foundation milestone, Economy2 schema14, schemas6–13 upgrades, namespaces,
+offlinePending and player progress were unchanged. The later v17 integration is described
+below and in DATA_MODEL.md. Older game servers cannot overwrite this sidecar, and its grants cannot
 enter their undifferentiated wallet. This is compatible for the disabled foundation only.
 Later wallet/lineage/award schema changes require a separately reviewed mixed-server barrier or
 bridge; rollback must retain ledger records and dispatch identity history.
@@ -138,7 +139,18 @@ and capacity monitoring are **required before repeatable products launch**, to a
 overflow receipt needing an operational migration. Corrupt/newer/oversized data fails closed;
 no reset, truncation or fallback profile is written.
 
-## Offline Double & Claim: integration design, not implemented
+## Offline Double & Claim: integrated, purchases disabled
+
+MN-22 now supplies frozen awards, normal claims, reservations and receipt fulfillment in
+schema17's **single profile aggregate** through P02's optional `prepare`/`fulfill` hooks.
+The existing native launcher/remote protocol is reused. Its candidate permanent product/award
+binding, retained credits, cancellation recovery, unresolved decisions and tests are documented
+in [the offline implementation and P08 handoff](OFFLINE_DOUBLE_CLAIM.md). This supersedes the
+future-integration status below; those design prerequisites remain protected and sales stay off.
+P04's fixed token grants use `deliverReserved` only after an immutable sidecar entry commits;
+bounded join/refresh replay recovers interruptions. Mixed Starter grants remain reserved.
+
+The following records the original P02 design constraints, rather than current implementation status.
 
 The approved promise is normal reward **N**, purchased extra **N** for one specific return.
 There is no permanent offline entitlement. `OfflineAward` names the future server-created frozen

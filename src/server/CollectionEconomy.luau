@@ -175,7 +175,7 @@ function Economy.pityProgress(pity: { [string]: Types.Pity }): { [string]: Types
 	end
 	return result
 end
-function Economy.buckets(collection: string, pity: { [string]: Types.Pity }): { [string]: number }
+local function pityBuckets(collection: string, pity: { [string]: Types.Pity }): { [string]: number }
 	local config = Config.collections[collection]
 	assert(config, "Unknown collection")
 	local result = table.clone(Config.buckets[config.buckets])
@@ -215,10 +215,51 @@ function Economy.buckets(collection: string, pity: { [string]: Types.Pity }): { 
 	end
 	return result
 end
-function Economy.odds(pity: { [string]: Types.Pity }): { [string]: number }
+-- This distribution drives disclosures and the draw. Pity resolves first; Luck changes weights,
+-- then reward floors condition that same distribution. L=1 retains the exact free probabilities.
+function Economy.buckets(
+	collection: string,
+	pity: { [string]: Types.Pity },
+	luck: number?,
+	minimum: Rarity.Id?
+): { [string]: number }
+	local weight = luck or 1
+	assert(weight == 1 or weight == 2 or weight == 4, "Unapproved Luck weight")
+	local result = pityBuckets(collection, pity)
+	if weight == 1 and minimum == nil then
+		return result
+	end
+	local floor = if minimum then table.find(Rarity.order, minimum) or 1 else 1
+	local total = 0
+	for index, rarity in Rarity.order do
+		local chance = result[rarity]
+		if chance then
+			result[rarity] = if index < floor
+				then 0
+				else chance * (if index >= 3 then weight else 1)
+			total += result[rarity]
+		end
+	end
+	assert(total > 0, "No figures at the minimum rarity")
+	for rarity, chance in result do
+		result[rarity] = chance * 100 / total
+	end
+	return result
+end
+function Economy.rarityOdds(
+	pity: { [string]: Types.Pity },
+	luck: number?
+): { [string]: { [string]: number } }
+	local result: { [string]: { [string]: number } } = {}
+	for id in Config.collections do
+		result[id] = Economy.buckets(id, pity, luck)
+	end
+	return result
+end
+function Economy.odds(pity: { [string]: Types.Pity }, luck: number?): { [string]: number }
 	local result: { [string]: number } = {}
 	for id in Config.collections do
-		local buckets = Economy.buckets(id, pity)
+		local buckets = Economy.buckets(id, pity, luck)
 		for _, figure in Catalog.figures do
 			if figure.collection == id then
 				result[figure.id] = buckets[figure.rarity]
@@ -235,10 +276,11 @@ function Economy.roll(
 	collection: string,
 	pity: { [string]: Types.Pity },
 	minimum: Rarity.Id?,
-	forcedRarity: string?
+	forcedRarity: string?,
+	luck: number?
 ): string
 	assert(value >= 0 and value < 1, "Roll must be in [0, 1)")
-	local buckets = Economy.buckets(collection, pity)
+	local buckets = Economy.buckets(collection, pity, luck, minimum)
 	-- Server-only debug injection retains the actual within-rarity figure weights.
 	if forcedRarity then
 		assert(

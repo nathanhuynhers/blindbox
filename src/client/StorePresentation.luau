@@ -80,6 +80,10 @@ export type OfflineInput = {
 	doubleText: string, -- exact server 2N; never parsed from formatted UI text
 	freeText: string, -- actual free claim amount, including capacity clipping
 	eligible: boolean,
+	buyAllowed: boolean?,
+	priceText: string?,
+	claimed: boolean?,
+	freeClaimRestored: boolean?,
 	outcome: Outcome,
 	noChargeConfirmed: boolean?,
 	reason: string?,
@@ -240,6 +244,9 @@ function Presentation.offline(input: OfflineInput): (string, boolean)
 		return `Yay! +{input.doubleText} Coins claimed!`, true
 	end
 	if input.outcome == "cancelled" then
+		if input.reason then
+			return input.reason, not (input.freeClaimRestored or input.noChargeConfirmed)
+		end
 		return if input.noChargeConfirmed
 			then "Purchase cancelled. You weren't charged. Claim is still free."
 			else "Waiting for purchase verification. Don't purchase again to retry.",
