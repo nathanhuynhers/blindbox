@@ -90,6 +90,10 @@ One-opening overrides are server-only, temporary and consumed inside preflighted
   repaired state follows the normal save path.
 - `Persistence`/`Storage`: existing UpdateAsync leases/generations, failure pauses, autosaves and
   isolated Studio/live stores. Failed loads never overwrite progress with defaults.
+- `PurchaseConfig`/`PurchaseProtocol`/`PurchaseAvailability`/`Entitlements`/`PurchaseService`/
+  `PurchaseRuntime`/`PurchaseLedger`: disabled P02 purchase foundation; server verification,
+  private typed state and atomic durable receipt + reserved reward sidecar. No wallet release,
+  gameplay effects or client wiring. See [purchase integration contract](PURCHASE_FOUNDATION.md).
 - `AfkReconnect`/`AfkClient`/`AfkIdle`: server-timed public-server idle reconnect, fresh client
   confirmations, a frozen saved/released profile handoff and conditional lease recovery.
   `AfkConfig` centralizes tuning; `AfkNotice` reuses the existing UI tokens. See the
