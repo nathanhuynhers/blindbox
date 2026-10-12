@@ -24,6 +24,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 	local visible: boolean? = nil
 	local colors: { [BasePart]: Color3 } = {}
 	local textures: { [MeshPart]: string } = {}
+	local appearances: { [SurfaceAppearance]: MeshPart } = {}
 	local shownVariant = ""
 	local extent = 1.7
 	local dimensions = Vector3.new(3.4, 3.4, 3.4)
@@ -41,6 +42,11 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 		camera.CFrame = CFrame.lookAt(Vector3.new(0, 0.35, -distance), Vector3.zero)
 	end
 	local function replace(nextModel: Model?)
+		-- Hidden PBR surfaces have no parent, so model destruction alone cannot free them.
+		for appearance in appearances do
+			appearance:Destroy()
+		end
+		table.clear(appearances)
 		if model then
 			model:Destroy()
 		end
@@ -61,6 +67,13 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 				if part:IsA("MeshPart") and part.TextureID ~= "" then
 					textures[part] = part.TextureID
 				end
+				if
+					part:IsA("SurfaceAppearance")
+					and part.Parent
+					and part.Parent:IsA("MeshPart")
+				then
+					appearances[part] = part.Parent
+				end
 			end
 		end
 		fit()
@@ -78,7 +91,17 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 		for part, texture in textures do
 			part.TextureID = if discovered then texture else ""
 		end
+		-- SurfaceAppearance overrides TextureID; detach it for the same grey silhouette.
+		for appearance, part in appearances do
+			appearance.Parent = if discovered then part else nil
+		end
 	end
+	scope.add(function()
+		for appearance in appearances do
+			appearance:Destroy()
+		end
+		table.clear(appearances)
+	end)
 	scope.connect(frame:GetPropertyChangedSignal("AbsoluteSize"), fit)
 	scope.add(FigureModel.onTemplatesChanged(function()
 		if

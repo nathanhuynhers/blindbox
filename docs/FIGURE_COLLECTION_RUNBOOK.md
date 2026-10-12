@@ -51,6 +51,9 @@ catalog, ask before adding it: that is a gameplay change and is not covered by t
 ```text
 tools/figures/                      shared tooling, never copied per collection
   sdf.py                            signed-distance sculpting primitives
+  modeling.py                       optional mesh sweeps, braids, garment lofts, Comp profiles
+  materials.py / baking.py          portable presets and optional Cycles map baking
+  glb.py                            embedded core-glTF inspection
   build.py                          Blender: mesh, audit, export GLB, re-import, render
   publish.py                        gates, manifest, upload, runtime wiring, checks
 assets/figures/<collection-slug>/
@@ -61,7 +64,8 @@ assets/figures/<collection-slug>/
     reference/<figure>_sheet.webp
     model/<figure>_roblox.glb       the upload file
     model/<figure>_production.blend
-    renders/<figure>_{front,three_quarter,side,back,beauty}.{png,webp}
+    renders/<figure>_{beauty,fidelity}_{front,three_quarter,side,back}.{png,webp}
+    renders/<figure>_{beauty,fidelity}_sheet.png
     validation/<figure>_validation.json
 build/figures/<collection>/         ignored scratch: previews and build logs
 ```
@@ -72,8 +76,8 @@ new collection's `figures.py`.
 
 ## 3. How the figures are modeled
 
-Figures are sculpted **in code as signed-distance fields (SDFs)** and meshed by Blender 5.2's bundled
-OpenVDB. No interactive Blender or MCP is needed, and every figure rebuilds deterministically from
+Figures can mix **signed-distance fields (SDFs)** meshed by Blender 5.2's bundled OpenVDB and
+procedural/native mesh components. No interactive Blender or MCP is required; figures rebuild from
 `figures.py`. Blender is at `C:\Program Files\Blender Foundation\Blender 5.2\blender.exe`; override the
 path with the `BLENDER` environment variable.
 
@@ -99,10 +103,95 @@ path with the `BLENDER` environment variable.
 | Faces, bellies, spots, trims | `overlay(base, region, out, depth)`: a thin skin that follows the surface |
 | Front-projected shapes | `front_decal` with `ellipse2` / `arc2` |
 
-In the Tidepool `figures.py`, `face(...)` builds eyes (domed lens), eye highlights, cheeks, and a smile
-or open mouth with tongue as skins on a given base. `surface_point` and `sample_surface` place spots
-and knobs on a surface. When a new collection needs these helpers, copy them into its own
-`figures.py`, or move them into `tools/figures/` once two collections share them.
+Existing collection-specific `face(...)` helpers remain supported. New definitions should use
+shared `surface_point` (fails when no crossing exists), `surface_normal`, `project_decal`, `shell`
+and `subtract` from `sdf.py` for oriented eyes, lids, eyebrows, lips, cheeks and recessed features.
+Place features on the **outermost** skin. These are geometry operations, not a facial anatomy preset.
+
+### Hybrid modeling (opt-in)
+
+Import `Comp` from `modeling.py` and `Mat`/`preset` from `materials.py` in **new** definitions.
+Keep existing definitions and their local classes unchanged. Pass a material key directly in a
+spec's `mats` dictionary, or use the existing collection `assemble` helper with material tuples.
+
+| Need | Shared capability |
+| --- | --- |
+| Layered bangs, locks, flowing clumps, ponytails, limbs, seam trim | `hair_lock(points, widths, depths)` / `sweep(points, radii)`; transported elliptical sections, explicit sampling, rounded ends and UVs |
+| Braids | `braid(points, radius, spread, turns)`; three closed overlapping strands; declare `expected_islands=3` |
+| Skirts, dress/coats, cuffs, collars | `garment_loft(centers, radii, thickness, folds, fold_depth)`; inner/outer rings joined at rims. Rings must ascend in Z; use mesh factories for posed sleeves or open jackets |
+| Scarves, ribbons, lapels, footwear, headwear, hands, props | Flattened/tapered sweeps, custom `MeshData(vertices, faces, uvs)`, or a callable returning a Blender mesh object with applied modifiers |
+| Intentional separate pieces sharing material | `join_meshes`; concatenation, **not boolean union**. Declare island count. Keep separate Comp objects when budgets/materials differ |
+
+Native factories must return a temporary mesh object. The builder copies evaluated modifiers,
+world transforms and UVs and removes that source object; the Comp's material replaces its slots.
+Clean up any other construction helpers in the factory. Arbitrary self-intersections, garment fit,
+hand anatomy and reference accuracy still require artistic inspection; these helpers cannot infer them.
+
+```python
+from modeling import Comp, hair_lock
+from materials import preset
+
+mats = {"hair": preset("satin_vinyl", "#49302B", pbr=True)}
+comps = [Comp("Example_Lock", None, "hair", quality="high",
+              mesh=lambda: hair_lock([(0, 0, 2), (0.2, -0.4, 1.6), (0.25, -0.5, 1.2)],
+                                     [0.16, 0.12, 0.025], [0.07, 0.06, 0.025]))]
+# Return the same name/title/rarity/catalog/comps/mats/bounds spec as existing definitions.
+```
+
+### Detail and optimization controls
+
+New `Comp` profiles are starting points, not per-figure quality promises:
+
+| Profile | SDF voxel (studs) | Per-part triangle target | Max sampled optimization movement (studs) |
+| --- | --- | --- | --- |
+| simple | 0.012 | 6,000 | 0.012 |
+| medium | 0.008 | 10,000 | 0.008 |
+| high | 0.004 | 16,000 | 0.004 |
+
+Override `voxel`, `tris`, `max_surface_error` per component. Preserve faces/hair edges/accessories
+as separate parts with tighter limits rather than raising every part's budget. Author native
+topology when SDF sampling would spend most triangles on a thin ribbon or pleated garment.
+Legacy components retain their voxel, budget, smooth shading and cleanup defaults.
+
+- For thin SDF geometry, supply tight `bounds=(lo, hi)` with positive margin and `min_feature`
+  (full thickness); at least three voxels must span it. Legacy coarse 0.04-stud discovery can miss
+  narrow disconnected details. Explicit bounds bypass that scan. Bounds touching the surface fail.
+- New components keep small islands (`min_faces=0`), require `expected_islands=1` by default,
+  and support `smooth=False` for hard surfaces. Tiny details should not be silently cleaned away.
+  Counts refer to connected surface islands. Closed cavity shells with disconnected inward-facing
+  inner skins fail the orientation gate; use open garment shells with joined/capped rims, or custom
+  connected topology. Clip SDF `shell` to a region for facial patches and closed garment edges.
+- Optimization measures symmetric distances from vertices and face centers before/after cleanup
+  and decimation. Exceeding a new component's limit fails: split geometry or increase its budget.
+  This is sampled geometry evidence, not a Hausdorff guarantee or visual-quality score.
+- The dense-grid memory guard defaults to 64 million cells (`FIG_MAX_GRID_CELLS`). Tighten bounds
+  or split parts before raising it. No automatic smoothing/subdivision is added.
+- Keep each part **below 20,000 triangles**, preserving the existing conservative publisher gate.
+  [Roblox's general limit](https://create.roblox.com/docs/art/modeling/specifications) is 20,000.
+
+### Materials and maps
+
+`preset(name, hex_color, pbr=False, **overrides)` supports `satin_vinyl`, `glossy_vinyl`,
+`matte_plastic`, `glossy_eyes`, `painted_resin`, `soft_fabric`, `polished_metal`, `pearlescent`,
+and `translucent`. `pbr=True` embeds a small packed G-roughness/B-metalness map even for uniform
+presets. Flat albedo remains sufficient for many simple parts; share materials between parts.
+Pearlescence is a roughness/metalness approximation; interference, coat, subsurface and refraction
+remain optional **beauty-only** `render={...}` effects.
+
+`Mat` accepts `color_map`, `roughness_map`, `metalness_map`, `normal_map` PNG paths. Color is sRGB;
+data maps are Non-Color; normals must be tangent-space OpenGL (+Y). Roughness and metalness maps
+must have matching dimensions. Default map budget is at most 2048px; prefer 256–512px for small
+figures and use larger maps only for visible detail. Spatial maps require valid nondegenerate UVs;
+native UVs are preserved, otherwise new components use smart projection. Legacy flat/ramp UVs
+are supported, but are unsuitable for spatial maps. Sweep caps have disk UVs; cap/side charts
+overlap, so unwrap uniquely in Blender when the painting/bake requires unique texels.
+
+`baking.bake_maps(obj, directory, resolution=512, channels=(...), high=None, cage=0.02)` bakes
+opaque Principled color, roughness and metalness through emission (no lighting), and tangent-space
+normals from an optional selected high-resolution source. UVs must already be unwrapped. It restores
+nodes, selection and render settings on success/failure. Bake before assembling the spec, then pass
+the returned PNG paths to `Mat`. Do not leave the high-resolution source in the production collection.
+Alpha is explicit in Mat; transmission is not baked. Check bake seams and projection cages visually.
 
 ### Defining a figure
 
@@ -139,7 +228,7 @@ eyes, and the mouth is a small arc between and below them.
 "/c/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup --python tools/figures/build.py -- <collection> <figure> preview
 ```
 
-This writes `build/figures/<collection>/preview/<figure>_sheet.png`: four 420 px views (about
+This writes `build/figures/<collection>/preview/<figure>_beauty_sheet.png`: four 420 px views (about
 10–100 s each). Run figures in parallel as background processes. Look at the sheet next to the
 reference views and fix the biggest mismatch first: silhouette, then proportions, then features,
 then color. Environment variables: `FIG_VIEWS=front,side` renders a subset, `FIG_TAG=_x` suffixes the
@@ -167,6 +256,32 @@ default the same way with a module-level `RENDER_VIEW = "<transform>|<look>|<exp
 - **Degenerate faces:** `build.py` dissolves slivers (2e-5); the audit must report zero.
 - Skip microscopic details (sparkle speckles) and say so in the receipt.
 
+### Beauty versus production fidelity
+
+`preview` uses source geometry and optional Blender garnish. `final` saves a clean production
+blend/GLB, resets Blender, reimports that GLB, and renders `*_fidelity_*` views with fixed Khronos
+PBR Neutral lighting/color management and no garnish. It then reopens the source blend to render
+`*_beauty_*` views. Both use the same measured framing at the four standard angles, fitting varied
+heights/widths automatically. `FIG_VIEW` and collection `RENDER_VIEW` affect **beauty only**.
+Use `build.py -- <collection> <figure> fidelity` to rerender an existing GLB without rebuilding it.
+Neither mode is a Roblox screenshot. Compare both sheets to the reference before publication.
+
+Final defaults are 1000px/96 samples. `FIG_RENDER_RES` and `FIG_RENDER_SAMPLES` allow faster
+technical fixture runs; full production review should use the defaults and all four views.
+Lineups remain source/beauty renders. Previously produced filenames are not rewritten by this upgrade.
+
+### Infrastructure regression checks (no uploads)
+
+```powershell
+python -m unittest tests/test_asset_pipeline.py tests/test_figure_publish.py tests/test_figure_glb.py
+& "$env:BLENDER" -b --factory-startup --python-exit-code 1 --python tests/test_figure_modeling.py
+& "$env:BLENDER" -b --factory-startup --python-exit-code 1 --python tests/test_figure_blender.py
+& "$env:BLENDER" -b --factory-startup --python-exit-code 1 --python tools/figures/build.py -- --fixture technical final
+```
+
+Set `BLENDER` to the installed executable first. The fixture is isolated geometry/material swatches,
+not a character or collection; all outputs stay in ignored `build/`. Never pass it to `publish.py`.
+
 ## 5. Build, publish and wire up: one command
 
 When the previews match the sheets:
@@ -181,11 +296,22 @@ nothing further. In order, it:
 
 1. **Builds** each figure in parallel (Blender `final` mode, about 5–20 minutes for a collection):
    production `.blend`, GLB, a validation report, a clean re-import, and 1000 px inspection and
-   beauty renders. Logs go to `build/figures/<collection>/`.
+   beauty and reimported fidelity renders. Logs go to `build/figures/<collection>/`.
+   Default concurrency is two isolated Blender processes (`FIG_BUILD_JOBS` overrides it); high-detail
+   grids need substantial memory, so size concurrency to available RAM.
 2. **Gates** every report: each part closed, manifold, zero-area-free and positive-volume; under
    20,000 triangles per part; the GLB re-imports with identical mesh and triangle counts; every
    material has an embedded albedo texture (Studio imports factor-only colors near-white); no glTF
    extensions; a catalog ID and an `_Eyes` part are present.
+   New schema-2 reports additionally gate finite vertices/UVs, one material per part, duplicate
+   faces, orientation of disconnected surfaces, declared island counts, measured optimization
+   error, embedded PBR data and triangle/UV/normal export attributes. Reimport checks surface,
+   bounds, volume, topology, UV corners and shading normals, not just counts. A GLB SHA-256 binds
+   its report and fidelity preview to the upload input; changed binaries require a new build.
+   Old reports remain supported. Technical gates do not establish reference likeness or detect
+   every self-intersection, hidden overlap, texture seam or thin feature omitted by its definition.
+   Schema-2 publication requires all four beauty/fidelity inspection files. Blender exceptions
+   return a nonzero process status so `--build` stops rather than accepting an older report.
 3. **Registers** each figure in `assets/manifest.json` as alias `<figure_snake>` and key
    `Models.<CollectionPascal>.<FigureName>`, with every part as a required node.
 4. **Uploads** through `scripts/upload_assets.py` (dry run first). It uses `ROBLOX_API_KEY` from the
@@ -218,6 +344,14 @@ Then render the lineup (`build.py -- <collection> lineup`) and check that no fig
   scale is relative), `UIPreview` (all portrait previews; rebuilds on template arrival; undiscovered
   previews also hide `TextureID`), and `OpeningFigure` (the unboxing reveal). The server re-renders
   every plot on `FigureRevision`.
+- **PBR:** the loader preserves imported `SurfaceAppearance`, normals and material properties;
+  it does not fabricate texture IDs or change world lighting. `UIPreview` temporarily detaches
+  PBR surfaces as well as hiding `TextureID` for undiscovered silhouettes, restores them for
+  discovered previews, and destroys detached surfaces when the model/screen is replaced.
+  [SurfaceAppearance](https://create.roblox.com/docs/reference/engine/classes/SurfaceAppearance)
+  depends on graphics settings, environment reflections and uploaded maps; a portable GLB is
+  not proof that Open Cloud or Studio has imported every map correctly. Verify imported color,
+  roughness, metalness and normal maps before accepting a future PBR collection.
 - **Tuning** lives in [FigureAssets.luau](../src/shared/FigureAssets.luau): `scale` (0.8) and
   `glassTransparency` (0.55). If a collection's figures are much larger or smaller than about 3 studs,
   or break the display (8-stud spacing) or shelf (3.6-stud spacing, 4.2-stud rows) layouts, discuss
@@ -246,6 +380,14 @@ a playtest you did not run:
 3. Collection shows color for discovered figures and grey silhouettes for undiscovered ones.
 4. The unboxing reveal frames each figure well.
 5. A two-player test shows the same figures for visitors.
+
+For new PBR assets, also compare exported/reimported fidelity views to Studio at the same angles,
+neutral daytime lighting and a recorded graphics level. Inspect Collection tile/detail **discovered
+and undiscovered** states, unboxing, Display and Shelves at desktop 1920×1080 and landscape phone
+667×375 (plus relevant inset preset per the [device matrix](qa/DEVICE_TEST_MATRIX.md)). Toggle
+discovered state repeatedly, replace figures and close/reopen screens; check no detached material
+instances remain. ViewportFrame lighting differs from Workspace; do not promise identical gloss,
+refraction or shadows. Preserve existing runtime glass overrides (0.55) when comparing alpha.
 
 ## 8. Receipt
 
