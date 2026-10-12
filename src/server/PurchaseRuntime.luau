@@ -8,7 +8,11 @@ local Service = require(script.Parent.PurchaseService)
 local Storage = require(script.Parent.Storage)
 local Types = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 local Runtime = {}
-function Runtime.start(folder: Folder, sessionFor: (Player) -> Storage.Session?)
+function Runtime.start(
+	folder: Folder,
+	sessionFor: (Player) -> Storage.Session?,
+	ownershipChanged: ((number) -> ())?
+)
 	local request = Instance.new("RemoteEvent")
 	request.Name, request.Parent = "PurchaseRequest", folder
 	local state = Instance.new("RemoteEvent")
@@ -31,6 +35,7 @@ function Runtime.start(folder: Folder, sessionFor: (Player) -> Storage.Session?)
 			and os.clock() < session.safeUntil
 	end
 	local service = Service.create({
+		ownershipChanged = ownershipChanged,
 		now = os.clock,
 		ready = ready,
 		update = function(key, transform)

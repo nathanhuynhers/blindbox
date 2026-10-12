@@ -56,6 +56,16 @@ export type DealView = {
 	soon: number,
 	offers: { DealOffer },
 }
+-- Verified server inputs. Timed overlap is supplied by P04 as intervals, not a saved current power.
+export type EarningFactors = { permanentTier: number, vipFactor: number, timedCoinFactor: number }
+export type EarningInputs = { permanentTier: number }
+export type ConveniencePreferences = { autoCollect: boolean, movement: boolean }
+export type CoinModifierView = {
+	verifiedTier: number,
+	appliedTier: number,
+	ownershipFresh: boolean,
+	reason: string,
+}
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
@@ -87,13 +97,26 @@ export type Profile = {
 	sfxVolume: number,
 	musicVolume: number,
 	deals: DealStock,
+	-- v15 checkpoint of the effective permanent tier at lastSeen, never proof of current ownership.
+	earningInputs: EarningInputs?,
+	convenience: ConveniencePreferences?,
 }
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.
-export type State = Profile & { revision: number, time: number, offlineSeconds: number }
+export type State = Profile & {
+	revision: number,
+	time: number,
+	offlineSeconds: number,
+	earningFactors: EarningFactors,
+	coinModifiers: CoinModifierView,
+	convenience: ConveniencePreferences,
+}
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 -- Private owner presentation only: build-up toward a rarity guarantee; odds resolve priority.
 export type PityProgress = { Legendary: number, Mythical: number }
 export type Snapshot = {
+	-- Owner-only verified and actually applied benefits; no Store wiring implied.
+	coinModifiers: CoinModifierView?,
+	earningFactors: EarningFactors?,
 	-- Runtime owner-only acknowledgement of the Shelf editor's showcase pause.
 	shelfEditorToken: number?,
 	shelves: ShelfView,

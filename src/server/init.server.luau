@@ -21,6 +21,9 @@ local PlotSlots = require(script.PlotSlots)
 local PlotConfig = require(script.PlotConfig)
 local Storage = require(script.Storage)
 local PurchaseRuntime = require(script.PurchaseRuntime)
+local PurchaseConfig = require(script.PurchaseConfig)
+local CoinModifiers = require(script.CoinModifiers)
+local CoinModifierRuntime = require(script.CoinModifierRuntime)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
 local PlayerSpawn = require(script.PlayerSpawn)
@@ -87,9 +90,14 @@ local adminRemote = Instance.new("RemoteFunction")
 adminRemote.Name = "Admin"
 adminRemote.Parent = folder
 folder.Parent = ReplicatedStorage
+local ownershipChanged: ((number) -> ())? = nil
 local purchases = PurchaseRuntime.start(folder, function(player: Player): Storage.Session?
 	local session = sessions[player]
 	return if session and not shuttingDown then session.storage else nil
+end, function(userId)
+	if ownershipChanged then
+		ownershipChanged(userId)
+	end
 end)
 -- Current plaza deal window and its length. Studio playtests may shorten it with the
 -- StudioDealWindowSeconds attribute on ServerStorage; live servers always use the config.
@@ -111,6 +119,8 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		Rules.refreshDay(state, day)
 	end
 	local snapshot: Types.Snapshot = {
+		coinModifiers = table.clone(state.coinModifiers),
+		earningFactors = table.clone(state.earningFactors),
 		shelfEditorToken = session.plot.showcase.editorToken,
 		shelves = Shelves.publicView(state.shelves, session.plot.view),
 		shelfAvailable = Shelves.availability(state.shelves, state.owned),
@@ -152,6 +162,31 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		deals = Deals.view(state, dealClock()),
 	}
 	stateRemote:FireClient(player, snapshot, reply)
+end
+-- P02 invokes this immediately after verified ownership changes. A paused/frozen profile
+-- defers the change until the ordinary loop resumes; it must not alter a handoff checkpoint.
+local function refreshCoinModifiers(player: Player, session: Session, now: number)
+	local storage = session.storage
+	if shuttingDown then
+		return
+	end
+	local changed = CoinModifierRuntime.sync(storage, PurchaseConfig.products, function(key)
+		return purchases.ownership(player.UserId, key)
+	end, CoinModifiers.effectsValidated, now)
+	if changed then
+		if storage.handle then
+			storage.status = "Autosave pending"
+		end
+		PlayerPlot.render(session.plot, session.transaction.state)
+	end
+end
+ownershipChanged = function(userId)
+	local player = Players:GetPlayerByUserId(userId)
+	local session = if player then sessions[player] else nil
+	if player and session then
+		refreshCoinModifiers(player, session, os.clock())
+		send(player, session, nil)
+	end
 end
 local afk = AfkReconnect.create({
 	now = os.clock,
@@ -659,6 +694,7 @@ table.insert(
 		elapsed = 0
 		local now = os.clock()
 		for player, session in sessions do
+			refreshCoinModifiers(player, session, now)
 			local character = player.Character
 			local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
 			if root and root:IsA("BasePart") then

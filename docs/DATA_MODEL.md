@@ -112,10 +112,20 @@ The retired legacy adapters are no longer used by the active Profile decoder.
 
 ## Storage and runtime boundaries
 
+P03A also supports forward-only **v15**: `earningInputs = {permanentTier = 1/2/4/8}` and
+`convenience = {autoCollect = boolean, movement = boolean}` are required. V6–v14 defaults remain
+free and toggles off; unchanged free profiles continue writing v14. An applied tier or preference
+change promotes to v15 permanently. The earning input is a saved offline checkpoint, never
+current entitlement proof; lease validation preserves it until offline calculation consumes it.
+All records are strictly validated/copied. Old readers reject v15, requiring a release barrier
+or compatibility bridge before enabling its writer. No namespace/reset is introduced. See
+[P03A compatibility and P05 integration contract](COIN_MODIFIERS.md#offline-checkpoint-and-schema-compatibility).
+
 The envelope remains `{data, token, expires, generation, writer}` under `Player_<UserId>`.
 Store names remain those established above; native UpdateAsync leases, generations, retries and
 pause-on-failure behavior are unchanged. A failed load never becomes a new profile. Only validated
-schema-14 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first).
+schema-14/v15 snapshots enter the acquisition/save path (valid schemas 6-13 are upgraded first;
+v15 is used only after the new applied-input/preference change).
 Wallet and banks save atomically in one aggregate.
 Replacement collects as many outgoing whole Coins as the wallet accepts; residual fractions and
 overflow remain in `earnings` under the outgoing ID. This uses the existing schema and does not

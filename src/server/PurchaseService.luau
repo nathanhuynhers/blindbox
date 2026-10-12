@@ -15,6 +15,8 @@ export type Dependencies = {
 	-- Product implementation must preflight all policy/lineage/capacity/disclosure dependencies.
 	eligible: (number, Config.Product) -> boolean,
 	send: (number, Types.Snapshot, Types.Result?) -> (),
+	-- Non-yielding server observer after P02 verification commits. Never a client ownership signal.
+	ownershipChanged: ((number) -> ())?,
 }
 type Session = {
 	entitlements: Entitlements.State,
@@ -142,6 +144,9 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 					product.platformId :: number,
 					deps.owns
 				)
+				if sessions[userId] == session and deps.ownershipChanged then
+					deps.ownershipChanged(userId)
+				end
 			end
 		end
 		session.working = false
@@ -283,6 +288,12 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		if kind == "Pass" then
 			-- Event is only a refresh trigger, never ownership proof (even if purchased=true).
 			Entitlements.refresh(session.entitlements, product.key, userId, id, deps.owns)
+			if sessions[userId] ~= session then
+				return
+			end
+			if deps.ownershipChanged then
+				deps.ownershipChanged(userId)
+			end
 		elseif session.prompt == product.key then
 			session.awaiting = purchased
 			if purchased and session.promptReceipt then

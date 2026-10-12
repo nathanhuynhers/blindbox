@@ -141,6 +141,13 @@ transaction receipts prevent retry collection.
 
 ## Offline earnings
 
+P03A implements a gated permanent Coin modifier layer. D2 was approved with policy/earned-lineage
+validation still required; production effects remain disabled and free tuning is unchanged.
+Highest verified configured 2/4/8 wins for new Display accrual and the saved normal offline
+reward. Fixed grants and existing banks are excluded. See [the modifier/snapshot/checkpoint
+contract](COIN_MODIFIERS.md) for source rules, old-rate settlement and the separate offline
+authorization boundary. P03B Double & Claim and P04 timer overlap are separate tasks.
+
 Displayed figures keep earning while their owner is offline, Coin only. Server `Economy` tuning:
 `offlineRate = 0.5` (fraction of the full online Display rate, including duplicates and the set
 bonus), `offlineMaxSeconds = 6 h` (accrual cap) and `offlineMinSeconds = 60` (shorter absences,

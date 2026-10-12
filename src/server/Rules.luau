@@ -10,6 +10,7 @@ local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
 local Shelves = require(script.Parent.Shelves)
 local Deals = require(script.Parent.Deals)
+local CoinModifiers = require(script.Parent.CoinModifiers)
 local Rules = {
 	rates = CollectionEconomy.rates,
 	odds = CollectionEconomy.odds({}),
@@ -20,6 +21,14 @@ local Rules = {
 function Rules.new(now: number): Types.State
 	return {
 		schemaVersion = 14,
+		earningFactors = CoinModifiers.free(),
+		convenience = { autoCollect = false, movement = false },
+		coinModifiers = {
+			verifiedTier = 1,
+			appliedTier = 1,
+			ownershipFresh = false,
+			reason = "ValidationPending",
+		},
 		display = { unlocked = DisplayConfig.defaultSlots, slots = { "", "", "" } },
 		shelves = Shelves.new(),
 		pityByGroup = {},
@@ -90,12 +99,16 @@ function Rules.refreshDay(state: Types.State, day: number)
 	state.goalProgress = math.max(state.goalProgress, math.min(3, count))
 end
 function Rules.rate(state: Types.State): number
+	return Rules.baseRate(state) * CoinModifiers.factor(state.earningFactors, "Display")
+end
+function Rules.baseRate(state: Types.State): number
 	return subtotal(state) + Rules.bonus(state)
 end
 function Rules.settle(state: Types.State, now: number)
 	local elapsed = math.max(0, now - state.time)
 	state.time = math.max(state.time, now)
-	local multiplier = if Rules.bonus(state) > 0 then 1 + Economy.setBonus else 1
+	local multiplier = (if Rules.bonus(state) > 0 then 1 + Economy.setBonus else 1)
+		* CoinModifiers.factor(state.earningFactors, "Display")
 	for _, id in state.display.slots do
 		if id ~= "" then
 			state.earnings[id] = math.min(
@@ -104,6 +117,50 @@ function Rules.settle(state: Types.State, now: number)
 			)
 		end
 	end
+end
+-- Non-yielding server boundary. P02 verification must complete before calling this;
+-- lifecycle/policy checks belong to the caller. Banks are settled using the OLD inputs.
+function Rules.setCoinModifiers(
+	state: Types.State,
+	view: Types.CoinModifierView,
+	now: number
+): boolean
+	assert(
+		CoinModifiers.validTier(view.appliedTier)
+			and CoinModifiers.validTier(view.verifiedTier)
+			and view.appliedTier <= view.verifiedTier,
+		"Invalid Coin tier"
+	)
+	local changed = state.earningFactors.permanentTier ~= view.appliedTier
+	if changed then
+		Rules.settle(state, now)
+		state.earningFactors.permanentTier = view.appliedTier
+		if view.appliedTier > 1 then
+			state.schemaVersion = 15
+		end
+		state.revision += 1
+	end
+	state.coinModifiers = table.clone(view)
+	return changed
+end
+-- P05's validated owner adapter owns readiness/entitlement checks. Preferences alone grant nothing.
+function Rules.setConveniencePreference(state: Types.State, key: string, enabled: boolean): boolean
+	if key == "auto_collect" then
+		if state.convenience.autoCollect == enabled then
+			return true
+		end
+		state.convenience.autoCollect = enabled
+	elseif key == "movement" then
+		if state.convenience.movement == enabled then
+			return true
+		end
+		state.convenience.movement = enabled
+	else
+		return false
+	end
+	state.schemaVersion = 15
+	state.revision += 1
+	return true
 end
 -- Server-only bank transfer; callers validate authorization and own revision/quest updates.
 local function transferBank(state: Types.State, id: string): number
@@ -115,6 +172,9 @@ local function transferBank(state: Types.State, id: string): number
 	end
 	return amount
 end
+-- P05 receives this server-only helper; it validates occupied/unlocked ownership, serializes
+-- after settlement and owns one revision. It must never call Rules.collect to skip the lesson.
+Rules.transferBank = transferBank
 function Rules.collect(state: Types.State, slot: number, id: string): (boolean, string)
 	if id == "" or state.display.slots[slot] ~= id or not state.owned[id] then
 		return false, "That figure is no longer displayed."
@@ -142,16 +202,32 @@ function Rules.claimOffline(state: Types.State): number
 end
 -- On join (wall = UTC os.time()): auto-claim what the previous visit left unclaimed, then award
 -- this absence at the saved Display's rate. Nothing changes a Display while its owner is away.
-function Rules.offline(state: Types.State, wall: number)
+function Rules.offline(state: Types.State, wall: number, paidEffectsAllowed: boolean?)
 	Rules.claimOffline(state)
 	local away = math.min(wall - state.lastSeen, Economy.offlineMaxSeconds)
 	-- Unknown last save (0) or a clock behind it awards nothing.
 	if state.lastSeen > 0 and away >= Economy.offlineMinSeconds then
-		state.offlinePending =
-			math.floor(math.min(Economy.coinLimit, away * Rules.rate(state) * Economy.offlineRate))
+		local inputs = CoinModifiers.free()
+		if paidEffectsAllowed == true and state.earningInputs then
+			inputs.permanentTier = state.earningInputs.permanentTier
+		end
+		-- One final floor. P04 must integrate approved timer overlap over this capped interval
+		-- before rounding, not substitute the timer's current/join-time factor.
+		state.offlinePending = math.floor(
+			math.min(
+				Economy.coinLimit,
+				away
+					* Rules.baseRate(state)
+					* CoinModifiers.factor(inputs, "OfflineDisplay")
+					* Economy.offlineRate
+			)
+		)
 		state.offlineSeconds = if state.offlinePending > 0 then away else 0
 	end
 	state.lastSeen = wall
+	-- Lease acquisition re-encodes before this calculation. Preserve its saved checkpoint
+	-- until now; subsequent live saves checkpoint current verified/applied inputs instead.
+	state.earningInputs = nil
 end
 -- Highest-income loadout for the unlocked slots and its Rules.rate. Income is the subtotal,
 -- times (1 + setBonus) once any collection shows three distinct figures, so an optimum is either
@@ -309,7 +385,8 @@ function Rules.adminFigures(
 ): (boolean, string)
 	local banks = 0
 	local elapsed = math.max(0, now - state.time)
-	local bonus = if Rules.bonus(state) > 0 then 1 + Economy.setBonus else 1
+	local bonus = (if Rules.bonus(state) > 0 then 1 + Economy.setBonus else 1)
+		* CoinModifiers.factor(state.earningFactors, "Display")
 	for _, id in ids do
 		local owned = state.owned[id] or 0
 		if
@@ -507,6 +584,7 @@ function Rules.mutate(
 		if not allowed then
 			return false, refusal, nil
 		end
+		Rules.settle(state, now or state.time)
 		local figures, fresh = open(state, collection, count, rolls, nil, override)
 		id = figures[1]
 		if action == "Daily" then
@@ -552,6 +630,7 @@ function Rules.mutate(
 			if not allowed then
 				return false, refusal, nil
 			end
+			Rules.settle(state, now or state.time)
 			figures = open(state, boxes.collection, boxes.count, rolls)
 		end
 		state.coins += reward.coins
@@ -576,6 +655,7 @@ function Rules.mutate(
 		if not allowed then
 			return false, refusal, nil
 		end
+		Rules.settle(state, now or state.time)
 		local figures = open(
 			state,
 			welcome.collection,
@@ -711,6 +791,7 @@ function Rules.mutate(
 			if state.display.slots[slot] == "" then
 				return false, "That slot is empty.", nil
 			end
+			Rules.settle(state, now or state.time)
 			state.display.slots[slot] = ""
 		end
 	else

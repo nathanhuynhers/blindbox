@@ -13,6 +13,8 @@ requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.sp
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+	"CoinModifiers": "server",
+	"CoinModifierRuntime": "server",
     "PurchaseTypes": "shared", "PurchaseConfig": "server", "PurchaseProtocol": "server",
     "PurchaseLedger": "server", "Entitlements": "server", "PurchaseAvailability": "server", "PurchaseService": "server",
     "AdminTypes": "shared", "AdminConfig": "server", "AdminProtocol": "server", "AdminOverrides": "server", "AdminService": "server", "AdminClient": "client",
@@ -116,7 +118,7 @@ for name, folder in modules.items():
 
 # Exercise the exact production owner-snapshot send function, with only its I/O context injected.
 bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
-send = bootstrap[bootstrap.index("local function send("):bootstrap.index("local afk = AfkReconnect.create(")]
+send = bootstrap[bootstrap.index("local function send("):bootstrap.index("-- P02 invokes")]
 sender = '\n'.join(f'local {name} = require("./{name}")' for name in
                    ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals"))
 sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
@@ -163,6 +165,7 @@ run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
 run("SaveSafety.spec")
 run("Purchases.spec")
+run("CoinModifiers.spec")
 run("Admin.spec", "AdminClient.spec", "AdminUI.spec")
 # Exercise missing authorization with the actual resolver/service, not a parallel policy mock.
 if not requested or "AdminDisabled.spec" in requested:
