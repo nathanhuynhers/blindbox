@@ -26,6 +26,7 @@ export type Controller = {
 	refresh: (Projection.Reveal?) -> (),
 	isActive: () -> boolean,
 	skip: () -> (),
+	advanceAutomatic: (string) -> (),
 	cancel: () -> (),
 	destroy: () -> (),
 }
@@ -36,6 +37,9 @@ type Session = {
 	interact: ((boolean) -> ())?,
 	refresh: ((Projection.Reveal?) -> ())?,
 	choice: string?,
+	requestId: string,
+	finished: boolean,
+	advanceAutomatic: (() -> ())?,
 }
 local actionName, movementName = "BlindboxOpeningInput", "BlindboxOpeningMovement"
 local function isGamepad(): boolean
@@ -44,7 +48,8 @@ end
 function Controller.create(
 	focus: (boolean) -> (),
 	report: (string) -> (),
-	choose: Choose?
+	choose: Choose?,
+	completed: ((string, boolean) -> ())?
 ): Controller
 	local audioCache = Scope.create()
 	Audio.preload(audioCache)
@@ -60,6 +65,15 @@ function Controller.create(
 		active = nil
 		State.cancel(session.state)
 		session.scope.destroy()
+		if completed then
+			local ok, problem = pcall(function()
+				completed(session.requestId, session.finished)
+				return true
+			end)
+			if not ok then
+				warn("Opening completion failed: " .. tostring(problem))
+			end
+		end
 	end
 	local function fail(reason: unknown)
 		close()
@@ -73,6 +87,12 @@ function Controller.create(
 			return active ~= nil
 		end,
 		cancel = close,
+		advanceAutomatic = function(id)
+			local session = active
+			if session and session.requestId == id and session.advanceAutomatic then
+				session.advanceAutomatic()
+			end
+		end,
 		skip = function()
 			if active and active.interact then
 				active.interact(true)
@@ -115,6 +135,8 @@ function Controller.create(
 			local session: Session = {
 				state = State.create(profile.timing, reduced, result.direct, result.tease ~= nil),
 				scope = scope,
+				requestId = result.requestId,
+				finished = false,
 				render = nil,
 				interact = nil,
 				refresh = nil,
@@ -282,6 +304,7 @@ function Controller.create(
 						end
 						if session.state.phase == "Done" then
 							local choice = session.choice
+							session.finished = true
 							close()
 							if
 								choose
@@ -360,6 +383,26 @@ function Controller.create(
 					end)
 				end
 				session.interact = interact
+				-- Advance only the existing interaction gates of the matching single reveal.
+				-- Never skip a timed phase or invoke the "another" purchase choice.
+				if not result.sequence and result.tease == nil then
+					session.advanceAutomatic = function()
+						safely(function()
+							local phase = session.state.phase
+							if phase ~= "Await" and phase ~= "Result" then
+								return
+							end
+							if phase == "Result" then
+								session.choice = "keep"
+							end
+							if State.activate(session.state) then
+								enterPhase()
+								draw(0)
+								wake()
+							end
+						end)
+					end
+				end
 				session.refresh = function(next)
 					if active == session and view.refresh then
 						view.refresh(next)

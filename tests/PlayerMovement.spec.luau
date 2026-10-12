@@ -26,11 +26,20 @@ player.Character = character()
 local first = humanoid(player.Character)
 local binding = Movement.bind(player)
 check(Config.baselineWalkSpeed == 36 and table.isfrozen(Config), "single frozen movement config")
-check(first.WalkSpeed == Config.baselineWalkSpeed, "existing initial character configured immediately")
-check(binding.humanoidAdded == nil and E.connections == baseline + 2, "ready character releases watcher")
+check(
+	first.WalkSpeed == Config.baselineWalkSpeed,
+	"existing initial character configured immediately"
+)
+check(
+	binding.humanoidAdded == nil and E.connections == baseline + 2,
+	"ready character releases watcher"
+)
 first.WalkSpeed = 23
 local extra = humanoid(player.Character)
-check(first.WalkSpeed == 23 and extra.WalkSpeed == 16, "one assignment without continuous overwrite")
+check(
+	first.WalkSpeed == 23 and extra.WalkSpeed == 16,
+	"one assignment without continuous overwrite"
+)
 
 local old = player.Character
 player.CharacterRemoving:Fire(old)
@@ -45,7 +54,9 @@ local completed = player.Character.ChildAdded:Capture()
 local second = humanoid(player.Character)
 check(second.WalkSpeed == Config.baselineWalkSpeed, "respawn gets configured baseline")
 second.WalkSpeed = 23
-for _, callback in completed do callback(second) end
+for _, callback in completed do
+	callback(second)
+end
 check(second.WalkSpeed == 23, "queued callback after success cannot reset a later speed")
 check(E.connections == baseline + 2, "late success releases watcher")
 
@@ -59,13 +70,18 @@ player.Character = character()
 player.CharacterAdded:Fire(player.Character)
 local successor = player.Character
 local abandoned = humanoid(pending)
-for _, callback in queued do callback(abandoned) end
+for _, callback in queued do
+	callback(abandoned)
+end
 check(abandoned.WalkSpeed == 16, "replaced character and queued callback ignored")
 player.CharacterRemoving:Fire(pending)
 check(binding.character == successor, "stale removal does not clear successor")
 check(E.connections == baseline + 3, "only successor watcher remains")
 player.CharacterRemoving:Fire(successor)
-check(binding.character == nil and E.connections == baseline + 2, "removal cleans missing-Humanoid watcher")
+check(
+	binding.character == nil and E.connections == baseline + 2,
+	"removal cleans missing-Humanoid watcher"
+)
 
 player.Character = nil
 Movement.unbind(binding)
@@ -84,9 +100,49 @@ queued = player.Character.ChildAdded:Capture()
 local added = player.CharacterAdded:Capture()
 Movement.unbind(binding)
 local after = humanoid(player.Character)
-for _, callback in queued do callback(after) end
-for _, callback in added do callback(player.Character) end
+for _, callback in queued do
+	callback(after)
+end
+for _, callback in added do
+	callback(player.Character)
+end
 player.CharacterAdded:Fire(player.Character)
 check(after.WalkSpeed == 16, "unbind prevents late Humanoid and queued spawn mutations")
 check(E.connections == baseline, "pending unbind leaves no connections")
-print(string.format("PASS: %d player movement spawn/respawn/cleanup checks (engine doubles)", checks))
+player.Character = character()
+local upgraded = humanoid(player.Character)
+binding = Movement.bind(player)
+check(Movement.bind(player) == binding, "duplicate bind shares one lifetime")
+local selection = { ready = true, owned = true, fresh = true, enabled = true }
+Movement.update(binding, selection)
+check(
+	upgraded.WalkSpeed == 48 and Config.upgradedWalkSpeed == 48,
+	"verified upgrade resolves to 48"
+)
+for _, key in { "ready", "owned", "fresh", "enabled" } do
+	selection[key] = false
+	Movement.update(binding, selection)
+	check(upgraded.WalkSpeed == 36, "free baseline on " .. key)
+	selection[key] = true
+	Movement.update(binding, selection)
+	check(upgraded.WalkSpeed == 48, "refresh restores selected verified benefit")
+end
+player.CharacterRemoving:Fire(player.Character)
+player.Character = character()
+player.CharacterAdded:Fire(player.Character)
+Movement.update(binding, selection)
+upgraded = humanoid(player.Character)
+check(upgraded.WalkSpeed == 48, "late respawn Humanoid gets resolved speed")
+selection.enabled = false
+Movement.update(binding, selection)
+check(upgraded.WalkSpeed == 36, "owner can select free speed")
+Movement.unbind(binding)
+selection.enabled = true
+Movement.update(binding, selection)
+check(
+	upgraded.WalkSpeed == 36 and E.connections == baseline,
+	"entitlement refresh after teardown stays inert"
+)
+print(
+	string.format("PASS: %d player movement spawn/respawn/cleanup checks (engine doubles)", checks)
+)

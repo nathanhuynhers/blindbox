@@ -13,6 +13,8 @@ requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.sp
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "ConvenienceTypes": "shared", "AutoOpen": "server", "AutoCollect": "server",
+    "ConvenienceProtocol": "server", "ConvenienceService": "server", "ConvenienceClient": "client", "ConveniencePresentation": "client", "ConvenienceResults": "client",
     "PurchaseTypes": "shared", "PurchaseConfig": "server", "PurchaseProtocol": "server",
     "PurchaseLedger": "server", "Entitlements": "server", "PurchaseAvailability": "server", "PurchaseService": "server",
     "AdminTypes": "shared", "AdminConfig": "server", "AdminProtocol": "server", "AdminOverrides": "server", "AdminService": "server", "AdminClient": "client",
@@ -38,6 +40,7 @@ modules = {
 }
 # Redesigned UI: the real components, screens and Interface run on tests/UIEngine.luau.
 ui = [
+	"ConvenienceControls",
 	"AdminConsole",
     "AfkNotice",
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
@@ -58,6 +61,10 @@ UI_PRELUDE = "\n".join([
 ])
 for name, folder in modules.items():
     source = (root / "src" / folder / f"{name}.luau").read_text(encoding="utf-8-sig")
+    if name == "Rules" and "Rules.transferBank =" not in source and "function Rules.transferBank" not in source:
+        # Integration-pending fixture: expose the ACTUAL private shared helper only in
+        # ignored generated tests. No duplicate transfer implementation or live export.
+        source = source.replace("return Rules", "Rules.transferBank = transferBank\nreturn Rules")
     if name in ("CoinBurst", "DisplayEarnings"):
         source = source.replace("--!strict", '--!strict\nlocal Engine = require("./CoinEngine")\nlocal game, workspace, Instance, Enum, task, os, warn = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task, Engine.os, Engine.warn\nlocal Color3, Vector3, Vector2, CFrame, UDim2, UDim, TweenInfo = Engine.Color3, Engine.Vector3, Engine.Vector2, Engine.CFrame, Engine.UDim2, Engine.UDim, Engine.TweenInfo\nlocal ColorSequence, NumberRange, NumberSequence, NumberSequenceKeypoint = Engine.ColorSequence, Engine.NumberRange, Engine.NumberSequence, Engine.NumberSequenceKeypoint')
         source = source.replace("require(script.Parent.UIIcons)", "Engine.Icons")
@@ -150,6 +157,7 @@ fixture_source = fixture_source.replace('require(script.Parent.StorePresentation
 (out / "StoreFixtures.luau").write_text(fixture_source, encoding="utf-8")
 run("StorePresentation.spec")
 run("PlayerMovement.spec")
+run("AutoOpen.spec", "AutoCollect.spec", "ConvenienceService.spec", "ConvenienceClient.spec", "ConvenienceOpening.spec", "ConvenienceResults.spec")
 run("PityProgress.spec")
 run("LinearPity.spec")
 run("UIEngine", "ShopLuck.spec")
