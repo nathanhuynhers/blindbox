@@ -13,6 +13,7 @@ local function fixture()
 	local state = { coins = 0, offlinePending = 10000, offlineSeconds = 3600 }
 	Awards.freeze(state, "normal_v1")
 	local clock, available, saveMode, durable, record = 0, true, "ok", nil, nil
+	local journals = {}
 	local prompts, events = 0, {}
 	local product = {
 		key = "offline_double",
@@ -57,7 +58,8 @@ local function fixture()
 		ready = function(id)
 			return available and id == 7
 		end,
-		update = function(_, transform)
+		update = function(key, transform)
+			if string.sub(key, 1, 7) == "Prompt_" then local result=transform(journals[key]); if result then journals[key]=result end; return result end
 			record = transform(record) or record
 			return record
 		end,
@@ -202,6 +204,7 @@ local product = {
 	integrationReady = true,
 	grant = { coins = 0, tokens = { Coins2_15 = 1 } },
 }
+local journals = {}
 local committed = Service.create({
 	now = function()
 		return now
@@ -209,7 +212,8 @@ local committed = Service.create({
 	ready = function()
 		return true
 	end,
-	update = function(_, transform)
+	update = function(key, transform)
+		if string.sub(key, 1, 7) == "Prompt_" then local result=transform(journals[key]); if result then journals[key]=result end; return result end
 		raw = transform(raw) or raw
 		return raw
 	end,

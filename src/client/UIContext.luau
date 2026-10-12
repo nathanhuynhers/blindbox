@@ -1,6 +1,13 @@
 --!strict
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Scope = require(script.Parent.UIScope)
+local Convenience = require(script.Parent.ConvenienceClient)
+export type Commerce = {
+	purchase: (string, number?) -> boolean,
+	activate: (string) -> (),
+	refresh: () -> (),
+	convenience: Convenience.Controller,
+}
 -- Optional destination details when one screen opens another.
 -- `tab` picks the Robux Store tab (StoreCatalog.Tab).
 export type Route = {
@@ -9,8 +16,10 @@ export type Route = {
 	slot: number?,
 	placing: string?,
 	tab: string?,
+	automation: boolean?,
 }
 export type Context = {
+	commerce: Commerce?,
 	scope: Scope.Scope,
 	effects: () -> boolean,
 	-- Design units per screen pixel ratio (desktop UIScale); 1 on phone.

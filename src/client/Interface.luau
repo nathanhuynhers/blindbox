@@ -25,11 +25,15 @@ local Goals = require(script.Parent.GoalsScreen)
 local Shelves = require(script.Parent.ShelvesScreen)
 local Login = require(script.Parent.LoginScreen)
 local Store = require(script.Parent.StoreScreen)
+local StorePresentation = require(script.Parent.StorePresentation)
 local Onboarding = require(script.Parent.Onboarding)
 local Sfx = require(script.Parent.Sfx)
 local ShelfEditor = require(script.Parent.ShelfEditor)
 local Interface = {}
 export type Interface = {
+	store: (StorePresentation.Input) -> (),
+	storeTick: (number) -> (),
+	convenienceChanged: () -> (),
 	update: (Types.Snapshot) -> (),
 	message: (string, string?) -> (),
 	effects: () -> boolean,
@@ -55,7 +59,8 @@ end
 function Interface.create(
 	send: (string, string?, number?, string?, number?) -> (),
 	travel: ((destination: "Home" | "Plaza") -> ())?,
-	shelfEditor: ShelfEditor.Controller?
+	shelfEditor: ShelfEditor.Controller?,
+	commerce: Context.Commerce?
 ): Interface
 	local scope = Scope.create()
 	local snapshot: Types.Snapshot? = nil
@@ -150,6 +155,7 @@ function Interface.create(
 			and (not shelfEditor or not opened or current ~= "Shelves" or shelfEditor.ready())
 	end
 	local ctx: Context.Context = {
+		commerce = commerce,
 		scope = scope,
 		effects = function()
 			return effects
@@ -179,6 +185,7 @@ function Interface.create(
 	local now = function()
 		return workspace:GetServerTimeNow()
 	end
+	local store = Store.create(hosts.Store, ctx)
 	local screens: { [string]: Context.Screen } = {
 		Collection = Collection.create(hosts.Collection, ctx),
 		Display = Display.create(hosts.Display, ctx),
@@ -186,7 +193,7 @@ function Interface.create(
 		Goals = Goals.create(hosts.Goals, ctx, now),
 		Shelves = Shelves.create(hosts.Shelves, ctx),
 		Login = Login.create(hosts.Login, ctx),
-		Store = Store.create(hosts.Store, ctx),
+		Store = store,
 	}
 	local hud = Hud.create(stage, ctx, function(value: boolean)
 		effects = value
@@ -457,6 +464,13 @@ function Interface.create(
 		scope.destroy()
 	end)
 	return {
+		store = store.present,
+		storeTick = store.tick,
+		convenienceChanged = function()
+			if snapshot and opened then
+				screens[current].update(snapshot)
+			end
+		end,
 		displayCoins = function(value)
 			displayedCoins = value
 			if not destroyed then

@@ -1,8 +1,7 @@
 --!strict
 -- Robux Store presentation copy: tabs and product cards for the retained monetization products.
 -- Benefits follow the user-approved D1 values in docs/MONETIZATION.md. This is display text
--- only, never purchase authority: there are no product IDs or prices here, and every product
--- stays "Coming soon" until the server purchase foundation (P02) supplies live offers.
+-- only, never purchase authority: live promises, prices and availability come from P02.
 local Style = require(script.Parent.UIStyle)
 local Catalog = {}
 
@@ -94,7 +93,7 @@ local packRules = {
 	"Coin multipliers never apply to packs",
 }
 
--- Exact specification examples, never fabricated player-specific odds. D2 remains unresolved.
+-- Specification examples; current/proposed player-specific odds are supplied by the server.
 Catalog.luckExamples = table.freeze({
 	"Grove / Tide — Common, Uncommon, Rare:\nBase: 60%, 30%, 10%\nLuck ×2: 54.545455%, 27.272727%, 18.181818%\nLuck ×4: 46.153846%, 23.076923%, 30.769231%",
 	"Concepts / Echo / Stars — Common, Uncommon, Rare, Legendary, Mythical:\nBase: 60%, 25%, 13.9%, 1%, 0.1%\nLuck ×2: 52.173913%, 21.739130%, 24.173913%, 1.739130%, 0.173913%\nLuck ×4: 41.379310%, 17.241379%, 38.344828%, 2.758621%, 0.275862%",

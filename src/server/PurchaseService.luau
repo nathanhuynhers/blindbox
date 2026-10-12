@@ -5,6 +5,7 @@ local Ledger = require(script.Parent.PurchaseLedger)
 local Entitlements = require(script.Parent.Entitlements)
 local Protocol = require(script.Parent.PurchaseProtocol)
 local Availability = require(script.Parent.PurchaseAvailability)
+local Journal = require(script.Parent.PurchaseJournal)
 export type Dependencies = {
 	now: () -> number,
 	ready: (number) -> boolean,
@@ -28,6 +29,8 @@ export type Dependencies = {
 	packageState: ((number, Config.Product) -> Types.PackageState?)?,
 }
 type Session = {
+	journal: Journal.Record?,
+	delivered: { [string]: boolean },
 	entitlements: Entitlements.State,
 	ledger: Ledger.Record?,
 	ledgerStatus: string,
@@ -71,7 +74,18 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		return nil
 	end
 	local function snapshot(userId: number, session: Session): Types.Snapshot
-		local reserved, count, fulfilled = Ledger.summary(session.ledger or Ledger.empty())
+		local reserved, count = Ledger.summary(session.ledger or Ledger.empty())
+		local fulfilled: { [string]: boolean } = {}
+		local delivered: { [string]: number } = {}
+		if session.ledger then
+			for key, entry in session.ledger.entries do
+				if not session.delivered[key] then
+					fulfilled[entry.product] = true
+				else
+					delivered[entry.product] = (delivered[entry.product] or 0) + 1
+				end
+			end
+		end
 		local highest = 1
 		for _, product in products do
 			local ownership = Entitlements.view(session.entitlements, product.key)
@@ -91,15 +105,23 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 			end
 			local reason = Availability.reason(product, {
 				ready = deps.ready(userId),
-				ledgerReady = session.ledger ~= nil and session.ledgerStatus == "Ready",
+				ledgerReady = session.ledger ~= nil
+					and session.journal ~= nil
+					and session.ledgerStatus == "Ready",
 				ledgerCount = count,
 				ownership = ownership,
 				fresh = fresh,
 				highestCoinTier = highest,
-				prompt = session.prompt ~= nil or session.working,
+				prompt = session.prompt ~= nil
+					or session.working
+					or (session.journal ~= nil and session.journal.pending ~= nil),
 				eligible = eligible,
 			})
 			table.insert(states, {
+				confirmedDeliveries = delivered[product.key] or 0,
+				grant = product.grant,
+				coinTier = product.coinTier,
+				benefits = product.benefits,
 				package = if deps.packageState then deps.packageState(userId, product) else nil,
 				key = product.key,
 				kind = product.kind,
@@ -109,14 +131,26 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 				ownership = ownership,
 				ownershipFresh = fresh,
 				fulfillment = if session.ledgerStatus == "Recovering"
+						or session.journal == nil
 					then "Recovering"
 					elseif session.prompt == product.key then "Pending"
+					elseif
+						session.journal
+						and session.journal.pending
+						and session.journal.pending.product == product.key
+					then "Recovering"
 					elseif fulfilled[product.key] then "Reserved"
 					else "None",
 			})
 		end
 		session.sequence += 1
 		return {
+			recoveryProduct = if session.prompt == nil
+					and session.journal
+					and session.journal.pending
+				then session.journal.pending.product
+				else nil,
+			tokenBenefits = Config.tokenBenefits,
 			sequence = session.sequence,
 			ready = deps.ready(userId),
 			ledgerStatus = session.ledgerStatus,
@@ -131,6 +165,20 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 			deps.send(userId, snapshot(userId, session), result)
 		end
 	end
+	local function resolvePrompt(userId: number, session: Session, product: string): boolean
+		local pending = if session.journal then session.journal.pending else nil
+		if not session.journal then
+			return false
+		end
+		if not pending or pending.product ~= product then
+			return true
+		end
+		session.journal = Journal.resolve(deps.update, userId, pending.id)
+		if not session.journal then
+			session.ledgerStatus = "Recovering"
+		end
+		return session.journal ~= nil
+	end
 	local function refresh(userId: number, session: Session)
 		if session.working or not deps.ready(userId) or deps.now() < session.nextRefresh then
 			return
@@ -138,11 +186,13 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		session.nextRefresh = deps.now() + 10
 		session.working = true
 		if configured then
+			local journal = Journal.load(deps.update, userId)
+			session.journal = journal
 			local record = Ledger.load(deps.update, userId)
 			if record then
 				session.ledger = record
 			end
-			session.ledgerStatus = if record then "Ready" else "Recovering"
+			session.ledgerStatus = if record and journal then "Ready" else "Recovering"
 			if record and deps.deliverReserved then
 				local keys: { string } = {}
 				for key in record.entries do
@@ -160,6 +210,8 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 						pcall(deps.deliverReserved, userId, key, record.entries[key])
 					if not ok or delivered == false then
 						session.deliveryFailed = true
+					elseif delivered == true then
+						session.delivered[key] = true
 					end
 				end
 				session.deliveryCursor = last + 1
@@ -188,6 +240,30 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 				end
 			end
 		end
+		if sessions[userId] ~= session then
+			session.working = false
+			return
+		end
+		local pending = if session.journal then session.journal.pending else nil
+		if pending and pending.kind == "Pass" then
+			local owned, fresh = Entitlements.view(session.entitlements, pending.product)
+			if owned == "Owned" and fresh then
+				session.journal = Journal.resolve(deps.update, userId, pending.id)
+			end
+		elseif pending and session.ledger then
+			local completed = 0
+			for key, entry in session.ledger.entries do
+				if session.delivered[key] and entry.product == pending.product then
+					completed += 1
+				end
+			end
+			if completed > pending.baseline then
+				session.journal = Journal.resolve(deps.update, userId, pending.id)
+			end
+		end
+		if session.journal == nil then
+			session.ledgerStatus = "Recovering"
+		end
 		session.working = false
 		send(userId, session, nil)
 	end
@@ -195,6 +271,8 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 	function api.add(userId: number)
 		-- A new join gets a new object; late replies cannot update a replacement session.
 		local session: Session = {
+			journal = if configured then nil else { version = 1 },
+			delivered = {},
 			entitlements = {},
 			ledger = if configured then nil else Ledger.empty(),
 			ledgerStatus = if configured then "Loading" else "Disabled",
@@ -234,7 +312,13 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 	end
 	function api.busy(userId: number): boolean
 		local session = sessions[userId]
-		return session ~= nil and (session.prompt ~= nil or session.working)
+		return session ~= nil
+			and (
+				session.prompt ~= nil
+				or session.working
+				or session.journal == nil
+				or session.journal.pending ~= nil
+			)
 	end
 	function api.request(userId: number, raw: unknown)
 		local session = sessions[userId]
@@ -308,6 +392,7 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 					else
 						session.prompt, session.awaiting, session.promptReceipt =
 							product.key, false, false
+						session.working = true
 						local ok, opened = pcall(function()
 							if deps.prepare and not deps.prepare(userId, product) then
 								return false
@@ -315,11 +400,35 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 							if sessions[userId] ~= session or not deps.ready(userId) then
 								return false
 							end
+							local baseline = 0
+							if session.ledger then
+								for _, entry in session.ledger.entries do
+									if entry.product == product.key then
+										baseline += 1
+									end
+								end
+							end
+							session.journal = Journal.begin(deps.update, userId, {
+								id = request.id,
+								product = product.key,
+								platformId = product.platformId :: number,
+								kind = product.kind :: Types.PlatformKind,
+								baseline = baseline,
+							})
+							if not session.journal then
+								error("Prompt obligation save unconfirmed")
+							end
+							-- Journal I/O yields; an old join must never launch a prompt for its replacement.
+							if sessions[userId] ~= session or not deps.ready(userId) then
+								return false
+							end
 							return deps.prompt(userId, product)
 						end)
+						session.working = false
 						if ok and opened then
 							result.status, result.reason = "PromptOpened", "PlatformPrompt"
 						elseif ok then
+							session.journal = Journal.resolve(deps.update, userId, request.id)
 							session.prompt = nil
 							result.reason = "PlatformUnavailable"
 						else
@@ -360,6 +469,13 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		if session.prompt == product.key and (kind == "Pass" or not purchased) then
 			session.prompt = nil
 		end
+		local pending = if session.journal then session.journal.pending else nil
+		if pending and pending.product == product.key and (kind == "Pass" or not purchased) then
+			local owned, fresh = Entitlements.view(session.entitlements, product.key)
+			if kind ~= "Pass" or not purchased or (owned == "Owned" and fresh) then
+				session.journal = Journal.resolve(deps.update, userId, pending.id)
+			end
+		end
 		send(userId, session, {
 			id = "platform",
 			product = product.key,
@@ -389,7 +505,9 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 			local ok, fulfilled = pcall(deps.fulfill, receipt, product)
 			if not ok or fulfilled ~= nil then
 				session.working = false
-				local confirmed = ok and fulfilled == true
+				local confirmed = ok
+					and fulfilled == true
+					and resolvePrompt(receipt.userId, session, product.key)
 				if confirmed and session.prompt == product.key then
 					session.promptReceipt = true
 					if session.awaiting then
@@ -425,6 +543,12 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		end
 		session.working = false
 		if record then
+			if delivery == true then
+				session.delivered["receipt:" .. receipt.purchaseId] = true
+			end
+			if delivery ~= false and not resolvePrompt(receipt.userId, session, product.key) then
+				delivery = false
+			end
 			session.ledger, session.ledgerStatus =
 				record, if delivery == false then "Recovering" else "Ready"
 			if delivery ~= false and session.prompt == product.key then
@@ -481,6 +605,9 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		end
 		session.working = false
 		if record then
+			if delivered == true then
+				session.delivered["pass:" .. tostring(product.platformId)] = true
+			end
 			session.ledger, session.ledgerStatus =
 				record, if delivered == false then "Recovering" else "Ready"
 		else

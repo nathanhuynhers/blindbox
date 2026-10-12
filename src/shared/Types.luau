@@ -146,6 +146,7 @@ export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 -- Private owner presentation only: build-up toward a rarity guarantee; odds resolve priority.
 export type PityProgress = { Legendary: number, Mythical: number }
 export type Snapshot = {
+	luckOfferOdds: { [number]: { [string]: number } }?,
 	offlineAward: OfflineTypes.View?,
 	-- Owner-only verified and actually applied benefits; no Store wiring implied.
 	coinModifiers: CoinModifierView?,

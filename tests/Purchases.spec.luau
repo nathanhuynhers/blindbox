@@ -61,8 +61,15 @@ local entry = { product = "pack_small", platformId = 101, kind = "DeveloperProdu
 local raw = nil
 local mode = "ok"
 local writes = 0
+local journals = {}
 local function update(_key, transform)
 	if mode == "fail" then error("injected unavailable") end
+	if string.sub(_key, 1, 7) == "Prompt_" then
+		local result = transform(journals[_key])
+		if result then journals[_key] = result end
+		if mode == "lost" then error("injected journal reply lost AFTER commit") end
+		return result
+	end
 	local nextValue = transform(raw)
 	if nextValue ~= nil then raw = nextValue; writes += 1 end
 	if mode == "lost" then error("injected reply lost AFTER commit") end

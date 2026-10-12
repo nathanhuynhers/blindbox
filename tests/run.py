@@ -13,6 +13,9 @@ requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.sp
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+	"PurchaseJournal": "server",
+	"ConvenienceOwner": "server",
+	"PurchaseClient": "client", "PurchasePrice": "client", "StoreProjection": "client",
     "PackageGrants": "server", "PackageRuntime": "server",
     "BoostTypes": "shared", "Boosts": "server", "LuckModifiers": "server", "BoostRuntime": "server", "BoostProtocol": "server",
     "OfflineTypes": "shared", "OfflineAwards": "server", "OfflinePurchase": "server", "OfflineRuntime": "server",
@@ -46,6 +49,7 @@ modules = {
 }
 # Redesigned UI: the real components, screens and Interface run on tests/UIEngine.luau.
 ui = [
+	"StoreBinding",
 	"ConvenienceControls",
 	"AdminConsole",
     "AfkNotice",
@@ -79,6 +83,8 @@ for name, folder in modules.items():
         source = source.replace("--!strict", UI_PRELUDE, 1)
     if name == "AdminConsole":
         source = source.replace("--!strict", '--!strict\nlocal os = {date = function(_, timestamp) return tostring(timestamp) end}', 1)
+    if name == "StoreBinding":
+        source = source.replace("--!strict", '--!strict\nlocal os = {clock = function() return require("./UIEngine").now end}', 1)
     if name in ("Storage", "OfflineRuntime"):
         source = source.replace("--!strict", '--!strict\nlocal Engine = require("./AfkEngine")\nlocal game, task, os, warn = Engine.game, Engine.task, Engine.os, Engine.warn', 1)
     if name == "AfkClient":
@@ -125,7 +131,7 @@ for name, folder in modules.items():
 
 # Exercise the exact production owner-snapshot send function, with only its I/O context injected.
 bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
-send = bootstrap[bootstrap.index("local function send("):bootstrap.index("-- P02 invokes")]
+send = bootstrap[bootstrap.index("local function snapshotFor("):bootstrap.index("-- P02 invokes")]
 sender = '\n'.join(f'local {name} = require("./{name}")' for name in
                    ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals", "OfflineAwards"))
 sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
@@ -164,6 +170,9 @@ fixture_source = (root / "tests/StoreFixtures.luau").read_text(encoding="utf-8")
 fixture_source = fixture_source.replace('require(script.Parent.StorePresentation)', 'require("./StorePresentation")')
 (out / "StoreFixtures.luau").write_text(fixture_source, encoding="utf-8")
 run("StorePresentation.spec")
+run("StoreIntegration.spec")
+run("StoreBinding.spec")
+run("ConvenienceOwner.spec")
 run("PlayerMovement.spec")
 run("AutoOpen.spec", "AutoCollect.spec", "ConvenienceService.spec", "ConvenienceClient.spec", "ConvenienceOpening.spec", "ConvenienceResults.spec")
 run("PityProgress.spec")
@@ -179,6 +188,7 @@ run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
 run("SaveSafety.spec")
 run("Purchases.spec")
+run("PurchaseJournal.spec")
 run("OfflineDouble.spec")
 run("OfflineDoublePurchase.spec")
 run("UIEngine", "OfflineDoubleClient.spec")
