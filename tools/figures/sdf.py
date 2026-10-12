@@ -76,7 +76,7 @@ def ellipsoid(p, c, r, R=None):
     rx, ry, rz = r
     k0 = np.sqrt((x / rx) ** 2 + (y / ry) ** 2 + (z / rz) ** 2)
     k1 = np.sqrt((x / rx**2) ** 2 + (y / ry**2) ** 2 + (z / rz**2) ** 2)
-    return k0 * (k0 - 1.0) / np.maximum(k1, 1e-9)
+    return np.where(k1 < 1e-9, -min(r), k0 * (k0 - 1.0) / np.maximum(k1, 1e-9))
 
 
 def round_box(p, c, half, r, R=None):
@@ -107,6 +107,10 @@ def round_cone(p, a, b, r1, r2):
     ba = b - a
     l2 = float(np.dot(ba, ba))
     rr = r1 - r2
+    # Coincident endpoints / a fully contained end sphere have no cone section.
+    # Dense tapered curves previously produced divide-by-zero or invalid distances.
+    if l2 <= rr * rr + 1e-15:
+        return sphere(p, a if r1 >= r2 else b, max(r1, r2))
     a2 = l2 - rr * rr
     il2 = 1.0 / l2
     pax, pay, paz = p[0] - a[0], p[1] - a[1], p[2] - a[2]
@@ -154,7 +158,7 @@ def tube(p, points, radii, k=0.02, samples=6):
 def ellipse2(u, v, ru, rv):
     k0 = np.sqrt((u / ru) ** 2 + (v / rv) ** 2)
     k1 = np.sqrt((u / ru**2) ** 2 + (v / rv**2) ** 2)
-    return k0 * (k0 - 1.0) / np.maximum(k1, 1e-9)
+    return np.where(k1 < 1e-9, -min(ru, rv), k0 * (k0 - 1.0) / np.maximum(k1, 1e-9))
 
 
 def arc2(u, v, radius, aperture_deg, thickness):
@@ -192,3 +196,62 @@ def fan_angle(p, hinge):
 def ribs(angle, count_per_radian, sharp=0.55):
     """Rounded rib profile in [0,1]: 1 on rib crowns, 0 in the grooves."""
     return np.abs(np.cos(angle * count_per_radian * 0.5)) ** sharp
+
+
+def shell(distance, thickness, offset=0.0):
+    """Closed garment/eyelid skin centered at offset from an SDF surface."""
+    if thickness <= 0:
+        raise ValueError("shell thickness must be positive")
+    return np.abs(distance - offset) - thickness / 2
+
+
+def subtract(base, cutter, blend=0.0):
+    """Recessed mouths, seams, grooves, openings; blend rounds the incision."""
+    return smax(base, -cutter, blend)
+
+
+def project_decal(p, center, shape, normal, up=(0, 0, 1), depth=0.5):
+    """Oriented 2D region for overlay/shell, with a bounded projection slab.
+
+    normal points out of the head. Place center with surface_point on the outermost
+    skin; use with overlay(base(p), region, out, depth) for curved facial features.
+    """
+    R = frame(normal, up)
+    u, v, w = local(p, center, R)
+    return np.maximum(shape(u, v), np.abs(w) - depth)
+
+
+def surface_point(fn, origin, direction, tmax=3.0, steps=256):
+    """First outward crossing from an interior point; fail instead of placing at origin."""
+    o, d = _v(origin), _v(direction)
+    if not np.isfinite(o).all() or not np.isfinite(d).all() or np.linalg.norm(d) < 1e-12:
+        raise ValueError("finite origin and nonzero direction required")
+    if tmax <= 0 or steps < 2:
+        raise ValueError("invalid ray sampling")
+    d /= np.linalg.norm(d)
+    ts = np.linspace(0, tmax, steps)
+    pts = o + ts[:, None] * d
+    values = np.asarray(fn(tuple(pts.T)))
+    if not np.isfinite(values).all() or values[0] >= 0:
+        raise ValueError("surface ray must start inside a finite SDF")
+    crossings = np.flatnonzero(values >= 0)
+    if not len(crossings):
+        raise ValueError("no surface crossing; extend tmax or fix origin")
+    idx = crossings[0]
+    lo, hi = ts[idx - 1], ts[idx]
+    for _ in range(32):
+        mid = (lo + hi) / 2
+        if fn(tuple(o + mid * d)) < 0:
+            lo = mid
+        else:
+            hi = mid
+    return o + (lo + hi) / 2 * d
+
+
+def surface_normal(fn, point, epsilon=1e-4):
+    """Finite-difference outward normal for locally oriented faces/accessories."""
+    p = _v(point)
+    g = np.array([fn(tuple(p + e * epsilon)) - fn(tuple(p - e * epsilon)) for e in np.eye(3)])
+    if not np.isfinite(g).all() or np.linalg.norm(g) < 1e-12:
+        raise ValueError("surface has no stable normal")
+    return g / np.linalg.norm(g)

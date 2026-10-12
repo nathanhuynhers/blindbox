@@ -16,7 +16,10 @@ Steps, stopping at the first failure:
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
+import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -82,6 +85,35 @@ def gate(report: dict) -> list[str]:
         problems.append("missing catalog ID (pass catalog= to assemble in figures.py)")
     if report.get("face") not in report.get("components", {}):
         problems.append("missing <Figure>_Eyes part used for runtime facing")
+    if report.get("schema_version", 1) >= 2:
+        if report["schema_version"] != 2:
+            problems.append("unsupported validation schema")
+        if len(report.get("components", {})) != report.get("meshes") or sum(p.get("tris", 0) for p in report.get("components", {}).values()) != report.get("triangles"):
+            problems.append("component totals do not match report")
+        if report.get("glb", {}).get("errors", ["missing GLB inspection"]):
+            problems.append("GLB inspection failed: " + str(report.get("glb", {}).get("errors")))
+        if reimport.get("geometry_mismatches", {"missing": True}) or reimport.get("unexpected_parts", ["missing"]):
+            problems.append("GLB geometry re-import changed")
+        previews = report.get("previews", {})
+        if previews.get("fidelity_source") != "exported_reimported_glb" or not previews.get("fidelity_views") or previews.get("fidelity_sha256") != glb.get("sha256"):
+            problems.append("missing matching production fidelity preview")
+        if set(previews.get("view_names", [])) != {"front", "three_quarter", "side", "back"} or len(previews.get("beauty_views", [])) != 4 or len(previews.get("fidelity_views", [])) != 4:
+            problems.append("all four beauty and fidelity inspection views are required")
+        for name, part in report.get("components", {}).items():
+            if not all(isinstance(part.get(k), (int, float)) and math.isfinite(part[k]) for k in ("tris", "signed_volume")):
+                problems.append(f"{name}: non-finite geometry statistics")
+            if not part.get("finite_vertices") or not part.get("finite_uvs") or part.get("materials") != 1:
+                problems.append(f"{name}: invalid vertices, UVs or material slots")
+            if part.get("duplicate_faces") or part.get("non_positive_islands"):
+                problems.append(f"{name}: duplicate faces or incorrectly oriented solid")
+            constraints = report.get("constraints", {}).get(name, {})
+            islands = constraints.get("expected_islands")
+            if islands is not None and part.get("islands") != islands:
+                problems.append(f"{name}: unexpected disconnected geometry")
+            build_info = report.get("build", {}).get(name, {})
+            limit = constraints.get("max_surface_error")
+            if limit is not None and build_info.get("surface_error", float("inf")) > limit:
+                problems.append(f"{name}: optimization exceeds surface error limit")
     return problems
 
 
@@ -160,17 +192,20 @@ def build(collection: str, figures: list[str]) -> None:
     print(f"-- Blender final build: {', '.join(figures)}", flush=True)
     logs = ROOT / "build" / "figures" / collection
     logs.mkdir(parents=True, exist_ok=True)
-    jobs = []
-    for figure in figures:
-        log = open(logs / f"{figure}_final.log", "w", encoding="utf-8")
-        command = [str(BLENDER), "-b", "--factory-startup", "--python",
+    workers = int(os.environ.get("FIG_BUILD_JOBS", "2"))
+    if workers < 1:
+        raise PublishError("FIG_BUILD_JOBS must be positive")
+
+    def build_one(figure):
+        command = [str(BLENDER), "-b", "--factory-startup", "--python-exit-code", "1", "--python",
                    str(ROOT / "tools" / "figures" / "build.py"), "--", collection, figure, "final"]
-        jobs.append((figure, log, subprocess.Popen(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)))
-    failed = []
-    for figure, log, process in jobs:
-        if process.wait() != 0:
-            failed.append(figure)
-        log.close()
+        with open(logs / f"{figure}_final.log", "w", encoding="utf-8") as log:
+            return figure, subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT).returncode
+
+    # High-detail voxel grids can consume hundreds of MB each; do not launch an
+    # entire collection simultaneously. Each worker has its own Blender process.
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        failed = [figure for figure, code in pool.map(build_one, figures) if code != 0]
     if failed:
         raise PublishError(f"Blender build failed for {', '.join(failed)}; see build/figures/{collection}/.")
 
@@ -180,7 +215,7 @@ def checks() -> None:
     run([tool("stylua"), "--check", "src"], "StyLua")
     run([tool("selene"), "src"], "Selene")
     run([sys.executable, "tests/run.py", str(ROOT / "build" / "tools" / "luau" / "luau.exe")], "Luau suites")
-    run([sys.executable, "-m", "unittest", "tests/test_asset_pipeline.py", "tests/test_figure_publish.py"], "Pipeline tests")
+    run([sys.executable, "-m", "unittest", "tests/test_asset_pipeline.py", "tests/test_figure_publish.py", "tests/test_figure_glb.py"], "Pipeline tests")
     run([tool("rojo"), "build", "default.project.json", "-o", "RobloxWorkspace.rbxlx"], "Rojo build")
 
 
@@ -205,6 +240,14 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             report = json.loads(path.read_text(encoding="utf-8"))
             failures += [f"{figure}: {problem}" for problem in gate(report)]
+            if report.get("schema_version", 1) >= 2:
+                model = path.parent.parent / "model" / f"{snake(figure)}_roblox.glb"
+                if not model.is_file() or hashlib.sha256(model.read_bytes()).hexdigest() != report.get("glb", {}).get("sha256"):
+                    failures.append(f"{figure}: GLB changed since validation")
+                previews = report.get("previews", {})
+                for image in previews.get("fidelity_views", []) + previews.get("beauty_views", []):
+                    if Path(image).name != image or not (path.parent.parent / "renders" / image).is_file():
+                        failures.append(f"{figure}: missing inspection render {image}")
             reports[figure] = report
         if failures:
             raise PublishError("Gates failed:\n  " + "\n  ".join(failures))

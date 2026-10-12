@@ -1,8 +1,12 @@
 """Offline tests for tools/figures/publish.py. Never uploads or runs Blender."""
 import copy
 import importlib.util
+import os
 from pathlib import Path
+import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 SPEC = importlib.util.spec_from_file_location(
     "publish", Path(__file__).resolve().parents[1] / "tools/figures/publish.py")
@@ -29,6 +33,30 @@ def report(**overrides):
 
 
 class GateTests(unittest.TestCase):
+    def test_v2_geometry_and_fidelity_gates(self):
+        value = report(schema_version=2)
+        value["triangles"] = 6400
+        value["glb"].update(errors=[], sha256="a" * 64)
+        value["reimport"].update(geometry_mismatches={}, unexpected_parts=[])
+        views = ["front", "three_quarter", "side", "back"]
+        value["previews"] = dict(fidelity_source="exported_reimported_glb", fidelity_sha256="a" * 64,
+                                 fidelity_views=[f"{v}.png" for v in views], beauty_views=[f"beauty_{v}.png" for v in views], view_names=views)
+        for part in value["components"].values():
+            part.update(finite_vertices=True, finite_uvs=True, materials=1, islands=1, non_positive_islands=0, duplicate_faces=0)
+        self.assertEqual(publish.gate(value), [])
+        for field, change in (
+            ("reimport", {"geometry_mismatches": {"eyes": ["UVs changed"]}}),
+            ("glb", {"errors": ["missing normal map"]}),
+            ("previews", {"fidelity_sha256": "b" * 64}),
+            ("constraints", {"BubbleBean_Eyes": {"expected_islands": 2}}),
+            ("constraints", {"BubbleBean_Eyes": {"max_surface_error": 0.01}}),
+        ):
+            broken = copy.deepcopy(value)
+            broken.setdefault(field, {}).update(change)
+            self.assertTrue(publish.gate(broken), field)
+        partial = report(schema_version=2)
+        self.assertTrue(publish.gate(partial))
+
     def test_clean_report_passes(self):
         self.assertEqual(publish.gate(report()), [])
 
@@ -57,6 +85,15 @@ class GateTests(unittest.TestCase):
 
 
 class WiringTests(unittest.TestCase):
+    def test_blender_build_errors_stop_and_use_python_failure_status(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(publish, "ROOT", Path(folder)), patch.dict(os.environ, {"FIG_BUILD_JOBS": "1"}):
+            with patch.object(publish.subprocess, "run", return_value=SimpleNamespace(returncode=1)) as run:
+                with self.assertRaises(publish.PublishError):
+                    publish.build("technical-fixture", ["swatch"])
+                command = run.call_args.args[0]
+                self.assertIn("--python-exit-code", command)
+                self.assertEqual(command[command.index("--python-exit-code") + 1], "1")
+
     def test_manifest_entry_uses_collection_key_and_all_nodes(self):
         entry = publish.manifest_entry("tidepool-tales", "bubble-bean", report())
         self.assertEqual(entry["key"], "Models.TidepoolTales.BubbleBean")
