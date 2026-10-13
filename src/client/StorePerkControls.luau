@@ -1,5 +1,5 @@
 --!strict
--- Local setup demonstrations only. Never calls ctx.send or a purchase/activation API.
+-- Approved controls use the existing dedicated backend paths. Fixtures remain isolated.
 local Kit = require(script.Parent.UIKit)
 local Style = require(script.Parent.UIStyle)
 local Button = require(script.Parent.UIButton)
@@ -7,6 +7,7 @@ local Scope = require(script.Parent.UIScope)
 local Presentation = require(script.Parent.StorePresentation)
 local Catalog = require(script.Parent.StoreCatalog)
 local State = require(script.Parent.UIState)
+local Context = require(script.Parent.UIContext)
 local Controls = {}
 
 function Controls.create(
@@ -14,7 +15,9 @@ function Controls.create(
 	scope: Scope.Scope,
 	effects: () -> boolean,
 	input: Presentation.Input,
-	key: string
+	key: string,
+	commerce: Context.Commerce?,
+	setup: (() -> ())?
 ): Frame?
 	local auto = key == "autoOpen"
 	local toggle = key == "autoCollect" or key == "speed"
@@ -34,6 +37,26 @@ function Controls.create(
 	note.TextYAlignment = Enum.TextYAlignment.Top
 	local owned = Presentation.offer(input, key).availability == "owned"
 	local allowed = input.fixture and owned and not input.promptActive
+	if auto and not input.fixture then
+		root.Size = UDim2.new(1, -8, 0, 158)
+		note.Text =
+			"Choose a collection, box budget (1–100) and Coin reserve in the Coin Shop. Stop remains available during openings."
+		local action = Button.create(
+			root,
+			"AutoSetup",
+			{ variant = "violet", text = "Set up in Coin Shop", size = 17 },
+			scope,
+			effects,
+			function()
+				if setup then
+					setup()
+				end
+			end
+		)
+		action.button.Position, action.button.Size = UDim2.fromOffset(0, 74), UDim2.new(1, 0, 0, 44)
+		action.set("Set up in Coin Shop", commerce ~= nil)
+		return root
+	end
 	if auto then
 		local count = if input.automation then input.automation.count else 10
 		local reserve = false
@@ -131,9 +154,21 @@ function Controls.create(
 		action.set(if running then "Stop · Preview" else "Start Auto Open", allowed)
 		paint()
 	elseif toggle then
+		local view = if commerce then commerce.convenience.view() else nil
+		allowed = allowed
+			or (
+				not input.fixture
+				and not input.promptActive
+				and view ~= nil
+				and (
+					if key == "speed"
+						then view.movementAllowed or view.movementEnabled
+						else view.collectAllowed or view.collectEnabled
+				)
+			)
 		local on = Presentation.offer(input, key).toggle == true
 		note.Text = if key == "speed"
-			then "Choose speed 48 or the free 36. Settings here are presentation only."
+			then "Choose speed 48 or the free 36. Your confirmed setting appears here."
 			else "Collects once per second. Pauses during the Welcome collecting lesson, full wallet and unavailable storage."
 		local setting: Button.Button
 		setting = Button.create(
@@ -143,6 +178,17 @@ function Controls.create(
 			scope,
 			effects,
 			function()
+				if not input.fixture and commerce then
+					local current = commerce.convenience.view()
+					if current then
+						if key == "speed" then
+							commerce.convenience.movement(not current.movementEnabled)
+						else
+							commerce.convenience.collect(not current.collectEnabled)
+						end
+					end
+					return
+				end
 				on = not on
 				setting.set(if on then "ON · Preview" else "OFF · Preview", allowed)
 			end
@@ -152,6 +198,7 @@ function Controls.create(
 		setting.set(if on then "ON" else "OFF", allowed)
 	else
 		local token: Presentation.Token? = nil
+		local tokenIndex = 1
 		root.Size = UDim2.new(1, -8, 0, 172)
 		note.Size = UDim2.new(1, 0, 0, 104)
 		for _, candidate in input.tokens do
@@ -170,6 +217,11 @@ function Controls.create(
 			effects,
 			function()
 				if confirming then
+					if not input.fixture and commerce and token then
+						commerce.activate(token.key)
+						activation.set("Saving activation…", false)
+						return
+					end
 					note.Text =
 						"PREVIEW ONLY · Activation shown. No token was consumed or effect started."
 					activation.set("Preview complete", false)
@@ -178,17 +230,52 @@ function Controls.create(
 					note.Text = `Activate {Catalog.products[key].name} for {if token
 						then token.minutes
 						else 30} minutes? The timer continues while you're offline. Same boosts add time, not strength.`
-					activation.set("Confirm preview activation", true)
+					activation.set(
+						if input.fixture then "Confirm preview activation" else "Confirm activation",
+						true
+					)
 				end
 			end
 		)
 		activation.button.Position, activation.button.Size =
 			UDim2.fromOffset(0, 114), UDim2.new(1, 0, 0, 44)
-		local ready = input.fixture
+		local ready = (input.fixture or commerce ~= nil)
 			and token ~= nil
 			and token.activation == "Ready"
 			and not input.promptActive
 		activation.set("Activate", ready)
+		local choices: { Presentation.Token } = {}
+		for _, candidate in input.tokens do
+			if candidate.product == key and candidate.count > 0 then
+				table.insert(choices, candidate)
+			end
+		end
+		if #choices > 1 then
+			root.Size = UDim2.new(1, -8, 0, 224)
+			local select: Button.Button
+			select = Button.create(
+				root,
+				"ChooseToken",
+				{ variant = "white", text = "Choose token length", size = 16 },
+				scope,
+				effects,
+				function()
+					tokenIndex = tokenIndex % #choices + 1
+					local chosen = choices[tokenIndex]
+					token = chosen
+					confirming = false
+					note.Text =
+						`{chosen.minutes} min · {chosen.count} unused · {chosen.activation}`
+					activation.set(
+						"Activate",
+						chosen.activation == "Ready" and not input.promptActive and commerce ~= nil
+					)
+					select.set(`Selected: {chosen.minutes} min`, true)
+				end
+			)
+			select.button.Position, select.button.Size =
+				UDim2.fromOffset(0, 172), UDim2.new(1, 0, 0, 44)
+		end
 		note.Text = if token
 			then token.activation
 				.. " · "

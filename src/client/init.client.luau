@@ -15,7 +15,12 @@ local OpeningController = require(script.OpeningController)
 local OpeningResult = require(script.OpeningResult)
 local PullSummary = require(script.PullSummary)
 local OfflineEarnings = require(script.OfflineEarnings)
-local OfflinePurchaseBinding = require(script.OfflinePurchaseBinding)
+local StoreBinding = require(script.StoreBinding)
+local ConvenienceClient = require(script.ConvenienceClient)
+local ConveniencePresentation = require(script.ConveniencePresentation)
+local ConvenienceResults = require(script.ConvenienceResults)
+local ConvenienceControls = require(script.ConvenienceControls)
+local Scope = require(script.UIScope)
 local WelcomeReward = require(script.WelcomeReward)
 local DealPopup = require(script.DealPopup)
 local DealStalls = require(script.DealStalls)
@@ -58,6 +63,18 @@ local sequence = -1
 local ui: Interface.Interface
 local deal: DealPopup.Controller
 local afk: AfkClient.Controller? = nil
+local storefront: StoreBinding.Controller? = nil
+local autoPresentation: ConveniencePresentation.Bridge? = nil
+local autoResults: ConvenienceResults.Controller? = nil
+local convenienceRequest = remotes:WaitForChild("ConvenienceRequest") :: RemoteEvent
+local convenience = ConvenienceClient.create({
+	id = function()
+		return HttpService:GenerateGUID(false)
+	end,
+	send = function(value)
+		convenienceRequest:FireServer(value)
+	end,
+})
 -- Sounds for confirmed replies. Box results sound through the opening; failures play "error".
 local feedback: { [string]: string } = {
 	Place = "Figure displayed",
@@ -95,6 +112,8 @@ local function request(
 		or pending
 		or (opening and opening.isActive())
 		or (afk and afk.blocked())
+		or (storefront and storefront.busy())
+		or (autoResults and autoResults.busy())
 	then
 		return
 	end
@@ -129,17 +148,37 @@ local function request(
 	sentAt = os.clock()
 	intentRemote:FireServer(intent)
 end
-ui = Interface.create(request, function(destination)
-	if adminFocused or (afk and afk.blocked()) then
-		return
-	end
-	-- The server picks the spot; the remote names the place, never a position.
-	if destination == "Plaza" then
-		plazaRemote:FireServer()
-	else
-		homeRemote:FireServer()
-	end
-end, shelfEditor)
+ui = Interface.create(
+	request,
+	function(destination)
+		if adminFocused or (afk and afk.blocked()) then
+			return
+		end
+		-- The server picks the spot; the remote names the place, never a position.
+		if destination == "Plaza" then
+			plazaRemote:FireServer()
+		else
+			homeRemote:FireServer()
+		end
+	end,
+	shelfEditor,
+	{
+		convenience = convenience,
+		purchase = function(key, minutes)
+			return storefront ~= nil and storefront.purchase(key, minutes)
+		end,
+		activate = function(token)
+			if storefront then
+				storefront.activate(token)
+			end
+		end,
+		refresh = function()
+			if storefront then
+				storefront.refresh()
+			end
+		end,
+	}
+)
 summary = PullSummary.create(ui.openingFocus, ui.effects)
 -- Outside tap claims free only while purchase/fulfillment is idle.
 local doublePurchase: (() -> boolean)? = nil
@@ -148,11 +187,23 @@ local offline = OfflineEarnings.create(ui.effects, function()
 end, function()
 	return doublePurchase ~= nil and doublePurchase()
 end)
-local offlinePurchase = OfflinePurchaseBinding.create(remotes, UIState.number, offline.present)
-doublePurchase = offlinePurchase.purchase
 local welcome = WelcomeReward.create(ui.effects, function()
 	request("WelcomeTen")
 end)
+storefront = StoreBinding.create(remotes, function()
+	return current ~= nil
+		and current.ready
+		and not pending
+		and not adminFocused
+		and not (opening and opening.isActive())
+		and not summary.isOpen()
+		and not welcome.isOpen()
+		and #batch == 0
+		and results == nil
+		and not (afk and afk.blocked())
+end, ui.store, offline.present, UIState.number, ui.message)
+local offlinePurchase = assert(storefront, "Store controller missing")
+doublePurchase = offlinePurchase.double
 -- E at a plaza stall; Buy names only the stall and the deal window on screen.
 deal = DealPopup.create(ui.effects, function(stall, window)
 	request("Deal", nil, stall, nil, nil, window)
@@ -206,7 +257,13 @@ local function choose(choice: string, result: OpeningResult.Result)
 		results = nil
 	end
 end
-opening = OpeningController.create(ui.openingFocus, ui.message, choose)
+opening = OpeningController.create(ui.openingFocus, ui.message, choose, function(id, finished)
+	if autoPresentation then
+		autoPresentation.completed(id, finished)
+	end
+end)
+local activeOpening = assert(opening, "Opening controller missing")
+autoPresentation = ConveniencePresentation.create(convenience, activeOpening)
 afk = AfkClient.create(afkRemote, function()
 	-- An AFK handoff waits for confirmed requests and every reveal/batch animation.
 	-- A static summary/reward popup requires no action to keep the profile safe.
@@ -215,8 +272,13 @@ afk = AfkClient.create(afkRemote, function()
 		or (opening ~= nil and opening.isActive())
 		or #batch > 0
 		or results ~= nil
+		or (autoResults ~= nil and autoResults.busy())
 end, ui.message)
 local connections: { RBXScriptConnection } = {}
+table.insert(
+	connections,
+	game:GetService("UserInputService").WindowFocusReleased:Connect(convenience.stop)
+)
 local displayInteraction = DisplayInteraction.create(
 	ui.openDisplay,
 	ui.openShelves,
@@ -244,142 +306,224 @@ local displayInteraction = DisplayInteraction.create(
 local shopKeeper = ShopKeeper.create(ui.effects)
 local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded, ui.displayCoins)
 ui.onCoinInterrupted(displayEarnings.interrupt, displayEarnings.destroy)
+local function receiveState(state: Types.Snapshot, reply: Types.Reply?)
+	local previous = current
+	if state.sequence > sequence then
+		sequence = state.sequence
+		current = state
+		offlinePurchase.gameplay(state)
+		if state.ready and afk then
+			afk.ready()
+		end
+		shelfEditor.receive(state.shelfEditorToken)
+		if
+			previous
+			and state.shelves.ownedCount > previous.shelves.ownedCount
+			and not (pending and pending.action == "BuyShelf")
+		then
+			shelfNotice = "Collection complete! New Shelf unlocked"
+		end
+		displayEarnings.receive(previous, state, reply)
+		ui.update(state)
+		deal.update(state)
+		dealStalls.update(state)
+		if state.ready and not musicStarted then
+			-- Once the profile and plot are ready. Areas or events may switch it later.
+			musicStarted = true
+			Music.play("world")
+		end
+		local offlineCoins, away = UIState.offline(state)
+		if
+			offlineCoins
+			and state.ready
+			and not pending
+			and not offline.isOpen()
+			and not adminFocused
+			and not (opening and opening.isActive())
+			and not summary.isOpen()
+		then
+			offline.show(offlineCoins, away)
+			Sfx.play("open")
+		end
+		displayInteraction.update(displayEarnings.update(state))
+		if previous and UIState.goal(previous) ~= "ready" and UIState.goal(state) == "ready" then
+			Sfx.play("goalReady")
+		end
+		if opening and opening.isActive() and reveal then
+			-- Live affordability and slots while the Reveal card is up.
+			opening.refresh(revealModel(state, reveal))
+		end
+	end
+	local intent = pending
+	-- Server-initiated collections (world click or tap) reply with a "collect:" id.
+	if reply and string.sub(reply.id, 1, 8) == "collect:" then
+		ui.message(reply.message, if reply.ok then "success" else "error")
+		if not reply.ok then
+			displayEarnings.interrupt()
+			Sfx.play("error")
+		end
+	end
+	if reply and intent and reply.id == intent.id then
+		local before = beforeRequest
+		pending = nil
+		if string.sub(intent.action, 1, 5) == "Shelf" or intent.action == "BuyShelf" then
+			shelfEditor.pending(false)
+		end
+		beforeRequest = nil
+		ui.pending(false)
+		deal.pending(false)
+		-- A bought deal opens like a Shop box; the popup gives way to the opening.
+		if reply.ok and intent.action == "Deal" then
+			deal.close()
+		end
+		local sound: string? = if reply.ok then replySounds[intent.action] else "error"
+		local text = if reply.ok then feedback[intent.action] or reply.message else reply.message
+		local kind = if reply.ok then "success" else "error"
+		if reply.ok and intent.action == "EquipBest" and before then
+			local changed
+			text, changed = UIState.equipSummary(before, state)
+			if #changed == 0 then
+				-- Already optimal is a calm notice, not a failure or a placement.
+				sound, kind = nil, "info"
+			end
+		end
+		-- A Login day that grants boxes sounds through its opening instead.
+		if intent.action == "Login" and (reply.figure or reply.figures) then
+			sound = nil
+		end
+		if sound then
+			Sfx.play(sound)
+		end
+		-- A saved volume needs no toast; the slider already shows it.
+		if not (reply.ok and intent.action == "SetVolume") then
+			ui.message(text, kind)
+		end
+		if
+			reply.ok
+			and intent.action == "Place"
+			and before
+			and before.step == Tutorial.display
+			and state.step == Tutorial.collect
+			and intent.slot
+		then
+			-- The Welcome Quest's first placement: show where the earning happens, unobstructed.
+			ui.closeScreen()
+			displayEarnings.celebrate(intent.slot)
+		end
+		revealBefore = before
+		-- Several figures: Open 10, the Welcome x10 or a multi-box Login reward day.
+		if before and reply.figures then
+			batch = OpeningResult.fromBatch(intent, before, state, reply)
+			local items = OpeningResult.summary(batch)
+			results = if #items > 0 then items else nil
+			resultsHeading = if intent.action == "WelcomeTen" then "Your Welcome ×10!" else nil
+			presentNext(state)
+		elseif before then
+			local result = OpeningResult.fromReply(intent, before, state, reply)
+			if result and opening then
+				reveal = result
+				opening.present(result, not ui.effects(), nil, revealModel(state, result))
+			end
+		end
+	end
+end
+table.insert(connections, stateRemote.OnClientEvent:Connect(receiveState))
+autoResults = ConvenienceResults.create({
+	applySnapshot = function(state)
+		receiveState(state, nil)
+	end,
+	present = function(result, before, after)
+		if
+			pending
+			or adminFocused
+			or offlinePurchase.busy()
+			or (opening and opening.isActive())
+			or summary.isOpen()
+			or offline.isOpen()
+			or welcome.isOpen()
+			or (afk and afk.blocked())
+		then
+			return false
+		end
+		revealBefore, reveal = before, result
+		return opening ~= nil
+			and opening.present(result, not ui.effects(), nil, revealModel(after, result))
+	end,
+	error = function(id, text)
+		convenience.stop()
+		if autoPresentation then
+			autoPresentation.completed(id, false)
+		end
+		ui.message(text)
+	end,
+})
+local stopScope = Scope.create()
+local stopGui = Instance.new("ScreenGui")
+stopGui.Name, stopGui.ResetOnSpawn, stopGui.DisplayOrder = "AutoOpenStop", false, 120
+stopGui.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
+stopGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+local stopButton = ConvenienceControls.createStop(stopGui, stopScope, ui.effects, convenience)
+stopButton.button.Visible = false
+local Actions = game:GetService("ContextActionService")
+local stopBound = false
 table.insert(
 	connections,
-	stateRemote.OnClientEvent:Connect(function(state: Types.Snapshot, reply: Types.Reply?)
-		local previous = current
-		if state.sequence > sequence then
-			sequence = state.sequence
-			current = state
-			if state.ready and afk then
-				afk.ready()
-			end
-			shelfEditor.receive(state.shelfEditorToken)
-			if
-				previous
-				and state.shelves.ownedCount > previous.shelves.ownedCount
-				and not (pending and pending.action == "BuyShelf")
-			then
-				shelfNotice = "Collection complete! New Shelf unlocked"
-			end
-			displayEarnings.receive(previous, state, reply)
-			ui.update(state)
-			deal.update(state)
-			dealStalls.update(state)
-			if state.ready and not musicStarted then
-				-- Once the profile and plot are ready. Areas or events may switch it later.
-				musicStarted = true
-				Music.play("world")
-			end
-			local offlineCoins, away = UIState.offline(state)
-			if state.offlineAward then
-				offlinePurchase.award(state.offlineAward)
-			end
-			if
-				offlineCoins
-				and state.ready
-				and not pending
-				and not offline.isOpen()
-				and not adminFocused
-			then
-				offline.show(offlineCoins, away)
-				Sfx.play("open")
-			end
-			displayInteraction.update(displayEarnings.update(state))
-			if
-				previous
-				and UIState.goal(previous) ~= "ready"
-				and UIState.goal(state) == "ready"
-			then
-				Sfx.play("goalReady")
-			end
-			if opening and opening.isActive() and reveal then
-				-- Live affordability and slots while the Reveal card is up.
-				opening.refresh(revealModel(state, reveal))
-			end
-		end
-		local intent = pending
-		-- Server-initiated collections (world click or tap) reply with a "collect:" id.
-		if reply and string.sub(reply.id, 1, 8) == "collect:" then
-			ui.message(reply.message, if reply.ok then "success" else "error")
-			if not reply.ok then
-				displayEarnings.interrupt()
-				Sfx.play("error")
-			end
-		end
-		if reply and intent and reply.id == intent.id then
-			local before = beforeRequest
-			pending = nil
-			if string.sub(intent.action, 1, 5) == "Shelf" or intent.action == "BuyShelf" then
-				shelfEditor.pending(false)
-			end
-			beforeRequest = nil
-			ui.pending(false)
-			deal.pending(false)
-			-- A bought deal opens like a Shop box; the popup gives way to the opening.
-			if reply.ok and intent.action == "Deal" then
-				deal.close()
-			end
-			local sound: string? = if reply.ok then replySounds[intent.action] else "error"
-			local text = if reply.ok
-				then feedback[intent.action] or reply.message
-				else reply.message
-			local kind = if reply.ok then "success" else "error"
-			if reply.ok and intent.action == "EquipBest" and before then
-				local changed
-				text, changed = UIState.equipSummary(before, state)
-				if #changed == 0 then
-					-- Already optimal is a calm notice, not a failure or a placement.
-					sound, kind = nil, "info"
-				end
-			end
-			-- A Login day that grants boxes sounds through its opening instead.
-			if intent.action == "Login" and (reply.figure or reply.figures) then
-				sound = nil
-			end
-			if sound then
-				Sfx.play(sound)
-			end
-			-- A saved volume needs no toast; the slider already shows it.
-			if not (reply.ok and intent.action == "SetVolume") then
-				ui.message(text, kind)
-			end
-			if
-				reply.ok
-				and intent.action == "Place"
-				and before
-				and before.step == Tutorial.display
-				and state.step == Tutorial.collect
-				and intent.slot
-			then
-				-- The Welcome Quest's first placement: show where the earning happens, unobstructed.
-				ui.closeScreen()
-				displayEarnings.celebrate(intent.slot)
-			end
-			revealBefore = before
-			-- Several figures: Open 10, the Welcome x10 or a multi-box Login reward day.
-			if before and reply.figures then
-				batch = OpeningResult.fromBatch(intent, before, state, reply)
-				local items = OpeningResult.summary(batch)
-				results = if #items > 0 then items else nil
-				resultsHeading = if intent.action == "WelcomeTen" then "Your Welcome ×10!" else nil
-				presentNext(state)
-			elseif before then
-				local result = OpeningResult.fromReply(intent, before, state, reply)
-				if result and opening then
-					reveal = result
-					opening.present(result, not ui.effects(), nil, revealModel(state, result))
-				end
+	(remotes:WaitForChild("ConvenienceState") :: RemoteEvent).OnClientEvent:Connect(function(value)
+		if convenience.receive(value) then
+			offlinePurchase.convenience(value)
+			ui.convenienceChanged()
+			local running = value.open.running
+				or value.open.phase == "Pending"
+				or value.open.phase == "Presenting"
+			stopButton.button.Visible = running
+			if running and not stopBound then
+				stopBound = true
+				Actions:BindActionAtPriority("StopAutoOpen", function(_, state)
+					if state == Enum.UserInputState.Begin then
+						convenience.stop()
+					end
+					return Enum.ContextActionResult.Sink
+				end, false, 3200, Enum.KeyCode.ButtonX)
+			elseif not running and stopBound then
+				stopBound = false
+				Actions:UnbindAction("StopAutoOpen")
 			end
 		end
 	end)
 )
+table.insert(
+	connections,
+	(remotes:WaitForChild("ConvenienceResult") :: RemoteEvent).OnClientEvent:Connect(function(value)
+		if autoResults then
+			autoResults.receive(value)
+		end
+	end)
+)
+table.insert(
+	connections,
+	game:GetService("Players").LocalPlayer.CharacterRemoving:Connect(function()
+		convenience.stop()
+	end)
+)
+convenience.ready()
+
 local syncAt = 0
+local storeTickAt = -math.huge
 table.insert(
 	connections,
 	RunService.Heartbeat:Connect(function()
 		local now = os.clock()
 		offlinePurchase.step()
+		if now - storeTickAt >= 1 then
+			storeTickAt = now
+			ui.storeTick(workspace:GetServerTimeNow())
+		end
+		if autoResults then
+			autoResults.step()
+		end
+		if autoPresentation then
+			autoPresentation.step(now)
+		end
 		if pending and now - sentAt > 3 then
 			sentAt = now
 			ui.message("Waiting for server… recovering the same request.")
@@ -449,6 +593,9 @@ end)
 syncRemote:FireServer()
 script.Destroying:Connect(function()
 	adminPanel.destroy()
+	Actions:UnbindAction("StopAutoOpen")
+	stopScope.destroy()
+	stopGui:Destroy()
 	if afk then
 		afk.destroy()
 	end
@@ -459,6 +606,10 @@ script.Destroying:Connect(function()
 		opening.destroy()
 	end
 	summary.destroy()
+	convenience.destroy()
+	if autoResults then
+		autoResults.destroy()
+	end
 	offlinePurchase.destroy()
 	offline.destroy()
 	welcome.destroy()

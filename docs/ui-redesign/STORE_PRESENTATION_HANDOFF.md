@@ -1,5 +1,10 @@
 # Store presentation handoff — 2026-10-11
 
+**P08 follow-through (2026-10-12):** StoreProjection/StoreBinding now supply this presentation
+from authoritative owner contracts and the common purchase controller. Fixtures remain isolated;
+real buying is still disabled by missing configuration and closed validation/release gates.
+See the [current integration evidence and P09 handoff](../audits/MONETIZATION_STORE_P08_2026-10-12.md).
+
 **Implemented; native visual/device verification pending. Buying remains disabled.**
 This extends the approved P07 shell. It does not approve D2, D3, MN-22 pricing, platform IDs,
 purchase wiring or release. The parallel purchase task continues to own authoritative contracts.

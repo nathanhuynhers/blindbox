@@ -1,5 +1,12 @@
 # UI redesign: implementation
 
+**P08 integration (2026-10-12):** the retained Store now consumes the shared P02 controller,
+authoritative product/modifier/odds snapshots and dedicated convenience/boost controls. Buying
+remains unavailable while platform configuration and rollout gates are closed. Earlier notes
+below about the unconnected Store describe its historical shell. Current product readiness and
+pending native visual/device acceptance are in the
+[P08 report and P09 handoff](../audits/MONETIZATION_STORE_P08_2026-10-12.md).
+
 Status: **implemented and merged into `master`; remaining Studio acceptance is listed below.** The design source
 is [BRIEF.md](BRIEF.md) and the [mockup](mockup/). This file maps the code and lists the Studio
 checks. It consolidates the useful implementation notes from the retired screen-specific UI docs.

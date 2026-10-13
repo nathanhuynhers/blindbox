@@ -1,5 +1,11 @@
 # Convenience upgrades (P05 / focused ownership handoff)
 
+**P08 follow-through (2026-10-12):** the shared server/client bootstrap, captured-session adapter,
+Coin Shop controls and opening Stop path are now connected. The integration below is historical
+P05 handoff context; the current readiness and native acceptance gaps are recorded in the
+[P08 report](audits/MONETIZATION_STORE_P08_2026-10-12.md). Policy/spendable-balance providers and
+all product rollout switches remain closed.
+
 Implemented modules and isolated tests, October 11, 2026. **Gameplay integration,
 native runtime and visual/device verification are pending.** This worktree deliberately
 does not edit Rules, Profile, shared Types, server init, purchase dispatch or income

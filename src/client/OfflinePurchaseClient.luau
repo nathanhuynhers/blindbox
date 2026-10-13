@@ -12,6 +12,15 @@ export type Dependencies = {
 	paint: (Presentation.OfflineInput) -> (),
 }
 local Client = {}
+export type Controller = {
+	busy: () -> boolean,
+	award: (OfflineTypes.View) -> (),
+	update: (Types.Snapshot, Types.Result?) -> (),
+	purchase: () -> boolean,
+	step: () -> (),
+	priceChanged: () -> (),
+	destroy: () -> (),
+}
 function Client.create(deps: Dependencies)
 	local view: OfflineTypes.View? = nil
 	local catalog: Types.Snapshot? = nil
@@ -61,7 +70,7 @@ function Client.create(deps: Dependencies)
 	end
 	function api.award(nextView: OfflineTypes.View)
 		view = nextView
-		if nextView.fulfilled then
+		if nextView.fulfilled and (not catalog or catalog.promptProduct == nil) then
 			pending, outcome, note =
 				nil, "idle", "Offline purchase saved. Reserved Coins remain protected."
 		end
@@ -107,10 +116,15 @@ function Client.create(deps: Dependencies)
 			end
 		elseif snapshot.promptProduct ~= nil then
 			outcome = "prompting"
+		elseif snapshot.recoveryProduct ~= nil or (item and item.fulfillment == "Recovering") then
+			outcome = "recovering"
 		elseif not pending and outcome == "prompting" then
 			outcome = "idle"
 		end
-		if view and view.fulfilled then
+		if snapshot.promptProduct ~= nil and outcome == "idle" then
+			outcome = "prompting"
+		end
+		if view and view.fulfilled and snapshot.promptProduct == nil then
 			outcome = "idle"
 		end
 		if view and view.recoveryRequired and snapshot.promptProduct == nil then
@@ -124,6 +138,7 @@ function Client.create(deps: Dependencies)
 		if
 			not alive
 			or pending
+			or (catalog ~= nil and catalog.promptProduct ~= nil)
 			or busy
 			or not award
 			or not award.claimable

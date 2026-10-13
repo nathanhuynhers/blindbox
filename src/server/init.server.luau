@@ -29,6 +29,9 @@ local OfflineRuntime = require(script.OfflineRuntime)
 local PackageRuntime = require(script.PackageRuntime)
 local PackageGrants = require(script.PackageGrants)
 local OfflineAwards = require(script.OfflineAwards)
+local ConvenienceRuntime = require(script.ConvenienceRuntime)
+local ConvenienceOwner = require(script.ConvenienceOwner)
+local ConvenienceService = require(script.ConvenienceService)
 local Protocol = require(script.Protocol)
 local World = require(script.World)
 local ModelAssets = require(script.ModelAssets)
@@ -52,6 +55,7 @@ local townModels = TownModels.start(function(kind: string, template: Model)
 	end
 end)
 type Session = {
+	convenience: ConvenienceService.Owner?,
 	transaction: Transactions.Session,
 	plot: PlayerPlot.Plot,
 	storage: Storage.Session,
@@ -100,6 +104,7 @@ local adminRemote = Instance.new("RemoteFunction")
 adminRemote.Name = "Admin"
 adminRemote.Parent = folder
 folder.Parent = ReplicatedStorage
+local convenience = ConvenienceRuntime.start(folder)
 local ownershipChanged: ((number) -> ())? = nil
 local purchaseChanged: ((Player) -> ())? = nil
 local function purchaseSession(player: Player): Storage.Session?
@@ -121,6 +126,36 @@ end, {
 	eligible = function(userId, product)
 		local player = Players:GetPlayerByUserId(userId)
 		local owner = if player then purchaseSession(player) else nil
+		if convenience.busy(userId) then
+			return false
+		end
+		-- P05 conveniences have no economic grant. Auto Open still requires the
+		-- paid-random policy path; income/Luck offers retain their validation gates.
+		if product.key == "movement" or product.key == "auto_collect" then
+			return owner ~= nil and product.kind == "Pass" and BoostRuntime.ready(owner, os.clock())
+		end
+		-- The provider is deliberately unresolved; configuring IDs cannot replace D2 validation.
+		local eligibility: BoostRuntime.Eligibility =
+			{ policy = "Unknown", lineageValidated = false, disclosureReady = false }
+		if product.key == "auto_open" or product.coinTier ~= nil then
+			return owner ~= nil
+				and BoostRuntime.ready(owner, os.clock())
+				and BoostRuntime.allowed(eligibility)
+				and (product.key == "auto_open" or CoinModifiers.effectsValidated)
+				and product.kind == "Pass"
+		end
+		if
+			product.key == "luck"
+			or product.key == "coins_boost_15"
+			or product.key == "coins_boost_30"
+			or product.key == "coins_boost_60"
+			or product.key == "luck_boost_2"
+			or product.key == "luck_boost_4"
+			or product.key == "combo_boost"
+		then
+			return owner ~= nil
+				and BoostRuntime.purchaseEligible(owner, product, eligibility, os.clock())
+		end
 		return if PackageGrants.supports(product.key)
 			then owner ~= nil and PackageRuntime.eligible(owner, product, os.clock())
 			else offlineIntegration.eligible(userId, product)
@@ -185,7 +220,7 @@ local function dealClock(): (number, number)
 	end
 	return Deals.window(os.time(), seconds), seconds
 end
-local function send(player: Player, session: Session, reply: Types.Reply?)
+local function snapshotFor(session: Session): Types.Snapshot
 	session.sequence += 1
 	local state = session.transaction.state
 	local day = math.floor(os.time() / 86400)
@@ -193,6 +228,10 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		Rules.refreshDay(state, day)
 	end
 	local snapshot: Types.Snapshot = {
+		luckOfferOdds = {
+			[2] = CollectionEconomy.odds(state.pityByGroup, math.max(2, Rules.luck(state))),
+			[4] = CollectionEconomy.odds(state.pityByGroup, math.max(4, Rules.luck(state))),
+		},
 		offlineAward = OfflineAwards.view(
 			state,
 			session.storage.ready
@@ -245,7 +284,10 @@ local function send(player: Player, session: Session, reply: Types.Reply?)
 		musicVolume = state.musicVolume,
 		deals = Deals.view(state, dealClock()),
 	}
-	stateRemote:FireClient(player, snapshot, reply)
+	return snapshot
+end
+local function send(player: Player, session: Session, reply: Types.Reply?)
+	stateRemote:FireClient(player, snapshotFor(session), reply)
 end
 -- P02 invokes this immediately after verified ownership changes. A paused/frozen profile
 -- defers the change until the ordinary loop resumes; it must not alter a handoff checkpoint.
@@ -280,6 +322,11 @@ ownershipChanged = function(userId)
 	local player = Players:GetPlayerByUserId(userId)
 	local session = if player then sessions[player] else nil
 	if player and session then
+		convenience.refresh(userId)
+		local autoOwned, autoFresh = purchases.ownership(userId, "auto_open")
+		if session.convenience and (autoOwned ~= "Owned" or not autoFresh) then
+			session.convenience.open.stop("Ownership refreshed; select Start to resume")
+		end
 		refreshCoinModifiers(player, session, os.clock())
 		send(player, session, nil)
 	end
@@ -311,6 +358,9 @@ local afk = AfkReconnect.create({
 		if not session or shuttingDown or player.Parent ~= Players then
 			return false
 		end
+		if not convenience.beforeHandoff(player.UserId) then
+			return false
+		end
 		return Storage.prepareTeleport(session.storage)
 	end,
 	recover = function(player)
@@ -319,6 +369,9 @@ local afk = AfkReconnect.create({
 			return false
 		end
 		local resumed = Storage.recoverTeleport(session.storage)
+		if resumed then
+			convenience.recover(player.UserId)
+		end
 		if sessions[player] == session and player.Parent == Players then
 			send(player, session, nil)
 		end
@@ -479,6 +532,7 @@ local function closeStorage(storage: Storage.Session)
 	closing -= 1
 end
 local function remove(player: Player)
+	convenience.remove(player.UserId)
 	purchases.remove(player.UserId)
 	admin.remove(player.UserId)
 	afk.remove(player)
@@ -548,6 +602,57 @@ local function added(player: Player)
 		afkCharacter = nil,
 	}
 	sessions[player] = session
+	local binding = movement[player]
+	if binding then
+		local owner = ConvenienceOwner.create(storage, transaction, binding, {
+			now = os.clock,
+			id = function()
+				return "auto:" .. HttpService:GenerateGUID(false)
+			end,
+			current = function()
+				return sessions[player] == session and player.Parent == Players and not shuttingDown
+			end,
+			alive = function()
+				local character = player.Character
+				local humanoid = if character
+					then character:FindFirstChildOfClass("Humanoid")
+					else nil
+				return humanoid ~= nil and humanoid.Health > 0
+			end,
+			ownership = function(key)
+				local owned, fresh = purchases.ownership(player.UserId, key)
+				return owned == "Owned", fresh
+			end,
+			purchaseBusy = function()
+				return purchases.busy(player.UserId)
+			end,
+			policyAllowed = function()
+				return false
+			end,
+			spendable = function()
+				return nil
+			end,
+			snapshot = function()
+				return snapshotFor(session)
+			end,
+			rolls = rolls,
+			day = function()
+				return math.floor(os.time() / 86400)
+			end,
+			window = function()
+				return (dealClock())
+			end,
+			deliver = function(value)
+				convenience.deliver(player, value)
+			end,
+			changed = function()
+				storage.status = "Autosave pending"
+				PlayerPlot.render(session.plot, transaction.state)
+			end,
+		})
+		session.convenience = owner
+		convenience.add(player, owner)
+	end
 	task.spawn(purchases.add, player.UserId)
 	afk.add(player)
 	PlayerPlot.bind(session.plot, function(actor, direction)
@@ -780,6 +885,22 @@ table.insert(
 			end
 		end
 		local beforeRevision = session.transaction.state.revision
+		local parsed = Protocol.parse(raw)
+		if
+			parsed
+			and (parsed.action == "Buy" or parsed.action == "BuyTen" or parsed.action == "Deal" or parsed.action == "Daily" or parsed.action == "Login" or parsed.action == "Welcome" or parsed.action == "WelcomeTen")
+			and session.convenience
+		then
+			session.convenience.open.stop("Manual opening selected")
+			if convenience.busy(player.UserId) then
+				send(player, session, {
+					id = parsed.id,
+					ok = false,
+					message = "Finish the current Auto Open result first.",
+				})
+				return
+			end
+		end
 		local beforeDaily = session.transaction.state.lastDailyDay
 		local reply, changed = Transactions.process(
 			session.transaction,
@@ -888,6 +1009,17 @@ table.insert(
 			end
 		end
 		admin.step()
+		local revisions: { [Player]: number } = {}
+		for player, session in sessions do
+			revisions[player] = session.transaction.state.revision
+		end
+		convenience.step()
+		for player, revision in revisions do
+			local session = sessions[player]
+			if session and session.transaction.state.revision ~= revision then
+				session.storage.status = "Autosave pending"
+			end
+		end
 		afk.step()
 		for player, session in sessions do
 			send(player, session, nil)
@@ -896,6 +1028,7 @@ table.insert(
 )
 game:BindToClose(function()
 	shuttingDown = true
+	convenience.destroy()
 	purchases.destroy()
 	afk.destroy()
 	for player, binding in movement do

@@ -23,6 +23,7 @@ export type LuckView = {
 	reason: string,
 }
 export type View = {
+	activationReasons: { [PurchaseTypes.TokenId]: string }?,
 	tokens: { [PurchaseTypes.TokenId]: number },
 	coin: Timer?,
 	luck: Timer?,

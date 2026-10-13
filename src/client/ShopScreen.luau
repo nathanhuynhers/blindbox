@@ -19,6 +19,7 @@ local Tile = require(script.Parent.FigureTile)
 local BoxPreview = require(script.Parent.BlindBoxPreview)
 local ShopLuck = require(script.Parent.ShopLuck)
 local Store = require(script.Parent.StoreScreen)
+local ConvenienceControls = require(script.Parent.ConvenienceControls)
 local Shop = {}
 
 local largest = 0
@@ -41,10 +42,41 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 	local refresh: () -> () = function() end
 	local list = List.create(body, ctx, function(id)
 		selected = id
+		if ctx.commerce then
+			ctx.commerce.convenience.collection(id)
+		end
 		refresh()
 	end)
 	-- Middle: product
 	local product = Kit.canvas(body, "Product")
+	local automation = false
+	local controls = if ctx.commerce
+		then ConvenienceControls.create(
+			product,
+			ctx.scope,
+			ctx.effects,
+			ctx.commerce.convenience,
+			function()
+				local snapshot = ctx.snapshot()
+				return {
+					id = selected,
+					name = State.collectionName(selected),
+					price = if snapshot then snapshot.prices[selected] else nil,
+				}
+			end
+		)
+		else nil
+	local auto = Button.create(
+		product,
+		"AutoOpenSetup",
+		{ variant = "violet", text = "Auto Open…", size = 16 },
+		ctx.scope,
+		ctx.effects,
+		function()
+			automation = not automation
+			refresh()
+		end
+	)
 	local stage = Kit.frame(product, "ProductStage")
 	local preview = BoxPreview.create(stage, ctx.scope)
 	local boxTitle = Kit.text(product, "BoxTitle", "", 24, Style.display())
@@ -185,7 +217,8 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local buttonWidth = math.min(300, middle - 32)
 		-- Visible actions top to bottom; the first is the large primary one.
 		local order: { TextButton } = {}
-		for _, item in { gift, buy, ten, free } do
+		auto.button.Visible = ctx.commerce ~= nil
+		for _, item in { gift, buy, ten, free, auto } do
 			if item.button.Visible then
 				table.insert(order, item.button)
 			end
@@ -203,6 +236,14 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 				local tall = if index == 1 then 54 else 46
 				Kit.rect(button, 14, y, middle - 28, tall)
 				y += tall + 14
+			end
+			if controls then
+				controls.root.Visible = automation
+				if automation then
+					controls.root.Position = UDim2.fromOffset(14, y)
+					controls.layout(middle - 28, 480)
+					y += 492
+				end
 			end
 			Kit.fit(product, y - 14 + 8, height)
 		else
@@ -223,6 +264,14 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 				local tall = if index == 1 then 64 else 52
 				Kit.rect(button, (middle - buttonWidth) / 2, y, buttonWidth, tall)
 				y += tall + 14
+			end
+			if controls then
+				controls.root.Visible = automation
+				if automation then
+					controls.root.Position = UDim2.fromOffset(16, y)
+					controls.layout(middle - 32, 480)
+					y += 492
+				end
 			end
 			Kit.fit(product, y - 14 + 8, height)
 		end
@@ -286,6 +335,9 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		Kit.fit(info, y + luckHeight + 12, height)
 	end
 	local function update(snapshot: Types.Snapshot)
+		if controls then
+			controls.update()
+		end
 		shell.update(snapshot)
 		local name = State.collectionName(selected)
 		list.update(snapshot, selected)
@@ -400,7 +452,15 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			if route and route.collection and Catalog.collectionIds[route.collection] then
 				selected = route.collection
 			end
+			if route and route.automation then
+				automation = true
+			end
 			refresh()
+		end,
+		shown = function(value: boolean)
+			if ctx.commerce then
+				ctx.commerce.convenience.collection(if value then selected else "")
+			end
 		end,
 	}
 end
