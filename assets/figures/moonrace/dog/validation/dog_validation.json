@@ -1,0 +1,1330 @@
+{
+  "schema_version": 2,
+  "figure": "MoonDog",
+  "title": "Dog",
+  "rarity": "Rare",
+  "size_xyz_studs": [
+    1.9224,
+    2.6552,
+    2.8804
+  ],
+  "meshes": 24,
+  "triangles": 48196,
+  "materials": [
+    "MoonDog_Blue",
+    "MoonDog_Blush",
+    "MoonDog_BrowMat",
+    "MoonDog_EarPink",
+    "MoonDog_EyeDark",
+    "MoonDog_EyeShine",
+    "MoonDog_GoldDeep",
+    "MoonDog_GoldMat",
+    "MoonDog_Iris",
+    "MoonDog_Lash",
+    "MoonDog_MouthMat",
+    "MoonDog_Navy",
+    "MoonDog_NoseBlack",
+    "MoonDog_Pupil",
+    "MoonDog_TailMix",
+    "MoonDog_Tan",
+    "MoonDog_TongueMat",
+    "MoonDog_White"
+  ],
+  "components": {
+    "MoonDog_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.1107299535983959,
+      "islands": 1,
+      "island_faces": [
+        6000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 6000,
+      "bounds": [
+        [
+          -0.9102019667625427,
+          -1.2593512535095215,
+          1.4198628664016724
+        ],
+        [
+          0.910201907157898,
+          0.08018137514591217,
+          2.540290594100952
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Mask": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05251200678015039,
+      "islands": 1,
+      "island_faces": [
+        3000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3000,
+      "bounds": [
+        [
+          -0.5651482939720154,
+          -1.2683004140853882,
+          1.446529746055603
+        ],
+        [
+          0.5651482939720154,
+          -0.6435890197753906,
+          2.4154229164123535
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Ears": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07072944651917429,
+      "islands": 2,
+      "island_faces": [
+        992,
+        1008
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2000,
+      "bounds": [
+        [
+          -0.6403796076774597,
+          -0.4399990737438202,
+          2.160416841506958
+        ],
+        [
+          0.6402086019515991,
+          -0.24000215530395508,
+          2.8804147243499756
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_EarInner": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.005460821053244659,
+      "islands": 2,
+      "island_faces": [
+        498,
+        502
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1000,
+      "bounds": [
+        [
+          -0.5885825753211975,
+          -0.4502525329589844,
+          2.366309404373169
+        ],
+        [
+          0.5886162519454956,
+          -0.3899974524974823,
+          2.753688335418701
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Eyes": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.008180660057297244,
+      "islands": 2,
+      "island_faces": [
+        598,
+        602
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.39264145493507385,
+          -1.1207822561264038,
+          1.8816449642181396
+        ],
+        [
+          0.3923758268356323,
+          -0.9274686574935913,
+          2.1859018802642822
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.006336021381095731,
+      "islands": 2,
+      "island_faces": [
+        598,
+        602
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.37638166546821594,
+          -1.113701581954956,
+          1.8990942239761353
+        ],
+        [
+          0.37685295939445496,
+          -0.9395384192466736,
+          2.1591031551361084
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Pupil": {
+      "tris": 600,
+      "verts": 304,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0016380248776392808,
+      "islands": 2,
+      "island_faces": [
+        296,
+        304
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 600,
+      "bounds": [
+        [
+          -0.3249271810054779,
+          -1.079588770866394,
+          1.966158390045166
+        ],
+        [
+          0.32481148838996887,
+          -0.9649152755737305,
+          2.11128306388855
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_EyeShine": {
+      "tris": 700,
+      "verts": 358,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0007786300566778706,
+      "islands": 4,
+      "island_faces": [
+        136,
+        148,
+        206,
+        210
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 700,
+      "bounds": [
+        [
+          -0.34108611941337585,
+          -1.1056568622589111,
+          1.9498130083084106
+        ],
+        [
+          0.34308627247810364,
+          -0.9483775496482849,
+          2.1330785751342773
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Lash": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0029056735437768258,
+      "islands": 2,
+      "island_faces": [
+        586,
+        614
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.41929471492767334,
+          -1.1119991540908813,
+          2.0306284427642822
+        ],
+        [
+          0.41961169242858887,
+          -0.8797892332077026,
+          2.2160329818725586
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Brow": {
+      "tris": 500,
+      "verts": 254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0007693101488331796,
+      "islands": 2,
+      "island_faces": [
+        248,
+        252
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 500,
+      "bounds": [
+        [
+          -0.2845779359340668,
+          -0.9806589484214783,
+          2.2290258407592773
+        ],
+        [
+          0.28487154841423035,
+          -0.872133731842041,
+          2.31268048286438
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Nose": {
+      "tris": 800,
+      "verts": 402,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.002399507810278039,
+      "islands": 1,
+      "island_faces": [
+        800
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.1104058250784874,
+          -1.2919379472732544,
+          1.785239338874817
+        ],
+        [
+          0.11007064580917358,
+          -1.1521600484848022,
+          1.9349339008331299
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Mouth": {
+      "tris": 800,
+      "verts": 402,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0021718225224579336,
+      "islands": 1,
+      "island_faces": [
+        800
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.16000717878341675,
+          -1.2258304357528687,
+          1.5727788209915161
+        ],
+        [
+          0.15993361175060272,
+          -1.0627415180206299,
+          1.7156391143798828
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Tongue": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0010055892614455261,
+      "islands": 1,
+      "island_faces": [
+        500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 500,
+      "bounds": [
+        [
+          -0.09941937774419785,
+          -1.2027002573013306,
+          1.5700937509536743
+        ],
+        [
+          0.09916695207357407,
+          -1.0636372566223145,
+          1.6610182523727417
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Blush": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00230912421545276,
+      "islands": 2,
+      "island_faces": [
+        400,
+        400
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.536501944065094,
+          -1.0528103113174438,
+          1.772019863128662
+        ],
+        [
+          0.536501944065094,
+          -0.9480012655258179,
+          1.8974308967590332
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Body": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.3417546006136796,
+      "islands": 1,
+      "island_faces": [
+        7000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 7000,
+      "bounds": [
+        [
+          -0.5403933525085449,
+          -0.8199964761734009,
+          0.10000518709421158
+        ],
+        [
+          0.5401818156242371,
+          0.9401958584785461,
+          1.4803051948547363
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Chest": {
+      "tris": 2500,
+      "verts": 1256,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03154200224185345,
+      "islands": 3,
+      "island_faces": [
+        182,
+        210,
+        2108
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2500,
+      "bounds": [
+        [
+          -0.47390034794807434,
+          -0.8280885815620422,
+          0.47894808650016785
+        ],
+        [
+          0.5283508896827698,
+          0.6281866431236267,
+          1.3090461492538452
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Paws": {
+      "tris": 2500,
+      "verts": 1258,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.10608119145273728,
+      "islands": 4,
+      "island_faces": [
+        620,
+        624,
+        626,
+        630
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2500,
+      "bounds": [
+        [
+          -0.5195603966712952,
+          -0.7504041194915771,
+          0.0
+        ],
+        [
+          0.5195919871330261,
+          0.7704740762710571,
+          0.24069669842720032
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Scarf": {
+      "tris": 4000,
+      "verts": 2000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.1992867322828083,
+      "islands": 1,
+      "island_faces": [
+        4000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 4000,
+      "bounds": [
+        [
+          -0.6106439232826233,
+          -1.1101126670837402,
+          1.0001282691955566
+        ],
+        [
+          0.6395004391670227,
+          0.15428222715854645,
+          1.7172929048538208
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_ScarfTails": {
+      "tris": 1296,
+      "verts": 652,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01202132911159694,
+      "islands": 2,
+      "island_faces": [
+        552,
+        744
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          0.48888474702835083,
+          -0.9632224440574646,
+          0.703765332698822
+        ],
+        [
+          1.0122367143630981,
+          -0.652725338935852,
+          1.4799787998199463
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_ScarfPattern": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0006908940436972912,
+      "islands": 2,
+      "island_faces": [
+        498,
+        502
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1000,
+      "bounds": [
+        [
+          -0.30960699915885925,
+          -1.107460856437683,
+          1.2161681652069092
+        ],
+        [
+          0.2900691628456116,
+          -1.0295387506484985,
+          1.3202660083770752
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Gold": {
+      "tris": 4000,
+      "verts": 2006,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.009390252145145632,
+      "islands": 5,
+      "island_faces": [
+        766,
+        768,
+        786,
+        792,
+        888
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 4000,
+      "bounds": [
+        [
+          -0.46674075722694397,
+          -1.2200106382369995,
+          0.8599056005477905
+        ],
+        [
+          0.47328299283981323,
+          -0.7277156114578247,
+          1.496819019317627
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_PawPrint": {
+      "tris": 600,
+      "verts": 298,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0006453674342326444,
+      "islands": 2,
+      "island_faces": [
+        174,
+        426
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 600,
+      "bounds": [
+        [
+          -0.06796756386756897,
+          -1.1607697010040283,
+          1.1178209781646729
+        ],
+        [
+          0.06791672110557556,
+          -1.0959446430206299,
+          1.2670360803604126
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Tassel": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0011473697946364542,
+      "islands": 1,
+      "island_faces": [
+        1000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1000,
+      "bounds": [
+        [
+          -0.049934323877096176,
+          -1.1883140802383423,
+          0.5544823408126831
+        ],
+        [
+          0.049934327602386475,
+          -1.0916858911514282,
+          0.8425241708755493
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonDog_Tail": {
+      "tris": 4000,
+      "verts": 2002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.2907468149347747,
+      "islands": 1,
+      "island_faces": [
+        4000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 4000,
+      "bounds": [
+        [
+          -0.37183550000190735,
+          0.4426597058773041,
+          0.7504104375839233
+        ],
+        [
+          0.33386728167533875,
+          1.3632516860961914,
+          1.881162166595459
+        ]
+      ],
+      "materials": 1
+    }
+  },
+  "build": {
+    "MoonDog_Head": {
+      "active_blocks": 5647,
+      "blocks": 17600,
+      "grid": [
+        257,
+        201,
+        177
+      ],
+      "surface_error": 0.0020069018937647343,
+      "retained_ratio": 0.023073550788730877,
+      "raw_tris": 260038,
+      "removed_faces": 0,
+      "seconds": 15.0
+    },
+    "MoonDog_Mask": {
+      "active_blocks": 4450,
+      "blocks": 24150,
+      "grid": [
+        281,
+        185,
+        241
+      ],
+      "surface_error": 0.0015746491262689233,
+      "retained_ratio": 0.0136164341282305,
+      "raw_tris": 220322,
+      "removed_faces": 0,
+      "seconds": 11.0
+    },
+    "MoonDog_Ears": {
+      "active_blocks": 2387,
+      "blocks": 6400,
+      "grid": [
+        257,
+        81,
+        161
+      ],
+      "surface_error": 0.0015527423238381743,
+      "retained_ratio": 0.020697077572646744,
+      "raw_tris": 96632,
+      "removed_faces": 0,
+      "seconds": 4.1
+    },
+    "MoonDog_EarInner": {
+      "active_blocks": 1980,
+      "blocks": 9108,
+      "grid": [
+        369,
+        73,
+        177
+      ],
+      "surface_error": 0.001219233963638544,
+      "retained_ratio": 0.020216723273491832,
+      "raw_tris": 49464,
+      "removed_faces": 0,
+      "seconds": 2.3
+    },
+    "MoonDog_Eyes": {
+      "active_blocks": 1692,
+      "blocks": 9504,
+      "grid": [
+        265,
+        129,
+        145
+      ],
+      "surface_error": 0.0011863033287227154,
+      "retained_ratio": 0.01735106998264893,
+      "raw_tris": 69160,
+      "removed_faces": 0,
+      "seconds": 6.0
+    },
+    "MoonDog_Iris": {
+      "active_blocks": 1381,
+      "blocks": 7392,
+      "grid": [
+        265,
+        113,
+        129
+      ],
+      "surface_error": 0.0011018229415640235,
+      "retained_ratio": 0.022529288074496844,
+      "raw_tris": 53264,
+      "removed_faces": 0,
+      "seconds": 5.6
+    },
+    "MoonDog_Pupil": {
+      "active_blocks": 750,
+      "blocks": 5408,
+      "grid": [
+        257,
+        105,
+        105
+      ],
+      "surface_error": 0.001035075867548585,
+      "retained_ratio": 0.02478929102627665,
+      "raw_tris": 24204,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "MoonDog_EyeShine": {
+      "active_blocks": 939,
+      "blocks": 13243,
+      "grid": [
+        329,
+        137,
+        153
+      ],
+      "surface_error": 0.0011189646320417523,
+      "retained_ratio": 0.02888742159128425,
+      "raw_tris": 24232,
+      "removed_faces": 0,
+      "seconds": 3.4
+    },
+    "MoonDog_Lash": {
+      "active_blocks": 2031,
+      "blocks": 18753,
+      "grid": [
+        377,
+        169,
+        153
+      ],
+      "surface_error": 0.0016079582273960114,
+      "retained_ratio": 0.015109544195416772,
+      "raw_tris": 79420,
+      "removed_faces": 0,
+      "seconds": 7.3
+    },
+    "MoonDog_Brow": {
+      "active_blocks": 456,
+      "blocks": 3718,
+      "grid": [
+        209,
+        105,
+        89
+      ],
+      "surface_error": 0.0009845388121902943,
+      "retained_ratio": 0.043073742246726394,
+      "raw_tris": 11608,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "MoonDog_Nose": {
+      "active_blocks": 420,
+      "blocks": 2028,
+      "grid": [
+        105,
+        97,
+        105
+      ],
+      "surface_error": 0.0006217188783921301,
+      "retained_ratio": 0.048088482808367396,
+      "raw_tris": 16636,
+      "removed_faces": 0,
+      "seconds": 0.8
+    },
+    "MoonDog_Mouth": {
+      "active_blocks": 1042,
+      "blocks": 10080,
+      "grid": [
+        193,
+        169,
+        161
+      ],
+      "surface_error": 0.0008920019608922303,
+      "retained_ratio": 0.01952362358453729,
+      "raw_tris": 40976,
+      "removed_faces": 0,
+      "seconds": 3.7
+    },
+    "MoonDog_Tongue": {
+      "active_blocks": 588,
+      "blocks": 4522,
+      "grid": [
+        137,
+        153,
+        113
+      ],
+      "surface_error": 0.0008551455684937537,
+      "retained_ratio": 0.023329600597237776,
+      "raw_tris": 21432,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "MoonDog_Blush": {
+      "active_blocks": 654,
+      "blocks": 3267,
+      "grid": [
+        265,
+        89,
+        73
+      ],
+      "surface_error": 0.0009978091111406684,
+      "retained_ratio": 0.054945054945054944,
+      "raw_tris": 14560,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "MoonDog_Body": {
+      "active_blocks": 7384,
+      "blocks": 16275,
+      "grid": [
+        169,
+        249,
+        201
+      ],
+      "surface_error": 0.0017706513172015548,
+      "retained_ratio": 0.021746154037328828,
+      "raw_tris": 321896,
+      "removed_faces": 0,
+      "seconds": 19.3
+    },
+    "MoonDog_Chest": {
+      "active_blocks": 3218,
+      "blocks": 35776,
+      "grid": [
+        257,
+        345,
+        209
+      ],
+      "surface_error": 0.0016356880078092217,
+      "retained_ratio": 0.01701768477802132,
+      "raw_tris": 146906,
+      "removed_faces": 0,
+      "seconds": 11.6
+    },
+    "MoonDog_Paws": {
+      "active_blocks": 4852,
+      "blocks": 15972,
+      "grid": [
+        265,
+        353,
+        89
+      ],
+      "surface_error": 0.002243578666821122,
+      "retained_ratio": 0.01176382013589565,
+      "raw_tris": 212516,
+      "removed_faces": 0,
+      "seconds": 9.5
+    },
+    "MoonDog_Scarf": {
+      "active_blocks": 5581,
+      "blocks": 19220,
+      "grid": [
+        249,
+        249,
+        161
+      ],
+      "surface_error": 0.002431749366223812,
+      "retained_ratio": 0.01499385252046661,
+      "raw_tris": 266776,
+      "removed_faces": 0,
+      "seconds": 9.2
+    },
+    "MoonDog_ScarfTails": {
+      "source": "mesh",
+      "surface_error": 1.6858739115832577e-07,
+      "retained_ratio": 1.0,
+      "raw_tris": 1296,
+      "removed_faces": 0,
+      "seconds": 0.0
+    },
+    "MoonDog_ScarfPattern": {
+      "active_blocks": 684,
+      "blocks": 8064,
+      "grid": [
+        289,
+        129,
+        113
+      ],
+      "surface_error": 0.0012549825478345156,
+      "retained_ratio": 0.0333912114331508,
+      "raw_tris": 29948,
+      "removed_faces": 0,
+      "seconds": 1.8
+    },
+    "MoonDog_Gold": {
+      "active_blocks": 1887,
+      "blocks": 24472,
+      "grid": [
+        305,
+        185,
+        225
+      ],
+      "surface_error": 0.0010055872844532132,
+      "retained_ratio": 0.053336177929489574,
+      "raw_tris": 74996,
+      "removed_faces": 0,
+      "seconds": 4.3
+    },
+    "MoonDog_PawPrint": {
+      "active_blocks": 484,
+      "blocks": 2688,
+      "grid": [
+        113,
+        97,
+        129
+      ],
+      "surface_error": 0.0012083585606887937,
+      "retained_ratio": 0.03352704514975414,
+      "raw_tris": 17896,
+      "removed_faces": 0,
+      "seconds": 1.0
+    },
+    "MoonDog_Tassel": {
+      "active_blocks": 384,
+      "blocks": 1485,
+      "grid": [
+        89,
+        73,
+        121
+      ],
+      "surface_error": 0.0012219013879075646,
+      "retained_ratio": 0.07442691277165824,
+      "raw_tris": 13436,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "MoonDog_Tail": {
+      "active_blocks": 4422,
+      "blocks": 14000,
+      "grid": [
+        161,
+        201,
+        225
+      ],
+      "surface_error": 0.00145451701246202,
+      "retained_ratio": 0.019504964013341397,
+      "raw_tris": 205076,
+      "removed_faces": 0,
+      "seconds": 19.1
+    }
+  },
+  "glb": {
+    "bytes": 1488652,
+    "sha256": "063d766529c9b1094973e083aef4668e795c4ad1848f8eb572edc7b7aa6e5ee0",
+    "nodes": [
+      "MoonDog_Blush",
+      "MoonDog_Body",
+      "MoonDog_Brow",
+      "MoonDog_Chest",
+      "MoonDog_EarInner",
+      "MoonDog_Ears",
+      "MoonDog_Eyes",
+      "MoonDog_EyeShine",
+      "MoonDog_Gold",
+      "MoonDog_Head",
+      "MoonDog_Iris",
+      "MoonDog_Lash",
+      "MoonDog_Mask",
+      "MoonDog_Mouth",
+      "MoonDog_Nose",
+      "MoonDog_PawPrint",
+      "MoonDog_Paws",
+      "MoonDog_Pupil",
+      "MoonDog_Scarf",
+      "MoonDog_ScarfPattern",
+      "MoonDog_ScarfTails",
+      "MoonDog_Tail",
+      "MoonDog_Tassel",
+      "MoonDog_Tongue",
+      "MoonDog"
+    ],
+    "meshes": 24,
+    "materials": 18,
+    "images": 18,
+    "textures": 18,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "catalog": "moon.dog",
+  "root": "MoonDog",
+  "face": "MoonDog_Eyes",
+  "glass": [],
+  "constraints": {
+    "MoonDog_Head": {
+      "expected_islands": 1,
+      "max_surface_error": 0.02,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonDog_Mask": {
+      "expected_islands": null,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonDog_Ears": {
+      "expected_islands": 2,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonDog_EarInner": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonDog_Eyes": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonDog_Iris": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonDog_Pupil": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.0035
+    },
+    "MoonDog_EyeShine": {
+      "expected_islands": 4,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonDog_Lash": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonDog_Brow": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonDog_Nose": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonDog_Mouth": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonDog_Tongue": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonDog_Blush": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonDog_Body": {
+      "expected_islands": 1,
+      "max_surface_error": 0.02,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonDog_Chest": {
+      "expected_islands": null,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonDog_Paws": {
+      "expected_islands": 4,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonDog_Scarf": {
+      "expected_islands": 1,
+      "max_surface_error": 0.016,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonDog_ScarfTails": {
+      "expected_islands": 2,
+      "max_surface_error": 0.006,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonDog_ScarfPattern": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonDog_Gold": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonDog_PawPrint": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonDog_Tassel": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonDog_Tail": {
+      "expected_islands": 1,
+      "max_surface_error": 0.016,
+      "min_feature": null,
+      "voxel": 0.006
+    }
+  },
+  "reimport": {
+    "meshes": 24,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "previews": {
+    "fidelity_source": "exported_reimported_glb",
+    "fidelity_sha256": "063d766529c9b1094973e083aef4668e795c4ad1848f8eb572edc7b7aa6e5ee0",
+    "fidelity_views": [
+      "dog_fidelity_front.png",
+      "dog_fidelity_three_quarter.png",
+      "dog_fidelity_side.png",
+      "dog_fidelity_back.png"
+    ],
+    "resolution": 1000,
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "disclaimer": "Blender production fidelity preview; not a Roblox screenshot",
+    "beauty_views": [
+      "dog_beauty_front.png",
+      "dog_beauty_three_quarter.png",
+      "dog_beauty_side.png",
+      "dog_beauty_back.png"
+    ]
+  }
+}

@@ -58,6 +58,14 @@ Manifest.Collection = {
 		CornerBottomLeft = "Collection.WeAreAllStars.CornerBottomLeft",
 		CornerBottomRight = "Collection.WeAreAllStars.CornerBottomRight",
 	},
+	Moonrace = {
+		Emblem = "Collection.Moonrace.Emblem",
+		ShopPattern = "Collection.Moonrace.ShopPattern",
+		CornerTopLeft = "Collection.Moonrace.CornerTopLeft",
+		CornerTopRight = "Collection.Moonrace.CornerTopRight",
+		CornerBottomLeft = "Collection.Moonrace.CornerBottomLeft",
+		CornerBottomRight = "Collection.Moonrace.CornerBottomRight",
+	},
 }
 Manifest.Global = { IconCollection = "Global.IconCollection" }
 Manifest.Navigation = {

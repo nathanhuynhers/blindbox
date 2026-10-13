@@ -1222,6 +1222,8 @@ for _, viewport in { { 705, 338 }, { 666, 374 }, { 1023, 599 }, { 1280, 720 } } 
 		for _, name in { "InsideTitle", "OddsTitle", "OddsBar" } do
 			check(within(contents, name).Visible, "Shop keeps contents and odds")
 		end
+		-- Coming-soon collections never sell; check the purchase actions on one that does.
+		screen.route({ collection = Catalog.collections[1].id })
 		local product = within(screen.root, "Product")
 		for _, name in { "BuyBox", "BuyTen", "DailyBox" } do
 			local action = within(product, name)

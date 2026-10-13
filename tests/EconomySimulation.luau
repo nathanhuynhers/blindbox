@@ -63,13 +63,13 @@ local function percentile(values,p)
 	table.sort(values)
 	return values[math.max(1,math.ceil(#values*p))]
 end
-local results={concept={},echo={},star={}}
-local boxes={concept={},echo={},star={}}
+local results={concept={},echo={},star={},moon={}}
+local boxes={concept={},echo={},star={},moon={}}
 for trial=1,300 do
 	local state=Rules.new(0)
 	for _=1,30 do buy(state,"grove") end
 	for _=1,30 do buy(state,"tide") end
-	for _, collection in {"concept","echo","star"} do
+	for _, collection in {"concept","echo","star","moon"} do
 		local entered=state.time
 		local count=0
 		repeat
@@ -82,10 +82,10 @@ for trial=1,300 do
 		table.insert(boxes[collection],count)
 	end
 end
-for _, collection in {"concept","echo","star"} do
+for _, collection in {"concept","echo","star","moon"} do
 	print(string.format("%s: hours p10=%.2f p25=%.2f median=%.2f p75=%.2f p90=%.2f; median boxes=%d",
 		collection,percentile(results[collection],.1),percentile(results[collection],.25),
 		percentile(results[collection],.5),percentile(results[collection],.75),percentile(results[collection],.9),
 		percentile(boxes[collection],.5)))
 end
-print("300 seeded progression runs; strongest Display with themed alternatives, sequential slot purchases, 30 Grove + 30 Tide boxes before Concepts, then Echo then Stars; no reveal/interaction delay or daily rewards.")
+print("300 seeded progression runs; strongest Display with themed alternatives, sequential slot purchases, 30 Grove + 30 Tide boxes before Concepts, then Echo, Stars and Moonrace; no reveal/interaction delay or daily rewards.")

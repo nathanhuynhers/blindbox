@@ -70,6 +70,7 @@ function Storage.open(userId: number): (Session?, string)
 			state.time = os.clock()
 			-- The lease guarantees one server per profile, so this runs once per join.
 			Rules.offline(state, os.time())
+			Rules.refundComingSoon(state, state.time)
 			return {
 				state = state,
 				handle = handle,

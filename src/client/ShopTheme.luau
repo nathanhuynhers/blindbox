@@ -75,6 +75,16 @@ ShopTheme.collections = {
 		ink = Color3.fromRGB(74, 58, 51),
 		trim = Color3.fromRGB(242, 207, 107),
 	},
+	moon = {
+		collectionId = "moon",
+		emblemKey = Manifest.Collection.Moonrace.Emblem,
+		patternKey = Manifest.Collection.Moonrace.ShopPattern,
+		primary = Color3.fromRGB(200, 55, 45),
+		secondary = Color3.fromRGB(228, 178, 76),
+		wash = Color3.fromRGB(251, 240, 226),
+		ink = Color3.fromRGB(74, 32, 24),
+		trim = Color3.fromRGB(228, 178, 76),
+	},
 } :: { [string]: Theme }
 
 function ShopTheme.get(collectionId: string): Theme

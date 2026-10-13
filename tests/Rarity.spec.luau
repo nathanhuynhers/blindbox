@@ -135,8 +135,8 @@ check(#Catalog.figures == #Economy.entries, "every figure has economy tuning")
 for _, figure in Catalog.figures do
 	check(Rules.rates[figure.id] > 0 and Rules.odds[figure.id] > 0, "positive published base economy")
 end
-local tiers = { grove = 3, tide = 3, concept = 5, echo = 5, star = 5 }
-local sizes = { grove = 6, tide = 6, concept = 5, echo = 13, star = 13 }
+local tiers = { grove = 3, tide = 3, concept = 5, echo = 5, star = 5, moon = 5 }
+local sizes = { grove = 6, tide = 6, concept = 5, echo = 13, star = 13, moon = 13 }
 for _, collection in Catalog.collections do
 	local rows = Shop.rarityOdds({ odds = Rules.odds, baseOdds = Rules.odds } :: any, collection.id)
 	local tierCount = tiers[collection.id]
