@@ -86,7 +86,8 @@ def positive(value, name, maximum):
         raise ImportError(f"{name} must be finite and between 0 and {maximum}")
 
 
-def load_batch(file: Path, incoming: Path, root: Path = ROOT) -> tuple[dict, list[dict], list[str]]:
+def load_batch(file: Path, incoming: Path, root: Path | None = None) -> tuple[dict, list[dict], list[str]]:
+    root = root if root is not None else ROOT
     batch = read_json(file)
     if batch.get("schema_version") != 1 or not SLUG.fullmatch(str(batch.get("batch_id", ""))):
         raise ImportError("manifest needs schema_version 1 and a kebab-case batch_id")
@@ -298,7 +299,8 @@ def upload_boundary(api):
         raise ImportError(str(error)) from None
 
 
-def proposal(rows: list[dict], root: Path = ROOT) -> dict:
+def proposal(rows: list[dict], root: Path | None = None) -> dict:
+    root = root if root is not None else ROOT
     manifest = read_json(root / "assets/manifest.json")
     uploads = read_json(root / "assets/uploads.json")
     records = []
