@@ -2,6 +2,8 @@
 /*.rbxl
 /*.rbxlx
 /build/
+# Manually downloaded batches; selected originals are archived on promotion.
+/assets/incoming/
 
 # Roblox Studio lock files
 *.rbxlx.lock

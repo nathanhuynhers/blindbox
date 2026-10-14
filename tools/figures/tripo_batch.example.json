@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "batch_id": "tripo-review-001",
+  "figures": [
+    {
+      "source": "bubble_bean_tripo.glb",
+      "collection_id": "tide",
+      "figure_id": "tide.bubble",
+      "rarity": "Common",
+      "collection_slug": "tidepool-tales",
+      "figure_slug": "bubble-bean",
+      "root": "BubbleBean",
+      "alias": "bubble_bean",
+      "asset_key": "Models.TidepoolTales.BubbleBean",
+      "height_studs": 3.1,
+      "rotation_degrees": [0, 0, 0],
+      "eyes": {
+        "object": "REPLACE_WITH_SOURCE_MESH_NAME",
+        "region": [[0.3, 0.0, 0.55], [0.7, 0.18, 0.85]]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    }
+  ]
+}

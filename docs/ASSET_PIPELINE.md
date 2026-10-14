@@ -6,6 +6,11 @@ are required; there are no added packages. Run commands from the repository root
 
 ## Sources and stable names
 
+Manually downloaded Tripo/external figure GLBs can be processed in a batch with
+[the external import command](TRIPO_BATCH_IMPORT.md). It stages conversions and a hashed review
+proposal, then reuses this uploader, manifest, ID generation and figure runtime mapping after
+explicit batch approval. It never overwrites approved model files or deploys a live place.
+
 Place reviewed artwork under [assets](../assets/README.md): `ui/global`,
 `ui/collection/shared`, `ui/collection/pocket-grove`, `ui/collection/tidepool-tales`,
 `figures/pocket-grove`, `figures/tidepool-tales`, `boxes`, or `display`.

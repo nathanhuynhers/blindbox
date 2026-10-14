@@ -6,6 +6,11 @@ for exact commands, APIs, gates and the standing authorization for approved refe
 This workflow does not authorize new collections/gameplay, replacement assets during infrastructure
 tests, or deployment of the live place.
 
+Manually downloaded Tripo/textured GLBs use the separate [external batch import pathway](TRIPO_BATCH_IMPORT.md).
+It preserves source art and logical/material parts, stages lossless mesh partitions, compares source/export
+renders, and reuses the uploader/runtime generator only after review of a hashed batch proposal.
+It does not require new `figures.py` definitions or change this SDF/hybrid workflow.
+
 ## Reference to production
 
 1. Receive an approved reference sheet. Record proportions, silhouette, expression, layered clothing,

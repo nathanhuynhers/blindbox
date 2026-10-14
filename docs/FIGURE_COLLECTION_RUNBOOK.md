@@ -7,6 +7,10 @@ went through every step. **Read this whole document before starting a new collec
 [FIGURE_PRODUCTION_WORKFLOW.md](FIGURE_PRODUCTION_WORKFLOW.md) describes the long-term goal. This
 runbook is the process that works today.
 
+For manually downloaded textured Tripo GLBs, follow [the external batch import guide](TRIPO_BATCH_IMPORT.md)
+instead of reconstructing them from sheets. Its explicit batch review gate supersedes the sheet workflow's
+standing publication approval for those imports; shared runtime/Studio acceptance contracts still apply.
+
 ## 0. Ground rules
 
 - **The sheet is the source of truth.** Reconstruct the character; do not redesign, "improve" or
