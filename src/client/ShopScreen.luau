@@ -20,6 +20,7 @@ local BoxPreview = require(script.Parent.BlindBoxPreview)
 local ShopLuck = require(script.Parent.ShopLuck)
 local Store = require(script.Parent.StoreScreen)
 local ConvenienceControls = require(script.Parent.ConvenienceControls)
+local Odds = require(script.Parent.OddsPopup)
 local Shop = {}
 
 local largest = 0
@@ -36,6 +37,8 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		subtitle = "Every box holds one figure from its collection",
 	})
 	local root, body = shell.root, shell.body
+	local oddsPopup = Odds.create(ctx.effects)
+	ctx.scope.add(oddsPopup.destroy)
 	-- The only Robux element here: a quiet way into the Store. No upsell beside Coin prices.
 	Store.chip(shell.chips, ctx).LayoutOrder = 1
 	local selected = Catalog.collections[1].id
@@ -175,7 +178,18 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		tiles[index] = tile
 	end
 	local oddsTitle = Kit.text(info, "OddsTitle", "Drop odds", 20, Style.display())
+	local allOdds = Button.create(
+		info,
+		"AllOdds",
+		{ text = "All odds", variant = "white", size = 13 },
+		ctx.scope,
+		ctx.effects,
+		function()
+			oddsPopup.show(selected)
+		end
+	)
 	local perBox = Kit.text(info, "PerBox", "per box", 13, nil, Style.muted)
+	perBox.Visible = false
 	perBox.TextXAlignment = Enum.TextXAlignment.Right
 	local stack = Kit.frame(info, "OddsBar", Style.track)
 	stack.ClipsDescendants = true
@@ -297,8 +311,8 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		y += math.ceil(count / columns) * (tileHeight + gap) + 8
 		Kit.rect(oddsTitle, pad, y, inner - 90, 26)
 		oddsTitle.TextSize = if phone then 17 else 20
-		Kit.rect(perBox, pad + inner - 90, y, 90, 26)
-		y += 32
+		Kit.rect(allOdds.button, pad + inner - 90, y - 8, 90, 44)
+		y += 42
 		Kit.rect(stack, pad, y, inner, if phone then 14 else 16)
 		y += if phone then 22 else 26
 		local rowHeight = if phone then 20 else 24
@@ -335,6 +349,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		Kit.fit(info, y + luckHeight + 12, height)
 	end
 	local function update(snapshot: Types.Snapshot)
+		oddsPopup.update(snapshot)
 		if controls then
 			controls.update()
 		end
@@ -457,6 +472,9 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			refresh()
 		end,
 		shown = function(value: boolean)
+			if not value then
+				oddsPopup.close()
+			end
 			if ctx.commerce then
 				ctx.commerce.convenience.collection(if value then selected else "")
 			end

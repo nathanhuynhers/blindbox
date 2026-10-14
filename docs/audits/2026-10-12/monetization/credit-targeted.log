@@ -1,0 +1,6 @@
+PASS: Store binding metadata, coordinated offline, activation, retry, focus and teardown fixtures (no native services)
+PASS: 2353 screen routing, send, pending, countdown and lifetime checks
+PASS: 34 offline client/popup fixture checks
+PASS: 18 offline credit client/popup fixture checks
+PASS: 43 actual offline Storage/Persistence/AFK fixture checks
+PASS: 18 actual recurring credit Storage/Persistence/AFK checks

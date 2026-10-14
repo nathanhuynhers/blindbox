@@ -15,6 +15,7 @@ local Scope = require(script.Parent.UIScope)
 local State = require(script.Parent.UIState)
 local Preview = require(script.Parent.BlindBoxPreview)
 local Sfx = require(script.Parent.Sfx)
+local Odds = require(script.Parent.OddsPopup)
 local Popup = {}
 Popup.stalls = table.freeze({
 	{ name = "Mint", body = Color3.fromRGB(205, 238, 219), stripe = Color3.fromRGB(143, 211, 176) },
@@ -41,11 +42,13 @@ function Popup.create(
 	effects: () -> boolean,
 	buy: (stall: number, window: number) -> ()
 ): Controller
+	local oddsPopup = Odds.create(effects)
 	local snapshot: Types.Snapshot? = nil
 	local busy = false
 	local finish: (() -> ())? = nil
 	local render: (() -> ())? = nil
 	local function close()
+		oddsPopup.close()
 		local done = finish
 		finish, render = nil, nil
 		if done then
@@ -194,6 +197,22 @@ function Popup.create(
 			end
 		)
 
+		local oddsButton = Button.create(
+			face,
+			"AllOdds",
+			{ text = "View odds", variant = "white", size = 18 },
+			scope,
+			effects,
+			function()
+				local state = snapshot
+				local deal = if state
+					then State.deal(state, stall, workspace:GetServerTimeNow())
+					else nil
+				if deal then
+					oddsPopup.show(deal.collection)
+				end
+			end
+		)
 		local compact = false
 		local function layout()
 			local size = gui.AbsoluteSize
@@ -267,7 +286,14 @@ function Popup.create(
 				buyButton.button,
 				pad,
 				head + pad + wellSize + pad,
-				width - 2 * pad,
+				(width - 2 * pad - 12) / 2,
+				buttonHeight
+			)
+			Kit.rect(
+				oddsButton.button,
+				pad + (width - 2 * pad - 12) / 2 + 12,
+				head + pad + wellSize + pad,
+				(width - 2 * pad - 12) / 2,
 				buttonHeight
 			)
 		end
@@ -376,6 +402,7 @@ function Popup.create(
 		show = show,
 		update = function(state: Types.Snapshot)
 			snapshot = state
+			oddsPopup.update(state)
 			if render then
 				render()
 			end

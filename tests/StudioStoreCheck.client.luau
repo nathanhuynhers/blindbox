@@ -30,9 +30,6 @@ local origin = if offline
 	then Vector2.zero
 	else (fixture:FindFirstChild("SafeArea") :: Frame).AbsolutePosition
 local targets, text = 0, 0
-local stage = fixture:FindFirstChild("Stage", true)
-local scaleObject = if stage then stage:FindFirstChildOfClass("UIScale") else nil
-local ratio = if not offline and scaleObject then scaleObject.Scale else 1
 for _, object in gui:GetDescendants() do
 	if not object:IsA("GuiObject") or not visible(object) then
 		continue
@@ -59,7 +56,7 @@ for _, object in gui:GetDescendants() do
 		ancestor = ancestor.Parent
 	end
 	if scroller then
-		local y = position.Y - scroller.AbsolutePosition.Y + scroller.CanvasPosition.Y * ratio
+		local y = position.Y - scroller.AbsolutePosition.Y + scroller.CanvasPosition.Y
 		local extent = math.max(scroller.AbsoluteCanvasSize.Y, scroller.AbsoluteWindowSize.Y)
 		assert(
 			y >= -1 and y + size.Y <= extent + 1,

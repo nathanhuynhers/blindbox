@@ -1401,6 +1401,39 @@ guarded.closeScreen()
 guarded.openShelves()
 guard.receive(lifecycle[5].token)
 guarded.update(guardedState)
+-- Native Studio exposed CanvasPosition as screen pixels under UIScale. Feed measured
+-- absolute bounds into the real Interface observer and check the selected target is revealed.
+local focusScroll = Engine.Instance.new("ScrollingFrame")
+focusScroll.ScrollingDirection = Engine.Enum.ScrollingDirection.Y
+focusScroll.AbsolutePosition = { X = 0, Y = 0 }
+focusScroll.AbsoluteWindowSize = { X = 600, Y = 400 }
+focusScroll.AbsoluteCanvasSize = { X = 600, Y = 1200 }
+focusScroll.CanvasSize = Engine.UDim2.fromOffset(0, 800)
+focusScroll.Parent = guardedGui
+local focusTarget = Engine.Instance.new("TextButton")
+focusTarget.AbsoluteSize = { X = 100, Y = 100 }
+focusTarget.Parent = focusScroll
+for _, dimensions in { { 1920, 1080 }, { 1280, 720 } } do
+ within(guardedGui, "SafeArea").AbsoluteSize = { X = dimensions[1], Y = dimensions[2] }
+ focusScroll.CanvasPosition = Engine.Vector2.new(7, 100)
+ focusTarget.AbsolutePosition = { X = 0, Y = 700 }
+ Engine.services.GuiService.SelectedObject = focusTarget
+ local moved = focusScroll.CanvasPosition.Y - 100
+ check(800 - moved <= 396, "scaled focus reveals the lower target in one selection change")
+ check(focusScroll.CanvasPosition.X == 7, "focus scroll preserves horizontal position")
+ Engine.services.GuiService.SelectedObject = nil
+ focusScroll.CanvasPosition = Engine.Vector2.new(7, 500)
+ focusTarget.AbsolutePosition = { X = 0, Y = -50 }
+ Engine.services.GuiService.SelectedObject = focusTarget
+ check(-50 - (focusScroll.CanvasPosition.Y - 500) >= 4, "scaled focus reveals the upper target")
+ Engine.services.GuiService.SelectedObject = nil
+ focusScroll.CanvasPosition = Engine.Vector2.new(7, 100)
+ focusTarget.AbsolutePosition = { X = 0, Y = 1000 }
+ Engine.services.GuiService.SelectedObject = focusTarget
+ check(focusScroll.CanvasPosition.Y == 800, "focus reaches the actual pixel canvas endpoint")
+ Engine.services.GuiService.SelectedObject = nil
+end
+focusScroll:Destroy()
 guard.pending(true)
 guarded.destroy()
 check(#lifecycle == 5 and not guard.ready(), "UI teardown retains pending edit hold")

@@ -4,7 +4,6 @@ local PurchaseTypes = require(game:GetService("ReplicatedStorage").Shared.Purcha
 local Ledger = require(script.Parent.PurchaseLedger)
 local Config = require(script.Parent.PurchaseConfig)
 local OfflineAwards = require(script.Parent.OfflineAwards)
-local Economy = require(script.Parent.Economy)
 local starterToken: PurchaseTypes.TokenId = "Coins2_15"
 local Grants = { creditLimit = 9007199254740990, maxMarkers = Ledger.maxEntries }
 local amounts: { [string]: number } = {
@@ -106,8 +105,7 @@ function Grants.capacity(state: Types.State, product: Config.Product): boolean
 			markers += 1
 		end
 	end
-	return grant.coins <= Economy.coinLimit - state.coins
-		and markers < Grants.maxMarkers
+	return markers < Grants.maxMarkers
 		and (if record then record.assistedCredit else 0) <= Grants.creditLimit - grant.coins
 		and (product.key ~= "starter" or (state.boosts.tokens[starterToken] or 0) < 1000000)
 end
@@ -202,9 +200,15 @@ function Grants.view(
 		appliedVipFactor = state.earningFactors.vipFactor,
 		fulfilledCoins = coins,
 		fulfilledTokens = tokens,
-		assistedCredit = if confirmed and state.packages then state.packages.assistedCredit else 0,
-		walletCredited = 0,
-		creditUsable = false,
+		assistedCredit = if confirmed and state.packages
+			then state.packages.assistedCredit - (if state.lineage
+				then state.lineage.packageTransferred
+				else 0)
+			else 0,
+		walletCredited = if confirmed and state.lineage
+			then state.lineage.packageTransferred
+			else 0,
+		creditUsable = confirmed and state.lineage ~= nil and state.paidBoostsAllowed,
 	}
 end
 return table.freeze(Grants)

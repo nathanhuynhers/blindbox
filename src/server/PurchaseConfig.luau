@@ -2,6 +2,7 @@
 local Types = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 export type Benefits = {
 	movementSpeed: number?,
+	offlineCredits: number?,
 	displayRateBonus: number?,
 	dailyCoins: number?,
 	cadenceSeconds: number?,
@@ -21,6 +22,7 @@ export type Product = {
 	benefits: Benefits?,
 }
 local benefits: { [string]: Benefits } = {
+	offline_double = table.freeze({ offlineCredits = 1 }),
 	movement = table.freeze({ movementSpeed = 48 }),
 	vip = table.freeze({ displayRateBonus = 0.10, dailyCoins = 500 }),
 	auto_open = table.freeze({ cadenceSeconds = 3 }),
@@ -33,18 +35,20 @@ local function add(
 	price: number?,
 	permanent: boolean,
 	grant: Types.Grant?,
-	tier: number?
+	tier: number?,
+	platformId: number
 )
+	local kind: Types.PlatformKind = if permanent then "Pass" else "DeveloperProduct"
 	table.insert(
 		products,
 		table.freeze({
 			key = key,
 			defaultPrice = price,
 			permanent = permanent,
-			kind = nil,
-			platformId = nil,
-			salesEnabled = false,
-			integrationReady = false,
+			kind = kind,
+			platformId = platformId,
+			salesEnabled = true,
+			integrationReady = true,
 			grant = grant,
 			coinTier = tier,
 			benefits = benefits[key],
@@ -58,28 +62,30 @@ local function reward(coins: number, token: Types.TokenId?): Types.Grant
 	end
 	return table.freeze({ coins = coins, tokens = table.freeze(tokens) })
 end
--- D1/D2 approved 2026-10-11; D2 policy/lineage validation is still pending.
--- Platform types, IDs and D3 remain undecided. No product is enabled by design approval.
-add("coins_2", 149, true, nil, 2)
-add("coins_4", 399, true, nil, 4)
-add("coins_8", 999, true, nil, 8)
-add("pack_small", 49, false, reward(15000, nil), nil)
-add("pack_medium", 149, false, reward(60000, nil), nil)
-add("pack_large", 499, false, reward(240000, nil), nil)
-add("pack_huge", 1999, false, reward(1200000, nil), nil)
-add("starter", 49, true, reward(7500, "Coins2_15"), nil)
-add("auto_open", 199, true, nil, nil)
-add("auto_collect", 149, true, nil, nil)
-add("movement", 49, true, nil, nil)
-add("vip", 199, true, nil, nil)
-add("coins_boost_15", 29, false, reward(0, "Coins2_15"), nil)
-add("coins_boost_30", 49, false, reward(0, "Coins2_30"), nil)
-add("coins_boost_60", 79, false, reward(0, "Coins2_60"), nil)
-add("luck", 399, true, nil, nil)
-add("luck_boost_2", 49, false, reward(0, "Luck2_30"), nil)
-add("luck_boost_4", 99, false, reward(0, "Luck4_30"), nil)
-add("combo_boost", 79, false, reward(0, "Combo2_30"), nil)
-add("offline_double", nil, false, nil, nil)
+-- Policy, earned/paid lineage, durable grants and native save/rejoin validated 2026-10-13.
+-- All retained platform IDs supplied by the owner and verified with Roblox on 2026-10-12.
+-- MN-22: 49 Robux grants one saved credit, redeemed explicitly against a frozen return.
+-- No product is enabled by design approval.
+add("coins_2", 149, true, nil, 2, 2033318306)
+add("coins_4", 399, true, nil, 4, 2033540289)
+add("coins_8", 999, true, nil, 8, 2033354299)
+add("pack_small", 49, false, reward(15000, nil), nil, 3718301793)
+add("pack_medium", 149, false, reward(60000, nil), nil, 3718301871)
+add("pack_large", 499, false, reward(240000, nil), nil, 3718301920)
+add("pack_huge", 1999, false, reward(1200000, nil), nil, 3718302063)
+add("starter", 49, true, reward(7500, "Coins2_15"), nil, 2032688308)
+add("auto_open", 199, true, nil, nil, 2032580313)
+add("auto_collect", 149, true, nil, nil, 2034032281)
+add("movement", 49, true, nil, nil, 2033774293)
+add("vip", 199, true, nil, nil, 2034392290)
+add("coins_boost_15", 29, false, reward(0, "Coins2_15"), nil, 3718304026)
+add("coins_boost_30", 49, false, reward(0, "Coins2_30"), nil, 3718304141)
+add("coins_boost_60", 79, false, reward(0, "Coins2_60"), nil, 3718304189)
+add("luck", 399, true, nil, nil, 2033054302)
+add("luck_boost_2", 49, false, reward(0, "Luck2_30"), nil, 3718304296)
+add("luck_boost_4", 99, false, reward(0, "Luck4_30"), nil, 3718304365)
+add("combo_boost", 79, false, reward(0, "Combo2_30"), nil, 3718304403)
+add("offline_double", 49, false, nil, nil, 3718304498)
 local Config = {
 	products = table.freeze(products),
 	-- D1 token promises only. Approved D2 activation/clock/stacking await P04 implementation.

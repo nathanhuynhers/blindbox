@@ -13,6 +13,8 @@ requested = set(sys.argv[2:])  # Optional focused spec names, e.g. AfkStorage.sp
 out = root / "build" / "tests"
 out.mkdir(parents=True, exist_ok=True)
 modules = {
+    "PaidLineage": "server", "PaidPolicy": "server",
+	"OfflineCredits": "server", "OfflineCreditService": "server",
 	"PurchaseJournal": "server",
 	"ConvenienceOwner": "server",
 	"PurchaseClient": "client", "PurchasePrice": "client", "StoreProjection": "client",
@@ -55,7 +57,7 @@ ui = [
     "AfkNotice",
     "UIStyle", "UIKit", "UIIcons", "UIButton", "UIBadge", "UIProgress", "ScreenShell", "Dock",
     "Hud", "SettingsMenu", "GoalTracker", "CollectionList", "FigureTile", "Notifications",
-    "ShopScreen", "ShopLuck", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
+    "ShopScreen", "ShopLuck", "OddsPopup", "CollectionScreen", "DisplayScreen", "DisplaySlot", "DisplayPicker", "PullSummary",
     "GoalsScreen", "ShelvesScreen", "LoginScreen", "StoreCatalog", "StorePresentation", "StorePerks", "StorePerkControls", "StoreScreen", "OfflineEarnings", "RevealCard", "Onboarding", "Interface",
 ]
 for name in ui:
@@ -133,9 +135,12 @@ for name, folder in modules.items():
 bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
 send = bootstrap[bootstrap.index("local function snapshotFor("):bootstrap.index("-- P02 invokes")]
 sender = '\n'.join(f'local {name} = require("./{name}")' for name in
-                   ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals", "OfflineAwards"))
+                   ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals", "OfflineCredits"))
 sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
+sender += 'local offlineIntegration = {view = function(owner) return OfflineCredits.view(owner.state, owner.ready and not owner.transferring, false) end}\n'
 sender += 'local function dealClock() return Deals.window(os.time()), Economy.deals.windowSeconds end\n'
+# Minimal snapshot fixtures alias transaction state exactly as the real Storage session does.
+send = send.replace("local function snapshotFor(session: Session): Types.Snapshot\n", "local function snapshotFor(session: Session): Types.Snapshot\n\tsession.storage.state = session.transaction.state\n", 1)
 sender += send + '\nreturn send\nend\n'
 (out / "SnapshotSender.luau").write_text(sender, encoding="utf-8")
 
@@ -164,6 +169,7 @@ def run(*names: str) -> None:
                 raise SystemExit(result.returncode)
 
 
+run("AfkEngine")
 run("OpeningEngine", "OpeningVisualEngine", "UIEngine", "Sfx.spec", "Music.spec", "OpeningAudio.spec", "OpeningLifecycle.spec", "OpeningResources.spec", "OpeningFlight.spec", "Rarity.spec")
 run("CoinEngine", "CoinCounter.spec")
 fixture_source = (root / "tests/StoreFixtures.luau").read_text(encoding="utf-8")
@@ -187,11 +193,12 @@ run("PlotEngine", "CollectionPlates.spec")
 run("PlotEngine", "ShopKeeper.spec")
 run("AfkEngine", "AfkReconnect.spec", "AfkStorage.spec", "AfkClient.spec")
 run("SaveSafety.spec")
-run("Purchases.spec")
+run("PaidLineage.spec", "PaidPolicy.spec")
+run("Purchases.spec", "PurchaseLifecycle.spec")
 run("PurchaseJournal.spec")
-run("OfflineDouble.spec")
+run("OfflineDouble.spec", "OfflineCredit.spec")
 run("OfflineDoublePurchase.spec")
-run("UIEngine", "OfflineDoubleClient.spec")
+run("UIEngine", "OfflineDoubleClient.spec", "OfflineCreditClient.spec")
 run("CoinModifiers.spec")
 run("LuckBoosts.spec")
 run("BoostPersistence.spec")
@@ -216,14 +223,14 @@ if not requested or "AdminDisabled.spec" in requested:
         if result.returncode:
             raise SystemExit(result.returncode)
 if not requested or "BoostActivation.spec" in requested:
-    # Fixture-only gate lift; source/catalog remain disabled. Use actual modules and Storage
+    # Exercise validated modules with Storage
     # failure injection to exercise successful and lost-reply durable activations.
     fixture = out / "boost-validated-fixture"
     fixture.mkdir(exist_ok=True)
     for file in out.glob("*.luau"):
         source = file.read_text(encoding="utf-8")
         if file.name == "Boosts.luau":
-            source, changed = re.subn(r"effectsValidated\s*=\s*false", "effectsValidated = true", source, count=1)
+            source, changed = re.subn(r"effectsValidated\s*=\s*(?:false|true)", "effectsValidated = true", source, count=1)
             assert changed == 1
         (fixture / file.name).write_text(source, encoding="utf-8")
     spec = fixture / "BoostActivation.spec.luau"
@@ -231,22 +238,25 @@ if not requested or "BoostActivation.spec" in requested:
     result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
     if result.returncode:
         raise SystemExit(result.returncode)
-if not requested or "OfflineDoubleStorage.spec" in requested:
-    # Review-candidate association gates lifted in ignored copies only; source stays false.
+if not requested or "OfflineDoubleStorage.spec" in requested or "OfflineCreditStorage.spec" in requested:
+    # Legacy association lifted in ignored fixtures only; production retains the saved-credit flow.
     fixture = out / "offline-validated-fixture"
     fixture.mkdir(exist_ok=True)
     for file in out.glob("*.luau"):
         source = file.read_text(encoding="utf-8")
         if file.name == "OfflineRuntime.luau":
             for gate in ("associationApproved", "paidPathValidated"):
-                source, changed = re.subn(gate + r"\s*=\s*false", gate + " = true", source, count=1)
+                source, changed = re.subn(gate + r"\s*=\s*(?:false|true)", gate + " = true", source, count=1)
                 assert changed == 1
         (fixture / file.name).write_text(source, encoding="utf-8")
-    spec = fixture / "OfflineDoubleStorage.spec.luau"
-    spec.write_text((root / "tests/OfflineDoubleStorage.spec.luau").read_text(encoding="utf-8"), encoding="utf-8")
-    result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
-    if result.returncode:
-        raise SystemExit(result.returncode)
+    for name in ("OfflineDoubleStorage.spec", "OfflineCreditStorage.spec"):
+        if requested and name not in requested:
+            continue
+        spec = fixture / (name + ".luau")
+        spec.write_text((root / "tests" / (name + ".luau")).read_text(encoding="utf-8"), encoding="utf-8")
+        result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
+        if result.returncode:
+            raise SystemExit(result.returncode)
 if requested:
     raise SystemExit(0)
 fixtures = [

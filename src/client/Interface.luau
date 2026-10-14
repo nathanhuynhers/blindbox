@@ -384,7 +384,7 @@ function Interface.create(
 	scope.connect(dim.Activated, back)
 	scope.connect(bounds:GetPropertyChangedSignal("AbsoluteSize"), resize)
 	scope.connect(GuiService:GetPropertyChangedSignal("TopbarInset"), resize)
-	-- Keep the gamepad selection inside its scroller (CanvasPosition is in design units).
+	-- CanvasPosition and absolute bounds use screen pixels, including under UIScale.
 	scope.connect(GuiService:GetPropertyChangedSignal("SelectedObject"), function()
 		local selected = GuiService.SelectedObject
 		if not selected or not selected:IsDescendantOf(gui) then
@@ -403,10 +403,10 @@ function Interface.create(
 					then top - 4
 					elseif bottom > window - 4 then bottom - window + 4
 					else 0
-				local limit = math.max(0, ancestor.CanvasSize.Y.Offset - window / scale)
+				local limit = math.max(0, ancestor.AbsoluteCanvasSize.Y - window)
 				ancestor.CanvasPosition = Vector2.new(
 					ancestor.CanvasPosition.X,
-					math.clamp(ancestor.CanvasPosition.Y + shift / scale, 0, limit)
+					math.clamp(ancestor.CanvasPosition.Y + shift, 0, limit)
 				)
 				break
 			end

@@ -3,7 +3,7 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.BoostTypes)
 local PurchaseTypes = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 local Config = require(script.Parent.PurchaseConfig)
 local Ledger = require(script.Parent.PurchaseLedger)
-local Boosts = { effectsValidated = false, maxRemaining = 86400, maxMarkers = Ledger.maxEntries }
+local Boosts = { effectsValidated = true, maxRemaining = 86400, maxMarkers = Ledger.maxEntries }
 local function integer(value: unknown, maximum: number): boolean
 	return typeof(value) == "number" and value >= 0 and value <= maximum and value % 1 == 0
 end

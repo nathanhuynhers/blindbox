@@ -99,7 +99,10 @@ function Projection.make(
 			benefit = `{item.coinTier}× Display Coins, online and offline`
 		end
 		if item.benefits then
-			if item.benefits.movementSpeed then
+			if key == "offline_double" then
+				benefit =
+					"One saved, single-use credit. Confirm a frozen return to add its extra Coins once."
+			elseif item.benefits.movementSpeed then
 				benefit = `Walk speed {item.benefits.movementSpeed}; free 36 remains available`
 			elseif item.benefits.displayRateBonus and item.benefits.dailyCoins then
 				benefit =
@@ -182,6 +185,21 @@ function Projection.make(
 		}
 	end
 	if gameplay then
+		local award = gameplay.offlineAward
+		if
+			award
+			and award.creditFlow
+			and ((award.credits or 0) > 0 or award.selectedAwardId ~= nil)
+		then
+			input.offers.doubleClaim = {
+				availability = "owned",
+				outcome = "idle",
+				actionText = "View saved return",
+				buyAllowed = gameplay.ready and not client.busy(),
+				benefit = `{award.credits or 0} saved credits; frozen return {award.selectedNormal or award.normal} Coins.`,
+				reason = "Open the return card to review and confirm redemption. Closing it keeps your credits.",
+			}
+		end
 		input.modifiers = if gameplay.earningFactors
 			then `Display Coins: permanent ×{gameplay.earningFactors.permanentTier} · VIP ×{gameplay.earningFactors.vipFactor} · timed ×{gameplay.earningFactors.timedCoinFactor}`
 			else "Checking active modifiers…"

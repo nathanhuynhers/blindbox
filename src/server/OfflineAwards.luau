@@ -2,10 +2,13 @@
 -- No earning formula here. N is the already rounded, server-computed return reward.
 -- Product identity epochs are a REVIEW CANDIDATE, never production authorization.
 local Types = require(game:GetService("ReplicatedStorage").Shared.OfflineTypes)
+local Lineage = require(script.Parent.PaidLineage)
+local GameTypes = require(game:GetService("ReplicatedStorage").Shared.Types)
 export type Award = Types.Award
 export type Reservation = Types.Reservation
 export type Record = Types.Record
 export type State = {
+	lineage: GameTypes.LineageRecord?,
 	coins: number,
 	offlinePending: number,
 	offlineSeconds: number,
@@ -224,7 +227,7 @@ end
 function Awards.drainEarned(state: State): number
 	local record = ensure(state)
 	local amount = math.min(record.earnedCredit, coinLimit - state.coins)
-	state.coins += amount
+	Lineage.creditEarned(state, amount)
 	record.earnedCredit -= amount
 	return amount
 end

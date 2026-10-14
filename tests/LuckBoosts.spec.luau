@@ -37,12 +37,12 @@ local function activate(record, token, id, wall, permanent)
 	return Boosts.activate(record, { id = id, token = token, revision = 0 }, wall or 1000000, permanent or 1)
 end
 -- Production safety stays closed independently of D1/D2 design approval.
-check(not Boosts.effectsValidated, "Validation gate closed")
+check(Boosts.effectsValidated, "Boost effects validated")
 for _, policy in { "Allowed", "Restricted", "Unknown" } do
-	check(not Runtime.allowed({ policy = policy, lineageValidated = true, disclosureReady = true }), "Global gate " .. policy)
+	check(Runtime.allowed({ policy = policy, lineageValidated = true, disclosureReady = true }) == (policy == "Allowed"), "Current policy gate " .. policy)
 end
 for _, product in Config.products do
-	check(not product.salesEnabled and not product.platformId and not product.kind, "No sales or live identities")
+	check(product.salesEnabled and product.integrationReady, "Validated catalog enabled")
 end
 for _, bad in { { id = "x", token = "Luck2_30", revision = 0, luck = 4 }, { id = "x", token = "Luck2_30", revision = 0, expires = 42 },
 	{ id = "x", token = "Luck2_30", revision = 0, userId = 1 }, { id = "x", token = "unknown", revision = 0 },

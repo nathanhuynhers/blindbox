@@ -9,6 +9,7 @@ local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Purchase = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 local Boost = require(game:GetService("ReplicatedStorage").Shared.BoostTypes)
 local Convenience = require(game:GetService("ReplicatedStorage").Shared.ConvenienceTypes)
+local OfflineTypes = require(game:GetService("ReplicatedStorage").Shared.OfflineTypes)
 local Offline = require(script.Parent.OfflinePurchaseClient)
 local Client = require(script.Parent.PurchaseClient)
 local Projection = require(script.Parent.StoreProjection)
@@ -32,12 +33,15 @@ function Binding.create(
 	paint: (Presentation.Input) -> (),
 	offlinePaint: (Presentation.OfflineInput) -> (),
 	format: (number) -> string,
-	message: (string) -> ()
+	message: (string) -> (),
+	reopenOffline: (() -> ())?
 ): Controller
 	local request = remotes:WaitForChild("PurchaseRequest") :: RemoteEvent
 	local state = remotes:WaitForChild("PurchaseState") :: RemoteEvent
 	local boostRequest = remotes:WaitForChild("BoostActivate") :: RemoteEvent
 	local boostResult = remotes:WaitForChild("BoostResult") :: RemoteEvent
+	local creditRequest = remotes:FindFirstChild("OfflineCreditRequest")
+	local creditState = remotes:FindFirstChild("OfflineCreditState")
 	local alive = true
 	local gameplay: Types.Snapshot? = nil
 	local convenience: Convenience.Snapshot? = nil
@@ -128,7 +132,13 @@ function Binding.create(
 			projected.promptActive = projected.promptActive or activation ~= nil
 			local function metadata(offer: Presentation.Offer, logical: string?)
 				local item = if logical then client.product(logical) else nil
-				if item and item.platformId and item.kind and item.available then
+				if
+					not offer.actionText
+					and item
+					and item.platformId
+					and item.kind
+					and item.available
+				then
 					local entry = prices[item.kind .. ":" .. item.platformId]
 					if entry and not entry.loading and not entry.text then
 						offer.availability, offer.buyAllowed, offer.reason =
@@ -158,6 +168,11 @@ function Binding.create(
 		price = price,
 		format = format,
 		paint = offlinePaint,
+		creditSend = if creditRequest and creditRequest:IsA("RemoteEvent")
+			then function(value: OfflineTypes.CreditRequest)
+				creditRequest:FireServer(value)
+			end
+			else nil,
 		send = function(value)
 			client.submit(value)
 		end,
@@ -192,11 +207,23 @@ function Binding.create(
 			client.refresh()
 		end),
 	}
+	if creditState and creditState:IsA("RemoteEvent") then
+		table.insert(
+			connections,
+			creditState.OnClientEvent:Connect(
+				function(view: OfflineTypes.View, result: OfflineTypes.CreditResult)
+					if offline then
+						offline.creditUpdate(view, result)
+					end
+				end
+			)
+		)
+	end
 	request:FireServer({ id = id(), action = "State" })
 	local requestedReady = false
 	return {
 		busy = function()
-			return client.busy() or activation ~= nil
+			return client.busy() or activation ~= nil or (offline ~= nil and offline.busy())
 		end,
 		purchase = function(key: string, minutes: number?): boolean
 			if activation then
@@ -204,12 +231,22 @@ function Binding.create(
 			end
 			focus = GuiService.SelectedObject
 			local logical = Projection.key(key, minutes)
+			if
+				logical == "offline_double"
+				and reopenOffline
+				and canPrompt()
+				and not client.busy()
+			then
+				reopenOffline()
+				return true
+			end
 			return logical ~= nil and client.purchase(logical)
 		end,
 		double = function(): boolean
 			focus = GuiService.SelectedObject
 			return not activation
-				and client.canPurchase("offline_double")
+				and canPrompt()
+				and not client.busy()
 				and offline ~= nil
 				and offline.purchase()
 		end,
@@ -255,6 +292,9 @@ function Binding.create(
 		end,
 		step = function()
 			client.step()
+			if offline then
+				offline.step()
+			end
 			if activation and os.clock() - activationSent >= 2 then
 				activationSent = os.clock()
 				boostRequest:FireServer(activation)

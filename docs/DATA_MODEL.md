@@ -2,7 +2,7 @@
 
 Default new-profile schema: **14**, written to `BlindBox_Economy2_Studio` and
 `BlindBox_Economy2_Live`. The decoder also supports forward-only **15/16/17/18** described
-below. It accepts valid Economy2 schemas 6–18; 6–13 upgrade to 14
+below. It accepts valid Economy2 schemas 6–20; 6–13 upgrade to 14
 in the acquisition UpdateAsync as well as the normal save path. Schemas 1–5, future versions and malformed records fail closed. Existing
 catalog figure IDs are unchanged. The prior audit reviewed schema 12 before the Welcome Quest
 merge; it is now an upgrade source, not the written format.
@@ -242,3 +242,7 @@ different window is valid and simply refreshed. The purchase increments `bought[
 non-yielding grant as the Coins, figure, pity and `boxesOpened` changes, so a crash rolls all of
 them back together. A clock that steps back into an earlier window also resets the count; that
 edge (seconds of cross-server skew around the hour) is accepted.
+
+## Monetization schema 20
+
+The enabled purchase bootstrap promotes acquired profiles through saved-credit schema 19 to earned/paid lineage schema 20 before allowing paid effects. The default Rules.new profile remains schema 14 until acquisition promotes the aggregate. All existing pity counters are retained. See [paid lineage](PAID_LINEAGE.md) and [release compatibility](audits/2026-10-13/monetization/ENABLEMENT.md). Previous readers reject schema 20, so release/restart and any rollback must retain compatible readers and receipt recovery.

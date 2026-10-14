@@ -161,10 +161,10 @@ scope.connect(GuiService:GetPropertyChangedSignal("SelectedObject"), function()
 				then top - 4
 				elseif bottom > window - 4 then bottom - window + 4
 				else 0
-			local limit = math.max(0, ancestor.CanvasSize.Y.Offset - window / scale.Scale)
+			local limit = math.max(0, ancestor.AbsoluteCanvasSize.Y - window)
 			ancestor.CanvasPosition = Vector2.new(
 				0,
-				math.clamp(ancestor.CanvasPosition.Y + shift / scale.Scale, 0, limit)
+				math.clamp(ancestor.CanvasPosition.Y + shift, 0, limit)
 			)
 			break
 		end

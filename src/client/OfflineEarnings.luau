@@ -31,12 +31,21 @@ function Offline.create(effects: () -> boolean, claim: () -> (), purchase: (() -
 			finish()
 		end
 	end
-	local function done()
+	local function done(explicit: boolean?)
 		if blocked then
 			return
 		end
 		close()
-		if not input or not input.fixture then
+		if
+			not input
+			or (
+				not input.fixture
+				and (
+					not input.creditFlow
+					or (input.freeClaimAvailable and (not input.olderReturn or explicit == true))
+				)
+			)
+		then
 			claim()
 		end
 	end
@@ -79,7 +88,9 @@ function Offline.create(effects: () -> boolean, claim: () -> (), purchase: (() -
 			backdrop.Position, backdrop.Size =
 				UDim2.fromOffset(-100, -100), UDim2.new(1, 200, 1, 200)
 			backdrop.Parent = gui
-			scope.connect(backdrop.Activated, done)
+			scope.connect(backdrop.Activated, function()
+				done(false)
+			end)
 			local card = Kit.card(gui, "Card", Style.surface, 26, 6, 4)
 			local face = card.face
 			-- Candy header band: rounded top with a square filler, one horizontal gradient.
@@ -111,14 +122,23 @@ function Offline.create(effects: () -> boolean, claim: () -> (), purchase: (() -
 			body.TextColor3, body.TextWrapped = Style.muted, true
 			body.TextTruncate = Enum.TextTruncate.None
 			body.TextXAlignment = Enum.TextXAlignment.Center
-			local button = Button.create(face, "Claim", {
-				variant = "gold",
-				text = "Claim",
-				size = 22,
-				radius = 18,
-				drop = 4,
-				price = true,
-			}, scope, effects, done)
+			local button = Button.create(
+				face,
+				"Claim",
+				{
+					variant = "gold",
+					text = "Claim",
+					size = 22,
+					radius = 18,
+					drop = 4,
+					price = true,
+				},
+				scope,
+				effects,
+				function()
+					done(true)
+				end
+			)
 			button.setPrice(coins)
 			local double = Button.create(
 				face,
@@ -139,7 +159,7 @@ function Offline.create(effects: () -> boolean, claim: () -> (), purchase: (() -
 						or not input
 						or input.fixture
 						or not input.buyAllowed
-						or not input.priceText
+						or (not input.priceText and not input.redemption)
 						or not purchase
 					then
 						return
@@ -199,27 +219,50 @@ function Offline.create(effects: () -> boolean, claim: () -> (), purchase: (() -
 					status.Text = (if offer.fixture then "PREVIEW ONLY · " else "") .. note
 					body.Text =
 						`Your Display earned {offer.baseText} Coins while you were away ({away}).`
-					if offer.freeText ~= offer.baseText then
+					if offer.olderReturn then
+						title.Text = "Saved return"
+						body.Text =
+							`Your saved return is {offer.baseText} Coins. Your current free claim is {offer.freeText} Coins.`
+						free.Text =
+							"Claim current applies to the newest return. Outside tap keeps it pending."
+					elseif offer.creditFlow and not offer.freeClaimAvailable then
+						body.Text =
+							"Your free Coins were already claimed. A saved credit adds only the frozen return shown on the button."
+						free.Text = "Credits stay saved when you choose Later."
+					end
+					if
+						not offer.olderReturn
+						and offer.freeClaimAvailable ~= false
+						and offer.freeText ~= offer.baseText
+					then
 						status.Text ..= ` Free claim fits {offer.freeText} Coins in your wallet.`
 					end
 					button.setPrice(offer.freeText)
 					double.button.Visible = offer.eligible
 					double.set(
-						`Double & Claim {offer.doubleText}`,
+						offer.actionText or `Double & Claim {offer.doubleText}`,
 						not offer.fixture
 							and not blocked
 							and offer.buyAllowed == true
-							and offer.priceText ~= nil
+							and (offer.priceText ~= nil or offer.redemption == true)
 							and purchase ~= nil,
-						if offer.priceText
-							then `2× this return · {offer.priceText}`
+						if offer.detailText
+							then offer.detailText
+							elseif offer.priceText then `2× this return · {offer.priceText}`
 							else "2× this return · Price TBD"
 					)
 				else
 					-- Production has no authoritative numeric 2N/eligibility contract yet.
 					double.button.Visible = false
 				end
-				button.set("Claim", not blocked)
+				button.set(
+					if offer
+							and offer.creditFlow
+							and not offer.freeClaimAvailable
+						then "Later"
+						else "Claim",
+					not blocked
+				)
 				layout()
 			end
 			scope.connect(gui:GetPropertyChangedSignal("AbsoluteSize"), layout)

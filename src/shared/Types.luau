@@ -85,7 +85,18 @@ export type PackageRecord = {
 		},
 	},
 }
+export type LineageRecord = {
+	version: number,
+	earnedCoins: number,
+	earnedOwned: { [string]: number },
+	earnedBanks: { [string]: number },
+	earnedSlots: number,
+	assistedReserve: number,
+	packageTransferred: number,
+	offlineTransferred: number,
+}
 export type Profile = {
+	lineage: LineageRecord?,
 	schemaVersion: number,
 	coins: number,
 	earnings: { [string]: number },
@@ -121,6 +132,7 @@ export type Profile = {
 	convenience: ConveniencePreferences?,
 	boosts: BoostTypes.Record?,
 	offlineData: OfflineTypes.Record?,
+	offlineCredits: OfflineTypes.CreditRecord?,
 	packages: PackageRecord?,
 }
 -- offlineSeconds is runtime-only: the absence that produced offlinePending this session.

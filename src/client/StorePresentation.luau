@@ -24,6 +24,7 @@ export type Outcome =
 	| "cancelled"
 	| "failed"
 export type Offer = {
+	actionText: string?,
 	benefit: string?,
 	buyAllowed: boolean?,
 	package: PurchaseTypes.PackageState?,
@@ -82,6 +83,13 @@ export type Input = {
 }
 export type View = { stamp: string, note: string, price: string?, pending: boolean }
 export type OfflineInput = {
+	olderReturn: boolean?,
+	creditFlow: boolean?,
+	redemption: boolean?,
+	actionText: string?,
+	detailText: string?,
+	freeClaimAvailable: boolean?,
+	creditCount: number?,
 	fixture: boolean,
 	baseText: string,
 	doubleText: string, -- exact server 2N; never parsed from formatted UI text
@@ -144,6 +152,8 @@ function Presentation.signature(input: Input): string
 				.. (value.reason or "")
 				.. ":"
 				.. (value.benefit or "")
+				.. ":"
+				.. (value.actionText or "")
 		)
 	end
 	local keys: { string } = {}
@@ -312,6 +322,9 @@ function Presentation.view(input: Input, key: string, minutes: number?): View
 		if price then
 			stamp = "Preview R$ " .. price
 		end
+	end
+	if offer.actionText and not pending then
+		stamp = offer.actionText
 	end
 	return {
 		stamp = stamp,

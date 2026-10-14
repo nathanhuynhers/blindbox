@@ -1,5 +1,7 @@
 # Full-game testing and release
 
+> **Current source acceptance, 2026-10-12:** purchase, entitlement, modifier, boost, convenience, package, offline and Store integration modules now exist, but all 20 catalog variants remain unconfigured and off sale. Policy/earned-lineage providers and usable assisted Coin delivery are incomplete; MN-22's 49-Robux saved-credit/redemption design is approved and implemented; native credit verification and launch configuration remain pending. Native Store fixture acceptance is partial; this is not launch readiness. See [the source-based acceptance report](audits/2026-10-12/monetization/ACCEPTANCE.md). Historical milestone claims below must not be read as the current implementation inventory.
+
 The economy redesign established `BlindBox_Economy2_Studio` /
 `BlindBox_Economy2_Live` stores; the current profile schema is 14. Valid Economy2 schemas 6–13
 upgrade as specified in the [data model](DATA_MODEL.md). Run the

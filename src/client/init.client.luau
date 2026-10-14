@@ -190,18 +190,35 @@ end)
 local welcome = WelcomeReward.create(ui.effects, function()
 	request("WelcomeTen")
 end)
-storefront = StoreBinding.create(remotes, function()
-	return current ~= nil
-		and current.ready
-		and not pending
-		and not adminFocused
-		and not (opening and opening.isActive())
-		and not summary.isOpen()
-		and not welcome.isOpen()
-		and #batch == 0
-		and results == nil
-		and not (afk and afk.blocked())
-end, ui.store, offline.present, UIState.number, ui.message)
+storefront = StoreBinding.create(
+	remotes,
+	function()
+		return current ~= nil
+			and current.ready
+			and not pending
+			and not adminFocused
+			and not (opening and opening.isActive())
+			and not summary.isOpen()
+			and not welcome.isOpen()
+			and #batch == 0
+			and results == nil
+			and not (afk and afk.blocked())
+	end,
+	ui.store,
+	offline.present,
+	UIState.number,
+	ui.message,
+	function()
+		local state = current
+		if state and state.offlineAward then
+			local award = state.offlineAward
+			offline.show(
+				UIState.number(award.selectedNormal or award.normal),
+				if award.selectedAwardId then "saved return" else "your absence"
+			)
+		end
+	end
+)
 local offlinePurchase = assert(storefront, "Store controller missing")
 doublePurchase = offlinePurchase.double
 -- E at a plaza stall; Buy names only the stall and the deal window on screen.
@@ -306,6 +323,7 @@ local displayInteraction = DisplayInteraction.create(
 local shopKeeper = ShopKeeper.create(ui.effects)
 local displayEarnings = DisplayEarnings.create(ui.effects, ui.coinLanded, ui.displayCoins)
 ui.onCoinInterrupted(displayEarnings.interrupt, displayEarnings.destroy)
+local offlineCreditShown: string? = nil
 local function receiveState(state: Types.Snapshot, reply: Types.Reply?)
 	local previous = current
 	if state.sequence > sequence then
@@ -333,6 +351,21 @@ local function receiveState(state: Types.Snapshot, reply: Types.Reply?)
 			Music.play("world")
 		end
 		local offlineCoins, away = UIState.offline(state)
+		local saved = state.offlineAward
+		if saved and saved.selectedAwardId and saved.selectedAwardId ~= saved.awardId then
+			offlineCoins = if saved.selectedAwardId ~= offlineCreditShown
+				then UIState.number(saved.selectedNormal or 0)
+				else nil
+			away = "saved return"
+		end
+		if
+			not offlineCoins
+			and saved
+			and saved.selectedAwardId
+			and saved.selectedAwardId ~= offlineCreditShown
+		then
+			offlineCoins, away = UIState.number(saved.selectedNormal or 0), "saved return"
+		end
 		if
 			offlineCoins
 			and state.ready
@@ -342,6 +375,7 @@ local function receiveState(state: Types.Snapshot, reply: Types.Reply?)
 			and not (opening and opening.isActive())
 			and not summary.isOpen()
 		then
+			offlineCreditShown = if saved then saved.selectedAwardId else nil
 			offline.show(offlineCoins, away)
 			Sfx.play("open")
 		end

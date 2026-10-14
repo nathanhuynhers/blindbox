@@ -14,8 +14,10 @@ local CoinModifiers = require(script.Parent.CoinModifiers)
 local Boosts = require(script.Parent.Boosts)
 local PackageGrants = require(script.Parent.PackageGrants)
 local OfflineAwards = require(script.Parent.OfflineAwards)
+local OfflineCredits = require(script.Parent.OfflineCredits)
 local LuckModifiers = require(script.Parent.LuckModifiers)
 local BoostTypes = require(game:GetService("ReplicatedStorage").Shared.BoostTypes)
+local Lineage = require(script.Parent.PaidLineage)
 local Rules = {
 	rates = CollectionEconomy.rates,
 	odds = CollectionEconomy.odds({}),
@@ -123,6 +125,7 @@ function Rules.settle(state: Types.State, now: number)
 	local elapsed = math.max(0, now - state.time)
 	local first = state.boostWall + math.max(0, state.time - state.boostTime)
 	state.time = math.max(state.time, now)
+	local earnedRates = Lineage.earnedRates(state)
 	local inputs = table.clone(state.earningFactors)
 	inputs.timedCoinFactor = 1
 	local eligible = state.paidBoostsAllowed
@@ -134,9 +137,17 @@ function Rules.settle(state: Types.State, now: number)
 		* CoinModifiers.factor(inputs, "Display")
 	for _, id in state.display.slots do
 		if id ~= "" then
+			local oldBank = state.earnings[id] or 0
 			state.earnings[id] = math.min(
 				Economy.coinLimit,
-				(state.earnings[id] or 0) + weighted * Rules.figureRate(state, id) * multiplier
+				oldBank + weighted * Rules.figureRate(state, id) * multiplier
+			)
+			Lineage.recordAccrual(
+				state,
+				id,
+				oldBank,
+				state.earnings[id],
+				elapsed * (earnedRates[id] or 0)
 			)
 		end
 	end
@@ -284,13 +295,7 @@ function Rules.setConveniencePreference(state: Types.State, key: string, enabled
 end
 -- Server-only bank transfer; callers validate authorization and own revision/quest updates.
 local function transferBank(state: Types.State, id: string): number
-	local bank = state.earnings[id] or 0
-	local amount = math.min(math.floor(bank), Economy.coinLimit - state.coins)
-	if amount > 0 then
-		state.earnings[id] = bank - amount
-		state.coins += amount
-	end
-	return amount
+	return Lineage.transferBank(state, id)
 end
 -- P05 receives this server-only helper; it validates occupied/unlocked ownership, serializes
 -- after settlement and owns one revision. It must never call Rules.collect to skip the lesson.
@@ -317,10 +322,14 @@ end
 -- Legacy pending keeps the existing free claim/cap behavior until its join calculation.
 function Rules.claimOffline(state: Types.State): number
 	if state.offlineData then
+		OfflineCredits.markBaseClaimed(
+			state,
+			if state.offlineData.current then state.offlineData.current.id else nil
+		)
 		return OfflineAwards.claim(state)
 	end
 	local amount = math.min(state.offlinePending, Economy.coinLimit - state.coins)
-	state.coins += amount
+	Lineage.creditEarned(state, amount)
 	state.offlinePending, state.offlineSeconds = 0, 0
 	return amount
 end
@@ -359,7 +368,17 @@ function Rules.offline(state: Types.State, wall: number, paidEffectsAllowed: boo
 	end
 	-- P04 computed and floored N above. Never rerun its formula when claiming/doubling.
 	if state.offlinePending > 0 or state.offlineData then
-		OfflineAwards.freeze(state, "display-boost-overlap-v1")
+		local earned = 0
+		for _, rate in Lineage.earnedRates(state) do
+			earned += rate
+		end
+		local assisted = if state.lineage
+			then state.offlinePending - math.min(
+				state.offlinePending,
+				math.floor(away * earned * Economy.offlineRate)
+			)
+			else 0
+		OfflineAwards.freeze(state, "display-boost-overlap-v1", assisted)
 		state.schemaVersion = math.max(17, state.schemaVersion)
 	end
 	if validWall then
@@ -501,9 +520,8 @@ function Rules.loginStreak(state: Types.State, day: number): number
 end
 -- Every check that can refuse opening `count` boxes; run before any mutation.
 -- Shared by normal openings and administrative grants. Callers preflight the whole batch.
-function Rules.grantFigure(state: Types.State, id: string, quantity: number)
-	state.owned[id] = (state.owned[id] or 0) + quantity
-	state.discovered[id] = true
+function Rules.grantFigure(state: Types.State, id: string, quantity: number, assisted: boolean?)
+	Lineage.grantFigure(state, id, quantity, assisted == true)
 end
 -- Server callers supply validated integers. Reject before settling, never clamp an admin request.
 function Rules.adminCoins(
@@ -520,6 +538,11 @@ function Rules.adminCoins(
 		return false, "Balance would exceed wallet bounds."
 	end
 	Rules.settle(state, now)
+	if state.lineage then
+		state.lineage.earnedCoins = if balance >= state.coins
+			then state.lineage.earnedCoins + balance - state.coins
+			else math.min(state.lineage.earnedCoins, balance)
+	end
 	state.coins = balance
 	state.revision += 1
 	return true, "Coin balance updated."
@@ -558,6 +581,14 @@ function Rules.adminFigures(
 	for _, id in ids do
 		if remove then
 			local remaining = (state.owned[id] or 0) - quantity
+			if state.lineage then
+				local earned = math.min(state.lineage.earnedOwned[id] or 0, remaining)
+				if earned > 0 then
+					state.lineage.earnedOwned[id] = earned
+				else
+					state.lineage.earnedOwned[id] = nil
+				end
+			end
 			if remaining > 0 then
 				state.owned[id] = remaining
 			else
@@ -568,6 +599,9 @@ function Rules.adminFigures(
 				-- Schema requires earnings to reference owned IDs. Confirmed final-copy removal
 				-- collects every whole Coin and forfeits only the sub-Coin remainder.
 				state.earnings[id] = nil
+				if state.lineage then
+					state.lineage.earnedBanks[id] = nil
+				end
 				for slot, placed in state.display.slots do
 					if placed == id then
 						state.display.slots[slot] = ""
@@ -649,7 +683,8 @@ local function open(
 	count: number,
 	rolls: { number },
 	floor: Rarity.Id?,
-	override: RollOverride?
+	override: RollOverride?,
+	assisted: boolean?
 ): ({ string }, number)
 	local figures: { string } = {}
 	local fresh = 0
@@ -668,7 +703,7 @@ local function open(
 		if not state.discovered[id] then
 			fresh += 1
 		end
-		Rules.grantFigure(state, id, 1)
+		Rules.grantFigure(state, id, 1, assisted == true or Rules.luck(state) > 1)
 		CollectionEconomy.advance(state.pityByGroup, collection, id)
 		figures[index] = id
 	end
@@ -728,7 +763,7 @@ function Rules.mutate(
 			if not PackageGrants.dailyCapacity(state) then
 				return false, "Your daily reward is waiting for purchase credit space.", nil
 			end
-		elseif state.coins < price * count then
+		elseif Lineage.spendable(state) < price * count then
 			return false, "Not enough Coins yet.", nil
 		end
 		local allowed, refusal = canOpen(state, collection, count, rolls)
@@ -736,13 +771,14 @@ function Rules.mutate(
 			return false, refusal, nil
 		end
 		Rules.settle(state, now or state.time)
-		local figures, fresh = open(state, collection, count, rolls, nil, override)
+		local assisted = action ~= "Daily" and Lineage.assistedSpend(state, price * count)
+		local figures, fresh = open(state, collection, count, rolls, nil, override, assisted)
 		id = figures[1]
 		if action == "Daily" then
 			state.lastDailyDay = today
 			PackageGrants.daily(state)
 		else
-			state.coins -= price * count
+			Lineage.spend(state, price * count)
 		end
 		if action == "Deal" then
 			state.deals.bought[stall] = (state.deals.bought[stall] or 0) + 1
@@ -785,7 +821,7 @@ function Rules.mutate(
 			Rules.settle(state, now or state.time)
 			figures = open(state, boxes.collection, boxes.count, rolls)
 		end
-		state.coins += reward.coins
+		Lineage.creditEarned(state, reward.coins)
 		state.lastLoginDay, state.loginStreak = today, streak
 		state.revision += 1
 		local message = string.format("Day %d reward claimed!", LoginRewards.day(streak))
@@ -849,10 +885,13 @@ function Rules.mutate(
 		if cost == 0 or state.display.unlocked >= DisplayConfig.maxSlots then
 			return false, "All Display slots are unlocked.", nil
 		end
-		if state.coins < cost then
+		if Lineage.spendable(state) < cost then
 			return false, string.format("You need %d Coins for the next slot.", cost), nil
 		end
-		state.coins -= cost
+		local assisted = Lineage.spend(state, cost)
+		if state.lineage and not assisted then
+			state.lineage.earnedSlots += 1
+		end
 		state.display.unlocked += 1
 		state.display.slots[state.display.unlocked] = ""
 	elseif action == "BuyShelf" then
@@ -860,10 +899,10 @@ function Rules.mutate(
 		if price == 0 then
 			return false, "Max shelves reached.", nil
 		end
-		if state.coins < price then
+		if Lineage.spendable(state) < price then
 			return false, "Not enough Coins yet.", nil
 		end
-		state.coins -= price
+		Lineage.spend(state, price)
 		Shelves.add(state.shelves)
 		state.revision += 1
 		return true, "New Shelf unlocked!", nil
@@ -875,7 +914,7 @@ function Rules.mutate(
 			return false, "Spend Coins before claiming.", nil
 		end
 		state.goalClaimed = true
-		state.coins += Economy.goalReward
+		Lineage.creditEarned(state, Economy.goalReward)
 	elseif action == "EquipBest" then
 		local best, income = Rules.best(state)
 		if income <= Rules.rate(state) * (1 + 1e-9) then

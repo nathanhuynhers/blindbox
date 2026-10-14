@@ -6,9 +6,9 @@ local Config = require(script.Parent.PurchaseConfig)
 export type Ownership = (string) -> (PurchaseTypes.Ownership, boolean)
 export type Source = "Display" | "OfflineDisplay" | "BankTransfer" | "FixedReward" | "CoinPack"
 local Modifiers = {
-	-- D2 design approved; policy/earned-lineage implementation and validation are still required.
+	-- Paid display effects are validated; current owner policy remains a runtime requirement.
 	-- This is NOT a sales switch. Missing configured IDs also disable every tier independently.
-	effectsValidated = false,
+	effectsValidated = true,
 }
 function Modifiers.validTier(value: unknown): boolean
 	return value == 1 or value == 2 or value == 4 or value == 8

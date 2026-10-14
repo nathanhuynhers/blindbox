@@ -8,6 +8,20 @@ export type Award = {
 	baseClaimed: boolean,
 }
 export type Reservation = { award: Award, productId: number, receiptId: string? }
+export type CreditRecord = {
+	version: number,
+	receipts: { [string]: number },
+	returns: { [string]: Award },
+	redemptions: { [string]: string },
+	selected: string?,
+}
+export type CreditRequest = { id: string, action: "Select" | "Redeem", awardId: string }
+export type CreditResult = {
+	id: string,
+	awardId: string,
+	status: "Selected" | "Redeemed" | "Rejected" | "Recovering",
+	reason: string,
+}
 export type Record = {
 	version: number,
 	serial: number,
@@ -20,6 +34,12 @@ export type Record = {
 	assistedCredit: number,
 }
 export type View = {
+	creditFlow: boolean?,
+	credits: number?,
+	selectedAwardId: string?,
+	selectedNormal: number?,
+	selectedBaseClaimed: boolean?,
+	redeemAllowed: boolean?,
 	awardId: string?,
 	normal: number,
 	doubled: number,

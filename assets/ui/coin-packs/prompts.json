@@ -1,0 +1,38 @@
+{
+  "generator": "Built-in image_gen",
+  "date": "2026-10-12",
+  "exportSize": [
+    512,
+    512
+  ],
+  "icons": [
+    {
+      "key": "pack_small",
+      "name": "Coin Pouch",
+      "coins": 15000,
+      "prompt": "Use case: stylized-concept. Asset type: square developer-product Coin pack catalog icon for Blindbox Town. Create ONE finished square icon, standalone PNG artwork. Input image: style reference only; match its chunky toy-like 3D gold coins with embossed stars, bold dark outlines, crisp cel shading, glossy highlights, bright radial-gradient backdrop and thick outlined playful typography. Draw a completely new subject specified below. Strong clear silhouette readable as a small thumbnail, polished Roblox simulator icon style. Keep every important object and letter comfortably inside a centered circle with radius 40% of the canvas; leave a generous colored-background margin on all sides. Keep the title around the lower-middle, not at the bottom edge; two centered lines if needed, thick white letters with dark outline and gentle 3D extrusion. Opaque full square colorful background with rays and a few sparkles. No multiplier badges, no Robux price, no cash, no real currency symbols, no avatars, no extra gamepass benefits, no logo, no watermark. Do not reproduce the reference's text or 2x badge. Match a coherent set of four increasingly large coin packs. Subject: A small chunky bright green drawstring coin pouch overflowing with a few large gold star-stamped Coins. Emerald/lime background and warm gold. Compact modest bundle, clearly a small pouch. Exact only text: 'COIN POUCH'.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/coin-packs/Coin Pouch.png"
+    },
+    {
+      "key": "pack_medium",
+      "name": "Coin Stack",
+      "coins": 60000,
+      "prompt": "Use case: stylized-concept. Asset type: square developer-product Coin pack catalog icon for Blindbox Town. Create ONE finished square icon, standalone PNG artwork. Input image: style reference only; match its chunky toy-like 3D gold coins with embossed stars, bold dark outlines, crisp cel shading, glossy highlights, bright radial-gradient backdrop and thick outlined playful typography. Draw a completely new subject specified below. Strong clear silhouette readable as a small thumbnail, polished Roblox simulator icon style. Keep every important object and letter comfortably inside a centered circle with radius 40% of the canvas; leave a generous colored-background margin on all sides. Keep the title around the lower-middle, not at the bottom edge; two centered lines if needed, thick white letters with dark outline and gentle 3D extrusion. Opaque full square colorful background with rays and a few sparkles. No multiplier badges, no Robux price, no cash, no real currency symbols, no avatars, no extra gamepass benefits, no logo, no watermark. Do not reproduce the reference's text or 2x badge. Match a coherent set of four increasingly large coin packs. Subject: Several neat chunky stacks of gold star-stamped Coins, with one tilted coin showing its embossed star. Electric-blue/cyan background and warm gold. More Coins than the small pouch, no bag or chest. Exact only text: 'COIN STACK'.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/coin-packs/Coin Stack.png"
+    },
+    {
+      "key": "pack_large",
+      "name": "Coin Sack",
+      "coins": 240000,
+      "prompt": "Use case: stylized-concept. Asset type: square developer-product Coin pack catalog icon for Blindbox Town. Create ONE finished square icon, standalone PNG artwork. Input image: style reference only; match its chunky toy-like 3D gold coins with embossed stars, bold dark outlines, crisp cel shading, glossy highlights, bright radial-gradient backdrop and thick outlined playful typography. Draw a completely new subject specified below. Strong clear silhouette readable as a small thumbnail, polished Roblox simulator icon style. Keep every important object and letter comfortably inside a centered circle with radius 40% of the canvas; leave a generous colored-background margin on all sides. Keep the title around the lower-middle, not at the bottom edge; two centered lines if needed, thick white letters with dark outline and gentle 3D extrusion. Opaque full square colorful background with rays and a few sparkles. No multiplier badges, no Robux price, no cash, no real currency symbols, no avatars, no extra gamepass benefits, no logo, no watermark. Do not reproduce the reference's text or 2x badge. Match a coherent set of four increasingly large coin packs. Subject: A large chunky rich brown drawstring sack, bulging and overflowing with many gold star-stamped Coins, with a few Coins at its foot. Purple/magenta background and warm gold. Clearly a substantial tall sack, much larger than a small pouch. Exact only text: 'COIN SACK'.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/coin-packs/Coin Sack.png"
+    },
+    {
+      "key": "pack_huge",
+      "name": "Treasure Chest",
+      "coins": 1200000,
+      "prompt": "Use case: stylized-concept. Asset type: square developer-product Coin pack catalog icon for Blindbox Town. Create ONE finished square icon, standalone PNG artwork. Input image: style reference only; match its chunky toy-like 3D gold coins with embossed stars, bold dark outlines, crisp cel shading, glossy highlights, bright radial-gradient backdrop and thick outlined playful typography. Draw a completely new subject specified below. Strong clear silhouette readable as a small thumbnail, polished Roblox simulator icon style. Keep every important object and letter comfortably inside a centered circle with radius 40% of the canvas; leave a generous colored-background margin on all sides. Keep the title around the lower-middle, not at the bottom edge; two centered lines if needed, thick white letters with dark outline and gentle 3D extrusion. Opaque full square colorful background with rays and a few sparkles. No multiplier badges, no Robux price, no cash, no real currency symbols, no avatars, no extra gamepass benefits, no logo, no watermark. Do not reproduce the reference's text or 2x badge. Match a coherent set of four increasingly large coin packs. Subject: A large open red-and-gold toy treasure chest overflowing with a mountain of gold star-stamped Coins, radiant golden gleam inside. Orange/amber background and warm gold. Largest richest bundle of this four-icon set. No gems or other reward items. Exact only text: 'TREASURE CHEST'.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/coin-packs/Treasure Chest.png"
+    }
+  ]
+}

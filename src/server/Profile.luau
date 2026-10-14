@@ -12,6 +12,8 @@ local CoinModifiers = require(script.Parent.CoinModifiers)
 local Boosts = require(script.Parent.Boosts)
 local OfflineAwards = require(script.Parent.OfflineAwards)
 local PackageGrants = require(script.Parent.PackageGrants)
+local OfflineCredits = require(script.Parent.OfflineCredits)
+local Lineage = require(script.Parent.PaidLineage)
 local Profile = {}
 local function integer(value: unknown, low: number, high: number): boolean
 	return typeof(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -57,6 +59,7 @@ function Profile.encode(state: Types.State): Types.Profile
 	end
 	return {
 		schemaVersion = state.schemaVersion,
+		lineage = if state.schemaVersion >= 20 then Lineage.copy(state) else nil,
 		earningInputs = inputs,
 		convenience = if state.schemaVersion >= 15 then table.clone(state.convenience) else nil,
 		boosts = if state.schemaVersion >= 16 then Boosts.copy(state.boosts) else nil,
@@ -65,6 +68,11 @@ function Profile.encode(state: Types.State): Types.Profile
 			else nil,
 		offlineData = if state.schemaVersion >= 17 and state.offlineData
 			then OfflineAwards.copy(state.offlineData, state.offlinePending)
+			else nil,
+		offlineCredits = if state.schemaVersion >= 19
+				and state.offlineCredits
+				and state.offlineData
+			then OfflineCredits.copy(state.offlineCredits, state.offlineData)
 			else nil,
 		coins = state.coins,
 		earnings = table.clone(state.earnings),
@@ -112,6 +120,8 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			and data.schemaVersion ~= 16
 			and data.schemaVersion ~= 17
 			and data.schemaVersion ~= 18
+			and data.schemaVersion ~= 19
+			and data.schemaVersion ~= 20
 		)
 		or not fields(data, {
 			"schemaVersion",
@@ -141,7 +151,9 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 			"convenience",
 			"boosts",
 			"offlineData",
+			"offlineCredits",
 			"packages",
+			"lineage",
 		})
 	then
 		return nil
@@ -408,6 +420,17 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 	elseif data.offlineData ~= nil then
 		return nil
 	end
+	if state.schemaVersion >= 19 then
+		local credits = if state.offlineData
+			then OfflineCredits.decode(data.offlineCredits, state.offlineData)
+			else nil
+		if not credits then
+			return nil
+		end
+		state.offlineCredits = credits
+	elseif data.offlineCredits ~= nil then
+		return nil
+	end
 	-- v6-v10 predate the login streak (Rules.new: never claimed). v11+ requires a consistent pair.
 	if (data.schemaVersion :: number) >= 11 then
 		if
@@ -483,6 +506,15 @@ function Profile.decode(raw: unknown, now: number): Types.State?
 		end
 		state.deals = { window = record.window :: number, bought = bought }
 	elseif data.deals ~= nil then
+		return nil
+	end
+	if state.schemaVersion >= 20 then
+		local record = Lineage.decode(data.lineage, state)
+		if not record then
+			return nil
+		end
+		state.lineage = record
+	elseif data.lineage ~= nil then
 		return nil
 	end
 	-- Idempotent: also grants collections completed before Shelf rewards existed.

@@ -135,6 +135,10 @@ local function card(
 	local picture = art(face, product)
 	local name = Kit.text(face, "Name", product.name, 19, Style.display())
 	name.TextWrapped, name.TextTruncate = true, Enum.TextTruncate.None
+	name.TextScaled = true
+	local nameSize = Instance.new("UITextSizeConstraint")
+	nameSize.MinTextSize, nameSize.MaxTextSize = 14, 19
+	nameSize.Parent = name
 	local benefit = Kit.text(
 		face,
 		"Benefit",
@@ -182,6 +186,7 @@ local function card(
 			picture.size(size)
 			picture.root.Position = UDim2.fromOffset(width / 2, top / 2)
 			name.TextSize = if phone then 17 else 19
+			nameSize.MaxTextSize = name.TextSize
 			Kit.rect(name, 12, top + 8, width - 24, 44)
 			Kit.rect(benefit, 12, top + 54, width - 24, 44)
 			Kit.rect(footer.root, 10, height - 54, width - 20, 44)
@@ -206,6 +211,10 @@ local function hero(
 	local picture = art(face, product)
 	local title = Kit.text(face, "Title", product.name, 30, Style.display())
 	title.TextWrapped, title.TextTruncate = true, Enum.TextTruncate.None
+	title.TextScaled = true
+	local titleSize = Instance.new("UITextSizeConstraint")
+	titleSize.MinTextSize, titleSize.MaxTextSize = 18, 30
+	titleSize.Parent = title
 	outlined(title, 3)
 	local benefit =
 		Kit.text(face, "Benefit", product.benefit, 15, Style.body(Enum.FontWeight.Heavy))
@@ -239,6 +248,7 @@ local function hero(
 			local textX = 32 + size
 			local textWidth = math.max(60, width - textX - stampWidth - 28)
 			title.TextSize = if phone then 22 else 30
+			titleSize.MaxTextSize = title.TextSize
 			Kit.rect(
 				title,
 				textX,

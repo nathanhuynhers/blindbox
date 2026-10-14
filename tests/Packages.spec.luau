@@ -21,7 +21,7 @@ for key, amount in { pack_small = 15000, pack_medium = 60000, pack_large = 24000
 	s.coins = Economy.coinLimit - amount
 	check(Grants.capacity(s, Config.find(key)), "Exact capacity " .. key)
 	s.coins += 1
-	check(not Grants.capacity(s, Config.find(key)), "Prompt refuses insufficient space " .. key)
+	check(Grants.capacity(s, Config.find(key)), "Protected paid value may exceed immediate wallet room " .. key)
 	s.coins = Economy.coinLimit
 	check(Grants.deliver(s, "receipt:fixed", grant), "Charged overflow delivered " .. key)
 	check(s.packages.assistedCredit == amount and s.coins == Economy.coinLimit, "Exact unmultipled credit, no random-box wallet " .. key)

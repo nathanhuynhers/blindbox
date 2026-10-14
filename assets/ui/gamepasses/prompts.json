@@ -1,0 +1,64 @@
+{
+  "generator": "Built-in image_gen",
+  "date": "2026-10-12",
+  "icons": [
+    {
+      "key": "coins-2",
+      "name": "2x Display Coins",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: A chunky gold coin with embossed star, paired with a bold floating '2x' badge and a smaller second coin. Emerald and lime background; gold subject. Exact sole text: '2x COINS'. Clearly shows multiplier two.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/2x Display Coins.png"
+    },
+    {
+      "key": "coins-4",
+      "name": "4x Display Coins",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: A dramatic stack of chunky gold coins with embossed stars and a bold floating '4x' badge. Electric blue and cyan background; gold subject. Exact sole text: '4x COINS'. Clearly shows multiplier four.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/4x Display Coins.png"
+    },
+    {
+      "key": "coins-8",
+      "name": "8x Display Coins",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: A radiant high-tier pile of chunky gold coins with embossed stars and a bold floating '8x' badge. Violet and magenta background; gold subject with strong shine. Exact sole text: '8x COINS'. Clearly shows multiplier eight.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/8x Display Coins.png"
+    },
+    {
+      "key": "starter",
+      "name": "Starter Pack",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: A cheerful chunky cyan blind-box gift package tied with a red ribbon, partly open with several star-stamped gold coins and a small lightning power-up token. Warm orange and yellow background. Exact sole text: 'STARTER PACK'. No character or figure inside the box.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/Starter Pack.png"
+    },
+    {
+      "key": "auto-open",
+      "name": "Auto Open",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: One chunky cyan blind box with a lifted lid, surrounded by a clear circular pair of green automation arrows, soft magical light emerging. Royal blue and cyan background. Exact sole text: 'AUTO OPEN'. No figure or character inside box, no implied multi-box quantity.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/Auto Open.png"
+    },
+    {
+      "key": "auto-collect",
+      "name": "Auto Collect",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: Several star-stamped gold coins following a short curved collection trail into a chunky bright green coin bank, with a small circular automation arrow. Emerald and teal background. Exact sole text: 'AUTO COLLECT'. Focus on convenient collection rather than multiplied coins.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/Auto Collect.png"
+    },
+    {
+      "key": "movement",
+      "name": "Movement Upgrade",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: A pair of chunky Roblox-style red and white sneakers in a dynamic diagonal pose, with clear sweeping speed streaks behind them. Orange and amber background. Exact sole text: 'SPEED BOOST'. No avatar, no real shoe branding.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/Movement Upgrade.png"
+    },
+    {
+      "key": "vip",
+      "name": "VIP",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: A large chunky gold crown with cyan jewels resting above a glossy purple VIP ticket badge. Rich violet and deep blue background with golden sparkles. Exact sole text: 'VIP'. Premium exclusive look without character or misleading reward symbols.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/VIP.png"
+    },
+    {
+      "key": "luck",
+      "name": "Permanent Luck",
+      "prompt": "Use case: stylized-concept. Asset type: square Roblox gamepass catalog icon for Blindbox Town, a friendly blind-box collecting game. Create ONE finished 1024x1024 square icon. Style: polished colorful Roblox simulator thumbnail art, chunky toy-like 3D plastic objects with bold dark outlines, crisp cel shading, glossy highlights, simple strong silhouette, playful premium finish. Large central subject fills about 70 percent of frame. Bright radial gradient backdrop with subtle rays and a few sparkles, restrained details, all objects and text inside the central 82 percent for safe circular cropping. A large readable short title with thick white letters, dark outline, slightly extruded, near lower center but well inside circular safe area. No price, no real money, no Roblox logo, no watermark, no official brand marks, no photorealism. Match a coherent set. Subject: A large chunky glossy bright green four-leaf clover with a small golden lucky star and magical sparkles. Emerald and aqua background. Exact sole text: 'LUCK'. Do not use dice, gambling imagery, numbers, rarity odds or guarantees.",
+      "file": "C:\\Users\\natha\\.codex\\worktrees\\eeb9\\RobloxWorkspace/assets/ui/gamepasses/Permanent Luck.png"
+    }
+  ],
+  "exportSize": [
+    512,
+    512
+  ]
+}

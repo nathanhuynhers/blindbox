@@ -7,6 +7,7 @@ export type Dependencies = {
 	now: () -> number,
 	id: () -> string,
 	send: (Types.Request) -> (),
+	creditSend: ((OfflineTypes.CreditRequest) -> ())?,
 	price: (Types.ProductState) -> string?,
 	format: (number) -> string,
 	paint: (Presentation.OfflineInput) -> (),
@@ -14,6 +15,7 @@ export type Dependencies = {
 local Client = {}
 export type Controller = {
 	busy: () -> boolean,
+	creditUpdate: (OfflineTypes.View, OfflineTypes.CreditResult) -> (),
 	award: (OfflineTypes.View) -> (),
 	update: (Types.Snapshot, Types.Result?) -> (),
 	purchase: () -> boolean,
@@ -28,12 +30,55 @@ function Client.create(deps: Dependencies)
 	local note: string? = nil
 	local pending: Types.Request? = nil
 	local sentAt = -math.huge
+	local creditPending: OfflineTypes.CreditRequest? = nil
+	local creditSentAt = -math.huge
 	local product: Types.ProductState? = nil
 	local actualPrice: string? = nil
 	local alive = true
 	local function paint()
 		local award = view
 		if not alive or not award then
+			return
+		end
+		if award.creditFlow then
+			local amount = award.selectedNormal or award.normal
+			local target = award.selectedAwardId or award.awardId
+			local redeem = (award.credits or 0) > 0
+			local enabled = target ~= nil
+				and amount > 0
+				and not award.recoveryRequired
+				and award.redeemAllowed == true
+				and (redeem or (product ~= nil and product.available and actualPrice ~= nil))
+			local previous = award.selectedAwardId ~= nil and award.selectedAwardId ~= award.awardId
+			deps.paint({
+				fixture = false,
+				creditFlow = true,
+				olderReturn = previous,
+				redemption = redeem,
+				creditCount = award.credits or 0,
+				freeClaimRestored = outcome == "cancelled",
+				baseText = deps.format(amount),
+				freeText = deps.format(award.claimable and award.normal or 0),
+				doubleText = deps.format(2 * amount),
+				freeClaimAvailable = award.claimable,
+				eligible = target ~= nil
+					and amount > 0
+					and (not award.fulfilled or award.selectedAwardId ~= nil),
+				buyAllowed = enabled,
+				priceText = actualPrice,
+				claimed = award.fulfilled == true and not award.selectedAwardId,
+				outcome = outcome,
+				reason = note
+					or (
+						if redeem
+							then "Your saved credit is ready. Confirm the return to redeem it."
+							else "Buy one saved, single-use credit, then confirm its redemption. Free Claim stays available."
+					),
+				actionText = if redeem then "Redeem +" .. deps.format(amount) else "Buy credit",
+				detailText = if redeem
+					then if previous then "Previous return · 1 credit" else "Uses 1 saved credit"
+					else actualPrice or "Buying unavailable",
+			})
 			return
 		end
 		deps.paint({
@@ -62,7 +107,8 @@ function Client.create(deps: Dependencies)
 	end
 	local api = {}
 	function api.busy(): boolean
-		return pending ~= nil
+		return creditPending ~= nil
+			or pending ~= nil
 			or (catalog ~= nil and catalog.promptProduct ~= nil)
 			or outcome == "prompting"
 			or outcome == "saving"
@@ -108,9 +154,13 @@ function Client.create(deps: Dependencies)
 			elseif result.status == "Cancelled" then
 				outcome, note =
 					"cancelled",
-					"Purchase window closed. Claim is still free; any delayed purchase will recover."
+					"Purchase window closed. Claim is still free; any delayed purchase saves a credit for confirmation."
 			elseif result.status == "Verified" then
-				outcome, note = "idle", "Offline purchase saved. Reserved Coins remain protected."
+				outcome, note =
+					"idle",
+					if view and view.creditFlow
+						then "Credit saved. Confirm redemption to add the frozen return."
+						else "Offline purchase saved. Reserved Coins remain protected."
 			elseif result.status == "Rejected" then
 				outcome, note = "idle", "Double & Claim unavailable. Claim is still free."
 			end
@@ -133,6 +183,30 @@ function Client.create(deps: Dependencies)
 		paint()
 	end
 	function api.purchase(): boolean
+		if view and view.creditFlow then
+			local award = view
+			local target = award.selectedAwardId or award.awardId
+			local redeem = (award.credits or 0) > 0
+			if
+				not alive
+				or api.busy()
+				or not target
+				or not award.redeemAllowed
+				or award.recoveryRequired
+				or (award.selectedNormal or award.normal) <= 0
+				or not deps.creditSend
+				or (not redeem and (not product or not product.available or not actualPrice))
+			then
+				return false
+			end
+			local request: OfflineTypes.CreditRequest =
+				{ id = deps.id(), action = if redeem then "Redeem" else "Select", awardId = target }
+			creditPending = request
+			creditSentAt, outcome, note = deps.now(), "saving", nil
+			paint()
+			deps.creditSend(request)
+			return true
+		end
 		local award, item = view, product
 		local busy = outcome == "prompting" or outcome == "saving" or outcome == "recovering"
 		if
@@ -157,7 +231,57 @@ function Client.create(deps: Dependencies)
 		deps.send(request)
 		return true
 	end
+	function api.creditUpdate(nextView: OfflineTypes.View, result: OfflineTypes.CreditResult)
+		local request = creditPending
+		if
+			not alive
+			or not request
+			or result.id ~= request.id
+			or result.awardId ~= request.awardId
+		then
+			return
+		end
+		view = nextView
+		if result.status == "Recovering" then
+			outcome, note = "saving", "Your credit operation is being saved. Reconnect to recover."
+			paint()
+			return
+		end
+		creditPending = nil
+		outcome, note =
+			"idle",
+			if result.status == "Redeemed"
+				then "Credit redeemed once. Your reserved Coins remain protected."
+				else nil
+		if
+			request.action == "Select"
+			and result.status == "Selected"
+			and nextView.selectedAwardId == request.awardId
+			and product
+			and product.available
+			and actualPrice
+			and catalog
+			and catalog.promptProduct == nil
+		then
+			local purchase: Types.Request =
+				{ id = deps.id(), action = "Purchase", product = "offline_double" }
+			pending, sentAt, outcome = purchase, deps.now(), "prompting"
+			paint()
+			deps.send(purchase)
+			return
+		end
+		if result.status == "Rejected" then
+			note = "Credit operation unavailable: "
+				.. result.reason
+				.. ". Your credit has been kept."
+		end
+		paint()
+	end
 	function api.step()
+		if alive and creditPending and deps.creditSend and deps.now() - creditSentAt >= 2 then
+			creditSentAt = deps.now()
+			deps.creditSend(creditPending)
+		end
 		-- A lost authorization reply retries its EXACT request id, never a new purchase.
 		if alive and pending and deps.now() - sentAt >= 2 then
 			sentAt = deps.now()
@@ -170,7 +294,7 @@ function Client.create(deps: Dependencies)
 		paint()
 	end
 	function api.destroy()
-		alive, pending, view, catalog = false, nil, nil, nil
+		alive, pending, creditPending, view, catalog = false, nil, nil, nil, nil
 	end
 	return api
 end

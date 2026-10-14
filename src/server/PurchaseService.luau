@@ -167,7 +167,12 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 	end
 	local function resolvePrompt(userId: number, session: Session, product: string): boolean
 		local pending = if session.journal then session.journal.pending else nil
-		if not session.journal then
+		-- A detached callback may confirm an already durable sidecar promise, but
+		-- must not resolve a journal belonging to the replacement join.
+		if sessions[userId] ~= session then
+			return true
+		end
+		if not deps.ready(userId) or not session.journal then
 			return false
 		end
 		if not pending or pending.product ~= product then
@@ -188,11 +193,19 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 		if configured then
 			local journal = Journal.load(deps.update, userId)
 			session.journal = journal
+			if sessions[userId] ~= session or not deps.ready(userId) then
+				session.working = false
+				return
+			end
 			local record = Ledger.load(deps.update, userId)
 			if record then
 				session.ledger = record
 			end
 			session.ledgerStatus = if record and journal then "Ready" else "Recovering"
+			if sessions[userId] ~= session or not deps.ready(userId) then
+				session.working = false
+				return
+			end
 			if record and deps.deliverReserved then
 				local keys: { string } = {}
 				for key in record.entries do
@@ -507,6 +520,8 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 				session.working = false
 				local confirmed = ok
 					and fulfilled == true
+					and sessions[receipt.userId] == session
+					and deps.ready(receipt.userId)
 					and resolvePrompt(receipt.userId, session, product.key)
 				if confirmed and session.prompt == product.key then
 					session.promptReceipt = true
@@ -535,11 +550,24 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 				grant = product.grant,
 			})
 		local delivery: boolean? = nil
+		-- The sidecar commit yields. Recheck the captured join and active lease.
+		if
+			record
+			and deps.deliverReserved
+			and (sessions[receipt.userId] ~= session or not deps.ready(receipt.userId))
+		then
+			session.working = false
+			return false
+		end
 		if record and deps.deliverReserved then
 			local key = "receipt:" .. receipt.purchaseId
 			local ok, delivered =
 				pcall(deps.deliverReserved, receipt.userId, key, record.entries[key])
-			delivery = if ok then delivered else false
+			delivery = if ok
+					and sessions[receipt.userId] == session
+					and deps.ready(receipt.userId)
+				then delivered
+				else false
 		end
 		session.working = false
 		if record then
@@ -598,10 +626,22 @@ function Service.create(deps: Dependencies, products: { Config.Product })
 			grant = product.grant,
 		})
 		local delivered: boolean? = nil
+		if
+			record
+			and deps.deliverReserved
+			and (sessions[userId] ~= session or not deps.ready(userId))
+		then
+			session.working = false
+			return false
+		end
 		if record and deps.deliverReserved then
 			local marker = "pass:" .. tostring(product.platformId)
 			local ok, value = pcall(deps.deliverReserved, userId, marker, record.entries[marker])
-			delivered = if ok then value else false
+			delivered = if ok
+					and sessions[userId] == session
+					and deps.ready(userId)
+				then value
+				else false
 		end
 		session.working = false
 		if record then

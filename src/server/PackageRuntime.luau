@@ -6,9 +6,10 @@ local Rules = require(script.Parent.Rules)
 local Ledger = require(script.Parent.PurchaseLedger)
 local CoinModifiers = require(script.Parent.CoinModifiers)
 local BoostRuntime = require(script.Parent.BoostRuntime)
+local Lineage = require(script.Parent.PaidLineage)
 local Runtime = {}
--- D2 requires a validated downstream earned/assisted path. It is not integrated yet.
-local paidPathValidated = false
+-- Validated earned/assisted delivery still requires current owner policy and healthy storage.
+local paidPathValidated = true
 function Runtime.reason(storage: Storage.Session, product: Config.Product, now: number): string
 	if not storage.handle or not BoostRuntime.ready(storage, now) then
 		return "ProfileUnavailable"
@@ -23,7 +24,12 @@ function Runtime.reason(storage: Storage.Session, product: Config.Product, now: 
 	if not Grants.capacity(storage.state, product) then
 		return "CapacityUnavailable"
 	end
-	if not paidPathValidated or not CoinModifiers.effectsValidated then
+	if
+		not paidPathValidated
+		or not CoinModifiers.effectsValidated
+		or not storage.state.lineage
+		or not storage.state.paidBoostsAllowed
+	then
 		return "ValidationPending"
 	end
 	return if Grants.supports(product.key) then "Available" else "UnsupportedProduct"
@@ -50,6 +56,7 @@ function Runtime.fulfill(
 	end
 	Rules.settle(storage.state, now)
 	Grants.promote(storage.state)
+	Lineage.drain(storage.state, storage.state.paidBoostsAllowed)
 	storage.state.revision += 1
 	storage.state.boostCommitPending, storage.ready = true, false
 	return (commit or Storage.flush)(storage, false)
@@ -64,6 +71,7 @@ function Runtime.commitDaily(
 	if not storage.handle or not BoostRuntime.ready(storage, now) then
 		return false
 	end
+	Lineage.drain(storage.state, storage.state.paidBoostsAllowed)
 	storage.state.boostCommitPending, storage.ready = true, false
 	return (commit or Storage.flush)(storage, false)
 end

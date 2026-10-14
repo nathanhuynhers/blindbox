@@ -3,7 +3,7 @@
 P08 connects the retained Store to P02 through one client session controller and adds the missing
 P05 bootstrap hooks. A status-only `PurchaseJournal` in the existing purchase sidecar preserves
 pre-receipt obligations across rejoins; it does not replace grant/receipt authority or alter profile
-schemas. Product IDs, sales, paid policy/lineage and release gates remain closed. See
+schemas. All20 product IDs are configured locally; sales, paid policy/lineage and release gates remain closed. See
 [integration readiness, verification and P09 handoff](audits/MONETIZATION_STORE_P08_2026-10-12.md).
 
 P06 adds server-only `PackageGrants`/`PackageRuntime` through P02's committed delivery and verified

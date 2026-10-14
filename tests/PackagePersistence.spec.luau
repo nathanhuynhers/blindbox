@@ -137,7 +137,7 @@ local owner, player, prompts = { state = Rules.new(0) }, {}, 0
 local fillDuringLookup = false
 local native = {
 	GetProductInfoAsync = function()
-		if fillDuringLookup then owner.state.coins = 1000000000000 end
+		if fillDuringLookup then owner.state.packages = Grants.empty(); owner.state.packages.assistedCredit = Grants.creditLimit - Grants.creditLimit % 500 end
 		return { IsForSale = true }
 	end,
 	PromptProductPurchase = function() prompts += 1 end,
@@ -149,7 +149,7 @@ local prompt = require("./PurchasePrompt")(
 )
 fillDuringLookup = true
 check(not prompt(8101, products[1]) and prompts == 0, "Capacity change during yielding metadata blocks native prompt")
-fillDuringLookup, owner.state.coins = false, 4500
+fillDuringLookup, owner.state.packages = false, nil
 check(prompt(8101, products[1]) and prompts == 1, "Actual adapter prompts only after fresh capacity check")
 check(Storage.close(s) and Storage.close(other) and Storage.close(capped), "Clean isolated release")
 print("Package persistence:", checks, "checks passed")

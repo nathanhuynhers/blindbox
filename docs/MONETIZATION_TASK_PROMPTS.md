@@ -1,12 +1,14 @@
 # Monetization task prompts
 
+> **Current source acceptance, 2026-10-12:** purchase, entitlement, modifier, boost, convenience, package, offline and Store integration modules now exist, but all 20 catalog variants remain unconfigured and off sale. Policy/earned-lineage providers and usable assisted Coin delivery are incomplete; MN-22's 49-Robux saved-credit/redemption design is approved and implemented; native credit verification and launch configuration remain pending. Native Store fixture acceptance is partial; this is not launch readiness. See [the source-based acceptance report](audits/2026-10-12/monetization/ACCEPTANCE.md). Historical milestone claims below must not be read as the current implementation inventory.
+
 Prepared 2026-10-11 from the [monetization plan](MONETIZATION.md) and the user's feature removals
 and addition of 2x offline earnings. These are copy-ready prompts for future tasks, not evidence
 of implementation or authorization to run them during this documentation task.
 
 Each text block is a complete prompt. Product rules and approval status stay in
 `docs/MONETIZATION.md`. D1 benefits/amounts/default list prices and the per-return Double & Claim
-flow are approved there; D2/D3, the offline purchase price, platform types/receipt protocol and
+flow and D2 (with its validation gate) are approved there; D3, the offline purchase price, platform types/receipt protocol and
 release remain unresolved. No prompt can override that decision table. The P07 design is approved
 and its UI is implemented with buying disabled; P08 now concerns remaining purchase integration.
 

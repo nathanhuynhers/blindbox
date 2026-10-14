@@ -26,8 +26,9 @@ removal preserves the bank, while replacement automatically attempts to collect 
 figure's whole bank. Fractions and wallet overflow survive replacement and rejoining.
 E nearby opens Display management only.
 Once either editor is open, a living owner can edit their Display and Shelves from anywhere
-inside their own plot; the server rejects edits from outside it. Future paid features are tracked
-in the [monetization plan](MONETIZATION.md); none are implemented.
+inside their own plot; the server rejects edits from outside it. Gated paid-feature modules are implemented as described
+in the [monetization plan](MONETIZATION.md), but policy/lineage validation,
+usable paid Coin delivery and native purchase acceptance remain incomplete; sales are disabled.
 See [economy](ECONOMY.md) for exact formulas and tuning.
 
 For canonical Shelf capacity, viewport, owned-copy placement, Shelf progression and completion rewards,

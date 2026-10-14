@@ -1,6 +1,9 @@
 --!strict
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
+local PolicyService = game:GetService("PolicyService")
+local PaidPolicy = require(script.PaidPolicy)
+local Lineage = require(script.PaidLineage)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
@@ -28,7 +31,6 @@ local BoostRuntime = require(script.BoostRuntime)
 local OfflineRuntime = require(script.OfflineRuntime)
 local PackageRuntime = require(script.PackageRuntime)
 local PackageGrants = require(script.PackageGrants)
-local OfflineAwards = require(script.OfflineAwards)
 local ConvenienceRuntime = require(script.ConvenienceRuntime)
 local ConvenienceOwner = require(script.ConvenienceOwner)
 local ConvenienceService = require(script.ConvenienceService)
@@ -100,6 +102,8 @@ local shelfEditorRemote = remote("ShelfEditor")
 local afkRemote = remote("AfkReconnect")
 local boostRequest = remote("BoostActivate")
 local boostResult = remote("BoostResult")
+local offlineCreditRequest = remote("OfflineCreditRequest")
+local offlineCreditState = remote("OfflineCreditState")
 local adminRemote = Instance.new("RemoteFunction")
 adminRemote.Name = "Admin"
 adminRemote.Parent = folder
@@ -107,6 +111,29 @@ folder.Parent = ReplicatedStorage
 local convenience = ConvenienceRuntime.start(folder)
 local ownershipChanged: ((number) -> ())? = nil
 local purchaseChanged: ((Player) -> ())? = nil
+local policy = PaidPolicy.create({
+	now = os.clock,
+	fetch = function(userId)
+		local player = Players:GetPlayerByUserId(userId)
+		assert(player, "Policy owner unavailable")
+		return PolicyService:GetPolicyInfoForPlayerAsync(player)
+	end,
+	changed = function(userId)
+		if ownershipChanged then
+			ownershipChanged(userId)
+		end
+	end,
+})
+local function paidAllowed(userId: number): boolean
+	return policy.status(userId) == "Allowed"
+end
+local function eligibilityFor(userId: number, owner: Storage.Session?): BoostRuntime.Eligibility
+	return {
+		policy = policy.status(userId),
+		lineageValidated = owner ~= nil and owner.state.lineage ~= nil,
+		disclosureReady = true,
+	}
+end
 local function purchaseSession(player: Player): Storage.Session?
 	local session = sessions[player]
 	return if session and not shuttingDown then session.storage else nil
@@ -115,7 +142,7 @@ local offlineIntegration = OfflineRuntime.create(purchaseSession, function(playe
 	if purchaseChanged then
 		purchaseChanged(player)
 	end
-end)
+end, paidAllowed)
 local purchases = PurchaseRuntime.start(folder, function(player: Player): Storage.Session?
 	return purchaseSession(player)
 end, function(userId)
@@ -134,9 +161,8 @@ end, {
 		if product.key == "movement" or product.key == "auto_collect" then
 			return owner ~= nil and product.kind == "Pass" and BoostRuntime.ready(owner, os.clock())
 		end
-		-- The provider is deliberately unresolved; configuring IDs cannot replace D2 validation.
-		local eligibility: BoostRuntime.Eligibility =
-			{ policy = "Unknown", lineageValidated = false, disclosureReady = false }
+		-- Current policy is rechecked after metadata lookups and before prompting.
+		local eligibility: BoostRuntime.Eligibility = eligibilityFor(userId, owner)
 		if product.key == "auto_open" or product.coinTier ~= nil then
 			return owner ~= nil
 				and BoostRuntime.ready(owner, os.clock())
@@ -157,7 +183,11 @@ end, {
 				and BoostRuntime.purchaseEligible(owner, product, eligibility, os.clock())
 		end
 		return if PackageGrants.supports(product.key)
-			then owner ~= nil and PackageRuntime.eligible(owner, product, os.clock())
+			then owner ~= nil and paidAllowed(userId) and PackageRuntime.eligible(
+				owner,
+				product,
+				os.clock()
+			)
 			else offlineIntegration.eligible(userId, product)
 	end,
 	prepare = function(userId, product)
@@ -166,7 +196,9 @@ end, {
 		end
 		local player = Players:GetPlayerByUserId(userId)
 		local owner = if player then purchaseSession(player) else nil
-		return owner ~= nil and PackageRuntime.eligible(owner, product, os.clock())
+		return owner ~= nil
+			and paidAllowed(userId)
+			and PackageRuntime.eligible(owner, product, os.clock())
 	end,
 	fulfill = offlineIntegration.fulfill,
 	packageState = function(userId, product)
@@ -232,12 +264,7 @@ local function snapshotFor(session: Session): Types.Snapshot
 			[2] = CollectionEconomy.odds(state.pityByGroup, math.max(2, Rules.luck(state))),
 			[4] = CollectionEconomy.odds(state.pityByGroup, math.max(4, Rules.luck(state))),
 		},
-		offlineAward = OfflineAwards.view(
-			state,
-			session.storage.ready
-				and not session.storage.busy
-				and session.storage.pendingSave == nil
-		),
+		offlineAward = offlineIntegration.view(session.storage),
 		coinModifiers = table.clone(state.coinModifiers),
 		earningFactors = Rules.earningFactors(state),
 		luckModifiers = table.clone(state.luckModifiers),
@@ -304,14 +331,25 @@ local function refreshCoinModifiers(player: Player, session: Session, now: numbe
 	end
 	local changed = CoinModifierRuntime.sync(storage, PurchaseConfig.products, function(key)
 		return purchases.ownership(player.UserId, key)
-	end, CoinModifiers.effectsValidated, now)
+	end, CoinModifiers.effectsValidated and paidAllowed(player.UserId), now)
 	local boostsChanged = BoostRuntime.sync(storage, PurchaseConfig.products, function(key)
 		return purchases.ownership(player.UserId, key)
-	end, { policy = "Unknown", lineageValidated = false, disclosureReady = false }, os.time(), now)
+	end, eligibilityFor(player.UserId, storage), os.time(), now)
 	local vipChanged = PackageRuntime.sync(storage, PurchaseConfig.products, function(key)
 		return purchases.ownership(player.UserId, key)
-	end, false, now)
-	if changed or boostsChanged or vipChanged then
+	end, paidAllowed(player.UserId), now)
+	local fundsChanged = false
+	if BoostRuntime.ready(storage, now) and storage.state.lineage then
+		if not paidAllowed(player.UserId) then
+			fundsChanged = Lineage.suspend(storage.state)
+		else
+			fundsChanged = Lineage.drain(storage.state, true) > 0
+		end
+		if fundsChanged then
+			storage.state.revision += 1
+		end
+	end
+	if changed or boostsChanged or vipChanged or fundsChanged then
 		if storage.handle then
 			storage.status = "Autosave pending"
 		end
@@ -534,6 +572,8 @@ end
 local function remove(player: Player)
 	convenience.remove(player.UserId)
 	purchases.remove(player.UserId)
+	policy.remove(player.UserId)
+	offlineIntegration.remove(player.UserId)
 	admin.remove(player.UserId)
 	afk.remove(player)
 	local binding = movement[player]
@@ -570,7 +610,11 @@ local function added(player: Player)
 		return
 	end
 	loading[player] = true
-	local storage, reason = Storage.open(player.UserId)
+	policy.add(player.UserId)
+	policy.refresh(player.UserId)
+	local storage, reason = Storage.open(player.UserId, function()
+		return paidAllowed(player.UserId)
+	end)
 	loading[player] = nil
 	if not storage then
 		PlotSlots.release(plots, player.UserId)
@@ -627,10 +671,10 @@ local function added(player: Player)
 				return purchases.busy(player.UserId)
 			end,
 			policyAllowed = function()
-				return false
+				return paidAllowed(player.UserId)
 			end,
 			spendable = function()
-				return nil
+				return Lineage.spendable(transaction.state)
 			end,
 			snapshot = function()
 				return snapshotFor(session)
@@ -719,6 +763,26 @@ end
 local connections: { RBXScriptConnection } = {}
 table.insert(
 	connections,
+	offlineCreditRequest.OnServerEvent:Connect(function(player: Player, raw: unknown)
+		afk.activity(player)
+		local captured = sessions[player]
+		if
+			not captured
+			or shuttingDown
+			or purchases.busy(player.UserId)
+			or convenience.busy(player.UserId)
+		then
+			return
+		end
+		local result = offlineIntegration.control(player.UserId, raw)
+		if result and sessions[player] == captured and not shuttingDown then
+			offlineCreditState:FireClient(player, offlineIntegration.view(captured.storage), result)
+			send(player, captured, nil)
+		end
+	end)
+)
+table.insert(
+	connections,
 	afkRemote.OnServerEvent:Connect(function(player: Player, raw: unknown)
 		afk.receive(player, raw)
 	end)
@@ -787,7 +851,7 @@ table.insert(
 		local result = BoostRuntime.activate(
 			session.storage,
 			raw,
-			{ policy = "Unknown", lineageValidated = false, disclosureReady = false },
+			eligibilityFor(player.UserId, session.storage),
 			os.time(),
 			now
 		)
@@ -884,6 +948,7 @@ table.insert(
 				return
 			end
 		end
+		refreshCoinModifiers(player, session, os.clock())
 		local beforeRevision = session.transaction.state.revision
 		local parsed = Protocol.parse(raw)
 		if
@@ -966,6 +1031,9 @@ table.insert(
 		end
 		elapsed = 0
 		local now = os.clock()
+		for _, userId in policy.due() do
+			task.spawn(policy.refresh, userId)
+		end
 		for player, session in sessions do
 			refreshCoinModifiers(player, session, now)
 			-- P02 ownership observers stay non-yielding. Durable Starter reconciliation
@@ -1030,6 +1098,7 @@ game:BindToClose(function()
 	shuttingDown = true
 	convenience.destroy()
 	purchases.destroy()
+	policy.destroy()
 	afk.destroy()
 	for player, binding in movement do
 		PlayerMovement.unbind(binding)

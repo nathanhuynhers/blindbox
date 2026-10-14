@@ -47,8 +47,14 @@ for mask = 0, 7 do
 		check(Modifiers.factor(inputs, source) == (if source == "Display" or source == "OfflineDisplay" then expected else 1), "Source " .. source)
 	end
 end
-check(not Modifiers.effectsValidated, "Production validation gate remains closed")
-check(Modifiers.resolve(Config.products, ownership, true).appliedTier == 1, "Missing configured IDs cannot activate")
+check(Modifiers.effectsValidated, "Display effects validated")
+local closedProducts = {}
+for _, product in Config.products do
+ local copy = table.clone(product)
+ copy.integrationReady = false
+ table.insert(closedProducts, copy)
+end
+check(Modifiers.resolve(closedProducts, ownership, true).appliedTier == 1, "Configured IDs cannot bypass integration validation")
 resolve(7, true)
 products[3].integrationReady = false
 check(Modifiers.resolve(products, ownership, true).appliedTier == 4, "Unintegrated 8 cannot activate")
@@ -141,7 +147,7 @@ for _, tier in { 1, 2, 4, 8 } do
 		local expected = if away < 60 then 0 else math.floor(base * tier * math.min(away, 21600) * 0.5)
 		check(loaded.offlinePending == expected, "Saved normal offline tier/boundary " .. tier .. "/" .. away)
 		local gated = Profile.decode(encoded, 0)
-		Rules.offline(gated, 1000000 + away) -- production default remains closed
+		Rules.offline(gated, 1000000 + away, false) -- explicit unknown/restricted policy stays closed
 		check(gated.offlinePending == (if away < 60 then 0 else math.floor(base * math.min(away, 21600) * 0.5)), "Offline validation gate")
 	end
 end

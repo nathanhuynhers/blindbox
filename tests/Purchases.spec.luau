@@ -44,10 +44,12 @@ readinessClock, present = 0, false
 check(not adapterReady(7), "Disconnect fails closed")
 present = true
 for _, product in Config.products do
-	check(product.platformId == nil and product.kind == nil and not product.salesEnabled and not product.integrationReady, "No invented identity/type/sale")
+	check(Config.configured(product) and product.permanent == (product.kind == "Pass"), "Owner-supplied platform identity and type")
+	check(Config.byId(product.platformId, product.kind) == product, "Configured identity routes to its retained promise")
+	check(product.salesEnabled and product.integrationReady, "Validated catalog enabled")
 end
 check(#Config.products == 20, "Every retained D1 variant")
-check(Config.find("offline_double").defaultPrice == nil and Config.find("offline_double").grant == nil, "Offline undecided")
+check(Config.find("offline_double").defaultPrice == 49 and Config.find("offline_double").grant == nil, "Offline credit price approved; no legacy variable grant")
 check(Config.find("pack_huge").grant.coins == 1200000 and Config.find("starter").grant.tokens.Coins2_15 == 1, "D1 promises")
 check(Protocol.parse({ id = "a", action = "Purchase", product = "movement", userId = 42 }) == nil, "Spoofed identity denied")
 check(Protocol.parse({ id = "a", action = "Purchase", product = "movement", price = 1 }) == nil, "Price denied")
@@ -236,11 +238,17 @@ service.refresh(7)
 now = 40
 service.refresh(7)
 check(view.reserved.coins == 52500, "Late disconnected reward recovered")
-local noWrites = writes
-local disabled = Service.create(deps, Config.products)
+local disabledProducts = {}
+for _, product in Config.products do
+ local copy = table.clone(product)
+ copy.salesEnabled = false
+ table.insert(disabledProducts, copy)
+end
+local disabled = Service.create(deps, disabledProducts)
 disabled.add(7)
+local noWrites = writes
 disabled.request(7, { id = "off", action = "Purchase", product = "pack_small" })
-check(reply.reason == "Unconfigured" and writes == noWrites and prompts == before, "Production defaults never access paid store or prompt")
+check(reply.reason == "SalesDisabled" and writes == noWrites and prompts == before, "Configured closed catalog never creates a purchase or prompt")
 -- A platform exception leaves the native prompt uncertain, and cannot invite repurchase.
 deps.prompt = function() prompts += 1; error("uncertain platform prompt") end
 local uncertain = Service.create(deps, { pack })

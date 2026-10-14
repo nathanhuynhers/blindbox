@@ -21,6 +21,8 @@ export type Session = {
 	pendingSave: Types.Profile?,
 	pendingRelease: Types.Profile?,
 }
+local Lineage = require(script.Parent.PaidLineage)
+local Credits = require(script.Parent.OfflineCredits)
 local Storage = {}
 local studioPersistence = Settings.studioPersistence
 	or game:GetService("ServerScriptService"):GetAttribute("StudioPersistenceTest") == true
@@ -37,7 +39,7 @@ local function update(key: string, transform: (unknown) -> unknown): unknown
 		return transform(raw)
 	end)
 end
-function Storage.open(userId: number): (Session?, string)
+function Storage.open(userId: number, paidAllowed: (() -> boolean)?): (Session?, string)
 	local started = os.clock()
 	if preview then
 		return {
@@ -69,7 +71,11 @@ function Storage.open(userId: number): (Session?, string)
 			end
 			state.time = os.clock()
 			-- The lease guarantees one server per profile, so this runs once per join.
-			Rules.offline(state, os.time())
+			if paidAllowed then
+				Credits.promote(state)
+				Lineage.promote(state)
+			end
+			Rules.offline(state, os.time(), if paidAllowed then paidAllowed() else false)
 			return {
 				state = state,
 				handle = handle,
