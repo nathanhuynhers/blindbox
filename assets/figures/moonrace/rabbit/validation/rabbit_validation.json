@@ -1,0 +1,1489 @@
+{
+  "schema_version": 2,
+  "figure": "MoonRabbit",
+  "title": "Rabbit",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    1.9078,
+    1.6938,
+    3.2535
+  ],
+  "meshes": 27,
+  "triangles": 45800,
+  "materials": [
+    "MoonRabbit_Blush",
+    "MoonRabbit_BrowMat",
+    "MoonRabbit_CharmRed",
+    "MoonRabbit_CottonCream",
+    "MoonRabbit_EarPink",
+    "MoonRabbit_EyeDark",
+    "MoonRabbit_EyeShine",
+    "MoonRabbit_GoldDeep",
+    "MoonRabbit_GoldMat",
+    "MoonRabbit_Iris",
+    "MoonRabbit_Lash",
+    "MoonRabbit_MouthInk",
+    "MoonRabbit_NosePink",
+    "MoonRabbit_Pupil",
+    "MoonRabbit_Ribbon",
+    "MoonRabbit_Rose",
+    "MoonRabbit_White"
+  ],
+  "components": {
+    "MoonRabbit_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.9215532874061912,
+      "islands": 1,
+      "island_faces": [
+        6000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 6000,
+      "bounds": [
+        [
+          -0.6650402545928955,
+          -0.6298946142196655,
+          1.0400946140289307
+        ],
+        [
+          0.6650402545928955,
+          0.5299175381660461,
+          2.15952205657959
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Ears": {
+      "tris": 3000,
+      "verts": 1504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09965186573384716,
+      "islands": 2,
+      "island_faces": [
+        1494,
+        1506
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3000,
+      "bounds": [
+        [
+          -0.6594287753105164,
+          -0.12291690707206726,
+          1.9861795902252197
+        ],
+        [
+          0.6599198579788208,
+          0.1638014018535614,
+          3.2535102367401123
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_EarInner": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.020535937597885207,
+      "islands": 2,
+      "island_faces": [
+        746,
+        754
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -0.596906304359436,
+          -0.09873292595148087,
+          2.0784711837768555
+        ],
+        [
+          0.596906304359436,
+          0.08384168148040771,
+          3.130178213119507
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Eyes": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.011902253920917384,
+      "islands": 2,
+      "island_faces": [
+        596,
+        604
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.415345162153244,
+          -0.6291928887367249,
+          1.4277502298355103
+        ],
+        [
+          0.41573846340179443,
+          -0.44977980852127075,
+          1.8087639808654785
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.009162712261422904,
+      "islands": 2,
+      "island_faces": [
+        600,
+        600
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.39652687311172485,
+          -0.6297903060913086,
+          1.4506745338439941
+        ],
+        [
+          0.39652684330940247,
+          -0.4656338393688202,
+          1.7714885473251343
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Pupil": {
+      "tris": 600,
+      "verts": 304,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0023932687347950708,
+      "islands": 2,
+      "island_faces": [
+        294,
+        306
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 600,
+      "bounds": [
+        [
+          -0.33520886301994324,
+          -0.615892231464386,
+          1.5383739471435547
+        ],
+        [
+          0.33442795276641846,
+          -0.5026070475578308,
+          1.7076547145843506
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_EyeShine": {
+      "tris": 700,
+      "verts": 358,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0011789094584681243,
+      "islands": 4,
+      "island_faces": [
+        128,
+        128,
+        218,
+        226
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 700,
+      "bounds": [
+        [
+          -0.3548910319805145,
+          -0.6260061264038086,
+          1.5134319067001343
+        ],
+        [
+          0.3531549572944641,
+          -0.4830242693424225,
+          1.7353609800338745
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Lash": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.004526266493422666,
+      "islands": 2,
+      "island_faces": [
+        592,
+        608
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.444183886051178,
+          -0.6491623520851135,
+          1.6191725730895996
+        ],
+        [
+          0.44401779770851135,
+          -0.3836848735809326,
+          1.8408844470977783
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Brow": {
+      "tris": 500,
+      "verts": 254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0004348167624553254,
+      "islands": 2,
+      "island_faces": [
+        250,
+        250
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 500,
+      "bounds": [
+        [
+          -0.27318161725997925,
+          -0.5064284801483154,
+          1.8934268951416016
+        ],
+        [
+          0.27318161725997925,
+          -0.4074035584926605,
+          1.938202977180481
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Blush": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.002788190164955351,
+      "islands": 2,
+      "island_faces": [
+        400,
+        400
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.5003033876419067,
+          -0.5644562244415283,
+          1.3592299222946167
+        ],
+        [
+          0.500303328037262,
+          -0.4416726231575012,
+          1.4996657371520996
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0002502561391011175,
+      "islands": 1,
+      "island_faces": [
+        300
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 300,
+      "bounds": [
+        [
+          -0.05021224170923233,
+          -0.638884425163269,
+          1.4348630905151367
+        ],
+        [
+          0.05021224543452263,
+          -0.5692689418792725,
+          1.5051517486572266
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Mouth": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0003338005509463831,
+      "islands": 1,
+      "island_faces": [
+        500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 500,
+      "bounds": [
+        [
+          -0.08870171010494232,
+          -0.6140871047973633,
+          1.3335274457931519
+        ],
+        [
+          0.08852963149547577,
+          -0.5154989957809448,
+          1.4640733003616333
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Body": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.049197856124178,
+      "islands": 1,
+      "island_faces": [
+        5000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 5000,
+      "bounds": [
+        [
+          -0.7598305344581604,
+          -0.46987801790237427,
+          0.03130876645445824
+        ],
+        [
+          0.7601946592330933,
+          0.5807682275772095,
+          1.3273983001708984
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Arms": {
+      "tris": 2000,
+      "verts": 1004,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.12866342954772858,
+      "islands": 2,
+      "island_faces": [
+        998,
+        1002
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2000,
+      "bounds": [
+        [
+          -0.6436477303504944,
+          -0.7820919752120972,
+          0.598916232585907
+        ],
+        [
+          0.6440095901489258,
+          0.07017288357019424,
+          1.1505924463272095
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Feet": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.030871074812831727,
+      "islands": 2,
+      "island_faces": [
+        492,
+        508
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1000,
+      "bounds": [
+        [
+          -0.4800666868686676,
+          -0.6601034998893738,
+          0.0
+        ],
+        [
+          0.4799662232398987,
+          -0.17941151559352875,
+          0.17981654405593872
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Toes": {
+      "tris": 600,
+      "verts": 300,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.000774765324643421,
+      "islands": 2,
+      "island_faces": [
+        296,
+        304
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 600,
+      "bounds": [
+        [
+          -0.41676777601242065,
+          -0.6393215656280518,
+          0.0385870561003685
+        ],
+        [
+          0.41739800572395325,
+          -0.5371026396751404,
+          0.15659505128860474
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_BodyFlowers": {
+      "tris": 1200,
+      "verts": 600,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.002954410585925601,
+      "islands": 4,
+      "island_faces": [
+        256,
+        294,
+        300,
+        350
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.745959997177124,
+          0.14774243533611298,
+          0.27830153703689575
+        ],
+        [
+          0.7644209861755371,
+          0.49287912249565125,
+          0.8394970297813416
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Gold": {
+      "tris": 6000,
+      "verts": 3012,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.03595747601104606,
+      "islands": 8,
+      "island_faces": [
+        222,
+        224,
+        224,
+        242,
+        380,
+        474,
+        1930,
+        2304
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 6000,
+      "bounds": [
+        [
+          -0.9303826689720154,
+          -0.8934831619262695,
+          0.08287923038005829
+        ],
+        [
+          0.5792718529701233,
+          0.6999121904373169,
+          2.2300827503204346
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Swirl": {
+      "tris": 400,
+      "verts": 202,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00043253935554300597,
+      "islands": 1,
+      "island_faces": [
+        400
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 400,
+      "bounds": [
+        [
+          -0.06196913868188858,
+          -0.552022397518158,
+          1.9011688232421875
+        ],
+        [
+          0.06212809681892395,
+          -0.40684497356414795,
+          2.0513217449188232
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_CharmDisc": {
+      "tris": 800,
+      "verts": 402,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.007516245446089937,
+      "islands": 1,
+      "island_faces": [
+        800
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.219952791929245,
+          -0.8556623458862305,
+          0.499625027179718
+        ],
+        [
+          0.22013013064861298,
+          -0.7643672227859497,
+          0.9405666589736938
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Moon": {
+      "tris": 500,
+      "verts": 252,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0020383097661974057,
+      "islands": 1,
+      "island_faces": [
+        500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 500,
+      "bounds": [
+        [
+          -0.15010668337345123,
+          -0.8574510812759399,
+          0.5642110109329224
+        ],
+        [
+          0.1389188915491104,
+          -0.7638940215110779,
+          0.8651463389396667
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Flowers": {
+      "tris": 2000,
+      "verts": 1000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0072355808139012365,
+      "islands": 2,
+      "island_faces": [
+        996,
+        1004
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2000,
+      "bounds": [
+        [
+          -0.654547929763794,
+          -0.40770894289016724,
+          1.7018121480941772
+        ],
+        [
+          0.6531763076782227,
+          -0.20797306299209595,
+          2.0210416316986084
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Ribbons": {
+      "tris": 4000,
+      "verts": 2012,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.020985940583398633,
+      "islands": 6,
+      "island_faces": [
+        646,
+        646,
+        664,
+        666,
+        688,
+        690
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.9539061784744263,
+          -0.30570706725120544,
+          0.927123486995697
+        ],
+        [
+          0.9539061784744263,
+          -0.09194699674844742,
+          2.0494537353515625
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Collar": {
+      "tris": 1500,
+      "verts": 750,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.057713515413495696,
+      "islands": 1,
+      "island_faces": [
+        1500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -0.4993692636489868,
+          -0.5157062411308289,
+          0.9402050375938416
+        ],
+        [
+          0.5009404420852661,
+          0.47514477372169495,
+          1.218331217765808
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Bow": {
+      "tris": 1500,
+      "verts": 752,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.024388590055917505,
+      "islands": 1,
+      "island_faces": [
+        1500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -0.3937823176383972,
+          0.5005370378494263,
+          0.620205283164978
+        ],
+        [
+          0.3939138650894165,
+          0.6698591113090515,
+          1.2586960792541504
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Tassel": {
+      "tris": 800,
+      "verts": 402,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0007986676189231875,
+      "islands": 1,
+      "island_faces": [
+        800
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.04526497423648834,
+          0.6180397272109985,
+          0.6039082407951355
+        ],
+        [
+          0.04495010897517204,
+          0.7017140984535217,
+          0.8623113632202148
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonRabbit_Cotton": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.033321929665375574,
+      "islands": 1,
+      "island_faces": [
+        1000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1000,
+      "bounds": [
+        [
+          -0.1996617317199707,
+          0.3997677266597748,
+          0.10038242489099503
+        ],
+        [
+          0.19996826350688934,
+          0.8003199100494385,
+          0.5002167224884033
+        ]
+      ],
+      "materials": 1
+    }
+  },
+  "build": {
+    "MoonRabbit_Head": {
+      "active_blocks": 4637,
+      "blocks": 11088,
+      "grid": [
+        193,
+        177,
+        169
+      ],
+      "surface_error": 0.000800436653662473,
+      "retained_ratio": 0.02788052266686493,
+      "raw_tris": 215204,
+      "removed_faces": 0,
+      "seconds": 3.3
+    },
+    "MoonRabbit_Ears": {
+      "active_blocks": 4284,
+      "blocks": 11264,
+      "grid": [
+        257,
+        89,
+        257
+      ],
+      "surface_error": 0.0016069429693743587,
+      "retained_ratio": 0.018204767221709793,
+      "raw_tris": 164792,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "MoonRabbit_EarInner": {
+      "active_blocks": 5294,
+      "blocks": 23452,
+      "grid": [
+        329,
+        105,
+        353
+      ],
+      "surface_error": 0.0018535408889874816,
+      "retained_ratio": 0.013157894736842105,
+      "raw_tris": 114000,
+      "removed_faces": 0,
+      "seconds": 2.0
+    },
+    "MoonRabbit_Eyes": {
+      "active_blocks": 2190,
+      "blocks": 8151,
+      "grid": [
+        265,
+        105,
+        153
+      ],
+      "surface_error": 0.001615832094103098,
+      "retained_ratio": 0.012844665182394245,
+      "raw_tris": 93424,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MoonRabbit_Iris": {
+      "active_blocks": 1714,
+      "blocks": 7854,
+      "grid": [
+        265,
+        113,
+        137
+      ],
+      "surface_error": 0.0013066701358184218,
+      "retained_ratio": 0.017035775127768313,
+      "raw_tris": 70440,
+      "removed_faces": 0,
+      "seconds": 1.4
+    },
+    "MoonRabbit_Pupil": {
+      "active_blocks": 905,
+      "blocks": 6240,
+      "grid": [
+        257,
+        105,
+        121
+      ],
+      "surface_error": 0.0010148435831069946,
+      "retained_ratio": 0.019369834710743803,
+      "raw_tris": 30976,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MoonRabbit_EyeShine": {
+      "active_blocks": 1079,
+      "blocks": 12464,
+      "grid": [
+        329,
+        129,
+        153
+      ],
+      "surface_error": 0.0011320716002956033,
+      "retained_ratio": 0.022986995928017864,
+      "raw_tris": 30452,
+      "removed_faces": 0,
+      "seconds": 0.7
+    },
+    "MoonRabbit_Lash": {
+      "active_blocks": 2639,
+      "blocks": 19646,
+      "grid": [
+        377,
+        177,
+        153
+      ],
+      "surface_error": 0.0017195570981130004,
+      "retained_ratio": 0.011204481792717087,
+      "raw_tris": 107100,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "MoonRabbit_Brow": {
+      "active_blocks": 508,
+      "blocks": 3042,
+      "grid": [
+        209,
+        105,
+        73
+      ],
+      "surface_error": 0.0010710303904488683,
+      "retained_ratio": 0.0594106463878327,
+      "raw_tris": 8416,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "MoonRabbit_Blush": {
+      "active_blocks": 690,
+      "blocks": 2790,
+      "grid": [
+        249,
+        81,
+        73
+      ],
+      "surface_error": 0.0011380752548575401,
+      "retained_ratio": 0.046707146193367584,
+      "raw_tris": 17128,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MoonRabbit_Nose": {
+      "active_blocks": 148,
+      "blocks": 891,
+      "grid": [
+        89,
+        73,
+        73
+      ],
+      "surface_error": 0.0008224733755923808,
+      "retained_ratio": 0.08073196986006459,
+      "raw_tris": 3716,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MoonRabbit_Mouth": {
+      "active_blocks": 457,
+      "blocks": 3808,
+      "grid": [
+        137,
+        113,
+        129
+      ],
+      "surface_error": 0.001182537991553545,
+      "retained_ratio": 0.03484320557491289,
+      "raw_tris": 14350,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MoonRabbit_Body": {
+      "active_blocks": 5463,
+      "blocks": 13440,
+      "grid": [
+        225,
+        161,
+        193
+      ],
+      "surface_error": 0.0014032300096005201,
+      "retained_ratio": 0.02016991133306978,
+      "raw_tris": 247894,
+      "removed_faces": 0,
+      "seconds": 4.0
+    },
+    "MoonRabbit_Arms": {
+      "active_blocks": 3416,
+      "blocks": 11264,
+      "grid": [
+        257,
+        177,
+        129
+      ],
+      "surface_error": 0.002355665899813175,
+      "retained_ratio": 0.012650861523669761,
+      "raw_tris": 158092,
+      "removed_faces": 0,
+      "seconds": 7.9
+    },
+    "MoonRabbit_Feet": {
+      "active_blocks": 1384,
+      "blocks": 3510,
+      "grid": [
+        209,
+        121,
+        73
+      ],
+      "surface_error": 0.001977663952857256,
+      "retained_ratio": 0.01875750300120048,
+      "raw_tris": 53312,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "MoonRabbit_Toes": {
+      "active_blocks": 975,
+      "blocks": 10560,
+      "grid": [
+        353,
+        129,
+        121
+      ],
+      "surface_error": 0.002088820096105337,
+      "retained_ratio": 0.017097914054485353,
+      "raw_tris": 35092,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "MoonRabbit_BodyFlowers": {
+      "active_blocks": 2014,
+      "blocks": 56832,
+      "grid": [
+        593,
+        193,
+        257
+      ],
+      "surface_error": 0.00230496097356081,
+      "retained_ratio": 0.01731701685522974,
+      "raw_tris": 69296,
+      "removed_faces": 0,
+      "seconds": 4.6
+    },
+    "MoonRabbit_Gold": {
+      "active_blocks": 3558,
+      "blocks": 88560,
+      "grid": [
+        321,
+        329,
+        433
+      ],
+      "surface_error": 0.0018194867298007011,
+      "retained_ratio": 0.04120539515973958,
+      "raw_tris": 145612,
+      "removed_faces": 0,
+      "seconds": 4.0
+    },
+    "MoonRabbit_Swirl": {
+      "active_blocks": 447,
+      "blocks": 4046,
+      "grid": [
+        113,
+        137,
+        137
+      ],
+      "surface_error": 0.001425445661880076,
+      "retained_ratio": 0.02409058058299205,
+      "raw_tris": 16604,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "MoonRabbit_CharmDisc": {
+      "active_blocks": 1262,
+      "blocks": 5082,
+      "grid": [
+        169,
+        89,
+        177
+      ],
+      "surface_error": 0.0009421118884347379,
+      "retained_ratio": 0.015275337966852516,
+      "raw_tris": 52372,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MoonRabbit_Moon": {
+      "active_blocks": 1156,
+      "blocks": 6468,
+      "grid": [
+        169,
+        113,
+        177
+      ],
+      "surface_error": 0.0013354566181078553,
+      "retained_ratio": 0.014305333028152895,
+      "raw_tris": 34952,
+      "removed_faces": 0,
+      "seconds": 0.5
+    },
+    "MoonRabbit_Flowers": {
+      "active_blocks": 1559,
+      "blocks": 12096,
+      "grid": [
+        385,
+        113,
+        145
+      ],
+      "surface_error": 0.0016552939778193831,
+      "retained_ratio": 0.030226091161890945,
+      "raw_tris": 66168,
+      "removed_faces": 0,
+      "seconds": 1.5
+    },
+    "MoonRabbit_Ribbons": {
+      "source": "mesh",
+      "surface_error": 0.00013105645484756678,
+      "retained_ratio": 0.8960573476702509,
+      "raw_tris": 4464,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MoonRabbit_Collar": {
+      "active_blocks": 2429,
+      "blocks": 7436,
+      "grid": [
+        209,
+        209,
+        89
+      ],
+      "surface_error": 0.002611172152683139,
+      "retained_ratio": 0.013256973167886309,
+      "raw_tris": 113148,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "MoonRabbit_Bow": {
+      "active_blocks": 1858,
+      "blocks": 5940,
+      "grid": [
+        217,
+        81,
+        177
+      ],
+      "surface_error": 0.0020726523362100124,
+      "retained_ratio": 0.01917275934352472,
+      "raw_tris": 78236,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "MoonRabbit_Tassel": {
+      "active_blocks": 340,
+      "blocks": 1485,
+      "grid": [
+        89,
+        73,
+        121
+      ],
+      "surface_error": 0.0011944775469601154,
+      "retained_ratio": 0.0759589821496392,
+      "raw_tris": 10532,
+      "removed_faces": 0,
+      "seconds": 0.4
+    },
+    "MoonRabbit_Cotton": {
+      "active_blocks": 913,
+      "blocks": 2744,
+      "grid": [
+        113,
+        113,
+        113
+      ],
+      "surface_error": 0.0013279503909870982,
+      "retained_ratio": 0.023925734520049764,
+      "raw_tris": 41796,
+      "removed_faces": 0,
+      "seconds": 0.5
+    }
+  },
+  "glb": {
+    "bytes": 1430152,
+    "sha256": "049ad07b96e99c7b89d51a53e87a6641d4f267a9ba2068fba4092f2ee828ebfc",
+    "nodes": [
+      "MoonRabbit_Arms",
+      "MoonRabbit_Blush",
+      "MoonRabbit_Body",
+      "MoonRabbit_BodyFlowers",
+      "MoonRabbit_Bow",
+      "MoonRabbit_Brow",
+      "MoonRabbit_CharmDisc",
+      "MoonRabbit_Collar",
+      "MoonRabbit_Cotton",
+      "MoonRabbit_EarInner",
+      "MoonRabbit_Ears",
+      "MoonRabbit_Eyes",
+      "MoonRabbit_EyeShine",
+      "MoonRabbit_Feet",
+      "MoonRabbit_Flowers",
+      "MoonRabbit_Gold",
+      "MoonRabbit_Head",
+      "MoonRabbit_Iris",
+      "MoonRabbit_Lash",
+      "MoonRabbit_Moon",
+      "MoonRabbit_Mouth",
+      "MoonRabbit_Nose",
+      "MoonRabbit_Pupil",
+      "MoonRabbit_Ribbons",
+      "MoonRabbit_Swirl",
+      "MoonRabbit_Tassel",
+      "MoonRabbit_Toes",
+      "MoonRabbit"
+    ],
+    "meshes": 27,
+    "materials": 17,
+    "images": 17,
+    "textures": 17,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "catalog": "moon.rabbit",
+  "root": "MoonRabbit",
+  "face": "MoonRabbit_Eyes",
+  "glass": [],
+  "constraints": {
+    "MoonRabbit_Head": {
+      "expected_islands": 1,
+      "max_surface_error": 0.02,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonRabbit_Ears": {
+      "expected_islands": 2,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonRabbit_EarInner": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonRabbit_Eyes": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonRabbit_Iris": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonRabbit_Pupil": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.0035
+    },
+    "MoonRabbit_EyeShine": {
+      "expected_islands": 4,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonRabbit_Lash": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonRabbit_Brow": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonRabbit_Blush": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonRabbit_Nose": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonRabbit_Mouth": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonRabbit_Body": {
+      "expected_islands": 1,
+      "max_surface_error": 0.02,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonRabbit_Arms": {
+      "expected_islands": 2,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonRabbit_Feet": {
+      "expected_islands": 2,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonRabbit_Toes": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonRabbit_BodyFlowers": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonRabbit_Gold": {
+      "expected_islands": null,
+      "max_surface_error": 0.013749999999999998,
+      "min_feature": null,
+      "voxel": 0.0055
+    },
+    "MoonRabbit_Swirl": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonRabbit_CharmDisc": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonRabbit_Moon": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonRabbit_Flowers": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonRabbit_Ribbons": {
+      "expected_islands": 6,
+      "max_surface_error": 0.006,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonRabbit_Collar": {
+      "expected_islands": 1,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonRabbit_Bow": {
+      "expected_islands": 1,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonRabbit_Tassel": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonRabbit_Cotton": {
+      "expected_islands": 1,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    }
+  },
+  "reimport": {
+    "meshes": 27,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "previews": {
+    "fidelity_source": "exported_reimported_glb",
+    "fidelity_sha256": "049ad07b96e99c7b89d51a53e87a6641d4f267a9ba2068fba4092f2ee828ebfc",
+    "fidelity_views": [
+      "rabbit_fidelity_front.png",
+      "rabbit_fidelity_three_quarter.png",
+      "rabbit_fidelity_side.png",
+      "rabbit_fidelity_back.png"
+    ],
+    "resolution": 1000,
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "disclaimer": "Blender production fidelity preview; not a Roblox screenshot",
+    "beauty_views": [
+      "rabbit_beauty_front.png",
+      "rabbit_beauty_three_quarter.png",
+      "rabbit_beauty_side.png",
+      "rabbit_beauty_back.png"
+    ]
+  }
+}

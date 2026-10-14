@@ -32,6 +32,18 @@ class BlenderTests(unittest.TestCase):
         self.assertAlmostEqual(packed.pixels[1], 0.38, delta=1 / 255)
         self.assertAlmostEqual(packed.pixels[2], 0, places=5)
 
+    def test_identical_slivers_are_not_a_surface_change(self):
+        # A long obtuse sliver beside its neighbours: BVH sampling alone reports a nonzero self-distance.
+        verts = [(0, 0, 0), (0.081, 0, 0), (0.0645, 0.0002, 0), (0.03, -0.02, 0), (0.05, 0.03, 0.001)]
+        faces = [(0, 1, 2), (0, 3, 1), (0, 2, 4), (2, 1, 4)]
+        a, b = bpy.data.meshes.new("A"), bpy.data.meshes.new("B")
+        a.from_pydata(verts, [], faces)
+        b.from_pydata(verts[::-1], [], [tuple(4 - i for i in f[::-1]) for f in faces])
+        self.assertEqual(build.face_set(a), build.face_set(b))
+        moved = bpy.data.meshes.new("Moved")
+        moved.from_pydata([verts[0], verts[1], (0.0645, 0.0005, 0), verts[3], verts[4]], [], faces)
+        self.assertNotEqual(build.face_set(a), build.face_set(moved))
+
     def test_excessive_decimation_and_clipped_bounds_fail(self):
         col = bpy.context.scene.collection
         c = Comp("OverOptimized", lambda p: sphere(p, (0, 0, 0), 0.4), "m",
@@ -42,6 +54,15 @@ class BlenderTests(unittest.TestCase):
                  bounds=((-0.3,)*3, (0.3,)*3), voxel=0.03)
         with self.assertRaisesRegex(ValueError, "touches sampling bounds"):
             build.build_object(c, c.bounds, col)
+
+    def test_object_factory_mesh_takes_component_name(self):
+        def source():
+            bpy.ops.mesh.primitive_cube_add(size=1)
+            bpy.context.object.data.name = "ImportedMesh"
+            return bpy.context.object
+        col = bpy.data.collections.new("factory-name")
+        obj, _ = build.build_object(Comp("Named_Body", None, "m", mesh=source, tris=100), None, col)
+        self.assertEqual(obj.data.name, "Named_Body")
 
     def test_procedural_and_high_to_low_bakes_survive_export(self):
         bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.5)

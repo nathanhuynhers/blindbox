@@ -346,6 +346,110 @@ local figures: { Types.Figure } = {
 		color = Color3.fromRGB(232, 160, 180),
 		shape = "round",
 	},
+	{
+		id = "moon.rat",
+		name = "Rat",
+		collection = "moon",
+		rarity = "Common",
+		color = Color3.fromRGB(122, 109, 110),
+		shape = "round",
+	},
+	{
+		id = "moon.ox",
+		name = "Ox",
+		collection = "moon",
+		rarity = "Common",
+		color = Color3.fromRGB(140, 95, 70),
+		shape = "round",
+	},
+	{
+		id = "moon.tiger",
+		name = "Tiger",
+		collection = "moon",
+		rarity = "Legendary",
+		color = Color3.fromRGB(238, 139, 47),
+		shape = "round",
+	},
+	{
+		id = "moon.rabbit",
+		name = "Rabbit",
+		collection = "moon",
+		rarity = "Common",
+		color = Color3.fromRGB(243, 164, 158),
+		shape = "round",
+	},
+	{
+		id = "moon.dragon",
+		name = "Dragon",
+		collection = "moon",
+		rarity = "Legendary",
+		color = Color3.fromRGB(47, 135, 137),
+		shape = "round",
+	},
+	{
+		id = "moon.snake",
+		name = "Snake",
+		collection = "moon",
+		rarity = "Uncommon",
+		color = Color3.fromRGB(51, 128, 123),
+		shape = "round",
+	},
+	{
+		id = "moon.horse",
+		name = "Horse",
+		collection = "moon",
+		rarity = "Uncommon",
+		color = Color3.fromRGB(140, 84, 52),
+		shape = "round",
+	},
+	{
+		id = "moon.goat",
+		name = "Goat",
+		collection = "moon",
+		rarity = "Common",
+		color = Color3.fromRGB(232, 214, 190),
+		shape = "round",
+	},
+	{
+		id = "moon.monkey",
+		name = "Monkey",
+		collection = "moon",
+		rarity = "Uncommon",
+		color = Color3.fromRGB(122, 74, 45),
+		shape = "round",
+	},
+	{
+		id = "moon.rooster",
+		name = "Rooster",
+		collection = "moon",
+		rarity = "Uncommon",
+		color = Color3.fromRGB(216, 50, 46),
+		shape = "round",
+	},
+	{
+		id = "moon.dog",
+		name = "Dog",
+		collection = "moon",
+		rarity = "Rare",
+		color = Color3.fromRGB(228, 154, 88),
+		shape = "round",
+	},
+	{
+		id = "moon.pig",
+		name = "Pig",
+		collection = "moon",
+		rarity = "Rare",
+		color = Color3.fromRGB(248, 201, 190),
+		shape = "round",
+	},
+	{
+		id = "moon.cat",
+		name = "Cat",
+		collection = "moon",
+		rarity = "Mythical",
+		color = Color3.fromRGB(43, 45, 77),
+		shape = "round",
+	},
 }
 local byId: { [string]: Types.Figure } = {}
 for _, figure in figures do
@@ -385,11 +489,21 @@ local collections = {
 		description = "Little lights for kinder tomorrows",
 		color = Color3.fromRGB(143, 167, 207),
 	},
+	{
+		id = "moon",
+		name = "Moonrace",
+		description = "Zodiac racers of the Lunar New Year, and the lost thirteenth",
+		color = Color3.fromRGB(200, 55, 45),
+		-- Placeholder until release: shown as "Coming soon", never sold. Owned figures stay valid.
+		comingSoon = true,
+	},
 }
 local collectionIds: { [string]: boolean } = {}
+local comingSoon: { [string]: boolean } = {}
 for _, collection in collections do
 	assert(not collectionIds[collection.id], "Duplicate collection ID")
 	collectionIds[collection.id] = true
+	comingSoon[collection.id] = (collection :: any).comingSoon == true
 end
 for _, figure in figures do
 	assert(collectionIds[figure.collection], "Missing collection")
@@ -399,4 +513,5 @@ return table.freeze({
 	byId = table.freeze(byId),
 	collections = collections,
 	collectionIds = collectionIds,
+	comingSoon = table.freeze(comingSoon),
 })

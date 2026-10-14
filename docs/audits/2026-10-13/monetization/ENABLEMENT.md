@@ -27,3 +27,9 @@ Publishing is a separate release activity and has not been performed. PASS: all 
 To release: publish this checked Studio candidate to Place 94818553489889, then restart existing servers so older schema readers are retired. Perform a live join/rejoin and new-buyer pass check after release; do not spend Robux without the account owner’s approval. No publishing or production data mutation has been performed by this task.
 
 PASS: clean final-candidate Studio startup with all 20 catalog products enabled, paid effect gates enabled, original Studio preview configuration, no receipt/state QA BindableFunctions and an empty runtime console. Final sources were rechecked after stopping in Edit mode.
+
+## Master integration — 2026-10-13
+
+Integrated master’s Moonrace coming-soon catalog and refund with the enabled purchase aggregate. Storage preserves credit/lineage promotion, current-policy offline calculation and the existing refund-on-acquisition. Refunds retain the removed copies’ earned/paid provenance; their prior wallet cap remains bounded. The merged full regression suite passes, including 70 lineage checks (nine new refund/migration/replay cases), existing coming-soon purchase guards and the incoming Moonrace tests. Pinned tool provisioning, Wally install, formatting, lint (zero errors/warnings), type analysis, Rojo sourcemap/build and diff checks pass.
+
+NOT RUN: a new native post-merge refund/acquisition test; Studio MCP reports no connected instances. Earlier native monetization checks above still describe the pre-merge candidate. No figure assets were reauthored or uploaded, no production profiles were mutated, and no place was published. Sync the merged master source into Studio before publishing; the prior Studio candidate does not include the later coming-soon/refund integration.

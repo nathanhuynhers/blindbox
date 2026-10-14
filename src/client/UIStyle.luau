@@ -127,6 +127,7 @@ Style.collections = table.freeze({
 	concept = collection(0xA84C70, 0xF7E1EA, "C", "Concepts", Manifest.Collection.Concepts.Emblem),
 	echo = collection(0xC46A2C, 0xFCEADB, "TE", "Echoes", Manifest.Collection.TenderEchoes.Emblem),
 	star = collection(0x4A5BB8, 0xE1E5F8, "WS", "Stars", Manifest.Collection.WeAreAllStars.Emblem),
+	moon = collection(0xB8322A, 0xFBE6DC, "MR", "Moonrace", Manifest.Collection.Moonrace.Emblem),
 }) :: { [string]: Collection }
 local neutral: Collection = table.freeze({
 	color = hex(0x6B4EE6),

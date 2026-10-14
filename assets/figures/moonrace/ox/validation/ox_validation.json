@@ -1,0 +1,1499 @@
+{
+  "schema_version": 2,
+  "figure": "MoonOx",
+  "title": "Ox",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.5019,
+    2.9287,
+    3.2649
+  ],
+  "meshes": 27,
+  "triangles": 60998,
+  "materials": [
+    "MoonOx_Blush",
+    "MoonOx_BrowMat",
+    "MoonOx_Brown",
+    "MoonOx_EarPink",
+    "MoonOx_EyeDark",
+    "MoonOx_EyeShine",
+    "MoonOx_GoldMat",
+    "MoonOx_Hide",
+    "MoonOx_Hoof",
+    "MoonOx_Horn",
+    "MoonOx_Iris",
+    "MoonOx_Lash",
+    "MoonOx_Leather",
+    "MoonOx_MouthInk",
+    "MoonOx_MuzzleCream",
+    "MoonOx_NosePink",
+    "MoonOx_NostrilMat",
+    "MoonOx_Orange",
+    "MoonOx_Pupil",
+    "MoonOx_Red",
+    "MoonOx_Sage"
+  ],
+  "components": {
+    "MoonOx_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 1.2150926711997867,
+      "islands": 1,
+      "island_faces": [
+        6000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 6000,
+      "bounds": [
+        [
+          -0.7654933333396912,
+          -1.4924579858779907,
+          1.4435304403305054
+        ],
+        [
+          0.7651219367980957,
+          -0.20001377165317535,
+          2.660008668899536
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Muzzle": {
+      "tris": 3000,
+      "verts": 1502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.08219489693074905,
+      "islands": 1,
+      "island_faces": [
+        3000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3000,
+      "bounds": [
+        [
+          -0.7201182246208191,
+          -1.5009009838104248,
+          1.4411859512329102
+        ],
+        [
+          0.7204031944274902,
+          -0.8765160441398621,
+          2.177142381668091
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Ears": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05597509226508325,
+      "islands": 2,
+      "island_faces": [
+        750,
+        750
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -1.2510148286819458,
+          -0.779400646686554,
+          1.8170229196548462
+        ],
+        [
+          1.250879168510437,
+          -0.5402300953865051,
+          2.181959390640259
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_EarInner": {
+      "tris": 1000,
+      "verts": 504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.014400617432501829,
+      "islands": 2,
+      "island_faces": [
+        498,
+        502
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1000,
+      "bounds": [
+        [
+          -1.2020652294158936,
+          -0.7938064932823181,
+          1.857844591140747
+        ],
+        [
+          1.202065110206604,
+          -0.6661187410354614,
+          2.122204542160034
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Horns": {
+      "tris": 3384,
+      "verts": 1696,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.13102160096950458,
+      "islands": 2,
+      "island_faces": [
+        1692,
+        1692
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3384,
+      "bounds": [
+        [
+          -1.2506024837493896,
+          -0.8877630233764648,
+          2.270052671432495
+        ],
+        [
+          1.2506024837493896,
+          -0.5522369742393494,
+          3.26493239402771
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Eyes": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0077515917765253,
+      "islands": 2,
+      "island_faces": [
+        596,
+        604
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.45126619935035706,
+          -1.4364805221557617,
+          1.9835220575332642
+        ],
+        [
+          0.45126619935035706,
+          -1.2314258813858032,
+          2.2589645385742188
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.006374155917723952,
+      "islands": 2,
+      "island_faces": [
+        598,
+        602
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.4365982413291931,
+          -1.43325936794281,
+          2.0022075176239014
+        ],
+        [
+          0.43659818172454834,
+          -1.2477855682373047,
+          2.2568609714508057
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Pupil": {
+      "tris": 600,
+      "verts": 304,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0017344359507613812,
+      "islands": 2,
+      "island_faces": [
+        298,
+        302
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 600,
+      "bounds": [
+        [
+          -0.38644033670425415,
+          -1.4079636335372925,
+          2.0706355571746826
+        ],
+        [
+          0.3868411183357239,
+          -1.2825838327407837,
+          2.222745418548584
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_EyeShine": {
+      "tris": 700,
+      "verts": 358,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0008442747746286025,
+      "islands": 4,
+      "island_faces": [
+        136,
+        136,
+        212,
+        216
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 700,
+      "bounds": [
+        [
+          -0.3974664807319641,
+          -1.429015040397644,
+          2.0528271198272705
+        ],
+        [
+          0.4062091112136841,
+          -1.2584593296051025,
+          2.2434747219085693
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Lash": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0030478448059012004,
+      "islands": 2,
+      "island_faces": [
+        596,
+        604
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.47538289427757263,
+          -1.4377374649047852,
+          2.1310911178588867
+        ],
+        [
+          0.47457990050315857,
+          -1.1752797365188599,
+          2.2907509803771973
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Brow": {
+      "tris": 500,
+      "verts": 254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00035086502858491396,
+      "islands": 2,
+      "island_faces": [
+        250,
+        250
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 500,
+      "bounds": [
+        [
+          -0.32495102286338806,
+          -1.2768491506576538,
+          2.363466739654541
+        ],
+        [
+          0.32495102286338806,
+          -1.1660747528076172,
+          2.4191701412200928
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Blush": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.004553033814935794,
+      "islands": 2,
+      "island_faces": [
+        394,
+        406
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.6054620146751404,
+          -1.3960890769958496,
+          1.826180100440979
+        ],
+        [
+          0.6054620146751404,
+          -1.1884949207305908,
+          2.0085322856903076
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Nose": {
+      "tris": 800,
+      "verts": 402,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.005440260958422941,
+      "islands": 1,
+      "island_faces": [
+        800
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.21984374523162842,
+          -1.5126259326934814,
+          1.788318395614624
+        ],
+        [
+          0.21991848945617676,
+          -1.412901759147644,
+          2.009995460510254
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Nostrils": {
+      "tris": 400,
+      "verts": 204,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0005907752053686541,
+      "islands": 2,
+      "island_faces": [
+        196,
+        204
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 400,
+      "bounds": [
+        [
+          -0.1413472592830658,
+          -1.5179095268249512,
+          1.8761762380599976
+        ],
+        [
+          0.14138926565647125,
+          -1.4297633171081543,
+          1.9424657821655273
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Mouth": {
+      "tris": 600,
+      "verts": 302,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00043125962656670675,
+      "islands": 1,
+      "island_faces": [
+        600
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 600,
+      "bounds": [
+        [
+          -0.14593768119812012,
+          -1.4623745679855347,
+          1.6471763849258423
+        ],
+        [
+          0.1459376960992813,
+          -1.3919779062271118,
+          1.7456631660461426
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Body": {
+      "tris": 7000,
+      "verts": 3502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 3.50686922939363,
+      "islands": 1,
+      "island_faces": [
+        7000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 7000,
+      "bounds": [
+        [
+          -0.840696394443512,
+          -1.1202815771102905,
+          0.2200271636247635
+        ],
+        [
+          0.8402188420295715,
+          1.2300996780395508,
+          2.1498630046844482
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Patches": {
+      "tris": 3000,
+      "verts": 1514,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.048146773317733066,
+      "islands": 7,
+      "island_faces": [
+        232,
+        286,
+        332,
+        412,
+        446,
+        622,
+        670
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3000,
+      "bounds": [
+        [
+          -0.8301680088043213,
+          -0.6770500540733337,
+          0.42006537318229675
+        ],
+        [
+          0.8467974066734314,
+          1.2364205121994019,
+          1.3616914749145508
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Bib": {
+      "tris": 2000,
+      "verts": 1002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05786818076423726,
+      "islands": 1,
+      "island_faces": [
+        2000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2000,
+      "bounds": [
+        [
+          -0.41949793696403503,
+          -1.0428045988082886,
+          0.4676918685436249
+        ],
+        [
+          0.4198397397994995,
+          -0.5619366765022278,
+          1.373016119003296
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Hooves": {
+      "tris": 3000,
+      "verts": 1508,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.22469227986240956,
+      "islands": 4,
+      "island_faces": [
+        738,
+        752,
+        752,
+        758
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3000,
+      "bounds": [
+        [
+          -0.8301292061805725,
+          -0.7485219836235046,
+          0.0
+        ],
+        [
+          0.8298478126525879,
+          0.9899863600730896,
+          0.2600235044956207
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Collar": {
+      "tris": 1500,
+      "verts": 750,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04598438266768888,
+      "islands": 1,
+      "island_faces": [
+        1500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -0.5503473877906799,
+          -1.1740386486053467,
+          1.2649091482162476
+        ],
+        [
+          0.5494528412818909,
+          -0.18588271737098694,
+          1.8559255599975586
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Gold": {
+      "tris": 7998,
+      "verts": 4021,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.06517707679209615,
+      "islands": 18,
+      "island_faces": [
+        164,
+        166,
+        168,
+        170,
+        170,
+        172,
+        174,
+        176,
+        176,
+        236,
+        240,
+        246,
+        246,
+        298,
+        1014,
+        1022,
+        1576,
+        1584
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 7998,
+      "bounds": [
+        [
+          -0.6907011866569519,
+          -1.3496077060699463,
+          0.07747010886669159
+        ],
+        [
+          0.6913891434669495,
+          1.2334595918655396,
+          2.7166450023651123
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Cloth": {
+      "tris": 5000,
+      "verts": 2502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.43114281523768205,
+      "islands": 1,
+      "island_faces": [
+        5000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 5000,
+      "bounds": [
+        [
+          -0.9349735379219055,
+          -0.7399840354919434,
+          0.659853994846344
+        ],
+        [
+          0.934750497341156,
+          0.9799997806549072,
+          2.246295928955078
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_ClothTrim": {
+      "tris": 3000,
+      "verts": 1500,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07941300806699986,
+      "islands": 1,
+      "island_faces": [
+        3000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3000,
+      "bounds": [
+        [
+          -0.9193188548088074,
+          -0.7399969100952148,
+          0.6595925688743591
+        ],
+        [
+          0.9195464849472046,
+          0.979994535446167,
+          2.260418176651001
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Bundles": {
+      "tris": 2000,
+      "verts": 1006,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09839437637245,
+      "islands": 3,
+      "island_faces": [
+        594,
+        698,
+        708
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2000,
+      "bounds": [
+        [
+          -1.0803066492080688,
+          -0.7280557155609131,
+          1.249147653579712
+        ],
+        [
+          1.0808440446853638,
+          1.2214678525924683,
+          1.7564642429351807
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Tassels": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0065520086694365,
+      "islands": 2,
+      "island_faces": [
+        748,
+        752
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -1.0469897985458374,
+          -0.48486238718032837,
+          0.8160268664360046
+        ],
+        [
+          1.0470584630966187,
+          -0.3551376461982727,
+          1.253541350364685
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Tail": {
+      "tris": 1116,
+      "verts": 560,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.004700896073401645,
+      "islands": 1,
+      "island_faces": [
+        1116
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.04929431527853012,
+          1.1305166482925415,
+          0.5150265097618103
+        ],
+        [
+          0.07449090480804443,
+          1.3760063648223877,
+          1.2995091676712036
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonOx_Tuft": {
+      "tris": 1000,
+      "verts": 502,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.012404822538862596,
+      "islands": 1,
+      "island_faces": [
+        1000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1000,
+      "bounds": [
+        [
+          -0.13069169223308563,
+          1.1402931213378906,
+          0.28949400782585144
+        ],
+        [
+          0.17031142115592957,
+          1.4107425212860107,
+          0.7193477749824524
+        ]
+      ],
+      "materials": 1
+    }
+  },
+  "build": {
+    "MoonOx_Head": {
+      "active_blocks": 5612,
+      "blocks": 15456,
+      "grid": [
+        225,
+        193,
+        185
+      ],
+      "surface_error": 0.0007632282213307917,
+      "retained_ratio": 0.02284861270839839,
+      "raw_tris": 262598,
+      "removed_faces": 0,
+      "seconds": 8.3
+    },
+    "MoonOx_Muzzle": {
+      "active_blocks": 6420,
+      "blocks": 22704,
+      "grid": [
+        345,
+        177,
+        193
+      ],
+      "surface_error": 0.0023356459569185972,
+      "retained_ratio": 0.008512376996152406,
+      "raw_tris": 352428,
+      "removed_faces": 0,
+      "seconds": 14.4
+    },
+    "MoonOx_Ears": {
+      "active_blocks": 2083,
+      "blocks": 7410,
+      "grid": [
+        457,
+        81,
+        105
+      ],
+      "surface_error": 0.0017379381461068988,
+      "retained_ratio": 0.017698697375873134,
+      "raw_tris": 84752,
+      "removed_faces": 0,
+      "seconds": 2.7
+    },
+    "MoonOx_EarInner": {
+      "active_blocks": 1816,
+      "blocks": 8970,
+      "grid": [
+        553,
+        81,
+        105
+      ],
+      "surface_error": 0.0020220179576426744,
+      "retained_ratio": 0.017509455105757108,
+      "raw_tris": 57112,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "MoonOx_Horns": {
+      "source": "mesh",
+      "surface_error": 4.951133405484143e-07,
+      "retained_ratio": 1.0,
+      "raw_tris": 3384,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "MoonOx_Eyes": {
+      "active_blocks": 1592,
+      "blocks": 8568,
+      "grid": [
+        289,
+        113,
+        137
+      ],
+      "surface_error": 0.001319817965850234,
+      "retained_ratio": 0.017303033798592687,
+      "raw_tris": 69352,
+      "removed_faces": 0,
+      "seconds": 4.0
+    },
+    "MoonOx_Iris": {
+      "active_blocks": 1338,
+      "blocks": 8568,
+      "grid": [
+        289,
+        113,
+        137
+      ],
+      "surface_error": 0.001255567418411374,
+      "retained_ratio": 0.02138884927990874,
+      "raw_tris": 56104,
+      "removed_faces": 0,
+      "seconds": 2.4
+    },
+    "MoonOx_Pupil": {
+      "active_blocks": 762,
+      "blocks": 7410,
+      "grid": [
+        305,
+        105,
+        121
+      ],
+      "surface_error": 0.0011150494683533907,
+      "retained_ratio": 0.023066277102875597,
+      "raw_tris": 26012,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MoonOx_EyeShine": {
+      "active_blocks": 950,
+      "blocks": 15884,
+      "grid": [
+        353,
+        153,
+        153
+      ],
+      "surface_error": 0.0010704982560127974,
+      "retained_ratio": 0.02717391304347826,
+      "raw_tris": 25760,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "MoonOx_Lash": {
+      "active_blocks": 2014,
+      "blocks": 19074,
+      "grid": [
+        409,
+        177,
+        137
+      ],
+      "surface_error": 0.0013524157693609595,
+      "retained_ratio": 0.01461703371662444,
+      "raw_tris": 82096,
+      "removed_faces": 0,
+      "seconds": 3.1
+    },
+    "MoonOx_Brow": {
+      "active_blocks": 538,
+      "blocks": 4030,
+      "grid": [
+        249,
+        105,
+        81
+      ],
+      "surface_error": 0.0012460254365578294,
+      "retained_ratio": 0.06364562118126273,
+      "raw_tris": 7856,
+      "removed_faces": 0,
+      "seconds": 0.6
+    },
+    "MoonOx_Blush": {
+      "active_blocks": 878,
+      "blocks": 5291,
+      "grid": [
+        297,
+        105,
+        89
+      ],
+      "surface_error": 0.001510277041234076,
+      "retained_ratio": 0.02902757619738752,
+      "raw_tris": 27560,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MoonOx_Nose": {
+      "active_blocks": 1018,
+      "blocks": 3528,
+      "grid": [
+        169,
+        97,
+        113
+      ],
+      "surface_error": 0.0011345159728080034,
+      "retained_ratio": 0.02325311010347634,
+      "raw_tris": 34404,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "MoonOx_Nostrils": {
+      "active_blocks": 574,
+      "blocks": 3528,
+      "grid": [
+        169,
+        113,
+        97
+      ],
+      "surface_error": 0.0008589070057496428,
+      "retained_ratio": 0.02828054298642534,
+      "raw_tris": 14144,
+      "removed_faces": 0,
+      "seconds": 1.1
+    },
+    "MoonOx_Mouth": {
+      "active_blocks": 518,
+      "blocks": 4116,
+      "grid": [
+        169,
+        113,
+        113
+      ],
+      "surface_error": 0.0008665258646942675,
+      "retained_ratio": 0.03398278205709107,
+      "raw_tris": 17656,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MoonOx_Body": {
+      "active_blocks": 10694,
+      "blocks": 29160,
+      "grid": [
+        217,
+        289,
+        241
+      ],
+      "surface_error": 0.0026334491558372974,
+      "retained_ratio": 0.014970316001984636,
+      "raw_tris": 467592,
+      "removed_faces": 0,
+      "seconds": 18.2
+    },
+    "MoonOx_Patches": {
+      "active_blocks": 4544,
+      "blocks": 50922,
+      "grid": [
+        329,
+        369,
+        217
+      ],
+      "surface_error": 0.0022561498917639256,
+      "retained_ratio": 0.01838956453511181,
+      "raw_tris": 163136,
+      "removed_faces": 0,
+      "seconds": 10.9
+    },
+    "MoonOx_Bib": {
+      "active_blocks": 2690,
+      "blocks": 8800,
+      "grid": [
+        177,
+        129,
+        201
+      ],
+      "surface_error": 0.0017184976022690535,
+      "retained_ratio": 0.015619142821441959,
+      "raw_tris": 128048,
+      "removed_faces": 0,
+      "seconds": 6.2
+    },
+    "MoonOx_Hooves": {
+      "active_blocks": 5604,
+      "blocks": 15990,
+      "grid": [
+        313,
+        329,
+        81
+      ],
+      "surface_error": 0.0022397672291845083,
+      "retained_ratio": 0.012948000828672052,
+      "raw_tris": 231696,
+      "removed_faces": 0,
+      "seconds": 10.8
+    },
+    "MoonOx_Collar": {
+      "active_blocks": 2333,
+      "blocks": 12636,
+      "grid": [
+        217,
+        209,
+        145
+      ],
+      "surface_error": 0.002462193835526705,
+      "retained_ratio": 0.01366120218579235,
+      "raw_tris": 109800,
+      "removed_faces": 0,
+      "seconds": 3.5
+    },
+    "MoonOx_Gold": {
+      "active_blocks": 4505,
+      "blocks": 122400,
+      "grid": [
+        273,
+        481,
+        481
+      ],
+      "surface_error": 0.0021891987416893244,
+      "retained_ratio": 0.05003378124765408,
+      "raw_tris": 159852,
+      "removed_faces": 0,
+      "seconds": 15.4
+    },
+    "MoonOx_Cloth": {
+      "active_blocks": 13161,
+      "blocks": 43890,
+      "grid": [
+        305,
+        281,
+        265
+      ],
+      "surface_error": 0.003262479556724429,
+      "retained_ratio": 0.006857882724719101,
+      "raw_tris": 729088,
+      "removed_faces": 0,
+      "seconds": 42.2
+    },
+    "MoonOx_ClothTrim": {
+      "active_blocks": 8804,
+      "blocks": 70356,
+      "grid": [
+        353,
+        329,
+        313
+      ],
+      "surface_error": 0.0033353683538734913,
+      "retained_ratio": 0.011808327232364264,
+      "raw_tris": 254058,
+      "removed_faces": 0,
+      "seconds": 24.5
+    },
+    "MoonOx_Bundles": {
+      "active_blocks": 3366,
+      "blocks": 37536,
+      "grid": [
+        409,
+        369,
+        129
+      ],
+      "surface_error": 0.0030756876803934574,
+      "retained_ratio": 0.013601371018198635,
+      "raw_tris": 147044,
+      "removed_faces": 0,
+      "seconds": 12.9
+    },
+    "MoonOx_Tassels": {
+      "active_blocks": 930,
+      "blocks": 9440,
+      "grid": [
+        473,
+        81,
+        129
+      ],
+      "surface_error": 0.0014799482887610793,
+      "retained_ratio": 0.04469606674612634,
+      "raw_tris": 33560,
+      "removed_faces": 0,
+      "seconds": 3.5
+    },
+    "MoonOx_Tail": {
+      "source": "mesh",
+      "surface_error": 1.7490029335931467e-07,
+      "retained_ratio": 1.0,
+      "raw_tris": 1116,
+      "removed_faces": 0,
+      "seconds": 0.1
+    },
+    "MoonOx_Tuft": {
+      "active_blocks": 845,
+      "blocks": 2912,
+      "grid": [
+        113,
+        105,
+        129
+      ],
+      "surface_error": 0.0016551320441067219,
+      "retained_ratio": 0.028069387525964183,
+      "raw_tris": 35626,
+      "removed_faces": 0,
+      "seconds": 3.4
+    }
+  },
+  "glb": {
+    "bytes": 1877412,
+    "sha256": "3266f8ab4159d9005e40b62d4c85dc17fd225591285c0325a6e5deeb07a6ea52",
+    "nodes": [
+      "MoonOx_Bib",
+      "MoonOx_Blush",
+      "MoonOx_Body",
+      "MoonOx_Brow",
+      "MoonOx_Bundles",
+      "MoonOx_Cloth",
+      "MoonOx_ClothTrim",
+      "MoonOx_Collar",
+      "MoonOx_EarInner",
+      "MoonOx_Ears",
+      "MoonOx_Eyes",
+      "MoonOx_EyeShine",
+      "MoonOx_Gold",
+      "MoonOx_Head",
+      "MoonOx_Hooves",
+      "MoonOx_Horns",
+      "MoonOx_Iris",
+      "MoonOx_Lash",
+      "MoonOx_Mouth",
+      "MoonOx_Muzzle",
+      "MoonOx_Nose",
+      "MoonOx_Nostrils",
+      "MoonOx_Patches",
+      "MoonOx_Pupil",
+      "MoonOx_Tail",
+      "MoonOx_Tassels",
+      "MoonOx_Tuft",
+      "MoonOx"
+    ],
+    "meshes": 27,
+    "materials": 21,
+    "images": 21,
+    "textures": 21,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "catalog": "moon.ox",
+  "root": "MoonOx",
+  "face": "MoonOx_Eyes",
+  "glass": [],
+  "constraints": {
+    "MoonOx_Head": {
+      "expected_islands": 1,
+      "max_surface_error": 0.02,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonOx_Muzzle": {
+      "expected_islands": 1,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonOx_Ears": {
+      "expected_islands": 2,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_EarInner": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonOx_Horns": {
+      "expected_islands": 2,
+      "max_surface_error": 0.006,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonOx_Eyes": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonOx_Iris": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonOx_Pupil": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.0035
+    },
+    "MoonOx_EyeShine": {
+      "expected_islands": 4,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonOx_Lash": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonOx_Brow": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonOx_Blush": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonOx_Nose": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonOx_Nostrils": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonOx_Mouth": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonOx_Body": {
+      "expected_islands": 1,
+      "max_surface_error": 0.022,
+      "min_feature": null,
+      "voxel": 0.009
+    },
+    "MoonOx_Patches": {
+      "expected_islands": null,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_Bib": {
+      "expected_islands": 1,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_Hooves": {
+      "expected_islands": 4,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_Collar": {
+      "expected_islands": 1,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_Gold": {
+      "expected_islands": null,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_Cloth": {
+      "expected_islands": 1,
+      "max_surface_error": 0.02,
+      "min_feature": null,
+      "voxel": 0.007
+    },
+    "MoonOx_ClothTrim": {
+      "expected_islands": 1,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_Bundles": {
+      "expected_islands": 3,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonOx_Tassels": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonOx_Tail": {
+      "expected_islands": 1,
+      "max_surface_error": 0.006,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonOx_Tuft": {
+      "expected_islands": 1,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    }
+  },
+  "reimport": {
+    "meshes": 27,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "previews": {
+    "fidelity_source": "exported_reimported_glb",
+    "fidelity_sha256": "3266f8ab4159d9005e40b62d4c85dc17fd225591285c0325a6e5deeb07a6ea52",
+    "fidelity_views": [
+      "ox_fidelity_front.png",
+      "ox_fidelity_three_quarter.png",
+      "ox_fidelity_side.png",
+      "ox_fidelity_back.png"
+    ],
+    "resolution": 1000,
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "disclaimer": "Blender production fidelity preview; not a Roblox screenshot",
+    "beauty_views": [
+      "ox_beauty_front.png",
+      "ox_beauty_three_quarter.png",
+      "ox_beauty_side.png",
+      "ox_beauty_back.png"
+    ]
+  }
+}

@@ -366,8 +366,13 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local price = State.price(snapshot, selected)
 		local need = State.need(snapshot, price)
 		buy.setPrice(State.compact(price))
-		buy.set("Open 1 box", ctx.canAct() and need == nil, need)
-		local affordTen = price > 0 and snapshot.coins >= price * 10
+		local soon = Catalog.comingSoon[selected]
+		buy.set(
+			if soon then "Coming soon" else "Open 1 box",
+			ctx.canAct() and need == nil and not soon,
+			if soon then nil else need
+		)
+		local affordTen = not soon and price > 0 and snapshot.coins >= price * 10
 		ten.setPrice(State.compact(price * 10))
 		ten.set("Open 10 boxes", ctx.canAct() and affordTen)
 		local options = State.freeBoxOptions(snapshot)

@@ -73,6 +73,15 @@ collection artwork (aliases `we_are_all_stars_emblem`, `we_are_all_stars_shop_pa
 [ui_art.py](../assets/figures/we-are-all-stars/ui_art.py); see the
 [We Are All Stars receipt](../assets/figures/we-are-all-stars/PRODUCTION.md).
 
+All thirteen Moonrace figures (`Models.Moonrace.*`, aliases `rat`, `ox`, `tiger`, `rabbit`, `dragon`,
+`snake`, `horse`, `goat`, `monkey`, `rooster`, `dog`, `pig`, `cat`) are published with
+`publish.py moonrace --build` and adopted at runtime the same way. They are the first collection built
+with the hybrid SDF/native-sweep components. Its collection artwork (aliases `moonrace_emblem`,
+`moonrace_shop_pattern`, `moonrace_corner_{top_left,top_right,bottom_left,bottom_right}`, keys
+`Collection.Moonrace.*`) is rendered from the production models by
+[ui_art.py](../assets/figures/moonrace/ui_art.py); the Mythical Cat is left out of the artwork on purpose.
+See the [Moonrace receipt](../assets/figures/moonrace/PRODUCTION.md) for upload status.
+
 ### Town models
 
 Town trees and the Peeka statues are sculpted like figures but live in `assets/models/`:

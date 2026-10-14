@@ -7,6 +7,7 @@ local Transactions = require("./Transactions")
 local Economy = require("./Economy")
 local Catalog = require("./Catalog")
 local Types = require("./Types")
+local Tutorial = require("./Tutorial")
 local checks = 0
 local function check(condition: boolean, description: string)
 	assert(condition, description)
@@ -31,6 +32,11 @@ check(not Rules.mutate(state, intent("Buy", 2, starter), 0, 10), "unfunded purch
 check(state.boxesOpened == 2, "a rejected purchase never counts")
 check(not Rules.mutate(state, intent("Buy", 2, "unknown"), 0, 10), "unknown collection fails")
 check(state.boxesOpened == 2, "an unknown collection never counts")
+state.coins = 1e9
+check(not Rules.mutate(state, intent("Buy", 2, "moon"), 0, 10), "a coming-soon collection is not sold")
+check(not Rules.mutate(state, intent("BuyTen", 2, "moon"), 0, 10), "a coming-soon ten-box is not sold")
+check(state.boxesOpened == 2, "a coming-soon collection never counts")
+state.coins = price - 1
 local full = Rules.new(0)
 for _, figure in Catalog.figures do
 	if figure.collection == starter then
@@ -170,5 +176,21 @@ local tenReply = Transactions.process(tenSession, tenRaw, 0, false, tenRolls, 10
 check(tenReply ~= nil and tenReply.ok and tenReply.figures ~= nil and #tenReply.figures == 10, "remote Open 10 replies with ten figures")
 local tenReplay = Transactions.process(tenSession, tenRaw, 0.1, false, tenRolls, 10)
 check(tenReplay == tenReply and tenSession.state.boxesOpened == 10, "replayed Open 10 is not recharged")
+
+-- Mistakenly sold coming-soon figures are removed on load and refunded at one box each.
+local mistaken = Rules.new(0)
+mistaken.step = Tutorial.done
+check(Rules.adminFigures(mistaken, { "moon.rat" }, 3, false, 0), "grant three Moonrace Rats")
+check(Rules.adminFigures(mistaken, { "moon.cat" }, 1, false, 0), "grant a Moonrace Cat")
+mistaken.display.slots[1] = "moon.cat"
+mistaken.pityByGroup.moon = { Legendary = 4, Mythical = 4 } :: any
+local before = mistaken.coins
+local refunded = Rules.refundComingSoon(mistaken, 0)
+check(refunded == 4 * Rules.prices.moon and mistaken.coins == before + refunded, "four copies refund four box prices")
+check(mistaken.owned["moon.rat"] == nil and mistaken.owned["moon.cat"] == nil, "Moonrace copies are removed")
+check(not mistaken.discovered["moon.cat"] and mistaken.display.slots[1] == "", "discoveries and Display are cleared")
+check(mistaken.pityByGroup.moon == nil, "Moonrace pity is cleared")
+check(Rules.refundComingSoon(mistaken, 0) == 0 and mistaken.coins == before + refunded, "refund runs once")
+check(Profile.decode(Profile.encode(mistaken), 0) ~= nil, "refunded profile still saves")
 
 print(string.format("PASS: %d box counter schema/migration/authority checks", checks))

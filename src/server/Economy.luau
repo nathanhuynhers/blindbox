@@ -16,6 +16,7 @@ local collections: { [string]: Collection } = {
 	concept = { tier = "niche", buckets = "standard", pity = "standard", group = "concept" },
 	echo = { tier = "prestige", buckets = "standard", pity = "standard", group = "echo" },
 	star = { tier = "prestige", buckets = "standard", pity = "standard", group = "star" },
+	moon = { tier = "prestige", buckets = "standard", pity = "standard", group = "moon" },
 }
 local buckets: { [string]: { [string]: number } } = {
 	starter = { Common = 60, Uncommon = 30, Rare = 10 },
@@ -102,6 +103,19 @@ return table.freeze({
 		{ id = "star.cloud-rest", units = 7.5, weight = 1 },
 		{ id = "star.meteor-shower", units = 8.5, weight = 1 },
 		{ id = "star.dreamcatcher", units = 22, weight = 1 },
+		{ id = "moon.rat", units = 0.55, weight = 1 },
+		{ id = "moon.ox", units = 0.6, weight = 1 },
+		{ id = "moon.rabbit", units = 0.65, weight = 1 },
+		{ id = "moon.goat", units = 0.7, weight = 1 },
+		{ id = "moon.snake", units = 1.2, weight = 1 },
+		{ id = "moon.horse", units = 1.25, weight = 1 },
+		{ id = "moon.monkey", units = 1.35, weight = 1 },
+		{ id = "moon.rooster", units = 1.4, weight = 1 },
+		{ id = "moon.dog", units = 2.8, weight = 1 },
+		{ id = "moon.pig", units = 3.2, weight = 1 },
+		{ id = "moon.tiger", units = 7.5, weight = 1 },
+		{ id = "moon.dragon", units = 8.5, weight = 1 },
+		{ id = "moon.cat", units = 22, weight = 1 },
 	},
 	-- Plaza pop-up stall deals (LOGIC-05). Offers change every `windowSeconds` of UTC time and
 	-- come from the window index and `seed` alone, so every server shows the same three. Each

@@ -1,0 +1,1239 @@
+{
+  "schema_version": 2,
+  "figure": "MoonGoat",
+  "title": "Goat",
+  "rarity": "Common",
+  "size_xyz_studs": [
+    2.5083,
+    2.4861,
+    2.7146
+  ],
+  "meshes": 22,
+  "triangles": 46990,
+  "materials": [
+    "MoonGoat_Blush",
+    "MoonGoat_BrowMat",
+    "MoonGoat_Coral",
+    "MoonGoat_Cream",
+    "MoonGoat_EarPink",
+    "MoonGoat_EyeDark",
+    "MoonGoat_EyeShine",
+    "MoonGoat_GoldMat",
+    "MoonGoat_Green",
+    "MoonGoat_Hoof",
+    "MoonGoat_Horn",
+    "MoonGoat_Iris",
+    "MoonGoat_Lash",
+    "MoonGoat_Leaf",
+    "MoonGoat_MouthInk",
+    "MoonGoat_NosePink",
+    "MoonGoat_Petal",
+    "MoonGoat_Pupil",
+    "MoonGoat_Wool"
+  ],
+  "components": {
+    "MoonGoat_Head": {
+      "tris": 6000,
+      "verts": 3002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.8175697120882159,
+      "islands": 1,
+      "island_faces": [
+        6000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 6000,
+      "bounds": [
+        [
+          -0.6201266050338745,
+          -1.187910795211792,
+          1.349952220916748
+        ],
+        [
+          0.6200248599052429,
+          -0.04005184397101402,
+          2.45003604888916
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Tuft": {
+      "tris": 2500,
+      "verts": 1248,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.07602490853641429,
+      "islands": 1,
+      "island_faces": [
+        2500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2500,
+      "bounds": [
+        [
+          -0.41865766048431396,
+          -0.9209451079368591,
+          2.0190365314483643
+        ],
+        [
+          0.4208337962627411,
+          -0.24169324338436127,
+          2.4595301151275635
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Ears": {
+      "tris": 1500,
+      "verts": 754,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.032432391373968514,
+      "islands": 2,
+      "island_faces": [
+        746,
+        754
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -0.9933679103851318,
+          -0.6099873781204224,
+          1.5672508478164673
+        ],
+        [
+          0.9933678507804871,
+          -0.39046767354011536,
+          1.9128168821334839
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_EarInner": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.006075367744212509,
+      "islands": 2,
+      "island_faces": [
+        396,
+        404
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.9486500024795532,
+          -0.6243256330490112,
+          1.609711766242981
+        ],
+        [
+          0.9486500024795532,
+          -0.5156972408294678,
+          1.8502827882766724
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Horns": {
+      "tris": 5000,
+      "verts": 2504,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.22802177560697887,
+      "islands": 2,
+      "island_faces": [
+        2500,
+        2500
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.2541477680206299,
+          -0.6954754590988159,
+          1.8383666276931763
+        ],
+        [
+          1.2541477680206299,
+          -0.060298968106508255,
+          2.7146456241607666
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Eyes": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.010812762902824088,
+      "islands": 2,
+      "island_faces": [
+        600,
+        600
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.39299261569976807,
+          -1.152503252029419,
+          1.7319482564926147
+        ],
+        [
+          0.39331379532814026,
+          -0.9554998874664307,
+          2.0964741706848145
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Iris": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00839215640469463,
+      "islands": 2,
+      "island_faces": [
+        596,
+        604
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.37650683522224426,
+          -1.1486387252807617,
+          1.7542345523834229
+        ],
+        [
+          0.37650683522224426,
+          -0.9695292711257935,
+          2.063096761703491
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Pupil": {
+      "tris": 600,
+      "verts": 304,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0022319414681151893,
+      "islands": 2,
+      "island_faces": [
+        296,
+        304
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 600,
+      "bounds": [
+        [
+          -0.32131487131118774,
+          -1.1219375133514404,
+          1.836763858795166
+        ],
+        [
+          0.32114139199256897,
+          -1.002528190612793,
+          2.004380464553833
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_EyeShine": {
+      "tris": 700,
+      "verts": 358,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0010657687518526577,
+      "islands": 4,
+      "island_faces": [
+        134,
+        138,
+        214,
+        214
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 700,
+      "bounds": [
+        [
+          -0.3384048342704773,
+          -1.1421701908111572,
+          1.8147341012954712
+        ],
+        [
+          0.3387586772441864,
+          -0.9859829545021057,
+          2.0314314365386963
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Lash": {
+      "tris": 1200,
+      "verts": 604,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.003923055294668118,
+      "islands": 2,
+      "island_faces": [
+        596,
+        604
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          -0.42310845851898193,
+          -1.158025860786438,
+          1.9085222482681274
+        ],
+        [
+          0.4231418967247009,
+          -0.9037465453147888,
+          2.1286375522613525
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Brow": {
+      "tris": 500,
+      "verts": 254,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00030507392344140944,
+      "islands": 2,
+      "island_faces": [
+        248,
+        252
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 500,
+      "bounds": [
+        [
+          -0.26861730217933655,
+          -1.0246703624725342,
+          2.15640926361084
+        ],
+        [
+          0.26861730217933655,
+          -0.9385095238685608,
+          2.196012020111084
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Blush": {
+      "tris": 800,
+      "verts": 404,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0022547966309395167,
+      "islands": 2,
+      "island_faces": [
+        398,
+        402
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 800,
+      "bounds": [
+        [
+          -0.4813721179962158,
+          -1.051440954208374,
+          1.660976767539978
+        ],
+        [
+          0.4813721179962158,
+          -0.8983819484710693,
+          1.7829861640930176
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Nose": {
+      "tris": 300,
+      "verts": 152,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00021421807698034366,
+      "islands": 1,
+      "island_faces": [
+        300
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 300,
+      "bounds": [
+        [
+          -0.05017333850264549,
+          -1.2071176767349243,
+          1.7050760984420776
+        ],
+        [
+          0.05017334222793579,
+          -1.147071361541748,
+          1.7749532461166382
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Mouth": {
+      "tris": 498,
+      "verts": 251,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.00033885730295190176,
+      "islands": 1,
+      "island_faces": [
+        498
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 498,
+      "bounds": [
+        [
+          -0.08889466524124146,
+          -1.1957796812057495,
+          1.5926154851913452
+        ],
+        [
+          0.08850988000631332,
+          -1.1059234142303467,
+          1.725016713142395
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Body": {
+      "tris": 8000,
+      "verts": 4002,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 2.196720343824788,
+      "islands": 1,
+      "island_faces": [
+        8000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 8000,
+      "bounds": [
+        [
+          -0.8418649435043335,
+          -0.86202472448349,
+          0.19514283537864685
+        ],
+        [
+          0.8518955111503601,
+          1.278956413269043,
+          1.7503020763397217
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Legs": {
+      "tris": 3000,
+      "verts": 1508,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.20228915216653542,
+      "islands": 4,
+      "island_faces": [
+        740,
+        746,
+        754,
+        760
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 3000,
+      "bounds": [
+        [
+          -0.5723034143447876,
+          -0.5700337886810303,
+          0.038643863052129745
+        ],
+        [
+          0.5706031918525696,
+          0.8106225728988647,
+          0.6693699359893799
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Hooves": {
+      "tris": 1998,
+      "verts": 1007,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0537907717881637,
+      "islands": 4,
+      "island_faces": [
+        494,
+        496,
+        502,
+        506
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1998,
+      "bounds": [
+        [
+          -0.5002259612083435,
+          -0.5385042428970337,
+          0.0
+        ],
+        [
+          0.5000047087669373,
+          0.7401700019836426,
+          0.17999547719955444
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Collar": {
+      "tris": 2000,
+      "verts": 1000,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.04634730629394093,
+      "islands": 1,
+      "island_faces": [
+        2000
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 2000,
+      "bounds": [
+        [
+          -0.49523797631263733,
+          -0.9727680683135986,
+          1.0207923650741577
+        ],
+        [
+          0.495491623878479,
+          -0.06764668226242065,
+          1.538812279701233
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Gold": {
+      "tris": 4996,
+      "verts": 2520,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.01204102501157878,
+      "islands": 12,
+      "island_faces": [
+        172,
+        176,
+        178,
+        178,
+        178,
+        182,
+        358,
+        398,
+        404,
+        426,
+        1140,
+        1206
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 4996,
+      "bounds": [
+        [
+          -0.6850920915603638,
+          -1.1089062690734863,
+          1.0201185941696167
+        ],
+        [
+          0.919851541519165,
+          -0.36015427112579346,
+          2.643686056137085
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Blossom": {
+      "tris": 1200,
+      "verts": 600,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0056164518192432554,
+      "islands": 1,
+      "island_faces": [
+        1200
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1200,
+      "bounds": [
+        [
+          0.02411014586687088,
+          -1.028739333152771,
+          1.3138433694839478
+        ],
+        [
+          0.3807908892631531,
+          -0.8678434491157532,
+          1.6687337160110474
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_SideFlower": {
+      "tris": 1498,
+      "verts": 749,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.015333367682728785,
+      "islands": 1,
+      "island_faces": [
+        1498
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1498,
+      "bounds": [
+        [
+          0.7997269034385681,
+          -0.6996054649353027,
+          0.812628984451294
+        ],
+        [
+          0.9204140901565552,
+          -0.10006634891033173,
+          1.3473656177520752
+        ]
+      ],
+      "materials": 1
+    },
+    "MoonGoat_Leaves": {
+      "tris": 1500,
+      "verts": 760,
+      "non_manifold_edges": 0,
+      "boundary_edges": 0,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0035476960641627306,
+      "islands": 5,
+      "island_faces": [
+        266,
+        276,
+        296,
+        330,
+        332
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 1500,
+      "bounds": [
+        [
+          -0.44127383828163147,
+          -0.9800420999526978,
+          1.1201454401016235
+        ],
+        [
+          0.8100414276123047,
+          -0.1915619969367981,
+          1.5349102020263672
+        ]
+      ],
+      "materials": 1
+    }
+  },
+  "build": {
+    "MoonGoat_Head": {
+      "active_blocks": 5563,
+      "blocks": 14950,
+      "grid": [
+        209,
+        201,
+        185
+      ],
+      "surface_error": 0.0007714010425843298,
+      "retained_ratio": 0.02304784733105928,
+      "raw_tris": 260328,
+      "removed_faces": 0,
+      "seconds": 9.7
+    },
+    "MoonGoat_Tuft": {
+      "active_blocks": 2220,
+      "blocks": 6600,
+      "grid": [
+        177,
+        161,
+        121
+      ],
+      "surface_error": 0.0032174624502658844,
+      "retained_ratio": 0.02240063080176338,
+      "raw_tris": 111604,
+      "removed_faces": 0,
+      "seconds": 2.6
+    },
+    "MoonGoat_Ears": {
+      "active_blocks": 2012,
+      "blocks": 9576,
+      "grid": [
+        457,
+        97,
+        113
+      ],
+      "surface_error": 0.0015033340314403176,
+      "retained_ratio": 0.01769368689251675,
+      "raw_tris": 84776,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "MoonGoat_EarInner": {
+      "active_blocks": 1581,
+      "blocks": 11220,
+      "grid": [
+        545,
+        89,
+        121
+      ],
+      "surface_error": 0.0018316677305847406,
+      "retained_ratio": 0.01585288522511097,
+      "raw_tris": 50464,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MoonGoat_Horns": {
+      "source": "mesh",
+      "surface_error": 0.0020578200928866863,
+      "retained_ratio": 0.6067961165048543,
+      "raw_tris": 8240,
+      "removed_faces": 0,
+      "seconds": 0.2
+    },
+    "MoonGoat_Eyes": {
+      "active_blocks": 2018,
+      "blocks": 8778,
+      "grid": [
+        265,
+        113,
+        153
+      ],
+      "surface_error": 0.0013461580965667963,
+      "retained_ratio": 0.013737521751076107,
+      "raw_tris": 87352,
+      "removed_faces": 0,
+      "seconds": 3.5
+    },
+    "MoonGoat_Iris": {
+      "active_blocks": 1618,
+      "blocks": 7812,
+      "grid": [
+        249,
+        113,
+        145
+      ],
+      "surface_error": 0.0012113589327782393,
+      "retained_ratio": 0.017994241842610365,
+      "raw_tris": 66688,
+      "removed_faces": 0,
+      "seconds": 2.9
+    },
+    "MoonGoat_Pupil": {
+      "active_blocks": 863,
+      "blocks": 5408,
+      "grid": [
+        257,
+        105,
+        105
+      ],
+      "surface_error": 0.0010968523565679789,
+      "retained_ratio": 0.019933554817275746,
+      "raw_tris": 30100,
+      "removed_faces": 0,
+      "seconds": 1.6
+    },
+    "MoonGoat_EyeShine": {
+      "active_blocks": 1034,
+      "blocks": 11951,
+      "grid": [
+        297,
+        137,
+        153
+      ],
+      "surface_error": 0.001104459399357438,
+      "retained_ratio": 0.024012074643249177,
+      "raw_tris": 29152,
+      "removed_faces": 0,
+      "seconds": 1.7
+    },
+    "MoonGoat_Lash": {
+      "active_blocks": 2389,
+      "blocks": 20328,
+      "grid": [
+        353,
+        177,
+        169
+      ],
+      "surface_error": 0.0016225047875195742,
+      "retained_ratio": 0.012317040625705664,
+      "raw_tris": 97426,
+      "removed_faces": 0,
+      "seconds": 4.3
+    },
+    "MoonGoat_Brow": {
+      "active_blocks": 476,
+      "blocks": 2496,
+      "grid": [
+        209,
+        97,
+        65
+      ],
+      "surface_error": 0.0008857199572958052,
+      "retained_ratio": 0.07631257631257632,
+      "raw_tris": 6552,
+      "removed_faces": 0,
+      "seconds": 1.2
+    },
+    "MoonGoat_Blush": {
+      "active_blocks": 638,
+      "blocks": 3348,
+      "grid": [
+        249,
+        97,
+        73
+      ],
+      "surface_error": 0.0011437577195465565,
+      "retained_ratio": 0.05305039787798409,
+      "raw_tris": 15080,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MoonGoat_Nose": {
+      "active_blocks": 140,
+      "blocks": 990,
+      "grid": [
+        89,
+        73,
+        81
+      ],
+      "surface_error": 0.0006454498507082462,
+      "retained_ratio": 0.0885478158205431,
+      "raw_tris": 3388,
+      "removed_faces": 0,
+      "seconds": 0.3
+    },
+    "MoonGoat_Mouth": {
+      "active_blocks": 480,
+      "blocks": 3808,
+      "grid": [
+        137,
+        113,
+        129
+      ],
+      "surface_error": 0.0009033995447680354,
+      "retained_ratio": 0.03499156829679595,
+      "raw_tris": 14232,
+      "removed_faces": 0,
+      "seconds": 1.3
+    },
+    "MoonGoat_Body": {
+      "active_blocks": 11131,
+      "blocks": 32116,
+      "grid": [
+        249,
+        297,
+        225
+      ],
+      "surface_error": 0.004714474081993103,
+      "retained_ratio": 0.016883051104995696,
+      "raw_tris": 473848,
+      "removed_faces": 0,
+      "seconds": 35.0
+    },
+    "MoonGoat_Legs": {
+      "active_blocks": 5472,
+      "blocks": 17748,
+      "grid": [
+        233,
+        273,
+        145
+      ],
+      "surface_error": 0.00436820974573493,
+      "retained_ratio": 0.012337961439757846,
+      "raw_tris": 243152,
+      "removed_faces": 0,
+      "seconds": 17.3
+    },
+    "MoonGoat_Hooves": {
+      "active_blocks": 3132,
+      "blocks": 11780,
+      "grid": [
+        249,
+        305,
+        81
+      ],
+      "surface_error": 0.0017143344739452004,
+      "retained_ratio": 0.015688799547710283,
+      "raw_tris": 127352,
+      "removed_faces": 0,
+      "seconds": 6.7
+    },
+    "MoonGoat_Collar": {
+      "active_blocks": 3096,
+      "blocks": 17081,
+      "grid": [
+        249,
+        233,
+        153
+      ],
+      "surface_error": 0.0016708022449165583,
+      "retained_ratio": 0.013536928741607104,
+      "raw_tris": 147744,
+      "removed_faces": 0,
+      "seconds": 5.3
+    },
+    "MoonGoat_Gold": {
+      "active_blocks": 2927,
+      "blocks": 106082,
+      "grid": [
+        465,
+        249,
+        473
+      ],
+      "surface_error": 0.003732385579496622,
+      "retained_ratio": 0.04515627542074152,
+      "raw_tris": 110638,
+      "removed_faces": 4,
+      "seconds": 10.4
+    },
+    "MoonGoat_Blossom": {
+      "active_blocks": 995,
+      "blocks": 3888,
+      "grid": [
+        145,
+        97,
+        145
+      ],
+      "surface_error": 0.0013532366137951612,
+      "retained_ratio": 0.02870264064293915,
+      "raw_tris": 41808,
+      "removed_faces": 0,
+      "seconds": 2.2
+    },
+    "MoonGoat_SideFlower": {
+      "active_blocks": 2021,
+      "blocks": 7488,
+      "grid": [
+        97,
+        209,
+        193
+      ],
+      "surface_error": 0.002487597521394491,
+      "retained_ratio": 0.015756479299899023,
+      "raw_tris": 95072,
+      "removed_faces": 0,
+      "seconds": 4.7
+    },
+    "MoonGoat_Leaves": {
+      "active_blocks": 1431,
+      "blocks": 30080,
+      "grid": [
+        377,
+        257,
+        161
+      ],
+      "surface_error": 0.0012656113831326365,
+      "retained_ratio": 0.03661751782052534,
+      "raw_tris": 40964,
+      "removed_faces": 0,
+      "seconds": 2.5
+    }
+  },
+  "glb": {
+    "bytes": 1455780,
+    "sha256": "2617c2e77be4e94a9fdb3a4e94ae6df3982e3452763555737d0faf0c20aa3a49",
+    "nodes": [
+      "MoonGoat_Blossom",
+      "MoonGoat_Blush",
+      "MoonGoat_Body",
+      "MoonGoat_Brow",
+      "MoonGoat_Collar",
+      "MoonGoat_EarInner",
+      "MoonGoat_Ears",
+      "MoonGoat_Eyes",
+      "MoonGoat_EyeShine",
+      "MoonGoat_Gold",
+      "MoonGoat_Head",
+      "MoonGoat_Hooves",
+      "MoonGoat_Horns",
+      "MoonGoat_Iris",
+      "MoonGoat_Lash",
+      "MoonGoat_Leaves",
+      "MoonGoat_Legs",
+      "MoonGoat_Mouth",
+      "MoonGoat_Nose",
+      "MoonGoat_Pupil",
+      "MoonGoat_SideFlower",
+      "MoonGoat_Tuft",
+      "MoonGoat"
+    ],
+    "meshes": 22,
+    "materials": 19,
+    "images": 19,
+    "textures": 19,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "catalog": "moon.goat",
+  "root": "MoonGoat",
+  "face": "MoonGoat_Eyes",
+  "glass": [],
+  "constraints": {
+    "MoonGoat_Head": {
+      "expected_islands": 1,
+      "max_surface_error": 0.018,
+      "min_feature": null,
+      "voxel": 0.007
+    },
+    "MoonGoat_Tuft": {
+      "expected_islands": 1,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonGoat_Ears": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonGoat_EarInner": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_Horns": {
+      "expected_islands": 2,
+      "max_surface_error": 0.006,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonGoat_Eyes": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_Iris": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_Pupil": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.0035
+    },
+    "MoonGoat_EyeShine": {
+      "expected_islands": 4,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonGoat_Lash": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonGoat_Brow": {
+      "expected_islands": 2,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_Blush": {
+      "expected_islands": 2,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonGoat_Nose": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_Mouth": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.003
+    },
+    "MoonGoat_Body": {
+      "expected_islands": 1,
+      "max_surface_error": 0.022,
+      "min_feature": null,
+      "voxel": 0.008
+    },
+    "MoonGoat_Legs": {
+      "expected_islands": 4,
+      "max_surface_error": 0.015,
+      "min_feature": null,
+      "voxel": 0.006
+    },
+    "MoonGoat_Hooves": {
+      "expected_islands": 4,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonGoat_Collar": {
+      "expected_islands": 1,
+      "max_surface_error": 0.0125,
+      "min_feature": null,
+      "voxel": 0.005
+    },
+    "MoonGoat_Gold": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_Blossom": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_SideFlower": {
+      "expected_islands": 1,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    },
+    "MoonGoat_Leaves": {
+      "expected_islands": null,
+      "max_surface_error": 0.01,
+      "min_feature": null,
+      "voxel": 0.004
+    }
+  },
+  "reimport": {
+    "meshes": 22,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "previews": {
+    "fidelity_source": "exported_reimported_glb",
+    "fidelity_sha256": "2617c2e77be4e94a9fdb3a4e94ae6df3982e3452763555737d0faf0c20aa3a49",
+    "fidelity_views": [
+      "goat_fidelity_front.png",
+      "goat_fidelity_three_quarter.png",
+      "goat_fidelity_side.png",
+      "goat_fidelity_back.png"
+    ],
+    "resolution": 1000,
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "disclaimer": "Blender production fidelity preview; not a Roblox screenshot",
+    "beauty_views": [
+      "goat_beauty_front.png",
+      "goat_beauty_three_quarter.png",
+      "goat_beauty_side.png",
+      "goat_beauty_back.png"
+    ]
+  }
+}

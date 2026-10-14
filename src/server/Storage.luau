@@ -76,6 +76,7 @@ function Storage.open(userId: number, paidAllowed: (() -> boolean)?): (Session?,
 				Lineage.promote(state)
 			end
 			Rules.offline(state, os.time(), if paidAllowed then paidAllowed() else false)
+			Rules.refundComingSoon(state, state.time)
 			return {
 				state = state,
 				handle = handle,

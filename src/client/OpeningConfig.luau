@@ -357,6 +357,7 @@ Config.packaging = {
 	concept = Config.collection("concept"),
 	echo = Config.collection("echo"),
 	star = Config.collection("star"),
+	moon = Config.collection("moon"),
 }
 Config.neutral = Color3.fromRGB(255, 238, 208)
 Config.stage = {

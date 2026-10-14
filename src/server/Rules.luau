@@ -627,6 +627,42 @@ function Rules.adminFigures(
 	state.revision += 1
 	return true, if remove then "Figures removed; placements reconciled." else "Figures granted."
 end
+-- Coming-soon collections were briefly sold by mistake. Each box gave exactly one copy, so every
+-- owned copy refunds one box price; copies, discoveries and pity for the collection are removed.
+-- Idempotent (nothing is left to refund afterwards), and inert once a collection is released.
+function Rules.refundComingSoon(state: Types.State, now: number): number
+	local refund = 0
+	local earnedRefund = 0
+	for _, figure in Catalog.figures do
+		local copies = state.owned[figure.id]
+		if copies and Catalog.comingSoon[figure.collection] then
+			local earnedCopies = if state.lineage
+				then state.lineage.earnedOwned[figure.id] or 0
+				else copies
+			if Rules.adminFigures(state, { figure.id }, copies, true, now) then
+				refund += copies * Rules.prices[figure.collection]
+				earnedRefund += earnedCopies * Rules.prices[figure.collection]
+				state.discovered[figure.id] = nil
+			end
+		end
+	end
+	for id, soon in Catalog.comingSoon do
+		local config = Economy.collections[id]
+		if soon and config then
+			state.pityByGroup[config.group] = nil
+		end
+	end
+	-- Refunds retain the removed copies' source, including migrated earned-only profiles.
+	local earned = math.min(earnedRefund, Economy.coinLimit - state.coins)
+	Lineage.creditEarned(state, earned)
+	local assistedRoom = if state.lineage
+		then Lineage.creditLimit
+			- state.lineage.assistedReserve
+			- (state.coins - state.lineage.earnedCoins)
+		else Economy.coinLimit - state.coins
+	state.coins += math.min(refund - earnedRefund, Economy.coinLimit - state.coins, assistedRoom)
+	return refund
+end
 function Rules.adminPity(
 	state: Types.State,
 	collection: string,
@@ -748,6 +784,9 @@ function Rules.mutate(
 		local normal = Rules.prices[collection]
 		if not normal then
 			return false, "Unknown collection.", nil
+		end
+		if Catalog.comingSoon[collection] then
+			return false, "This collection is coming soon.", nil
 		end
 		local price = if action == "Deal" then Deals.price(normal) else normal
 		if action == "Deal" and Deals.left(state, stall) < 1 then

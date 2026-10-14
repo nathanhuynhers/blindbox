@@ -142,6 +142,8 @@ def build_object(comp, bounds, collection):
             me.transform(source.matrix_world)
             # Factory objects are construction helpers, never exported.
             bpy.data.objects.remove(source, do_unlink=True)
+            # Roblox names MeshParts after the glTF mesh, so the source's mesh name must not leak.
+            me.name = comp.name
         else:
             raise TypeError(f"{comp.name}: mesh factory must return MeshData or a Blender mesh object")
     if me.validate():
@@ -200,6 +202,12 @@ def surface_error(before, after):
                 return float("inf")
             result = max(result, hit[3])
     return result
+
+
+def face_set(me, places=6):
+    """Triangles as sorted rounded corner positions: index order and UV/normal seam splits ignored."""
+    co = [tuple(round(c, places) for c in v.co) for v in me.vertices]
+    return sorted(tuple(sorted(co[i] for i in p.vertices)) for p in me.polygons)
 
 
 def drop_specks(me, min_faces):
@@ -620,7 +628,9 @@ def reimport_check(path, expected, snapshots=None):
         original.from_pydata(before["positions"], [], before["faces"])
         current = obj.data.copy()
         current.transform(obj.matrix_world)
-        if surface_error(original, current) > 2e-5:
+        # BVH nearest-point sampling is inexact on long obtuse slivers (it reports ~5e-5 for a mesh
+        # against itself), so identical triangles are accepted first; sampling judges real changes.
+        if face_set(original) != face_set(current) and surface_error(original, current) > 2e-5:
             errors.append("surface changed")
         bpy.data.meshes.remove(original)
         bpy.data.meshes.remove(current)
