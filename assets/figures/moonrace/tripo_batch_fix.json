@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "batch_id": "moonrace-fix-001",
+  "figures": [
+    {
+      "source": "ox.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.ox",
+      "rarity": "Common",
+      "collection_slug": "moonrace",
+      "figure_slug": "ox",
+      "root": "MoonOx",
+      "alias": "ox",
+      "asset_key": "Models.Moonrace.MoonOx",
+      "height_studs": 3.26,
+      "rotation_degrees": [
+        0,
+        0,
+        6.28
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.413,
+            0.0,
+            0.6855
+          ],
+          [
+            0.573,
+            0.1843,
+            0.8255
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "rooster.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.rooster",
+      "rarity": "Uncommon",
+      "collection_slug": "moonrace",
+      "figure_slug": "rooster",
+      "root": "MoonRooster",
+      "alias": "rooster",
+      "asset_key": "Models.Moonrace.MoonRooster",
+      "height_studs": 2.96,
+      "rotation_degrees": [
+        0,
+        0,
+        1.85
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4232,
+            0.0,
+            0.5944
+          ],
+          [
+            0.5832,
+            0.1913,
+            0.7344
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "rabbit.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.rabbit",
+      "rarity": "Common",
+      "collection_slug": "moonrace",
+      "figure_slug": "rabbit",
+      "root": "MoonRabbit",
+      "alias": "rabbit",
+      "asset_key": "Models.Moonrace.MoonRabbit",
+      "height_studs": 3.25,
+      "rotation_degrees": [
+        0,
+        0,
+        -18.2
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4139,
+            0.0,
+            0.4866
+          ],
+          [
+            0.5739,
+            0.1723,
+            0.6266
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "tiger.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.tiger",
+      "rarity": "Legendary",
+      "collection_slug": "moonrace",
+      "figure_slug": "tiger",
+      "root": "MoonTiger",
+      "alias": "tiger",
+      "asset_key": "Models.Moonrace.MoonTiger",
+      "height_studs": 3.02,
+      "rotation_degrees": [
+        0,
+        0,
+        -3.77
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4215,
+            0.0,
+            0.6533
+          ],
+          [
+            0.5815,
+            0.1927,
+            0.7933
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "dog.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.dog",
+      "rarity": "Rare",
+      "collection_slug": "moonrace",
+      "figure_slug": "dog",
+      "root": "MoonDog",
+      "alias": "dog",
+      "asset_key": "Models.Moonrace.MoonDog",
+      "height_studs": 2.88,
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {},
+      "rotation_degrees": [
+        0,
+        0,
+        5.89
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4231,
+            0.0,
+            0.5564
+          ],
+          [
+            0.5831,
+            0.119,
+            0.6964
+          ]
+        ]
+      }
+    }
+  ]
+}

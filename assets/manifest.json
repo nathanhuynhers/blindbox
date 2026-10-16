@@ -262,32 +262,11 @@
       "key": "Models.Moonrace.MoonDog",
       "requiredNodes": [
         "MoonDog",
-        "MoonDog_Head",
-        "MoonDog_Mask",
-        "MoonDog_Ears",
-        "MoonDog_EarInner",
         "MoonDog_Eyes",
-        "MoonDog_Iris",
-        "MoonDog_Pupil",
-        "MoonDog_EyeShine",
-        "MoonDog_Lash",
-        "MoonDog_Brow",
-        "MoonDog_Nose",
-        "MoonDog_Mouth",
-        "MoonDog_Tongue",
-        "MoonDog_Blush",
-        "MoonDog_Body",
-        "MoonDog_Chest",
-        "MoonDog_Paws",
-        "MoonDog_Scarf",
-        "MoonDog_ScarfTails",
-        "MoonDog_ScarfPattern",
-        "MoonDog_Gold",
-        "MoonDog_PawPrint",
-        "MoonDog_Tassel",
-        "MoonDog_Tail"
+        "MoonDog_Part002",
+        "MoonDog_Part003"
       ],
-      "source": "assets/figures/moonrace/dog/model/dog_roblox.glb"
+      "source": "assets/figures/external/moonrace/dog/d5ea51166f603ff5dac68cf69c60352d5aa5cb1831704e69d756dc7eafcef7b3/model/dog_roblox.glb"
     },
     "dragon": {
       "assetType": "Model",
@@ -1024,9 +1003,10 @@
       "requiredNodes": [
         "MoonOx",
         "MoonOx_Eyes",
-        "MoonOx_Part002"
+        "MoonOx_Part002",
+        "MoonOx_Part003"
       ],
-      "source": "assets/figures/external/moonrace/ox/ab7e74f772203ddd7c1387496372fdbdc758b024c01db1cf5d317d44d7508a8b/model/ox_roblox.glb"
+      "source": "assets/figures/external/moonrace/ox/9e81b10e2d7ba6f8b7db1f762432ccf15a4700c2d3aeed851dd99c7f3f31173e/model/ox_roblox.glb"
     },
     "page_turner": {
       "assetType": "Model",
@@ -1354,9 +1334,10 @@
       "requiredNodes": [
         "MoonRabbit",
         "MoonRabbit_Eyes",
-        "MoonRabbit_Part002"
+        "MoonRabbit_Part002",
+        "MoonRabbit_Part003"
       ],
-      "source": "assets/figures/external/moonrace/rabbit/03479113470a1b9ff1fe8a3ee57a3b5635904188f4c464826e829b778a695b8a/model/rabbit_roblox.glb"
+      "source": "assets/figures/external/moonrace/rabbit/125df77f3bdfef7bce2cc930d17cd9fdb9c61f4f393748d1141052646a94c9be/model/rabbit_roblox.glb"
     },
     "radiant": {
       "assetType": "Model",
@@ -1467,9 +1448,10 @@
       "requiredNodes": [
         "MoonRooster",
         "MoonRooster_Eyes",
-        "MoonRooster_Part002"
+        "MoonRooster_Part002",
+        "MoonRooster_Part003"
       ],
-      "source": "assets/figures/external/moonrace/rooster/d5233c48836d2c73ecd63380ae1c4c4e17ffe87440ef82e5c951853ad2fdfae9/model/rooster_roblox.glb"
+      "source": "assets/figures/external/moonrace/rooster/256aa76ebb7ad65ca54e025c5351790b0347cfa40c19acd9c5c6e1a4f401f465/model/rooster_roblox.glb"
     },
     "sanctuary": {
       "assetType": "Model",
@@ -1752,9 +1734,10 @@
       "requiredNodes": [
         "MoonTiger",
         "MoonTiger_Eyes",
-        "MoonTiger_Part002"
+        "MoonTiger_Part002",
+        "MoonTiger_Part003"
       ],
-      "source": "assets/figures/external/moonrace/tiger/38551b0085796dd0437f72073d322e5d9eddd68716216a4492933d1c4c17aa56/model/tiger_roblox.glb"
+      "source": "assets/figures/external/moonrace/tiger/4af324528f4a6e11cd04f1770e1287824f44cc5bb4332519065b7201b8c5b905/model/tiger_roblox.glb"
     },
     "town_poplar": {
       "assetType": "Model",

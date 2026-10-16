@@ -10,7 +10,11 @@ else gets clean palette regions propagated over the surface (inferred, not seen)
 view is camera-fitted only to report the figure's facing; its pose can differ from the model, and
 projecting sheet views produced misaligned camouflage, so they are not painted.
 
-  blender -b --factory-startup --python tools/figures/reference_paint.py -- <in.glb> <hero.png> <sheet.webp|-> <out.glb> <review_dir>
+  blender -b --factory-startup --python tools/figures/reference_paint.py -- <in.glb> <hero.png> <sheet.webp|-> <out.glb> <review_dir> [hero_az]
+
+Silhouettes are front/back ambiguous and the edge tie-break can pick the back (Moonrace Ox, Rooster). Check
+a gray render at the fitted azimuth against the reference; if wrong, pass hero_az (degrees) to search only
+within 25 degrees of it.
 """
 import bpy, sys, math, json, pathlib, numpy as np
 from mathutils import Vector
@@ -18,7 +22,8 @@ from mathutils.bvhtree import BVHTree
 from mathutils.kdtree import KDTree
 from bpy_extras.object_utils import world_to_camera_view
 
-src, hero_path, sheet_path, out_glb, review = sys.argv[sys.argv.index("--") + 1:]
+src, hero_path, sheet_path, out_glb, review, *hero_az = sys.argv[sys.argv.index("--") + 1:]
+hero_az = float(hero_az[0]) if hero_az else None
 review = pathlib.Path(review); review.mkdir(parents=True, exist_ok=True)
 N, V, G, TEX = 1024, 512, 256, 2048  # hero size, sheet-view size, fit grid, baked texture
 PRIORITY = {"hero": 1.0, "mirror": 0.8}
@@ -241,6 +246,7 @@ def fit(ref, azs, els=range(-30, 41, 10), keep=1):
             a1, e1 = best[1] if best[1] else (a0, e0)
             for az in np.arange(a1 - 3 * step, a1 + 3 * step + 0.1, step):
                 for el in np.arange(e1 - 3 * step, e1 + 3 * step + 0.1, step):
+                    if not min(els) <= el <= max(els): continue  # refinement must not drift into steep views (Joy)
                     v, t = iou(ref, float(az) % 360, float(el))
                     if v > best[0]: best = (v, (float(az) % 360, float(el)), t)
         out.append(best)
@@ -289,7 +295,9 @@ def refine(cand):
 
 
 # Hero renders are shot near eye level; steep views fit silhouettes by accident (Ares, Hera, Apollo hit 40-46 deg).
-cands = fit(hero_mask, range(0, 360, 10), range(-15, 21, 5), keep=3)
+azs = range(0, 360, 10) if hero_az is None else range(int(hero_az) - 25, int(hero_az) + 26, 5)
+cands = fit(hero_mask, azs, range(-15, 21, 5), keep=3 if hero_az is None else 1)
+cands = cands if isinstance(cands, list) else [cands]
 scored = [(refine(c), c) for c in cands]
 for (rb, base), c in scored:
     print("CAND hero", round(c[0], 4), c[1], "edges", round(base, 4), "->", round(rb[0], 4), flush=True)
@@ -304,6 +312,57 @@ if "front" in sources:
     if fb[0] >= 0.6: front_az, front_iou = fb[1][0], float(fb[0])
 for k in [k for k in sources if k != "hero"]: del sources[k]  # sheet poses differ from the model: facing only
 
+# --- Local warp: Tripo reshapes the pose slightly and the hero is a perspective render, so one rigid camera
+# leaves features doubled (Pawn's eyes) or offset. Per 16 px block (at 512 px) find the shift that best
+# aligns shaded-render edges with reference edges (normalized cross-correlation), keep confident blocks,
+# smooth the field, and apply it when projecting hero colours.
+H5, BS, RAD = 512, 16, 10
+place(sources["hero"]["az"], sources["hero"]["el"]); sc.display.shading.light = "STUDIO"; sc.display.shading.single_color = (0.8, 0.8, 0.8)
+rr = render(review / "_refine.png", N)
+dy0, dx0, k0 = sources["hero"]["refine"]
+ry_, rx_ = to_img(sources["hero"], rows / (N / G), cols / (N / G), dy0, dx0, k0)
+Gf_r = Gf[np.clip(ry_.round().astype(int), 0, N - 1), np.clip(rx_.round().astype(int), 0, N - 1)]
+A5 = gradient(rr[:, :, :3].mean(-1) * rr[:, :, 3])[::2, ::2]; B5 = Gf_r[::2, ::2]
+valid = grow(grow((rr[:, :, 3] > 0.5)[::2, ::2])).astype(float)
+gh = H5 // BS
+
+
+def bsum(X):
+    return X.reshape(gh, BS, gh, BS).sum((1, 3))
+
+
+Am = A5 * valid; nb = bsum(valid) + 1e-6; sa = bsum(Am); va = bsum(Am * Am) - sa * sa / nb
+best = np.full((gh, gh), -2.0); fy = np.zeros((gh, gh)); fx = np.zeros((gh, gh))
+for oy in range(-RAD, RAD + 1):
+    for ox in range(-RAD, RAD + 1):
+        Bs = np.roll(B5, (-oy, -ox), (0, 1)) * valid
+        sb = bsum(Bs); cov = bsum(Am * Bs) - sa * sb / nb; vb = bsum(Bs * Bs) - sb * sb / nb
+        ncc = cov / np.sqrt(np.maximum(va * vb, 1e-12)) - 0.002 * (oy * oy + ox * ox) ** 0.5  # mild preference for small shifts
+        upd = ncc > best; best[upd] = ncc[upd]; fy[upd] = oy; fx[upd] = ox
+conf = np.clip((best - 0.25) / 0.35, 0, 1) * (nb / BS ** 2 > 0.3)
+
+
+def blur(X, wgt, r=2):
+    k = np.exp(-0.5 * (np.arange(-r * 2, r * 2 + 1) / r) ** 2)
+    def sep(Y):
+        Y = np.apply_along_axis(lambda v: np.convolve(v, k, "same"), 0, Y)
+        return np.apply_along_axis(lambda v: np.convolve(v, k, "same"), 1, Y)
+    return sep(X * wgt) / np.maximum(sep(wgt), 1e-6)
+
+
+fy, fx = blur(fy, conf), blur(fx, conf)
+cov_ = blur(conf, np.ones_like(conf)); fy *= np.clip(cov_ * 3, 0, 1); fx *= np.clip(cov_ * 3, 0, 1)  # fade to 0 where nothing matched
+print("WARP blocks", int((conf > 0).sum()), "of", int((nb / BS ** 2 > 0.3).sum()), "max shift", round(float(np.hypot(fy, fx).max()), 1), "px@512", flush=True)
+
+
+def warp_at(r5, c5):
+    """Bilinear sample of the block flow at a 512-res render position (rows bottom-up)."""
+    gy_, gx_ = np.clip(r5 / BS - 0.5, 0, gh - 1.001), np.clip(c5 / BS - 0.5, 0, gh - 1.001)
+    y0, x0 = int(gy_), int(gx_); ty, tx = gy_ - y0, gx_ - x0
+    def bil(F): return (F[y0, x0] * (1 - ty) + F[y0 + 1, x0] * ty) * (1 - tx) + (F[y0, x0 + 1] * (1 - ty) + F[y0 + 1, x0 + 1] * ty) * tx
+    return bil(fy), bil(fx)
+
+
 # --- Per-source, per-vertex projection: image UV, view weight (grazing fades out), occlusion.
 bvh = BVHTree.FromObject(o, bpy.context.evaluated_depsgraph_get())
 n = len(me.vertices)
@@ -313,14 +372,33 @@ for name, S in sources.items():
     uv = np.zeros((n, 2)); w = np.zeros(n); sz = S["size"]
     for idx in range(n):
         p = world_to_camera_view(sc, cam, Vector(co[idx]))
-        ry, rx = to_img(S, p.y * G, p.x * G, dy, dx, k)
+        wy, wx = warp_at(p.y * H5, p.x * H5) if name == "hero" else (0.0, 0.0)
+        ry, rx = to_img(S, (p.y * H5 + wy) * G / H5, (p.x * H5 + wx) * G / H5, dy, dx, k)
         uv[idx] = (rx / sz, ry / sz)
         nd = float(nrm[idx] @ np.array(d))
-        if nd < 0.08 or not (0 <= rx < sz and 0 <= ry < sz): continue
+        # Grazing faces stretch a few image pixels into streaks; leave them to the clean palette fill.
+        if nd < 0.2 or not (0 <= rx < sz and 0 <= ry < sz): continue
         if bvh.ray_cast(Vector(co[idx]) + d * size * 0.01 + Vector(nrm[idx]) * size * 1e-3, d)[0] is not None: continue  # smaller offsets self-hit
-        w[idx] = min(1.0, (nd - 0.08) / 0.35)
+        w[idx] = min(1.0, (nd - 0.2) / 0.35)
     S.update(uv=uv, w=w)
     print("SEEN", name, int((w > 0).sum()), "of", n, flush=True)
+
+# Per-triangle hero visibility: faces the hero camera and its centroid is unblocked. Tripo hair and cloaks are
+# noisy thin shells whose vertex normals point every which way, so per-vertex tests left most of the visible
+# side unpainted (Taurus: 15% of triangles).
+loop_v = np.zeros(len(me.loops), int); me.loops.foreach_get("vertex_index", loop_v)
+poly_start = np.zeros(len(me.polygons), int); me.polygons.foreach_get("loop_start", poly_start)
+tri = loop_v[poly_start[:, None] + np.arange(3)]
+d_h = view_dir(sources["hero"]["az"], sources["hero"]["el"]); dh = np.array(d_h)
+fco = co[tri]; fn = np.cross(fco[:, 1] - fco[:, 0], fco[:, 2] - fco[:, 0])
+fn /= np.maximum(np.linalg.norm(fn, axis=1, keepdims=True), 1e-12); cen = fco.mean(1)
+hero_vis_face = np.abs(fn @ dh) > 0.05  # double-sided: some Tripo meshes are wound inside-out (Virgo); the ray test drops inner shells
+for fi in np.nonzero(hero_vis_face)[0]:
+    if bvh.ray_cast(Vector(cen[fi]) + d_h * size * 0.002, d_h)[0] is not None:
+        hero_vis_face[fi] = False
+seen_v = np.zeros(n, bool); seen_v[tri[hero_vis_face].ravel()] = True
+sources["hero"]["w"] = np.where(seen_v, np.maximum(sources["hero"]["w"], 0.5), 0.0)
+print("HERO faces visible", int(hero_vis_face.sum()), "of", len(tri), flush=True)
 
 # Mirror of the hero across X or Y through the bounding centre, whichever maps the surface onto itself.
 kd_all = KDTree(n)
@@ -376,6 +454,8 @@ assert all(len(p.vertices) == 3 for p in me.polygons), "expected triangles"
 textured = ["hero", "mirror"]
 score_f = np.stack([PRIORITY[nm] * sources[nm]["w"][tri].min(1) for nm in textured], 1)
 choice = np.where(score_f.max(1) > 0, score_f.argmax(1), -1)
+mirror_ok = sources["mirror"]["w"][tri].min(1) > 0
+choice = np.where(hero_vis_face, 0, np.where(mirror_ok, 1, -1))  # face-based: never put the front image on a back face
 colors = np.zeros((n, 3), np.float32); vbest = np.zeros(n)
 for nm in textured:
     pw = PRIORITY[nm] * sources[nm]["w"]; better = pw > vbest
@@ -404,97 +484,115 @@ cent, share = cent[keep], share[keep] / share[keep].sum()
 quant = lambda c: ((c[:, None] - cent[None]) ** 2).sum(-1).argmin(1)
 print("PALETTE", np.round(cent * 255).astype(int).tolist(), flush=True)
 
-# --- Labels: palette colour where seen, then propagated over the surface into hidden areas.
-edges = np.array([e.vertices[:] for e in me.edges])
+# --- Hidden surfaces: palette colours chosen by spatial neighbourhood (KD-tree over the visible surface, in
+# 3D), not mesh edges. Tripo hair and cloaks are thin disconnected shells, so edge propagation shattered the
+# far side into shards. Each hidden vertex takes a distance-weighted vote of its nearest seen neighbours'
+# palette labels, then a few rounds of spatial majority smoothing give large, calm regions.
+from mathutils.kdtree import KDTree as _KD
 labels = np.full(n, -1); labels[seen] = quant(colors[seen])
-reach = np.where(share < 0.06, 4, 10 ** 6)  # small accents (eyes, trims) must not flood hidden surfaces
-ring = np.where(labels >= 0, 0, -1)
-for limited in (True, False):
-    while True:
-        grown = False
-        for a_, b_ in ((0, 1), (1, 0)):
-            s_, t_ = edges[:, a_], edges[:, b_]
-            ok = (labels[s_] >= 0) & (labels[t_] < 0)
-            if limited: ok &= ring[s_] < reach[np.maximum(labels[s_], 0)]
-            if ok.any(): labels[t_[ok]] = labels[s_[ok]]; ring[t_[ok]] = ring[s_[ok]] + 1; grown = True
-        if not grown: break
-labels[labels < 0] = int(share.argmax())
 free = ~seen
-# Breadth-first growth leaves jagged wedges behind every stripe at the visible edge: diffuse the one-hot
-# labels over hidden vertices (seen ones fixed) so regions take smooth shapes and thin accents recede.
-P = np.eye(len(cent))[labels]
-deg = np.bincount(edges.ravel(), minlength=n).astype(float)
-for _ in range(150):
-    Q = np.stack([np.bincount(edges[:, 0], P[edges[:, 1], c], n) + np.bincount(edges[:, 1], P[edges[:, 0], c], n) for c in range(len(cent))], 1)
-    P[free] = Q[free] / np.maximum(deg[free], 1)[:, None]
-labels[free] = (P[free] * np.where(share < 0.06, 0.5, 1.0)).argmax(1)
+si = np.nonzero(seen)[0]; fi_ = np.nonzero(free)[0]
+kd_s = _KD(len(si))
+for j in si: kd_s.insert(Vector(co[j]), int(j))
+kd_s.balance()
+K = 24; rad = 0.08 * size
+accent = share < 0.06
+for idx in fi_:
+    votes = np.zeros(len(cent))
+    for (_, j, dist) in kd_s.find_n(Vector(co[idx]), K):
+        votes[labels[j]] += share[labels[j]] ** 0.75 / (dist + 0.02 * size)  # hidden sides lean to main body colours (Rabbit's back took ear orange)
+    labels[idx] = int(votes.argmax())
+kd_a = _KD(n)
+for j in range(n): kd_a.insert(Vector(co[j]), j)
+kd_a.balance()
+nbrs = {int(i): [j for (_, j, _) in kd_a.find_range(Vector(co[i]), rad)] for i in fi_}
+for _ in range(4):
+    new = labels.copy()
+    for i, js in nbrs.items():
+        cnt_ = np.bincount(labels[js], minlength=len(cent)); new[i] = int(cnt_.argmax())
+    labels = new
 colors[free] = cent[labels[free]]
-e2 = edges[labels[edges[:, 0]] == labels[edges[:, 1]]]
-for _ in range(8):  # soften inside a region only; region borders stay crisp
-    acc = np.zeros((n, 3)); cnt = np.zeros(n)
-    np.add.at(acc, e2[:, 0], colors[e2[:, 1]]); np.add.at(cnt, e2[:, 0], 1)
-    np.add.at(acc, e2[:, 1], colors[e2[:, 0]]); np.add.at(cnt, e2[:, 1], 1)
-    upd = free & (cnt > 0); colors[upd] = acc[upd] / cnt[upd][:, None]
+print("FILL hidden", len(fi_), "palette", len(cent), flush=True)
 
 
-# --- Bake attributes: per-corner atlas UV + blend weight, per-point fill colour.
+# --- Two materials. "Hero" faces map straight onto the prepared reference image: crisp, seamless, no bake.
+# "Fill" faces (unseen from the hero) get a small baked texture of their smooth palette colours. Baking
+# everything into one Smart-UV atlas shredded the visible side into thousands of tiny islands that Roblox's
+# 1024 px texture cap turned into flat shards.
 def linear(c): return np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4).astype(np.float32)
 
 
 fill = me.color_attributes.new("fill", "FLOAT_COLOR", "POINT")
 fill.data.foreach_set("color", np.concatenate([linear(colors), np.ones((n, 1), np.float32)], 1).ravel())
-luv = np.zeros((len(me.loops), 2)); lw = np.zeros(len(me.loops))
+luv = np.zeros((len(me.loops), 2))
 for i_, nm in enumerate(textured):
     f = np.nonzero(choice == i_)[0]
     if not len(f): continue
-    ls = (poly_start[f, None] + np.arange(3)).ravel(); vs = loop_v[ls]
-    luv[ls] = atlas_uv(nm, sources[nm]["uv"][vs]); lw[ls] = sources[nm]["w"][vs]
-proj = me.uv_layers.new(name="proj"); proj.data.foreach_set("uv", luv.ravel())
-vis = me.color_attributes.new("vis", "FLOAT_COLOR", "CORNER"); vis.data.foreach_set("color", np.repeat(lw.astype(np.float32), 4))
-
+    ls = (poly_start[f, None] + np.arange(3)).ravel()
+    luv[ls] = np.clip(sources[nm]["uv"][loop_v[ls]], 0, 1)
+t_uv = luv[poly_start[:, None] + np.arange(3)]
+uv_area = np.abs((t_uv[:, 1, 0] - t_uv[:, 0, 0]) * (t_uv[:, 2, 1] - t_uv[:, 0, 1]) - (t_uv[:, 1, 1] - t_uv[:, 0, 1]) * (t_uv[:, 2, 0] - t_uv[:, 0, 0]))
+hero_face = (choice >= 0) & (uv_area * N * N > 1e-3)  # sub-texel slivers go to fill (importer rejects zero-area UVs)
 bpy.context.view_layer.objects.active = o; o.select_set(True)
-uv0 = me.uv_layers.new(name="UVMap"); me.uv_layers.active = uv0
-bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT")
-bpy.ops.uv.smart_project(angle_limit=math.radians(60), island_margin=0.004)
+uv0 = me.uv_layers.new(name="UVMap"); me.uv_layers.active = uv0; uv0.data.foreach_set("uv", luv.ravel())
+import bmesh
+bpy.context.tool_settings.mesh_select_mode = (False, False, True)
+bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="DESELECT")
+bm_ = bmesh.from_edit_mesh(me); bm_.faces.ensure_lookup_table()
+for f_ in bm_.faces: f_.select_set(not hero_face[f_.index])
+bmesh.update_edit_mesh(me)
+bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.01)
+# Smart UV packs every island in the mesh; with hero faces hidden it packs only the fill islands.
+bpy.ops.mesh.reveal(); bpy.ops.mesh.select_all(action="DESELECT")
+bm_ = bmesh.from_edit_mesh(me); bm_.faces.ensure_lookup_table()
+for f_ in bm_.faces: f_.select_set(not hero_face[f_.index])
+bmesh.update_edit_mesh(me)
+bpy.ops.mesh.hide(unselected=True)
+bpy.context.scene.tool_settings.use_uv_select_sync = True
+bpy.ops.uv.select_all(action="SELECT"); bpy.ops.uv.pack_islands(margin=0.004, rotate=True)
+bpy.ops.mesh.reveal()
 bpy.ops.object.mode_set(mode="OBJECT")
-
-refimg = bpy.data.images.new("atlas", 2 * N, N, alpha=False)
-refimg.pixels.foreach_set(np.concatenate([atlas, np.ones((N, 2 * N, 1), np.float32)], 2).ravel())
-baked = bpy.data.images.new(pathlib.Path(out_glb).stem + "_albedo", TEX, TEX, alpha=False)
-mat = bpy.data.materials.new("bake"); mat.use_nodes = True; nt = mat.node_tree; nt.nodes.clear()
-nd_ = nt.nodes.new
-uvp = nd_("ShaderNodeUVMap"); uvp.uv_map = "proj"
-tex = nd_("ShaderNodeTexImage"); tex.image = refimg; tex.extension = "EXTEND"
-fa = nd_("ShaderNodeVertexColor"); fa.layer_name = "fill"
-va = nd_("ShaderNodeVertexColor"); va.layer_name = "vis"
-sep = nd_("ShaderNodeSeparateColor"); mix = nd_("ShaderNodeMix"); mix.data_type = "RGBA"
-em = nd_("ShaderNodeEmission"); outn = nd_("ShaderNodeOutputMaterial")
-target = nd_("ShaderNodeTexImage"); target.image = baked
-L = nt.links.new
-L(uvp.outputs["UV"], tex.inputs["Vector"]); L(va.outputs["Color"], sep.inputs["Color"])
-L(sep.outputs[0], mix.inputs["Factor"]); L(fa.outputs["Color"], mix.inputs[6]); L(tex.outputs["Color"], mix.inputs[7])
-L(mix.outputs[2], em.inputs["Color"]); L(em.outputs["Emission"], outn.inputs["Surface"])
-nt.nodes.active = target; target.select = True
-me.materials.clear(); me.materials.append(mat)
+fill_uv = np.zeros(len(me.loops) * 2); me.uv_layers["UVMap"].data.foreach_get("uv", fill_uv); fill_uv = fill_uv.reshape(-1, 2)
+hl = (poly_start[hero_face, None] + np.arange(3)).ravel(); fill_uv[hl] = luv[hl]  # projection UVs win on hero faces
+me.uv_layers["UVMap"].data.foreach_set("uv", fill_uv.ravel())
+stem = pathlib.Path(out_glb).stem
+hero_img = bpy.data.images.new(stem + "_hero", N, N, alpha=False)
+hero_img.pixels.foreach_set(np.concatenate([np.clip(hero_col, 0, 1), np.ones((N, N, 1), np.float32)], 2).ravel()); hero_img.pack()
+fill_img = bpy.data.images.new(stem + "_fill", 1024, 1024, alpha=False)
+dummy = bpy.data.images.new("dummy", 8, 8)
+mats = []
+for nm_, img_ in (("hero", dummy), ("fill", fill_img)):
+    m_ = bpy.data.materials.new("bake_" + nm_); m_.use_nodes = True; nt = m_.node_tree; nt.nodes.clear()
+    vc = nt.nodes.new("ShaderNodeVertexColor"); vc.layer_name = "fill"
+    em = nt.nodes.new("ShaderNodeEmission"); outn = nt.nodes.new("ShaderNodeOutputMaterial")
+    nt.links.new(vc.outputs["Color"], em.inputs["Color"]); nt.links.new(em.outputs["Emission"], outn.inputs["Surface"])
+    t_ = nt.nodes.new("ShaderNodeTexImage"); t_.image = img_; nt.nodes.active = t_
+    mats.append(m_)
+me.materials.clear(); [me.materials.append(m_) for m_ in mats]
+mi_ = np.where(hero_face, 0, 1).astype(np.int32)
+me.polygons.foreach_set("material_index", mi_)
 sc.render.engine = "CYCLES"; sc.cycles.samples = 4; sc.cycles.device = "CPU"
-sc.render.bake.margin = 16; sc.render.bake.use_clear = True
+sc.render.bake.margin = 8; sc.render.bake.use_clear = True
 bpy.ops.object.bake(type="EMIT")
-baked.pack()
+fill_img.pack()
 
-# --- Clean export: geometry + UV0 + one textured material, no extra attributes.
-for a in [a for a in me.color_attributes if a.name in ("fill", "vis")]: me.color_attributes.remove(a)
-me.uv_layers.remove(me.uv_layers["proj"])
-final = bpy.data.materials.new(pathlib.Path(out_glb).stem); final.use_nodes = True
-bsdf = next(x for x in final.node_tree.nodes if x.type == "BSDF_PRINCIPLED")
-t2 = final.node_tree.nodes.new("ShaderNodeTexImage"); t2.image = baked
-final.node_tree.links.new(t2.outputs["Color"], bsdf.inputs["Base Color"])
-bsdf.inputs["Roughness"].default_value = 0.6; bsdf.inputs["Metallic"].default_value = 0.0
-me.materials.clear(); me.materials.append(final)
+# --- Clean export: geometry + UV0 + two textured materials, no extra attributes.
+for a in [a for a in me.color_attributes if a.name == "fill"]: me.color_attributes.remove(a)
+me.materials.clear()  # clearing resets material_index to 0; restored below
+for nm_, img_ in (("hero", hero_img), ("fill", fill_img)):
+    m_ = bpy.data.materials.new(f"{stem}_{nm_}"); m_.use_nodes = True
+    bsdf = next(x for x in m_.node_tree.nodes if x.type == "BSDF_PRINCIPLED")
+    t2 = m_.node_tree.nodes.new("ShaderNodeTexImage"); t2.image = img_
+    m_.node_tree.links.new(t2.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.6; bsdf.inputs["Metallic"].default_value = 0.0
+    me.materials.append(m_)
+me.polygons.foreach_set("material_index", mi_); me.update()
 o.name = me.name = "Body"
 pathlib.Path(out_glb).parent.mkdir(parents=True, exist_ok=True)
 bpy.ops.export_scene.gltf(filepath=out_glb, export_format="GLB", use_selection=True, export_texcoords=True,
                           export_normals=True, export_vertex_color="NONE", export_extras=False,
                           export_animations=False, export_yup=True)
+print("MATERIALS hero faces", int(hero_face.sum()), "fill faces", int((~hero_face).sum()), flush=True)
 
 # --- Review renders: albedo-only hero view, then lit views around the figure from its fitted front.
 sc.render.engine = "BLENDER_WORKBENCH"; sc.display.shading.color_type = "TEXTURE"; sc.render.film_transparent = False
@@ -505,7 +603,7 @@ for name, (a_, e_, light) in {"hero": (sources["hero"]["az"], sources["hero"]["e
     sc.display.shading.light = light; place(a_, e_); render(review / f"paint_{name}.png", 768)
 json.dump(dict(source=src, hero=hero_path, sheet=sheet_path, repairs=repairs, front_az=front_az, axis="XY"[axis], refine=list(sources["hero"]["refine"]),
                fits={nm: dict(iou=float(sources[nm]["iou"]), az=sources[nm]["az"], el=sources[nm]["el"]) for nm in names if "iou" in sources[nm]},
-               faces={nm: int((choice == i_).sum()) for i_, nm in enumerate(textured)}, front_iou=front_iou, fill_faces=int((choice < 0).sum()), triangles=len(tri)),
+               faces={nm: int((choice == i_).sum()) for i_, nm in enumerate(textured)}, front_iou=front_iou, fill_faces=int((~hero_face).sum()), triangles=len(tri)),
           open(review / "paint.json", "w", encoding="utf-8"), indent=1)
 for f in ("_fit.png", "_refine.png"): (review / f).unlink(missing_ok=True)
 print("DONE", out_glb, flush=True)

@@ -283,6 +283,14 @@ def convert(job):
                 lo, hi = e['eyes']['region']
                 eyes = bool(np.all(position >= lo) and np.all(position <= hi))
             groups.setdefault((eyes, face.material_index), []).append(face.index)
+        # A face region can straddle materials (painted Tripo figures: hero texture plus a fill texture on
+        # slivers). The eyes part takes the region's majority material; the rest stays in ordinary parts.
+        eye_groups = [k for k in groups if k[0]]
+        if 'region' in e['eyes'] and len(eye_groups) > 1:
+            keep = max(eye_groups, key=lambda k: len(groups[k]))
+            for k in eye_groups:
+                if k != keep:
+                    groups.setdefault((False, k[1]), []).extend(groups.pop(k))
         for (eyes, material), indices in sorted(groups.items(), reverse=True):
             selected_faces = [obj.data.polygons[i].vertices[:] for i in indices]
             groups_of_indices = partition(selected_faces, [v.co[:] for v in obj.data.vertices], MAX_TRIS)

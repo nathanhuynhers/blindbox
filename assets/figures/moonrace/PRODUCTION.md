@@ -22,6 +22,16 @@ Play Solo (local build, 2026-10-16): all 13 `Ready`; the 11 new models have 2 te
 `_Eyes` present, and render in colour (captures in `build/figures/moonrace-rest-studio/`). Opening, Display,
 Shelves, phone and two-client checks remain pending, as below.
 
+**2026-10-16 (second pass): Ox, Rooster, Rabbit, Tiger repainted; Dog replaced by the Tripo corgi** (batch
+[tripo_batch_fix.json](tripo_batch_fix.json), `moonrace-fix-001`). The user flagged them in Studio. Causes: the Ox
+and Rooster camera fits had picked the back view (their faces were painted onto their backs), and a single
+Smart-UV atlas shredded the visible side into shards. `reference_paint.py` now (a) accepts a pinned hero
+azimuth, (b) warps the projection locally onto mesh edges, (c) decides hero visibility per triangle, (d) keeps
+the hero side on the untouched reference image as its own material, with a second baked material for inferred
+regions, and (e) fills hidden sides with spatially smoothed, body-biased palette colours. The importer now gives
+the eyes part the majority material of a face region that straddles two materials. The old sculpted Dog was
+still live: the corgi from the earlier preview session had never been imported, and it is now.
+
 Thirteen original Chinese-zodiac designer toys reconstructed from the approved character sheets in each
 figure's `reference/` folder (originals kept in `assets/incoming/moonrace_<figure>_sheet.png`). Catalog
 collection `moon`, rarities per the brief. The Cat is the lost thirteenth sign and the Mythical chase figure.
@@ -29,20 +39,20 @@ collection `moon`, rarities per the brief. The Cat is the lost thirteenth sign a
 | Figure | Catalog ID | Rarity | MeshParts | Triangles | Size W × D × H (studs) | Largest mesh | Roblox asset |
 | --- | --- | --- | ---: | ---: | --- | ---: | --- |
 | Rat | `moon.rat` | Common | 2 | 19,932 | 3.41 × 1.96 × 3.12 | Body (Tripo, painted) | 90445507761070 |
-| Ox | `moon.ox` | Common | 2 | 18,870 | 2.90 × 2.78 × 3.26 | Body (Tripo, painted) | 109342049768676 |
-| Tiger | `moon.tiger` | Legendary | 2 | 19,830 | 3.65 × 3.19 × 3.02 | Body (Tripo, painted) | 116459560411422 |
-| Rabbit | `moon.rabbit` | Common | 2 | 19,058 | 2.40 × 1.83 × 3.25 | Body (Tripo, painted) | 127121294287729 |
+| Ox | `moon.ox` | Common | 3 | 18,870 | 3.11 × 2.97 × 3.26 | Body (Tripo, painted v2) | 77804658314112 |
+| Tiger | `moon.tiger` | Legendary | 3 | 19,830 | 3.65 × 3.19 × 3.02 | Body (Tripo, painted v2) | 128822692503820 |
+| Rabbit | `moon.rabbit` | Common | 3 | 19,058 | 2.40 × 1.83 × 3.25 | Body (Tripo, painted v2) | 79893095696957 |
 | Dragon | `moon.dragon` | Legendary | 2 | 19,126 | 3.56 × 2.87 × 3.34 | Body (Tripo, painted) | 123652325469820 |
 | Snake | `moon.snake` | Uncommon | 2 | 19,720 | 2.23 × 1.92 × 2.65 | Body (Tripo, painted) | 121455625651964 |
 | Horse | `moon.horse` | Uncommon | 2 | 19,384 | 1.81 × 3.59 × 2.93 | Body (Tripo, painted) | 137181243756586 |
 | Goat | `moon.goat` | Common | 2 | 19,036 | 2.89 × 2.24 × 2.71 | Body (Tripo, painted) | 103139641039054 |
 | Monkey | `moon.monkey` | Uncommon | 2 | 19,370 | 2.47 × 2.71 × 2.88 | Body (Tripo, painted) | 138779592435562 |
-| Rooster | `moon.rooster` | Uncommon | 2 | 19,722 | 2.28 × 2.53 × 2.96 | Body (Tripo, painted) | 129513774118433 |
-| Dog | `moon.dog` | Rare | 24 | 48,196 | 1.92 × 2.66 × 2.88 | Body 7,000 | 94277193176846 |
+| Rooster | `moon.rooster` | Uncommon | 3 | 19,722 | 2.26 × 2.54 × 2.96 | Body (Tripo, painted v2) | 83426922772510 |
+| Dog | `moon.dog` | Rare | 3 | 19,118 | 2.42 × 3.73 × 2.88 | Body (Tripo, painted v2) | 84568453281368 |
 | Pig | `moon.pig` | Rare | 2 | 19,458 | 2.64 × 2.21 × 2.66 | Body (Tripo, painted) | 117858047560206 |
 | Cat | `moon.cat` | Mythical | 9 | 117,592 | 3.52 × 3.92 × 3.40 | Eyes 17,593 | 90559133725577 |
 
-379,294 triangles in all; every part is below 20k (gate: 20k). Manifest keys are
+350,216 triangles in all; every part is below 20k (gate: 20k). Manifest keys are
 `Models.Moonrace.Moon<Figure>`, aliases are the figure slugs. Monkey and Rabbit were republished once as
 replacement assets (see "Studio verification"); the IDs above are current, the earlier ones are orphaned.
 
