@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16/fantasy_a.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/astral-signs/taurus_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 3,
+  "island_faces": 2
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  16,
+  -2,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8904915959232322,
+   "az": 346.0,
+   "el": 3.0
+  }
+ },
+ "faces": {
+  "hero": 3032,
+  "mirror": 430
+ },
+ "front_iou": 0.0,
+ "fill_faces": 15546,
+ "triangles": 19008
+}

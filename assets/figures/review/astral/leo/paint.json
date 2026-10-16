@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16/fantasy_b.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/astral-signs/leo_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 2,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  8,
+  14,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8815259093778836,
+   "az": 357.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 3548,
+  "mirror": 363
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14971,
+ "triangles": 18882
+}

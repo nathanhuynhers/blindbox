@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16/fantasy_c.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/astral-signs/aries_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 12,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  -16,
+  -2,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8200029244041527,
+   "az": 353.0,
+   "el": 8.0
+  }
+ },
+ "faces": {
+  "hero": 3381,
+  "mirror": 517
+ },
+ "front_iou": 0.0,
+ "fill_faces": 15005,
+ "triangles": 18903
+}

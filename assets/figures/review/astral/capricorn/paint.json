@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16/chibi_fantasy.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/astral-signs/capricorn_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 5,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -14,
+  -18,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.875196213383564,
+   "az": 349.0,
+   "el": 2.0
+  }
+ },
+ "faces": {
+  "hero": 2802,
+  "mirror": 349
+ },
+ "front_iou": 0.0,
+ "fill_faces": 15713,
+ "triangles": 18864
+}

@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16/stylized_chibi.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/astral-signs/virgo_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 7,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  4,
+  -20,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8830831099195711,
+   "az": 353.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 2339,
+  "mirror": 496
+ },
+ "front_iou": 0.0,
+ "fill_faces": 15707,
+ "triangles": 18542
+}
