@@ -266,7 +266,7 @@
         "MoonDog_Part002",
         "MoonDog_Part003"
       ],
-      "source": "assets/figures/external/moonrace/dog/d5ea51166f603ff5dac68cf69c60352d5aa5cb1831704e69d756dc7eafcef7b3/model/dog_roblox.glb"
+      "source": "assets/figures/external/moonrace/dog/f697d68c8eae37ac3ef36ff2b08d6d31da1bc1c5e1d5bb23f7835c6da41304c9/model/dog_roblox.glb"
     },
     "dragon": {
       "assetType": "Model",
@@ -492,9 +492,10 @@
       "requiredNodes": [
         "MoonGoat",
         "MoonGoat_Eyes",
-        "MoonGoat_Part002"
+        "MoonGoat_Part002",
+        "MoonGoat_Part003"
       ],
-      "source": "assets/figures/external/moonrace/goat/1861a31ba08ebbad03d1b93f9b7bfc94b9c60da19f259c21ef181ad78f69552f/model/goat_roblox.glb"
+      "source": "assets/figures/external/moonrace/goat/93aae90fdc9fc74d43e661a7a06e10c742185bee481ee3f974daffa571d2ba84/model/goat_roblox.glb"
     },
     "hearth_helm": {
       "assetType": "Model",
@@ -1006,7 +1007,7 @@
         "MoonOx_Part002",
         "MoonOx_Part003"
       ],
-      "source": "assets/figures/external/moonrace/ox/9e81b10e2d7ba6f8b7db1f762432ccf15a4700c2d3aeed851dd99c7f3f31173e/model/ox_roblox.glb"
+      "source": "assets/figures/external/moonrace/ox/726ae15f66abea82ec669879b7653e258a3b6e08c66d06c3fcc42c7ec0ac4163/model/ox_roblox.glb"
     },
     "page_turner": {
       "assetType": "Model",
@@ -1337,7 +1338,7 @@
         "MoonRabbit_Part002",
         "MoonRabbit_Part003"
       ],
-      "source": "assets/figures/external/moonrace/rabbit/125df77f3bdfef7bce2cc930d17cd9fdb9c61f4f393748d1141052646a94c9be/model/rabbit_roblox.glb"
+      "source": "assets/figures/external/moonrace/rabbit/7434d9d2575861d322fcddd496b39e79043540b9caa5f161ac8dc4acae4d7633/model/rabbit_roblox.glb"
     },
     "radiant": {
       "assetType": "Model",
@@ -1523,9 +1524,10 @@
       "requiredNodes": [
         "MoonSnake",
         "MoonSnake_Eyes",
-        "MoonSnake_Part002"
+        "MoonSnake_Part002",
+        "MoonSnake_Part003"
       ],
-      "source": "assets/figures/external/moonrace/snake/fc4869a2c04ce163596fd49705631bbbfc40086669606835c11ecfed6782fa62/model/snake_roblox.glb"
+      "source": "assets/figures/external/moonrace/snake/0cfdbae46d0aa1a1b64dc6dbc997cc61b8e4f624013c0dd40c8a72bb3ad7ed99/model/snake_roblox.glb"
     },
     "sprout_scout": {
       "assetType": "Model",
@@ -1737,7 +1739,7 @@
         "MoonTiger_Part002",
         "MoonTiger_Part003"
       ],
-      "source": "assets/figures/external/moonrace/tiger/4af324528f4a6e11cd04f1770e1287824f44cc5bb4332519065b7201b8c5b905/model/tiger_roblox.glb"
+      "source": "assets/figures/external/moonrace/tiger/45c89d56bd2683ed06306b86a5782993246aba948b69973f5d5853c356f052b8/model/tiger_roblox.glb"
     },
     "town_poplar": {
       "assetType": "Model",

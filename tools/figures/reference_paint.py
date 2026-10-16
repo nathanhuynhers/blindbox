@@ -22,8 +22,19 @@ from mathutils.bvhtree import BVHTree
 from mathutils.kdtree import KDTree
 from bpy_extras.object_utils import world_to_camera_view
 
-src, hero_path, sheet_path, out_glb, review, *hero_az = sys.argv[sys.argv.index("--") + 1:]
-hero_az = float(hero_az[0]) if hero_az else None
+src, hero_path, sheet_path, out_glb, review, *extra = sys.argv[sys.argv.index("--") + 1:]
+hero_az = float(extra[0]) if extra and extra[0] != "-" else None
+# Optional landmarks JSON: [{"render": [x, y], "ref" or "paint": [x, y]}, ...]. "render" is a pixel in the 768 px
+# paint_hero.png / landmarks_render.png frame (fitted hero camera), "ref" a pixel in the reference image
+# scaled to 768 px; both top-down. The projection is bent with a Gaussian RBF so each model feature (eye,
+# nostril, mouth) samples exactly its reference feature; the correction fades out away from the landmarks.
+landmarks = json.load(open(extra[1], encoding="utf-8")) if len(extra) > 1 and extra[1] != "-" else []
+# Optional face camera JSON: {"az", "el", "center": [x, y], "radius": px, "landmarks": [{"render", "ref"}, ...]}.
+# Tripo often turns the head relative to the body, so the body-fitted camera sees a turned face that no 2D warp
+# can match to a frontal reference face. The head (sphere around the ray-cast "center", "radius" in 768 px of the
+# face camera's frame) is projected from its own camera through an affine + RBF fit of >=3 landmarks, blended into
+# the body mapping over the outer 35% of the radius.
+face_spec = json.load(open(extra[2], encoding="utf-8")) if len(extra) > 2 and extra[2] != "-" else None
 review = pathlib.Path(review); review.mkdir(parents=True, exist_ok=True)
 N, V, G, TEX = 1024, 512, 256, 2048  # hero size, sheet-view size, fit grid, baked texture
 PRIORITY = {"hero": 1.0, "mirror": 0.8}
@@ -156,7 +167,7 @@ o = meshes[0]; me = o.data
 # shared by 3+ faces) and lone 1-3 triangle islands. Drop the smallest extra fin faces and islands under 8
 # faces; every other triangle is untouched.
 import bmesh
-bm = bmesh.new(); bm.from_mesh(me)
+bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
 bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-7)
 repairs = dict(fin_faces=0, island_faces=0)
 while True:
@@ -175,6 +186,9 @@ while True:
                     if h not in seen_f: seen_f.add(h); st.append(h)
         if len(isl) < 8: small.extend(isl)
     small = set(small) - fins
+    # Zero-area slivers export zero shading normals and fail the importer's lossless reimport (Moonrace Dragon).
+    bm.verts.ensure_lookup_table(); vs_ = list(bm.verts); sz2 = max((v.co - vs_[0].co).length_squared for v in vs_[:: max(1, len(vs_) // 500)]) or 1.0
+    small |= {f for f in bm.faces if f.calc_area() < 1e-10 * sz2} - fins
     if not fins and not small: break
     repairs["fin_faces"] += len(fins); repairs["island_faces"] += len(small)
     bmesh.ops.delete(bm, geom=list(fins | small), context="FACES")
@@ -363,6 +377,39 @@ def warp_at(r5, c5):
     return bil(fy), bil(fx)
 
 
+def hero_map(px, py):
+    """Normalized hero-camera position (x right, y up) -> hero image pixel (row bottom-up, col)."""
+    S = sources["hero"]; dy, dx, k = S["refine"]
+    wy, wx = warp_at(py * H5, px * H5)
+    return to_img(S, (py * H5 + wy) * G / H5, (px * H5 + wx) * G / H5, dy, dx, k)
+
+
+LM_SIGMA = 0.07  # normalized render units (~54 px at 768); tighter bends features into streaks (Ox right eye)
+lm_pts, lm_w = np.zeros((0, 2)), np.zeros((0, 2))
+if landmarks:
+    lm_pts = np.array([[l["render"][0] / 768, 1 - l["render"][1] / 768] for l in landmarks])
+    # "ref": the feature's pixel in the reference (768 frame). "paint": where the current paint shows that feature
+    # in paint_hero.png - its reference pixel is then whatever that render point maps to without landmarks.
+    want = np.array([[N - l["ref"][1] * N / 768, l["ref"][0] * N / 768] if "ref" in l else
+                     hero_map(l["paint"][0] / 768, 1 - l["paint"][1] / 768) for l in landmarks])
+    have = np.array([hero_map(x, y) for x, y in lm_pts])
+    d2 = ((lm_pts[:, None] - lm_pts[None]) ** 2).sum(-1)
+    lm_w = np.linalg.solve(np.exp(-d2 / (2 * LM_SIGMA ** 2)) + 1e-6 * np.eye(len(lm_pts)), want - have)
+    print("LANDMARKS", len(landmarks), "max correction px@1024", round(float(np.abs(want - have).max()), 1), flush=True)
+
+
+def lm_corr(px, py):
+    if not len(lm_pts): return 0.0, 0.0
+    phi = np.exp(-((lm_pts - [px, py]) ** 2).sum(1) / (2 * LM_SIGMA ** 2))
+    c = phi @ lm_w; return float(c[0]), float(c[1])
+
+
+# Gray render of the fitted hero view in the paint_hero frame, for picking landmarks.
+place(sources["hero"]["az"], sources["hero"]["el"]); sc.display.shading.light = "STUDIO"; sc.display.shading.single_color = (0.8, 0.8, 0.8)
+sc.display.shading.show_cavity = True
+render(review / "landmarks_render.png", 768); sc.display.shading.show_cavity = False
+
+
 # --- Per-source, per-vertex projection: image UV, view weight (grazing fades out), occlusion.
 bvh = BVHTree.FromObject(o, bpy.context.evaluated_depsgraph_get())
 n = len(me.vertices)
@@ -372,8 +419,10 @@ for name, S in sources.items():
     uv = np.zeros((n, 2)); w = np.zeros(n); sz = S["size"]
     for idx in range(n):
         p = world_to_camera_view(sc, cam, Vector(co[idx]))
-        wy, wx = warp_at(p.y * H5, p.x * H5) if name == "hero" else (0.0, 0.0)
-        ry, rx = to_img(S, (p.y * H5 + wy) * G / H5, (p.x * H5 + wx) * G / H5, dy, dx, k)
+        if name == "hero":
+            ry, rx = hero_map(p.x, p.y); cy, cx = lm_corr(p.x, p.y); ry += cy; rx += cx
+        else:
+            ry, rx = to_img(S, p.y * G, p.x * G, dy, dx, k)
         uv[idx] = (rx / sz, ry / sz)
         nd = float(nrm[idx] @ np.array(d))
         # Grazing faces stretch a few image pixels into streaks; leave them to the clean palette fill.
@@ -394,11 +443,53 @@ fco = co[tri]; fn = np.cross(fco[:, 1] - fco[:, 0], fco[:, 2] - fco[:, 0])
 fn /= np.maximum(np.linalg.norm(fn, axis=1, keepdims=True), 1e-12); cen = fco.mean(1)
 hero_vis_face = np.abs(fn @ dh) > 0.05  # double-sided: some Tripo meshes are wound inside-out (Virgo); the ray test drops inner shells
 for fi in np.nonzero(hero_vis_face)[0]:
-    if bvh.ray_cast(Vector(cen[fi]) + d_h * size * 0.002, d_h)[0] is not None:
+    hit = bvh.ray_cast(Vector(cen[fi]) + d_h * size * 0.002, d_h)
+    if hit[0] is not None and hit[3] > 0.015 * size:  # nearer hits are the same thin doubled shell (Virgo: 97% of rays)
         hero_vis_face[fi] = False
 seen_v = np.zeros(n, bool); seen_v[tri[hero_vis_face].ravel()] = True
 sources["hero"]["w"] = np.where(seen_v, np.maximum(sources["hero"]["w"], 0.5), 0.0)
 print("HERO faces visible", int(hero_vis_face.sum()), "of", len(tri), flush=True)
+
+if face_spec:
+    FS = face_spec; place(FS["az"], FS["el"]); d_f = view_dir(FS["az"], FS["el"]); df = np.array(d_f)
+    pf = np.array([world_to_camera_view(sc, cam, Vector(c_))[:2] for c_ in co])  # normalized x right, y up
+    # Head centre: ray from the face camera through the marked pixel.
+    cx_, cy_ = FS["center"][0] / 768, 1 - FS["center"][1] / 768
+    q_ = cam.rotation_euler.to_quaternion(); right_, up_ = q_ @ Vector((1, 0, 0)), q_ @ Vector((0, 1, 0))
+    origin_ = cam.location + right_ * (cx_ - 0.5) * cam.data.ortho_scale + up_ * (cy_ - 0.5) * cam.data.ortho_scale
+    hit_ = bvh.ray_cast(origin_, -d_f)[0]; assert hit_ is not None, "face centre misses the mesh"
+    R_ = FS["radius"] / 768 * cam.data.ortho_scale
+    dist_ = np.linalg.norm(co - np.array(hit_), axis=1)
+    t_face = np.clip((R_ - dist_) / (0.35 * R_), 0, 1)
+    L_ = FS["landmarks"]; P_ = np.array([[l["render"][0] / 768, 1 - l["render"][1] / 768] for l in L_])
+    W_ = np.array([[N - l["ref"][1] * N / 768, l["ref"][0] * N / 768] for l in L_])
+    X_ = np.c_[P_, np.ones(len(P_))]; A_ = np.linalg.lstsq(X_, W_, rcond=None)[0]
+    res_ = W_ - X_ @ A_
+    # Regularized: close landmarks (mouth corners, nostrils) made an exact RBF overshoot and balloon features (Goat eyes).
+    K_ = np.exp(-((P_[:, None] - P_[None]) ** 2).sum(-1) / (2 * LM_SIGMA ** 2)) + FS.get("smooth", 0.5) * np.eye(len(P_))
+    Wr_ = np.linalg.solve(K_, res_)
+    # "mirror": "left"/"right" copies that (near, undistorted) half of the reference face onto the other half
+    # about the vertical through "center": a 3/4 reference squeezes the far eye, which looks wrong on a
+    # frontal Tripo face. The copied half is mirror-imaged, which suits these symmetric faces.
+    q_pf = pf.copy()
+    if FS.get("mirror"):
+        far = (pf[:, 0] > cx_) if FS["mirror"] == "left" else (pf[:, 0] < cx_)
+        q_pf[far, 0] = 2 * cx_ - pf[far, 0]
+    phi_ = np.exp(-((q_pf[:, None] - P_[None]) ** 2).sum(-1) / (2 * LM_SIGMA ** 2))
+    rc_face = np.c_[q_pf, np.ones(n)] @ A_ + phi_ @ Wr_  # (row, col) in the N px reference
+    uv_face = np.stack([rc_face[:, 1] / N, rc_face[:, 0] / N], 1)
+    H_ = sources["hero"]; H_["uv"] = H_["uv"] * (1 - t_face[:, None]) + uv_face * t_face[:, None]
+    # Visibility from the face camera inside the head region.
+    fco_ = co[tri]; cen_ = fco_.mean(1); t_c = t_face[tri].mean(1)
+    face_vis = (t_c > 0.5) & (np.abs(fn @ df) > 0.05)
+    for fi in np.nonzero(face_vis)[0]:
+        hit = bvh.ray_cast(Vector(cen_[fi]) + d_f * size * 0.002, d_f)
+        if hit[0] is not None and hit[3] > 0.04 * size: face_vis[fi] = False  # a lid overhang is fine; another body part is not
+    hero_vis_face = np.where(t_c > 0.5, face_vis, hero_vis_face)
+    seen_v = np.zeros(n, bool); seen_v[tri[hero_vis_face].ravel()] = True
+    H_["w"] = np.where(seen_v, np.maximum(H_["w"], 0.5), 0.0)
+    print("FACECAM", FS["az"], FS["el"], "head verts", int((t_face > 0).sum()), "face tris", int(face_vis.sum()),
+          "affine rms px", round(float(np.sqrt((res_ ** 2).sum(1).mean())), 1), flush=True)
 
 # Mirror of the hero across X or Y through the bounding centre, whichever maps the surface onto itself.
 kd_all = KDTree(n)
@@ -497,10 +588,11 @@ for j in si: kd_s.insert(Vector(co[j]), int(j))
 kd_s.balance()
 K = 24; rad = 0.08 * size
 accent = share < 0.06
+lum = cent @ np.array([0.299, 0.587, 0.114])
 for idx in fi_:
     votes = np.zeros(len(cent))
     for (_, j, dist) in kd_s.find_n(Vector(co[idx]), K):
-        votes[labels[j]] += share[labels[j]] ** 0.75 / (dist + 0.02 * size)  # hidden sides lean to main body colours (Rabbit's back took ear orange)
+        votes[labels[j]] += share[labels[j]] ** 0.75 * (0.35 + lum[labels[j]]) / (dist + 0.02 * size)  # main body colours, not shading (Rabbit's back took ear orange; Fog/Hail went charcoal)
     labels[idx] = int(votes.argmax())
 kd_a = _KD(n)
 for j in range(n): kd_a.insert(Vector(co[j]), j)
@@ -533,6 +625,39 @@ for i_, nm in enumerate(textured):
 t_uv = luv[poly_start[:, None] + np.arange(3)]
 uv_area = np.abs((t_uv[:, 1, 0] - t_uv[:, 0, 0]) * (t_uv[:, 2, 1] - t_uv[:, 0, 1]) - (t_uv[:, 1, 1] - t_uv[:, 0, 1]) * (t_uv[:, 2, 0] - t_uv[:, 0, 0]))
 hero_face = (choice >= 0) & (uv_area * N * N > 1e-3)  # sub-texel slivers go to fill (importer rejects zero-area UVs)
+# Majority-filter the hero/fill split over edge-adjacent faces: lone faces of the other material leave
+# point-touching fans in the importer's parts that Blender reimports with zero normals (Moonrace Dragon).
+_ef = {}
+for p_ in me.polygons:
+    for ek in p_.edge_keys: _ef.setdefault(ek, []).append(p_.index)
+_adj = [[] for _ in range(len(me.polygons))]
+for fs_ in _ef.values():
+    for a_ in fs_:
+        _adj[a_].extend(b_ for b_ in fs_ if b_ != a_)
+for _ in range(2):
+    nb_ = np.array([np.mean(hero_face[js]) if js else float(hero_face[i]) for i, js in enumerate(_adj)])
+    hero_face = np.where(nb_ > 0.5, True, np.where(nb_ < 0.5, False, hero_face)) & (uv_area * N * N > 1e-3)
+# Where one material's faces touch a vertex as separate fans (only a point in common), give the whole fan to
+# fill: such point contacts reimport with zero normals in Blender and fail the lossless gate (Moonrace Dragon).
+_vf = {}
+for p_ in me.polygons:
+    for v_ in p_.vertices: _vf.setdefault(v_, []).append(p_.index)
+_fe = [set(me.polygons[i].edge_keys) for i in range(len(me.polygons))]
+for _ in range(3):
+    changed_ = 0
+    for v_, fs_ in _vf.items():
+        for mat_ in (True, False):
+            sel_ = [f_ for f_ in fs_ if hero_face[f_] == mat_]
+            if len(sel_) < 2: continue
+            comp_ = {sel_[0]}; grew_ = True
+            while grew_:
+                grew_ = False
+                for f_ in sel_:
+                    if f_ not in comp_ and any(_fe[f_] & _fe[g_] for g_ in comp_): comp_.add(f_); grew_ = True
+            if len(comp_) < len(sel_):
+                for f_ in fs_:
+                    if hero_face[f_]: hero_face[f_] = False; changed_ += 1
+    if not changed_: break
 bpy.context.view_layer.objects.active = o; o.select_set(True)
 uv0 = me.uv_layers.new(name="UVMap"); me.uv_layers.active = uv0; uv0.data.foreach_set("uv", luv.ravel())
 import bmesh
@@ -587,6 +712,13 @@ for nm_, img_ in (("hero", hero_img), ("fill", fill_img)):
     bsdf.inputs["Roughness"].default_value = 0.6; bsdf.inputs["Metallic"].default_value = 0.0
     me.materials.append(m_)
 me.polygons.foreach_set("material_index", mi_); me.update()
+# Consistent outward winding (Tripo mixes it; Roblox culls back faces) and plain smooth normals from the geometry.
+# Tripo's own normals are smooth vertex normals too, but at folded spots a part boundary leaves fans where
+# Blender can't store them and the glTF reimport turns them to zero (Moonrace Dragon) - a black dot in-game.
+import bmesh as _bm
+bmw = _bm.new(); bmw.from_mesh(me); _bm.ops.recalc_face_normals(bmw, faces=bmw.faces); bmw.to_mesh(me); bmw.free()
+if me.has_custom_normals: me.normals_split_custom_set([(0.0, 0.0, 0.0)] * len(me.loops))
+me.shade_smooth()
 o.name = me.name = "Body"
 pathlib.Path(out_glb).parent.mkdir(parents=True, exist_ok=True)
 bpy.ops.export_scene.gltf(filepath=out_glb, export_format="GLB", use_selection=True, export_texcoords=True,
