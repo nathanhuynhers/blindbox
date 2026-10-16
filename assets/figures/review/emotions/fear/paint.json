@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g07.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/human-emotions/fear_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 2,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  18,
+  -6,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8222086684710098,
+   "az": 329.0,
+   "el": 3.0
+  }
+ },
+ "faces": {
+  "hero": 4700,
+  "mirror": 946
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13621,
+ "triangles": 19267
+}

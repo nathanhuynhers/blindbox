@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g02.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/human-emotions/anger_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  24,
+  -16,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8639868648664497,
+   "az": 333.0,
+   "el": -10.0
+  }
+ },
+ "faces": {
+  "hero": 5292,
+  "mirror": 1270
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12776,
+ "triangles": 19338
+}

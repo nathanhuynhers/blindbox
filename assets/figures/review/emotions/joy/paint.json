@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g09.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/human-emotions/joy_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  24,
+  12,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.777870269578024,
+   "az": 338.0,
+   "el": 26.0
+  }
+ },
+ "faces": {
+  "hero": 3874,
+  "mirror": 1338
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13672,
+ "triangles": 18884
+}
