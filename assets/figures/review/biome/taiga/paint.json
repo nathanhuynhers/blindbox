@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16d/two.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/biomes/taiga_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  4,
+  16,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8271834145586756,
+   "az": 323.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 3815,
+  "mirror": 1994
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13729,
+ "triangles": 19538
+}

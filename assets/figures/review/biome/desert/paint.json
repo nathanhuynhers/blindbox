@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16d/stylized_fantasy.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/biomes/desert_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 8,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  22,
+  -6,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8051575055760946,
+   "az": 316.0,
+   "el": 3.0
+  }
+ },
+ "faces": {
+  "hero": 2981,
+  "mirror": 722
+ },
+ "front_iou": 0.0,
+ "fill_faces": 15613,
+ "triangles": 19316
+}
