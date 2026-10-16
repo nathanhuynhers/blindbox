@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m1.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/pocket-orbit/earth_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -20,
+  24,
+  0.97
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.7609210577408457,
+   "az": 351.0,
+   "el": 0.0
+  }
+ },
+ "faces": {
+  "hero": 6167,
+  "mirror": 1147
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12470,
+ "triangles": 19078
+}
