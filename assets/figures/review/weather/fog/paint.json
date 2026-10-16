@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g16.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/weather/fog_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -28,
+  -12,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.6732029713786323,
+   "az": 341.0,
+   "el": -7.0
+  }
+ },
+ "faces": {
+  "hero": 4352,
+  "mirror": 1253
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14221,
+ "triangles": 19826
+}

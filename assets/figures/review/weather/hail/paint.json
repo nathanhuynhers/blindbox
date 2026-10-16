@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g01.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/weather/hail_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 2,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -24,
+  -6,
+  0.97
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.6861580630424852,
+   "az": 209.0,
+   "el": 32.0
+  }
+ },
+ "faces": {
+  "hero": 2853,
+  "mirror": 607
+ },
+ "front_iou": 0.0,
+ "fill_faces": 15322,
+ "triangles": 18782
+}
