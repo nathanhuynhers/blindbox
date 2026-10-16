@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m2.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/desserts/matcha_mochi_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  0,
+  -6,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.902600996126176,
+   "az": 329.0,
+   "el": -9.0
+  }
+ },
+ "faces": {
+  "hero": 4252,
+  "mirror": 1540
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13484,
+ "triangles": 19276
+}

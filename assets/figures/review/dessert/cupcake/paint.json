@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m6.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/desserts/cupcake_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  4,
+  4,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8811960666265302,
+   "az": 337.0,
+   "el": -7.0
+  }
+ },
+ "faces": {
+  "hero": 4760,
+  "mirror": 2210
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12454,
+ "triangles": 19424
+}

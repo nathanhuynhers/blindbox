@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m3.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/desserts/donut_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -2,
+  -2,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.9465018678227183,
+   "az": 3.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 5460,
+  "mirror": 755
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13349,
+ "triangles": 19564
+}

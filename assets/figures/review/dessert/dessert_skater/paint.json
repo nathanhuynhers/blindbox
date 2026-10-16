@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m4.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/desserts/dessert_skater_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -4,
+  -4,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8490027156100759,
+   "az": 42.0,
+   "el": 10.0
+  }
+ },
+ "faces": {
+  "hero": 3981,
+  "mirror": 2806
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12559,
+ "triangles": 19346
+}

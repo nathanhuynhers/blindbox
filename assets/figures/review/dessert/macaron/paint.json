@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m5.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/desserts/macaron_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  24,
+  -22,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8124763883641859,
+   "az": 353.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 4060,
+  "mirror": 2860
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12212,
+ "triangles": 19132
+}

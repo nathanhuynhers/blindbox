@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m7.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/desserts/strawberry_shortcake_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  0,
+  0,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.89246820184554,
+   "az": 342.0,
+   "el": 2.0
+  }
+ },
+ "faces": {
+  "hero": 4703,
+  "mirror": 1116
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13845,
+ "triangles": 19664
+}
