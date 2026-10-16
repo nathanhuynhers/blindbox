@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16f/n1.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/five-senses/smell_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 1,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  0,
+  -6,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8470713148115377,
+   "az": 333.0,
+   "el": -4.0
+  }
+ },
+ "faces": {
+  "hero": 3358,
+  "mirror": 1281
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14547,
+ "triangles": 19186
+}

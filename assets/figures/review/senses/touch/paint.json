@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16f/n2.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/five-senses/touch_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -24,
+  16,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8184897617416458,
+   "az": 350.0,
+   "el": -6.0
+  }
+ },
+ "faces": {
+  "hero": 4556,
+  "mirror": 1196
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13766,
+ "triangles": 19518
+}
