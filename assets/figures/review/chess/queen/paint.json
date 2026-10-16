@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g14.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/humanoid-chess-pieces/queen_mythical.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 1,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -24,
+  -12,
+  0.97
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.80119940029985,
+   "az": 19.0,
+   "el": 21.0
+  }
+ },
+ "faces": {
+  "hero": 4516,
+  "mirror": 961
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13481,
+ "triangles": 18958
+}

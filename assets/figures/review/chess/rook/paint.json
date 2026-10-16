@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g03.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/humanoid-chess-pieces/rook_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  8,
+  -28,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8926493192797541,
+   "az": 348.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 4162,
+  "mirror": 366
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14520,
+ "triangles": 19048
+}
