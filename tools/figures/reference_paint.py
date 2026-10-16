@@ -48,7 +48,8 @@ def foreground(px, b):
     bg = A @ np.linalg.lstsq(A[inl], px[inl], rcond=None)[0]
     bg = np.clip(bg, np.percentile(px[inl], 2, 0), np.percentile(px[inl], 98, 0))
     r = px / np.maximum(bg, 1e-3)
-    shadow = (r.max(-1) - r.min(-1) < 0.05) & (r.mean(-1) < 0.985)
+    # Floor shadows only darken the backdrop a little; darker neutral pixels (black hats, gray fog) are figure.
+    shadow = (r.max(-1) - r.min(-1) < 0.05) & (r.mean(-1) < 0.985) & (r.mean(-1) > 0.8)
     return (np.abs(px - bg).max(-1) > 0.06) & ~shadow, bg
 
 
