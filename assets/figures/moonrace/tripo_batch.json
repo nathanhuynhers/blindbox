@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "batch_id": "moonrace-cat-001",
+  "figures": [
+    {
+      "source": "moonrace_cat.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.cat",
+      "rarity": "Mythical",
+      "collection_slug": "moonrace",
+      "figure_slug": "cat",
+      "root": "MoonCat",
+      "alias": "cat",
+      "asset_key": "Models.Moonrace.MoonCat",
+      "height_studs": 3.4,
+      "rotation_degrees": [
+        0,
+        0,
+        -20
+      ],
+      "eyes": {
+        "object": "Face"
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {
+        "Body": {
+          "target_triangles": 100000,
+          "max_surface_error": 0.01
+        }
+      }
+    }
+  ]
+}

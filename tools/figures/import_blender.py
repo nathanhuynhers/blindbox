@@ -77,8 +77,13 @@ def normalize(objects, entry):
         mesh.transform(transform)
         obj.parent = None
         obj.matrix_world = Matrix.Identity(4)
-        obj.data = mesh
+        old, obj.data = obj.data, mesh
         mesh.normals_split_custom_set(normals)
+        # Roblox names MeshParts after the glTF mesh; the copy must not become "<name>.001".
+        name = old.name
+        if not old.users:
+            bpy.data.meshes.remove(old)
+        mesh.name = name
     coords = np.asarray([v.co[:] for o in objects for v in o.data.vertices])
     low, high = coords.min(0), coords.max(0)
     if not np.isfinite(coords).all() or min(high - low) <= 1e-8:
@@ -88,6 +93,34 @@ def normalize(objects, entry):
     for obj in objects:
         obj.data.transform(transform)
     return coords, scale
+
+
+def spread_degenerate_uvs(mesh, eps=1e-5):
+    """Give zero-UV-area triangles (collinear/coincident UVs) a sub-texel area so tangents exist.
+
+    Tripo exports and collapse decimation both produce some; they sample one texel either way, and
+    eps (0.04 texel at 4096 px) moves no visible texture. Returns how many triangles changed.
+    """
+    import bmesh
+    bm = bmesh.new()
+    bm.from_mesh(mesh)
+    uv = bm.loops.layers.uv.active
+    changed = 0
+    for f in bm.faces:
+        a, b, c = (l[uv].uv for l in f.loops)
+        if abs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) >= 1e-12:
+            continue
+        ab = b - a
+        if ab.length < 1e-4:
+            f.loops[1][uv].uv = (a.x + eps, a.y)
+            f.loops[2][uv].uv = (a.x, a.y + eps)
+        else:
+            n = ab.normalized()
+            f.loops[2][uv].uv = (c.x - n.y * eps, c.y + n.x * eps)
+        changed += 1
+    bm.to_mesh(mesh)
+    bm.free()
+    return changed
 
 
 def optimize(obj, policy, output, texture_limit=4096):
@@ -101,10 +134,19 @@ def optimize(obj, policy, output, texture_limit=4096):
     bpy.context.scene.collection.objects.link(source)
     before = source.data
     bpy.context.view_layer.objects.active = obj
+    # glTF import splits vertices along UV seams; decimating unwelded seams collapses each side
+    # independently and tears the surface. Weld positions first (UVs stay per corner).
+    import bmesh
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-7)
+    bm.to_mesh(obj.data)
+    bm.free()
     mod = obj.modifiers.new('ExplicitQualityBudget', 'DECIMATE')
     mod.ratio = policy['target_triangles'] / len(before.polygons)
     mod.use_collapse_triangulate = True
     bpy.ops.object.modifier_apply(modifier=mod.name)
+    uv_spread = spread_degenerate_uvs(obj.data)
     error = build.surface_error(before, obj.data)
     if not math.isfinite(error) or error > policy['max_surface_error']:
         raise ValueError(f'{obj.name}: decimation surface error {error} exceeds {policy["max_surface_error"]}; split instead')
@@ -140,7 +182,7 @@ def optimize(obj, policy, output, texture_limit=4096):
     bpy.data.objects.remove(source, do_unlink=True)
     return {'mode': 'explicit_decimation', 'surface_error': error, 'normal_bake': Path(bake).name if bake else None,
             'original_material': original_material, 'baked_material': baked_material,
-            'before_triangles': before_count, 'after_triangles': len(obj.data.polygons)}
+            'before_triangles': before_count, 'after_triangles': len(obj.data.polygons), 'uv_spread': uv_spread}
 
 
 def render(objects, output, slug, kind, framing, resolution, samples):
@@ -262,6 +304,9 @@ def convert(job):
     for obj in list(bpy.context.scene.objects):
         if obj not in parts:
             bpy.data.objects.remove(obj, do_unlink=True)
+    if any(info.get('mode') == 'explicit_decimation' for info in information.values()):
+        # Decimation can move the extreme vertices; restore the requested height and grounding.
+        normalize(parts, dict(e, rotation_degrees=[0, 0, 0]))
     root = bpy.data.objects.new(e['root'], None)
     bpy.context.scene.collection.objects.link(root)
     for obj in parts:

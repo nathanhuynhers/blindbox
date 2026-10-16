@@ -23,7 +23,7 @@ collection `moon`, rarities per the brief. The Cat is the lost thirteenth sign a
 | Rooster | `moon.rooster` | Uncommon | 23 | 55,688 | 2.46 × 2.17 × 2.96 | Body 7,000 | 104113895492534 |
 | Dog | `moon.dog` | Rare | 24 | 48,196 | 1.92 × 2.66 × 2.88 | Body 7,000 | 94277193176846 |
 | Pig | `moon.pig` | Rare | 18 | 39,482 | 1.86 × 2.18 × 2.66 | Body 8,000 | 126529031599245 |
-| Cat | `moon.cat` | Mythical | 2 | 20,886 | 4.20 × 3.41 × 3.40 | Body 18,498 | 139335350043376 |
+| Cat | `moon.cat` | Mythical | 9 | 117,592 | 3.52 × 3.92 × 3.40 | Eyes 17,593 | 90559133725577 |
 
 803,444 triangles in all; every part is below 11k (gate: 20k). Manifest keys are
 `Models.Moonrace.Moon<Figure>`, aliases are the figure slugs. Monkey and Rabbit were republished once as
@@ -102,15 +102,19 @@ still produces 6 parts / 18,134 triangles with zero reimport mismatches.
 
 Candid notes, most significant first:
 
-- **Cat (Mythical), replaced with a Tripo model.** The SDF Cat (`cat()` in figures.py, kept for
-  reference) was replaced by `cat_tripo()`: a Tripo image-to-3D model of the sheet. The export also
-  modelled the sheet's small turnaround views; `cat/source/prep_tripo.py` keeps only the largest island
-  (the hero cat, 216k triangles), scales it to 3.4 studs, decimates it to 18.5k, repairs collapse fins
-  and saves a 1024 px basecolor (Tripo's roughness/metal and normal maps are unused: no verified
-  SurfaceAppearance path). `MoonCat_Eyes` is a hidden marker sphere inside the head for runtime facing.
-  Loaded in Edit Studio from the asset: textured, both parts named correctly, facing -Z
-  (`cat/renders/cat_studio_*.jpg`). At 4.20 studs wide (ribbons and tails) it is the widest figure.
-- **Cat, earlier SDF version (superseded).** Silhouette, navy/cream mask, gold face marks, blue star-lit eyes, crescent-ring
+- **Cat (Mythical), paid Tripo model via the external import path.** Imported with
+  `tools/figures/external.py` (docs/TRIPO_BATCH_IMPORT.md), batch `tripo_batch.json`, after
+  `cat/source/prep_tripo_source.py`: the Tripo export modelled the whole sheet, so only the largest island
+  (the hero cat, 850k of 1.88M triangles) is kept and split into `Face` (protected eyes patch, 17,593) and
+  `Body`; two Tripo fins are dropped and Tripo's zero-area UV triangles get a sub-texel spread. Unused
+  `KHR_materials_volume`/`FB_ngon_encoding` declarations were stripped from the header first. Rotated
+  -20° about Z so the face, not the asymmetric tails, sets the front. Body decimated 832,745 → 99,999
+  (surface error 0.0038 studs); 4K basecolor, roughness/metal and normal maps kept. Source/export renders:
+  silhouette IoU ≥ 0.998, colour MAE ≤ 0.01. Studio Edit: 9 textured MeshParts with SurfaceAppearance,
+  `MoonCat_Eyes` is a MeshPart, ModelAssets proportion/facing checks pass (yaw 0.01°). Asset
+  77143924705971 (first upload) has `.001` mesh names and fails the runtime face lookup; superseded.
+- **Cat, Tripo free-trial and SDF versions (superseded, files removed).** The SDF Cat:
+ Silhouette, navy/cream mask, gold face marks, blue star-lit eyes, crescent-ring
   crown with star and dangling gems, bow medallion, layered cloak with lavender lining, cream ribbons and
   a gradient tail all read. The sheet's cloak billows far more dramatically, with a printed star field
   and gold-edged swirls; ours is a hanging bell cloak with seven scattered gold stars, a gold hem and
@@ -190,7 +194,7 @@ to Echo; it is an idealized online baseline, not engagement evidence.
 2. `GrantCollection moon`; Collection should show colour previews for discovered figures; toggle a figure
    away to confirm the grey silhouette state on detail and tiles.
 3. Place Tiger, Dragon, Cat and Rat on Display slots and Shelves; check scale (8-stud Display spacing,
-   3.6-stud Shelf spacing) and that nothing clips: Cat (4.20), Dragon (2.84) and Rat (2.74) are the
+   3.6-stud Shelf spacing) and that nothing clips: Cat (3.52 wide, 3.92 deep), Dragon (2.84) and Rat (2.74) are the
    widest; Tiger (3.29) and Horse (3.02) the deepest, before the runtime 0.8 scale.
 4. Repeat 1–3 at landscape phone 667×375 and an inset phone preset.
 5. Two-client test: a visitor sees the same Moonrace figures on the owner's Display.

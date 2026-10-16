@@ -1,5 +1,9 @@
 # Tripo / external GLB batch import
 
+For gray models, disconnected maps or reference-image pairing, start with
+[texture preparation](FIGURE_TEXTURING.md). It prepares immutable inputs for this importer;
+missing character colors still require authored UV-aligned textures and visual review.
+
 This is a separate import path beside the existing SDF/hybrid factory. Download textured,
 static GLBs manually from Tripo; no Tripo API, AI calls, packages or humanoid rigging are needed.
 Python 3.10+ and the existing Blender installation (`BLENDER` or `--blender`) are sufficient.

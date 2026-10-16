@@ -1,0 +1,641 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "9037115dc3ca9d3c194874d0c4016ff99ef3614ef6f216b5d7daf30451c39261",
+  "source_filename": "moonrace_cat.glb",
+  "source_sha256": "08529c34ac94c3286a22133c34f34391350966e2b53351f5c2aeda9b0db84b68",
+  "import_entry": {
+    "source": "moonrace_cat.glb",
+    "collection_id": "moon",
+    "figure_id": "moon.cat",
+    "rarity": "Mythical",
+    "collection_slug": "moonrace",
+    "figure_slug": "cat",
+    "root": "MoonCat",
+    "alias": "cat",
+    "asset_key": "Models.Moonrace.MoonCat",
+    "height_studs": 3.4,
+    "rotation_degrees": [
+      0,
+      0,
+      -20
+    ],
+    "eyes": {
+      "object": "Face"
+    },
+    "protected_objects": [],
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {
+      "Body": {
+        "target_triangles": 100000,
+        "max_surface_error": 0.01
+      }
+    },
+    "title": "Cat"
+  },
+  "catalog": "moon.cat",
+  "collection_id": "moon",
+  "rarity": "Mythical",
+  "root": "MoonCat",
+  "figure": "MoonCat",
+  "title": "Cat",
+  "face": "MoonCat_Eyes",
+  "glass": [],
+  "meshes": 9,
+  "triangles": 117592,
+  "source_triangles": 850338,
+  "source": {
+    "bytes": 35868344,
+    "textures": [
+      {
+        "name": "mythical+cat+3d+model_normal",
+        "width": 4096,
+        "height": 4096
+      },
+      {
+        "name": "mythical+cat+3d+model_basecolor",
+        "width": 4096,
+        "height": 4096
+      },
+      {
+        "name": "mythical+cat+3d+model_rm",
+        "width": 4096,
+        "height": 4096
+      }
+    ],
+    "primitive_triangles": [
+      832745,
+      17593
+    ],
+    "triangles": 850338,
+    "mesh_nodes": [
+      "Body",
+      "Face"
+    ]
+  },
+  "size_xyz_studs": [
+    3.5175575017929077,
+    3.9240609407424927,
+    3.4000000953674316
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "MoonCat_Part001": {
+      "tris": 12499,
+      "verts": 6427,
+      "non_manifold_edges": 373,
+      "boundary_edges": 373,
+      "zero_area_faces": 0,
+      "signed_volume": 0.49225438069902666,
+      "islands": 2,
+      "island_faces": [
+        174,
+        12325
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.7177519798278809,
+          -1.452931523323059,
+          0.0
+        ],
+        [
+          0.1447305530309677,
+          -0.7233985662460327,
+          1.3357964754104614
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Part002": {
+      "tris": 12500,
+      "verts": 6619,
+      "non_manifold_edges": 742,
+      "boundary_edges": 742,
+      "zero_area_faces": 0,
+      "signed_volume": 1.0339981167605374,
+      "islands": 3,
+      "island_faces": [
+        116,
+        241,
+        12143
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.1566171646118164,
+          -1.8459681272506714,
+          1.2741737365722656
+        ],
+        [
+          0.186370387673378,
+          -0.7136579155921936,
+          3.3061156272888184
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Part003": {
+      "tris": 12500,
+      "verts": 6458,
+      "non_manifold_edges": 426,
+      "boundary_edges": 426,
+      "zero_area_faces": 0,
+      "signed_volume": 0.2340746186147765,
+      "islands": 4,
+      "island_faces": [
+        1,
+        21,
+        121,
+        12357
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          0.07420935481786728,
+          -1.9236750602722168,
+          0.0347772054374218
+        ],
+        [
+          1.7587788105010986,
+          -0.6981432437896729,
+          1.3463205099105835
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Part004": {
+      "tris": 12500,
+      "verts": 6525,
+      "non_manifold_edges": 568,
+      "boundary_edges": 568,
+      "zero_area_faces": 0,
+      "signed_volume": 1.0125854617025027,
+      "islands": 3,
+      "island_faces": [
+        1,
+        134,
+        12365
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          0.05199631676077843,
+          -1.9620305299758911,
+          1.3030283451080322
+        ],
+        [
+          1.3917255401611328,
+          -0.7106454372406006,
+          3.4000000953674316
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Part005": {
+      "tris": 12500,
+      "verts": 6683,
+      "non_manifold_edges": 858,
+      "boundary_edges": 858,
+      "zero_area_faces": 0,
+      "signed_volume": 0.5414718549388161,
+      "islands": 12,
+      "island_faces": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        25,
+        64,
+        142,
+        518,
+        657,
+        11085
+      ],
+      "non_positive_islands": 5,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.758778691291809,
+          -0.7929694056510925,
+          0.149620920419693
+        ],
+        [
+          -0.43873846530914307,
+          0.8473395109176636,
+          2.853433132171631
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Part006": {
+      "tris": 12500,
+      "verts": 6496,
+      "non_manifold_edges": 494,
+      "boundary_edges": 494,
+      "zero_area_faces": 0,
+      "signed_volume": 0.49344259225249437,
+      "islands": 3,
+      "island_faces": [
+        1528,
+        2458,
+        8514
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.6213486194610596,
+          0.6943592429161072,
+          0.45500096678733826
+        ],
+        [
+          -0.4303291141986847,
+          1.9620304107666016,
+          2.7520222663879395
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Part007": {
+      "tris": 12500,
+      "verts": 6488,
+      "non_manifold_edges": 480,
+      "boundary_edges": 480,
+      "zero_area_faces": 0,
+      "signed_volume": 0.09732181839827643,
+      "islands": 3,
+      "island_faces": [
+        57,
+        714,
+        11729
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.5902337431907654,
+          -0.8221394419670105,
+          0.10628928989171982
+        ],
+        [
+          1.7392231225967407,
+          1.3986656665802002,
+          0.9676417708396912
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Part008": {
+      "tris": 12500,
+      "verts": 6644,
+      "non_manifold_edges": 780,
+      "boundary_edges": 780,
+      "zero_area_faces": 0,
+      "signed_volume": 0.47962053315767433,
+      "islands": 9,
+      "island_faces": [
+        1,
+        2,
+        7,
+        31,
+        173,
+        702,
+        1099,
+        1914,
+        8571
+      ],
+      "non_positive_islands": 3,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.5719410181045532,
+          -0.799514889717102,
+          0.8538694381713867
+        ],
+        [
+          1.3963611125946045,
+          1.7793960571289062,
+          2.920494794845581
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonCat_Eyes": {
+      "tris": 17593,
+      "verts": 9651,
+      "non_manifold_edges": 517,
+      "boundary_edges": 517,
+      "zero_area_faces": 0,
+      "signed_volume": 0.2925165026700695,
+      "islands": 1,
+      "island_faces": [
+        17593
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.5653831362724304,
+          -1.7590245008468628,
+          1.5631989240646362
+        ],
+        [
+          0.5646606683731079,
+          -1.2950202226638794,
+          2.1141767501831055
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "explicit_decimation",
+      "surface_error": 0.0038349968381226063,
+      "normal_bake": null,
+      "original_material": null,
+      "baked_material": null,
+      "before_triangles": 832745,
+      "after_triangles": 99999,
+      "uv_spread": 1
+    },
+    "Face": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 14884328,
+    "textures": 3,
+    "primitive_triangles": [
+      17593,
+      12499,
+      12500,
+      12500,
+      12500,
+      12500,
+      12500,
+      12500,
+      12500
+    ],
+    "triangles": 117592,
+    "mesh_nodes": [
+      "MoonCat_Eyes",
+      "MoonCat_Part001",
+      "MoonCat_Part002",
+      "MoonCat_Part003",
+      "MoonCat_Part004",
+      "MoonCat_Part005",
+      "MoonCat_Part006",
+      "MoonCat_Part007",
+      "MoonCat_Part008"
+    ],
+    "sha256": "5fb948935535439966e8b679e4cc4a156dc4f21c734adfbf2a340bb8a32f762d",
+    "nodes": [
+      "MoonCat_Eyes",
+      "MoonCat_Part001",
+      "MoonCat_Part002",
+      "MoonCat_Part003",
+      "MoonCat_Part004",
+      "MoonCat_Part005",
+      "MoonCat_Part006",
+      "MoonCat_Part007",
+      "MoonCat_Part008",
+      "MoonCat"
+    ],
+    "meshes": 9,
+    "materials": 1,
+    "images": 3,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": [
+      "tripo_material_a7e41c4f-dc0c-403f-9f74-5784a6361067"
+    ]
+  },
+  "reimport": {
+    "meshes": 9,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "tripo_material_a7e41c4f-dc0c-403f-9f74-5784a6361067": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 1,
+      "roughnessFactor": 1,
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            4096,
+            4096
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        "metallic_roughness": {
+          "dimensions": [
+            4096,
+            4096
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        "normal": {
+          "dimensions": [
+            4096,
+            4096
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "tripo_material_a7e41c4f-dc0c-403f-9f74-5784a6361067": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 1,
+      "roughnessFactor": 1,
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            4096,
+            4096
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        "metallic_roughness": {
+          "dimensions": [
+            4096,
+            4096
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        "normal": {
+          "dimensions": [
+            4096,
+            4096
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9987132515445892,
+      "foreground_rgb_mae": 0.009926960803568363,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9987304822440237,
+      "foreground_rgb_mae": 0.009646247141063213,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 0.9988087151888814,
+      "foreground_rgb_mae": 0.008745746687054634,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9985103099412698,
+      "foreground_rgb_mae": 0.006476310081779957,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "cat_source_front.png",
+      "cat_source_three_quarter.png",
+      "cat_source_side.png",
+      "cat_source_back.png"
+    ],
+    "fidelity_views": [
+      "cat_fidelity_front.png",
+      "cat_fidelity_three_quarter.png",
+      "cat_fidelity_side.png",
+      "cat_fidelity_back.png"
+    ],
+    "fidelity_sha256": "5fb948935535439966e8b679e4cc4a156dc4f21c734adfbf2a340bb8a32f762d",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "08529c34ac94c3286a22133c34f34391350966e2b53351f5c2aeda9b0db84b68",
+    "source/source.blend": "4fb82300debfbce70624a54881fd9fa61f79428be8d5f19d44ba407a9d04794b",
+    "model/cat_production.blend": "6848e3c2b6cb31355223d3a9052af528583c061e57c8c1cfac1c92a865fa8565",
+    "model/cat_roblox.glb": "5fb948935535439966e8b679e4cc4a156dc4f21c734adfbf2a340bb8a32f762d",
+    "renders/cat_fidelity_back.png": "a7885aa4525b1a292dbe93560011d70dfa4458fe255cbc20daca5aade3744ad9",
+    "renders/cat_fidelity_front.png": "3e5a198e5b9e97d9abb350f50c82b8625117bf0ef322ec8f19079e627e7a2666",
+    "renders/cat_fidelity_side.png": "4d4a6c614847b0aca90b63796c0a6ce3fce55cd4e516bf2ff997c2a0a0688f26",
+    "renders/cat_fidelity_three_quarter.png": "fe92660e8dc7071725c3710719005be4959d568ad9ff1e0c96ff54b8635f7c37",
+    "renders/cat_source_back.png": "fb918c4077a5529bfb8464bc6d2f6f0cb6cb0c952a2b2fb3cb4f61bd9e6462c6",
+    "renders/cat_source_front.png": "b66e133b4bbe1ac3a4685bc57089dc01ae12e089f368a835db9de607ffe577a0",
+    "renders/cat_source_side.png": "a83c924c8d849eaeb90b594746afbdd855ba5436fdbe17da32e3f1aeb9c20098",
+    "renders/cat_source_three_quarter.png": "4df042b58468c99c06dc73d2cc5e7e9f3feb88a9d99f2618beaf880f2935e1d7"
+  }
+}

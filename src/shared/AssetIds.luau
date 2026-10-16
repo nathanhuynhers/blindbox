@@ -91,7 +91,7 @@ return {
 	["Models.Concepts.Lovity"] = "81477041201834",
 	["Models.Concepts.Verity"] = "109372339520223",
 	["Models.Concepts.VerityTrueForm"] = "119788043148480",
-	["Models.Moonrace.MoonCat"] = "139335350043376",
+	["Models.Moonrace.MoonCat"] = "90559133725577",
 	["Models.Moonrace.MoonDog"] = "94277193176846",
 	["Models.Moonrace.MoonDragon"] = "86625290881445",
 	["Models.Moonrace.MoonGoat"] = "96999427483853",

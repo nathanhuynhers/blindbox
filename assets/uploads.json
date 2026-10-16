@@ -810,13 +810,13 @@
     "source": "assets/figures/concepts/verity-true-form/model/verity_true_form_roblox.glb"
   },
   "Models.Moonrace.MoonCat": {
-    "assetId": "139335350043376",
+    "assetId": "90559133725577",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "7f834a6b5224333f5220565c554d649ab8fc21fb07ec84c06978c35e8e5f799a",
-    "source": "assets/figures/moonrace/cat/model/cat_roblox.glb"
+    "sha256": "5fb948935535439966e8b679e4cc4a156dc4f21c734adfbf2a340bb8a32f762d",
+    "source": "assets/figures/external/moonrace/cat/9037115dc3ca9d3c194874d0c4016ff99ef3614ef6f216b5d7daf30451c39261/model/cat_roblox.glb"
   },
   "Models.Moonrace.MoonDog": {
     "assetId": "94277193176846",

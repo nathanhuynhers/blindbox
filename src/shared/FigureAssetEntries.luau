@@ -197,8 +197,8 @@ return {
 		key = "Models.Moonrace.MoonCat",
 		root = "MoonCat",
 		face = "MoonCat_Eyes",
-		parts = 2,
-		size = Vector3.new(4.1951, 3.4031, 3.4113),
+		parts = 9,
+		size = Vector3.new(3.5175575017929077, 3.4000000953674316, 3.9240609407424927),
 		glass = {},
 	},
 	["moon.dog"] = {
