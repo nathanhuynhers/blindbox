@@ -1,0 +1,413 @@
+{
+  "schema_version": 1,
+  "batch_id": "moonrace-rest-001",
+  "figures": [
+    {
+      "source": "rat.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.rat",
+      "rarity": "Common",
+      "collection_slug": "moonrace",
+      "figure_slug": "rat",
+      "root": "MoonRat",
+      "alias": "rat",
+      "asset_key": "Models.Moonrace.MoonRat",
+      "height_studs": 3.12,
+      "rotation_degrees": [
+        0,
+        0,
+        3.83
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4212,
+            0.0,
+            0.477
+          ],
+          [
+            0.5812,
+            0.1119,
+            0.617
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "ox.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.ox",
+      "rarity": "Common",
+      "collection_slug": "moonrace",
+      "figure_slug": "ox",
+      "root": "MoonOx",
+      "alias": "ox",
+      "asset_key": "Models.Moonrace.MoonOx",
+      "height_studs": 3.26,
+      "rotation_degrees": [
+        0,
+        0,
+        75.41
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4055,
+            0.0,
+            0.6844
+          ],
+          [
+            0.5655,
+            0.3983,
+            0.8244
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "tiger.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.tiger",
+      "rarity": "Legendary",
+      "collection_slug": "moonrace",
+      "figure_slug": "tiger",
+      "root": "MoonTiger",
+      "alias": "tiger",
+      "asset_key": "Models.Moonrace.MoonTiger",
+      "height_studs": 3.02,
+      "rotation_degrees": [
+        0,
+        0,
+        -3.77
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4215,
+            0.0,
+            0.6533
+          ],
+          [
+            0.5815,
+            0.1927,
+            0.7933
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "rabbit.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.rabbit",
+      "rarity": "Common",
+      "collection_slug": "moonrace",
+      "figure_slug": "rabbit",
+      "root": "MoonRabbit",
+      "alias": "rabbit",
+      "asset_key": "Models.Moonrace.MoonRabbit",
+      "height_studs": 3.25,
+      "rotation_degrees": [
+        0,
+        0,
+        -18.2
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4139,
+            0.0,
+            0.4866
+          ],
+          [
+            0.5739,
+            0.1723,
+            0.6266
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "dragon.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.dragon",
+      "rarity": "Legendary",
+      "collection_slug": "moonrace",
+      "figure_slug": "dragon",
+      "root": "MoonDragon",
+      "alias": "dragon",
+      "asset_key": "Models.Moonrace.MoonDragon",
+      "height_studs": 3.34,
+      "rotation_degrees": [
+        0,
+        0,
+        11.99
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4224,
+            0.0,
+            0.5432
+          ],
+          [
+            0.5824,
+            0.285,
+            0.6832
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "snake.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.snake",
+      "rarity": "Uncommon",
+      "collection_slug": "moonrace",
+      "figure_slug": "snake",
+      "root": "MoonSnake",
+      "alias": "snake",
+      "asset_key": "Models.Moonrace.MoonSnake",
+      "height_studs": 2.65,
+      "rotation_degrees": [
+        0,
+        0,
+        3.27
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4159,
+            0.0,
+            0.5874
+          ],
+          [
+            0.5759,
+            0.11,
+            0.7274
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "horse.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.horse",
+      "rarity": "Uncommon",
+      "collection_slug": "moonrace",
+      "figure_slug": "horse",
+      "root": "MoonHorse",
+      "alias": "horse",
+      "asset_key": "Models.Moonrace.MoonHorse",
+      "height_studs": 2.93,
+      "rotation_degrees": [
+        0,
+        0,
+        2.22
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4117,
+            0.0,
+            0.6191
+          ],
+          [
+            0.5717,
+            0.1144,
+            0.7591
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "goat.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.goat",
+      "rarity": "Common",
+      "collection_slug": "moonrace",
+      "figure_slug": "goat",
+      "root": "MoonGoat",
+      "alias": "goat",
+      "asset_key": "Models.Moonrace.MoonGoat",
+      "height_studs": 2.71,
+      "rotation_degrees": [
+        0,
+        0,
+        8.27
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4178,
+            0.0,
+            0.5346
+          ],
+          [
+            0.5778,
+            0.1063,
+            0.6746
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "monkey.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.monkey",
+      "rarity": "Uncommon",
+      "collection_slug": "moonrace",
+      "figure_slug": "monkey",
+      "root": "MoonMonkey",
+      "alias": "monkey",
+      "asset_key": "Models.Moonrace.MoonMonkey",
+      "height_studs": 2.88,
+      "rotation_degrees": [
+        0,
+        0,
+        35.76
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4237,
+            0.0,
+            0.5567
+          ],
+          [
+            0.5837,
+            0.26,
+            0.6967
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "rooster.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.rooster",
+      "rarity": "Uncommon",
+      "collection_slug": "moonrace",
+      "figure_slug": "rooster",
+      "root": "MoonRooster",
+      "alias": "rooster",
+      "asset_key": "Models.Moonrace.MoonRooster",
+      "height_studs": 2.96,
+      "rotation_degrees": [
+        0,
+        0,
+        5.81
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.416,
+            0.0,
+            0.626
+          ],
+          [
+            0.576,
+            0.2174,
+            0.766
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "pig.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.pig",
+      "rarity": "Rare",
+      "collection_slug": "moonrace",
+      "figure_slug": "pig",
+      "root": "MoonPig",
+      "alias": "pig",
+      "asset_key": "Models.Moonrace.MoonPig",
+      "height_studs": 2.66,
+      "rotation_degrees": [
+        0,
+        0,
+        -30.34
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4173,
+            0.0,
+            0.7382
+          ],
+          [
+            0.5773,
+            0.3238,
+            0.8782
+          ]
+        ]
+      },
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    }
+  ]
+}

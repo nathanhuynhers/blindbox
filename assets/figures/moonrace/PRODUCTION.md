@@ -5,27 +5,44 @@
 figure resolver). Studio Play Solo loaded every model as `Ready`; opening reveal, Display, Shelves,
 discovered-state previews, landscape phone and two-client checks are still pending (see the end).**
 
+**2026-10-16: eleven figures replaced by painted Tripo models** (Rat, Ox, Tiger, Rabbit, Dragon, Snake,
+Horse, Goat, Monkey, Rooster, Pig; Dog and Cat unchanged). The user's Tripo downloads were gray meshes
+(no UV0, materials or textures). [reference_paint.py](../../../tools/figures/reference_paint.py) projected
+each figure's hero image (`assets/reference_models/moonrace/`) onto it and baked a 2048 px albedo onto new
+UV0. [face_patch.py](../../../tools/figures/face_patch.py) set the facing and eye region from the marked
+eyes, and the GLBs went through `texture_prepare.py` and `external.py` (batch
+[tripo_batch_rest.json](tripo_batch_rest.json), `moonrace-rest-001`, plan
+`5a6a29acb1134629f91a1921c8eee90b26f878b09e5efd76f269b7c5cd00da4f`). The user approved publishing without
+per-plan review. Source/export loss: silhouette IoU 1.0, colour MAE ≤ 0.0001 on every view. Mesh repairs
+removed Tripo fins (Ox 2, Rooster 15, Snake 2, Tiger 2 faces) and lone tiny islands (Rooster 9, Snake 6).
+**Hidden sides are inferred, not seen:** the hero side is the reference image; the far side is the mirror
+image where the figure is symmetric, otherwise clean palette regions. The Ox and Horse turn their heads away
+from the body, so their runtime front shows mostly inferred surface, and the Ox reads the weakest. Studio
+Play Solo (local build, 2026-10-16): all 13 `Ready`; the 11 new models have 2 textured MeshParts each,
+`_Eyes` present, and render in colour (captures in `build/figures/moonrace-rest-studio/`). Opening, Display,
+Shelves, phone and two-client checks remain pending, as below.
+
 Thirteen original Chinese-zodiac designer toys reconstructed from the approved character sheets in each
 figure's `reference/` folder (originals kept in `assets/incoming/moonrace_<figure>_sheet.png`). Catalog
 collection `moon`, rarities per the brief. The Cat is the lost thirteenth sign and the Mythical chase figure.
 
 | Figure | Catalog ID | Rarity | MeshParts | Triangles | Size W × D × H (studs) | Largest mesh | Roblox asset |
 | --- | --- | --- | ---: | ---: | --- | ---: | --- |
-| Rat | `moon.rat` | Common | 31 | 62,532 | 2.74 × 1.42 × 3.12 | Gold 7,000 | 89864961293110 |
-| Ox | `moon.ox` | Common | 27 | 60,998 | 2.50 × 2.93 × 3.26 | Gold 7,998 | 90519645854260 |
-| Tiger | `moon.tiger` | Legendary | 31 | 102,754 | 2.55 × 3.29 × 3.02 | StripesLeft 10,800 | 95678223448330 |
-| Rabbit | `moon.rabbit` | Common | 27 | 45,800 | 1.91 × 1.69 × 3.25 | Head 6,000 | 125098612349310 |
-| Dragon | `moon.dragon` | Legendary | 25 | 78,864 | 2.84 × 2.12 × 3.34 | Body 9,600 | 86625290881445 |
-| Snake | `moon.snake` | Uncommon | 24 | 52,098 | 2.14 × 2.26 × 2.65 | Body 7,000 | 99526443758779 |
-| Horse | `moon.horse` | Uncommon | 26 | 67,190 | 1.93 × 3.02 × 2.93 | Gold 7,000 | 89454442431132 |
-| Goat | `moon.goat` | Common | 22 | 46,990 | 2.51 × 2.49 × 2.71 | Body 8,000 | 96999427483853 |
-| Monkey | `moon.monkey` | Uncommon | 24 | 47,586 | 1.52 × 1.95 × 2.88 | Head 6,000 | 136022389345173 |
-| Rooster | `moon.rooster` | Uncommon | 23 | 55,688 | 2.46 × 2.17 × 2.96 | Body 7,000 | 104113895492534 |
+| Rat | `moon.rat` | Common | 2 | 19,932 | 3.41 × 1.96 × 3.12 | Body (Tripo, painted) | 90445507761070 |
+| Ox | `moon.ox` | Common | 2 | 18,870 | 2.90 × 2.78 × 3.26 | Body (Tripo, painted) | 109342049768676 |
+| Tiger | `moon.tiger` | Legendary | 2 | 19,830 | 3.65 × 3.19 × 3.02 | Body (Tripo, painted) | 116459560411422 |
+| Rabbit | `moon.rabbit` | Common | 2 | 19,058 | 2.40 × 1.83 × 3.25 | Body (Tripo, painted) | 127121294287729 |
+| Dragon | `moon.dragon` | Legendary | 2 | 19,126 | 3.56 × 2.87 × 3.34 | Body (Tripo, painted) | 123652325469820 |
+| Snake | `moon.snake` | Uncommon | 2 | 19,720 | 2.23 × 1.92 × 2.65 | Body (Tripo, painted) | 121455625651964 |
+| Horse | `moon.horse` | Uncommon | 2 | 19,384 | 1.81 × 3.59 × 2.93 | Body (Tripo, painted) | 137181243756586 |
+| Goat | `moon.goat` | Common | 2 | 19,036 | 2.89 × 2.24 × 2.71 | Body (Tripo, painted) | 103139641039054 |
+| Monkey | `moon.monkey` | Uncommon | 2 | 19,370 | 2.47 × 2.71 × 2.88 | Body (Tripo, painted) | 138779592435562 |
+| Rooster | `moon.rooster` | Uncommon | 2 | 19,722 | 2.28 × 2.53 × 2.96 | Body (Tripo, painted) | 129513774118433 |
 | Dog | `moon.dog` | Rare | 24 | 48,196 | 1.92 × 2.66 × 2.88 | Body 7,000 | 94277193176846 |
-| Pig | `moon.pig` | Rare | 18 | 39,482 | 1.86 × 2.18 × 2.66 | Body 8,000 | 126529031599245 |
+| Pig | `moon.pig` | Rare | 2 | 19,458 | 2.64 × 2.21 × 2.66 | Body (Tripo, painted) | 117858047560206 |
 | Cat | `moon.cat` | Mythical | 9 | 117,592 | 3.52 × 3.92 × 3.40 | Eyes 17,593 | 90559133725577 |
 
-803,444 triangles in all; every part is below 11k (gate: 20k). Manifest keys are
+379,294 triangles in all; every part is below 20k (gate: 20k). Manifest keys are
 `Models.Moonrace.Moon<Figure>`, aliases are the figure slugs. Monkey and Rabbit were republished once as
 replacement assets (see "Studio verification"); the IDs above are current, the earlier ones are orphaned.
 

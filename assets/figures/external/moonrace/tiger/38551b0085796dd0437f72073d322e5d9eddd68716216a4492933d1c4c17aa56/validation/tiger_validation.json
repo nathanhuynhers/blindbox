@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "38551b0085796dd0437f72073d322e5d9eddd68716216a4492933d1c4c17aa56",
+  "source_filename": "7d7cfe79b07828747ab70481d31fa6a00d30a64bb31c6729f83789e53ae19902/tiger.glb",
+  "source_sha256": "7d7cfe79b07828747ab70481d31fa6a00d30a64bb31c6729f83789e53ae19902",
+  "import_entry": {
+    "source": "7d7cfe79b07828747ab70481d31fa6a00d30a64bb31c6729f83789e53ae19902/tiger.glb",
+    "collection_id": "moon",
+    "figure_id": "moon.tiger",
+    "rarity": "Legendary",
+    "collection_slug": "moonrace",
+    "figure_slug": "tiger",
+    "root": "MoonTiger",
+    "alias": "tiger",
+    "asset_key": "Models.Moonrace.MoonTiger",
+    "height_studs": 3.02,
+    "rotation_degrees": [
+      0,
+      0,
+      -3.77
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4215,
+          0.0,
+          0.6533
+        ],
+        [
+          0.5815,
+          0.1927,
+          0.7933
+        ]
+      ]
+    },
+    "protected_objects": [],
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "title": "Tiger"
+  },
+  "catalog": "moon.tiger",
+  "collection_id": "moon",
+  "rarity": "Legendary",
+  "root": "MoonTiger",
+  "figure": "MoonTiger",
+  "title": "Tiger",
+  "face": "MoonTiger_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19830,
+  "source_triangles": 19830,
+  "source": {
+    "bytes": 5598404,
+    "textures": [
+      {
+        "name": "tiger_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19830
+    ],
+    "triangles": 19830,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    3.6453640460968018,
+    3.193027138710022,
+    3.0199999809265137
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "MoonTiger_Eyes": {
+      "tris": 167,
+      "verts": 225,
+      "non_manifold_edges": 51,
+      "boundary_edges": 51,
+      "zero_area_faces": 0,
+      "signed_volume": 0.1596496490096196,
+      "islands": 2,
+      "island_faces": [
+        2,
+        165
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.3456633687019348,
+          -1.3544639348983765,
+          1.9507197141647339
+        ],
+        [
+          0.3454974889755249,
+          -1.0243339538574219,
+          2.411783456802368
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonTiger_Part002": {
+      "tris": 19663,
+      "verts": 20268,
+      "non_manifold_edges": 59,
+      "boundary_edges": 59,
+      "zero_area_faces": 0,
+      "signed_volume": 4.714535882120523,
+      "islands": 1,
+      "island_faces": [
+        19663
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.8226820230484009,
+          -1.5965136289596558,
+          0.0
+        ],
+        [
+          1.8226820230484009,
+          1.5965135097503662,
+          3.0199999809265137
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5940388,
+    "textures": 1,
+    "primitive_triangles": [
+      167,
+      19663
+    ],
+    "triangles": 19830,
+    "mesh_nodes": [
+      "MoonTiger_Eyes",
+      "MoonTiger_Part002"
+    ],
+    "sha256": "db1375bde1d463d3a128cb775b0db391674ad1027d415fde94475e7bfc1e23bc",
+    "nodes": [
+      "MoonTiger_Eyes",
+      "MoonTiger_Part002",
+      "MoonTiger"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "tiger": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "tiger": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999905145838274,
+      "foreground_rgb_mae": 8.549274207325652e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999820960190499,
+      "foreground_rgb_mae": 8.36806430015713e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.489613588200882e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9999721489843663,
+      "foreground_rgb_mae": 5.4585569159826264e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "tiger_source_front.png",
+      "tiger_source_three_quarter.png",
+      "tiger_source_side.png",
+      "tiger_source_back.png"
+    ],
+    "fidelity_views": [
+      "tiger_fidelity_front.png",
+      "tiger_fidelity_three_quarter.png",
+      "tiger_fidelity_side.png",
+      "tiger_fidelity_back.png"
+    ],
+    "fidelity_sha256": "db1375bde1d463d3a128cb775b0db391674ad1027d415fde94475e7bfc1e23bc",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "7d7cfe79b07828747ab70481d31fa6a00d30a64bb31c6729f83789e53ae19902",
+    "source/source.blend": "35f68036a17a05922a0168565c6af19cb01a4cb488ad9265ccd9780a0c169317",
+    "model/tiger_production.blend": "392fd24d83fef7dd4a43d9138c7e32956e08f39eb5dde994489d28e1b5d115a3",
+    "model/tiger_roblox.glb": "db1375bde1d463d3a128cb775b0db391674ad1027d415fde94475e7bfc1e23bc",
+    "renders/tiger_fidelity_back.png": "6e2c30e50aa569c3847cbf1e69007aeaf6d902eb9904aff45e187012ddc47e83",
+    "renders/tiger_fidelity_front.png": "0a2da4325732519727b4016bc1eb8ab60e3c3ccbe2ead8778d9d3333e3115f99",
+    "renders/tiger_fidelity_side.png": "920d99b825e1a40870935f144860c15a96df2f8f12f67382d94b41a424faadfe",
+    "renders/tiger_fidelity_three_quarter.png": "ef6cc81d732e93de90ba26849e3448a6e9bb6237f4ee72e81be47bc543c6966e",
+    "renders/tiger_source_back.png": "44efe49f3908212b4e05b3dd14b320a4339810d139bebe9c9d079943d7936953",
+    "renders/tiger_source_front.png": "055ba2db9a738765cfbd1141ea3259cecf4973e3caa483c37043d116cb9efea5",
+    "renders/tiger_source_side.png": "15566fec7fe12f2b1c38be4f70f9698ffc8a49321169c9293c104d6e5b3c8bc8",
+    "renders/tiger_source_three_quarter.png": "dd055e30f98435975d1897397697282e050159b716efe8c6f141fc20014e64ac"
+  }
+}

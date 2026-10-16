@@ -20,7 +20,9 @@ warnings and pending visual acceptance. Prepared GLBs are content-addressed; unc
 outputs reuse their location. Failures do not stop inspection of other inputs. Any failure
 returns a nonzero exit code and blocks generation of a complete import manifest.
 
-**This does not paint missing character details from reference art.** A single photograph or
+**Texture preparation does not paint missing character details from reference art.** (The separate
+opt-in [approximate colour step](#approximate-colour-for-untextured-tripo-meshes-opt-in) does, with
+inferred hidden sides.) A single photograph or
 character sheet is not a UV texture atlas. A connected albedo can still contain gray pixels or
 the wrong character colors. The report's `ready_for_import_review` means the existing importer's
 technical source checks passed; reference likeness, seam quality and Studio appearance remain
@@ -131,6 +133,41 @@ authoring and unwrapping; it cannot infer anatomical regions or reference likene
 UV regeneration and atlas baking are deliberately not applied to textured inputs because they
 would invalidate existing maps. A gray monolithic mesh needs this authoring stage before it
 can be declared a faithfully colored figure.
+
+### Approximate colour for untextured Tripo meshes (opt-in)
+
+When the user explicitly asks to colour a gray, UV-less Tripo mesh from the single hero image it was
+generated from (as with the Moonrace batch), `tools/figures/reference_paint.py` produces a new
+textured input. It never edits the source GLB:
+
+```powershell
+& "$env:BLENDER" -b --factory-startup --python-exit-code 1 --python tools/figures/reference_paint.py -- <in.glb> <hero.png> <sheet.webp> <out.glb> <review_dir>
+```
+
+- An orthographic camera is fitted to the hero silhouette. Its mirror-ambiguous candidates are
+  separated by correlating interior shading edges, then refined by edge alignment. The hero is
+  projected at full resolution and baked into a 2048 px albedo on new Smart-UV UV0. Geometry,
+  normals and vertex order are unchanged.
+- Surfaces the hero cannot see take the hero texture mirrored across the symmetry plane, when one
+  matches. Otherwise they get clean palette regions: k-means on the hero, blend clusters dropped,
+  labels grown and then diffused over the surface. **Backs and far sides are inferred, not seen.**
+  Projecting the sheet's other views was tried and rejected: their pose differs from the model and
+  produced misaligned camouflage. The sheet FRONT view is fitted only as a facing cross-check.
+- `review_dir` gets `paint_hero.png` (flat albedo from the fitted camera), lit
+  front/three-quarter/side/back views and `paint.json` (fit IoU, edge scores, face counts).
+
+The runtime faces a figure along the line from its bounding-box centre to `_Eyes`, and silhouettes
+cannot tell front from back. So mark the pixel between the eyes on `paint_hero.png` and run
+`tools/figures/face_patch.py`. It ray-casts that point, iterates the yaw until the face patch is
+straight ahead, and prints `rotation_degrees` and `eyes.region` for the batch manifest:
+
+```powershell
+& "$env:BLENDER" -b --factory-startup --python tools/figures/face_patch.py -- <painted.glb> <hero_az> <hero_el> <px> <py>
+```
+
+The painted GLBs then follow the normal path above: `texture_prepare.py --manifest`, `external.py`,
+review, and an explicitly approved publish. Reference likeness on hidden sides remains a human
+review item.
 
 ## Visual acceptance and batch rollout
 

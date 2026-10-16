@@ -1,0 +1,322 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "ab7e74f772203ddd7c1387496372fdbdc758b024c01db1cf5d317d44d7508a8b",
+  "source_filename": "9aa9933d62a71253dd6f83db6a70043995bf6fb684da01b2f4114700f0434524/ox.glb",
+  "source_sha256": "9aa9933d62a71253dd6f83db6a70043995bf6fb684da01b2f4114700f0434524",
+  "import_entry": {
+    "source": "9aa9933d62a71253dd6f83db6a70043995bf6fb684da01b2f4114700f0434524/ox.glb",
+    "collection_id": "moon",
+    "figure_id": "moon.ox",
+    "rarity": "Common",
+    "collection_slug": "moonrace",
+    "figure_slug": "ox",
+    "root": "MoonOx",
+    "alias": "ox",
+    "asset_key": "Models.Moonrace.MoonOx",
+    "height_studs": 3.26,
+    "rotation_degrees": [
+      0,
+      0,
+      75.41
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4055,
+          0.0,
+          0.6844
+        ],
+        [
+          0.5655,
+          0.3983,
+          0.8244
+        ]
+      ]
+    },
+    "protected_objects": [],
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "title": "Ox"
+  },
+  "catalog": "moon.ox",
+  "collection_id": "moon",
+  "rarity": "Common",
+  "root": "MoonOx",
+  "figure": "MoonOx",
+  "title": "Ox",
+  "face": "MoonOx_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 18870,
+  "source_triangles": 18870,
+  "source": {
+    "bytes": 5424900,
+    "textures": [
+      {
+        "name": "ox_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      18870
+    ],
+    "triangles": 18870,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.899431824684143,
+    2.7781338691711426,
+    3.259999990463257
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "MoonOx_Eyes": {
+      "tris": 199,
+      "verts": 225,
+      "non_manifold_edges": 73,
+      "boundary_edges": 73,
+      "zero_area_faces": 0,
+      "signed_volume": 0.028533254784301097,
+      "islands": 3,
+      "island_faces": [
+        1,
+        37,
+        161
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2735896706581116,
+          -1.3662667274475098,
+          2.1714565753936768
+        ],
+        [
+          0.2732022702693939,
+          -0.1988537758588791,
+          2.71635103225708
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonOx_Part002": {
+      "tris": 18671,
+      "verts": 19682,
+      "non_manifold_edges": 77,
+      "boundary_edges": 77,
+      "zero_area_faces": 0,
+      "signed_volume": 8.206186890875385,
+      "islands": 2,
+      "island_faces": [
+        72,
+        18599
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.4497159719467163,
+          -1.3890669345855713,
+          0.0
+        ],
+        [
+          1.4497158527374268,
+          1.3890669345855713,
+          3.259999990463257
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5755260,
+    "textures": 1,
+    "primitive_triangles": [
+      199,
+      18671
+    ],
+    "triangles": 18870,
+    "mesh_nodes": [
+      "MoonOx_Eyes",
+      "MoonOx_Part002"
+    ],
+    "sha256": "d4e0618b2e6a1a2560cd25363687b54f721319ed076f209efeffa0fe3173a2c6",
+    "nodes": [
+      "MoonOx_Eyes",
+      "MoonOx_Part002",
+      "MoonOx"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "ox": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "ox": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 4.932686351821758e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 5.865739149157889e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 0.9999832554712748,
+      "foreground_rgb_mae": 5.914211578783579e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9999821673769995,
+      "foreground_rgb_mae": 5.9791742387460545e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "ox_source_front.png",
+      "ox_source_three_quarter.png",
+      "ox_source_side.png",
+      "ox_source_back.png"
+    ],
+    "fidelity_views": [
+      "ox_fidelity_front.png",
+      "ox_fidelity_three_quarter.png",
+      "ox_fidelity_side.png",
+      "ox_fidelity_back.png"
+    ],
+    "fidelity_sha256": "d4e0618b2e6a1a2560cd25363687b54f721319ed076f209efeffa0fe3173a2c6",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "9aa9933d62a71253dd6f83db6a70043995bf6fb684da01b2f4114700f0434524",
+    "source/source.blend": "92398cce9f38f1646732a2f676b91a3001df3bbabdda7826249a6e48e420e8f0",
+    "model/ox_production.blend": "b9cbed9c847435705147c0a7a5ad947957edd303753008116430275476d3352a",
+    "model/ox_roblox.glb": "d4e0618b2e6a1a2560cd25363687b54f721319ed076f209efeffa0fe3173a2c6",
+    "renders/ox_fidelity_back.png": "9cfa953fbe2e01b6c042e3f3fe146b175f41aa6cc9f92730e5c09f46ca6d66f5",
+    "renders/ox_fidelity_front.png": "8fb597d7ac3d445ed31cdc59f33240c0979067211aca17a6c5daf3d90b1c70d0",
+    "renders/ox_fidelity_side.png": "1b3b5961ac26929c358ed99cc169e7e197e0df306d011d4b2ad15e5f757c7440",
+    "renders/ox_fidelity_three_quarter.png": "24b1c01585de26851791c99131b0fa5fd097f47edcf27585d1401d6541bf00fc",
+    "renders/ox_source_back.png": "66d9c8b72174f553c04ec6d9bc4be7e156c2ec6d5ed7be6cf812369c68cb686a",
+    "renders/ox_source_front.png": "674e870d82fc3bf2626715e4ab867d18b47bfb7993fe987a669e3da23c8c840b",
+    "renders/ox_source_side.png": "b9c9e4d326080389dead1403e18320a57ed47ec27ebbce7eb453095ab4b32526",
+    "renders/ox_source_three_quarter.png": "b2c2a902903557b70af736a46a3d326ba22680b7b6da62fd571ab36e4ab2b0b2"
+  }
+}

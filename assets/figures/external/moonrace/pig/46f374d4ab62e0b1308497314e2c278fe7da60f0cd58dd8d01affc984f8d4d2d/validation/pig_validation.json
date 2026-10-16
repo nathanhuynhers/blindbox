@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "46f374d4ab62e0b1308497314e2c278fe7da60f0cd58dd8d01affc984f8d4d2d",
+  "source_filename": "32f435970ddad229632cd7bcfdd4946aea9933efa6390744892f59fe18fdb460/pig.glb",
+  "source_sha256": "32f435970ddad229632cd7bcfdd4946aea9933efa6390744892f59fe18fdb460",
+  "import_entry": {
+    "source": "32f435970ddad229632cd7bcfdd4946aea9933efa6390744892f59fe18fdb460/pig.glb",
+    "collection_id": "moon",
+    "figure_id": "moon.pig",
+    "rarity": "Rare",
+    "collection_slug": "moonrace",
+    "figure_slug": "pig",
+    "root": "MoonPig",
+    "alias": "pig",
+    "asset_key": "Models.Moonrace.MoonPig",
+    "height_studs": 2.66,
+    "rotation_degrees": [
+      0,
+      0,
+      -30.34
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4173,
+          0.0,
+          0.7382
+        ],
+        [
+          0.5773,
+          0.3238,
+          0.8782
+        ]
+      ]
+    },
+    "protected_objects": [],
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "title": "Pig"
+  },
+  "catalog": "moon.pig",
+  "collection_id": "moon",
+  "rarity": "Rare",
+  "root": "MoonPig",
+  "figure": "MoonPig",
+  "title": "Pig",
+  "face": "MoonPig_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19458,
+  "source_triangles": 19458,
+  "source": {
+    "bytes": 5474728,
+    "textures": [
+      {
+        "name": "pig_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19458
+    ],
+    "triangles": 19458,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.6427245140075684,
+    2.2102309465408325,
+    2.6600000858306885
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "MoonPig_Eyes": {
+      "tris": 149,
+      "verts": 183,
+      "non_manifold_edges": 49,
+      "boundary_edges": 49,
+      "zero_area_faces": 0,
+      "signed_volume": 0.12486860254226431,
+      "islands": 1,
+      "island_faces": [
+        149
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.254241406917572,
+          -0.8075435757637024,
+          1.9370836019515991
+        ],
+        [
+          0.25428980588912964,
+          -0.36915987730026245,
+          2.345658540725708
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonPig_Part002": {
+      "tris": 19309,
+      "verts": 19026,
+      "non_manifold_edges": 49,
+      "boundary_edges": 49,
+      "zero_area_faces": 0,
+      "signed_volume": 5.335510557194686,
+      "islands": 2,
+      "island_faces": [
+        1366,
+        17943
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.3213622570037842,
+          -1.1051154136657715,
+          0.0
+        ],
+        [
+          1.3213622570037842,
+          1.105115532875061,
+          2.6600000858306885
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5792016,
+    "textures": 1,
+    "primitive_triangles": [
+      149,
+      19309
+    ],
+    "triangles": 19458,
+    "mesh_nodes": [
+      "MoonPig_Eyes",
+      "MoonPig_Part002"
+    ],
+    "sha256": "4afa0780e26fb4876112d039215308f7639b5f11395e3e1e2f9632b3314096de",
+    "nodes": [
+      "MoonPig_Eyes",
+      "MoonPig_Part002",
+      "MoonPig"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "pig": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "pig": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 3.6441477277548984e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999944414490031,
+      "foreground_rgb_mae": 4.439574695425108e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 4.444042860995978e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9999829505737132,
+      "foreground_rgb_mae": 3.9722563087707385e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "pig_source_front.png",
+      "pig_source_three_quarter.png",
+      "pig_source_side.png",
+      "pig_source_back.png"
+    ],
+    "fidelity_views": [
+      "pig_fidelity_front.png",
+      "pig_fidelity_three_quarter.png",
+      "pig_fidelity_side.png",
+      "pig_fidelity_back.png"
+    ],
+    "fidelity_sha256": "4afa0780e26fb4876112d039215308f7639b5f11395e3e1e2f9632b3314096de",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "32f435970ddad229632cd7bcfdd4946aea9933efa6390744892f59fe18fdb460",
+    "source/source.blend": "2fa34f69384dd223f3b79ed7ad030ba22818567a6cfd64a11c1b5a8104014812",
+    "model/pig_production.blend": "cab192aa9fa453a90857651c12ef9acda5b8d0cd54fe1aa0d50a7b6d23ad33ae",
+    "model/pig_roblox.glb": "4afa0780e26fb4876112d039215308f7639b5f11395e3e1e2f9632b3314096de",
+    "renders/pig_fidelity_back.png": "bc395782dae8f2f05a35e5af8895f3359760dd2f8ab3615366819d60cb738e84",
+    "renders/pig_fidelity_front.png": "23f140537bd3b45a3ce71ff288bc5d7c33089be0e112a12cefbc27bab21948bf",
+    "renders/pig_fidelity_side.png": "3ec1a0ad0ab10f9b33c3bb446e02d8d3108fb71753e47e621db1f9ddcd6494c1",
+    "renders/pig_fidelity_three_quarter.png": "986626e02753829b813d43eb1c5359c94bbb93f70f7b73200dd85fecc3eae080",
+    "renders/pig_source_back.png": "bcb64970c3a87f25a8797082870c0baaf7a9c03206abf0b237fd83ee1163a5fd",
+    "renders/pig_source_front.png": "5299efd51a1a33264d9aa2a1b1e9e93817c84304c0c0fa921dfc53a8675c867a",
+    "renders/pig_source_side.png": "7f58a8c35284154a2b2d07eb389309fd4c81555c5591d2c069df7559749122b1",
+    "renders/pig_source_three_quarter.png": "fab73927dc18404a69f221c4bb5806b4382ae4aabb509c1059c4a5dc0e637cb7"
+  }
+}

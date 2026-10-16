@@ -828,103 +828,103 @@
     "source": "assets/figures/moonrace/dog/model/dog_roblox.glb"
   },
   "Models.Moonrace.MoonDragon": {
-    "assetId": "86625290881445",
+    "assetId": "123652325469820",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "2c9a248e8ce1e0541ace6fdcf2775d56cb5de13628acd9f30e7207774a22c32e",
-    "source": "assets/figures/moonrace/dragon/model/dragon_roblox.glb"
+    "sha256": "8bed8c3171347fc2261cfaa9e9141165f5a9b0a97a101455ffa14da4e077a8e5",
+    "source": "assets/figures/external/moonrace/dragon/2ac967df1fb6292ffa9d0c21cde805717c7e1545ad3a564b06bf3ec09b506025/model/dragon_roblox.glb"
   },
   "Models.Moonrace.MoonGoat": {
-    "assetId": "96999427483853",
+    "assetId": "103139641039054",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "2617c2e77be4e94a9fdb3a4e94ae6df3982e3452763555737d0faf0c20aa3a49",
-    "source": "assets/figures/moonrace/goat/model/goat_roblox.glb"
+    "sha256": "3c90f84318f38ab5741f5753ac3e116854d34c97e5db9ba3fa163833127950da",
+    "source": "assets/figures/external/moonrace/goat/1861a31ba08ebbad03d1b93f9b7bfc94b9c60da19f259c21ef181ad78f69552f/model/goat_roblox.glb"
   },
   "Models.Moonrace.MoonHorse": {
-    "assetId": "89454442431132",
+    "assetId": "137181243756586",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "8ec4b6cc65920bba8d21ee4f9c8ca461e087ca663aa4edfec96ecde481a7e687",
-    "source": "assets/figures/moonrace/horse/model/horse_roblox.glb"
+    "sha256": "de29f8c94a171d48b1e3fcc624f2fab4af2fec9627c561fac586923cc8739a2f",
+    "source": "assets/figures/external/moonrace/horse/60818c503d538b222c6fe1eb68b8008a75007b6c64c558b7628e134b0eb93ecb/model/horse_roblox.glb"
   },
   "Models.Moonrace.MoonMonkey": {
-    "assetId": "136022389345173",
+    "assetId": "138779592435562",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "dc150753398e6318347788e525935523cbf3c36b342ee31cffe1594a8352bd5f",
-    "source": "assets/figures/moonrace/monkey/model/monkey_roblox.glb"
+    "sha256": "7fdf4cd5622e8d9f7abc8194009ee6fa87aa73120c228430d96640aeab3d9436",
+    "source": "assets/figures/external/moonrace/monkey/a1d58fbfd1c83c953ec3ea9e7cc394c07358e4f319e33fe6a65ce9684a0772d5/model/monkey_roblox.glb"
   },
   "Models.Moonrace.MoonOx": {
-    "assetId": "90519645854260",
+    "assetId": "109342049768676",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "3266f8ab4159d9005e40b62d4c85dc17fd225591285c0325a6e5deeb07a6ea52",
-    "source": "assets/figures/moonrace/ox/model/ox_roblox.glb"
+    "sha256": "d4e0618b2e6a1a2560cd25363687b54f721319ed076f209efeffa0fe3173a2c6",
+    "source": "assets/figures/external/moonrace/ox/ab7e74f772203ddd7c1387496372fdbdc758b024c01db1cf5d317d44d7508a8b/model/ox_roblox.glb"
   },
   "Models.Moonrace.MoonPig": {
-    "assetId": "126529031599245",
+    "assetId": "117858047560206",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "77df9af4b26de91e3b6638f53ef5ac76e258679930ed1fe08c45c57215428278",
-    "source": "assets/figures/moonrace/pig/model/pig_roblox.glb"
+    "sha256": "4afa0780e26fb4876112d039215308f7639b5f11395e3e1e2f9632b3314096de",
+    "source": "assets/figures/external/moonrace/pig/46f374d4ab62e0b1308497314e2c278fe7da60f0cd58dd8d01affc984f8d4d2d/model/pig_roblox.glb"
   },
   "Models.Moonrace.MoonRabbit": {
-    "assetId": "125098612349310",
+    "assetId": "127121294287729",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "049ad07b96e99c7b89d51a53e87a6641d4f267a9ba2068fba4092f2ee828ebfc",
-    "source": "assets/figures/moonrace/rabbit/model/rabbit_roblox.glb"
+    "sha256": "abf6cd89974f8cf827e4ad2b3a9ec76dbd7044f0a16b879f603ea397b9de8eb9",
+    "source": "assets/figures/external/moonrace/rabbit/03479113470a1b9ff1fe8a3ee57a3b5635904188f4c464826e829b778a695b8a/model/rabbit_roblox.glb"
   },
   "Models.Moonrace.MoonRat": {
-    "assetId": "89864961293110",
+    "assetId": "90445507761070",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "6e2d0a160d7f93a673522a4465260878bb34faba340eb7492521a9eec20fb169",
-    "source": "assets/figures/moonrace/rat/model/rat_roblox.glb"
+    "sha256": "fe8458007d2d02c29abafe4631c70ea13c306a02fc8a5af19f4a974d9e4cefbc",
+    "source": "assets/figures/external/moonrace/rat/0f87d85a7b310a3d561fe1ad1bdd87b7079ef349ec711b85e7920f70c1f731e0/model/rat_roblox.glb"
   },
   "Models.Moonrace.MoonRooster": {
-    "assetId": "104113895492534",
+    "assetId": "129513774118433",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "d8bad0604976489a2ef2a7ab080a62b4f5df6c32f57a70dfab67b2027b36c726",
-    "source": "assets/figures/moonrace/rooster/model/rooster_roblox.glb"
+    "sha256": "32bfa1aa04074773219bddd8bc4286a12fe1d937d8dba7a7e6e0d88e665f2e87",
+    "source": "assets/figures/external/moonrace/rooster/d5233c48836d2c73ecd63380ae1c4c4e17ffe87440ef82e5c951853ad2fdfae9/model/rooster_roblox.glb"
   },
   "Models.Moonrace.MoonSnake": {
-    "assetId": "99526443758779",
+    "assetId": "121455625651964",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "710bbea3556865ed38ff9befa4d53bf9ca439992e5efe021fddea579e488eeff",
-    "source": "assets/figures/moonrace/snake/model/snake_roblox.glb"
+    "sha256": "bc8ea1c6d0aede0d51bb6f315be61a9bc212a878d3978ead3ac5b2de427714f9",
+    "source": "assets/figures/external/moonrace/snake/fc4869a2c04ce163596fd49705631bbbfc40086669606835c11ecfed6782fa62/model/snake_roblox.glb"
   },
   "Models.Moonrace.MoonTiger": {
-    "assetId": "95678223448330",
+    "assetId": "116459560411422",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "d737131b3985ef481e73c62b005f927b14c5f040cfd9bc3cab3955bd49020ea2",
-    "source": "assets/figures/moonrace/tiger/model/tiger_roblox.glb"
+    "sha256": "db1375bde1d463d3a128cb775b0db391674ad1027d415fde94475e7bfc1e23bc",
+    "source": "assets/figures/external/moonrace/tiger/38551b0085796dd0437f72073d322e5d9eddd68716216a4492933d1c4c17aa56/model/tiger_roblox.glb"
   },
   "Models.PocketGrove.AcornDot": {
     "assetId": "108614572737539",

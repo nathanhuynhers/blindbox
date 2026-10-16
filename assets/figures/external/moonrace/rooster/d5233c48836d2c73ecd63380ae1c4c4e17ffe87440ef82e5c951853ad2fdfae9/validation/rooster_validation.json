@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "d5233c48836d2c73ecd63380ae1c4c4e17ffe87440ef82e5c951853ad2fdfae9",
+  "source_filename": "ce30d53f7b3004d066574d04e851ee235a00fe37eb6bc1997fa85049d58d2ddf/rooster.glb",
+  "source_sha256": "ce30d53f7b3004d066574d04e851ee235a00fe37eb6bc1997fa85049d58d2ddf",
+  "import_entry": {
+    "source": "ce30d53f7b3004d066574d04e851ee235a00fe37eb6bc1997fa85049d58d2ddf/rooster.glb",
+    "collection_id": "moon",
+    "figure_id": "moon.rooster",
+    "rarity": "Uncommon",
+    "collection_slug": "moonrace",
+    "figure_slug": "rooster",
+    "root": "MoonRooster",
+    "alias": "rooster",
+    "asset_key": "Models.Moonrace.MoonRooster",
+    "height_studs": 2.96,
+    "rotation_degrees": [
+      0,
+      0,
+      5.81
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.416,
+          0.0,
+          0.626
+        ],
+        [
+          0.576,
+          0.2174,
+          0.766
+        ]
+      ]
+    },
+    "protected_objects": [],
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "title": "Rooster"
+  },
+  "catalog": "moon.rooster",
+  "collection_id": "moon",
+  "rarity": "Uncommon",
+  "root": "MoonRooster",
+  "figure": "MoonRooster",
+  "title": "Rooster",
+  "face": "MoonRooster_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19722,
+  "source_triangles": 19722,
+  "source": {
+    "bytes": 5606544,
+    "textures": [
+      {
+        "name": "rooster_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19722
+    ],
+    "triangles": 19722,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.2762564420700073,
+    2.52814519405365,
+    2.9600000381469727
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "MoonRooster_Eyes": {
+      "tris": 127,
+      "verts": 191,
+      "non_manifold_edges": 31,
+      "boundary_edges": 31,
+      "zero_area_faces": 0,
+      "signed_volume": 0.05825749331723233,
+      "islands": 1,
+      "island_faces": [
+        127
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.20126518607139587,
+          -1.208207368850708,
+          1.840438723564148
+        ],
+        [
+          0.18952196836471558,
+          -0.6553817391395569,
+          2.3562920093536377
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "MoonRooster_Part002": {
+      "tris": 19595,
+      "verts": 21710,
+      "non_manifold_edges": 47,
+      "boundary_edges": 47,
+      "zero_area_faces": 0,
+      "signed_volume": 3.231638339762898,
+      "islands": 2,
+      "island_faces": [
+        26,
+        19569
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.1381281614303589,
+          -1.2640726566314697,
+          0.0
+        ],
+        [
+          1.1381282806396484,
+          1.2640725374221802,
+          2.9600000381469727
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5966492,
+    "textures": 1,
+    "primitive_triangles": [
+      127,
+      19595
+    ],
+    "triangles": 19722,
+    "mesh_nodes": [
+      "MoonRooster_Eyes",
+      "MoonRooster_Part002"
+    ],
+    "sha256": "32bfa1aa04074773219bddd8bc4286a12fe1d937d8dba7a7e6e0d88e665f2e87",
+    "nodes": [
+      "MoonRooster_Eyes",
+      "MoonRooster_Part002",
+      "MoonRooster"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "rooster": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "rooster": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999921505215978,
+      "foreground_rgb_mae": 6.977314478717744e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999931305470833,
+      "foreground_rgb_mae": 7.664154691156e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 0.9999725623349452,
+      "foreground_rgb_mae": 8.408837311435491e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.711863094707951e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "rooster_source_front.png",
+      "rooster_source_three_quarter.png",
+      "rooster_source_side.png",
+      "rooster_source_back.png"
+    ],
+    "fidelity_views": [
+      "rooster_fidelity_front.png",
+      "rooster_fidelity_three_quarter.png",
+      "rooster_fidelity_side.png",
+      "rooster_fidelity_back.png"
+    ],
+    "fidelity_sha256": "32bfa1aa04074773219bddd8bc4286a12fe1d937d8dba7a7e6e0d88e665f2e87",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "ce30d53f7b3004d066574d04e851ee235a00fe37eb6bc1997fa85049d58d2ddf",
+    "source/source.blend": "7068491af7667fed8642ae1fd9a89b35e2f24cc0d3eae7545eae5ffd1b2705c7",
+    "model/rooster_production.blend": "4ff35f8dacfac123938c696399faa1f4d18c1d40b9d42085d242d136f20fdc49",
+    "model/rooster_roblox.glb": "32bfa1aa04074773219bddd8bc4286a12fe1d937d8dba7a7e6e0d88e665f2e87",
+    "renders/rooster_fidelity_back.png": "1f8b681fcffa82fcc115cea6213648c115bb91d33db54731b7e6e085e8c7bab5",
+    "renders/rooster_fidelity_front.png": "3d6243e1e5e5ee6ba6d480429cbed54fad8c0341f9c6603e97c79a1c80102a21",
+    "renders/rooster_fidelity_side.png": "a4800d4805950fdede6ebba373d7a642a749696f76583df17ba9f5484884ac39",
+    "renders/rooster_fidelity_three_quarter.png": "c364b3138e9f99295de4c891c7494e1648b0084506f77df1e086d2caf206e969",
+    "renders/rooster_source_back.png": "e400da2adf70d57eee4b6dcf0ef77bdaf8e6c40bf49f699dd50e9991d19902a5",
+    "renders/rooster_source_front.png": "ed22a0734b8296d5134c5bc462022bfa5d6a1ff67d22839c2a57acaec609c84e",
+    "renders/rooster_source_side.png": "46681476b7b23c954557ccb0e1125c318f1a71447f1d8fbd0ea5ef3fcbf3cafe",
+    "renders/rooster_source_three_quarter.png": "3cda262b012b0635641623db20fb628527ed2a5c1d85aeeac1dc1946f01ea8f5"
+  }
+}
