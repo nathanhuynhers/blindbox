@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16b/golden_goddess_figure.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/greek-gods/apollo_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 20,
+  "island_faces": 1
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  10,
+  26,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.7387567656224373,
+   "az": 203.0,
+   "el": 30.0
+  }
+ },
+ "faces": {
+  "hero": 2698,
+  "mirror": 1272
+ },
+ "front_iou": 0.0,
+ "fill_faces": 15505,
+ "triangles": 19475
+}

@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16b/fantasy_princess.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/greek-gods/hera_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 2,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -6,
+  0,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.9040079966465676,
+   "az": 331.0,
+   "el": -12.0
+  }
+ },
+ "faces": {
+  "hero": 4800,
+  "mirror": 2825
+ },
+ "front_iou": 0.0,
+ "fill_faces": 11720,
+ "triangles": 19345
+}

@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16b/fantasy_knight.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/greek-gods/ares_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  12,
+  -24,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8083644652694232,
+   "az": 337.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 5879,
+  "mirror": 681
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12146,
+ "triangles": 18706
+}

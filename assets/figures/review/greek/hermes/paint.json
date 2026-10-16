@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16b/angelic_figure.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/greek-gods/hermes_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  24,
+  -18,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.6739600559725226,
+   "az": 323.0,
+   "el": -3.0
+  }
+ },
+ "faces": {
+  "hero": 4391,
+  "mirror": 2181
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12522,
+ "triangles": 19094
+}

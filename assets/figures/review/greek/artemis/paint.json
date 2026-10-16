@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16b/fantasy_archer.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/greek-gods/artemis_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 11,
+  "island_faces": 3
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  -22,
+  -24,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.7105690323744251,
+   "az": 349.0,
+   "el": -12.0
+  }
+ },
+ "faces": {
+  "hero": 4179,
+  "mirror": 1454
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13613,
+ "triangles": 19246
+}
