@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g13.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/halloween/pumpkin_trick_or_treater_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 1,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  0,
+  -2,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.9315440866801945,
+   "az": 337.0,
+   "el": -5.0
+  }
+ },
+ "faces": {
+  "hero": 4599,
+  "mirror": 1181
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13954,
+ "triangles": 19734
+}

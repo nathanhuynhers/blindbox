@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g11.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/halloween/mummy_sorcerer_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 2,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  10,
+  8,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8377686193700323,
+   "az": 339.0,
+   "el": -9.0
+  }
+ },
+ "faces": {
+  "hero": 4273,
+  "mirror": 1312
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14093,
+ "triangles": 19678
+}

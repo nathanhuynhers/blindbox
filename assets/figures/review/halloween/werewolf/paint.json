@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g06.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/halloween/werewolf_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 2,
+  "island_faces": 1
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  6,
+  -4,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.9264055689693017,
+   "az": 0.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 3943,
+  "mirror": 543
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14674,
+ "triangles": 19160
+}

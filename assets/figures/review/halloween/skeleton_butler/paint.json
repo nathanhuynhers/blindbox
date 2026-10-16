@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g15.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/halloween/skeleton_butler_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "Y",
+ "refine": [
+  2,
+  12,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8490811122871164,
+   "az": 342.0,
+   "el": -6.0
+  }
+ },
+ "faces": {
+  "hero": 5771,
+  "mirror": 965
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12408,
+ "triangles": 19144
+}

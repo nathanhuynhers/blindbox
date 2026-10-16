@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g08.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/halloween/ghost_with_lantern_rare.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  4,
+  -6,
+  1.03
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.9048452367931751,
+   "az": 344.0,
+   "el": 1.0
+  }
+ },
+ "faces": {
+  "hero": 4372,
+  "mirror": 803
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14077,
+ "triangles": 19252
+}
