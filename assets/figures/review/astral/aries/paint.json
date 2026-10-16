@@ -21,10 +21,10 @@
   }
  },
  "faces": {
-  "hero": 4508,
-  "mirror": 639
+  "hero": 9140,
+  "mirror": 320
  },
  "front_iou": 0.0,
- "fill_faces": 14084,
+ "fill_faces": 9597,
  "triangles": 18903
 }
