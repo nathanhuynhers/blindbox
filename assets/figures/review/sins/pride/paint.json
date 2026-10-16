@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16g/g14.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/seven-deadly-sins/pride_common.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 1,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -8,
+  -12,
+  1.0
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.9089839027804288,
+   "az": 334.0,
+   "el": -10.0
+  }
+ },
+ "faces": {
+  "hero": 6428,
+  "mirror": 671
+ },
+ "front_iou": 0.0,
+ "fill_faces": 12207,
+ "triangles": 18958
+}
