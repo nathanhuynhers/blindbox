@@ -9,22 +9,22 @@
  "front_az": null,
  "axis": "X",
  "refine": [
-  20,
-  0,
-  0.97
+  18,
+  -2,
+  1.0
  ],
  "fits": {
   "hero": {
-   "iou": 0.8117097655505432,
-   "az": 337.0,
-   "el": -2.0
+   "iou": 0.8118324008138352,
+   "az": 335.0,
+   "el": 0.0
   }
  },
  "faces": {
-  "hero": 3132,
-  "mirror": 1407
+  "hero": 3151,
+  "mirror": 1356
  },
  "front_iou": 0.0,
- "fill_faces": 14716,
+ "fill_faces": 14748,
  "triangles": 19255
 }
