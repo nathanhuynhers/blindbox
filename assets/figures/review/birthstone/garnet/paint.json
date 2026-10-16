@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16c/fantasy_red.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/birthstones/garnet_uncommon.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 27,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  20,
+  0,
+  0.97
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8117097655505432,
+   "az": 337.0,
+   "el": -2.0
+  }
+ },
+ "faces": {
+  "hero": 3132,
+  "mirror": 1407
+ },
+ "front_iou": 0.0,
+ "fill_faces": 14716,
+ "triangles": 19255
+}
