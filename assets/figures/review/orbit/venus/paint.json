@@ -1,0 +1,30 @@
+{
+ "source": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/incoming/new-2026-10-16e/m1.glb",
+ "hero": "C:\\Users\\natha\\Documents\\RobloxWorkspace/assets/reference_models/pocket-orbit/venus_legendary.png",
+ "sheet": "-",
+ "repairs": {
+  "fin_faces": 0,
+  "island_faces": 0
+ },
+ "front_az": null,
+ "axis": "X",
+ "refine": [
+  -6,
+  -12,
+  0.97
+ ],
+ "fits": {
+  "hero": {
+   "iou": 0.8565040036259254,
+   "az": 348.0,
+   "el": -1.0
+  }
+ },
+ "faces": {
+  "hero": 4257,
+  "mirror": 1156
+ },
+ "front_iou": 0.0,
+ "fill_faces": 13665,
+ "triangles": 19078
+}
