@@ -138,7 +138,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope): Preview
 		if deadline and coroutine.status(deadline) ~= "dead" then
 			task.cancel(deadline)
 		end
-		local assets = Skin.apply(current, bound, selected)
+		local assets = Skin.apply(current, bound, selected, false)
 		for _, child in current:GetDescendants() do
 			if child:IsA("MeshPart") then
 				table.insert(assets, child)

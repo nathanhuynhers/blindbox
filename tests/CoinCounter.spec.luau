@@ -57,6 +57,18 @@ check(State.compact(value) == "999.9B", "large progress rounds down")
 counter.finish(first)
 check(State.compact(value) == "1T", "trillion final formatting")
 
+-- Impact products can exceed 2^53 even with a safe one-quadrillion delta.
+counter.snapshot(0)
+local large = 999999999999999
+first = counter.snapshot(large, large, 0, 32) :: number
+for i=1,32 do
+ local expected = 31249999999999 * i + math.floor(31 * i / 32)
+ counter.impact(first,i)
+ check(value == expected, "Exact large impact share without unsafe intermediate")
+end
+counter.finish(first)
+check(value == large, "Large counter reaches exact wallet")
+
 local sequence = 0
 local function snapshot(coins: number)
 	sequence += 1

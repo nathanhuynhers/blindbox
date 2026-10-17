@@ -17,7 +17,12 @@ function Counter.create(display: (number) -> ()): Counter
 	local function publish()
 		local remaining = 0
 		for _, entry in pending do
-			remaining += entry.amount - math.floor(entry.amount * entry.impacts / entry.count)
+			-- Split before multiplying: visual impact arithmetic must stay below 2^53.
+			local whole = math.floor(entry.amount / entry.count)
+			local remainder = entry.amount - whole * entry.count
+			local landed = whole * entry.impacts
+				+ math.floor(remainder * entry.impacts / entry.count)
+			remaining += entry.amount - landed
 		end
 		display(math.max(0, wallet - remaining))
 	end

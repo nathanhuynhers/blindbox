@@ -1,0 +1,322 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "a702dc1efd04ec50deda190022fd59c175b4ac4eb6b504b4d8a1585aa99e8ceb",
+  "source_filename": "df21342a277da24ab58d9c7b47164de830199b19fe4888f1c3a49dd93e07c943/savanna_painted.glb",
+  "source_sha256": "df21342a277da24ab58d9c7b47164de830199b19fe4888f1c3a49dd93e07c943",
+  "import_entry": {
+    "source": "df21342a277da24ab58d9c7b47164de830199b19fe4888f1c3a49dd93e07c943/savanna_painted.glb",
+    "figure_id": "biome.savanna",
+    "collection_id": "biome",
+    "rarity": "Common",
+    "collection_slug": "biomes",
+    "figure_slug": "savanna",
+    "root": "BiomeSavanna",
+    "alias": "biome_savanna",
+    "asset_key": "Models.Biomes.BiomeSavanna",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      18.67
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4201,
+          0.0,
+          0.6394
+        ],
+        [
+          0.5801,
+          0.347,
+          0.7794
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Savanna"
+  },
+  "catalog": "biome.savanna",
+  "collection_id": "biome",
+  "rarity": "Common",
+  "root": "BiomeSavanna",
+  "figure": "BiomeSavanna",
+  "title": "Savanna",
+  "face": "BiomeSavanna_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19082,
+  "source_triangles": 19082,
+  "source": {
+    "bytes": 5661304,
+    "textures": [
+      {
+        "name": "savanna_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19082
+    ],
+    "triangles": 19082,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    3.0212368965148926,
+    2.282430052757263,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "BiomeSavanna_Eyes": {
+      "tris": 339,
+      "verts": 488,
+      "non_manifold_edges": 83,
+      "boundary_edges": 83,
+      "zero_area_faces": 0,
+      "signed_volume": -0.07026920930130887,
+      "islands": 3,
+      "island_faces": [
+        1,
+        21,
+        317
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2988266348838806,
+          -0.7460801005363464,
+          2.2533037662506104
+        ],
+        [
+          0.2982381582260132,
+          -0.3243779242038727,
+          2.8632240295410156
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "BiomeSavanna_Part002": {
+      "tris": 18743,
+      "verts": 20912,
+      "non_manifold_edges": 83,
+      "boundary_edges": 83,
+      "zero_area_faces": 0,
+      "signed_volume": 2.0999305478578854,
+      "islands": 2,
+      "island_faces": [
+        58,
+        18685
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.5106184482574463,
+          -1.1412150859832764,
+          0.0
+        ],
+        [
+          1.5106184482574463,
+          1.1412149667739868,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 6016412,
+    "textures": 1,
+    "primitive_triangles": [
+      339,
+      18743
+    ],
+    "triangles": 19082,
+    "mesh_nodes": [
+      "BiomeSavanna_Eyes",
+      "BiomeSavanna_Part002"
+    ],
+    "sha256": "ed152b94cf2e00d08005708047672bcca519f08c4b33c94f9327282d08a98626",
+    "nodes": [
+      "BiomeSavanna_Eyes",
+      "BiomeSavanna_Part002",
+      "BiomeSavanna"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "savanna": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "savanna": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.14052507141605e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 8.921111293602735e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.767608622089028e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.556493073934689e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "savanna_source_front.png",
+      "savanna_source_three_quarter.png",
+      "savanna_source_side.png",
+      "savanna_source_back.png"
+    ],
+    "fidelity_views": [
+      "savanna_fidelity_front.png",
+      "savanna_fidelity_three_quarter.png",
+      "savanna_fidelity_side.png",
+      "savanna_fidelity_back.png"
+    ],
+    "fidelity_sha256": "ed152b94cf2e00d08005708047672bcca519f08c4b33c94f9327282d08a98626",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "df21342a277da24ab58d9c7b47164de830199b19fe4888f1c3a49dd93e07c943",
+    "source/source.blend": "dabc7099f4bb6094257a9def97be1a0add4a58078d754aa25edbdbb348e1774a",
+    "model/savanna_production.blend": "4154b31710bc8ced6f0e105b7dd2f1a5a83d25b77651cff81d4c5dec98c1723b",
+    "model/savanna_roblox.glb": "ed152b94cf2e00d08005708047672bcca519f08c4b33c94f9327282d08a98626",
+    "renders/savanna_fidelity_back.png": "51ae89cc48192f91d18238f0f49fcc780e893eb1ad93b1c3e02bee020f3f9921",
+    "renders/savanna_fidelity_front.png": "d064de6f462324ba51cb9ba1022ced19df03dcdcc76462187445b344c079a5a8",
+    "renders/savanna_fidelity_side.png": "743815afb479159ebacd27d92249a10aa164194b3954bbb07a16628db52b7ae8",
+    "renders/savanna_fidelity_three_quarter.png": "4ea0376d29a77c8f74ebac2687e16b4515cd37e28a70cdbfa1079dc6b9581db3",
+    "renders/savanna_source_back.png": "d2d6fa27126c0e9b7fd7f2ca96d717bc5a85b3e0ee5e478121772a0b57345cd5",
+    "renders/savanna_source_front.png": "a7b2be52e0a874eba83bb10b7e2ce13141825895cd1840da994e5deb1645c343",
+    "renders/savanna_source_side.png": "016aec4c7b9c4bdbab6be202a58fa404a03d8d92d5344a61fb26854ea116b0da",
+    "renders/savanna_source_three_quarter.png": "35d199d24759292f03e3ee2265deed4bf2ea26299ba355add84b7b7787705461"
+  }
+}

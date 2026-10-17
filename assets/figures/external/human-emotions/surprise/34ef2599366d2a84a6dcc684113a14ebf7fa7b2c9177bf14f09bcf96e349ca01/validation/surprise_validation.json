@@ -1,0 +1,322 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "34ef2599366d2a84a6dcc684113a14ebf7fa7b2c9177bf14f09bcf96e349ca01",
+  "source_filename": "cf04494ca27c2eca7a03b7e558e5a060f561109587f62b0735a8ad2dd646dea6/surprise_painted.glb",
+  "source_sha256": "cf04494ca27c2eca7a03b7e558e5a060f561109587f62b0735a8ad2dd646dea6",
+  "import_entry": {
+    "source": "cf04494ca27c2eca7a03b7e558e5a060f561109587f62b0735a8ad2dd646dea6/surprise_painted.glb",
+    "figure_id": "emotion.surprise",
+    "collection_id": "emotion",
+    "rarity": "Uncommon",
+    "collection_slug": "human-emotions",
+    "figure_slug": "surprise",
+    "root": "EmotionSurprise",
+    "alias": "emotion_surprise",
+    "asset_key": "Models.HumanEmotions.EmotionSurprise",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      -1.1
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4206,
+          0.0,
+          0.6163
+        ],
+        [
+          0.5806,
+          0.4258,
+          0.7563
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Surprise"
+  },
+  "catalog": "emotion.surprise",
+  "collection_id": "emotion",
+  "rarity": "Uncommon",
+  "root": "EmotionSurprise",
+  "figure": "EmotionSurprise",
+  "title": "Surprise",
+  "face": "EmotionSurprise_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19260,
+  "source_triangles": 19260,
+  "source": {
+    "bytes": 4997864,
+    "textures": [
+      {
+        "name": "surprise_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19260
+    ],
+    "triangles": 19260,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.1586945056915283,
+    1.9397037029266357,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "EmotionSurprise_Eyes": {
+      "tris": 155,
+      "verts": 173,
+      "non_manifold_edges": 71,
+      "boundary_edges": 71,
+      "zero_area_faces": 0,
+      "signed_volume": -0.003709465726078226,
+      "islands": 3,
+      "island_faces": [
+        3,
+        15,
+        137
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.21563206613063812,
+          -0.40945854783058167,
+          2.183450222015381
+        ],
+        [
+          0.21572206914424896,
+          -0.11081548035144806,
+          2.743844747543335
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "EmotionSurprise_Part002": {
+      "tris": 19105,
+      "verts": 17619,
+      "non_manifold_edges": 71,
+      "boundary_edges": 71,
+      "zero_area_faces": 0,
+      "signed_volume": 2.305370359876982,
+      "islands": 2,
+      "island_faces": [
+        530,
+        18575
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.0793472528457642,
+          -0.9698518514633179,
+          0.0
+        ],
+        [
+          1.0793472528457642,
+          0.9698518514633179,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5290664,
+    "textures": 1,
+    "primitive_triangles": [
+      155,
+      19105
+    ],
+    "triangles": 19260,
+    "mesh_nodes": [
+      "EmotionSurprise_Eyes",
+      "EmotionSurprise_Part002"
+    ],
+    "sha256": "0cbafc4ebdc3fd1130a6b6ad8135a3416302d6f2809a4528b3bff3c91f66a885",
+    "nodes": [
+      "EmotionSurprise_Eyes",
+      "EmotionSurprise_Part002",
+      "EmotionSurprise"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "surprise": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "surprise": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 8.707039523869753e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.338450036011636e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 8.278142922790721e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.15938552073203e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "surprise_source_front.png",
+      "surprise_source_three_quarter.png",
+      "surprise_source_side.png",
+      "surprise_source_back.png"
+    ],
+    "fidelity_views": [
+      "surprise_fidelity_front.png",
+      "surprise_fidelity_three_quarter.png",
+      "surprise_fidelity_side.png",
+      "surprise_fidelity_back.png"
+    ],
+    "fidelity_sha256": "0cbafc4ebdc3fd1130a6b6ad8135a3416302d6f2809a4528b3bff3c91f66a885",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "cf04494ca27c2eca7a03b7e558e5a060f561109587f62b0735a8ad2dd646dea6",
+    "source/source.blend": "8b8b4f6546d3a3adb68007c9a7c0a5e8873174e88a58a55568645a1356db0f07",
+    "model/surprise_production.blend": "5964dba80ab3a9be8fdbd262483a9daecdda11d8fb02d4aa349e35a21e181a8f",
+    "model/surprise_roblox.glb": "0cbafc4ebdc3fd1130a6b6ad8135a3416302d6f2809a4528b3bff3c91f66a885",
+    "renders/surprise_fidelity_back.png": "a8f2304cb4b3b271e82d9e7d5f242e9153b7a8efa8f2f364c5be4a4b02ee8c5e",
+    "renders/surprise_fidelity_front.png": "d64c7eb97a1dd76323902efce798401d54315e0e65d4e01e48705f599ceb3052",
+    "renders/surprise_fidelity_side.png": "778e19f824a88f0cf5e29fcac4d9564050293be795b0afa8f4c479873d0c45d1",
+    "renders/surprise_fidelity_three_quarter.png": "49f70c565d7ff2a832a817d3a750c07b86cb7b604d5bdbabf92b1f5c8a6e7189",
+    "renders/surprise_source_back.png": "59627bdea3682a559528cd1d84cee53ac197c0eee471e1b37f5af4e6bedf9ce4",
+    "renders/surprise_source_front.png": "80149242381c235679c2cc76014ab87b1b5268410e8fead7c79ce1cd9b1ef421",
+    "renders/surprise_source_side.png": "fa0bdbf532697104f7bdacf33a820a2abfa46e4b6c91bcc8e0e7001b74e3eb57",
+    "renders/surprise_source_three_quarter.png": "8cbf95701ac0f9e1b5d2bf2ad09f31833e98e799cc335d5fb3d527590ceb7f64"
+  }
+}

@@ -128,6 +128,42 @@ Style.collections = table.freeze({
 	echo = collection(0xC46A2C, 0xFCEADB, "TE", "Echoes", Manifest.Collection.TenderEchoes.Emblem),
 	star = collection(0x4A5BB8, 0xE1E5F8, "WS", "Stars", Manifest.Collection.WeAreAllStars.Emblem),
 	moon = collection(0xB8322A, 0xFBE6DC, "MR", "Moonrace", Manifest.Collection.Moonrace.Emblem),
+	dessert = collection(0xC06885, 0xFFF0E9, "D", "Desserts", "Collection.Desserts.Emblem"),
+	halloween = collection(0x934DA8, 0xFAEEDC, "H", "Halloween", "Collection.Halloween.Emblem"),
+	chess = collection(
+		0x576879,
+		0xECEDF1,
+		"HC",
+		"Humanoid Chess Pieces",
+		"Collection.HumanoidChessPieces.Emblem"
+	),
+	emotion = collection(
+		0xB2577B,
+		0xF9E9F1,
+		"HE",
+		"Human Emotions",
+		"Collection.HumanEmotions.Emblem"
+	),
+	astral = collection(0x5E60A1, 0xEDEBFA, "AS", "Astral Signs", "Collection.AstralSigns.Emblem"),
+	biome = collection(0x4B8063, 0xEAF3E4, "B", "Biomes", "Collection.Biomes.Emblem"),
+	weather = collection(0x4A85A9, 0xE8F4FA, "W", "Weather", "Collection.Weather.Emblem"),
+	sense = collection(0x8E6B9E, 0xF3EAF6, "FS", "Five Senses", "Collection.FiveSenses.Emblem"),
+	olympian = collection(0xA47C35, 0xFCF3DE, "O", "Olympians", "Collection.Olympians.Emblem"),
+	birthstone = collection(
+		0x517E83,
+		0xE5F5EF,
+		"B",
+		"Birthstones",
+		"Collection.Birthstones.Emblem"
+	),
+	sin = collection(
+		0x9F4357,
+		0xF9E6EA,
+		"SD",
+		"Seven Deadly Sins",
+		"Collection.SevenDeadlySins.Emblem"
+	),
+	orbit = collection(0x465B99, 0xE6EDFB, "PO", "Pocket Orbit", "Collection.PocketOrbit.Emblem"),
 }) :: { [string]: Collection }
 local neutral: Collection = table.freeze({
 	color = hex(0x6B4EE6),

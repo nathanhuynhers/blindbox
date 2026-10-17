@@ -1,0 +1,321 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "cde6584a8d0601cbe64f935ebdd35e261e2b01b5d5633aa789f2b9d54191992c",
+  "source_filename": "d4dc95034e1da6085b81643ede3998628326678f4bbfd28685f8ea27a4a64d1e/rook_painted.glb",
+  "source_sha256": "d4dc95034e1da6085b81643ede3998628326678f4bbfd28685f8ea27a4a64d1e",
+  "import_entry": {
+    "source": "d4dc95034e1da6085b81643ede3998628326678f4bbfd28685f8ea27a4a64d1e/rook_painted.glb",
+    "figure_id": "chess.rook",
+    "collection_id": "chess",
+    "rarity": "Uncommon",
+    "collection_slug": "humanoid-chess-pieces",
+    "figure_slug": "rook",
+    "root": "ChessRook",
+    "alias": "chess_rook",
+    "asset_key": "Models.HumanoidChessPieces.ChessRook",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      11.4
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4254,
+          0.0,
+          0.6658
+        ],
+        [
+          0.5854,
+          0.4627,
+          0.8058
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Rook"
+  },
+  "catalog": "chess.rook",
+  "collection_id": "chess",
+  "rarity": "Uncommon",
+  "root": "ChessRook",
+  "figure": "ChessRook",
+  "title": "Rook",
+  "face": "ChessRook_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19048,
+  "source_triangles": 19048,
+  "source": {
+    "bytes": 4871732,
+    "textures": [
+      {
+        "name": "rook_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19048
+    ],
+    "triangles": 19048,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    3.625222682952881,
+    3.151095151901245,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "ChessRook_Eyes": {
+      "tris": 314,
+      "verts": 466,
+      "non_manifold_edges": 90,
+      "boundary_edges": 90,
+      "zero_area_faces": 0,
+      "signed_volume": -0.011723381421994541,
+      "islands": 2,
+      "island_faces": [
+        1,
+        313
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.3462177813053131,
+          -0.45316532254219055,
+          2.320452928543091
+        ],
+        [
+          0.34607431292533875,
+          -0.07932975143194199,
+          2.924330234527588
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "ChessRook_Part002": {
+      "tris": 18734,
+      "verts": 19196,
+      "non_manifold_edges": 90,
+      "boundary_edges": 90,
+      "zero_area_faces": 0,
+      "signed_volume": 4.388532291946706,
+      "islands": 2,
+      "island_faces": [
+        1,
+        18733
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.8126113414764404,
+          -1.5755475759506226,
+          0.0
+        ],
+        [
+          1.8126113414764404,
+          1.5755475759506226,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5198148,
+    "textures": 1,
+    "primitive_triangles": [
+      314,
+      18734
+    ],
+    "triangles": 19048,
+    "mesh_nodes": [
+      "ChessRook_Eyes",
+      "ChessRook_Part002"
+    ],
+    "sha256": "7b844563ab9d6b7b66ea64fdd5f1df45fc333018177ac5a9ab1950d216334401",
+    "nodes": [
+      "ChessRook_Eyes",
+      "ChessRook_Part002",
+      "ChessRook"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "rook": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "rook": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.607898831134662e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.243800453376025e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 5.16529253218323e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 3.763896529562771e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "rook_source_front.png",
+      "rook_source_three_quarter.png",
+      "rook_source_side.png",
+      "rook_source_back.png"
+    ],
+    "fidelity_views": [
+      "rook_fidelity_front.png",
+      "rook_fidelity_three_quarter.png",
+      "rook_fidelity_side.png",
+      "rook_fidelity_back.png"
+    ],
+    "fidelity_sha256": "7b844563ab9d6b7b66ea64fdd5f1df45fc333018177ac5a9ab1950d216334401",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "d4dc95034e1da6085b81643ede3998628326678f4bbfd28685f8ea27a4a64d1e",
+    "source/source.blend": "a6c358d6a70840a1af613cceaf7bdd3c292ace32a3e3d03bd7de8657024701c1",
+    "model/rook_production.blend": "fd7eeea9ef0730863f2dbfffc44cdb8e233b773265d888a1e222532a1e81aaf9",
+    "model/rook_roblox.glb": "7b844563ab9d6b7b66ea64fdd5f1df45fc333018177ac5a9ab1950d216334401",
+    "renders/rook_fidelity_back.png": "841039fc17d6fbc23dbb1afb13a8c79f30f21aa002db564e48ea30a7a1617207",
+    "renders/rook_fidelity_front.png": "2947a01e0fac839f43bc6124cf36cede269705a4dace601f9a2b89ebd2082352",
+    "renders/rook_fidelity_side.png": "10c606773be371679c6cdcf020d43093fb5e25f5783e9a50bedb15b1fb3f0dc2",
+    "renders/rook_fidelity_three_quarter.png": "81bd74439b7a9741fa7bc3769909874388c609effbf1b1c4f19ccc0775f23a05",
+    "renders/rook_source_back.png": "2d8f2480827fd208955647ab2097a89a474eea3fb4c89a443ae5fc487b880bd2",
+    "renders/rook_source_front.png": "df890bae43dec9dc43b066bc6765d83246df7b2cbf5baddd417badc1465d027e",
+    "renders/rook_source_side.png": "de39081d5aac50a344b9e3840df6fe98d715d345bcabc7a9459663c9ce0117b8",
+    "renders/rook_source_three_quarter.png": "99d5ac08a2fc052ef5a5bcddf22ad3e19b22e17c8eac6650114aea8feb7f9b0b"
+  }
+}

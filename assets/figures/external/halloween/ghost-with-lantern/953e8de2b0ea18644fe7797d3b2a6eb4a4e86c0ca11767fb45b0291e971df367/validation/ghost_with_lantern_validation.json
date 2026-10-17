@@ -1,0 +1,323 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "953e8de2b0ea18644fe7797d3b2a6eb4a4e86c0ca11767fb45b0291e971df367",
+  "source_filename": "87799c1b5e5eed1034685156ad157be2a746e46e8f94bc58f494b2ab3ba1cddc/ghost_with_lantern_painted.glb",
+  "source_sha256": "87799c1b5e5eed1034685156ad157be2a746e46e8f94bc58f494b2ab3ba1cddc",
+  "import_entry": {
+    "source": "87799c1b5e5eed1034685156ad157be2a746e46e8f94bc58f494b2ab3ba1cddc/ghost_with_lantern_painted.glb",
+    "figure_id": "halloween.ghost-with-lantern",
+    "collection_id": "halloween",
+    "rarity": "Rare",
+    "collection_slug": "halloween",
+    "figure_slug": "ghost-with-lantern",
+    "root": "HalloweenGhostWithLantern",
+    "alias": "halloween_ghost_with_lantern",
+    "asset_key": "Models.Halloween.HalloweenGhostWithLantern",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      13.17
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4287,
+          0.0,
+          0.6407
+        ],
+        [
+          0.5887,
+          0.3385,
+          0.7807
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Ghost with Lantern"
+  },
+  "catalog": "halloween.ghost-with-lantern",
+  "collection_id": "halloween",
+  "rarity": "Rare",
+  "root": "HalloweenGhostWithLantern",
+  "figure": "HalloweenGhostWithLantern",
+  "title": "Ghost with Lantern",
+  "face": "HalloweenGhostWithLantern_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19252,
+  "source_triangles": 19252,
+  "source": {
+    "bytes": 5083628,
+    "textures": [
+      {
+        "name": "ghost_with_lantern_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19252
+    ],
+    "triangles": 19252,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.7832378149032593,
+    1.9242650270462036,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "HalloweenGhostWithLantern_Eyes": {
+      "tris": 180,
+      "verts": 272,
+      "non_manifold_edges": 50,
+      "boundary_edges": 50,
+      "zero_area_faces": 0,
+      "signed_volume": -0.0089653620036094,
+      "islands": 1,
+      "island_faces": [
+        180
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2556225061416626,
+          -0.6108927726745605,
+          2.2744932174682617
+        ],
+        [
+          0.255385160446167,
+          -0.2441096007823944,
+          2.816070318222046
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "HalloweenGhostWithLantern_Part002": {
+      "tris": 19072,
+      "verts": 20729,
+      "non_manifold_edges": 50,
+      "boundary_edges": 50,
+      "zero_area_faces": 0,
+      "signed_volume": 2.9984649822583056,
+      "islands": 5,
+      "island_faces": [
+        5,
+        66,
+        104,
+        214,
+        18683
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.3916189670562744,
+          -0.9621325135231018,
+          0.0
+        ],
+        [
+          1.3916188478469849,
+          0.9621325135231018,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5427832,
+    "textures": 1,
+    "primitive_triangles": [
+      180,
+      19072
+    ],
+    "triangles": 19252,
+    "mesh_nodes": [
+      "HalloweenGhostWithLantern_Eyes",
+      "HalloweenGhostWithLantern_Part002"
+    ],
+    "sha256": "a871011845e4dd18e90010312c74e6109edcd6e51c30df4629584ebed756ee0c",
+    "nodes": [
+      "HalloweenGhostWithLantern_Eyes",
+      "HalloweenGhostWithLantern_Part002",
+      "HalloweenGhostWithLantern"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "ghost_with_lantern": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "ghost_with_lantern": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011189021461177617,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.73195128608495e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00013325914915185422,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.638847116846591e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "ghost_with_lantern_source_front.png",
+      "ghost_with_lantern_source_three_quarter.png",
+      "ghost_with_lantern_source_side.png",
+      "ghost_with_lantern_source_back.png"
+    ],
+    "fidelity_views": [
+      "ghost_with_lantern_fidelity_front.png",
+      "ghost_with_lantern_fidelity_three_quarter.png",
+      "ghost_with_lantern_fidelity_side.png",
+      "ghost_with_lantern_fidelity_back.png"
+    ],
+    "fidelity_sha256": "a871011845e4dd18e90010312c74e6109edcd6e51c30df4629584ebed756ee0c",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "87799c1b5e5eed1034685156ad157be2a746e46e8f94bc58f494b2ab3ba1cddc",
+    "source/source.blend": "a75c1083848eec6f43f9cfe9056bd1dffccf99846e479e0f51fe61338e392b19",
+    "model/ghost_with_lantern_production.blend": "1ce3810c917265783bd969510eeac172962345320ad3b109c623ce7e27520f04",
+    "model/ghost_with_lantern_roblox.glb": "a871011845e4dd18e90010312c74e6109edcd6e51c30df4629584ebed756ee0c",
+    "renders/ghost_with_lantern_fidelity_back.png": "d143faf92c5414a9ea8e0744e4efa72d3d9437887d4e56b2309e30bffaca2934",
+    "renders/ghost_with_lantern_fidelity_front.png": "18f6d8937e28c6f3cbfa2f57f7d8b3adfd7218cb145af5ceb5b71ac951ae1547",
+    "renders/ghost_with_lantern_fidelity_side.png": "44a67b18fef161e653578469c194cfb31ea62914f03af9f3a072ac3627b25e60",
+    "renders/ghost_with_lantern_fidelity_three_quarter.png": "6911c76735cda2f5b84eb15fe5bcde57352412657a23dc48815ca31753fa7916",
+    "renders/ghost_with_lantern_source_back.png": "4f5e370d7a867b2a9eb66297c2d5f8190ba36d9b465efdf817be6777d4ab47b6",
+    "renders/ghost_with_lantern_source_front.png": "dc826d427da45b122fa30888e01ef3b21a53de0d95d637bbf0e28587ca1c9c5a",
+    "renders/ghost_with_lantern_source_side.png": "d8460c8d29e755f11a538d0dee14a03875108370c47c7eee40e83971efaca7b8",
+    "renders/ghost_with_lantern_source_three_quarter.png": "c06b638493f450c8bd193b3b7e406e3572c76739366f30322b53326eacf4b36b"
+  }
+}

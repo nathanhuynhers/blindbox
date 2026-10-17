@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "b857e589e71395faf7f0c5e5c02a51a1b57dd01e335fa10cdfdfe85fb20015b3",
+  "source_filename": "da12be4f498054f6ffc362a74fb152115f4fff97522da5774cb6c219be1f5b89/donut_painted.glb",
+  "source_sha256": "da12be4f498054f6ffc362a74fb152115f4fff97522da5774cb6c219be1f5b89",
+  "import_entry": {
+    "source": "da12be4f498054f6ffc362a74fb152115f4fff97522da5774cb6c219be1f5b89/donut_painted.glb",
+    "figure_id": "dessert.donut",
+    "collection_id": "dessert",
+    "rarity": "Uncommon",
+    "collection_slug": "desserts",
+    "figure_slug": "donut",
+    "root": "DessertDonut",
+    "alias": "dessert_donut",
+    "asset_key": "Models.Desserts.DessertDonut",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      1.8
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4083,
+          0.0,
+          0.5932
+        ],
+        [
+          0.5683,
+          0.4429,
+          0.7332
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Donut"
+  },
+  "catalog": "dessert.donut",
+  "collection_id": "dessert",
+  "rarity": "Uncommon",
+  "root": "DessertDonut",
+  "figure": "DessertDonut",
+  "title": "Donut",
+  "face": "DessertDonut_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19564,
+  "source_triangles": 19564,
+  "source": {
+    "bytes": 5526784,
+    "textures": [
+      {
+        "name": "donut_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19564
+    ],
+    "triangles": 19564,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.4806793928146362,
+    2.5653411149978638,
+    3.5719997882843018
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "DessertDonut_Eyes": {
+      "tris": 260,
+      "verts": 323,
+      "non_manifold_edges": 62,
+      "boundary_edges": 62,
+      "zero_area_faces": 0,
+      "signed_volume": 0.013263559966728893,
+      "islands": 1,
+      "island_faces": [
+        260
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.28091195225715637,
+          -0.41663384437561035,
+          2.0793943405151367
+        ],
+        [
+          0.2807866036891937,
+          -0.1984633505344391,
+          2.6931285858154297
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "DessertDonut_Part002": {
+      "tris": 19304,
+      "verts": 19538,
+      "non_manifold_edges": 62,
+      "boundary_edges": 62,
+      "zero_area_faces": 0,
+      "signed_volume": 2.2664353410588665,
+      "islands": 2,
+      "island_faces": [
+        2040,
+        17264
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.2403396368026733,
+          -1.282670497894287,
+          0.0
+        ],
+        [
+          1.240339756011963,
+          1.2826706171035767,
+          3.5719997882843018
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5856684,
+    "textures": 1,
+    "primitive_triangles": [
+      260,
+      19304
+    ],
+    "triangles": 19564,
+    "mesh_nodes": [
+      "DessertDonut_Eyes",
+      "DessertDonut_Part002"
+    ],
+    "sha256": "470b9dc0e5ae812e603d02431fabe476dd5d9aff5abe095f4fe9b977d1ee4f71",
+    "nodes": [
+      "DessertDonut_Eyes",
+      "DessertDonut_Part002",
+      "DessertDonut"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "donut": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "donut": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999898861176851,
+      "foreground_rgb_mae": 7.45915385778062e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.188725819811225e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 0.9999778606772419,
+      "foreground_rgb_mae": 7.837031444068998e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.404212035704404e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "donut_source_front.png",
+      "donut_source_three_quarter.png",
+      "donut_source_side.png",
+      "donut_source_back.png"
+    ],
+    "fidelity_views": [
+      "donut_fidelity_front.png",
+      "donut_fidelity_three_quarter.png",
+      "donut_fidelity_side.png",
+      "donut_fidelity_back.png"
+    ],
+    "fidelity_sha256": "470b9dc0e5ae812e603d02431fabe476dd5d9aff5abe095f4fe9b977d1ee4f71",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "da12be4f498054f6ffc362a74fb152115f4fff97522da5774cb6c219be1f5b89",
+    "source/source.blend": "f5db1706841b6a9dcd9b2c188935ed52d626b5399b8c4037c3c45ca536f4b507",
+    "model/donut_production.blend": "1c00a7e29ea32d3389a9fed4e20b12afa641a697d53fd4b9cb9e2a75e490453c",
+    "model/donut_roblox.glb": "470b9dc0e5ae812e603d02431fabe476dd5d9aff5abe095f4fe9b977d1ee4f71",
+    "renders/donut_fidelity_back.png": "b6f8f4bce4411500decb1f3553612bae5e1a3a5db02e72410041b2f0fc00a2c1",
+    "renders/donut_fidelity_front.png": "ceae099657326a2d44e922a40ec0bf699fdaebf936b7da9ee267c05d184a60cb",
+    "renders/donut_fidelity_side.png": "973d64464994d3dc7b625b3601bec1d60ad9da9033a1c4f326735ce0a75a517b",
+    "renders/donut_fidelity_three_quarter.png": "661c756ea028a9c9941128c4c342f162fd7db082e50199201510e9f511334f6c",
+    "renders/donut_source_back.png": "edbd24d58756a9e74f4521df72eb4505ee56a12151e03e49d6667223e0b1a24d",
+    "renders/donut_source_front.png": "c2ef88679574618ba8d789f8e5e9170782f1457e0b462aca5f3b897011b204cd",
+    "renders/donut_source_side.png": "6cfb4e7a9a90ede8c7dcc2440589506214810311a2a1e605934301628a4e2522",
+    "renders/donut_source_three_quarter.png": "d4163b228ef679e4d359849d96463dcd08147082be54bfdcd218aed98603987f"
+  }
+}

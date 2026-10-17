@@ -1,0 +1,323 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "ac24b73245c099808c60923135e0b497ccec273aa6a901866176cc804a8976a3",
+  "source_filename": "e9e1ecd30d5342ed4965d3097f3c76bcaaed37e75ff86c03830ddfae935d3859/hera_painted.glb",
+  "source_sha256": "e9e1ecd30d5342ed4965d3097f3c76bcaaed37e75ff86c03830ddfae935d3859",
+  "import_entry": {
+    "source": "e9e1ecd30d5342ed4965d3097f3c76bcaaed37e75ff86c03830ddfae935d3859/hera_painted.glb",
+    "figure_id": "olympian.hera",
+    "collection_id": "olympian",
+    "rarity": "Rare",
+    "collection_slug": "olympians",
+    "figure_slug": "hera",
+    "root": "OlympianHera",
+    "alias": "olympian_hera",
+    "asset_key": "Models.Olympians.OlympianHera",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      25.76
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4247,
+          0.0,
+          0.6672
+        ],
+        [
+          0.5847,
+          0.4214,
+          0.8072
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Hera"
+  },
+  "catalog": "olympian.hera",
+  "collection_id": "olympian",
+  "rarity": "Rare",
+  "root": "OlympianHera",
+  "figure": "OlympianHera",
+  "title": "Hera",
+  "face": "OlympianHera_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19345,
+  "source_triangles": 19345,
+  "source": {
+    "bytes": 6422808,
+    "textures": [
+      {
+        "name": "hera_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19345
+    ],
+    "triangles": 19345,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.83793568611145,
+    1.9946441650390625,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "OlympianHera_Eyes": {
+      "tris": 225,
+      "verts": 311,
+      "non_manifold_edges": 83,
+      "boundary_edges": 83,
+      "zero_area_faces": 0,
+      "signed_volume": -0.01910521966918286,
+      "islands": 3,
+      "island_faces": [
+        1,
+        2,
+        222
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.27522093057632446,
+          -0.4703722298145294,
+          2.3474795818328857
+        ],
+        [
+          0.27488386631011963,
+          -0.14128346741199493,
+          2.9653637409210205
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "OlympianHera_Part002": {
+      "tris": 19120,
+      "verts": 22482,
+      "non_manifold_edges": 88,
+      "boundary_edges": 88,
+      "zero_area_faces": 0,
+      "signed_volume": 3.591654960812492,
+      "islands": 3,
+      "island_faces": [
+        9,
+        16,
+        19095
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.418967843055725,
+          -0.9973220825195312,
+          0.0
+        ],
+        [
+          1.418967843055725,
+          0.9973220825195312,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 6800764,
+    "textures": 1,
+    "primitive_triangles": [
+      225,
+      19120
+    ],
+    "triangles": 19345,
+    "mesh_nodes": [
+      "OlympianHera_Eyes",
+      "OlympianHera_Part002"
+    ],
+    "sha256": "a5ebb8a3232c2f21c3ee51f2cbe165a920be5161c8ef2d2e5e0340eaf35ba0e4",
+    "nodes": [
+      "OlympianHera_Eyes",
+      "OlympianHera_Part002",
+      "OlympianHera"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "hera": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "hera": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011493187776068226,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999883547605739,
+      "foreground_rgb_mae": 8.981296559795737e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011973104847129434,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9999912501749965,
+      "foreground_rgb_mae": 6.414250674424693e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "hera_source_front.png",
+      "hera_source_three_quarter.png",
+      "hera_source_side.png",
+      "hera_source_back.png"
+    ],
+    "fidelity_views": [
+      "hera_fidelity_front.png",
+      "hera_fidelity_three_quarter.png",
+      "hera_fidelity_side.png",
+      "hera_fidelity_back.png"
+    ],
+    "fidelity_sha256": "a5ebb8a3232c2f21c3ee51f2cbe165a920be5161c8ef2d2e5e0340eaf35ba0e4",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "e9e1ecd30d5342ed4965d3097f3c76bcaaed37e75ff86c03830ddfae935d3859",
+    "source/source.blend": "8dfe97589f0e4472ed88270bd84312cb64946135c8b988962e12d96234b32bce",
+    "model/hera_production.blend": "c8399cffa3413d64a5a5e0d5ee57ef801bbfafa4fba8c7331ae4f02b3419a34e",
+    "model/hera_roblox.glb": "a5ebb8a3232c2f21c3ee51f2cbe165a920be5161c8ef2d2e5e0340eaf35ba0e4",
+    "renders/hera_fidelity_back.png": "dce5750cd4c117dfffa4dc695cfb5bdf9f938f72969b4867afb535a733f17cba",
+    "renders/hera_fidelity_front.png": "ca48be0db1dc902caf89f1a1ea71e17f998fb3730ad461478581c9d80749e66f",
+    "renders/hera_fidelity_side.png": "dab1a578e5a800cd7bc7fcd93ca5e8179a5a73c12fca404a565792b9259e540d",
+    "renders/hera_fidelity_three_quarter.png": "b266350ed84fcd710e4936f21dcf7214c7ffa572f5816d78493b02fce6b1a5dc",
+    "renders/hera_source_back.png": "1661fcabb2215ea8b409381194f7925210ba924776996e0c80fba5067a9daf4c",
+    "renders/hera_source_front.png": "b50402fc389938cdf1f3fcb39f0981cf82302508ac0dc05f6b7d23de24f6d8a5",
+    "renders/hera_source_side.png": "38818f52f144148f99aef71372e6f4a360966d39bd6f3d6f2de7d9ee067b810d",
+    "renders/hera_source_three_quarter.png": "2e0b92131e4f6d1f69dee29169b935894238b502a5543928876933f5b7a8cbaf"
+  }
+}

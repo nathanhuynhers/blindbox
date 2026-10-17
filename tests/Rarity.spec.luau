@@ -135,21 +135,20 @@ check(#Catalog.figures == #Economy.entries, "every figure has economy tuning")
 for _, figure in Catalog.figures do
 	check(Rules.rates[figure.id] > 0 and Rules.odds[figure.id] > 0, "positive published base economy")
 end
-local tiers = { grove = 3, tide = 3, concept = 5, echo = 5, star = 5, moon = 5 }
-local sizes = { grove = 6, tide = 6, concept = 5, echo = 13, star = 13, moon = 13 }
 for _, collection in Catalog.collections do
-	local rows = Shop.rarityOdds({ odds = Rules.odds, baseOdds = Rules.odds } :: any, collection.id)
-	local tierCount = tiers[collection.id]
-	check(#rows == tierCount, "Shop omits unavailable tiers")
-	for index, row in rows do
-		check(row.rarity == order[index], "Shop canonical order")
-	end
-	local discovered, total = Shop.completion({ discovered = {} } :: any, collection.id)
-	check(
-		discovered == 0 and total == sizes[collection.id],
-		"completion still follows actual figures"
-	)
+ local present, count = {}, 0
+ for _, figure in Catalog.figures do
+  if figure.collection == collection.id then present[figure.rarity] = true; count += 1 end
+ end
+ local expected = {}
+ for _, rarity in order do if present[rarity] then table.insert(expected, rarity) end end
+ local rows = Shop.rarityOdds({ odds = Rules.odds, baseOdds = Rules.odds } :: any, collection.id)
+ check(#rows == #expected, "Shop omits absent rarities")
+ for index, row in rows do check(row.rarity == expected[index], "Shop canonical order") end
+ local discovered, total = Shop.completion({ discovered = {} } :: any, collection.id)
+ check(discovered == 0 and total == count, "completion follows actual roster")
 end
+
 print(
 	"PASS: "
 		.. checks

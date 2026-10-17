@@ -1,5 +1,7 @@
 # Persistent data model
 
+The [collection expansion candidate](COLLECTION_INTEGRATION.md) retains these schema shapes and Economy2 stores, preserves progress and widens currency bounds. Older readers are incompatible with the expanded catalog/bounds; its drain/maintenance release barrier is mandatory before any separately authorized deployment.
+
 Default new-profile schema: **14**, written to `BlindBox_Economy2_Studio` and
 `BlindBox_Economy2_Live`. The decoder also supports forward-only **15/16/17/18** described
 below. It accepts valid Economy2 schemas 6–20; 6–13 upgrade to 14
@@ -20,13 +22,13 @@ the fixed-grant sidecar. Paid consumption/lineage remains gated; mixed-server re
 
 Rarity is catalog metadata, not a persisted player field. `Types.Figure.rarity` uses the closed
 shared `Rarity.Id` type: Common, Uncommon, Rare, Legendary or Mythical. Catalog startup rejects
-unknown labels. The economy reset introduces permanent duplicates and persisted pity. Figure assignments are unchanged. See [rarity architecture and future content](RARITY.md).
+unknown labels. The economy reset introduces permanent duplicates and persisted pity. Stable figure IDs are unchanged; Moonrace rarity metadata now follows the approved expansion roster. See [rarity architecture and future content](RARITY.md).
 
 | Field | Meaning |
 | --- | --- |
 | schemaVersion | New profiles14; applied inputs/preferences15; boost operations16; positive offline award/retained record17; package delivery/VIP daily credit18. Valid6–13 upgrade to14; unsupported versions fail closed |
-| coins | Integer in 0..1,000,000,000,000; no Scrap field |
-| earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000, including fractional Coins; retained while not displayed |
+| coins | Integer in 0..1,000,000,000,000,000; no Scrap field |
+| earnings | Owned figure IDs to finite amounts in 0..1,000,000,000,000,000, including fractional Coins; retained while not displayed |
 | pityByGroup | Known active group IDs to integer legendaryDryRolls/mythicalDryRolls, each 0..1,000,000 |
 | owned | Known figure IDs to integer counts 1..1,000,000,000 each; no ordinary total-copy cap |
 | discovered | Known figure IDs to true; permanent; includes every owned ID |
@@ -40,9 +42,11 @@ unknown labels. The economy reset introduces permanent duplicates and persisted 
 | boxesOpened | Lifetime boxes opened, integer 0..1,000,000,000 (`Rules.boxesOpenedLimit`); presentation only |
 | shelfRewards | Known collection IDs to true: collections whose first completion already granted a free Shelf Unit (v9+; required) |
 | lastSeen | UTC `os.time()` of the last save, integer 0..100,000,000,000; 0 = unknown (new or upgraded), awards nothing (v10; required) |
-| offlinePending | Whole offline Coins not yet claimed, integer0..1,000,000,000,000; auto-claimed on join. In v17 it matches the frozen unclaimed N; reservations/credits survive that auto-claim |
+| offlinePending | Whole offline Coins not yet claimed, integer0..1,000,000,000,000,000; auto-claimed on join. In v17 it matches the frozen unclaimed N; reservations/credits survive that auto-claim |
 | sfxVolume / musicVolume | Player audio settings, whole percent 0..100 of the default mix (100 = default); set only by the validated `SetVolume` intent; presentation only (v12; required) |
 | deals | Plaza stall stock `{window, bought}`: the deal window index (-1 = none yet) and a dense array of boxes bought per stall in that window, integers 0..1,000,000, at most 16 stalls (v14; required) |
+
+[Collection purchase progression](COLLECTION_PROGRESSION.md) derives permanent access from this existing `discovered` map, including existing higher-tier history. It adds no saved unlock marker, field, schema or namespace. Removing owned copies does not remove discoveries. The private `collectionAccess` snapshot is computed server-side and is never accepted as a client unlock claim. Future catalog/qualification changes must preserve earned access; older servers also need replacement because they lack purchase enforcement, even though the saved format is unchanged.
 
 Each unit is `{id, placements, customization}`. IDs such as `shelf:1` are stable and unique
 within the ordered array. `placements` maps local `row:R/slot:S` keys to known permanently

@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "6977ca040c67ecb358a742ad1836257918924b3bb3aad0e0091be65208eefc76",
+  "source_filename": "3a89b5afacb906cc45e680f0b627b04eab67a9af4f466c25d74057574599c258/anger_painted.glb",
+  "source_sha256": "3a89b5afacb906cc45e680f0b627b04eab67a9af4f466c25d74057574599c258",
+  "import_entry": {
+    "source": "3a89b5afacb906cc45e680f0b627b04eab67a9af4f466c25d74057574599c258/anger_painted.glb",
+    "figure_id": "emotion.anger",
+    "collection_id": "emotion",
+    "rarity": "Uncommon",
+    "collection_slug": "human-emotions",
+    "figure_slug": "anger",
+    "root": "EmotionAnger",
+    "alias": "emotion_anger",
+    "asset_key": "Models.HumanEmotions.EmotionAnger",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      8.34
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4176,
+          0.0,
+          0.5144
+        ],
+        [
+          0.5776,
+          0.3416,
+          0.6544
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Anger"
+  },
+  "catalog": "emotion.anger",
+  "collection_id": "emotion",
+  "rarity": "Uncommon",
+  "root": "EmotionAnger",
+  "figure": "EmotionAnger",
+  "title": "Anger",
+  "face": "EmotionAnger_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19338,
+  "source_triangles": 19338,
+  "source": {
+    "bytes": 5600440,
+    "textures": [
+      {
+        "name": "anger_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19338
+    ],
+    "triangles": 19338,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.8020081520080566,
+    2.3306281566619873,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "EmotionAnger_Eyes": {
+      "tris": 187,
+      "verts": 264,
+      "non_manifold_edges": 59,
+      "boundary_edges": 59,
+      "zero_area_faces": 0,
+      "signed_volume": -0.00980316137241521,
+      "islands": 2,
+      "island_faces": [
+        4,
+        183
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.25843843817710876,
+          -0.7231448292732239,
+          1.7937088012695312
+        ],
+        [
+          0.2577751576900482,
+          -0.34159839153289795,
+          2.3891265392303467
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "EmotionAnger_Part002": {
+      "tris": 19151,
+      "verts": 19848,
+      "non_manifold_edges": 59,
+      "boundary_edges": 59,
+      "zero_area_faces": 0,
+      "signed_volume": 4.237565159893094,
+      "islands": 1,
+      "island_faces": [
+        19151
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.4010040760040283,
+          -1.1653140783309937,
+          0.0
+        ],
+        [
+          1.4010040760040283,
+          1.1653140783309937,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5934812,
+    "textures": 1,
+    "primitive_triangles": [
+      187,
+      19151
+    ],
+    "triangles": 19338,
+    "mesh_nodes": [
+      "EmotionAnger_Eyes",
+      "EmotionAnger_Part002"
+    ],
+    "sha256": "09706f46bcdfd4c1ca45944840bf9647f1a183c8856e176a009ea7b1c5c6f45b",
+    "nodes": [
+      "EmotionAnger_Eyes",
+      "EmotionAnger_Part002",
+      "EmotionAnger"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "anger": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "anger": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.31509319646284e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999918338015287,
+      "foreground_rgb_mae": 6.757129449397326e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 5.746027818531729e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 4.89322301291395e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "anger_source_front.png",
+      "anger_source_three_quarter.png",
+      "anger_source_side.png",
+      "anger_source_back.png"
+    ],
+    "fidelity_views": [
+      "anger_fidelity_front.png",
+      "anger_fidelity_three_quarter.png",
+      "anger_fidelity_side.png",
+      "anger_fidelity_back.png"
+    ],
+    "fidelity_sha256": "09706f46bcdfd4c1ca45944840bf9647f1a183c8856e176a009ea7b1c5c6f45b",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "3a89b5afacb906cc45e680f0b627b04eab67a9af4f466c25d74057574599c258",
+    "source/source.blend": "33ea24305f5549682e9d568fb64ed5f88004318cb70dc21d4f3f94960ad5d5f2",
+    "model/anger_production.blend": "f08bb2e87efc3d7c7e843a3fe2e4b14d8a4efaae65744bf1f27cf80039e99aaa",
+    "model/anger_roblox.glb": "09706f46bcdfd4c1ca45944840bf9647f1a183c8856e176a009ea7b1c5c6f45b",
+    "renders/anger_fidelity_back.png": "a83b6b074b5c43c3953662f61a3464765786083151b9c9099068488d4b03c3b1",
+    "renders/anger_fidelity_front.png": "759b0809af2af5bddb70d2b4e703a9863e5f29735da825083131850ef89dbc90",
+    "renders/anger_fidelity_side.png": "ac04dbb50682c4c5cbce7a63054e74601b8f9f0d0cd84cf69b4efd44c49aa368",
+    "renders/anger_fidelity_three_quarter.png": "72800ea893f63efcade3f11361a6640ba16c71d3b4a68a83badb1e5770090c89",
+    "renders/anger_source_back.png": "6626ffa1461b827b484df9d9faa2300ba8701f65b4766662ac1240aed2ed4836",
+    "renders/anger_source_front.png": "f59c9321a2b9c9dc6690675d847cb204a8f814754b107edfb5b0280fcac4818b",
+    "renders/anger_source_side.png": "fcd3b7b8e71c8f4463f2d1b0eff6e448c5f99757e195e5efeb986738af823e2b",
+    "renders/anger_source_three_quarter.png": "37e23a24fd1b5bb4b8e4c6731bce77632e04a0ff29f54ebac2e612b81b834e46"
+  }
+}

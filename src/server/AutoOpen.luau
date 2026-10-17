@@ -1,4 +1,5 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Wire = require(game:GetService("ReplicatedStorage").Shared.ConvenienceTypes)
 local AutoOpen = {}
@@ -9,6 +10,7 @@ export type Context = {
 	fresh: boolean,
 	-- Explicit upstream authorization. Unknown/unapproved policy must resolve false.
 	policyAllowed: boolean,
+	collectionRefusal: string?,
 	flowActive: boolean,
 	busy: boolean,
 	cooldownReady: boolean,
@@ -50,6 +52,9 @@ local function refusal(ctx: Context): string?
 	end
 	if not ctx.policyAllowed then
 		return "Opening eligibility unconfirmed"
+	end
+	if ctx.collectionRefusal then
+		return ctx.collectionRefusal
 	end
 	if not ctx.flowActive then
 		return "Opening flow closed"
@@ -121,7 +126,7 @@ function AutoOpen.create(deps: Dependencies): Controller
 				#collection < 1
 				or #collection > 64
 				or not integer(limit, 1, 100)
-				or not integer(reserve, 0, 1e12)
+				or not integer(reserve, 0, Currency.limit)
 			then
 				return false
 			end
@@ -187,7 +192,7 @@ function AutoOpen.create(deps: Dependencies): Controller
 			end
 			local ctx = deps.context(status.collection)
 			local price = ctx.price
-			if not price or not integer(price, 1, 1e12) then
+			if not price or not integer(price, 1, Currency.limit) then
 				stop("Collection unavailable")
 				return
 			end
@@ -195,7 +200,7 @@ function AutoOpen.create(deps: Dependencies): Controller
 				stop("Another opening is pending")
 				return
 			end
-			if not integer(ctx.spendable, 0, 1e12) then
+			if not integer(ctx.spendable, 0, Currency.limit) then
 				stop("Spendable balance unavailable")
 				return
 			end

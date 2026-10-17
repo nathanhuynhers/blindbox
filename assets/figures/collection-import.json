@@ -1,0 +1,1519 @@
+{
+  "schema_version": 1,
+  "batch_id": "collection-integration-042",
+  "note": "Existing painted review models; hidden-side reference likeness remains a review item. New uploads require explicit reviewed-plan approval.",
+  "figures": [
+    {
+      "source": "dessert/donut/donut_painted.glb",
+      "figure_id": "dessert.donut",
+      "collection_id": "dessert",
+      "rarity": "Uncommon",
+      "collection_slug": "desserts",
+      "figure_slug": "donut",
+      "root": "DessertDonut",
+      "alias": "dessert_donut",
+      "asset_key": "Models.Desserts.DessertDonut",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        1.8
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4083,
+            0.0,
+            0.5932
+          ],
+          [
+            0.5683,
+            0.4429,
+            0.7332
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "dessert/cupcake/cupcake_painted.glb",
+      "figure_id": "dessert.cupcake",
+      "collection_id": "dessert",
+      "rarity": "Common",
+      "collection_slug": "desserts",
+      "figure_slug": "cupcake",
+      "root": "DessertCupcake",
+      "alias": "dessert_cupcake",
+      "asset_key": "Models.Desserts.DessertCupcake",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        34.73
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4237,
+            0.0,
+            0.5923
+          ],
+          [
+            0.5837,
+            0.3709,
+            0.7323
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "dessert/macaron/macaron_painted.glb",
+      "figure_id": "dessert.macaron",
+      "collection_id": "dessert",
+      "rarity": "Common",
+      "collection_slug": "desserts",
+      "figure_slug": "macaron",
+      "root": "DessertMacaron",
+      "alias": "dessert_macaron",
+      "asset_key": "Models.Desserts.DessertMacaron",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        12.7
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4206,
+            0.0,
+            0.5877
+          ],
+          [
+            0.5806,
+            0.3498,
+            0.7277
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "dessert/matcha_mochi/matcha_mochi_painted.glb",
+      "figure_id": "dessert.matcha-mochi",
+      "collection_id": "dessert",
+      "rarity": "Rare",
+      "collection_slug": "desserts",
+      "figure_slug": "matcha-mochi",
+      "root": "DessertMatchaMochi",
+      "alias": "dessert_matcha_mochi",
+      "asset_key": "Models.Desserts.DessertMatchaMochi",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        36.03
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4237,
+            0.0,
+            0.5855
+          ],
+          [
+            0.5837,
+            0.315,
+            0.7255
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "dessert/dessert_skater/dessert_skater_painted.glb",
+      "figure_id": "dessert.dessert-skater",
+      "collection_id": "dessert",
+      "rarity": "Uncommon",
+      "collection_slug": "desserts",
+      "figure_slug": "dessert-skater",
+      "root": "DessertDessertSkater",
+      "alias": "dessert_dessert_skater",
+      "asset_key": "Models.Desserts.DessertDessertSkater",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -29.83
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.418,
+            0.0,
+            0.6688
+          ],
+          [
+            0.578,
+            0.2982,
+            0.8088
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "dessert/strawberry_shortcake/strawberry_shortcake_painted.glb",
+      "figure_id": "dessert.strawberry-shortcake",
+      "collection_id": "dessert",
+      "rarity": "Rare",
+      "collection_slug": "desserts",
+      "figure_slug": "strawberry-shortcake",
+      "root": "DessertStrawberryShortcake",
+      "alias": "dessert_strawberry_shortcake",
+      "asset_key": "Models.Desserts.DessertStrawberryShortcake",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        17.69
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4189,
+            0.0,
+            0.6728
+          ],
+          [
+            0.5789,
+            0.4344,
+            0.8128
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "halloween/pumpkin_trick_or_treater/pumpkin_trick_or_treater_painted.glb",
+      "figure_id": "halloween.pumpkin-trick-or-treater",
+      "collection_id": "halloween",
+      "rarity": "Uncommon",
+      "collection_slug": "halloween",
+      "figure_slug": "pumpkin-trick-or-treater",
+      "root": "HalloweenPumpkinTrickOrTreater",
+      "alias": "halloween_pumpkin_trick_or_treater",
+      "asset_key": "Models.Halloween.HalloweenPumpkinTrickOrTreater",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        17.61
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4246,
+            0.0,
+            0.6082
+          ],
+          [
+            0.5846,
+            0.2385,
+            0.7482
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "halloween/candy_corn_jester/candy_corn_jester_painted.glb",
+      "figure_id": "halloween.candy-corn-jester",
+      "collection_id": "halloween",
+      "rarity": "Common",
+      "collection_slug": "halloween",
+      "figure_slug": "candy-corn-jester",
+      "root": "HalloweenCandyCornJester",
+      "alias": "halloween_candy_corn_jester",
+      "asset_key": "Models.Halloween.HalloweenCandyCornJester",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        4.48
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4163,
+            0.0,
+            0.605
+          ],
+          [
+            0.5763,
+            0.3119,
+            0.745
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "halloween/ghost_with_lantern/ghost_with_lantern_painted.glb",
+      "figure_id": "halloween.ghost-with-lantern",
+      "collection_id": "halloween",
+      "rarity": "Rare",
+      "collection_slug": "halloween",
+      "figure_slug": "ghost-with-lantern",
+      "root": "HalloweenGhostWithLantern",
+      "alias": "halloween_ghost_with_lantern",
+      "asset_key": "Models.Halloween.HalloweenGhostWithLantern",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        13.17
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4287,
+            0.0,
+            0.6407
+          ],
+          [
+            0.5887,
+            0.3385,
+            0.7807
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "halloween/skeleton_butler/skeleton_butler_painted.glb",
+      "figure_id": "halloween.skeleton-butler",
+      "collection_id": "halloween",
+      "rarity": "Common",
+      "collection_slug": "halloween",
+      "figure_slug": "skeleton-butler",
+      "root": "HalloweenSkeletonButler",
+      "alias": "halloween_skeleton_butler",
+      "asset_key": "Models.Halloween.HalloweenSkeletonButler",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        62.91
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4714,
+            0.0,
+            0.6108
+          ],
+          [
+            0.6314,
+            0.4702,
+            0.7508
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "halloween/witch_catgirl/witch_catgirl_painted.glb",
+      "figure_id": "halloween.witch-catgirl",
+      "collection_id": "halloween",
+      "rarity": "Uncommon",
+      "collection_slug": "halloween",
+      "figure_slug": "witch-catgirl",
+      "root": "HalloweenWitchCatgirl",
+      "alias": "halloween_witch_catgirl",
+      "asset_key": "Models.Halloween.HalloweenWitchCatgirl",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        11.59
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4271,
+            0.0,
+            0.5803
+          ],
+          [
+            0.5871,
+            0.3157,
+            0.7203
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "halloween/mummy_sorcerer/mummy_sorcerer_painted.glb",
+      "figure_id": "halloween.mummy-sorcerer",
+      "collection_id": "halloween",
+      "rarity": "Rare",
+      "collection_slug": "halloween",
+      "figure_slug": "mummy-sorcerer",
+      "root": "HalloweenMummySorcerer",
+      "alias": "halloween_mummy_sorcerer",
+      "asset_key": "Models.Halloween.HalloweenMummySorcerer",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        60.19
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4189,
+            0.0,
+            0.5878
+          ],
+          [
+            0.5789,
+            0.4645,
+            0.7278
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "halloween/werewolf/werewolf_painted.glb",
+      "figure_id": "halloween.werewolf",
+      "collection_id": "halloween",
+      "rarity": "Rare",
+      "collection_slug": "halloween",
+      "figure_slug": "werewolf",
+      "root": "HalloweenWerewolf",
+      "alias": "halloween_werewolf",
+      "asset_key": "Models.Halloween.HalloweenWerewolf",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        8.37
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4241,
+            0.0,
+            0.5881
+          ],
+          [
+            0.5841,
+            0.3088,
+            0.7281
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "chess/pawn/pawn_painted.glb",
+      "figure_id": "chess.pawn",
+      "collection_id": "chess",
+      "rarity": "Common",
+      "collection_slug": "humanoid-chess-pieces",
+      "figure_slug": "pawn",
+      "root": "ChessPawn",
+      "alias": "chess_pawn",
+      "asset_key": "Models.HumanoidChessPieces.ChessPawn",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        17.31
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4235,
+            0.0,
+            0.5694
+          ],
+          [
+            0.5835,
+            0.3487,
+            0.7094
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "chess/rook/rook_painted.glb",
+      "figure_id": "chess.rook",
+      "collection_id": "chess",
+      "rarity": "Uncommon",
+      "collection_slug": "humanoid-chess-pieces",
+      "figure_slug": "rook",
+      "root": "ChessRook",
+      "alias": "chess_rook",
+      "asset_key": "Models.HumanoidChessPieces.ChessRook",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        11.4
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4254,
+            0.0,
+            0.6658
+          ],
+          [
+            0.5854,
+            0.4627,
+            0.8058
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "emotions/joy/joy_painted.glb",
+      "figure_id": "emotion.joy",
+      "collection_id": "emotion",
+      "rarity": "Common",
+      "collection_slug": "human-emotions",
+      "figure_slug": "joy",
+      "root": "EmotionJoy",
+      "alias": "emotion_joy",
+      "asset_key": "Models.HumanEmotions.EmotionJoy",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        23.02
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4221,
+            0.0,
+            0.6415
+          ],
+          [
+            0.5821,
+            0.3359,
+            0.7815
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "emotions/anger/anger_painted.glb",
+      "figure_id": "emotion.anger",
+      "collection_id": "emotion",
+      "rarity": "Uncommon",
+      "collection_slug": "human-emotions",
+      "figure_slug": "anger",
+      "root": "EmotionAnger",
+      "alias": "emotion_anger",
+      "asset_key": "Models.HumanEmotions.EmotionAnger",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        8.34
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4176,
+            0.0,
+            0.5144
+          ],
+          [
+            0.5776,
+            0.3416,
+            0.6544
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "emotions/fear/fear_painted.glb",
+      "figure_id": "emotion.fear",
+      "collection_id": "emotion",
+      "rarity": "Uncommon",
+      "collection_slug": "human-emotions",
+      "figure_slug": "fear",
+      "root": "EmotionFear",
+      "alias": "emotion_fear",
+      "asset_key": "Models.HumanEmotions.EmotionFear",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        3.73
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4124,
+            0.0,
+            0.616
+          ],
+          [
+            0.5724,
+            0.2361,
+            0.756
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "emotions/disgust/disgust_painted.glb",
+      "figure_id": "emotion.disgust",
+      "collection_id": "emotion",
+      "rarity": "Common",
+      "collection_slug": "human-emotions",
+      "figure_slug": "disgust",
+      "root": "EmotionDisgust",
+      "alias": "emotion_disgust",
+      "asset_key": "Models.HumanEmotions.EmotionDisgust",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        15.05
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4187,
+            0.0,
+            0.6394
+          ],
+          [
+            0.5787,
+            0.4009,
+            0.7794
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "emotions/surprise/surprise_painted.glb",
+      "figure_id": "emotion.surprise",
+      "collection_id": "emotion",
+      "rarity": "Uncommon",
+      "collection_slug": "human-emotions",
+      "figure_slug": "surprise",
+      "root": "EmotionSurprise",
+      "alias": "emotion_surprise",
+      "asset_key": "Models.HumanEmotions.EmotionSurprise",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -1.1
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4206,
+            0.0,
+            0.6163
+          ],
+          [
+            0.5806,
+            0.4258,
+            0.7563
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "emotions/envy/envy_painted.glb",
+      "figure_id": "emotion.envy",
+      "collection_id": "emotion",
+      "rarity": "Rare",
+      "collection_slug": "human-emotions",
+      "figure_slug": "envy",
+      "root": "EmotionEnvy",
+      "alias": "emotion_envy",
+      "asset_key": "Models.HumanEmotions.EmotionEnvy",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        24.87
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4302,
+            0.0,
+            0.505
+          ],
+          [
+            0.5902,
+            0.2705,
+            0.645
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "astral/aries/aries_painted.glb",
+      "figure_id": "astral.aries",
+      "collection_id": "astral",
+      "rarity": "Uncommon",
+      "collection_slug": "astral-signs",
+      "figure_slug": "aries",
+      "root": "AstralAries",
+      "alias": "astral_aries",
+      "asset_key": "Models.AstralSigns.AstralAries",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -5.18
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4215,
+            0.0,
+            0.5695
+          ],
+          [
+            0.5815,
+            0.209,
+            0.7095
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "astral/taurus/taurus_painted.glb",
+      "figure_id": "astral.taurus",
+      "collection_id": "astral",
+      "rarity": "Common",
+      "collection_slug": "astral-signs",
+      "figure_slug": "taurus",
+      "root": "AstralTaurus",
+      "alias": "astral_taurus",
+      "asset_key": "Models.AstralSigns.AstralTaurus",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        1.99
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4226,
+            0.0,
+            0.5528
+          ],
+          [
+            0.5826,
+            0.1802,
+            0.6928
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "astral/leo/leo_painted.glb",
+      "figure_id": "astral.leo",
+      "collection_id": "astral",
+      "rarity": "Uncommon",
+      "collection_slug": "astral-signs",
+      "figure_slug": "leo",
+      "root": "AstralLeo",
+      "alias": "astral_leo",
+      "asset_key": "Models.AstralSigns.AstralLeo",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -10.5
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4225,
+            0.0,
+            0.5688
+          ],
+          [
+            0.5825,
+            0.2156,
+            0.7088
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "astral/virgo/virgo_painted.glb",
+      "figure_id": "astral.virgo",
+      "collection_id": "astral",
+      "rarity": "Common",
+      "collection_slug": "astral-signs",
+      "figure_slug": "virgo",
+      "root": "AstralVirgo",
+      "alias": "astral_virgo",
+      "asset_key": "Models.AstralSigns.AstralVirgo",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -10.29
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.415,
+            0.0,
+            0.5957
+          ],
+          [
+            0.575,
+            0.2347,
+            0.7357
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "astral/capricorn/capricorn_painted.glb",
+      "figure_id": "astral.capricorn",
+      "collection_id": "astral",
+      "rarity": "Uncommon",
+      "collection_slug": "astral-signs",
+      "figure_slug": "capricorn",
+      "root": "AstralCapricorn",
+      "alias": "astral_capricorn",
+      "asset_key": "Models.AstralSigns.AstralCapricorn",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -4.83
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4076,
+            0.0,
+            0.5691
+          ],
+          [
+            0.5676,
+            0.2651,
+            0.7091
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "biome/desert/desert_painted.glb",
+      "figure_id": "biome.desert",
+      "collection_id": "biome",
+      "rarity": "Uncommon",
+      "collection_slug": "biomes",
+      "figure_slug": "desert",
+      "root": "BiomeDesert",
+      "alias": "biome_desert",
+      "asset_key": "Models.Biomes.BiomeDesert",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        63.11
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4267,
+            0.0,
+            0.6757
+          ],
+          [
+            0.5867,
+            0.4296,
+            0.8157
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "biome/savanna/savanna_painted.glb",
+      "figure_id": "biome.savanna",
+      "collection_id": "biome",
+      "rarity": "Common",
+      "collection_slug": "biomes",
+      "figure_slug": "savanna",
+      "root": "BiomeSavanna",
+      "alias": "biome_savanna",
+      "asset_key": "Models.Biomes.BiomeSavanna",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        18.67
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4201,
+            0.0,
+            0.6394
+          ],
+          [
+            0.5801,
+            0.347,
+            0.7794
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "biome/taiga/taiga_painted.glb",
+      "figure_id": "biome.taiga",
+      "collection_id": "biome",
+      "rarity": "Rare",
+      "collection_slug": "biomes",
+      "figure_slug": "taiga",
+      "root": "BiomeTaiga",
+      "alias": "biome_taiga",
+      "asset_key": "Models.Biomes.BiomeTaiga",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        33.93
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4232,
+            0.0,
+            0.6667
+          ],
+          [
+            0.5832,
+            0.3945,
+            0.8067
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "weather/fog/fog_painted.glb",
+      "figure_id": "weather.fog",
+      "collection_id": "weather",
+      "rarity": "Common",
+      "collection_slug": "weather",
+      "figure_slug": "fog",
+      "root": "WeatherFog",
+      "alias": "weather_fog",
+      "asset_key": "Models.Weather.WeatherFog",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        2.06
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4243,
+            0.0,
+            0.6205
+          ],
+          [
+            0.5843,
+            0.2776,
+            0.7605
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "weather/hail/hail_painted.glb",
+      "figure_id": "weather.hail",
+      "collection_id": "weather",
+      "rarity": "Uncommon",
+      "collection_slug": "weather",
+      "figure_slug": "hail",
+      "root": "WeatherHail",
+      "alias": "weather_hail",
+      "asset_key": "Models.Weather.WeatherHail",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        26.09
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4187,
+            0.0,
+            0.6466
+          ],
+          [
+            0.5787,
+            0.2991,
+            0.7866
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "senses/touch/touch_painted.glb",
+      "figure_id": "sense.touch",
+      "collection_id": "sense",
+      "rarity": "Common",
+      "collection_slug": "five-senses",
+      "figure_slug": "touch",
+      "root": "SenseTouch",
+      "alias": "sense_touch",
+      "asset_key": "Models.FiveSenses.SenseTouch",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        14.71
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4152,
+            0.0,
+            0.6773
+          ],
+          [
+            0.5752,
+            0.4508,
+            0.8173
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "senses/smell/smell_painted.glb",
+      "figure_id": "sense.smell",
+      "collection_id": "sense",
+      "rarity": "Uncommon",
+      "collection_slug": "five-senses",
+      "figure_slug": "smell",
+      "root": "SenseSmell",
+      "alias": "sense_smell",
+      "asset_key": "Models.FiveSenses.SenseSmell",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        18.96
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4244,
+            0.0,
+            0.6246
+          ],
+          [
+            0.5844,
+            0.2411,
+            0.7646
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "greek/apollo/apollo_painted.glb",
+      "figure_id": "olympian.apollo",
+      "collection_id": "olympian",
+      "rarity": "Rare",
+      "collection_slug": "olympians",
+      "figure_slug": "apollo",
+      "root": "OlympianApollo",
+      "alias": "olympian_apollo",
+      "asset_key": "Models.Olympians.OlympianApollo",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        27.15
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4261,
+            0.0,
+            0.6259
+          ],
+          [
+            0.5861,
+            0.5421,
+            0.7659
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "greek/artemis/artemis_painted.glb",
+      "figure_id": "olympian.artemis",
+      "collection_id": "olympian",
+      "rarity": "Common",
+      "collection_slug": "olympians",
+      "figure_slug": "artemis",
+      "root": "OlympianArtemis",
+      "alias": "olympian_artemis",
+      "asset_key": "Models.Olympians.OlympianArtemis",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -49.88
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4031,
+            0.0,
+            0.7189
+          ],
+          [
+            0.5631,
+            0.4733,
+            0.8589
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "greek/hermes/hermes_painted.glb",
+      "figure_id": "olympian.hermes",
+      "collection_id": "olympian",
+      "rarity": "Common",
+      "collection_slug": "olympians",
+      "figure_slug": "hermes",
+      "root": "OlympianHermes",
+      "alias": "olympian_hermes",
+      "asset_key": "Models.Olympians.OlympianHermes",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        38.11
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4257,
+            0.0,
+            0.589
+          ],
+          [
+            0.5857,
+            0.286,
+            0.729
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "greek/ares/ares_painted.glb",
+      "figure_id": "olympian.ares",
+      "collection_id": "olympian",
+      "rarity": "Uncommon",
+      "collection_slug": "olympians",
+      "figure_slug": "ares",
+      "root": "OlympianAres",
+      "alias": "olympian_ares",
+      "asset_key": "Models.Olympians.OlympianAres",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        -9.05
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.3933,
+            0.0,
+            0.6279
+          ],
+          [
+            0.5533,
+            0.3251,
+            0.7679
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "greek/hera/hera_painted.glb",
+      "figure_id": "olympian.hera",
+      "collection_id": "olympian",
+      "rarity": "Rare",
+      "collection_slug": "olympians",
+      "figure_slug": "hera",
+      "root": "OlympianHera",
+      "alias": "olympian_hera",
+      "asset_key": "Models.Olympians.OlympianHera",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        25.76
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4247,
+            0.0,
+            0.6672
+          ],
+          [
+            0.5847,
+            0.4214,
+            0.8072
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "birthstone/garnet/garnet_painted.glb",
+      "figure_id": "birthstone.garnet",
+      "collection_id": "birthstone",
+      "rarity": "Uncommon",
+      "collection_slug": "birthstones",
+      "figure_slug": "garnet",
+      "root": "BirthstoneGarnet",
+      "alias": "birthstone_garnet",
+      "asset_key": "Models.Birthstones.BirthstoneGarnet",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        46.61
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4295,
+            0.0,
+            0.6527
+          ],
+          [
+            0.5895,
+            0.4439,
+            0.7927
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "birthstone/peridot/peridot_painted.glb",
+      "figure_id": "birthstone.peridot",
+      "collection_id": "birthstone",
+      "rarity": "Common",
+      "collection_slug": "birthstones",
+      "figure_slug": "peridot",
+      "root": "BirthstonePeridot",
+      "alias": "birthstone_peridot",
+      "asset_key": "Models.Birthstones.BirthstonePeridot",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        13.72
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4273,
+            0.0,
+            0.6644
+          ],
+          [
+            0.5873,
+            0.4057,
+            0.8044
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "sins/pride/pride_painted.glb",
+      "figure_id": "sin.pride",
+      "collection_id": "sin",
+      "rarity": "Common",
+      "collection_slug": "seven-deadly-sins",
+      "figure_slug": "pride",
+      "root": "SinPride",
+      "alias": "sin_pride",
+      "asset_key": "Models.SevenDeadlySins.SinPride",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        28.01
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4224,
+            0.0,
+            0.6375
+          ],
+          [
+            0.5824,
+            0.2921,
+            0.7775
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    },
+    {
+      "source": "orbit/earth/earth_painted.glb",
+      "figure_id": "orbit.earth",
+      "collection_id": "orbit",
+      "rarity": "Common",
+      "collection_slug": "pocket-orbit",
+      "figure_slug": "earth",
+      "root": "OrbitEarth",
+      "alias": "orbit_earth",
+      "asset_key": "Models.PocketOrbit.OrbitEarth",
+      "height_studs": 3.572,
+      "rotation_degrees": [
+        0,
+        0,
+        11.76
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4409,
+            0.0,
+            0.6527
+          ],
+          [
+            0.6009,
+            0.1492,
+            0.7927
+          ]
+        ]
+      },
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {}
+    }
+  ]
+}

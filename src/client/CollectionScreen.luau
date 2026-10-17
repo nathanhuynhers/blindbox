@@ -31,6 +31,11 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		coins = false,
 	})
 	local root, body = shell.root, shell.body
+	shell.title.TextScaled = true
+	shell.title.TextTruncate = Enum.TextTruncate.None
+	local titleSize = Instance.new("UITextSizeConstraint")
+	titleSize.MinTextSize, titleSize.MaxTextSize = 14, 30
+	titleSize.Parent = shell.title
 	local selected = Catalog.collections[1].id
 	local figure: string? = nil
 	local filter: State.Filter = "all"
@@ -96,8 +101,12 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 	unknown.Size = UDim2.fromScale(1, 1)
 	unknown.TextXAlignment = Enum.TextXAlignment.Center
 	local name = Kit.text(detail, "FigureName", "", 26, Style.display())
-	name.AutomaticSize = Enum.AutomaticSize.X
+	name.TextScaled = true
+	name.TextWrapped = true
 	name.TextTruncate = Enum.TextTruncate.None
+	local nameSize = Instance.new("UITextSizeConstraint")
+	nameSize.MinTextSize, nameSize.MaxTextSize = 14, 26
+	nameSize.Parent = name
 	local pill = Badge.rarity(detail, 26, 12)
 	local stats: { Stat } = {}
 	for index, label in { "Earns", "You own", "Box chance" } do
@@ -105,6 +114,10 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		Kit.corner(box, 14)
 		local caption = Kit.text(box, "Label", label, 12, nil, Style.muted)
 		local value = Kit.text(box, "Value", "", 18, Style.display())
+		value.TextScaled = true
+		local valueSize = Instance.new("UITextSizeConstraint")
+		valueSize.MinTextSize, valueSize.MaxTextSize = 12, 18
+		valueSize.Parent = value
 		stats[index] = { root = box, label = caption, value = value }
 	end
 	stats[1].value.TextColor3 = Style.mintText
@@ -197,11 +210,12 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		Kit.rect(rarityBar, dpad, if compact then 10 else 16, inner, wellHeight + edge)
 		Kit.rect(well, 0, 0, inner, wellHeight)
 		local y = (if compact then 10 else 16) + wellHeight + edge + (if compact then 10 else 14)
-		name.TextSize = if compact then 19 else 26
+		nameSize.MaxTextSize = if compact then 19 else 26
 		name.Position = UDim2.fromOffset(dpad, y)
-		name.Size = UDim2.fromOffset(0, if compact then 24 else 32)
-		pill.root.Position = UDim2.fromOffset(dpad, y + (if compact then 28 else 36))
-		y += if compact then 56 else 72
+		local nameHeight = if compact then 32 else 40
+		name.Size = UDim2.fromOffset(inner, nameHeight)
+		pill.root.Position = UDim2.fromOffset(dpad, y + nameHeight + 4)
+		y += nameHeight + 40
 		local statGap = if compact then 5 else 8
 		local statWidth = State.cells(inner, 3, statGap)
 		for index, stat in stats do
@@ -329,6 +343,7 @@ function Collection.create(parent: Instance, ctx: Context.Context): Context.Scre
 		update = update,
 		layout = function(nextWidth: number, nextHeight: number, nextPhone: boolean)
 			phone = nextPhone
+			titleSize.MaxTextSize = if phone then 20 else 30
 			width, height = shell.layout(nextWidth, nextHeight, nextPhone)
 			arrange()
 			refresh()

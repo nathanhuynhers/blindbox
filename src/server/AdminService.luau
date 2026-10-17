@@ -134,7 +134,7 @@ function Service.create(deps: Dependencies): Controller
 				id = collection.id,
 				price = Rules.prices[collection.id],
 				group = config.group,
-				base = table.clone(Economy.buckets[config.buckets]),
+				base = CollectionEconomy.buckets(collection.id, {}),
 				effective = CollectionEconomy.buckets(collection.id, pity),
 				pity = curves,
 			})
@@ -152,7 +152,9 @@ function Service.create(deps: Dependencies): Controller
 			if change >= Config.largeChange and request.confirmed ~= true then
 				return false, "Confirm this large Coin change.", nil
 			end
-			if change > Config.transactionLimit then
+			-- SetBalance has its own finite wallet bound in AdminProtocol and explicit
+			-- large-change confirmation. The incremental grant/remove cap is separate.
+			if request.action ~= "SetBalance" and change > Config.transactionLimit then
 				return false, "Change exceeds the transaction limit.", nil
 			end
 			local ok, message = Rules.adminCoins(target.state, request.action, amount, deps.now())
@@ -221,7 +223,7 @@ function Service.create(deps: Dependencies): Controller
 			end
 			if
 				request.rarity
-				and not Economy.buckets[Economy.collections[collection].buckets][request.rarity]
+				and (CollectionEconomy.buckets(collection, {})[request.rarity] or 0) <= 0
 			then
 				return false, "Rarity is not eligible for this box.", nil
 			end

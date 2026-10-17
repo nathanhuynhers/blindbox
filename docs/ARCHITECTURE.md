@@ -17,6 +17,8 @@ and explicit figure income units/weights. `CollectionEconomy` validates configur
 prices, base rates, current odds, rolls and duplicate multipliers. `Rules` owns atomic mutations,
 income settlement and unique Display placement. See [economy](ECONOMY.md).
 
+`CollectionAccess` derives the [two-tier purchase window](COLLECTION_PROGRESSION.md) from permanent discoveries. Rules preflights all Coin-paid box paths, including server-derived deals; the Auto Open owner adapter checks the same access before each ordinary transaction. Owner snapshots expose route progress and access only for presentation. No new profile field or authority on clients is introduced.
+
 The user accepted the MVP and authorized the full-game roadmap. Blind Box is live (owner
 confirmation, October 11, 2026); documented storage, device and multi-client acceptance gaps
 still apply to release verification. See [roadmap](ROADMAP.md), [operations](OPERATIONS.md),

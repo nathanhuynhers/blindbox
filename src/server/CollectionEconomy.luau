@@ -9,6 +9,7 @@ local prices: { [string]: number } = {}
 local weights: { [string]: number } = {}
 local totals: { [string]: { [string]: number } } = {}
 local groups: { [string]: string } = {}
+local baseBuckets: { [string]: { [string]: number } } = {}
 local function guaranteeDry(curve: Config.Curve): number
 	return curve.start + math.ceil((100 - curve.base) / curve.increment)
 end
@@ -47,7 +48,7 @@ for _, rarity in Rarity.order do
 end
 for _, tier in Config.tiers do
 	assert(
-		positive(tier.price) and tier.price % 1 == 0 and tier.price <= Config.coinLimit,
+		positive(tier.price) and tier.price % 1 == 0 and tier.price <= Config.coinLimit / 10,
 		"Invalid tier price"
 	)
 	assert(positive(tier.paybackSeconds), "Invalid tier pacing")
@@ -64,6 +65,30 @@ for id, config in Config.collections do
 	assert(Catalog.collectionIds[id], "Unknown economic collection")
 	local tier, buckets = Config.tiers[config.tier], Config.buckets[config.buckets]
 	assert(tier and buckets, "Invalid collection profile")
+	local distribution = table.clone(buckets)
+	if config.rosterBudgets then
+		local present: { [string]: boolean } = {}
+		for _, figure in Catalog.figures do
+			if figure.collection == id then
+				present[figure.rarity] = true
+			end
+		end
+		assert(present.Common, "New collection requires a Common figure: " .. id)
+		local remaining = 100
+		for _, rarity in Rarity.order do
+			if rarity ~= "Common" then
+				local chance = if present[rarity] then buckets[rarity] or 0 else 0
+				distribution[rarity] = chance
+				remaining -= chance
+			end
+		end
+		distribution.Common = remaining
+		assert(
+			config.expectedIncome and positive(config.expectedIncome),
+			"Invalid provisional income"
+		)
+	end
+	baseBuckets[id] = distribution
 	assert(#config.group > 0 and #config.group <= 64, "Invalid pity group")
 	totals[id], prices[id] = {}, tier.price
 	if config.pity then
@@ -102,6 +127,10 @@ for _, entry in Config.entries do
 	local figure = Catalog.byId[entry.id]
 	assert(figure and not weights[entry.id], "Invalid economy reference")
 	assert(positive(entry.units) and positive(entry.weight), "Invalid income units/weight")
+	assert(
+		not Config.collections[figure.collection].rosterBudgets or entry.weight == 1,
+		"New rarity shares must be equal"
+	)
 	weights[entry.id] = entry.weight
 	local total = totals[figure.collection]
 	total[figure.rarity] = (total[figure.rarity] or 0) + entry.weight
@@ -110,10 +139,13 @@ for _, figure in Catalog.figures do
 	assert(weights[figure.id], "Missing figure economy")
 end
 for id, config in Config.collections do
-	local buckets, tier = Config.buckets[config.buckets], Config.tiers[config.tier]
+	local buckets, tier = baseBuckets[id], Config.tiers[config.tier]
 	local average = 0
 	for rarity, chance in buckets do
-		assert(totals[id][rarity] and positive(totals[id][rarity]), "Bucket has no figures")
+		assert(
+			chance == 0 or (totals[id][rarity] and positive(totals[id][rarity])),
+			"Bucket has no figures"
+		)
 		for _, entry in Config.entries do
 			local figure = Catalog.byId[entry.id]
 			if figure.collection == id and figure.rarity == rarity then
@@ -129,7 +161,9 @@ for id, config in Config.collections do
 			local figure = Catalog.byId[entry.id]
 			if figure.collection == id and figure.rarity == rarity then
 				assert(buckets[rarity], "Figure has no rarity bucket")
-				local rate = entry.units * tier.price / (tier.paybackSeconds * average)
+				local rate = if config.rosterBudgets
+					then entry.units * (config.expectedIncome :: number) / average
+					else entry.units * tier.price / (tier.paybackSeconds * average)
 				assert(positive(rate) and rate <= Config.coinLimit, "Invalid figure rate")
 				rates[entry.id] = rate
 				minimum, maximum = math.min(minimum, rate), math.max(maximum, rate)
@@ -160,6 +194,9 @@ function Economy.pityProgress(pity: { [string]: Types.Pity }): { [string]: Types
 			local progress = pity[config.group]
 			local profile = Config.pity[config.pity]
 			local function fraction(rarity: string, dry: number): number
+				if (baseBuckets[id][rarity] or 0) == 0 then
+					return 0
+				end
 				local curve = profile[rarity]
 				local full = guaranteeDry(curve)
 				return if full > 0 then math.clamp(dry / full, 0, 1) else 0
@@ -178,13 +215,16 @@ end
 local function pityBuckets(collection: string, pity: { [string]: Types.Pity }): { [string]: number }
 	local config = Config.collections[collection]
 	assert(config, "Unknown collection")
-	local result = table.clone(Config.buckets[config.buckets])
+	local result = table.clone(baseBuckets[collection])
 	if config.pity then
 		local progress = pity[config.group]
 		local profile = Config.pity[config.pity]
 		local baseHigh, currentHigh = 0, 0
 		local guaranteed: string? = nil
 		for rarity, curve in profile do
+			if (result[rarity] or 0) == 0 then
+				continue
+			end
 			local dry = if not progress
 				then 0
 				elseif rarity == "Legendary" then progress.legendaryDryRolls
@@ -283,10 +323,7 @@ function Economy.roll(
 	local buckets = Economy.buckets(collection, pity, luck, minimum)
 	-- Server-only debug injection retains the actual within-rarity figure weights.
 	if forcedRarity then
-		assert(
-			Config.buckets[Config.collections[collection].buckets][forcedRarity],
-			"Ineligible rarity"
-		)
+		assert((baseBuckets[collection][forcedRarity] or 0) > 0, "Ineligible rarity")
 		buckets = { [forcedRarity] = 100 }
 	end
 	local floor = if minimum then table.find(Rarity.order, minimum) or 1 else 1
@@ -301,7 +338,7 @@ function Economy.roll(
 	local last = ""
 	for index, rarity in Rarity.order do
 		local chance = buckets[rarity]
-		if chance and index >= floor then
+		if chance and chance > 0 and index >= floor then
 			for _, figure in Catalog.figures do
 				if figure.collection == collection and figure.rarity == rarity then
 					last = figure.id

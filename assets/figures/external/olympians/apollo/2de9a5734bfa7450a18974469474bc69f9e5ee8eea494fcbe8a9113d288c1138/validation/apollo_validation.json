@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "2de9a5734bfa7450a18974469474bc69f9e5ee8eea494fcbe8a9113d288c1138",
+  "source_filename": "af07c45aac0a596586c281e6762f3d8555afa11e472f16645178ab7b556aba9b/apollo_painted.glb",
+  "source_sha256": "af07c45aac0a596586c281e6762f3d8555afa11e472f16645178ab7b556aba9b",
+  "import_entry": {
+    "source": "af07c45aac0a596586c281e6762f3d8555afa11e472f16645178ab7b556aba9b/apollo_painted.glb",
+    "figure_id": "olympian.apollo",
+    "collection_id": "olympian",
+    "rarity": "Rare",
+    "collection_slug": "olympians",
+    "figure_slug": "apollo",
+    "root": "OlympianApollo",
+    "alias": "olympian_apollo",
+    "asset_key": "Models.Olympians.OlympianApollo",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      27.15
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4261,
+          0.0,
+          0.6259
+        ],
+        [
+          0.5861,
+          0.5421,
+          0.7659
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Apollo"
+  },
+  "catalog": "olympian.apollo",
+  "collection_id": "olympian",
+  "rarity": "Rare",
+  "root": "OlympianApollo",
+  "figure": "OlympianApollo",
+  "title": "Apollo",
+  "face": "OlympianApollo_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19475,
+  "source_triangles": 19475,
+  "source": {
+    "bytes": 5984988,
+    "textures": [
+      {
+        "name": "apollo_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19475
+    ],
+    "triangles": 19475,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.476744055747986,
+    1.8135117292404175,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "OlympianApollo_Eyes": {
+      "tris": 115,
+      "verts": 179,
+      "non_manifold_edges": 45,
+      "boundary_edges": 45,
+      "zero_area_faces": 0,
+      "signed_volume": -0.044072245708470674,
+      "islands": 1,
+      "island_faces": [
+        115
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.24651864171028137,
+          -0.28363415598869324,
+          2.2124481201171875
+        ],
+        [
+          0.24650642275810242,
+          0.13292191922664642,
+          2.8016562461853027
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "OlympianApollo_Part002": {
+      "tris": 19360,
+      "verts": 22739,
+      "non_manifold_edges": 76,
+      "boundary_edges": 76,
+      "zero_area_faces": 0,
+      "signed_volume": 1.3213421617202987,
+      "islands": 2,
+      "island_faces": [
+        14,
+        19346
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.2383720874786377,
+          -0.9067558646202087,
+          0.0
+        ],
+        [
+          1.2383719682693481,
+          0.9067558646202087,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 6360912,
+    "textures": 1,
+    "primitive_triangles": [
+      115,
+      19360
+    ],
+    "triangles": 19475,
+    "mesh_nodes": [
+      "OlympianApollo_Eyes",
+      "OlympianApollo_Part002"
+    ],
+    "sha256": "54aefe96a93e9364788ac2910f2a85f307aafb5e922641010550c5bbead91b9b",
+    "nodes": [
+      "OlympianApollo_Eyes",
+      "OlympianApollo_Part002",
+      "OlympianApollo"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "apollo": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "apollo": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999903409639718,
+      "foreground_rgb_mae": 0.00022227146837394685,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999754363124992,
+      "foreground_rgb_mae": 0.00017603978631086648,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 0.9999769919241653,
+      "foreground_rgb_mae": 0.00021956923592370003,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.999981812394853,
+      "foreground_rgb_mae": 0.00014229127555154264,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "apollo_source_front.png",
+      "apollo_source_three_quarter.png",
+      "apollo_source_side.png",
+      "apollo_source_back.png"
+    ],
+    "fidelity_views": [
+      "apollo_fidelity_front.png",
+      "apollo_fidelity_three_quarter.png",
+      "apollo_fidelity_side.png",
+      "apollo_fidelity_back.png"
+    ],
+    "fidelity_sha256": "54aefe96a93e9364788ac2910f2a85f307aafb5e922641010550c5bbead91b9b",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "af07c45aac0a596586c281e6762f3d8555afa11e472f16645178ab7b556aba9b",
+    "source/source.blend": "2e4def31f0a1407b8b7402151e16db563f85a62fc2431bb0e3d78da863a18028",
+    "model/apollo_production.blend": "10b63301088534f72da9ff2012fd4a67ce9f4490ed17cd63bd874c782b000302",
+    "model/apollo_roblox.glb": "54aefe96a93e9364788ac2910f2a85f307aafb5e922641010550c5bbead91b9b",
+    "renders/apollo_fidelity_back.png": "abed3c1c4b5c9efb3a00bc20dc38af0890b3384e0c1037827a8ebc34d40e5659",
+    "renders/apollo_fidelity_front.png": "b2de9dc1c9ea2784103d92ea11b4a9af0eb6ab7cc30b67e671e39046dd8fe07e",
+    "renders/apollo_fidelity_side.png": "2745e0f8060da8f32f340f6c40bb4fcb3f1f995edd9b88dc02724daff11325da",
+    "renders/apollo_fidelity_three_quarter.png": "bbdc2b7dde43b481ad523f7e2af1516f393074f804ac3943f12dd0f2ddaf6f39",
+    "renders/apollo_source_back.png": "8ea2dc36e228c844fdce9b15ee72704063925bb25d9cddb3bd3c275186c3d523",
+    "renders/apollo_source_front.png": "95df01ec7b67a04df21f28bc3682bb19e4ece5809b4d2f8b33fecf7f569acda5",
+    "renders/apollo_source_side.png": "fb1c6e08c17da93f0c6ba2cb8118d9d1cf3b105c34c3583044989d6cbc1c573f",
+    "renders/apollo_source_three_quarter.png": "f93273379a9d4364ad7cc3cfe43ef8b75f20c3a66ee03dfd61155230d16f8fca"
+  }
+}

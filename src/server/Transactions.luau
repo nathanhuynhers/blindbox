@@ -38,7 +38,14 @@ function Transactions.process(
 	local display = intent.action == "Place"
 		or intent.action == "Remove"
 		or intent.action == "EquipBest"
-	if intent.action ~= "Place" and intent.action ~= "EquipBest" then
+	-- Paid openings settle in Rules only after access and purchase preflight succeed.
+	if
+		intent.action ~= "Place"
+		and intent.action ~= "EquipBest"
+		and intent.action ~= "Buy"
+		and intent.action ~= "BuyTen"
+		and intent.action ~= "Deal"
+	then
 		Rules.settle(session.state, now)
 	end
 	for index = #session.receipts, 1, -1 do

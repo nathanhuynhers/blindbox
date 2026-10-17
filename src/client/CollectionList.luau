@@ -81,6 +81,8 @@ function List.create(parent: Instance, ctx: Context.Context, choose: (string) ->
 		local stroke = Kit.stroke(button, Style.violet)
 		local icon, emblem, mono = List.icon(button, collection.id, collection.name, 42)
 		local name = Kit.text(button, "Name", collection.name, 15)
+		name.TextWrapped = true
+		name.TextTruncate = Enum.TextTruncate.None
 		local bar = Progress.bar(button, "Progress", 6, Style.collection(collection.id).color)
 		local count = Kit.text(button, "Count", "", 13, nil, Style.muted)
 		count.TextXAlignment = Enum.TextXAlignment.Right
@@ -121,8 +123,8 @@ function List.create(parent: Instance, ctx: Context.Context, choose: (string) ->
 					item.icon.Position = UDim2.fromOffset(10, 10)
 					local textX = 64
 					local countWidth = 44
-					Kit.rect(item.name, textX, 12, width - 24 - textX - countWidth - 10, 20)
-					Kit.rect(item.bar.root, textX, 37, width - 24 - textX - countWidth - 10, 6)
+					Kit.rect(item.name, textX, 6, width - 24 - textX - countWidth - 10, 34)
+					Kit.rect(item.bar.root, textX, 47, width - 24 - textX - countWidth - 10, 6)
 					Kit.rect(item.count, width - 24 - countWidth - 10, 12, countWidth, 34)
 				end
 				item.name.Visible = not rail
@@ -139,9 +141,16 @@ function List.create(parent: Instance, ctx: Context.Context, choose: (string) ->
 				item.stroke.Transparency = if on then 0 else 1
 				item.button.BackgroundTransparency = if on and not rail then 0 else 1
 				item.button:SetAttribute("Selected", on)
+				local locked = State.purchaseLock(snapshot, id) ~= nil
+				item.button:SetAttribute("PurchaseLocked", locked)
 				item.button:SetAttribute(
 					"AccessibleName",
-					State.collectionName(id) .. ", " .. found .. " of " .. total
+					State.collectionName(id)
+						.. ", "
+						.. found
+						.. " of "
+						.. total
+						.. (if locked then ", purchases unavailable" else "")
 				)
 			end
 		end,

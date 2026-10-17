@@ -1,0 +1,324 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "ad5eec6eb31fad6385a4957327b7d7a5e6381d8edd114c3fd49ea307edac98e8",
+  "source_filename": "3297e426f42cd155bee337f878eb266639f1a8d213716c8f94662fab18ec8989/desert_painted.glb",
+  "source_sha256": "3297e426f42cd155bee337f878eb266639f1a8d213716c8f94662fab18ec8989",
+  "import_entry": {
+    "source": "3297e426f42cd155bee337f878eb266639f1a8d213716c8f94662fab18ec8989/desert_painted.glb",
+    "figure_id": "biome.desert",
+    "collection_id": "biome",
+    "rarity": "Uncommon",
+    "collection_slug": "biomes",
+    "figure_slug": "desert",
+    "root": "BiomeDesert",
+    "alias": "biome_desert",
+    "asset_key": "Models.Biomes.BiomeDesert",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      63.11
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4267,
+          0.0,
+          0.6757
+        ],
+        [
+          0.5867,
+          0.4296,
+          0.8157
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Desert"
+  },
+  "catalog": "biome.desert",
+  "collection_id": "biome",
+  "rarity": "Uncommon",
+  "root": "BiomeDesert",
+  "figure": "BiomeDesert",
+  "title": "Desert",
+  "face": "BiomeDesert_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19316,
+  "source_triangles": 19316,
+  "source": {
+    "bytes": 5530292,
+    "textures": [
+      {
+        "name": "desert_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19316
+    ],
+    "triangles": 19316,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.846734642982483,
+    2.721740961074829,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "BiomeDesert_Eyes": {
+      "tris": 157,
+      "verts": 233,
+      "non_manifold_edges": 63,
+      "boundary_edges": 63,
+      "zero_area_faces": 0,
+      "signed_volume": -0.11237266152196446,
+      "islands": 6,
+      "island_faces": [
+        1,
+        1,
+        1,
+        2,
+        10,
+        142
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.28685513138771057,
+          -0.7360004782676697,
+          2.362558126449585
+        ],
+        [
+          0.2865682542324066,
+          -0.15057829022407532,
+          2.964907169342041
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "BiomeDesert_Part002": {
+      "tris": 19159,
+      "verts": 22974,
+      "non_manifold_edges": 75,
+      "boundary_edges": 75,
+      "zero_area_faces": 0,
+      "signed_volume": 2.971136223320493,
+      "islands": 1,
+      "island_faces": [
+        19159
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.4233673810958862,
+          -1.3608704805374146,
+          0.0
+        ],
+        [
+          1.4233672618865967,
+          1.3608704805374146,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5916992,
+    "textures": 1,
+    "primitive_triangles": [
+      157,
+      19159
+    ],
+    "triangles": 19316,
+    "mesh_nodes": [
+      "BiomeDesert_Eyes",
+      "BiomeDesert_Part002"
+    ],
+    "sha256": "5b0fd60afeb65658387f32d7d3a438a4b8a70708deea939e0dd70604fafb2cc5",
+    "nodes": [
+      "BiomeDesert_Eyes",
+      "BiomeDesert_Part002",
+      "BiomeDesert"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "desert": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "desert": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999915146372508,
+      "foreground_rgb_mae": 0.0001485548709752038,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999803684835635,
+      "foreground_rgb_mae": 0.00012627044634427875,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00018424660083837807,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00012408691691234708,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "desert_source_front.png",
+      "desert_source_three_quarter.png",
+      "desert_source_side.png",
+      "desert_source_back.png"
+    ],
+    "fidelity_views": [
+      "desert_fidelity_front.png",
+      "desert_fidelity_three_quarter.png",
+      "desert_fidelity_side.png",
+      "desert_fidelity_back.png"
+    ],
+    "fidelity_sha256": "5b0fd60afeb65658387f32d7d3a438a4b8a70708deea939e0dd70604fafb2cc5",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "3297e426f42cd155bee337f878eb266639f1a8d213716c8f94662fab18ec8989",
+    "source/source.blend": "dd2695df4d5adf562b5f6ca7670216d9c64ec3ed682182804facffe35b6282e2",
+    "model/desert_production.blend": "cbcfc83348ae74750b0064123a77731d27354bb43cd560844ac881954479d320",
+    "model/desert_roblox.glb": "5b0fd60afeb65658387f32d7d3a438a4b8a70708deea939e0dd70604fafb2cc5",
+    "renders/desert_fidelity_back.png": "c5c8eaf12e05353971a3fa96dd07dd184d507339ca4de9f5e5490b09697a3589",
+    "renders/desert_fidelity_front.png": "cc619fa0a013cb5ecd7465d4df79d4e7862d81fcdf1627ef2d9c5d1553c15db0",
+    "renders/desert_fidelity_side.png": "817712a80bd8e21411c110099b26e5756d7c57c03074ac79d4a2f1408e534ace",
+    "renders/desert_fidelity_three_quarter.png": "1058e00cddac0a77ba62b14caa86b5bf2ceac04de3d5d7242e87144dcf8ca40c",
+    "renders/desert_source_back.png": "81eb0a28f0881f8f4006c6cac7573ece7732fde390b8bca42285c51fb0d44108",
+    "renders/desert_source_front.png": "64fa491981cbfc2620ea55a219593ecf97bf4b286a659574df0f7e6d142dabc2",
+    "renders/desert_source_side.png": "25b06bea181a95401b13b0011be47b2a30a6bda78930b1e499483d4b992be34f",
+    "renders/desert_source_three_quarter.png": "0d5e4c693adcdf68d535b5ce1f44ffe21c71cf3aa738438ab3cd0b02c2e05931"
+  }
+}

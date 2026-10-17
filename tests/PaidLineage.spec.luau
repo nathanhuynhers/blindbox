@@ -112,23 +112,13 @@ end
 for group,counters in free.pityByGroup do
 	check(tracked.pityByGroup[group].legendaryDryRolls==counters.legendaryDryRolls and tracked.pityByGroup[group].mythicalDryRolls==counters.mythicalDryRolls,"All rolls count toward the same pity")
 end
--- Master refunds coming-soon purchases on acquisition after lineage promotion.
-local legacy = Rules.new(0)
-Rules.grantFigure(legacy, "moon.rat", 2)
-promote(legacy)
-local legacyBefore = legacy.coins
-check(Rules.refundComingSoon(legacy, 0) == 2 * Rules.prices.moon, "Migrated refund amount")
-check(legacy.coins == legacyBefore + 2 * Rules.prices.moon and legacy.lineage.earnedCoins == legacy.coins, "Legacy refunds remain spendable earned Coins")
-check(Profile.decode(Profile.encode(legacy), 0) ~= nil, "Migrated refund profile validates")
+-- New catalog metadata does not erase or convert already-earned/assisted Moonrace copies.
 local mixed = state()
 Rules.grantFigure(mixed, "moon.rat", 2)
 Rules.grantFigure(mixed, "moon.rat", 3, true)
-local mixedBefore = mixed.coins
-check(Rules.refundComingSoon(mixed, 0) == 5 * Rules.prices.moon, "Mixed copy refund amount")
-check(mixed.coins == mixedBefore + 5 * Rules.prices.moon and mixed.lineage.earnedCoins == mixedBefore + 2 * Rules.prices.moon, "Refund preserves paid and earned provenance")
-mixed.paidBoostsAllowed = false
-check(Lineage.suspend(mixed) and mixed.lineage.assistedReserve == 3 * Rules.prices.moon, "Restricted refunded paid value stays protected")
-check(Profile.decode(Profile.encode(mixed), 0) ~= nil, "Restricted refund profile validates")
-check(Rules.refundComingSoon(mixed, 0) == 0, "Refund replay adds no value")
-check(Lineage.drain(mixed, true) == 3 * Rules.prices.moon and Lineage.drain(mixed, true) == 0, "Refund reserve restored once")
+local loaded = Profile.decode(Profile.encode(mixed), 0)
+check(loaded ~= nil and loaded.owned["moon.rat"] == 5, "Existing copies retained")
+check(loaded.lineage.earnedOwned["moon.rat"] == 2, "Existing copy lineage retained")
+check(loaded.coins == mixed.coins and loaded.lineage.earnedCoins == mixed.lineage.earnedCoins, "No release-time currency mutation")
+
 print("PASS:",checks,"paid-Coin lineage, policy transitions, shared pity, conservation and schema checks")

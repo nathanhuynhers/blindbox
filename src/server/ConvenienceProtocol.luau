@@ -1,4 +1,5 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 local Wire = require(game:GetService("ReplicatedStorage").Shared.ConvenienceTypes)
 local Protocol = {}
 local function integer(value: unknown, low: number, high: number): boolean
@@ -26,7 +27,7 @@ function Protocol.parse(raw: unknown): Wire.Request?
 		if
 			not identifier(value.collection)
 			or not integer(value.limit, 1, 100)
-			or not integer(value.reserve, 0, 1e12)
+			or not integer(value.reserve, 0, Currency.limit)
 		then
 			return nil
 		end

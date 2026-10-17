@@ -69,7 +69,7 @@ check(
 		and delayed.offlineData.assistedCredit == 10007,
 	"Correct new receipt keeps both promises"
 )
-local full = reward(50, 1000000000000)
+local full = reward(50, require("./Currency").limit)
 check(
 	Awards.reserve(full, 101) and Awards.fulfill(full, 101, "full"),
 	"Charged purchase survives full wallet"

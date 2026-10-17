@@ -65,6 +65,9 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 					id = selected,
 					name = State.collectionName(selected),
 					price = if snapshot then snapshot.prices[selected] else nil,
+					refusal = if snapshot
+						then State.purchaseLock(snapshot, selected)
+						else "Access confirmation pending",
 				}
 			end
 		)
@@ -84,6 +87,11 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 	local preview = BoxPreview.create(stage, ctx.scope)
 	local boxTitle = Kit.text(product, "BoxTitle", "", 24, Style.display())
 	boxTitle.TextXAlignment = Enum.TextXAlignment.Center
+	boxTitle.TextScaled = true
+	boxTitle.TextTruncate = Enum.TextTruncate.None
+	local boxTitleSize = Instance.new("UITextSizeConstraint")
+	boxTitleSize.MinTextSize, boxTitleSize.MaxTextSize = 14, 24
+	boxTitleSize.Parent = boxTitle
 	local progress =
 		Kit.text(product, "Discovery", "", 14, Style.body(Enum.FontWeight.Bold), Style.muted)
 	progress.TextXAlignment = Enum.TextXAlignment.Center
@@ -165,6 +173,8 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 	gift.button.Visible = false
 	-- Right: contents and odds
 	local info = Kit.canvas(body, "Contents")
+	local accessHint = Kit.text(info, "PurchaseAccess", "", 14, Style.body(), Style.ink)
+	accessHint.TextWrapped, accessHint.TextTruncate = true, Enum.TextTruncate.None
 	local luck = ShopLuck.create(info, ctx)
 	local inside = Kit.text(info, "InsideTitle", "What's inside", 20, Style.display())
 	local insideCount = Kit.text(info, "InsideCount", "", 13, nil, Style.muted)
@@ -242,6 +252,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			boxTitle.TextXAlignment = Enum.TextXAlignment.Left
 			progress.TextXAlignment = Enum.TextXAlignment.Left
 			boxTitle.TextSize = 18
+			boxTitleSize.MaxTextSize = 18
 			boxTitle.TextWrapped = true
 			Kit.rect(boxTitle, 118, 12, middle - 130, 44)
 			Kit.rect(progress, 118, 58, middle - 130, 36)
@@ -270,6 +281,7 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 			boxTitle.TextXAlignment = Enum.TextXAlignment.Center
 			progress.TextXAlignment = Enum.TextXAlignment.Center
 			boxTitle.TextSize = 24
+			boxTitleSize.MaxTextSize = 24
 			boxTitle.TextWrapped = false
 			Kit.rect(boxTitle, 12, top + stageSize + 12, middle - 24, 30)
 			Kit.rect(progress, 12, top + stageSize + 42, middle - 24, 20)
@@ -294,6 +306,16 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local pad = if phone then 14 else 20
 		local inner = infoWidth - pad * 2 - info.ScrollBarThickness
 		local y = if phone then 10 else 16
+		if accessHint.Visible then
+			-- Reserve conservative wrapped-line space inside the existing scrolling panel.
+			local lines = 0
+			for line in string.gmatch(accessHint.Text .. "\n", "([^\n]*)\n") do
+				lines += math.max(1, math.ceil(#line / math.max(1, math.floor(inner / 8))))
+			end
+			local hintHeight = lines * 19 + 12
+			Kit.rect(accessHint, pad, y, inner, hintHeight)
+			y += hintHeight + 12
+		end
 		Kit.rect(inside, pad, y, inner - 90, 26)
 		inside.TextSize = if phone then 17 else 20
 		Kit.rect(insideCount, pad + inner - 90, y, 90, 26)
@@ -366,15 +388,21 @@ function Shop.create(parent: Instance, ctx: Context.Context): Context.Screen
 		local price = State.price(snapshot, selected)
 		local need = State.need(snapshot, price)
 		buy.setPrice(State.compact(price))
-		local soon = Catalog.comingSoon[selected]
+		local lock = State.purchaseLock(snapshot, selected)
+		accessHint.Text = State.accessText(snapshot, selected)
+		accessHint.Visible = accessHint.Text ~= ""
+		root:SetAttribute("PurchaseLocked", lock ~= nil)
 		buy.set(
-			if soon then "Coming soon" else "Open 1 box",
-			ctx.canAct() and need == nil and not soon,
-			if soon then nil else need
+			lock or "Open 1 box",
+			ctx.canAct() and need == nil and lock == nil,
+			if lock then nil else need
 		)
-		local affordTen = not soon and price > 0 and snapshot.coins >= price * 10
+		local affordTen = price > 0 and snapshot.coins >= price * 10
 		ten.setPrice(State.compact(price * 10))
-		ten.set("Open 10 boxes", ctx.canAct() and affordTen)
+		ten.set(
+			if lock then "Open 10 locked" else "Open 10 boxes",
+			ctx.canAct() and affordTen and lock == nil
+		)
 		local options = State.freeBoxOptions(snapshot)
 		freeChoice = if table.find(options, selected)
 			then selected

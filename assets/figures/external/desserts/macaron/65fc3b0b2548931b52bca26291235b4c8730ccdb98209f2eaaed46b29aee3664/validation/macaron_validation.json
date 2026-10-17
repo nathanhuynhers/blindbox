@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "65fc3b0b2548931b52bca26291235b4c8730ccdb98209f2eaaed46b29aee3664",
+  "source_filename": "fd469cfecd6c3fccdd802dceed3384fb5a5239c49691107b9d5e12dd15746cc4/macaron_painted.glb",
+  "source_sha256": "fd469cfecd6c3fccdd802dceed3384fb5a5239c49691107b9d5e12dd15746cc4",
+  "import_entry": {
+    "source": "fd469cfecd6c3fccdd802dceed3384fb5a5239c49691107b9d5e12dd15746cc4/macaron_painted.glb",
+    "figure_id": "dessert.macaron",
+    "collection_id": "dessert",
+    "rarity": "Common",
+    "collection_slug": "desserts",
+    "figure_slug": "macaron",
+    "root": "DessertMacaron",
+    "alias": "dessert_macaron",
+    "asset_key": "Models.Desserts.DessertMacaron",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      12.7
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4206,
+          0.0,
+          0.5877
+        ],
+        [
+          0.5806,
+          0.3498,
+          0.7277
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Macaron"
+  },
+  "catalog": "dessert.macaron",
+  "collection_id": "dessert",
+  "rarity": "Common",
+  "root": "DessertMacaron",
+  "figure": "DessertMacaron",
+  "title": "Macaron",
+  "face": "DessertMacaron_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19132,
+  "source_triangles": 19132,
+  "source": {
+    "bytes": 5622864,
+    "textures": [
+      {
+        "name": "macaron_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19132
+    ],
+    "triangles": 19132,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.044913649559021,
+    1.9939756989479065,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "DessertMacaron_Eyes": {
+      "tris": 95,
+      "verts": 125,
+      "non_manifold_edges": 41,
+      "boundary_edges": 41,
+      "zero_area_faces": 0,
+      "signed_volume": -0.02316899482698647,
+      "islands": 2,
+      "island_faces": [
+        2,
+        93
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.22040227055549622,
+          -0.5835816264152527,
+          2.0821316242218018
+        ],
+        [
+          0.2199074923992157,
+          -0.2695535123348236,
+          2.6540136337280273
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "DessertMacaron_Part002": {
+      "tris": 19037,
+      "verts": 21855,
+      "non_manifold_edges": 41,
+      "boundary_edges": 41,
+      "zero_area_faces": 0,
+      "signed_volume": 3.3547352897191973,
+      "islands": 1,
+      "island_faces": [
+        19037
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.0224567651748657,
+          -0.9969878792762756,
+          0.0
+        ],
+        [
+          1.0224568843841553,
+          0.9969878196716309,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5984192,
+    "textures": 1,
+    "primitive_triangles": [
+      95,
+      19037
+    ],
+    "triangles": 19132,
+    "mesh_nodes": [
+      "DessertMacaron_Eyes",
+      "DessertMacaron_Part002"
+    ],
+    "sha256": "51a4845fb3922a766c26d6ae67ff107e35ac6fcc49e24ae9505430bff660178f",
+    "nodes": [
+      "DessertMacaron_Eyes",
+      "DessertMacaron_Part002",
+      "DessertMacaron"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "macaron": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "macaron": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999896761405284,
+      "foreground_rgb_mae": 9.437222615815699e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.807593647157773e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.265269181923941e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.258619734784588e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "macaron_source_front.png",
+      "macaron_source_three_quarter.png",
+      "macaron_source_side.png",
+      "macaron_source_back.png"
+    ],
+    "fidelity_views": [
+      "macaron_fidelity_front.png",
+      "macaron_fidelity_three_quarter.png",
+      "macaron_fidelity_side.png",
+      "macaron_fidelity_back.png"
+    ],
+    "fidelity_sha256": "51a4845fb3922a766c26d6ae67ff107e35ac6fcc49e24ae9505430bff660178f",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "fd469cfecd6c3fccdd802dceed3384fb5a5239c49691107b9d5e12dd15746cc4",
+    "source/source.blend": "dcbd108590420b398ec92219bf6b6456b917ef3e65c94821cbfaa4107ba041ea",
+    "model/macaron_production.blend": "19905bbecd639bcbfb700a6ff1d9c814a7a16b5bf1198935fa5a690a6f1f404a",
+    "model/macaron_roblox.glb": "51a4845fb3922a766c26d6ae67ff107e35ac6fcc49e24ae9505430bff660178f",
+    "renders/macaron_fidelity_back.png": "822af18ea1b9131c6000556911deec3484b41a0e61a8e54fde1cae0ea82adcde",
+    "renders/macaron_fidelity_front.png": "7c4bc40ca38ff7240fae65828e73646a81aa7f06a605760a37fdafaa1daaba84",
+    "renders/macaron_fidelity_side.png": "514c2fe3592d975cfa025d42abf22f50773d357ed57136b1299bb3d3a476324b",
+    "renders/macaron_fidelity_three_quarter.png": "f99d307975ba6f46b994dca384c43b47f37a1fb8ef93333f6095bc2760bdf367",
+    "renders/macaron_source_back.png": "e06950d7002459d2a1d7e9913ff7b7c52e2fc5dee320bb3ec91e842eaa34098a",
+    "renders/macaron_source_front.png": "ccd9a9a5f03672d3b9326c0e3e77ca9be97986d30e7a67fc2ef271d5b164ec75",
+    "renders/macaron_source_side.png": "9b4a120b3b48a56a37ef2e1f4d1585599b4e7e21026c5bbcddd484d11ef3bb72",
+    "renders/macaron_source_three_quarter.png": "8b066693b9d06bdeab02720d4c89cd4bf417762f5d932c685fb71e29a496d139"
+  }
+}

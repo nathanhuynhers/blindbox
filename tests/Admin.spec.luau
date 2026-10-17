@@ -54,6 +54,13 @@ check(not Protocol.allowed(0, "Owner") and not Protocol.allowed(-1, "Owner") and
 check(not Protocol.allowed(owner, "Unknown"), "unknown permission fails closed")
 local connected = service.receive(owner, "Connect")
 check(connected.ok and connected.token == token and connected.sequence == 0, "owner bootstrap")
+for _, box in connected.boxes or {} do
+	if box.id == "orbit" then
+		check(box.base.Common == 98.9 and box.base.Uncommon == 0 and box.base.Rare == 0, "admin base odds use the sparse authoritative distribution")
+	elseif box.id == "weather" or box.id == "birthstone" then
+		check(box.base.Common == 73.9 and box.base.Rare == 0, "admin absent Rare budget goes only to Common")
+	end
+end
 check(not service.receive(99, "Connect").ok, "unauthorized bootstrap")
 local unauthorized = request("GrantCoins"); unauthorized.amount = 100
 check(not service.receive(99, unauthorized).ok and first.state.coins == Economy.startingCoins, "forged unauthorized mutation")
@@ -94,6 +101,15 @@ large = request("GrantCoins"); large.amount = Config.largeChange; large.confirme
 check(call(large).ok, "confirmed large grant")
 local set = request("SetBalance"); set.amount = 20; set.confirmed = true
 check(call(set).ok and first.state.coins == 20, "set balance")
+local high = request("SetBalance"); high.amount = Economy.coinLimit
+check(not call(high).ok and first.state.coins == 20, "large SetBalance still requires confirmation")
+high = request("SetBalance"); high.amount = Economy.coinLimit; high.confirmed = true
+check(call(high).ok and first.state.coins == Economy.coinLimit, "SetBalance supports the full large wallet independently of incremental cap")
+check(call(high).ok and first.state.coins == Economy.coinLimit, "large SetBalance replay is idempotent")
+high = request("SetBalance"); high.amount = Economy.coinLimit + 1; high.confirmed = true
+check(not call(high).ok and first.state.coins == Economy.coinLimit, "SetBalance rejects over-limit currency")
+set = request("SetBalance"); set.amount = 20; set.confirmed = true
+check(call(set).ok and first.state.coins == 20, "restore balance for subsequent admin checks")
 local remove = request("RemoveCoins"); remove.amount = 21
 check(not call(remove).ok and first.state.coins == 20, "no negative coins")
 remove = request("RemoveCoins"); remove.amount = 5
@@ -148,6 +164,8 @@ local reset = request("ResetPity"); reset.collection, reset.confirmed = "concept
 check(call(reset).ok and first.state.pityByGroup.concept.legendaryDryRolls == 0 and first.state.pityByGroup.concept.mythicalDryRolls == 0, "reset both pity counters")
 local force = request("ForceRarity"); force.collection, force.rarity, force.confirmed = "grove", "Legendary", true
 check(not call(force).ok, "ineligible forced rarity refused")
+local absent = request("ForceRarity"); absent.collection, absent.rarity, absent.confirmed = "orbit", "Rare", true
+check(not call(absent).ok, "admin cannot arm a rarity absent from a sparse collection")
 force = request("ForceFigure"); force.collection, force.figure, force.confirmed = "tide", "grove.pebble", true
 check(not call(force).ok, "ineligible forced figure refused")
 force = request("ForceRarity"); force.collection, force.rarity, force.confirmed = "grove", "Rare", true

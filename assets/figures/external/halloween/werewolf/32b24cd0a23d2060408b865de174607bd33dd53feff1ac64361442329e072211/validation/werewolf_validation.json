@@ -1,0 +1,323 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "32b24cd0a23d2060408b865de174607bd33dd53feff1ac64361442329e072211",
+  "source_filename": "e5c13641e0045feaaf5abb6f6fc0e92815638943b8715f3d29bc995df6720f70/werewolf_painted.glb",
+  "source_sha256": "e5c13641e0045feaaf5abb6f6fc0e92815638943b8715f3d29bc995df6720f70",
+  "import_entry": {
+    "source": "e5c13641e0045feaaf5abb6f6fc0e92815638943b8715f3d29bc995df6720f70/werewolf_painted.glb",
+    "figure_id": "halloween.werewolf",
+    "collection_id": "halloween",
+    "rarity": "Rare",
+    "collection_slug": "halloween",
+    "figure_slug": "werewolf",
+    "root": "HalloweenWerewolf",
+    "alias": "halloween_werewolf",
+    "asset_key": "Models.Halloween.HalloweenWerewolf",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      8.37
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4241,
+          0.0,
+          0.5881
+        ],
+        [
+          0.5841,
+          0.3088,
+          0.7281
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Werewolf"
+  },
+  "catalog": "halloween.werewolf",
+  "collection_id": "halloween",
+  "rarity": "Rare",
+  "root": "HalloweenWerewolf",
+  "figure": "HalloweenWerewolf",
+  "title": "Werewolf",
+  "face": "HalloweenWerewolf_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19160,
+  "source_triangles": 19160,
+  "source": {
+    "bytes": 5277152,
+    "textures": [
+      {
+        "name": "werewolf_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19160
+    ],
+    "triangles": 19160,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    3.205578923225403,
+    2.8716723918914795,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "HalloweenWerewolf_Eyes": {
+      "tris": 345,
+      "verts": 472,
+      "non_manifold_edges": 87,
+      "boundary_edges": 87,
+      "zero_area_faces": 0,
+      "signed_volume": -0.03205190559366882,
+      "islands": 3,
+      "island_faces": [
+        11,
+        34,
+        300
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.311367392539978,
+          -0.979935348033905,
+          2.058487892150879
+        ],
+        [
+          0.3108345866203308,
+          -0.43695107102394104,
+          2.6526944637298584
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "HalloweenWerewolf_Part002": {
+      "tris": 18815,
+      "verts": 21993,
+      "non_manifold_edges": 87,
+      "boundary_edges": 87,
+      "zero_area_faces": 0,
+      "signed_volume": 3.5338275051182766,
+      "islands": 3,
+      "island_faces": [
+        39,
+        1192,
+        17584
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.6027894020080566,
+          -1.4358361959457397,
+          0.0
+        ],
+        [
+          1.6027895212173462,
+          1.4358361959457397,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5648056,
+    "textures": 1,
+    "primitive_triangles": [
+      345,
+      18815
+    ],
+    "triangles": 19160,
+    "mesh_nodes": [
+      "HalloweenWerewolf_Eyes",
+      "HalloweenWerewolf_Part002"
+    ],
+    "sha256": "ee031b63d709332bdbac2e8185ca7cce5b57bf0f9665c1f0820dfecc75f99811",
+    "nodes": [
+      "HalloweenWerewolf_Eyes",
+      "HalloweenWerewolf_Part002",
+      "HalloweenWerewolf"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "werewolf": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "werewolf": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 8.637849532533437e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.201683133142069e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.501326424768195e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9999910916314786,
+      "foreground_rgb_mae": 4.397124212118797e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "werewolf_source_front.png",
+      "werewolf_source_three_quarter.png",
+      "werewolf_source_side.png",
+      "werewolf_source_back.png"
+    ],
+    "fidelity_views": [
+      "werewolf_fidelity_front.png",
+      "werewolf_fidelity_three_quarter.png",
+      "werewolf_fidelity_side.png",
+      "werewolf_fidelity_back.png"
+    ],
+    "fidelity_sha256": "ee031b63d709332bdbac2e8185ca7cce5b57bf0f9665c1f0820dfecc75f99811",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "e5c13641e0045feaaf5abb6f6fc0e92815638943b8715f3d29bc995df6720f70",
+    "source/source.blend": "2713a31ca4feb3900051d6c6f23ce68679ed3ad5db5a9de6c96fef5bf9186865",
+    "model/werewolf_production.blend": "d93f2a967f57259ea6af3d7074bd48179e06ce35d67ca90627e67c0234e7d99f",
+    "model/werewolf_roblox.glb": "ee031b63d709332bdbac2e8185ca7cce5b57bf0f9665c1f0820dfecc75f99811",
+    "renders/werewolf_fidelity_back.png": "ae2b26d6291ca635ba4878da123b0c8d8c883e5619008a93eb7d02d61997e45d",
+    "renders/werewolf_fidelity_front.png": "ccb8422816023224d4b28c7982fc77c45cd14a7e4cb8ce0cc411acbfb6aa9757",
+    "renders/werewolf_fidelity_side.png": "00acc9cfea839cf8b2b0ffefc7e03813849f38c365af53a8bb1562112281ad01",
+    "renders/werewolf_fidelity_three_quarter.png": "df23f176d1e75a2bd4dee0f6fa013760148322052fb0d663fcba16680d8d1ec0",
+    "renders/werewolf_source_back.png": "aa06a5463d3b9c4f990f2237c3389dce1f0f1a13d87c8a597bb0ba1f9a7d817d",
+    "renders/werewolf_source_front.png": "8ae97338ca66c6313d3e65b17c24723e8abad961aaed628a14b84d7689b0d1e9",
+    "renders/werewolf_source_side.png": "1c434495a942a8953145e87ebaa8997a41f8397f9dc0360de0e888e3a4b7bd4e",
+    "renders/werewolf_source_three_quarter.png": "70a98d32b9b15d475c41afc1a88b4b04175ec96d224def1200a1b655d3f261b2"
+  }
+}

@@ -15,6 +15,7 @@ local Types = require(ReplicatedStorage.Shared.Types)
 local Rules = require(script.Rules)
 local Economy = require(script.Economy)
 local CollectionEconomy = require(script.CollectionEconomy)
+local CollectionAccess = require(script.CollectionAccess)
 local Transactions = require(script.Transactions)
 local Deals = require(script.Deals)
 local PlayerPlot = require(script.PlayerPlot)
@@ -260,6 +261,7 @@ local function snapshotFor(session: Session): Types.Snapshot
 		Rules.refreshDay(state, day)
 	end
 	local snapshot: Types.Snapshot = {
+		collectionAccess = CollectionAccess.view(state.discovered),
 		luckOfferOdds = {
 			[2] = CollectionEconomy.odds(state.pityByGroup, math.max(2, Rules.luck(state))),
 			[4] = CollectionEconomy.odds(state.pityByGroup, math.max(4, Rules.luck(state))),

@@ -1,4 +1,5 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 -- Receipts grant fungible credits. Only an explicit owner request selects/redeems a return.
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Offline = require(game:GetService("ReplicatedStorage").Shared.OfflineTypes)
@@ -85,7 +86,7 @@ function Credits.decode(raw: unknown, data: Offline.Record): Offline.CreditRecor
 			or serial > data.serial
 			or id ~= "offline:" .. tostring(serial)
 			or item.id ~= id
-			or not integer(item.normal, 1000000000000)
+			or not integer(item.normal, Currency.limit)
 			or item.normal == 0
 			or not integer(item.assisted, item.normal :: number)
 			or not identifier(item.calculationVersion)

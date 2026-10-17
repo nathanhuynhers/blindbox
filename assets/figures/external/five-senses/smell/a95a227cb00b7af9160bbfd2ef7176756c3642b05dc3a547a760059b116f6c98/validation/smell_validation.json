@@ -1,0 +1,323 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "a95a227cb00b7af9160bbfd2ef7176756c3642b05dc3a547a760059b116f6c98",
+  "source_filename": "379aa24fbcb0c2ab00a7fe082d9d5f2bb697b97e3be83103e0c2c8e1cb1aee62/smell_painted.glb",
+  "source_sha256": "379aa24fbcb0c2ab00a7fe082d9d5f2bb697b97e3be83103e0c2c8e1cb1aee62",
+  "import_entry": {
+    "source": "379aa24fbcb0c2ab00a7fe082d9d5f2bb697b97e3be83103e0c2c8e1cb1aee62/smell_painted.glb",
+    "figure_id": "sense.smell",
+    "collection_id": "sense",
+    "rarity": "Uncommon",
+    "collection_slug": "five-senses",
+    "figure_slug": "smell",
+    "root": "SenseSmell",
+    "alias": "sense_smell",
+    "asset_key": "Models.FiveSenses.SenseSmell",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      18.96
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4244,
+          0.0,
+          0.6246
+        ],
+        [
+          0.5844,
+          0.2411,
+          0.7646
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Smell"
+  },
+  "catalog": "sense.smell",
+  "collection_id": "sense",
+  "rarity": "Uncommon",
+  "root": "SenseSmell",
+  "figure": "SenseSmell",
+  "title": "Smell",
+  "face": "SenseSmell_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19186,
+  "source_triangles": 19186,
+  "source": {
+    "bytes": 5489528,
+    "textures": [
+      {
+        "name": "smell_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19186
+    ],
+    "triangles": 19186,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.4765175580978394,
+    1.9279365539550781,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "SenseSmell_Eyes": {
+      "tris": 122,
+      "verts": 167,
+      "non_manifold_edges": 46,
+      "boundary_edges": 46,
+      "zero_area_faces": 0,
+      "signed_volume": 0.016839282900967555,
+      "islands": 1,
+      "island_faces": [
+        122
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2332916557788849,
+          -0.706123948097229,
+          2.2345993518829346
+        ],
+        [
+          0.23306067287921906,
+          -0.44286608695983887,
+          2.7691943645477295
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "SenseSmell_Part002": {
+      "tris": 19064,
+      "verts": 20529,
+      "non_manifold_edges": 46,
+      "boundary_edges": 46,
+      "zero_area_faces": 0,
+      "signed_volume": 2.647959668175148,
+      "islands": 5,
+      "island_faces": [
+        2,
+        17,
+        78,
+        258,
+        18709
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.2382588386535645,
+          -0.9639682769775391,
+          0.0
+        ],
+        [
+          1.238258719444275,
+          0.9639682769775391,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5831372,
+    "textures": 1,
+    "primitive_triangles": [
+      122,
+      19064
+    ],
+    "triangles": 19186,
+    "mesh_nodes": [
+      "SenseSmell_Eyes",
+      "SenseSmell_Part002"
+    ],
+    "sha256": "3b335a237462b3f32a02076bd3f66382f1fa28a78599485c4e0c409b58512ad1",
+    "nodes": [
+      "SenseSmell_Eyes",
+      "SenseSmell_Part002",
+      "SenseSmell"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "smell": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "smell": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999836274927142,
+      "foreground_rgb_mae": 0.00011475738574517891,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011991733481409028,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 0.999989904394617,
+      "foreground_rgb_mae": 0.00012866948964074254,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9999919563066577,
+      "foreground_rgb_mae": 5.779893399449065e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "smell_source_front.png",
+      "smell_source_three_quarter.png",
+      "smell_source_side.png",
+      "smell_source_back.png"
+    ],
+    "fidelity_views": [
+      "smell_fidelity_front.png",
+      "smell_fidelity_three_quarter.png",
+      "smell_fidelity_side.png",
+      "smell_fidelity_back.png"
+    ],
+    "fidelity_sha256": "3b335a237462b3f32a02076bd3f66382f1fa28a78599485c4e0c409b58512ad1",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "379aa24fbcb0c2ab00a7fe082d9d5f2bb697b97e3be83103e0c2c8e1cb1aee62",
+    "source/source.blend": "15451e96d28e17fa5c4908563aca3e7f29653a1656925fb0f22fc86ad22b0599",
+    "model/smell_production.blend": "b3258bc76b1d66d77694f6693fac9148e14e1acd7af9b13dcba363d1ea6e2907",
+    "model/smell_roblox.glb": "3b335a237462b3f32a02076bd3f66382f1fa28a78599485c4e0c409b58512ad1",
+    "renders/smell_fidelity_back.png": "4d2d61c5562a900c9e2f94d68e9942670c793df4436c8d37ac79201b9d841050",
+    "renders/smell_fidelity_front.png": "0e9ca8e347af35c6394efdf7336622024837fb34228698f83604d5eeb743ecba",
+    "renders/smell_fidelity_side.png": "8a0fd4c83cea06ff181bc3a0b232b6a533fc21030090c6597c5ffc724aab4f27",
+    "renders/smell_fidelity_three_quarter.png": "13888e296b6ccad826b6fa7a466f4c99ebd256ff7e57d6927f6453431a220255",
+    "renders/smell_source_back.png": "421e3a0510208f3c2f441dae652171d7b2b71bd10b1062657f2ffe88a777c442",
+    "renders/smell_source_front.png": "247049952f565977a32cebe2e70c6dabcf57c1b94e10e65b4efb74e7cd72cab8",
+    "renders/smell_source_side.png": "264d002445f6b2cd92d9e791ca0689be6e86bb5d0bf21325720873512fa4bb8f",
+    "renders/smell_source_three_quarter.png": "6c695c67f2faa203cb385408abc8044a8bc03de8297e355071756263d0f46b5b"
+  }
+}

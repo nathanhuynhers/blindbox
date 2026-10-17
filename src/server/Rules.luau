@@ -8,6 +8,7 @@ local Rarity = require(game:GetService("ReplicatedStorage").Shared.Rarity)
 local Tutorial = require(game:GetService("ReplicatedStorage").Shared.Tutorial)
 local Economy = require(script.Parent.Economy)
 local CollectionEconomy = require(script.Parent.CollectionEconomy)
+local CollectionAccess = require(script.Parent.CollectionAccess)
 local Shelves = require(script.Parent.Shelves)
 local Deals = require(script.Parent.Deals)
 local CoinModifiers = require(script.Parent.CoinModifiers)
@@ -571,7 +572,14 @@ function Rules.adminFigures(
 			local accrued = if table.find(state.display.slots, id)
 				then elapsed * Rules.figureRate(state, id) * bonus
 				else 0
-			banks += math.floor(math.min(Economy.coinLimit, (state.earnings[id] or 0) + accrued))
+			local amount =
+				math.floor(math.min(Economy.coinLimit, (state.earnings[id] or 0) + accrued))
+			-- Inventory-wide removals may visit far more than six banks. Refuse before
+			-- accumulating past wallet capacity, keeping even rejection arithmetic exact.
+			if amount > Economy.coinLimit - state.coins - banks then
+				return false, "Spend Coins first so final-copy banks can be collected safely."
+			end
+			banks += amount
 		end
 	end
 	if banks > Economy.coinLimit - state.coins then
@@ -626,42 +634,6 @@ function Rules.adminFigures(
 	Rules.grantShelves(state)
 	state.revision += 1
 	return true, if remove then "Figures removed; placements reconciled." else "Figures granted."
-end
--- Coming-soon collections were briefly sold by mistake. Each box gave exactly one copy, so every
--- owned copy refunds one box price; copies, discoveries and pity for the collection are removed.
--- Idempotent (nothing is left to refund afterwards), and inert once a collection is released.
-function Rules.refundComingSoon(state: Types.State, now: number): number
-	local refund = 0
-	local earnedRefund = 0
-	for _, figure in Catalog.figures do
-		local copies = state.owned[figure.id]
-		if copies and Catalog.comingSoon[figure.collection] then
-			local earnedCopies = if state.lineage
-				then state.lineage.earnedOwned[figure.id] or 0
-				else copies
-			if Rules.adminFigures(state, { figure.id }, copies, true, now) then
-				refund += copies * Rules.prices[figure.collection]
-				earnedRefund += earnedCopies * Rules.prices[figure.collection]
-				state.discovered[figure.id] = nil
-			end
-		end
-	end
-	for id, soon in Catalog.comingSoon do
-		local config = Economy.collections[id]
-		if soon and config then
-			state.pityByGroup[config.group] = nil
-		end
-	end
-	-- Refunds retain the removed copies' source, including migrated earned-only profiles.
-	local earned = math.min(earnedRefund, Economy.coinLimit - state.coins)
-	Lineage.creditEarned(state, earned)
-	local assistedRoom = if state.lineage
-		then Lineage.creditLimit
-			- state.lineage.assistedReserve
-			- (state.coins - state.lineage.earnedCoins)
-		else Economy.coinLimit - state.coins
-	state.coins += math.min(refund - earnedRefund, Economy.coinLimit - state.coins, assistedRoom)
-	return refund
 end
 function Rules.adminPity(
 	state: Types.State,
@@ -762,6 +734,27 @@ function Rules.mutate(
 	local action, id = intent.action, intent.figure or ""
 	local rolls = if type(roll) == "number" then { roll } else roll
 	local today = day or 0
+	-- Reject paid openings before day/stock refresh, settlement, rolls or grants.
+	-- Free rewards keep their existing authorization and discovery behavior.
+	if action == "Buy" or action == "BuyTen" or action == "Deal" then
+		local collection = intent.choice or Economy.dailyCollection
+		if action == "Deal" then
+			if window == nil or intent.window ~= window then
+				return false, "That deal just changed. Take a look at the new one!", nil
+			end
+			collection = Deals.offers(window)[intent.slot or 0] or ""
+		end
+		if not Rules.prices[collection] then
+			return false, "Unknown collection.", nil
+		end
+		if Catalog.comingSoon[collection] then
+			return false, "This collection is coming soon.", nil
+		end
+		local refusal = CollectionAccess.refusal(state.discovered, collection)
+		if refusal then
+			return false, refusal, nil
+		end
+	end
 	-- Place and EquipBest must pass every check before settlement or any gameplay mutation.
 	if action ~= "Place" and action ~= "EquipBest" then
 		Rules.refreshDay(state, today)

@@ -1,0 +1,325 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "acde127c8a2502e8bce10c2233d182eca0120a4ea0c34bdb91ece4dcb328c0b5",
+  "source_filename": "67e6589aef0c599a1ec44045c8cfefe633ce3e3c71c58b05cb8dd0a761b82336/cupcake_painted.glb",
+  "source_sha256": "67e6589aef0c599a1ec44045c8cfefe633ce3e3c71c58b05cb8dd0a761b82336",
+  "import_entry": {
+    "source": "67e6589aef0c599a1ec44045c8cfefe633ce3e3c71c58b05cb8dd0a761b82336/cupcake_painted.glb",
+    "figure_id": "dessert.cupcake",
+    "collection_id": "dessert",
+    "rarity": "Common",
+    "collection_slug": "desserts",
+    "figure_slug": "cupcake",
+    "root": "DessertCupcake",
+    "alias": "dessert_cupcake",
+    "asset_key": "Models.Desserts.DessertCupcake",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      34.73
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4237,
+          0.0,
+          0.5923
+        ],
+        [
+          0.5837,
+          0.3709,
+          0.7323
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Cupcake"
+  },
+  "catalog": "dessert.cupcake",
+  "collection_id": "dessert",
+  "rarity": "Common",
+  "root": "DessertCupcake",
+  "figure": "DessertCupcake",
+  "title": "Cupcake",
+  "face": "DessertCupcake_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19424,
+  "source_triangles": 19424,
+  "source": {
+    "bytes": 5363276,
+    "textures": [
+      {
+        "name": "cupcake_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19424
+    ],
+    "triangles": 19424,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.126951217651367,
+    1.7420214414596558,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "DessertCupcake_Eyes": {
+      "tris": 249,
+      "verts": 300,
+      "non_manifold_edges": 83,
+      "boundary_edges": 83,
+      "zero_area_faces": 0,
+      "signed_volume": -0.015568267407625956,
+      "islands": 6,
+      "island_faces": [
+        1,
+        1,
+        2,
+        19,
+        68,
+        158
+      ],
+      "non_positive_islands": 4,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2007804811000824,
+          -0.4777226448059082,
+          2.112304210662842
+        ],
+        [
+          0.20050674676895142,
+          -0.19759145379066467,
+          2.6809182167053223
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "DessertCupcake_Part002": {
+      "tris": 19175,
+      "verts": 20159,
+      "non_manifold_edges": 83,
+      "boundary_edges": 83,
+      "zero_area_faces": 0,
+      "signed_volume": 2.0164986141456596,
+      "islands": 2,
+      "island_faces": [
+        18,
+        19157
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.0634756088256836,
+          -0.8710107207298279,
+          0.0
+        ],
+        [
+          1.0634756088256836,
+          0.8710107207298279,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5700756,
+    "textures": 1,
+    "primitive_triangles": [
+      249,
+      19175
+    ],
+    "triangles": 19424,
+    "mesh_nodes": [
+      "DessertCupcake_Eyes",
+      "DessertCupcake_Part002"
+    ],
+    "sha256": "82a4f9a07601c4151a73af42d9ea0bde37fa52544c2729e85c78cc12ddc925b0",
+    "nodes": [
+      "DessertCupcake_Eyes",
+      "DessertCupcake_Part002",
+      "DessertCupcake"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "cupcake": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "cupcake": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 8.059391257120296e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.12780815269798e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.72811729600653e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 5.290224726195447e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "cupcake_source_front.png",
+      "cupcake_source_three_quarter.png",
+      "cupcake_source_side.png",
+      "cupcake_source_back.png"
+    ],
+    "fidelity_views": [
+      "cupcake_fidelity_front.png",
+      "cupcake_fidelity_three_quarter.png",
+      "cupcake_fidelity_side.png",
+      "cupcake_fidelity_back.png"
+    ],
+    "fidelity_sha256": "82a4f9a07601c4151a73af42d9ea0bde37fa52544c2729e85c78cc12ddc925b0",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "67e6589aef0c599a1ec44045c8cfefe633ce3e3c71c58b05cb8dd0a761b82336",
+    "source/source.blend": "6d30402d3b50064355f48e916e295d5efd3014a65808bc030a9914c7f972e56b",
+    "model/cupcake_production.blend": "5dee5e9d7e95aa69736d8f8ffc854995b781bdfefe4830c3a2faddfc45bd5bfa",
+    "model/cupcake_roblox.glb": "82a4f9a07601c4151a73af42d9ea0bde37fa52544c2729e85c78cc12ddc925b0",
+    "renders/cupcake_fidelity_back.png": "ab230b3581f30b456d6483303a9aca2cab8aecab1136b9ea05e86eb4ae1d8484",
+    "renders/cupcake_fidelity_front.png": "51189ffcd680cdfce01d0ef74878936236a74db1c4e79fece7be704458d44665",
+    "renders/cupcake_fidelity_side.png": "d5948e99b01031a0c06213f8a0e9b3d49f46029c90ffe0a1dc9322e06806b08e",
+    "renders/cupcake_fidelity_three_quarter.png": "4bdfbd304a8620843648a0e0d01e700d288c4153afe1e985411496c2ab31015a",
+    "renders/cupcake_source_back.png": "91e9a503d57aed09574052c7eccd0276bc4fdb78c62b2d28fbcc53b37f7a3ec6",
+    "renders/cupcake_source_front.png": "d53fe6b109221ebedbc3e6c15620ab660864d5e965aac86fe72671bdf5bac3ba",
+    "renders/cupcake_source_side.png": "a12e8f55f74e7d7ba3564ccb066c7c61d46025383df6ae63be6fdff29d25ec39",
+    "renders/cupcake_source_three_quarter.png": "e50f68f04dcae3f8e4da1362391f08141d012068dde7485fbe7b911e4a97b0ce"
+  }
+}

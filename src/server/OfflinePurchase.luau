@@ -1,4 +1,5 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 local Awards = require(script.Parent.OfflineAwards)
 local Ledger = require(script.Parent.PurchaseLedger)
 export type Dependencies = {
@@ -34,7 +35,7 @@ function Purchase.create(deps: Dependencies)
 			or current.baseClaimed
 			or current.normal ~= state.offlinePending
 			or next(record.exceptions) ~= nil
-			or state.coins > 1000000000000 - 2 * current.normal
+			or state.coins > Currency.limit - 2 * current.normal
 		then
 			return false
 		end

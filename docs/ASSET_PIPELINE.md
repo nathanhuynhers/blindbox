@@ -1,8 +1,12 @@
 # Asset pipeline
 
+The approved [42-model expansion receipt](../assets/figures/external/COLLECTION_INTEGRATION_PRODUCTION.md) records the new external-model aliases, semantic keys and Roblox IDs. Together with the 75 reused expansion models and original 43, generated mappings register all 160 figures. The [integration report](COLLECTION_INTEGRATION.md) separates completed upload/loading checks from pending device, gameplay-surface and multiplayer acceptance. Asset upload does not publish the live place.
+
 The pipeline registers artwork, reviewed GLB models and PCM WAV audio; individual runtime adoptions are explicit. Both Collection
 screens now use production corners and tab emblems; see the [batch receipt](COLLECTION_ASSET_BATCH.md). Python 3.10+ and Git
 are required; there are no added packages. Run commands from the repository root.
+
+The [collection expansion candidate](COLLECTION_INTEGRATION.md) registers twelve new collection emblems and the explicitly approved Moonrace emblem replacement; see their [artwork receipt](../assets/ui/collection/NEW_COLLECTION_ART.md). Its 42 remaining external models use the separate reviewed import manifest and require owner approval of the final hashed batch plan.
 
 ## Sources and stable names
 

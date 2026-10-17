@@ -157,7 +157,27 @@ export type State = Profile & {
 export type Pity = { legendaryDryRolls: number, mythicalDryRolls: number }
 -- Private owner presentation only: build-up toward a rarity guarantee; odds resolve priority.
 export type PityProgress = { Legendary: number, Mythical: number }
+export type CollectionQualification = {
+	collection: string,
+	tier: number,
+	target: number,
+	found: number,
+	legendary: boolean,
+	qualified: boolean,
+}
+export type CollectionPurchaseAccess = {
+	tier: number,
+	unlocked: boolean,
+	routes: { CollectionQualification },
+}
+export type CollectionAccessView = {
+	frontier: number,
+	highestQualifiedTier: number,
+	collections: { [string]: CollectionPurchaseAccess },
+}
 export type Snapshot = {
+	-- Server-derived owner-only purchase access; never a client authorization claim.
+	collectionAccess: CollectionAccessView?,
 	luckOfferOdds: { [number]: { [string]: number } }?,
 	offlineAward: OfflineTypes.View?,
 	-- Owner-only verified and actually applied benefits; no Store wiring implied.

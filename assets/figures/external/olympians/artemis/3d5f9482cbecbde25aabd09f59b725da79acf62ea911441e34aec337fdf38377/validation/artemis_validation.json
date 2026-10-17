@@ -1,0 +1,323 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "3d5f9482cbecbde25aabd09f59b725da79acf62ea911441e34aec337fdf38377",
+  "source_filename": "8cdc1a0f58223bd507ddce6487c8fa83565c61695b309f8b908e285ec4447c14/artemis_painted.glb",
+  "source_sha256": "8cdc1a0f58223bd507ddce6487c8fa83565c61695b309f8b908e285ec4447c14",
+  "import_entry": {
+    "source": "8cdc1a0f58223bd507ddce6487c8fa83565c61695b309f8b908e285ec4447c14/artemis_painted.glb",
+    "figure_id": "olympian.artemis",
+    "collection_id": "olympian",
+    "rarity": "Common",
+    "collection_slug": "olympians",
+    "figure_slug": "artemis",
+    "root": "OlympianArtemis",
+    "alias": "olympian_artemis",
+    "asset_key": "Models.Olympians.OlympianArtemis",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      -49.88
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4031,
+          0.0,
+          0.7189
+        ],
+        [
+          0.5631,
+          0.4733,
+          0.8589
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Artemis"
+  },
+  "catalog": "olympian.artemis",
+  "collection_id": "olympian",
+  "rarity": "Common",
+  "root": "OlympianArtemis",
+  "figure": "OlympianArtemis",
+  "title": "Artemis",
+  "face": "OlympianArtemis_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19246,
+  "source_triangles": 19246,
+  "source": {
+    "bytes": 5571860,
+    "textures": [
+      {
+        "name": "artemis_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19246
+    ],
+    "triangles": 19246,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.0969715118408203,
+    2.876220226287842,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "OlympianArtemis_Eyes": {
+      "tris": 135,
+      "verts": 194,
+      "non_manifold_edges": 37,
+      "boundary_edges": 37,
+      "zero_area_faces": 0,
+      "signed_volume": -0.06095118765026869,
+      "islands": 3,
+      "island_faces": [
+        1,
+        19,
+        115
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2140728235244751,
+          -0.3973095118999481,
+          2.5488367080688477
+        ],
+        [
+          0.21417666971683502,
+          -0.018488900735974312,
+          3.101799249649048
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "OlympianArtemis_Part002": {
+      "tris": 19111,
+      "verts": 21667,
+      "non_manifold_edges": 55,
+      "boundary_edges": 55,
+      "zero_area_faces": 0,
+      "signed_volume": 1.9004017109580136,
+      "islands": 3,
+      "island_faces": [
+        5,
+        12,
+        19094
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.0484857559204102,
+          -1.438110113143921,
+          0.0
+        ],
+        [
+          1.0484857559204102,
+          1.438110113143921,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5930536,
+    "textures": 1,
+    "primitive_triangles": [
+      135,
+      19111
+    ],
+    "triangles": 19246,
+    "mesh_nodes": [
+      "OlympianArtemis_Eyes",
+      "OlympianArtemis_Part002"
+    ],
+    "sha256": "af9c9ee5686d506049a7363407ff7e4f0f0771586668e19fff9bfdcc5aabe26f",
+    "nodes": [
+      "OlympianArtemis_Eyes",
+      "OlympianArtemis_Part002",
+      "OlympianArtemis"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "artemis": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "artemis": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011389335850253701,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999901074332747,
+      "foreground_rgb_mae": 0.00010874064901145175,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.0001035999521263875,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 8.762777724768966e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "artemis_source_front.png",
+      "artemis_source_three_quarter.png",
+      "artemis_source_side.png",
+      "artemis_source_back.png"
+    ],
+    "fidelity_views": [
+      "artemis_fidelity_front.png",
+      "artemis_fidelity_three_quarter.png",
+      "artemis_fidelity_side.png",
+      "artemis_fidelity_back.png"
+    ],
+    "fidelity_sha256": "af9c9ee5686d506049a7363407ff7e4f0f0771586668e19fff9bfdcc5aabe26f",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "8cdc1a0f58223bd507ddce6487c8fa83565c61695b309f8b908e285ec4447c14",
+    "source/source.blend": "657650b6dd98406808c6d1e7330e8e404a74ba36fb26c05a4223020d41ad6b67",
+    "model/artemis_production.blend": "80229a27e9ff1f3c151cc49d483e5e99a925cdf62a5457401f28d5d9c825fa1c",
+    "model/artemis_roblox.glb": "af9c9ee5686d506049a7363407ff7e4f0f0771586668e19fff9bfdcc5aabe26f",
+    "renders/artemis_fidelity_back.png": "15c3cf0eff7a8984eefb0546c9d4dbc91d5adbb8526c1f447dc57930ea4124f3",
+    "renders/artemis_fidelity_front.png": "d147281dba96b86fce589fc3f575793f6b528d29b18ef8cd72fb6735db0a0f57",
+    "renders/artemis_fidelity_side.png": "58628b1e4cc30d038f0dee57d0a33b0c45411a1d7d7ef6de9e6c16f23df487eb",
+    "renders/artemis_fidelity_three_quarter.png": "6421b5db0d80f2f5d92f36db2a34985afa7dd13c9a151f97e58cf4e0c84d870c",
+    "renders/artemis_source_back.png": "278d69100c557c6c05166e08d8bc78614915abac488ab60251b0fa720f6f260b",
+    "renders/artemis_source_front.png": "0573ba842d2d119412cef4ae2d6a27890570469fe099a561180a8a3bc03a2787",
+    "renders/artemis_source_side.png": "7fc559c1aed2bf30eb4304808876450746e61f4b623d961890677312153ab7be",
+    "renders/artemis_source_three_quarter.png": "90fc5ca9dc4cfd5c4c0b179bd52d828e6c07cc76b3a4f400c210c81b90bedace"
+  }
+}

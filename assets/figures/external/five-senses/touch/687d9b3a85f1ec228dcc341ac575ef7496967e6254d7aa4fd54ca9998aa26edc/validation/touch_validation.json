@@ -1,0 +1,322 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "687d9b3a85f1ec228dcc341ac575ef7496967e6254d7aa4fd54ca9998aa26edc",
+  "source_filename": "9f1515b48fd94e02e11186c32fb31a4494846a04f5e5b066c3afd5afbdeed176/touch_painted.glb",
+  "source_sha256": "9f1515b48fd94e02e11186c32fb31a4494846a04f5e5b066c3afd5afbdeed176",
+  "import_entry": {
+    "source": "9f1515b48fd94e02e11186c32fb31a4494846a04f5e5b066c3afd5afbdeed176/touch_painted.glb",
+    "figure_id": "sense.touch",
+    "collection_id": "sense",
+    "rarity": "Common",
+    "collection_slug": "five-senses",
+    "figure_slug": "touch",
+    "root": "SenseTouch",
+    "alias": "sense_touch",
+    "asset_key": "Models.FiveSenses.SenseTouch",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      14.71
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4152,
+          0.0,
+          0.6773
+        ],
+        [
+          0.5752,
+          0.4508,
+          0.8173
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Touch"
+  },
+  "catalog": "sense.touch",
+  "collection_id": "sense",
+  "rarity": "Common",
+  "root": "SenseTouch",
+  "figure": "SenseTouch",
+  "title": "Touch",
+  "face": "SenseTouch_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19518,
+  "source_triangles": 19518,
+  "source": {
+    "bytes": 5266852,
+    "textures": [
+      {
+        "name": "touch_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19518
+    ],
+    "triangles": 19518,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    3.0357919931411743,
+    2.235225796699524,
+    3.5719997882843018
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "SenseTouch_Eyes": {
+      "tris": 202,
+      "verts": 245,
+      "non_manifold_edges": 64,
+      "boundary_edges": 64,
+      "zero_area_faces": 0,
+      "signed_volume": -0.02285626995837186,
+      "islands": 3,
+      "island_faces": [
+        2,
+        23,
+        177
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2950965464115143,
+          -0.40984368324279785,
+          2.4015424251556396
+        ],
+        [
+          0.2949398159980774,
+          -0.060457900166511536,
+          2.975648880004883
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "SenseTouch_Part002": {
+      "tris": 19316,
+      "verts": 20213,
+      "non_manifold_edges": 64,
+      "boundary_edges": 64,
+      "zero_area_faces": 0,
+      "signed_volume": 2.317591611335019,
+      "islands": 2,
+      "island_faces": [
+        828,
+        18488
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.5178959369659424,
+          -1.1176129579544067,
+          0.0
+        ],
+        [
+          1.517896056175232,
+          1.1176128387451172,
+          3.5719997882843018
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5605284,
+    "textures": 1,
+    "primitive_triangles": [
+      202,
+      19316
+    ],
+    "triangles": 19518,
+    "mesh_nodes": [
+      "SenseTouch_Eyes",
+      "SenseTouch_Part002"
+    ],
+    "sha256": "a4b2ab23472fd9f9d075af204ac662a7fb173e0065532e4c5aae431b6570351f",
+    "nodes": [
+      "SenseTouch_Eyes",
+      "SenseTouch_Part002",
+      "SenseTouch"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "touch": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "touch": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.0001030455096042715,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999921910994151,
+      "foreground_rgb_mae": 9.398242400493473e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00012107764632673934,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.948333222884685e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "touch_source_front.png",
+      "touch_source_three_quarter.png",
+      "touch_source_side.png",
+      "touch_source_back.png"
+    ],
+    "fidelity_views": [
+      "touch_fidelity_front.png",
+      "touch_fidelity_three_quarter.png",
+      "touch_fidelity_side.png",
+      "touch_fidelity_back.png"
+    ],
+    "fidelity_sha256": "a4b2ab23472fd9f9d075af204ac662a7fb173e0065532e4c5aae431b6570351f",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "9f1515b48fd94e02e11186c32fb31a4494846a04f5e5b066c3afd5afbdeed176",
+    "source/source.blend": "8b1a8e0c4dc803ea9a2b785b8369705a9b47f70097cccda69c2d53f8f6544675",
+    "model/touch_production.blend": "6914fb91525381c30ab64e66251080da39c9afe98092a3a1490cdfc89545d88f",
+    "model/touch_roblox.glb": "a4b2ab23472fd9f9d075af204ac662a7fb173e0065532e4c5aae431b6570351f",
+    "renders/touch_fidelity_back.png": "a1f1f3f319a0c44022f03d9c3540e6f7ae29667f7c20a92d871d0bef4f918f77",
+    "renders/touch_fidelity_front.png": "a12e9f37fcb7e2a65f437b4d8b6440a52f012f3010940e9a1e1a1fbf025418e6",
+    "renders/touch_fidelity_side.png": "4e56d9d25b1e64522cac3ba1757eb5ade14ddccc45f4559aba79aa8721eef6d8",
+    "renders/touch_fidelity_three_quarter.png": "d34ac41e119415cfcc9572db6833322fcb7fb99ab17e863cdb449ea1ae99246c",
+    "renders/touch_source_back.png": "78d7ff9cb0fe35ded1abd1b4d3ad2d7a2b3c45e00de4dfa2ec08dd5307d7c6a4",
+    "renders/touch_source_front.png": "250e6cc62a4cf1ec9d4a075e85562765ef4d0d4931d4b9c64c6efa4d8fdf8bfb",
+    "renders/touch_source_side.png": "dc5a211164dc392f74c1f27aaff975ad37ddb8c779e9390895bf02d5211ba691",
+    "renders/touch_source_three_quarter.png": "37539f592067b55e3ec0646f38f8db2e3a36103b6766974aba6311d4179f8e0b"
+  }
+}

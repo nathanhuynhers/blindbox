@@ -1,9 +1,11 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 -- Dedicated Coin Shop/settings controls; Store purchase cards stay with P08.
 local Client = require(script.Parent.ConvenienceClient)
 local Scope = require(script.Parent.UIScope)
 local Kit = require(script.Parent.UIKit)
 local Style = require(script.Parent.UIStyle)
+local State = require(script.Parent.UIState)
 local Button = require(script.Parent.UIButton)
 local Controls = {}
 -- Mount on the existing safe-area opening overlay so Stop survives openingFocus.
@@ -28,7 +30,7 @@ function Controls.createStop(
 	end)
 	return stop
 end
-export type Collection = { id: string, name: string, price: number? }
+export type Collection = { id: string, name: string, price: number?, refusal: string? }
 export type Panel = { root: ScrollingFrame, update: () -> (), layout: (number, number) -> () }
 function Controls.create(
 	parent: Instance,
@@ -83,7 +85,7 @@ function Controls.create(
 			or count < 1
 			or count > 100
 			or keep < 0
-			or keep > 1e12
+			or keep > Currency.limit
 		then
 			return nil, nil
 		end
@@ -96,12 +98,15 @@ function Controls.create(
 		cost.Text = if count
 				and keep
 				and selected.price
-			then `Spends up to {count * selected.price} Coins. Keeps at least {keep} Coins.`
+			then `Spends up to {State.number(count * selected.price)} Coins. Keeps at least {State.number(
+				keep
+			)} Coins.`
 			else "Enter whole values. A confirmed collection price is required."
 		local open = if view then view.open else nil
-		status.Text = if open
-			then `{open.reason} · {open.completed}/{open.limit} boxes`
-			else "Waiting for confirmation"
+		status.Text = selected.refusal
+			or if open
+				then `{open.reason} · {open.completed}/{open.limit} boxes`
+				else "Waiting for confirmation"
 		start.set(
 			"Start Auto Open",
 			view ~= nil
@@ -109,6 +114,7 @@ function Controls.create(
 				and count ~= nil
 				and keep ~= nil
 				and selected.price ~= nil
+				and selected.refusal == nil
 				and open ~= nil
 				and not open.running
 				and open.phase == "Idle"
@@ -133,7 +139,7 @@ function Controls.create(
 		effects,
 		function()
 			local count, keep = values()
-			if count and keep then
+			if count and keep and collection().refusal == nil then
 				client.start(collection().id, count, keep)
 			end
 		end

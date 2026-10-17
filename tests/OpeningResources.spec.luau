@@ -130,9 +130,14 @@ for _, reduced in { false, true } do
 		)
 		local plate = box:FindFirstChild("CollectionNamePlate", true)
 		check(
-			plate and plate:FindFirstChild("CollectionName"),
+			plate and plate:FindFirstChild("CollectionTitle"),
 			"production nameplate exists during box"
 		)
+		local labels = 0
+		for _, child in plate:GetDescendants() do
+			if child:IsA("TextLabel") then labels += 1 end
+		end
+		check(labels == 1, "opening uses exactly one collection name, without overlapping labels")
 		local lights = 0
 		for _, node in stage():GetDescendants() do
 			if node:IsA("Light") then
@@ -439,6 +444,32 @@ check(not failed.production, "failed delivery replaces production once")
 E.failLoad = false
 failedScope.destroy()
 holder:Destroy()
+
+-- Every collection shares one label owner, even after reskinning. Product viewports
+-- deliberately omit the native label because their projected text owns that surface.
+local Skin = require("./BlindBoxSkin")
+local Model = require("./BlindBoxModel")
+local function labelCount(model)
+	local count = 0
+	for _, child in model:GetDescendants() do
+		if child:IsA("TextLabel") then count += 1 end
+	end
+	return count
+end
+local labelHolder = E.Instance.new("Folder")
+for _, collection in Catalog.collections do
+	local asset = Box.create(labelHolder, collection.id)
+	check(asset.production and labelCount(asset.model) == 1, "one opening label for " .. collection.id)
+	local surfaces = assert(Model.surfaces(asset.model))
+	local title = surfaces.CollectionNamePlate[1]:FindFirstChild("CollectionTitle")
+	check(title:GetChildren()[1].Text == collection.name, "correct collection title for " .. collection.id)
+	Skin.apply(asset.model, surfaces, collection.id)
+	check(labelCount(asset.model) == 1, "reskinning cannot stack labels for " .. collection.id)
+	Skin.apply(asset.model, surfaces, collection.id, false)
+	check(labelCount(asset.model) == 0, "viewport uses only its projected name for " .. collection.id)
+	asset.model:Destroy()
+end
+labelHolder:Destroy()
 
 -- Stale phase draws/cues and post-cleanup calls cannot turn retired lighting back on.
 local effectsScope = Scope.create()

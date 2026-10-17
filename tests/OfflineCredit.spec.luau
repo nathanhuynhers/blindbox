@@ -48,7 +48,7 @@ check(Credits.grant(delayed, 101, "next") and Credits.redeem(delayed, "offline:2
 	and delayed.coins == 14507 and delayed.offlineData.assistedCredit == 10007,
 	"Next return uses the same platform identity with a new credit")
 local full = reward(50)
-full.coins = 1000000000000
+full.coins = require("./Currency").limit
 check(Credits.grant(full, 101, "full") and Credits.redeem(full, "offline:1"), "Full wallet protects benefit")
 check(full.offlineData.earnedCredit == 50 and full.offlineData.assistedCredit == 50,
 	"No clipping earned or assisted overflow")

@@ -36,8 +36,8 @@ modules = {
     "Rarity": "shared",
     "PlotFixture": "server", "PlotStyle": "server", "TownPlacements": "server", "Awning": "server", "NightLights": "server", "TownStyle": "server", "TownLayout": "server", "TownProps": "server", "PlazaFixture": "server", "LeaderboardBoard": "server", "LeaderboardStore": "server", "LeaderboardStats": "server", "DayNight": "server", "CollectionFixture": "server", "DisplayFixture": "server", "DisplayConfig": "shared", "ShelfConfig": "shared", "Shelves": "server", "LegacyCosmetics": "server", "LegacyShelfPages": "server", "PlotSlots": "server", "PlotConfig": "server", "PlotGeometry": "server", "PlayerPlot": "server", "ShopFixture": "server", "UpgradeStation": "server", "FigureSlots": "server", "World": "server",
     "AssetIds": "shared", "AssetManifest": "shared", "BlindBoxSpec": "shared", "BlindBoxModel": "shared",
-    "Types": "shared", "Tutorial": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
-    "CollectionEconomy": "server", "Deals": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
+    "FigureAssetEntries": "shared", "Currency": "shared", "Types": "shared", "Tutorial": "shared", "Catalog": "shared", "LoginRewards": "shared", "Economy": "server",
+    "CollectionAccess": "server", "CollectionEconomy": "server", "Deals": "server", "Rules": "server", "Protocol": "server", "Transactions": "server",
     "DisplayInteraction": "client", "ShopKeeper": "client", "HomeTeleport": "server", "Profile": "server", "Persistence": "server", "Scroll": "client",
     "OpeningState": "client", "OpeningResult": "client", "OpeningConfig": "client", "OpeningLayout": "client",
     "OpeningAudioConfig": "client", "OpeningAudioSequence": "client", "SoundManifest": "client", "Sfx": "client", "Music": "client",
@@ -101,7 +101,7 @@ for name, folder in modules.items():
         source = source.replace("--!strict", '--!strict\nlocal Vector3 = require("./OpeningVisualEngine").Vector3')
     if name in ("OpeningFlight", "OpeningFlightEffects", "OpeningCinematic", "OpeningLighting", "OpeningEffects", "OpeningBox", "OpeningFallbackBox", "OpeningFigure", "OpeningAudio", "Sfx", "Music", "BlindBoxSkin", "BlindBoxModel"):
         source = source.replace('--!strict', '--!strict\nlocal Engine = require("./OpeningVisualEngine")\nlocal game, workspace, Instance, Enum, task, warn = Engine.game, Engine.workspace, Engine.Instance, Engine.Enum, Engine.task, Engine.warn\nlocal Vector3, Vector2, Color3, CFrame, UDim2 = Engine.Vector3, Engine.Vector2, Engine.Color3, Engine.CFrame, Engine.UDim2\nlocal NumberRange, NumberSequence, NumberSequenceKeypoint, ColorSequence = Engine.NumberRange, Engine.NumberSequence, Engine.NumberSequenceKeypoint, Engine.ColorSequence')
-        for dependency in ("BlindBoxModel", "AssetManifest", "BlindBoxSpec"):
+        for dependency in ("BlindBoxModel", "AssetManifest", "BlindBoxSpec", "Catalog"):
             for prefix in ("ReplicatedStorage.Shared", "Shared"):
                 source = source.replace(f'require({prefix}.{dependency})', f'require("./{dependency}")')
         source = source.replace('local Shared = game:GetService("ReplicatedStorage").Shared', '')
@@ -127,6 +127,8 @@ for name, folder in modules.items():
         source = source.replace('local FigureModel = require(game:GetService("ReplicatedStorage").Shared.FigureModel)', 'local FigureModel = Engine.FigureModel')
         if name == "PlayerPlot":
             source = source.replace('--!strict', '--!strict\nlocal game = require("./PlotEngine").game\nlocal os = {clock = function() return require("./PlotEngine").clock end}', 1)
+    if name == "FigureAssetEntries":
+        source = source.replace("--!strict", '--!strict\nlocal Vector3 = require("./OpeningVisualEngine").Vector3', 1)
     if name in ("Rarity", "Catalog", "OpeningConfig", "ShopTheme"):
         source = source.replace("--!strict", '--!strict\nlocal Color3 = require("./OpeningVisualEngine").Color3')
     (out / f"{name}.luau").write_text(source, encoding="utf-8")
@@ -135,7 +137,7 @@ for name, folder in modules.items():
 bootstrap = (root / "src/server/init.server.luau").read_text(encoding="utf-8")
 send = bootstrap[bootstrap.index("local function snapshotFor("):bootstrap.index("-- P02 invokes")]
 sender = '\n'.join(f'local {name} = require("./{name}")' for name in
-                   ("Rules", "CollectionEconomy", "Economy", "Shelves", "Deals", "OfflineCredits"))
+                   ("Rules", "CollectionAccess", "CollectionEconomy", "Economy", "Shelves", "Deals", "OfflineCredits"))
 sender += '\nreturn function(stateRemote)\nlocal os = {time = function() return 864000 end}\n'
 sender += 'local offlineIntegration = {view = function(owner) return OfflineCredits.view(owner.state, owner.ready and not owner.transferring, false) end}\n'
 sender += 'local function dealClock() return Deals.window(os.time()), Economy.deals.windowSeconds end\n'
@@ -181,7 +183,10 @@ run("StoreBinding.spec")
 run("ConvenienceOwner.spec")
 run("PlayerMovement.spec")
 run("AutoOpen.spec", "AutoCollect.spec", "ConvenienceService.spec", "ConvenienceClient.spec", "ConvenienceOpening.spec", "ConvenienceResults.spec")
-run("PityProgress.spec")
+run("PityProgress.spec", "NewCollections.spec", "IncomeTargets.spec")
+run("CollectionAccess.spec")
+run("CollectionAccessDeals.spec")
+run("CollectionAccessUI.spec")
 run("LinearPity.spec")
 run("UIEngine", "ShopLuck.spec")
 run("UIEngine", "Screens.spec", "Onboarding.spec")
@@ -257,6 +262,30 @@ if not requested or "OfflineDoubleStorage.spec" in requested or "OfflineCreditSt
         result = subprocess.run([sys.argv[1], str(spec)], cwd=root)
         if result.returncode:
             raise SystemExit(result.returncode)
+if not requested or "NewCollections.spec" in requested:
+    fixture = out / "collections-ready-fixture"
+    fixture.mkdir(exist_ok=True)
+    for file in out.glob("*.luau"):
+        source = file.read_text(encoding="utf-8")
+        if file.name == "Catalog.luau":
+            source = source.replace('if productionOnly[figure.collection] and not FigureEntries[figure.id] then', 'if false then')
+        (fixture / file.name).write_text(source, encoding="utf-8")
+    result = subprocess.run([sys.argv[1], str(fixture / "NewCollections.spec.luau")], cwd=root)
+    if result.returncode:
+        raise SystemExit(result.returncode)
+if not requested or "BoxesOpened.spec" in requested:
+    fixture = out / "collections-unavailable-fixture"
+    fixture.mkdir(exist_ok=True)
+    for file in out.glob("*.luau"):
+        source = file.read_text(encoding="utf-8")
+        if file.name == "Catalog.luau":
+            original = 'comingSoon[collection.id] = collection.comingSoon == true'
+            assert original in source
+            source = source.replace(original, original + ' or collection.id == "dessert"', 1)
+        (fixture / file.name).write_text(source, encoding="utf-8")
+    result = subprocess.run([sys.argv[1], str(fixture / "BoxesOpened.spec.luau")], cwd=root)
+    if result.returncode:
+        raise SystemExit(result.returncode)
 if requested:
     raise SystemExit(0)
 fixtures = [
@@ -278,6 +307,10 @@ fixtures = [
     ('discount = 0.25', 'discount = 1', "Invalid deal discount"),
     ('stock = 3', 'stock = 0', "Invalid deal stock"),
     ('weight = 1.5 }', 'weight = 0 }', "Invalid deal weight"),
+    ('expectedIncome = 2000,', 'expectedIncome = 0,', "Invalid provisional income"),
+    ('expectedIncome = 2000,', 'expectedIncome = 0/0,', "Invalid provisional income"),
+    ('{ id = "moon.rat", units = 1.3, weight = 1 }', '{ id = "moon.rat", units = 1.3, weight = 2 }', "New rarity shares must be equal"),
+    ('rarity = "Common"', 'rarity = "Rare"', "New collection requires a Common figure"),
 ]
 for index, (old, new, expected) in enumerate(fixtures):
     fixture = out / f"invalid-{index}"
@@ -286,9 +319,9 @@ for index, (old, new, expected) in enumerate(fixtures):
         (fixture / f"{helper}.luau").write_text((out / f"{helper}.luau").read_text(encoding="utf-8"), encoding="utf-8")
     for name in modules:
         source = (out / f"{name}.luau").read_text(encoding="utf-8")
-        if name == "Economy":
+        if name == ("Catalog" if expected == "New collection requires a Common figure" else "Economy"):
             assert old in source
-            source = source.replace(old, new, 1)
+            source = source.replace(old, new) if name == "Catalog" else source.replace(old, new, 1)
         (fixture / f"{name}.luau").write_text(source, encoding="utf-8")
     (fixture / "load.luau").write_text('require("./Rules")\n', encoding="utf-8")
     result = subprocess.run([sys.argv[1], str(fixture / "load.luau")], cwd=root, capture_output=True, text=True)

@@ -1,0 +1,321 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "7e94f5ce9e46aed2f6cba6cd7bd77b07473fce1f67a835303e036c24fa05de4f",
+  "source_filename": "6e7999e55959c993ea7ba9b33a46314d6ab23864d4964be3f41c61e8a7499586/taiga_painted.glb",
+  "source_sha256": "6e7999e55959c993ea7ba9b33a46314d6ab23864d4964be3f41c61e8a7499586",
+  "import_entry": {
+    "source": "6e7999e55959c993ea7ba9b33a46314d6ab23864d4964be3f41c61e8a7499586/taiga_painted.glb",
+    "figure_id": "biome.taiga",
+    "collection_id": "biome",
+    "rarity": "Rare",
+    "collection_slug": "biomes",
+    "figure_slug": "taiga",
+    "root": "BiomeTaiga",
+    "alias": "biome_taiga",
+    "asset_key": "Models.Biomes.BiomeTaiga",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      33.93
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4232,
+          0.0,
+          0.6667
+        ],
+        [
+          0.5832,
+          0.3945,
+          0.8067
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Taiga"
+  },
+  "catalog": "biome.taiga",
+  "collection_id": "biome",
+  "rarity": "Rare",
+  "root": "BiomeTaiga",
+  "figure": "BiomeTaiga",
+  "title": "Taiga",
+  "face": "BiomeTaiga_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19538,
+  "source_triangles": 19538,
+  "source": {
+    "bytes": 5763752,
+    "textures": [
+      {
+        "name": "taiga_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19538
+    ],
+    "triangles": 19538,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.695148468017578,
+    2.0865646600723267,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "BiomeTaiga_Eyes": {
+      "tris": 163,
+      "verts": 238,
+      "non_manifold_edges": 65,
+      "boundary_edges": 65,
+      "zero_area_faces": 0,
+      "signed_volume": 0.0091861481779432,
+      "islands": 2,
+      "island_faces": [
+        5,
+        158
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.27047887444496155,
+          -0.47799837589263916,
+          2.327847719192505
+        ],
+        [
+          0.2389725148677826,
+          -0.15279148519039154,
+          2.920039176940918
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "BiomeTaiga_Part002": {
+      "tris": 19375,
+      "verts": 21919,
+      "non_manifold_edges": 65,
+      "boundary_edges": 65,
+      "zero_area_faces": 0,
+      "signed_volume": 2.528927035124464,
+      "islands": 2,
+      "island_faces": [
+        66,
+        19309
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.347574234008789,
+          -1.0432822704315186,
+          0.0
+        ],
+        [
+          1.347574234008789,
+          1.043282389640808,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 6130416,
+    "textures": 1,
+    "primitive_triangles": [
+      163,
+      19375
+    ],
+    "triangles": 19538,
+    "mesh_nodes": [
+      "BiomeTaiga_Eyes",
+      "BiomeTaiga_Part002"
+    ],
+    "sha256": "cb3760a250fdb109846477ea8dcb7263ffdb26ca37af49e467d02f2e3b0aeed8",
+    "nodes": [
+      "BiomeTaiga_Eyes",
+      "BiomeTaiga_Part002",
+      "BiomeTaiga"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "taiga": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "taiga": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.023192978929728e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.741009176243097e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 8.983732550404966e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.06926332693547e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "taiga_source_front.png",
+      "taiga_source_three_quarter.png",
+      "taiga_source_side.png",
+      "taiga_source_back.png"
+    ],
+    "fidelity_views": [
+      "taiga_fidelity_front.png",
+      "taiga_fidelity_three_quarter.png",
+      "taiga_fidelity_side.png",
+      "taiga_fidelity_back.png"
+    ],
+    "fidelity_sha256": "cb3760a250fdb109846477ea8dcb7263ffdb26ca37af49e467d02f2e3b0aeed8",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "6e7999e55959c993ea7ba9b33a46314d6ab23864d4964be3f41c61e8a7499586",
+    "source/source.blend": "081c6d34efa41bd4e10fa238e3063e7d5ccf9f718beb3bb6de371fae634f33e6",
+    "model/taiga_production.blend": "1311881b4759d6537d26f7ce0e6516e1cb15f933ecefa48bc1dc99d03414fb88",
+    "model/taiga_roblox.glb": "cb3760a250fdb109846477ea8dcb7263ffdb26ca37af49e467d02f2e3b0aeed8",
+    "renders/taiga_fidelity_back.png": "9ee6187063f4765f924609160dc4e1790be96f0efb90e3a184fa479450514b37",
+    "renders/taiga_fidelity_front.png": "bcbeca78c514da9e6210859cc005f88e9bb372345b73c99b792fd19d15c68eb3",
+    "renders/taiga_fidelity_side.png": "8ce7b415880531e708382c7bdd224f3fad75c4bdb57b0dee5d7b49d46a291d0b",
+    "renders/taiga_fidelity_three_quarter.png": "6a832bb3d8ad5a1eb2fbec3a850d3fedd4d222ba5276807fc020af0948ee9e9d",
+    "renders/taiga_source_back.png": "5b895024ca7162aca6c83927f725714fcf950f4de05bce111730677e2babf329",
+    "renders/taiga_source_front.png": "b0e0712bcef154ceb1b77aeda0b1a499b296ebe3389f0c2ca177de3bbc2dbf25",
+    "renders/taiga_source_side.png": "4d7ff067db996e0db5ebe978d1f0f1defde9d1ce202dc8478a61c9f9bf0cfab3",
+    "renders/taiga_source_three_quarter.png": "ca643264b65a6e19b97d8311456a35aef3fdba9c552f6c8db1009ea5c4fa27a7"
+  }
+}

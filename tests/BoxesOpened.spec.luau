@@ -33,9 +33,14 @@ check(state.boxesOpened == 2, "a rejected purchase never counts")
 check(not Rules.mutate(state, intent("Buy", 2, "unknown"), 0, 10), "unknown collection fails")
 check(state.boxesOpened == 2, "an unknown collection never counts")
 state.coins = 1e9
-check(not Rules.mutate(state, intent("Buy", 2, "moon"), 0, 10), "a coming-soon collection is not sold")
-check(not Rules.mutate(state, intent("BuyTen", 2, "moon"), 0, 10), "a coming-soon ten-box is not sold")
-check(state.boxesOpened == 2, "a coming-soon collection never counts")
+-- The production catalog may be fully registered. The harness also runs this spec with
+-- Desserts explicitly unavailable in an isolated content-readiness fixture.
+if Catalog.comingSoon.dessert then
+	local ok, reason = Rules.mutate(state, intent("Buy", 2, "dessert"), 0, 10)
+	check(not ok and string.find(reason, "coming soon", 1, true), "content readiness remains distinct from progression")
+	check(not Rules.mutate(state, intent("BuyTen", 2, "dessert"), 0, 10), "a coming-soon ten-box is not sold")
+	check(state.boxesOpened == 2, "a coming-soon collection never counts")
+end
 state.coins = price - 1
 local full = Rules.new(0)
 for _, figure in Catalog.figures do
@@ -177,20 +182,15 @@ check(tenReply ~= nil and tenReply.ok and tenReply.figures ~= nil and #tenReply.
 local tenReplay = Transactions.process(tenSession, tenRaw, 0.1, false, tenRolls, 10)
 check(tenReplay == tenReply and tenSession.state.boxesOpened == 10, "replayed Open 10 is not recharged")
 
--- Mistakenly sold coming-soon figures are removed on load and refunded at one box each.
-local mistaken = Rules.new(0)
-mistaken.step = Tutorial.done
-check(Rules.adminFigures(mistaken, { "moon.rat" }, 3, false, 0), "grant three Moonrace Rats")
-check(Rules.adminFigures(mistaken, { "moon.cat" }, 1, false, 0), "grant a Moonrace Cat")
-mistaken.display.slots[1] = "moon.cat"
-mistaken.pityByGroup.moon = { Legendary = 4, Mythical = 4 } :: any
-local before = mistaken.coins
-local refunded = Rules.refundComingSoon(mistaken, 0)
-check(refunded == 4 * Rules.prices.moon and mistaken.coins == before + refunded, "four copies refund four box prices")
-check(mistaken.owned["moon.rat"] == nil and mistaken.owned["moon.cat"] == nil, "Moonrace copies are removed")
-check(not mistaken.discovered["moon.cat"] and mistaken.display.slots[1] == "", "discoveries and Display are cleared")
-check(mistaken.pityByGroup.moon == nil, "Moonrace pity is cleared")
-check(Rules.refundComingSoon(mistaken, 0) == 0 and mistaken.coins == before + refunded, "refund runs once")
-check(Profile.decode(Profile.encode(mistaken), 0) ~= nil, "refunded profile still saves")
+-- Releasing Moonrace preserves prior ownership, discoveries, placements and dry counts.
+local prior = Rules.new(0)
+Rules.grantFigure(prior, "moon.rat", 3)
+Rules.grantFigure(prior, "moon.cat", 1)
+prior.display.slots[1] = "moon.cat"
+prior.pityByGroup.moon = {legendaryDryRolls=4, mythicalDryRolls=7}
+local loaded = Profile.decode(Profile.encode(prior), 0)
+check(loaded ~= nil and loaded.owned["moon.rat"] == 3 and loaded.discovered["moon.cat"], "old Moonrace progress survives")
+check(loaded.display.slots[1] == "moon.cat" and loaded.pityByGroup.moon.mythicalDryRolls == 7, "placements and pity survive")
+check(loaded.coins == prior.coins, "no automatic removal/refund on release")
 
 print(string.format("PASS: %d box counter schema/migration/authority checks", checks))

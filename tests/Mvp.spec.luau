@@ -20,9 +20,10 @@ for _, collection in Catalog.collections do
    expected+=Rules.odds[figure.id]/100*Rules.rates[figure.id]
   end
  end
- local tier=Config.tiers[Config.collections[collection.id].tier]
+ local config=Config.collections[collection.id]
+ local tier=Config.tiers[config.tier]
  check(close(sum,100),"100% per collection")
- check(close(expected,tier.price/tier.paybackSeconds),"weighted income matches tier budget")
+ check(close(expected,config.expectedIncome or tier.price/tier.paybackSeconds),"weighted income matches the configured expectation")
 end
 check(Rules.prices.echo==Rules.prices.star and Rules.rates["echo.moon-doze"]==Rules.rates["star.dreamcatcher"],"Prestige peers")
 for _, value in {0,0.00001,0.2,0.6,0.75,0.9,0.999999999} do

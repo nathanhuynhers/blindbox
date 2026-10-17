@@ -1,0 +1,851 @@
+{
+  "source": "assets/reference_models/blindbox_190_figure_catalog.md",
+  "note": "Approved roster/prices; expected income is provisional and independent of box prices. No discovery gates.",
+  "collections": [
+    {
+      "id": "moon",
+      "name": "Moonrace",
+      "slug": "moonrace",
+      "price": 2000000,
+      "provisionalExpectedIncome": 2000,
+      "color": "C8372D",
+      "wash": "FBF0E2",
+      "figures": [
+        {
+          "id": "moon.rat",
+          "name": "Rat",
+          "slug": "rat",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "moon.ox",
+          "name": "Ox",
+          "slug": "ox",
+          "rarity": "Rare"
+        },
+        {
+          "id": "moon.tiger",
+          "name": "Tiger",
+          "slug": "tiger",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "moon.rabbit",
+          "name": "Rabbit",
+          "slug": "rabbit",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "moon.dragon",
+          "name": "Dragon",
+          "slug": "dragon",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "moon.snake",
+          "name": "Snake",
+          "slug": "snake",
+          "rarity": "Rare"
+        },
+        {
+          "id": "moon.horse",
+          "name": "Horse",
+          "slug": "horse",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "moon.goat",
+          "name": "Goat",
+          "slug": "goat",
+          "rarity": "Common"
+        },
+        {
+          "id": "moon.monkey",
+          "name": "Monkey",
+          "slug": "monkey",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "moon.rooster",
+          "name": "Rooster",
+          "slug": "rooster",
+          "rarity": "Common"
+        },
+        {
+          "id": "moon.dog",
+          "name": "Dog",
+          "slug": "dog",
+          "rarity": "Common"
+        },
+        {
+          "id": "moon.pig",
+          "name": "Pig",
+          "slug": "pig",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "moon.cat",
+          "name": "Cat",
+          "slug": "cat",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "dessert",
+      "name": "Desserts",
+      "slug": "desserts",
+      "price": 10000000,
+      "provisionalExpectedIncome": 7000,
+      "color": "C06885",
+      "wash": "FFF0E9",
+      "figures": [
+        {
+          "id": "dessert.donut",
+          "name": "Donut",
+          "slug": "donut",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "dessert.cupcake",
+          "name": "Cupcake",
+          "slug": "cupcake",
+          "rarity": "Common"
+        },
+        {
+          "id": "dessert.macaron",
+          "name": "Macaron",
+          "slug": "macaron",
+          "rarity": "Common"
+        },
+        {
+          "id": "dessert.matcha-mochi",
+          "name": "Matcha Mochi",
+          "slug": "matcha-mochi",
+          "rarity": "Rare"
+        },
+        {
+          "id": "dessert.dessert-skater",
+          "name": "Dessert Skater",
+          "slug": "dessert-skater",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "dessert.caramel-princess",
+          "name": "Caramel Princess",
+          "slug": "caramel-princess",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "dessert.strawberry-shortcake",
+          "name": "Strawberry Shortcake",
+          "slug": "strawberry-shortcake",
+          "rarity": "Rare"
+        },
+        {
+          "id": "dessert.tiramisu-prince",
+          "name": "Tiramisu Prince",
+          "slug": "tiramisu-prince",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "dessert.chocolate-cherry-queen",
+          "name": "Chocolate Cherry Queen",
+          "slug": "chocolate-cherry-queen",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "dessert.candy-confectioner-princess",
+          "name": "Candy Confectioner Princess",
+          "slug": "candy-confectioner-princess",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "halloween",
+      "name": "Halloween",
+      "slug": "halloween",
+      "price": 10000000,
+      "provisionalExpectedIncome": 7000,
+      "color": "934DA8",
+      "wash": "FAEEDC",
+      "figures": [
+        {
+          "id": "halloween.pumpkin-trick-or-treater",
+          "name": "Pumpkin Trick-or-Treater",
+          "slug": "pumpkin-trick-or-treater",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "halloween.candy-corn-jester",
+          "name": "Candy Corn Jester",
+          "slug": "candy-corn-jester",
+          "rarity": "Common"
+        },
+        {
+          "id": "halloween.ghost-with-lantern",
+          "name": "Ghost with Lantern",
+          "slug": "ghost-with-lantern",
+          "rarity": "Rare"
+        },
+        {
+          "id": "halloween.skeleton-butler",
+          "name": "Skeleton Butler",
+          "slug": "skeleton-butler",
+          "rarity": "Common"
+        },
+        {
+          "id": "halloween.witch-catgirl",
+          "name": "Witch Catgirl",
+          "slug": "witch-catgirl",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "halloween.mummy-sorcerer",
+          "name": "Mummy Sorcerer",
+          "slug": "mummy-sorcerer",
+          "rarity": "Rare"
+        },
+        {
+          "id": "halloween.vampire-prince",
+          "name": "Vampire Prince",
+          "slug": "vampire-prince",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "halloween.werewolf",
+          "name": "Werewolf",
+          "slug": "werewolf",
+          "rarity": "Rare"
+        },
+        {
+          "id": "halloween.vampire-queen",
+          "name": "Vampire Queen",
+          "slug": "vampire-queen",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "halloween.pumpkin-knight",
+          "name": "Pumpkin Knight",
+          "slug": "pumpkin-knight",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "chess",
+      "name": "Humanoid Chess Pieces",
+      "slug": "humanoid-chess-pieces",
+      "price": 50000000,
+      "provisionalExpectedIncome": 24500,
+      "color": "576879",
+      "wash": "ECEDF1",
+      "figures": [
+        {
+          "id": "chess.pawn",
+          "name": "Pawn",
+          "slug": "pawn",
+          "rarity": "Common"
+        },
+        {
+          "id": "chess.rook",
+          "name": "Rook",
+          "slug": "rook",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "chess.knight",
+          "name": "Knight",
+          "slug": "knight",
+          "rarity": "Rare"
+        },
+        {
+          "id": "chess.bishop",
+          "name": "Bishop",
+          "slug": "bishop",
+          "rarity": "Rare"
+        },
+        {
+          "id": "chess.king",
+          "name": "King",
+          "slug": "king",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "chess.queen",
+          "name": "Queen",
+          "slug": "queen",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "emotion",
+      "name": "Human Emotions",
+      "slug": "human-emotions",
+      "price": 250000000,
+      "provisionalExpectedIncome": 85750,
+      "color": "B2577B",
+      "wash": "F9E9F1",
+      "figures": [
+        {
+          "id": "emotion.joy",
+          "name": "Joy",
+          "slug": "joy",
+          "rarity": "Common"
+        },
+        {
+          "id": "emotion.sadness",
+          "name": "Sadness",
+          "slug": "sadness",
+          "rarity": "Rare"
+        },
+        {
+          "id": "emotion.anger",
+          "name": "Anger",
+          "slug": "anger",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "emotion.fear",
+          "name": "Fear",
+          "slug": "fear",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "emotion.disgust",
+          "name": "Disgust",
+          "slug": "disgust",
+          "rarity": "Common"
+        },
+        {
+          "id": "emotion.surprise",
+          "name": "Surprise",
+          "slug": "surprise",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "emotion.love",
+          "name": "Love",
+          "slug": "love",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "emotion.envy",
+          "name": "Envy",
+          "slug": "envy",
+          "rarity": "Rare"
+        },
+        {
+          "id": "emotion.serenity",
+          "name": "Serenity",
+          "slug": "serenity",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "emotion.hope",
+          "name": "Hope",
+          "slug": "hope",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "astral",
+      "name": "Astral Signs",
+      "slug": "astral-signs",
+      "price": 1250000000,
+      "provisionalExpectedIncome": 300125,
+      "color": "5E60A1",
+      "wash": "EDEBFA",
+      "figures": [
+        {
+          "id": "astral.aries",
+          "name": "Aries",
+          "slug": "aries",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "astral.taurus",
+          "name": "Taurus",
+          "slug": "taurus",
+          "rarity": "Common"
+        },
+        {
+          "id": "astral.gemini",
+          "name": "Gemini",
+          "slug": "gemini",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "astral.cancer",
+          "name": "Cancer",
+          "slug": "cancer",
+          "rarity": "Rare"
+        },
+        {
+          "id": "astral.leo",
+          "name": "Leo",
+          "slug": "leo",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "astral.virgo",
+          "name": "Virgo",
+          "slug": "virgo",
+          "rarity": "Common"
+        },
+        {
+          "id": "astral.libra",
+          "name": "Libra",
+          "slug": "libra",
+          "rarity": "Rare"
+        },
+        {
+          "id": "astral.scorpio",
+          "name": "Scorpio",
+          "slug": "scorpio",
+          "rarity": "Rare"
+        },
+        {
+          "id": "astral.sagittarius",
+          "name": "Sagittarius",
+          "slug": "sagittarius",
+          "rarity": "Rare"
+        },
+        {
+          "id": "astral.capricorn",
+          "name": "Capricorn",
+          "slug": "capricorn",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "astral.aquarius",
+          "name": "Aquarius",
+          "slug": "aquarius",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "astral.pisces",
+          "name": "Pisces",
+          "slug": "pisces",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "astral.ophiuchus",
+          "name": "Ophiuchus",
+          "slug": "ophiuchus",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "biome",
+      "name": "Biomes",
+      "slug": "biomes",
+      "price": 6250000000,
+      "provisionalExpectedIncome": 1050437.5,
+      "color": "4B8063",
+      "wash": "EAF3E4",
+      "figures": [
+        {
+          "id": "biome.desert",
+          "name": "Desert",
+          "slug": "desert",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "biome.tundra",
+          "name": "Tundra",
+          "slug": "tundra",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "biome.rainforest",
+          "name": "Rainforest",
+          "slug": "rainforest",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "biome.savanna",
+          "name": "Savanna",
+          "slug": "savanna",
+          "rarity": "Common"
+        },
+        {
+          "id": "biome.taiga",
+          "name": "Taiga",
+          "slug": "taiga",
+          "rarity": "Rare"
+        },
+        {
+          "id": "biome.ocean",
+          "name": "Ocean",
+          "slug": "ocean",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "weather",
+      "name": "Weather",
+      "slug": "weather",
+      "price": 6250000000,
+      "provisionalExpectedIncome": 1050437.5,
+      "color": "4A85A9",
+      "wash": "E8F4FA",
+      "figures": [
+        {
+          "id": "weather.rain",
+          "name": "Rain",
+          "slug": "rain",
+          "rarity": "Mythical"
+        },
+        {
+          "id": "weather.snow",
+          "name": "Snow",
+          "slug": "snow",
+          "rarity": "Mythical"
+        },
+        {
+          "id": "weather.lightning",
+          "name": "Lightning",
+          "slug": "lightning",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "weather.fog",
+          "name": "Fog",
+          "slug": "fog",
+          "rarity": "Common"
+        },
+        {
+          "id": "weather.hail",
+          "name": "Hail",
+          "slug": "hail",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "weather.rainbow",
+          "name": "Rainbow",
+          "slug": "rainbow",
+          "rarity": "Mythical"
+        },
+        {
+          "id": "weather.tornado",
+          "name": "Tornado",
+          "slug": "tornado",
+          "rarity": "Legendary"
+        }
+      ]
+    },
+    {
+      "id": "sense",
+      "name": "Five Senses",
+      "slug": "five-senses",
+      "price": 31250000000,
+      "provisionalExpectedIncome": 3676531.25,
+      "color": "8E6B9E",
+      "wash": "F3EAF6",
+      "figures": [
+        {
+          "id": "sense.sight",
+          "name": "Sight",
+          "slug": "sight",
+          "rarity": "Mythical"
+        },
+        {
+          "id": "sense.sound",
+          "name": "Sound",
+          "slug": "sound",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "sense.touch",
+          "name": "Touch",
+          "slug": "touch",
+          "rarity": "Common"
+        },
+        {
+          "id": "sense.taste",
+          "name": "Taste",
+          "slug": "taste",
+          "rarity": "Rare"
+        },
+        {
+          "id": "sense.smell",
+          "name": "Smell",
+          "slug": "smell",
+          "rarity": "Uncommon"
+        }
+      ]
+    },
+    {
+      "id": "olympian",
+      "name": "Olympians",
+      "slug": "olympians",
+      "price": 156250000000,
+      "provisionalExpectedIncome": 12867859.375,
+      "color": "A47C35",
+      "wash": "FCF3DE",
+      "figures": [
+        {
+          "id": "olympian.zeus",
+          "name": "Zeus",
+          "slug": "zeus",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "olympian.poseidon",
+          "name": "Poseidon",
+          "slug": "poseidon",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "olympian.hades",
+          "name": "Hades",
+          "slug": "hades",
+          "rarity": "Mythical"
+        },
+        {
+          "id": "olympian.athena",
+          "name": "Athena",
+          "slug": "athena",
+          "rarity": "Rare"
+        },
+        {
+          "id": "olympian.apollo",
+          "name": "Apollo",
+          "slug": "apollo",
+          "rarity": "Rare"
+        },
+        {
+          "id": "olympian.artemis",
+          "name": "Artemis",
+          "slug": "artemis",
+          "rarity": "Common"
+        },
+        {
+          "id": "olympian.aphrodite",
+          "name": "Aphrodite",
+          "slug": "aphrodite",
+          "rarity": "Mythical"
+        },
+        {
+          "id": "olympian.hermes",
+          "name": "Hermes",
+          "slug": "hermes",
+          "rarity": "Common"
+        },
+        {
+          "id": "olympian.ares",
+          "name": "Ares",
+          "slug": "ares",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "olympian.hera",
+          "name": "Hera",
+          "slug": "hera",
+          "rarity": "Rare"
+        }
+      ]
+    },
+    {
+      "id": "birthstone",
+      "name": "Birthstones",
+      "slug": "birthstones",
+      "price": 781250000000,
+      "provisionalExpectedIncome": 45037507.8125,
+      "color": "517E83",
+      "wash": "E5F5EF",
+      "figures": [
+        {
+          "id": "birthstone.garnet",
+          "name": "Garnet",
+          "slug": "garnet",
+          "rarity": "Uncommon"
+        },
+        {
+          "id": "birthstone.amethyst",
+          "name": "Amethyst",
+          "slug": "amethyst",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "birthstone.aquamarine",
+          "name": "Aquamarine",
+          "slug": "aquamarine",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "birthstone.diamond",
+          "name": "Diamond",
+          "slug": "diamond",
+          "rarity": "Mythical"
+        },
+        {
+          "id": "birthstone.emerald",
+          "name": "Emerald",
+          "slug": "emerald",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "birthstone.pearl",
+          "name": "Pearl",
+          "slug": "pearl",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "birthstone.ruby",
+          "name": "Ruby",
+          "slug": "ruby",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "birthstone.peridot",
+          "name": "Peridot",
+          "slug": "peridot",
+          "rarity": "Common"
+        },
+        {
+          "id": "birthstone.sapphire",
+          "name": "Sapphire",
+          "slug": "sapphire",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "birthstone.opal",
+          "name": "Opal",
+          "slug": "opal",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "sin",
+      "name": "Seven Deadly Sins",
+      "slug": "seven-deadly-sins",
+      "price": 3906250000000,
+      "provisionalExpectedIncome": 157631277.34375,
+      "color": "9F4357",
+      "wash": "F9E6EA",
+      "figures": [
+        {
+          "id": "sin.pride",
+          "name": "Pride",
+          "slug": "pride",
+          "rarity": "Common"
+        },
+        {
+          "id": "sin.greed",
+          "name": "Greed",
+          "slug": "greed",
+          "rarity": "Rare"
+        },
+        {
+          "id": "sin.lust",
+          "name": "Lust",
+          "slug": "lust",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "sin.envy",
+          "name": "Envy",
+          "slug": "envy",
+          "rarity": "Rare"
+        },
+        {
+          "id": "sin.gluttony",
+          "name": "Gluttony",
+          "slug": "gluttony",
+          "rarity": "Rare"
+        },
+        {
+          "id": "sin.wrath",
+          "name": "Wrath",
+          "slug": "wrath",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "sin.sloth",
+          "name": "Sloth",
+          "slug": "sloth",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "sin.demon-king",
+          "name": "Demon King",
+          "slug": "demon-king",
+          "rarity": "Mythical"
+        }
+      ]
+    },
+    {
+      "id": "orbit",
+      "name": "Pocket Orbit",
+      "slug": "pocket-orbit",
+      "price": 19531250000000,
+      "provisionalExpectedIncome": 551709470.703125,
+      "color": "465B99",
+      "wash": "E6EDFB",
+      "figures": [
+        {
+          "id": "orbit.mercury",
+          "name": "Mercury",
+          "slug": "mercury",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "orbit.venus",
+          "name": "Venus",
+          "slug": "venus",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "orbit.earth",
+          "name": "Earth",
+          "slug": "earth",
+          "rarity": "Common"
+        },
+        {
+          "id": "orbit.mars",
+          "name": "Mars",
+          "slug": "mars",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "orbit.jupiter",
+          "name": "Jupiter",
+          "slug": "jupiter",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "orbit.saturn",
+          "name": "Saturn",
+          "slug": "saturn",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "orbit.uranus",
+          "name": "Uranus",
+          "slug": "uranus",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "orbit.neptune",
+          "name": "Neptune",
+          "slug": "neptune",
+          "rarity": "Legendary"
+        },
+        {
+          "id": "orbit.pluto",
+          "name": "Pluto",
+          "slug": "pluto",
+          "rarity": "Mythical"
+        }
+      ]
+    }
+  ]
+}

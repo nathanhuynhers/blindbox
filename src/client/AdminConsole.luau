@@ -1,4 +1,5 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 local Players = game:GetService("Players")
 local Input = game:GetService("UserInputService")
 local Actions = game:GetService("ContextActionService")
@@ -515,7 +516,7 @@ function Console.create(
 					amountValue,
 					if action == "SetBalance" then 0 else 1,
 					if action == "SetBalance"
-						then 1000000000000
+						then Currency.limit
 						else reply.transactionLimit or 100000000
 				)
 				if not amount then

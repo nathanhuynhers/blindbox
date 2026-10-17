@@ -1,0 +1,322 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "44396b4815ba23c507c553ec837179956540cba32cac174ff111082db3e4e70f",
+  "source_filename": "24e616d7a9bde24b3d5436c27ebe4e359cf5bc19d4f945411de66579fee139cd/hermes_painted.glb",
+  "source_sha256": "24e616d7a9bde24b3d5436c27ebe4e359cf5bc19d4f945411de66579fee139cd",
+  "import_entry": {
+    "source": "24e616d7a9bde24b3d5436c27ebe4e359cf5bc19d4f945411de66579fee139cd/hermes_painted.glb",
+    "figure_id": "olympian.hermes",
+    "collection_id": "olympian",
+    "rarity": "Common",
+    "collection_slug": "olympians",
+    "figure_slug": "hermes",
+    "root": "OlympianHermes",
+    "alias": "olympian_hermes",
+    "asset_key": "Models.Olympians.OlympianHermes",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      38.11
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4257,
+          0.0,
+          0.589
+        ],
+        [
+          0.5857,
+          0.286,
+          0.729
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Hermes"
+  },
+  "catalog": "olympian.hermes",
+  "collection_id": "olympian",
+  "rarity": "Common",
+  "root": "OlympianHermes",
+  "figure": "OlympianHermes",
+  "title": "Hermes",
+  "face": "OlympianHermes_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19094,
+  "source_triangles": 19094,
+  "source": {
+    "bytes": 5717324,
+    "textures": [
+      {
+        "name": "hermes_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19094
+    ],
+    "triangles": 19094,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    3.1170907020568848,
+    1.4695588946342468,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "OlympianHermes_Eyes": {
+      "tris": 433,
+      "verts": 572,
+      "non_manifold_edges": 101,
+      "boundary_edges": 101,
+      "zero_area_faces": 0,
+      "signed_volume": -0.04881664664501655,
+      "islands": 3,
+      "island_faces": [
+        11,
+        15,
+        407
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.28726649284362793,
+          -0.6290682554244995,
+          2.0756704807281494
+        ],
+        [
+          0.2868938446044922,
+          -0.2865418791770935,
+          2.655778169631958
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "OlympianHermes_Part002": {
+      "tris": 18661,
+      "verts": 20694,
+      "non_manifold_edges": 101,
+      "boundary_edges": 101,
+      "zero_area_faces": 0,
+      "signed_volume": 0.9861713879839155,
+      "islands": 2,
+      "island_faces": [
+        3,
+        18658
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.5585453510284424,
+          -0.734779417514801,
+          0.0
+        ],
+        [
+          1.5585453510284424,
+          0.7347794771194458,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 6068308,
+    "textures": 1,
+    "primitive_triangles": [
+      433,
+      18661
+    ],
+    "triangles": 19094,
+    "mesh_nodes": [
+      "OlympianHermes_Eyes",
+      "OlympianHermes_Part002"
+    ],
+    "sha256": "a797c9d134087b05e5b5175e892ae72f0ec3f53b5cc6e04026162d014c933f30",
+    "nodes": [
+      "OlympianHermes_Eyes",
+      "OlympianHermes_Part002",
+      "OlympianHermes"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "hermes": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "hermes": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00010572825704002753,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011177265696460381,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.0001160919273388572,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.266194683732465e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "hermes_source_front.png",
+      "hermes_source_three_quarter.png",
+      "hermes_source_side.png",
+      "hermes_source_back.png"
+    ],
+    "fidelity_views": [
+      "hermes_fidelity_front.png",
+      "hermes_fidelity_three_quarter.png",
+      "hermes_fidelity_side.png",
+      "hermes_fidelity_back.png"
+    ],
+    "fidelity_sha256": "a797c9d134087b05e5b5175e892ae72f0ec3f53b5cc6e04026162d014c933f30",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "24e616d7a9bde24b3d5436c27ebe4e359cf5bc19d4f945411de66579fee139cd",
+    "source/source.blend": "f3ba1eac651319759d0008017d04b65fb1631ca3259bd1d1d6579819149fae81",
+    "model/hermes_production.blend": "b4934f835d18bce2c7a00dd5a694571132abbcb3e467a4dda2e4b3b4510274c1",
+    "model/hermes_roblox.glb": "a797c9d134087b05e5b5175e892ae72f0ec3f53b5cc6e04026162d014c933f30",
+    "renders/hermes_fidelity_back.png": "e2f7fb8b0943eb9dc75094cb0b4099d9e524e22b4c49533ec3802b2bcb46e73e",
+    "renders/hermes_fidelity_front.png": "6d9e5c97fae6f236ab1cceeef365b2ba0785968bdf4b5967cdf8c73be3e1d3a3",
+    "renders/hermes_fidelity_side.png": "8a3874222dfa1ce848b0c4b42b292bfa555532274d4d98bf155365bac7696966",
+    "renders/hermes_fidelity_three_quarter.png": "f25c94e7e4be94646dbb2446b04d1d9baefb45fee1d66470c8068673abfb9e19",
+    "renders/hermes_source_back.png": "edebf09d3f751f990d61c4bb27b4f30bf7d3c55b7892870004af82ac78cb08a7",
+    "renders/hermes_source_front.png": "51b92790ac8fe33eb77d4cc9a6aff90050dcf768f0fb6bc84325b78475460bc3",
+    "renders/hermes_source_side.png": "4c34de340d9b1081e59d7ec7405d3104d697a68d3072146774a17a59befdfe56",
+    "renders/hermes_source_three_quarter.png": "b91cfaee69c8d67c71691433e1eb42459306378bed4858083ec459b431538532"
+  }
+}

@@ -15,6 +15,16 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 	frame.LightColor = Color3.fromRGB(255, 246, 225)
 	frame.LightDirection = Vector3.new(-1, -1, -2)
 	frame.Parent = parent
+	local status = Instance.new("TextLabel")
+	status.Name = "FigureStatus"
+	status.Size = UDim2.fromScale(1, 1)
+	status.BackgroundTransparency = 1
+	status.Text = "Figure loading"
+	status.TextSize = 14
+	status.TextColor3 = Color3.fromRGB(85, 75, 98)
+	status.TextWrapped = true
+	status.Visible = false
+	status.Parent = frame
 	local camera = Instance.new("Camera")
 	camera.FieldOfView = 35
 	camera.Parent = frame
@@ -81,9 +91,11 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 	local function show(id: string?)
 		shownVariant = if id and id ~= "" then FigureModel.variant(id) else ""
 		replace(if id and id ~= "" then FigureModel.create(id, CFrame.new()) else nil)
+		status.Visible = shownVariant == "pending"
 	end
 	local function paint(discovered: boolean)
 		visible = discovered
+		status.Visible = discovered and shownVariant == "pending"
 		for part, color in colors do
 			part.Color = if discovered then color else Color3.fromRGB(120, 114, 130)
 		end
@@ -134,6 +146,7 @@ function Preview.create(parent: Instance, scope: Scope.Scope, productShot: boole
 			end
 			key = "box:" .. collection
 			shownVariant = ""
+			status.Visible = false
 			local asset = Box.create(frame, collection)
 			asset.pose(CFrame.Angles(-0.06, 0.24, 0), 0)
 			replace(asset.model)

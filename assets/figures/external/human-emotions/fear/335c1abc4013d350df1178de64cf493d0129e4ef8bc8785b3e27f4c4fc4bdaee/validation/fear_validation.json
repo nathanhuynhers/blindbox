@@ -1,0 +1,323 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "335c1abc4013d350df1178de64cf493d0129e4ef8bc8785b3e27f4c4fc4bdaee",
+  "source_filename": "1e2739038db12b31a4716eae839e7289e9f5001a860a5c1ce925c7e1d368ffdb/fear_painted.glb",
+  "source_sha256": "1e2739038db12b31a4716eae839e7289e9f5001a860a5c1ce925c7e1d368ffdb",
+  "import_entry": {
+    "source": "1e2739038db12b31a4716eae839e7289e9f5001a860a5c1ce925c7e1d368ffdb/fear_painted.glb",
+    "figure_id": "emotion.fear",
+    "collection_id": "emotion",
+    "rarity": "Uncommon",
+    "collection_slug": "human-emotions",
+    "figure_slug": "fear",
+    "root": "EmotionFear",
+    "alias": "emotion_fear",
+    "asset_key": "Models.HumanEmotions.EmotionFear",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      3.73
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4124,
+          0.0,
+          0.616
+        ],
+        [
+          0.5724,
+          0.2361,
+          0.756
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Fear"
+  },
+  "catalog": "emotion.fear",
+  "collection_id": "emotion",
+  "rarity": "Uncommon",
+  "root": "EmotionFear",
+  "figure": "EmotionFear",
+  "title": "Fear",
+  "face": "EmotionFear_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19267,
+  "source_triangles": 19267,
+  "source": {
+    "bytes": 5030508,
+    "textures": [
+      {
+        "name": "fear_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19267
+    ],
+    "triangles": 19267,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.696128726005554,
+    1.802625596523285,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "EmotionFear_Eyes": {
+      "tris": 119,
+      "verts": 151,
+      "non_manifold_edges": 47,
+      "boundary_edges": 47,
+      "zero_area_faces": 0,
+      "signed_volume": -0.005531652592342124,
+      "islands": 2,
+      "island_faces": [
+        1,
+        118
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2553454041481018,
+          -0.7408143281936646,
+          2.1868371963500977
+        ],
+        [
+          0.2550337612628937,
+          -0.4349455237388611,
+          2.749032735824585
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "EmotionFear_Part002": {
+      "tris": 19148,
+      "verts": 19618,
+      "non_manifold_edges": 52,
+      "boundary_edges": 52,
+      "zero_area_faces": 0,
+      "signed_volume": 3.0552873862753245,
+      "islands": 4,
+      "island_faces": [
+        58,
+        180,
+        184,
+        18726
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.3480644226074219,
+          -0.9013127684593201,
+          0.0
+        ],
+        [
+          1.3480643033981323,
+          0.9013128280639648,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5357568,
+    "textures": 1,
+    "primitive_triangles": [
+      119,
+      19148
+    ],
+    "triangles": 19267,
+    "mesh_nodes": [
+      "EmotionFear_Eyes",
+      "EmotionFear_Part002"
+    ],
+    "sha256": "b3f4a53f10dee3ea79e05d668013caa49cd741257bd8210f5e76b0c2be4ab296",
+    "nodes": [
+      "EmotionFear_Eyes",
+      "EmotionFear_Part002",
+      "EmotionFear"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "fear": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "fear": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.383123738691211e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.9251203967724e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.847568874945864e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.0101265262346715e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "fear_source_front.png",
+      "fear_source_three_quarter.png",
+      "fear_source_side.png",
+      "fear_source_back.png"
+    ],
+    "fidelity_views": [
+      "fear_fidelity_front.png",
+      "fear_fidelity_three_quarter.png",
+      "fear_fidelity_side.png",
+      "fear_fidelity_back.png"
+    ],
+    "fidelity_sha256": "b3f4a53f10dee3ea79e05d668013caa49cd741257bd8210f5e76b0c2be4ab296",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "1e2739038db12b31a4716eae839e7289e9f5001a860a5c1ce925c7e1d368ffdb",
+    "source/source.blend": "dcc52aa8e8be9387536defaa2df0841417185d97bf560e39894c0c772d38d5db",
+    "model/fear_production.blend": "28ce2fa2db952f9cd57ef918a61c75233e1cbc9a12f83c22cf802dd70118a73b",
+    "model/fear_roblox.glb": "b3f4a53f10dee3ea79e05d668013caa49cd741257bd8210f5e76b0c2be4ab296",
+    "renders/fear_fidelity_back.png": "0d607f33d2fdbe99a9c0681533308a09ecc539e8d047119eb8b5c97162025f15",
+    "renders/fear_fidelity_front.png": "d5eb2f16bde0040a3185ac36014ea23f26c623f3f1755ebdee7aec9fe3363260",
+    "renders/fear_fidelity_side.png": "7209e74509b4ae7a9e95334b1e61c77535ac01e041ca4caf564540860526f6af",
+    "renders/fear_fidelity_three_quarter.png": "6076fc4423068a01632278d8184a48ef9ba36f7e937918983363b012c30abf50",
+    "renders/fear_source_back.png": "f018555f80821581ef23477d23549c4b09302f21d67edd6426d30f5ae60202ab",
+    "renders/fear_source_front.png": "cc34e2797b39e17bb15303197bfe8ba007ef88d2c999158ba2f1b1dfcdec05e5",
+    "renders/fear_source_side.png": "5ea0536edab4e393cda580f40dc915c083972a8cf786c0620ed74b9a31236dca",
+    "renders/fear_source_three_quarter.png": "b51eb6eaf787e9addf817b50735a0fac1332be88886f99b68f9108d8f83cae65"
+  }
+}

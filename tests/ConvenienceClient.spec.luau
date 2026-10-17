@@ -63,6 +63,7 @@ check(calls[#calls].action == "State", "recovery requests state only")
 local root = E.Instance.new("Frame")
 local baseline = E.connections
 local scope = Scope.create()
+local collectionRefusal: string? = nil
 local panel = Controls.create(
 	root,
 	scope,
@@ -71,7 +72,7 @@ local panel = Controls.create(
 	end,
 	client,
 	function()
-		return { id = "grove", name = "Pocket Grove", price = 1500 }
+		return { id = "grove", name = "Pocket Grove", price = 1500, refusal = collectionRefusal }
 	end
 )
 for _, size in { { 1920, 1080 }, { 1280, 720 }, { 667, 375 }, { 812, 375 } } do
@@ -90,7 +91,7 @@ count.Text = "2"
 reserve.Text = "500"
 panel.update()
 check(
-	string.find(panel.root:FindFirstChild("MaximumCost").Text, "3000", 1, true) ~= nil,
+	string.find(panel.root:FindFirstChild("MaximumCost").Text, "3,000", 1, true) ~= nil,
 	"maximum spend shown before Start"
 )
 before = #calls
@@ -104,6 +105,14 @@ panel.update()
 before = #calls
 panel.root:FindFirstChild("StartAutoOpen").Activated:Fire()
 check(#calls == before, "invalid numeric input disables Start")
+count.Text = "2"
+collectionRefusal = "Purchases locked"
+panel.update()
+before = #calls
+panel.root:FindFirstChild("StartAutoOpen").Activated:Fire()
+check(#calls == before and panel.root:FindFirstChild("Status").Text == "Purchases locked", "server access refusal disables Auto Open controls independently of ownership")
+collectionRefusal = nil
+panel.update()
 panel.root:FindFirstChild("StopAutoOpen").Activated:Fire()
 check(calls[#calls].action == "Stop", "Stop always reachable")
 panel.root:FindFirstChild("AutoCollect").Activated:Fire()

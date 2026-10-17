@@ -7,6 +7,8 @@ local Storage = require(script.Parent.Storage)
 local Movement = require(script.Parent.PlayerMovement)
 local Transactions = require(script.Parent.Transactions)
 local Rules = require(script.Parent.Rules)
+local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
+local CollectionAccess = require(script.Parent.CollectionAccess)
 local Open = require(script.Parent.AutoOpen)
 local Collect = require(script.Parent.AutoCollect)
 export type Dependencies = {
@@ -55,6 +57,9 @@ function Owner.create(
 			owned = owned,
 			fresh = fresh,
 			policyAllowed = deps.policyAllowed(),
+			collectionRefusal = if Catalog.comingSoon[chosen]
+				then "This collection is coming soon."
+				else CollectionAccess.refusal(transaction.state.discovered, chosen),
 			flowActive = chosen ~= "" and chosen == collection,
 			busy = deps.purchaseBusy(),
 			cooldownReady = deps.now() - lastPurchase >= 3,
@@ -75,6 +80,7 @@ function Owner.create(
 				or not ctx.owned
 				or not ctx.fresh
 				or not ctx.policyAllowed
+				or ctx.collectionRefusal ~= nil
 				or not ctx.flowActive
 				or ctx.busy
 				or not ctx.cooldownReady
@@ -160,6 +166,8 @@ function Owner.create(
 				and owned
 				and fresh
 				and deps.policyAllowed()
+				and not Catalog.comingSoon[collection]
+				and CollectionAccess.canBuy(transaction.state.discovered, collection)
 				and deps.alive()
 				and not deps.purchaseBusy()
 		end,

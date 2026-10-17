@@ -76,22 +76,7 @@ local function build(parent: Instance, collection: string, forceFallback: string
 					})
 				end
 			end
-			-- SurfaceGui works on the real stage, so the collection name follows the actual plate.
-			local plate = resolved.CollectionNamePlate[1]
-			local labelSurface = Instance.new("SurfaceGui")
-			labelSurface.Name = "CollectionName"
-			labelSurface.Face = BoxModel.face(plate, Vector3.new(0, 0, -1))
-			labelSurface.CanvasSize = Vector2.new(640, 140)
-			labelSurface.LightInfluence = 0
-			labelSurface.Parent = plate
-			local text = Instance.new("TextLabel")
-			text.BackgroundTransparency = 1
-			text.Size = UDim2.fromScale(1, 1)
-			text.Text = Config.collection(collection).name
-			text.Font = Enum.Font.FredokaOne
-			text.TextScaled = true
-			text.TextColor3 = Config.neutral
-			text.Parent = labelSurface
+			-- BlindBoxSkin owns the collection name on the actual plate.
 			clone.Name = if animationRoot == clone then "BlindBox_Root" else "ProductionBlindBox"
 			clone:SetAttribute("OpeningSource", "Models.BlindBoxBase")
 			return {

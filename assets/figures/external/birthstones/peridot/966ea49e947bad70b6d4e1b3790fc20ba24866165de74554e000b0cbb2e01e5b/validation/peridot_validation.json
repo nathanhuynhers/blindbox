@@ -1,0 +1,323 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "966ea49e947bad70b6d4e1b3790fc20ba24866165de74554e000b0cbb2e01e5b",
+  "source_filename": "c0c467e2f75e5eed0b3e0abb9bcfedf805019947207e6ea200fcc9a4a2e60676/peridot_painted.glb",
+  "source_sha256": "c0c467e2f75e5eed0b3e0abb9bcfedf805019947207e6ea200fcc9a4a2e60676",
+  "import_entry": {
+    "source": "c0c467e2f75e5eed0b3e0abb9bcfedf805019947207e6ea200fcc9a4a2e60676/peridot_painted.glb",
+    "figure_id": "birthstone.peridot",
+    "collection_id": "birthstone",
+    "rarity": "Common",
+    "collection_slug": "birthstones",
+    "figure_slug": "peridot",
+    "root": "BirthstonePeridot",
+    "alias": "birthstone_peridot",
+    "asset_key": "Models.Birthstones.BirthstonePeridot",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      13.72
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4273,
+          0.0,
+          0.6644
+        ],
+        [
+          0.5873,
+          0.4057,
+          0.8044
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Peridot"
+  },
+  "catalog": "birthstone.peridot",
+  "collection_id": "birthstone",
+  "rarity": "Common",
+  "root": "BirthstonePeridot",
+  "figure": "BirthstonePeridot",
+  "title": "Peridot",
+  "face": "BirthstonePeridot_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19780,
+  "source_triangles": 19780,
+  "source": {
+    "bytes": 5801472,
+    "textures": [
+      {
+        "name": "peridot_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19780
+    ],
+    "triangles": 19780,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.5633660554885864,
+    1.7660576701164246,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "BirthstonePeridot_Eyes": {
+      "tris": 267,
+      "verts": 386,
+      "non_manifold_edges": 97,
+      "boundary_edges": 97,
+      "zero_area_faces": 0,
+      "signed_volume": -0.062409860832331465,
+      "islands": 4,
+      "island_faces": [
+        7,
+        15,
+        38,
+        207
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.23517626523971558,
+          -0.6274887323379517,
+          2.332529067993164
+        ],
+        [
+          0.23481988906860352,
+          -0.12004461139440536,
+          2.928806781768799
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "BirthstonePeridot_Part002": {
+      "tris": 19513,
+      "verts": 20500,
+      "non_manifold_edges": 97,
+      "boundary_edges": 97,
+      "zero_area_faces": 0,
+      "signed_volume": 1.3711424773720091,
+      "islands": 2,
+      "island_faces": [
+        104,
+        19409
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.281683087348938,
+          -0.8830288052558899,
+          0.0
+        ],
+        [
+          1.2816829681396484,
+          0.8830288648605347,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 6145020,
+    "textures": 1,
+    "primitive_triangles": [
+      267,
+      19513
+    ],
+    "triangles": 19780,
+    "mesh_nodes": [
+      "BirthstonePeridot_Eyes",
+      "BirthstonePeridot_Part002"
+    ],
+    "sha256": "891efddf8ba1f7b9b89cbac8077ec6ef66c05634508cd190768a6deb8fb84336",
+    "nodes": [
+      "BirthstonePeridot_Eyes",
+      "BirthstonePeridot_Part002",
+      "BirthstonePeridot"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "peridot": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "peridot": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00013027213572058827,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011227910727029666,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00014723127242177725,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011393185559427366,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "peridot_source_front.png",
+      "peridot_source_three_quarter.png",
+      "peridot_source_side.png",
+      "peridot_source_back.png"
+    ],
+    "fidelity_views": [
+      "peridot_fidelity_front.png",
+      "peridot_fidelity_three_quarter.png",
+      "peridot_fidelity_side.png",
+      "peridot_fidelity_back.png"
+    ],
+    "fidelity_sha256": "891efddf8ba1f7b9b89cbac8077ec6ef66c05634508cd190768a6deb8fb84336",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "c0c467e2f75e5eed0b3e0abb9bcfedf805019947207e6ea200fcc9a4a2e60676",
+    "source/source.blend": "836541d37b8b2bb49e71cb6f698c5d4585cc59ffc0ab7d6c6b201a243885a8d5",
+    "model/peridot_production.blend": "f99bc82532ed381592ea5bfb023636398222e9917da656773b0eda78679a4f61",
+    "model/peridot_roblox.glb": "891efddf8ba1f7b9b89cbac8077ec6ef66c05634508cd190768a6deb8fb84336",
+    "renders/peridot_fidelity_back.png": "61c2e4e444b9acd70f08fed3f2e79067a9de91013e7275b3fbcb645dce92c77d",
+    "renders/peridot_fidelity_front.png": "363f4171634faee2535f50f1a0c328060156f08a332a4f77fab4e8fb9f3c62dd",
+    "renders/peridot_fidelity_side.png": "7a3f1875383edb12f4e40d995298d527e25a1132523835a517bb56c74ad085c1",
+    "renders/peridot_fidelity_three_quarter.png": "299eea542f8430a1f9bbd00c3eb8190f58efa56fc8e745e41edf357c1a964919",
+    "renders/peridot_source_back.png": "24d726463cade4c56c36afc0ee3dfad85359feb4e70ef487b5ae9a4de748e418",
+    "renders/peridot_source_front.png": "44a7e4814d7b6b720f17c2822bf57342c1ac2cb71a6362430a584fa8ea604ff5",
+    "renders/peridot_source_side.png": "3474c8a58d314be690604c8deb75d6c3462f68509e43a49712645c6e2dff1a99",
+    "renders/peridot_source_three_quarter.png": "8a344cb1de78ab2afe6cafad46d70971be760c8ba1156dc4102aff2885ad12c4"
+  }
+}

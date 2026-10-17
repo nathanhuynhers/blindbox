@@ -1,4 +1,5 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 -- Receipt and reserved reward are ONE UpdateAsync value. No wallet mutation here.
 local Types = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 export type Entry = {
@@ -43,7 +44,7 @@ function Ledger.grant(raw: unknown): Types.Grant?
 	local value = raw :: { [string]: unknown }
 	if
 		not fields(value, { coins = true, tokens = true })
-		or not integer(value.coins, 1000000000000)
+		or not integer(value.coins, Currency.limit)
 		or typeof(value.tokens) ~= "table"
 	then
 		return nil
@@ -74,6 +75,7 @@ function Ledger.decode(raw: unknown): Record?
 	end
 	local result = Ledger.empty()
 	local count = 0
+	local coins = 0
 	for id, rawEntry in value.entries :: { [string]: unknown } do
 		count += 1
 		if count > Ledger.maxEntries or not identifier(id) or typeof(rawEntry) ~= "table" then
@@ -91,6 +93,10 @@ function Ledger.decode(raw: unknown): Record?
 		then
 			return nil
 		end
+		if grant.coins > Currency.creditLimit - coins then
+			return nil
+		end
+		coins += grant.coins
 		result.entries[id] = {
 			product = entry.product :: string,
 			platformId = entry.platformId :: number,
@@ -158,13 +164,14 @@ function Ledger.commit(update: Update, userId: number, receiptId: string, entry:
 			end
 			return record -- Replays recover the original promise, never recompute it.
 		end
-		local count = 0
-		for _ in record.entries do
+		local count, coins = 0, 0
+		for _, pending in record.entries do
 			count += 1
+			coins += pending.grant.coins
 		end
-		if count >= Ledger.maxEntries then
+		if count >= Ledger.maxEntries or entry.grant.coins > Currency.creditLimit - coins then
 			return nil
-		end -- Never evict a paid marker.
+		end -- Never evict a paid marker or persist an unsafe cumulative promise.
 		record.entries[receiptId] = {
 			product = entry.product,
 			platformId = entry.platformId,
@@ -192,6 +199,10 @@ function Ledger.summary(record: Record): (Types.Grant, number, { [string]: boole
 	for _, entry in record.entries do
 		count += 1
 		products[entry.product] = true
+		assert(
+			entry.grant.coins <= Currency.creditLimit - total.coins,
+			"Unsafe reserved Coin total"
+		)
 		total.coins += entry.grant.coins
 		for token, amount in entry.grant.tokens do
 			local id: Types.TokenId = token :: Types.TokenId

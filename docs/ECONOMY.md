@@ -1,5 +1,9 @@
 # Collection economy
 
+See the [collection expansion candidate](COLLECTION_INTEGRATION.md) for the 13 new collections' approved prices, exact base distributions, provisional independent income targets, numeric audit and required release barrier. The original five collections' rates and odds below remain unchanged. The candidate is not published.
+
+[Collection purchase progression](COLLECTION_PROGRESSION.md) adds server-owned discovery qualifications and a two-tier buying window. It controls access only; all prices, probabilities, rarity assignments, income and reward values below and in the expansion remain unchanged.
+
 Implemented and merged into `master`; recorded single-client Studio checks do not close
 persistent, multiplayer or device acceptance. The historical
 [redesign plan](archive/RARITY_ECONOMY_REDESIGN.md) records the discussion. This document and the
@@ -100,8 +104,7 @@ effectiveRate = baseRate * multiplier
 | Legendary | +50% | +150% | 2 |
 | Mythical | +100% | +300% | 2 |
 
-Only one instance of each figure ID may earn in Display. Three slots start unlocked; slots 4, 5
-and 6 cost 40,000, 400,000 and 4,000,000 Coins, respectively, purchased sequentially. Inventory-only
+Only one instance of each figure ID may earn in Display. Three slots start unlocked; slot 4 now costs 1,000,000 Coins. Slots 5–6 retain their existing purchase handling. Inventory-only
 figures earn zero. Shelves remain cosmetic; placements across all persistent Shelf Units are
 limited to owned copies, independently of Display placement. See
 [cosmetic eligibility](PLAYER_PLOTS_AND_SHELVES.md#cosmetic-eligibility-and-permissions).
@@ -126,7 +129,7 @@ whole bank before the swap. Empty-slot placement and ordinary Remove do not coll
 opens Display management only. Shelves cannot collect or generate income. Fractions and wallet
 overflow persist per figure ID after replacement; redisplay to collect the remainder. Removal
 preserves the entire bank.
-Each bank has a one-trillion-Coin safety ceiling. Collection transfers only whole Coins that fit
+Each bank has a one-quadrillion-Coin safety ceiling (`Currency.limit`); see the expansion candidate for precision and rollout constraints. Collection transfers only whole Coins that fit
 in the wallet, retaining fractions and overflow. No ordinary bank timer/cap exists; offline earnings are separate (below).
 Duplicate copies enhance one bank's earning rate, not multiple collection targets.
 

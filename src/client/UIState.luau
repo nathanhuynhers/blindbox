@@ -19,7 +19,7 @@ local function finite(value: number): number
 end
 
 function State.number(value: number): string
-	local integer = tostring(math.floor(math.max(0, finite(value))))
+	local integer = string.format("%.0f", math.floor(math.max(0, finite(value))))
 	local reversed = string.gsub(string.reverse(integer), "(%d%d%d)", "%1,")
 	local result = string.reverse(reversed)
 	return (string.gsub(result, "^,", ""))
@@ -31,7 +31,8 @@ function State.compact(value: number): string
 	if value < 10000 then
 		return State.number(value)
 	end
-	local units: { { any } } = { { 1e12, "T" }, { 1e9, "B" }, { 1e6, "M" }, { 1e3, "K" } }
+	local units: { { any } } =
+		{ { 1e15, "Qa" }, { 1e12, "T" }, { 1e9, "B" }, { 1e6, "M" }, { 1e3, "K" } }
 	for _, unit in units do
 		local size = unit[1] :: number
 		if value >= size then
@@ -181,6 +182,46 @@ function State.completion(snapshot: Types.Snapshot, collection: string): (number
 		end
 	end
 	return found, #members
+end
+
+-- Project only the server's access view. Missing expansion access fails closed until confirmed.
+function State.purchaseLock(snapshot: Types.Snapshot, collection: string): string?
+	if Catalog.comingSoon[collection] then
+		return "Coming soon"
+	end
+	local view = snapshot.collectionAccess
+	local access = if view then view.collections[collection] else nil
+	if access then
+		return if access.unlocked then nil else "Purchases locked"
+	end
+	return if Catalog.productionOnly[collection] then "Access confirmation pending" else nil
+end
+function State.accessText(snapshot: Types.Snapshot, collection: string): string
+	local view = snapshot.collectionAccess
+	local access = if view then view.collections[collection] else nil
+	if not access then
+		return if Catalog.productionOnly[collection] then "Confirming purchase access…" else ""
+	end
+	if access.unlocked then
+		return ""
+	end
+	local lines = { "Unlock " .. State.collectionName(collection) }
+	for index, route in access.routes do
+		if index > 1 then
+			table.insert(lines, "OR")
+		end
+		table.insert(
+			lines,
+			`{State.collectionName(route.collection)}: discover {route.target} non-Mythicals, including a Legendary.`
+		)
+		table.insert(
+			lines,
+			`Discoveries: {math.min(route.found, route.target)}/{route.target} · Legendary: {if route.legendary
+				then "found"
+				else "needed"}`
+		)
+	end
+	return table.concat(lines, "\n")
 end
 
 function State.totalCompletion(snapshot: Types.Snapshot): (number, number)
@@ -528,7 +569,7 @@ function State.reveal(
 		another = {
 			collection = figure.collection,
 			price = price,
-			need = State.need(snapshot, price),
+			need = State.purchaseLock(snapshot, figure.collection) or State.need(snapshot, price),
 		},
 	}
 end
@@ -674,7 +715,8 @@ function State.deal(snapshot: Types.Snapshot, stall: number, now: number): Deal?
 		elseif left == 1 then "last"
 		else "available"
 	local clock = State.clock(remaining)
-	local short = State.need(snapshot, offer.deal)
+	local lock = State.purchaseLock(snapshot, offer.collection)
+	local short = lock or State.need(snapshot, offer.deal)
 	local canBuy = status ~= "restocking" and status ~= "soldout" and short == nil
 	return {
 		stall = stall,

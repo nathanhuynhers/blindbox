@@ -4,6 +4,7 @@ local Assets = require(Shared.AssetManifest)
 local Spec = require(Shared.BlindBoxSpec)
 local Box = require(Shared.BlindBoxModel)
 local Theme = require(script.Parent.ShopTheme)
+local Catalog = require(Shared.Catalog)
 local Skin = {}
 
 local function paint(parts: { BasePart }?, color: Color3)
@@ -17,7 +18,12 @@ local function paint(parts: { BasePart }?, color: Color3)
 	end
 end
 
-function Skin.apply(model: Model, surfaces: Box.Surfaces, collectionId: string): { Instance }
+function Skin.apply(
+	model: Model,
+	surfaces: Box.Surfaces,
+	collectionId: string,
+	renderTitle: boolean?
+): { Instance }
 	local theme = Theme.get(collectionId)
 	local right, up, front = Box.axes(surfaces)
 	-- The source GLB has no image textures; imported material layers can mask Part.Color.
@@ -71,6 +77,36 @@ function Skin.apply(model: Model, surfaces: Box.Surfaces, collectionId: string):
 		decal.Color3 = Color3.new(1, 1, 1)
 		decal.Parent = part
 		table.insert(preload, decal)
+	end
+	local title = collectionId
+	for _, collection in Catalog.collections do
+		if collection.id == collectionId then
+			title = collection.name
+			break
+		end
+	end
+	for _, part in surfaces.CollectionNamePlate do
+		-- World/stage boxes use one native label. Viewport previews own a projected label.
+		if renderTitle == false then
+			continue
+		end
+		local gui = Instance.new("SurfaceGui")
+		gui.Name = "CollectionTitle"
+		gui:SetAttribute("BlindBoxTheme", true)
+		gui.Face = Box.face(part, front)
+		gui.CanvasSize = Vector2.new(768, 192)
+		gui.LightInfluence = 0
+		gui.Parent = part
+		local text = Instance.new("TextLabel")
+		text.Size = UDim2.fromScale(0.92, 0.88)
+		text.Position = UDim2.fromScale(0.04, 0.06)
+		text.BackgroundTransparency = 1
+		text.Text = title
+		text.Font = Enum.Font.GothamBold
+		text.TextColor3 = Color3.fromRGB(255, 249, 238)
+		text.TextScaled = true
+		text.TextWrapped = true
+		text.Parent = gui
 	end
 	model:SetAttribute("CollectionId", collectionId)
 	return preload

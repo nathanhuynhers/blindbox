@@ -431,6 +431,33 @@
     "sha256": "7673059b4b2702d263a86740df3014fc6b2161845cc3a2a99d9ae64b8422a8d6",
     "source": "assets/audio/opening/transform_mythical.wav"
   },
+  "Collection.AstralSigns.Emblem": {
+    "assetId": "98682151441520",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e3d0e167729680e31893a22436b327aff282bcb64523a3633d5188d9870b54d5",
+    "source": "assets/ui/collection/astral-signs/astral_signs_emblem.png"
+  },
+  "Collection.Biomes.Emblem": {
+    "assetId": "71218672248391",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "28c204f0b3923e808f7616ce8f67f984d6151175f9e0f600e109aa7f722b9507",
+    "source": "assets/ui/collection/biomes/biomes_emblem.png"
+  },
+  "Collection.Birthstones.Emblem": {
+    "assetId": "138752080376496",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ff86a99c8824cdc25560d9593ae0a1f778f94327d56e468d18eb07c3ab34d21f",
+    "source": "assets/ui/collection/birthstones/birthstones_emblem.png"
+  },
   "Collection.Concepts.CornerBottomLeft": {
     "assetId": "127603092899733",
     "assetType": "Image",
@@ -485,6 +512,51 @@
     "sha256": "dbb4315d67bed8d934fefa45b4d945b4da2e229d152d5472aeb6f0ef1d7daf4c",
     "source": "assets/ui/shop/concepts/concepts_shop_pattern.png"
   },
+  "Collection.Desserts.Emblem": {
+    "assetId": "139928128134713",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "0581a2092076b55c34d24ccb4d66bae48b39b7be670d5cb03866e6985441b49f",
+    "source": "assets/ui/collection/desserts/desserts_emblem.png"
+  },
+  "Collection.FiveSenses.Emblem": {
+    "assetId": "139742772367042",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8e66b0e1fac3d319d07a9ef646cb7aae8ba637502fc29bcf291c50ee1fef73a4",
+    "source": "assets/ui/collection/five-senses/five_senses_emblem.png"
+  },
+  "Collection.Halloween.Emblem": {
+    "assetId": "77148150075575",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "644aa60da6a5d62b9de47135016fc9426bc23382df5a370d07c8952110dea26d",
+    "source": "assets/ui/collection/halloween/halloween_emblem.png"
+  },
+  "Collection.HumanEmotions.Emblem": {
+    "assetId": "96882384703856",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "40c26070b432ac1b0373614b0f4cc3d7ce514a8d9817cbe711586eaebc985dd3",
+    "source": "assets/ui/collection/human-emotions/human_emotions_emblem.png"
+  },
+  "Collection.HumanoidChessPieces.Emblem": {
+    "assetId": "109575715651280",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "bcea7400e07559eb857f582ae7b1b36c0aa2590fdaaadfaf420f3b89daa09ac6",
+    "source": "assets/ui/collection/humanoid-chess-pieces/humanoid_chess_pieces_emblem.png"
+  },
   "Collection.Moonrace.CornerBottomLeft": {
     "assetId": "112568218620262",
     "assetType": "Image",
@@ -522,13 +594,13 @@
     "source": "assets/ui/collection/moonrace/moonrace_corner_top_right.png"
   },
   "Collection.Moonrace.Emblem": {
-    "assetId": "92403306538274",
+    "assetId": "100215376124772",
     "assetType": "Image",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "927661da979c802642edf3055015752d3e8b6bde66f9ab3386c8accb52611d71",
-    "source": "assets/ui/collection/moonrace/moonrace_emblem.png"
+    "sha256": "3f0a9318cd94741765ebdde52d9381938a4b564d67994d37ef9eb40a8007f82a",
+    "source": "assets/ui/collection/moonrace/moonrace_emblem_v2.png"
   },
   "Collection.Moonrace.ShopPattern": {
     "assetId": "114583744329921",
@@ -538,6 +610,15 @@
     },
     "sha256": "2ade0ec38665f7bb7913ff116da6a3286bdc9138c801569acaa04b94394d9f0d",
     "source": "assets/ui/shop/moonrace/moonrace_shop_pattern.png"
+  },
+  "Collection.Olympians.Emblem": {
+    "assetId": "114778265922638",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "171e7386f839827bc8b70c30c7eab20a0910995ba467395ab281dc3f670ca154",
+    "source": "assets/ui/collection/olympians/olympians_emblem.png"
   },
   "Collection.PocketGrove.CornerBottomLeft": {
     "assetId": "124027410851506",
@@ -592,6 +673,24 @@
     },
     "sha256": "ad137ddb825db915ddcd1cecde149d0390f6acee939a40f5013ce8fdf83d0d27",
     "source": "assets/ui/shop/pocket-grove/pocket_grove_shop_pattern.png"
+  },
+  "Collection.PocketOrbit.Emblem": {
+    "assetId": "130785821492119",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6f0bf5f0029f5f001199186637fa5395f729c1a7ce201da66e5e30a18bcbe86a",
+    "source": "assets/ui/collection/pocket-orbit/pocket_orbit_emblem.png"
+  },
+  "Collection.SevenDeadlySins.Emblem": {
+    "assetId": "80220035740135",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ad6d5151b306b064cb7c8d9874e5b465081544eabd5469f05c59ea55fa59426f",
+    "source": "assets/ui/collection/seven-deadly-sins/seven_deadly_sins_emblem.png"
   },
   "Collection.TenderEchoes.CornerBottomLeft": {
     "assetId": "128974677022896",
@@ -755,6 +854,15 @@
     "sha256": "b8aae0d01df7c2f5c0b166128822a1739d3038c6d28304d3bc194a86baacd7ad",
     "source": "assets/ui/shop/we-are-all-stars/we_are_all_stars_shop_pattern.png"
   },
+  "Collection.Weather.Emblem": {
+    "assetId": "136787788372184",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "492e2f904ba733fb7a1e452636d76b492a54fd3d23fd944d964205037169cd28",
+    "source": "assets/ui/collection/weather/weather_emblem.png"
+  },
   "Models.AstralSigns.AstralAquarius": {
     "assetId": "111905346437445",
     "assetType": "Model",
@@ -763,6 +871,15 @@
     },
     "sha256": "921f842a8de8ede9e8df61ee8180a18208f49a81be4b38bb3a6077811021db7c",
     "source": "assets/figures/astral-signs/aquarius/model/aquarius_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralAries": {
+    "assetId": "86797348490914",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b9a4763a132f98ef4ebfcfef839c7c1f708d521df00bc461cae94be2140f82cb",
+    "source": "assets/figures/external/astral-signs/aries/bf617f1e7c36171fd53d4b731ec5757bc805a1b52bf78bc8a211da2606d80026/model/aries_roblox.glb"
   },
   "Models.AstralSigns.AstralCancer": {
     "assetId": "110921687705025",
@@ -773,6 +890,15 @@
     "sha256": "ac0ca2a57fd886873e6bc2d48558031c8839ac5a70d5c2cd10172a9585082ddd",
     "source": "assets/figures/astral-signs/cancer/model/cancer_roblox.rbxmx"
   },
+  "Models.AstralSigns.AstralCapricorn": {
+    "assetId": "86444663625804",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "465508793d0f898ffd28891f8cd64ebd095aa2a94de768a8ed7b24c90dc71328",
+    "source": "assets/figures/external/astral-signs/capricorn/e45bac4ce6ab70e4e23ea458c9a93c496e20780a49b6e96ab2c7ce936ec1fd25/model/capricorn_roblox.glb"
+  },
   "Models.AstralSigns.AstralGemini": {
     "assetId": "113013693024953",
     "assetType": "Model",
@@ -781,6 +907,15 @@
     },
     "sha256": "f4ff9df70d4a2334ad1b681cb4d9f80764ee14ee4cdf9e9c025250a037f9c281",
     "source": "assets/figures/astral-signs/gemini/model/gemini_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralLeo": {
+    "assetId": "80477109617206",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "51d591492dc9130c9e2968901be5a1c4e95387a141006002e6f9281cb08ca087",
+    "source": "assets/figures/external/astral-signs/leo/e5d756e1b3a52cca7938217e7959bf149f74ac7abd99e0266ce204eb4df26db2/model/leo_roblox.glb"
   },
   "Models.AstralSigns.AstralLibra": {
     "assetId": "109854314544661",
@@ -827,6 +962,33 @@
     "sha256": "609d063fa7a57109098b3faf660b1b1117424ed02dc3260c7bac4d80b628fbc7",
     "source": "assets/figures/astral-signs/scorpio/model/scorpio_roblox.rbxmx"
   },
+  "Models.AstralSigns.AstralTaurus": {
+    "assetId": "137320104077544",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "93d256bc1ba2662263b26177d5e2aafb206a60697a3aaa028817aba2812f84fb",
+    "source": "assets/figures/external/astral-signs/taurus/b4957f27d29875095d1b196ea4f4c6bae4f888b91b46b4944483e2cf9808b8fc/model/taurus_roblox.glb"
+  },
+  "Models.AstralSigns.AstralVirgo": {
+    "assetId": "98611913839076",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fcbaee50f0f68c898d6e2be9a6e6a7c7a980408389dcc1e4f4ccff36fc79cd47",
+    "source": "assets/figures/external/astral-signs/virgo/13f319821468ca82b96b0521bd08e4ebb34ba1adf695b3bdc699696ca5fbffbc/model/virgo_roblox.glb"
+  },
+  "Models.Biomes.BiomeDesert": {
+    "assetId": "114567602422609",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5b0fd60afeb65658387f32d7d3a438a4b8a70708deea939e0dd70604fafb2cc5",
+    "source": "assets/figures/external/biomes/desert/ad5eec6eb31fad6385a4957327b7d7a5e6381d8edd114c3fd49ea307edac98e8/model/desert_roblox.glb"
+  },
   "Models.Biomes.BiomeOcean": {
     "assetId": "122372670885158",
     "assetType": "Model",
@@ -844,6 +1006,24 @@
     },
     "sha256": "2858f6392bcf2cc052bc08e746a1cf3fd465b589486f575957322cf70e4e5457",
     "source": "assets/figures/biomes/rainforest/model/rainforest_roblox.rbxmx"
+  },
+  "Models.Biomes.BiomeSavanna": {
+    "assetId": "110900938334909",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ed152b94cf2e00d08005708047672bcca519f08c4b33c94f9327282d08a98626",
+    "source": "assets/figures/external/biomes/savanna/a702dc1efd04ec50deda190022fd59c175b4ac4eb6b504b4d8a1585aa99e8ceb/model/savanna_roblox.glb"
+  },
+  "Models.Biomes.BiomeTaiga": {
+    "assetId": "86170277262591",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "cb3760a250fdb109846477ea8dcb7263ffdb26ca37af49e467d02f2e3b0aeed8",
+    "source": "assets/figures/external/biomes/taiga/7e94f5ce9e46aed2f6cba6cd7bd77b07473fce1f67a835303e036c24fa05de4f/model/taiga_roblox.glb"
   },
   "Models.Biomes.BiomeTundra": {
     "assetId": "72104582818654",
@@ -890,6 +1070,15 @@
     "sha256": "1ce5760c2c084d58f77dc966dea0ea315bc989a2cddeed9466523a032285773b",
     "source": "assets/figures/birthstones/emerald/model/emerald_roblox.rbxmx"
   },
+  "Models.Birthstones.BirthstoneGarnet": {
+    "assetId": "82389359404214",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f22d4721c1e9f911f32a03087d22e13db4a30a324dcf6506f2cc15a4a5e71a0a",
+    "source": "assets/figures/external/birthstones/garnet/dc160984f1a7af8c8c7a6f8dfa9c351c4dd39e8ef72c6342774aec890821128c/model/garnet_roblox.glb"
+  },
   "Models.Birthstones.BirthstoneOpal": {
     "assetId": "75710319423546",
     "assetType": "Model",
@@ -907,6 +1096,15 @@
     },
     "sha256": "5cc12a3b638bdb9665cbdb044f4924816ee5268ce11be079c11016cbff54275f",
     "source": "assets/figures/birthstones/pearl/model/pearl_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstonePeridot": {
+    "assetId": "116516371426083",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "891efddf8ba1f7b9b89cbac8077ec6ef66c05634508cd190768a6deb8fb84336",
+    "source": "assets/figures/external/birthstones/peridot/966ea49e947bad70b6d4e1b3790fc20ba24866165de74554e000b0cbb2e01e5b/model/peridot_roblox.glb"
   },
   "Models.Birthstones.BirthstoneRuby": {
     "assetId": "85768919886530",
@@ -1007,6 +1205,60 @@
     "sha256": "4ece0ea688b92cb28f3d945cb61a0fc9b27e22f549b6d431c52d554363b73860",
     "source": "assets/figures/desserts/chocolate-cherry-queen/model/chocolate_cherry_queen_roblox.rbxmx"
   },
+  "Models.Desserts.DessertCupcake": {
+    "assetId": "135655293687389",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "82a4f9a07601c4151a73af42d9ea0bde37fa52544c2729e85c78cc12ddc925b0",
+    "source": "assets/figures/external/desserts/cupcake/acde127c8a2502e8bce10c2233d182eca0120a4ea0c34bdb91ece4dcb328c0b5/model/cupcake_roblox.glb"
+  },
+  "Models.Desserts.DessertDessertSkater": {
+    "assetId": "135120170498546",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5a107d7b6fff9f6e5bb1e33026614afafaac6e5c17e9269eaa31a48f0d54adfe",
+    "source": "assets/figures/external/desserts/dessert-skater/03b29a0291ddee5fdcc13e9135337ff109906a243f5fe7f6952815d17dc53dc7/model/dessert_skater_roblox.glb"
+  },
+  "Models.Desserts.DessertDonut": {
+    "assetId": "132284442614377",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "470b9dc0e5ae812e603d02431fabe476dd5d9aff5abe095f4fe9b977d1ee4f71",
+    "source": "assets/figures/external/desserts/donut/b857e589e71395faf7f0c5e5c02a51a1b57dd01e335fa10cdfdfe85fb20015b3/model/donut_roblox.glb"
+  },
+  "Models.Desserts.DessertMacaron": {
+    "assetId": "110578994914600",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "51a4845fb3922a766c26d6ae67ff107e35ac6fcc49e24ae9505430bff660178f",
+    "source": "assets/figures/external/desserts/macaron/65fc3b0b2548931b52bca26291235b4c8730ccdb98209f2eaaed46b29aee3664/model/macaron_roblox.glb"
+  },
+  "Models.Desserts.DessertMatchaMochi": {
+    "assetId": "109547465681316",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1b0a0b366e3afe9aba952eeff3174694381098794992543ac6095f0807941631",
+    "source": "assets/figures/external/desserts/matcha-mochi/49a33d633598367ef5b53d7c9d45ebff5f70bd6fc47a697bc4540dd7f0280115/model/matcha_mochi_roblox.glb"
+  },
+  "Models.Desserts.DessertStrawberryShortcake": {
+    "assetId": "94924764946882",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "75c7fabc3255179f30119af382ec5fc28cb6b1073477137eb9966a5f151e3694",
+    "source": "assets/figures/external/desserts/strawberry-shortcake/6914c083d95d3f032a0da7a5edf58b2b30714e29ef98c96bb35d457da5c24e5f/model/strawberry_shortcake_roblox.glb"
+  },
   "Models.Desserts.DessertTiramisuPrince": {
     "assetId": "124267987574371",
     "assetType": "Model",
@@ -1024,6 +1276,15 @@
     },
     "sha256": "eb537c2a4dfad107006d026972ad03fdbefc64757f509cd777c56a703773a81f",
     "source": "assets/figures/five-senses/sight/model/sight_roblox.rbxmx"
+  },
+  "Models.FiveSenses.SenseSmell": {
+    "assetId": "97547876670540",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3b335a237462b3f32a02076bd3f66382f1fa28a78599485c4e0c409b58512ad1",
+    "source": "assets/figures/external/five-senses/smell/a95a227cb00b7af9160bbfd2ef7176756c3642b05dc3a547a760059b116f6c98/model/smell_roblox.glb"
   },
   "Models.FiveSenses.SenseSound": {
     "assetId": "127927976855512",
@@ -1043,6 +1304,42 @@
     "sha256": "356ec38645d9a78493c1724e14fbc3b1afdc7c7bd689ea3275f927ed3f9e9535",
     "source": "assets/figures/five-senses/taste/model/taste_roblox.rbxmx"
   },
+  "Models.FiveSenses.SenseTouch": {
+    "assetId": "136624773079375",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a4b2ab23472fd9f9d075af204ac662a7fb173e0065532e4c5aae431b6570351f",
+    "source": "assets/figures/external/five-senses/touch/687d9b3a85f1ec228dcc341ac575ef7496967e6254d7aa4fd54ca9998aa26edc/model/touch_roblox.glb"
+  },
+  "Models.Halloween.HalloweenCandyCornJester": {
+    "assetId": "91372332612173",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "125dd3ed80eb6eda2a476c4e22968ce07e6199502f1be31b790871edc3412c8b",
+    "source": "assets/figures/external/halloween/candy-corn-jester/1d814974f145c867439c11add165ce226ead35dcf0e7a850e4f3c32ffb80614b/model/candy_corn_jester_roblox.glb"
+  },
+  "Models.Halloween.HalloweenGhostWithLantern": {
+    "assetId": "117360866263757",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a871011845e4dd18e90010312c74e6109edcd6e51c30df4629584ebed756ee0c",
+    "source": "assets/figures/external/halloween/ghost-with-lantern/953e8de2b0ea18644fe7797d3b2a6eb4a4e86c0ca11767fb45b0291e971df367/model/ghost_with_lantern_roblox.glb"
+  },
+  "Models.Halloween.HalloweenMummySorcerer": {
+    "assetId": "91269394188516",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "57255e77ebd7121d1ed511697206c4a22e3a64fa29db9a3bacd0feb09d287d3f",
+    "source": "assets/figures/external/halloween/mummy-sorcerer/49f32bafb728b5681a300ba6468d8623423c823fe58af7cffa1265ac025c9303/model/mummy_sorcerer_roblox.glb"
+  },
   "Models.Halloween.HalloweenPumpkinKnight": {
     "assetId": "90577220505492",
     "assetType": "Model",
@@ -1051,6 +1348,24 @@
     },
     "sha256": "69435e9de4b6f2090f6cc9dd30336cd019ac585fd0cc4729d8602d07753eb503",
     "source": "assets/figures/halloween/pumpkin-knight/model/pumpkin_knight_roblox.rbxmx"
+  },
+  "Models.Halloween.HalloweenPumpkinTrickOrTreater": {
+    "assetId": "104046146249949",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "294f2841e3dfe647e18ac1485304b31fa06e215390ab437b984ed4958ef773c5",
+    "source": "assets/figures/external/halloween/pumpkin-trick-or-treater/55f5c5e283f0f5a1a2294d669f9fd49e275d2091249d599b0c1b918672ecede7/model/pumpkin_trick_or_treater_roblox.glb"
+  },
+  "Models.Halloween.HalloweenSkeletonButler": {
+    "assetId": "119967896633961",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4ae2911f407568b78350f2a8072f92b5baa553e49b9779e1cb558c6324f35668",
+    "source": "assets/figures/external/halloween/skeleton-butler/2ff2b9d170ae3cd7f37fa61d697545bce19d9444b4e6bafb51a85e6fd22e0ca2/model/skeleton_butler_roblox.glb"
   },
   "Models.Halloween.HalloweenVampirePrince": {
     "assetId": "87032786640114",
@@ -1070,6 +1385,60 @@
     "sha256": "6ca65588468cdec9baaccc57042d9d4758ff7fe45accdff779e5be0faedab78d",
     "source": "assets/figures/halloween/vampire-queen/model/vampire_queen_roblox.rbxmx"
   },
+  "Models.Halloween.HalloweenWerewolf": {
+    "assetId": "96021621640835",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ee031b63d709332bdbac2e8185ca7cce5b57bf0f9665c1f0820dfecc75f99811",
+    "source": "assets/figures/external/halloween/werewolf/32b24cd0a23d2060408b865de174607bd33dd53feff1ac64361442329e072211/model/werewolf_roblox.glb"
+  },
+  "Models.Halloween.HalloweenWitchCatgirl": {
+    "assetId": "122960749581395",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a9288ca99e134fca19d07cba8be5ee6252b5c86bc9c2774420cbc5a2b49934e2",
+    "source": "assets/figures/external/halloween/witch-catgirl/e88ad62af5053a52cdd9b8734659b0b2336b68ffbc2fa07e57c1e323c259723a/model/witch_catgirl_roblox.glb"
+  },
+  "Models.HumanEmotions.EmotionAnger": {
+    "assetId": "89999717712325",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "09706f46bcdfd4c1ca45944840bf9647f1a183c8856e176a009ea7b1c5c6f45b",
+    "source": "assets/figures/external/human-emotions/anger/6977ca040c67ecb358a742ad1836257918924b3bb3aad0e0091be65208eefc76/model/anger_roblox.glb"
+  },
+  "Models.HumanEmotions.EmotionDisgust": {
+    "assetId": "139063001864035",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "937cbb22ff2825455c9bd9fe9ab9cd8cce5a251b0d716748d71e5ecd0c84978a",
+    "source": "assets/figures/external/human-emotions/disgust/a210d5d135a85a4fd62c3b6a041172d115c9d2baf04124d0a3e6e90c9843c19b/model/disgust_roblox.glb"
+  },
+  "Models.HumanEmotions.EmotionEnvy": {
+    "assetId": "103998196923174",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "0c7680a3942056b97b81d808dec733c67888ce1532a9f0ee5326aac79e8b8e69",
+    "source": "assets/figures/external/human-emotions/envy/3533b17b49e8162f779473654661d011ae1904d1f81289387e298f0577a286f9/model/envy_roblox.glb"
+  },
+  "Models.HumanEmotions.EmotionFear": {
+    "assetId": "132427545444043",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b3f4a53f10dee3ea79e05d668013caa49cd741257bd8210f5e76b0c2be4ab296",
+    "source": "assets/figures/external/human-emotions/fear/335c1abc4013d350df1178de64cf493d0129e4ef8bc8785b3e27f4c4fc4bdaee/model/fear_roblox.glb"
+  },
   "Models.HumanEmotions.EmotionHope": {
     "assetId": "125752036253911",
     "assetType": "Model",
@@ -1078,6 +1447,15 @@
     },
     "sha256": "fe77a16c17c2a0f74670a776c1170f2e7f08eb068791ca0dfbacf5f1d5caf953",
     "source": "assets/figures/human-emotions/hope/model/hope_roblox.rbxmx"
+  },
+  "Models.HumanEmotions.EmotionJoy": {
+    "assetId": "99911172311034",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d466d473fada0b944e5f4f7370edd82ebea3fbc365ee58d86fd4d4e7c48a42d0",
+    "source": "assets/figures/external/human-emotions/joy/cfb2759b9489795ec04e7da21f427b2fb3d86337f2d4e39c62b7611dd0faa483/model/joy_roblox.glb"
   },
   "Models.HumanEmotions.EmotionLove": {
     "assetId": "112827431870677",
@@ -1106,6 +1484,15 @@
     "sha256": "23c89f8494a4acb382ca647fbb10d52ad1b3d6d13f5b2e85b50760109d9ccbe4",
     "source": "assets/figures/human-emotions/serenity/model/serenity_roblox.rbxmx"
   },
+  "Models.HumanEmotions.EmotionSurprise": {
+    "assetId": "105272620530319",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "0cbafc4ebdc3fd1130a6b6ad8135a3416302d6f2809a4528b3bff3c91f66a885",
+    "source": "assets/figures/external/human-emotions/surprise/34ef2599366d2a84a6dcc684113a14ebf7fa7b2c9177bf14f09bcf96e349ca01/model/surprise_roblox.glb"
+  },
   "Models.HumanoidChessPieces.ChessBishop": {
     "assetId": "97846507714399",
     "assetType": "Model",
@@ -1133,6 +1520,15 @@
     "sha256": "3c0c7591c5d3173228738d4d97c5187a6e94334127541e312921456ace329b01",
     "source": "assets/figures/humanoid-chess-pieces/knight/model/knight_roblox.rbxmx"
   },
+  "Models.HumanoidChessPieces.ChessPawn": {
+    "assetId": "70526730067606",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fdacc3da7f0ba302c181aa387dc9bfffd9dabc7dd2f98087e8de96fc9bbf597d",
+    "source": "assets/figures/external/humanoid-chess-pieces/pawn/420774de0b24f7f8e11d45bcf2a0ce569db13122625af65870874474f834bcab/model/pawn_roblox.glb"
+  },
   "Models.HumanoidChessPieces.ChessQueen": {
     "assetId": "74045277950854",
     "assetType": "Model",
@@ -1141,6 +1537,15 @@
     },
     "sha256": "a7434dc169157bb3cc21541ae2a802dd92e81af4b5b00d85edaab4710a273fbe",
     "source": "assets/figures/humanoid-chess-pieces/queen/model/queen_roblox.rbxmx"
+  },
+  "Models.HumanoidChessPieces.ChessRook": {
+    "assetId": "95359027078165",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7b844563ab9d6b7b66ea64fdd5f1df45fc333018177ac5a9ab1950d216334401",
+    "source": "assets/figures/external/humanoid-chess-pieces/rook/cde6584a8d0601cbe64f935ebdd35e261e2b01b5d5633aa789f2b9d54191992c/model/rook_roblox.glb"
   },
   "Models.Moonrace.MoonCat": {
     "assetId": "90559133725577",
@@ -1268,6 +1673,33 @@
     "sha256": "e745350e1edc6e168cdd2b817428b09faccba21476e351ff9d9a80c3aa2ad580",
     "source": "assets/figures/olympians/aphrodite/model/aphrodite_roblox.rbxmx"
   },
+  "Models.Olympians.OlympianApollo": {
+    "assetId": "104776987484795",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "54aefe96a93e9364788ac2910f2a85f307aafb5e922641010550c5bbead91b9b",
+    "source": "assets/figures/external/olympians/apollo/2de9a5734bfa7450a18974469474bc69f9e5ee8eea494fcbe8a9113d288c1138/model/apollo_roblox.glb"
+  },
+  "Models.Olympians.OlympianAres": {
+    "assetId": "113142099866146",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e2cac6f8d8223631dfa34a6cf821aef8c999c553c7036668ea77c1d589d00271",
+    "source": "assets/figures/external/olympians/ares/46afd26ec8cb660dc33b60aa47102992f138ae5832c706e00fd2b61f412832c5/model/ares_roblox.glb"
+  },
+  "Models.Olympians.OlympianArtemis": {
+    "assetId": "128290581477315",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "af9c9ee5686d506049a7363407ff7e4f0f0771586668e19fff9bfdcc5aabe26f",
+    "source": "assets/figures/external/olympians/artemis/3d5f9482cbecbde25aabd09f59b725da79acf62ea911441e34aec337fdf38377/model/artemis_roblox.glb"
+  },
   "Models.Olympians.OlympianAthena": {
     "assetId": "93212612704390",
     "assetType": "Model",
@@ -1285,6 +1717,24 @@
     },
     "sha256": "e3a56ac5667573fd01fff8a1eb0da63f5ef0e155808e2e7636133ce87b6dc5ea",
     "source": "assets/figures/olympians/hades/model/hades_roblox.rbxmx"
+  },
+  "Models.Olympians.OlympianHera": {
+    "assetId": "79257957346622",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a5ebb8a3232c2f21c3ee51f2cbe165a920be5161c8ef2d2e5e0340eaf35ba0e4",
+    "source": "assets/figures/external/olympians/hera/ac24b73245c099808c60923135e0b497ccec273aa6a901866176cc804a8976a3/model/hera_roblox.glb"
+  },
+  "Models.Olympians.OlympianHermes": {
+    "assetId": "120075247877269",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a797c9d134087b05e5b5175e892ae72f0ec3f53b5cc6e04026162d014c933f30",
+    "source": "assets/figures/external/olympians/hermes/44396b4815ba23c507c553ec837179956540cba32cac174ff111082db3e4e70f/model/hermes_roblox.glb"
   },
   "Models.Olympians.OlympianPoseidon": {
     "assetId": "107675908010032",
@@ -1357,6 +1807,15 @@
     },
     "sha256": "d29dc5b3d2af2ab05e1042ec97b337ed31bdaf5f785f79cef4b0a935b810db27",
     "source": "assets/figures/pocket-grove/sunbeam-sprite/model/sunbeam_sprite_roblox.glb"
+  },
+  "Models.PocketOrbit.OrbitEarth": {
+    "assetId": "81146575532383",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "8fbc5cebde1f192a0162fd4d1290d0c661f8065efe830ed3133a5bae8f83ff17",
+    "source": "assets/figures/external/pocket-orbit/earth/8fed3d829ab3832991372afc0b0d5aed525ad537c82c60db292fe435f23d5e46/model/earth_roblox.glb"
   },
   "Models.PocketOrbit.OrbitJupiter": {
     "assetId": "135951897975777",
@@ -1474,6 +1933,15 @@
     },
     "sha256": "7828b91f94d417567b8b623e14068aed014e82e5cf22ceed2bedc7b39d84d36e",
     "source": "assets/figures/seven-deadly-sins/lust/model/lust_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinPride": {
+    "assetId": "120244975928386",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "537b208d77b1e91d2d3be06d015fd713f548efeeeed80608c586c17263333a02",
+    "source": "assets/figures/external/seven-deadly-sins/pride/82129153134f6254fb1f9f47c541b76cfd81cbb5018df9b7bb64bb161b719407/model/pride_roblox.glb"
   },
   "Models.SevenDeadlySins.SinSloth": {
     "assetId": "95833503297421",
@@ -1870,6 +2338,24 @@
     },
     "sha256": "33c6590252bf221905e4d794b63b891e0fd718aff935dc1e688c0c6007dc5dfc",
     "source": "assets/figures/we-are-all-stars/wishing/model/wishing_roblox.glb"
+  },
+  "Models.Weather.WeatherFog": {
+    "assetId": "83756796010860",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1170dba3527646662624b6e606854e347752df765923b1b9a383ae7d1f3e95ce",
+    "source": "assets/figures/external/weather/fog/2e56ffed3f07c8e2e162239569b9b6e32a68c9a8ac6499dbc42a3f05da6c37ba/model/fog_roblox.glb"
+  },
+  "Models.Weather.WeatherHail": {
+    "assetId": "104250728707773",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "237a0bcf17f1050d2f4b71dd503a69bc0e330ac3319af33cf2ec693b5883e113",
+    "source": "assets/figures/external/weather/hail/002c01c8416ca919394b83f1c913345ef0e6083265b026c4c435c309a699b43b/model/hail_roblox.glb"
   },
   "Models.Weather.WeatherLightning": {
     "assetId": "140593474220079",

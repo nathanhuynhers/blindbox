@@ -1,0 +1,853 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "cfb2759b9489795ec04e7da21f427b2fb3d86337f2d4e39c62b7611dd0faa483",
+  "source_filename": "578930b18551454394b9de1313dfebd318858e4d14d116c3dd30997e34d528ee/joy_painted.glb",
+  "source_sha256": "578930b18551454394b9de1313dfebd318858e4d14d116c3dd30997e34d528ee",
+  "import_entry": {
+    "source": "578930b18551454394b9de1313dfebd318858e4d14d116c3dd30997e34d528ee/joy_painted.glb",
+    "figure_id": "emotion.joy",
+    "collection_id": "emotion",
+    "rarity": "Common",
+    "collection_slug": "human-emotions",
+    "figure_slug": "joy",
+    "root": "EmotionJoy",
+    "alias": "emotion_joy",
+    "asset_key": "Models.HumanEmotions.EmotionJoy",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      23.02
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4221,
+          0.0,
+          0.6415
+        ],
+        [
+          0.5821,
+          0.3359,
+          0.7815
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Joy"
+  },
+  "catalog": "emotion.joy",
+  "collection_id": "emotion",
+  "rarity": "Common",
+  "root": "EmotionJoy",
+  "figure": "EmotionJoy",
+  "title": "Joy",
+  "face": "EmotionJoy_Eyes",
+  "glass": [],
+  "meshes": 4,
+  "triangles": 18884,
+  "source_triangles": 18884,
+  "source": {
+    "bytes": 4013576,
+    "textures": [
+      {
+        "name": "joy_hero",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "name": "joy_fill",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "name": "joy_face",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "primitive_triangles": [
+      4546,
+      10433,
+      3905
+    ],
+    "triangles": 18884,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.6359007358551025,
+    2.079376459121704,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "EmotionJoy_Eyes": {
+      "tris": 172,
+      "verts": 227,
+      "non_manifold_edges": 66,
+      "boundary_edges": 66,
+      "zero_area_faces": 0,
+      "signed_volume": 0.033620627378608416,
+      "islands": 2,
+      "island_faces": [
+        2,
+        170
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.2486116886138916,
+          -0.5998023748397827,
+          2.250863552093506
+        ],
+        [
+          0.24814021587371826,
+          -0.2725362479686737,
+          2.829068422317505
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "EmotionJoy_Part002": {
+      "tris": 3733,
+      "verts": 5107,
+      "non_manifold_edges": 425,
+      "boundary_edges": 425,
+      "zero_area_faces": 0,
+      "signed_volume": 0.8221794149956803,
+      "islands": 7,
+      "island_faces": [
+        1,
+        4,
+        20,
+        23,
+        32,
+        47,
+        3606
+      ],
+      "non_positive_islands": 2,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.2026187181472778,
+          -0.7424095869064331,
+          1.8965692520141602
+        ],
+        [
+          0.9115742444992065,
+          0.7977758646011353,
+          3.07678484916687
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "EmotionJoy_Part003": {
+      "tris": 10433,
+      "verts": 11565,
+      "non_manifold_edges": 2819,
+      "boundary_edges": 2819,
+      "zero_area_faces": 0,
+      "signed_volume": -0.037084822216228386,
+      "islands": 115,
+      "island_faces": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        6,
+        6,
+        6,
+        6,
+        7,
+        7,
+        8,
+        9,
+        10,
+        16,
+        18,
+        20,
+        20,
+        52,
+        52,
+        52,
+        61,
+        62,
+        94,
+        594,
+        9153
+      ],
+      "non_positive_islands": 47,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.3179503679275513,
+          -1.0369846820831299,
+          0.0
+        ],
+        [
+          1.3179503679275513,
+          1.039688229560852,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "EmotionJoy_Part004": {
+      "tris": 4546,
+      "verts": 3728,
+      "non_manifold_edges": 2764,
+      "boundary_edges": 2764,
+      "zero_area_faces": 0,
+      "signed_volume": 1.58169699875992,
+      "islands": 234,
+      "island_faces": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        6,
+        6,
+        6,
+        6,
+        7,
+        7,
+        7,
+        7,
+        7,
+        8,
+        8,
+        8,
+        8,
+        9,
+        9,
+        9,
+        10,
+        11,
+        12,
+        12,
+        13,
+        14,
+        14,
+        16,
+        16,
+        17,
+        18,
+        20,
+        21,
+        24,
+        30,
+        30,
+        30,
+        34,
+        40,
+        46,
+        50,
+        53,
+        54,
+        69,
+        69,
+        73,
+        100,
+        101,
+        105,
+        143,
+        163,
+        207,
+        227,
+        248,
+        411,
+        589,
+        1019
+      ],
+      "non_positive_islands": 102,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.3179503679275513,
+          -1.039688229560852,
+          0.003814376424998045
+        ],
+        [
+          1.3179503679275513,
+          0.9864256381988525,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 4380192,
+    "textures": 3,
+    "primitive_triangles": [
+      172,
+      3733,
+      10433,
+      4546
+    ],
+    "triangles": 18884,
+    "mesh_nodes": [
+      "EmotionJoy_Eyes",
+      "EmotionJoy_Part002",
+      "EmotionJoy_Part003",
+      "EmotionJoy_Part004"
+    ],
+    "sha256": "d466d473fada0b944e5f4f7370edd82ebea3fbc365ee58d86fd4d4e7c48a42d0",
+    "nodes": [
+      "EmotionJoy_Eyes",
+      "EmotionJoy_Part002",
+      "EmotionJoy_Part003",
+      "EmotionJoy_Part004",
+      "EmotionJoy"
+    ],
+    "meshes": 4,
+    "materials": 3,
+    "images": 3,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 4,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "joy_hero": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    },
+    "joy_fill": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    },
+    "joy_face": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "joy_face": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    },
+    "joy_fill": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    },
+    "joy_hero": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00011070940672652796,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 0.00010665138688636944,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 9.769372991286218e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 7.430445839418098e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "joy_source_front.png",
+      "joy_source_three_quarter.png",
+      "joy_source_side.png",
+      "joy_source_back.png"
+    ],
+    "fidelity_views": [
+      "joy_fidelity_front.png",
+      "joy_fidelity_three_quarter.png",
+      "joy_fidelity_side.png",
+      "joy_fidelity_back.png"
+    ],
+    "fidelity_sha256": "d466d473fada0b944e5f4f7370edd82ebea3fbc365ee58d86fd4d4e7c48a42d0",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "578930b18551454394b9de1313dfebd318858e4d14d116c3dd30997e34d528ee",
+    "source/source.blend": "b4e4e5db8365991618fa7f260007b33b967eede870cefb3ae3c06a4ffed0fc91",
+    "model/joy_production.blend": "cb89939ab294d32902c2450acbbc3fb55ac379f1d18e8e318274e0be9cf7152e",
+    "model/joy_roblox.glb": "d466d473fada0b944e5f4f7370edd82ebea3fbc365ee58d86fd4d4e7c48a42d0",
+    "renders/joy_fidelity_back.png": "b02f62601d77cde68fe7c4b07e257091c128c28e1398bebf183925cd0826d41c",
+    "renders/joy_fidelity_front.png": "ca85181da003c0bd5d2b27be134de090fbccfb95f7eabe63793f58e9f8c57d89",
+    "renders/joy_fidelity_side.png": "884de915cd2924007ede956be3e27dd316f7103032036e76f9f089c72124d5f0",
+    "renders/joy_fidelity_three_quarter.png": "bf76152bcaed4eca89660b1226780b5f7c8e2b4a92ea02ef356dc06d3c5670c2",
+    "renders/joy_source_back.png": "cb19fb4b7cd3621ec8144e159a39d3a6168dbbbe2e7dd734f6edb1311d69e336",
+    "renders/joy_source_front.png": "2fa194a090a7b575d6287a7dbdabbd541bf7a5b137f7c79cbb6d16e3cd944cd0",
+    "renders/joy_source_side.png": "203d58e4c5ea8ab5c4f60a519288b22ce4395f47e2dac02b26048373e16e62a9",
+    "renders/joy_source_three_quarter.png": "56c9def723fe41d101a41d3021431ebb7e303c2c6dbfca350f879edcd0e12ac9"
+  }
+}

@@ -22,7 +22,10 @@ end
 
 -- Which build create() would return now; callers rebuild when this changes.
 function FigureModel.variant(id: string): string
-	return if template(id) then "production" else "placeholder"
+	return if template(id)
+		then "production"
+		elseif Catalog.productionOnly[Catalog.byId[id].collection] then "pending"
+		else "placeholder"
 end
 
 -- Calls back whenever production figure templates may have changed. Returns a disconnect.
@@ -68,6 +71,31 @@ function FigureModel.create(id: string, at: CFrame): Model
 	end
 	local model = Instance.new("Model")
 	model.Name = definition.name
+	if Catalog.productionOnly[definition.collection] then
+		-- Keep saved placements while loading, without imitating an approved collectible.
+		local anchor = Instance.new("Part")
+		anchor.Name = "LoadingBounds"
+		anchor.Size = Vector3.new(3, 3, 3)
+		anchor.Transparency = 1
+		anchor.Anchored = true
+		anchor.CanCollide, anchor.CanTouch, anchor.CanQuery = false, false, false
+		anchor.CFrame = at * CFrame.new(0, 1.5, 0)
+		anchor.Parent = model
+		model.PrimaryPart = anchor
+		model:SetAttribute("FigurePending", true)
+		local status = Instance.new("BillboardGui")
+		status.Name = "FigureStatus"
+		status.Size = UDim2.fromOffset(160, 32)
+		status.Parent = anchor
+		local label = Instance.new("TextLabel")
+		label.Size = UDim2.fromScale(1, 1)
+		label.BackgroundTransparency = 1
+		label.Text = "Figure loading"
+		label.TextSize = 18
+		label.TextColor3 = Color3.fromRGB(85, 75, 98)
+		label.Parent = status
+		return model
+	end
 	local function ball(name: string, size: Vector3, offset: Vector3, color: Color3): Part
 		local part = Instance.new("Part")
 		part.Name = name

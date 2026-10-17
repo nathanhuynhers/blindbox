@@ -1,0 +1,321 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "e88ad62af5053a52cdd9b8734659b0b2336b68ffbc2fa07e57c1e323c259723a",
+  "source_filename": "8082c1068a4c23776e1f04a51bd723c107035a556add28c63e1605f6ed7876e9/witch_catgirl_painted.glb",
+  "source_sha256": "8082c1068a4c23776e1f04a51bd723c107035a556add28c63e1605f6ed7876e9",
+  "import_entry": {
+    "source": "8082c1068a4c23776e1f04a51bd723c107035a556add28c63e1605f6ed7876e9/witch_catgirl_painted.glb",
+    "figure_id": "halloween.witch-catgirl",
+    "collection_id": "halloween",
+    "rarity": "Uncommon",
+    "collection_slug": "halloween",
+    "figure_slug": "witch-catgirl",
+    "root": "HalloweenWitchCatgirl",
+    "alias": "halloween_witch_catgirl",
+    "asset_key": "Models.Halloween.HalloweenWitchCatgirl",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      11.59
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4271,
+          0.0,
+          0.5803
+        ],
+        [
+          0.5871,
+          0.3157,
+          0.7203
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Witch Catgirl"
+  },
+  "catalog": "halloween.witch-catgirl",
+  "collection_id": "halloween",
+  "rarity": "Uncommon",
+  "root": "HalloweenWitchCatgirl",
+  "figure": "HalloweenWitchCatgirl",
+  "title": "Witch Catgirl",
+  "face": "HalloweenWitchCatgirl_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19354,
+  "source_triangles": 19354,
+  "source": {
+    "bytes": 4998792,
+    "textures": [
+      {
+        "name": "witch_catgirl_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19354
+    ],
+    "triangles": 19354,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.2930620908737183,
+    2.2837666273117065,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "HalloweenWitchCatgirl_Eyes": {
+      "tris": 193,
+      "verts": 254,
+      "non_manifold_edges": 63,
+      "boundary_edges": 63,
+      "zero_area_faces": 0,
+      "signed_volume": -0.024625437709892315,
+      "islands": 3,
+      "island_faces": [
+        1,
+        1,
+        191
+      ],
+      "non_positive_islands": 3,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.26153913140296936,
+          -0.7877668738365173,
+          2.040415048599243
+        ],
+        [
+          0.2610832750797272,
+          -0.4227745831012726,
+          2.612092971801758
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "HalloweenWitchCatgirl_Part002": {
+      "tris": 19161,
+      "verts": 19741,
+      "non_manifold_edges": 67,
+      "boundary_edges": 67,
+      "zero_area_faces": 0,
+      "signed_volume": 2.6200122163577806,
+      "islands": 1,
+      "island_faces": [
+        19161
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.1465309858322144,
+          -1.141883373260498,
+          0.0
+        ],
+        [
+          1.146531105041504,
+          1.1418832540512085,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5328552,
+    "textures": 1,
+    "primitive_triangles": [
+      193,
+      19161
+    ],
+    "triangles": 19354,
+    "mesh_nodes": [
+      "HalloweenWitchCatgirl_Eyes",
+      "HalloweenWitchCatgirl_Part002"
+    ],
+    "sha256": "a9288ca99e134fca19d07cba8be5ee6252b5c86bc9c2774420cbc5a2b49934e2",
+    "nodes": [
+      "HalloweenWitchCatgirl_Eyes",
+      "HalloweenWitchCatgirl_Part002",
+      "HalloweenWitchCatgirl"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "witch_catgirl": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "witch_catgirl": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.905536429258063e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 0.9999890541709082,
+      "foreground_rgb_mae": 6.397228571586311e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.69681467115879e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 0.9999909817289829,
+      "foreground_rgb_mae": 5.36262959940359e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "witch_catgirl_source_front.png",
+      "witch_catgirl_source_three_quarter.png",
+      "witch_catgirl_source_side.png",
+      "witch_catgirl_source_back.png"
+    ],
+    "fidelity_views": [
+      "witch_catgirl_fidelity_front.png",
+      "witch_catgirl_fidelity_three_quarter.png",
+      "witch_catgirl_fidelity_side.png",
+      "witch_catgirl_fidelity_back.png"
+    ],
+    "fidelity_sha256": "a9288ca99e134fca19d07cba8be5ee6252b5c86bc9c2774420cbc5a2b49934e2",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "8082c1068a4c23776e1f04a51bd723c107035a556add28c63e1605f6ed7876e9",
+    "source/source.blend": "27cf584a4b2cc9143faadfa4c4e3d0d66571dfc415484f6426ae1aee58e7dac3",
+    "model/witch_catgirl_production.blend": "116e612f2d745cfdc9ae45c6c021144b270b946050316b09fb9f06e88ff48c63",
+    "model/witch_catgirl_roblox.glb": "a9288ca99e134fca19d07cba8be5ee6252b5c86bc9c2774420cbc5a2b49934e2",
+    "renders/witch_catgirl_fidelity_back.png": "f4668d2b625e34aa8854d216e36622accf2b51cd16b32aeb2725ec7854e9c0a2",
+    "renders/witch_catgirl_fidelity_front.png": "78ef2c32a9984fc0625f019db34172e0294b96217acec78e31bf8bfbcbd3573c",
+    "renders/witch_catgirl_fidelity_side.png": "a1213d7a3405a93bf0ed314421f432b2f374a861f85154844b515c5d2cf6666f",
+    "renders/witch_catgirl_fidelity_three_quarter.png": "3c3f377f04df189b074ef9ebf3da6486a0ca8c4e17139c02d6a802e0a2580628",
+    "renders/witch_catgirl_source_back.png": "7dd3eb8ddf33b4a79158e9f43a7664236f164f7daaf9f61a48480bbeaaebae62",
+    "renders/witch_catgirl_source_front.png": "b1648539ffe0bd8b5d2c0e0b2fdacedfdac50570b3af30091f23218e3707fce7",
+    "renders/witch_catgirl_source_side.png": "9934172c6eb374de9983d186a9dfba09caaf2c481cd52a38292b17e19df0c6e9",
+    "renders/witch_catgirl_source_three_quarter.png": "d19d6648984f357bf5a5fa9182f9168bd37ee1313a9914afcd00a61c98f31b78"
+  }
+}

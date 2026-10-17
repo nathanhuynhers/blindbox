@@ -1,5 +1,9 @@
 # Blind Box game design
 
+The [collection expansion candidate](COLLECTION_INTEGRATION.md) adds 117 figures across 13 collections, approved prices and roster-aware odds, with independently configurable provisional income and a one-quadrillion Coin ceiling. All models and emblems are uploaded and wired; full native acceptance remains pending. This candidate is not a live release.
+
+The subsequent approved [collection purchase progression](COLLECTION_PROGRESSION.md) uses permanent unique non-Mythical discoveries including a Legendary. Qualifying in either baseline prestige collection opens expansion tiers 1–2; the highest qualifying expansion tier opens purchases through two tiers ahead. Original five-collection access and owned-figure use remain available.
+
 Current direction is [Player Plots, Display and Shelves](PLAYER_PLOTS_AND_SHELVES.md).
 The accepted [historical MVP](archive/MVP.md) established the core loop. Blind Box is now live
 (owner confirmation, October 11, 2026); documented native storage, multiplayer and physical-device
@@ -19,7 +23,7 @@ for current tuning, probability-budget handling and simultaneous-guarantee prior
 
 Duplicate copies are permanently retained and automatically enhance their figure's income with
 rarity-scaled diminishing returns. Each figure ID can earn in only one Display slot. Display starts
-with three slots and expands sequentially to six for 40,000 / 400,000 / 4,000,000 Coins.
+with three slots; slot 4 costs 1,000,000 Coins. Existing slots 5–6 gamepass handling is unchanged.
 Three distinct displayed figures from one collection grant +10% total income once. Displayed figures
 keep earning offline at half rate for up to 6 hours, claimed from a welcome-back popup. No visitor payouts. Figures bank income until their owner steps on its corresponding plate or clicks/taps that figure;
 removal preserves the bank, while replacement automatically attempts to collect the outgoing

@@ -1,0 +1,319 @@
+{
+  "schema_version": 3,
+  "pipeline": "external_glb",
+  "fingerprint": "49a33d633598367ef5b53d7c9d45ebff5f70bd6fc47a697bc4540dd7f0280115",
+  "source_filename": "7e03512333be7ffc055a92647f7aa10d0d7b72cc4633e4a11b8172d7d9739fd3/matcha_mochi_painted.glb",
+  "source_sha256": "7e03512333be7ffc055a92647f7aa10d0d7b72cc4633e4a11b8172d7d9739fd3",
+  "import_entry": {
+    "source": "7e03512333be7ffc055a92647f7aa10d0d7b72cc4633e4a11b8172d7d9739fd3/matcha_mochi_painted.glb",
+    "figure_id": "dessert.matcha-mochi",
+    "collection_id": "dessert",
+    "rarity": "Rare",
+    "collection_slug": "desserts",
+    "figure_slug": "matcha-mochi",
+    "root": "DessertMatchaMochi",
+    "alias": "dessert_matcha_mochi",
+    "asset_key": "Models.Desserts.DessertMatchaMochi",
+    "height_studs": 3.572,
+    "rotation_degrees": [
+      0,
+      0,
+      36.03
+    ],
+    "eyes": {
+      "object": "Body",
+      "region": [
+        [
+          0.4237,
+          0.0,
+          0.5855
+        ],
+        [
+          0.5837,
+          0.315,
+          0.7255
+        ]
+      ]
+    },
+    "max_parts": 64,
+    "texture_limit": 4096,
+    "resize_textures": false,
+    "optimization": {},
+    "protected_objects": [],
+    "title": "Matcha Mochi"
+  },
+  "catalog": "dessert.matcha-mochi",
+  "collection_id": "dessert",
+  "rarity": "Rare",
+  "root": "DessertMatchaMochi",
+  "figure": "DessertMatchaMochi",
+  "title": "Matcha Mochi",
+  "face": "DessertMatchaMochi_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "triangles": 19276,
+  "source_triangles": 19276,
+  "source": {
+    "bytes": 5285312,
+    "textures": [
+      {
+        "name": "matcha_mochi_albedo",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "primitive_triangles": [
+      19276
+    ],
+    "triangles": 19276,
+    "mesh_nodes": [
+      "Body"
+    ]
+  },
+  "size_xyz_studs": [
+    2.2935508489608765,
+    2.127834677696228,
+    3.572000026702881
+  ],
+  "grounded": true,
+  "facing_valid": true,
+  "components": {
+    "DessertMatchaMochi_Eyes": {
+      "tris": 210,
+      "verts": 269,
+      "non_manifold_edges": 54,
+      "boundary_edges": 54,
+      "zero_area_faces": 0,
+      "signed_volume": -0.01705062832376104,
+      "islands": 1,
+      "island_faces": [
+        210
+      ],
+      "non_positive_islands": 1,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -0.22245019674301147,
+          -0.7632282972335815,
+          2.064281702041626
+        ],
+        [
+          0.221920907497406,
+          -0.36592918634414673,
+          2.633610725402832
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    },
+    "DessertMatchaMochi_Part002": {
+      "tris": 19066,
+      "verts": 17570,
+      "non_manifold_edges": 54,
+      "boundary_edges": 54,
+      "zero_area_faces": 0,
+      "signed_volume": 3.705242873583077,
+      "islands": 1,
+      "island_faces": [
+        19066
+      ],
+      "non_positive_islands": 0,
+      "duplicate_faces": 0,
+      "finite_vertices": true,
+      "finite_uvs": true,
+      "uv_zero_area_faces": 0,
+      "bounds": [
+        [
+          -1.1467753648757935,
+          -1.0639173984527588,
+          0.0
+        ],
+        [
+          1.146775484085083,
+          1.0639172792434692,
+          3.572000026702881
+        ]
+      ],
+      "materials": 1,
+      "branch_edges": 0
+    }
+  },
+  "optimization": {
+    "Body": {
+      "mode": "lossless",
+      "surface_error": 0.0
+    }
+  },
+  "texture_changes": [],
+  "glb": {
+    "bytes": 5579736,
+    "textures": 1,
+    "primitive_triangles": [
+      210,
+      19066
+    ],
+    "triangles": 19276,
+    "mesh_nodes": [
+      "DessertMatchaMochi_Eyes",
+      "DessertMatchaMochi_Part002"
+    ],
+    "sha256": "1b0a0b366e3afe9aba952eeff3174694381098794992543ac6095f0807941631",
+    "nodes": [
+      "DessertMatchaMochi_Eyes",
+      "DessertMatchaMochi_Part002",
+      "DessertMatchaMochi"
+    ],
+    "meshes": 2,
+    "materials": 1,
+    "images": 1,
+    "all_materials_textured": true,
+    "extensions_required": [],
+    "extensions_used": [],
+    "errors": [],
+    "pbr_materials": []
+  },
+  "reimport": {
+    "meshes": 2,
+    "triangle_mismatches": {},
+    "unexpected_parts": [],
+    "geometry_mismatches": {}
+  },
+  "material_mismatches": [],
+  "source_materials": {
+    "matcha_mochi": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "production_materials": {
+    "matcha_mochi": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.6000000238418579,
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "normalScale": 1,
+      "occlusionStrength": 1,
+      "maps": {
+        "albedo": {
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "texCoord": 0,
+          "wrapS": 10497,
+          "wrapT": 10497
+        }
+      }
+    }
+  },
+  "visual_comparison": {
+    "front": {
+      "silhouette_iou": 0.9999787827673636,
+      "foreground_rgb_mae": 5.3986073908163235e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "three_quarter": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 5.074653745396063e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "side": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 6.226918776519597e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    },
+    "back": {
+      "silhouette_iou": 1.0,
+      "foreground_rgb_mae": 4.604106652550399e-05,
+      "pass": true,
+      "limits": {
+        "silhouette_iou_min": 0.97,
+        "foreground_rgb_mae_max": 0.05
+      }
+    }
+  },
+  "previews": {
+    "view_names": [
+      "front",
+      "three_quarter",
+      "side",
+      "back"
+    ],
+    "source_views": [
+      "matcha_mochi_source_front.png",
+      "matcha_mochi_source_three_quarter.png",
+      "matcha_mochi_source_side.png",
+      "matcha_mochi_source_back.png"
+    ],
+    "fidelity_views": [
+      "matcha_mochi_fidelity_front.png",
+      "matcha_mochi_fidelity_three_quarter.png",
+      "matcha_mochi_fidelity_side.png",
+      "matcha_mochi_fidelity_back.png"
+    ],
+    "fidelity_sha256": "1b0a0b366e3afe9aba952eeff3174694381098794992543ac6095f0807941631",
+    "fidelity_source": "exported_reimported_glb"
+  },
+  "errors": [],
+  "notes": [
+    "Open boundaries from partitioning are intentional; no caps added.",
+    "Image metrics flag large losses, not likeness, seams or Roblox PBR fidelity.",
+    "Original source GLB is byte-preserved. Orientation/scale are explicit manifest choices."
+  ],
+  "artifacts": {
+    "source/original.glb": "7e03512333be7ffc055a92647f7aa10d0d7b72cc4633e4a11b8172d7d9739fd3",
+    "source/source.blend": "80d07348368a4054bb3d007c23bc730dc32a32d176e973c7bcf5468f59586384",
+    "model/matcha_mochi_production.blend": "f4eecb43c25882c72dbcf2aa685eaa424b355e2b3f6598831e862c290d29d728",
+    "model/matcha_mochi_roblox.glb": "1b0a0b366e3afe9aba952eeff3174694381098794992543ac6095f0807941631",
+    "renders/matcha_mochi_fidelity_back.png": "c0846d7bea79eddb354f59e0d7f413c268a3dd8d66ef96786b46599df263e860",
+    "renders/matcha_mochi_fidelity_front.png": "ba27ec8133bb377c4ffdd79ab5563df3d0373cb2ef36aca1801aca2a404df024",
+    "renders/matcha_mochi_fidelity_side.png": "5069192be9fb28910f852fc9339871b54da8f01e2885c83d353ae8e8ca271771",
+    "renders/matcha_mochi_fidelity_three_quarter.png": "61bfa576b659f45ccd86dd0c25eaf8d029518f08484085917ef0a3d39a332316",
+    "renders/matcha_mochi_source_back.png": "486ce108e6a2ab25fcb902aed8f3043d21fef5b200fa5776c8c48b13422c0434",
+    "renders/matcha_mochi_source_front.png": "8116926d2e32deecc629a3e37b0c3ed62503bca8f7283f2aa2d1b1460a68d310",
+    "renders/matcha_mochi_source_side.png": "8cd266868f4946b78356f9cc38095e1f94b6a99f32b92921cfa2b6525edb672a",
+    "renders/matcha_mochi_source_three_quarter.png": "961c163f5680f421577e00de124bd307f45ee0338428ad040fc5da77ee41e39d"
+  }
+}

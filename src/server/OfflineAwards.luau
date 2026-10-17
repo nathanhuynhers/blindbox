@@ -1,4 +1,5 @@
 --!strict
+local Currency = require(game:GetService("ReplicatedStorage").Shared.Currency)
 -- No earning formula here. N is the already rounded, server-computed return reward.
 -- Product identity epochs are a REVIEW CANDIDATE, never production authorization.
 local Types = require(game:GetService("ReplicatedStorage").Shared.OfflineTypes)
@@ -15,7 +16,7 @@ export type State = {
 	offlineData: Record?,
 }
 local Awards = { maxBindings = 256, maxReceipts = 2048, creditLimit = 9007199254740990 }
-local coinLimit = 1000000000000
+local coinLimit = Currency.limit
 local function integer(value: unknown, maximum: number): boolean
 	return typeof(value) == "number" and value >= 0 and value <= maximum and value % 1 == 0
 end
