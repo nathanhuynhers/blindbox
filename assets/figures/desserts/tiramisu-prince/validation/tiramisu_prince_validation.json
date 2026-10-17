@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "dessert.tiramisu-prince",
+  "collection_id": "dessert",
+  "rarity": "Legendary",
+  "root": "DessertTiramisuPrince",
+  "figure": "DessertTiramisuPrince",
+  "title": "Tiramisu Prince",
+  "face": "DessertTiramisuPrince_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7239,
+    1.8699,
+    3.5663
+  ],
+  "components": [
+    "DessertTiramisuPrince_Body",
+    "DessertTiramisuPrince_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "cedd3cf4592b45cfd32bc85920e57db342d8efe0a31d1aea3f6d7246fb8d253d"
+  }
+}

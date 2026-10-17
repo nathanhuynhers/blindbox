@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.cancer",
+  "collection_id": "astral",
+  "rarity": "Rare",
+  "root": "AstralCancer",
+  "figure": "AstralCancer",
+  "title": "Cancer",
+  "face": "AstralCancer_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.572,
+    2.8256,
+    3.0337
+  ],
+  "components": [
+    "AstralCancer_Body",
+    "AstralCancer_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "ac0ca2a57fd886873e6bc2d48558031c8839ac5a70d5c2cd10172a9585082ddd"
+  }
+}

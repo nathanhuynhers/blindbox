@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "emotion.sadness",
+  "collection_id": "emotion",
+  "rarity": "Rare",
+  "root": "EmotionSadness",
+  "figure": "EmotionSadness",
+  "title": "Sadness",
+  "face": "EmotionSadness_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.763,
+    2.3888,
+    3.571
+  ],
+  "components": [
+    "EmotionSadness_Body",
+    "EmotionSadness_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "f436a359173f5c357a6e7eea549e046f464fd9036f3b08547d4e33511cd02fff"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sin.lust",
+  "collection_id": "sin",
+  "rarity": "Legendary",
+  "root": "SinLust",
+  "figure": "SinLust",
+  "title": "Lust",
+  "face": "SinLust_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.3163,
+    2.2764,
+    3.5641
+  ],
+  "components": [
+    "SinLust_Body",
+    "SinLust_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "7828b91f94d417567b8b623e14068aed014e82e5cf22ceed2bedc7b39d84d36e"
+  }
+}

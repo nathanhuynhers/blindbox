@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sense.taste",
+  "collection_id": "sense",
+  "rarity": "Rare",
+  "root": "SenseTaste",
+  "figure": "SenseTaste",
+  "title": "Taste",
+  "face": "SenseTaste_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.3472,
+    1.9838,
+    3.5727
+  ],
+  "components": [
+    "SenseTaste_Body",
+    "SenseTaste_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "356ec38645d9a78493c1724e14fbc3b1afdc7c7bd689ea3275f927ed3f9e9535"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "chess.bishop",
+  "collection_id": "chess",
+  "rarity": "Rare",
+  "root": "ChessBishop",
+  "figure": "ChessBishop",
+  "title": "Bishop",
+  "face": "ChessBishop_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7802,
+    1.6893,
+    3.5683
+  ],
+  "components": [
+    "ChessBishop_Body",
+    "ChessBishop_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "d568b107c660903e99a369fcc4e0b82aaf1ddb6a326b0fac0fc87e0d292e0675"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "biome.tundra",
+  "collection_id": "biome",
+  "rarity": "Legendary",
+  "root": "BiomeTundra",
+  "figure": "BiomeTundra",
+  "title": "Tundra",
+  "face": "BiomeTundra_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2452,
+    2.3395,
+    3.5518
+  ],
+  "components": [
+    "BiomeTundra_Body",
+    "BiomeTundra_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "dd0bc2fa18c960a9a55f8ed590d840bced4bb3d7820f2cf1008048d3a91f39c5"
+  }
+}

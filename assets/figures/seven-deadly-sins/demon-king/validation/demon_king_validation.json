@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sin.demon-king",
+  "collection_id": "sin",
+  "rarity": "Mythical",
+  "root": "SinDemonKing",
+  "figure": "SinDemonKing",
+  "title": "Demon King",
+  "face": "SinDemonKing_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2699,
+    1.5139,
+    3.5661
+  ],
+  "components": [
+    "SinDemonKing_Body",
+    "SinDemonKing_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "28dc5886ba344b3080e461008eda6c4ae4f487a08837baab7ecc89d97d0d4b1f"
+  }
+}

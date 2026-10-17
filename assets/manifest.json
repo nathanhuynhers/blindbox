@@ -2207,6 +2207,633 @@
         "Wishing_Blush"
       ],
       "source": "assets/figures/we-are-all-stars/wishing/model/wishing_roblox.glb"
+    },
+    "astral_gemini": {
+      "key": "Models.AstralSigns.AstralGemini",
+      "source": "assets/figures/astral-signs/gemini/model/gemini_roblox.rbxmx",
+      "displayName": "Astral Signs - Gemini",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralGemini",
+        "AstralGemini_Body",
+        "AstralGemini_Eyes"
+      ]
+    },
+    "astral_cancer": {
+      "key": "Models.AstralSigns.AstralCancer",
+      "source": "assets/figures/astral-signs/cancer/model/cancer_roblox.rbxmx",
+      "displayName": "Astral Signs - Cancer",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralCancer",
+        "AstralCancer_Body",
+        "AstralCancer_Eyes"
+      ]
+    },
+    "astral_libra": {
+      "key": "Models.AstralSigns.AstralLibra",
+      "source": "assets/figures/astral-signs/libra/model/libra_roblox.rbxmx",
+      "displayName": "Astral Signs - Libra",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralLibra",
+        "AstralLibra_Body",
+        "AstralLibra_Eyes"
+      ]
+    },
+    "astral_scorpio": {
+      "key": "Models.AstralSigns.AstralScorpio",
+      "source": "assets/figures/astral-signs/scorpio/model/scorpio_roblox.rbxmx",
+      "displayName": "Astral Signs - Scorpio",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralScorpio",
+        "AstralScorpio_Body",
+        "AstralScorpio_Eyes"
+      ]
+    },
+    "astral_sagittarius": {
+      "key": "Models.AstralSigns.AstralSagittarius",
+      "source": "assets/figures/astral-signs/sagittarius/model/sagittarius_roblox.rbxmx",
+      "displayName": "Astral Signs - Sagittarius",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralSagittarius",
+        "AstralSagittarius_Body",
+        "AstralSagittarius_Eyes"
+      ]
+    },
+    "astral_aquarius": {
+      "key": "Models.AstralSigns.AstralAquarius",
+      "source": "assets/figures/astral-signs/aquarius/model/aquarius_roblox.rbxmx",
+      "displayName": "Astral Signs - Aquarius",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralAquarius",
+        "AstralAquarius_Body",
+        "AstralAquarius_Eyes"
+      ]
+    },
+    "astral_pisces": {
+      "key": "Models.AstralSigns.AstralPisces",
+      "source": "assets/figures/astral-signs/pisces/model/pisces_roblox.rbxmx",
+      "displayName": "Astral Signs - Pisces",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralPisces",
+        "AstralPisces_Body",
+        "AstralPisces_Eyes"
+      ]
+    },
+    "astral_ophiuchus": {
+      "key": "Models.AstralSigns.AstralOphiuchus",
+      "source": "assets/figures/astral-signs/ophiuchus/model/ophiuchus_roblox.rbxmx",
+      "displayName": "Astral Signs - Ophiuchus",
+      "assetType": "Model",
+      "requiredNodes": [
+        "AstralOphiuchus",
+        "AstralOphiuchus_Body",
+        "AstralOphiuchus_Eyes"
+      ]
+    },
+    "olympian_zeus": {
+      "key": "Models.Olympians.OlympianZeus",
+      "source": "assets/figures/olympians/zeus/model/zeus_roblox.rbxmx",
+      "displayName": "Olympians - Zeus",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OlympianZeus",
+        "OlympianZeus_Body",
+        "OlympianZeus_Eyes"
+      ]
+    },
+    "olympian_poseidon": {
+      "key": "Models.Olympians.OlympianPoseidon",
+      "source": "assets/figures/olympians/poseidon/model/poseidon_roblox.rbxmx",
+      "displayName": "Olympians - Poseidon",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OlympianPoseidon",
+        "OlympianPoseidon_Body",
+        "OlympianPoseidon_Eyes"
+      ]
+    },
+    "olympian_hades": {
+      "key": "Models.Olympians.OlympianHades",
+      "source": "assets/figures/olympians/hades/model/hades_roblox.rbxmx",
+      "displayName": "Olympians - Hades",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OlympianHades",
+        "OlympianHades_Body",
+        "OlympianHades_Eyes"
+      ]
+    },
+    "olympian_athena": {
+      "key": "Models.Olympians.OlympianAthena",
+      "source": "assets/figures/olympians/athena/model/athena_roblox.rbxmx",
+      "displayName": "Olympians - Athena",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OlympianAthena",
+        "OlympianAthena_Body",
+        "OlympianAthena_Eyes"
+      ]
+    },
+    "olympian_aphrodite": {
+      "key": "Models.Olympians.OlympianAphrodite",
+      "source": "assets/figures/olympians/aphrodite/model/aphrodite_roblox.rbxmx",
+      "displayName": "Olympians - Aphrodite",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OlympianAphrodite",
+        "OlympianAphrodite_Body",
+        "OlympianAphrodite_Eyes"
+      ]
+    },
+    "birthstone_ruby": {
+      "key": "Models.Birthstones.BirthstoneRuby",
+      "source": "assets/figures/birthstones/ruby/model/ruby_roblox.rbxmx",
+      "displayName": "Birthstones - Ruby",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstoneRuby",
+        "BirthstoneRuby_Body",
+        "BirthstoneRuby_Eyes"
+      ]
+    },
+    "birthstone_amethyst": {
+      "key": "Models.Birthstones.BirthstoneAmethyst",
+      "source": "assets/figures/birthstones/amethyst/model/amethyst_roblox.rbxmx",
+      "displayName": "Birthstones - Amethyst",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstoneAmethyst",
+        "BirthstoneAmethyst_Body",
+        "BirthstoneAmethyst_Eyes"
+      ]
+    },
+    "birthstone_emerald": {
+      "key": "Models.Birthstones.BirthstoneEmerald",
+      "source": "assets/figures/birthstones/emerald/model/emerald_roblox.rbxmx",
+      "displayName": "Birthstones - Emerald",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstoneEmerald",
+        "BirthstoneEmerald_Body",
+        "BirthstoneEmerald_Eyes"
+      ]
+    },
+    "birthstone_sapphire": {
+      "key": "Models.Birthstones.BirthstoneSapphire",
+      "source": "assets/figures/birthstones/sapphire/model/sapphire_roblox.rbxmx",
+      "displayName": "Birthstones - Sapphire",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstoneSapphire",
+        "BirthstoneSapphire_Body",
+        "BirthstoneSapphire_Eyes"
+      ]
+    },
+    "birthstone_pearl": {
+      "key": "Models.Birthstones.BirthstonePearl",
+      "source": "assets/figures/birthstones/pearl/model/pearl_roblox.rbxmx",
+      "displayName": "Birthstones - Pearl",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstonePearl",
+        "BirthstonePearl_Body",
+        "BirthstonePearl_Eyes"
+      ]
+    },
+    "birthstone_diamond": {
+      "key": "Models.Birthstones.BirthstoneDiamond",
+      "source": "assets/figures/birthstones/diamond/model/diamond_roblox.rbxmx",
+      "displayName": "Birthstones - Diamond",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstoneDiamond",
+        "BirthstoneDiamond_Body",
+        "BirthstoneDiamond_Eyes"
+      ]
+    },
+    "birthstone_opal": {
+      "key": "Models.Birthstones.BirthstoneOpal",
+      "source": "assets/figures/birthstones/opal/model/opal_roblox.rbxmx",
+      "displayName": "Birthstones - Opal",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstoneOpal",
+        "BirthstoneOpal_Body",
+        "BirthstoneOpal_Eyes"
+      ]
+    },
+    "birthstone_aquamarine": {
+      "key": "Models.Birthstones.BirthstoneAquamarine",
+      "source": "assets/figures/birthstones/aquamarine/model/aquamarine_roblox.rbxmx",
+      "displayName": "Birthstones - Aquamarine",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BirthstoneAquamarine",
+        "BirthstoneAquamarine_Body",
+        "BirthstoneAquamarine_Eyes"
+      ]
+    },
+    "biome_ocean": {
+      "key": "Models.Biomes.BiomeOcean",
+      "source": "assets/figures/biomes/ocean/model/ocean_roblox.rbxmx",
+      "displayName": "Biomes - Ocean",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BiomeOcean",
+        "BiomeOcean_Body",
+        "BiomeOcean_Eyes"
+      ]
+    },
+    "biome_rainforest": {
+      "key": "Models.Biomes.BiomeRainforest",
+      "source": "assets/figures/biomes/rainforest/model/rainforest_roblox.rbxmx",
+      "displayName": "Biomes - Rainforest",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BiomeRainforest",
+        "BiomeRainforest_Body",
+        "BiomeRainforest_Eyes"
+      ]
+    },
+    "biome_tundra": {
+      "key": "Models.Biomes.BiomeTundra",
+      "source": "assets/figures/biomes/tundra/model/tundra_roblox.rbxmx",
+      "displayName": "Biomes - Tundra",
+      "assetType": "Model",
+      "requiredNodes": [
+        "BiomeTundra",
+        "BiomeTundra_Body",
+        "BiomeTundra_Eyes"
+      ]
+    },
+    "orbit_mercury": {
+      "key": "Models.PocketOrbit.OrbitMercury",
+      "source": "assets/figures/pocket-orbit/mercury/model/mercury_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Mercury",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitMercury",
+        "OrbitMercury_Body",
+        "OrbitMercury_Eyes"
+      ]
+    },
+    "orbit_venus": {
+      "key": "Models.PocketOrbit.OrbitVenus",
+      "source": "assets/figures/pocket-orbit/venus/model/venus_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Venus",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitVenus",
+        "OrbitVenus_Body",
+        "OrbitVenus_Eyes"
+      ]
+    },
+    "orbit_mars": {
+      "key": "Models.PocketOrbit.OrbitMars",
+      "source": "assets/figures/pocket-orbit/mars/model/mars_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Mars",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitMars",
+        "OrbitMars_Body",
+        "OrbitMars_Eyes"
+      ]
+    },
+    "orbit_jupiter": {
+      "key": "Models.PocketOrbit.OrbitJupiter",
+      "source": "assets/figures/pocket-orbit/jupiter/model/jupiter_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Jupiter",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitJupiter",
+        "OrbitJupiter_Body",
+        "OrbitJupiter_Eyes"
+      ]
+    },
+    "orbit_saturn": {
+      "key": "Models.PocketOrbit.OrbitSaturn",
+      "source": "assets/figures/pocket-orbit/saturn/model/saturn_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Saturn",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitSaturn",
+        "OrbitSaturn_Body",
+        "OrbitSaturn_Eyes"
+      ]
+    },
+    "orbit_uranus": {
+      "key": "Models.PocketOrbit.OrbitUranus",
+      "source": "assets/figures/pocket-orbit/uranus/model/uranus_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Uranus",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitUranus",
+        "OrbitUranus_Body",
+        "OrbitUranus_Eyes"
+      ]
+    },
+    "orbit_neptune": {
+      "key": "Models.PocketOrbit.OrbitNeptune",
+      "source": "assets/figures/pocket-orbit/neptune/model/neptune_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Neptune",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitNeptune",
+        "OrbitNeptune_Body",
+        "OrbitNeptune_Eyes"
+      ]
+    },
+    "orbit_pluto": {
+      "key": "Models.PocketOrbit.OrbitPluto",
+      "source": "assets/figures/pocket-orbit/pluto/model/pluto_roblox.rbxmx",
+      "displayName": "Pocket Orbit - Pluto",
+      "assetType": "Model",
+      "requiredNodes": [
+        "OrbitPluto",
+        "OrbitPluto_Body",
+        "OrbitPluto_Eyes"
+      ]
+    },
+    "dessert_tiramisu_prince": {
+      "key": "Models.Desserts.DessertTiramisuPrince",
+      "source": "assets/figures/desserts/tiramisu-prince/model/tiramisu_prince_roblox.rbxmx",
+      "displayName": "Desserts - Tiramisu Prince",
+      "assetType": "Model",
+      "requiredNodes": [
+        "DessertTiramisuPrince",
+        "DessertTiramisuPrince_Body",
+        "DessertTiramisuPrince_Eyes"
+      ]
+    },
+    "dessert_caramel_princess": {
+      "key": "Models.Desserts.DessertCaramelPrincess",
+      "source": "assets/figures/desserts/caramel-princess/model/caramel_princess_roblox.rbxmx",
+      "displayName": "Desserts - Caramel Princess",
+      "assetType": "Model",
+      "requiredNodes": [
+        "DessertCaramelPrincess",
+        "DessertCaramelPrincess_Body",
+        "DessertCaramelPrincess_Eyes"
+      ]
+    },
+    "dessert_candy_confectioner_princess": {
+      "key": "Models.Desserts.DessertCandyConfectionerPrincess",
+      "source": "assets/figures/desserts/candy-confectioner-princess/model/candy_confectioner_princess_roblox.rbxmx",
+      "displayName": "Desserts - Candy Confectioner Princess",
+      "assetType": "Model",
+      "requiredNodes": [
+        "DessertCandyConfectionerPrincess",
+        "DessertCandyConfectionerPrincess_Body",
+        "DessertCandyConfectionerPrincess_Eyes"
+      ]
+    },
+    "sense_sight": {
+      "key": "Models.FiveSenses.SenseSight",
+      "source": "assets/figures/five-senses/sight/model/sight_roblox.rbxmx",
+      "displayName": "Five Senses - Sight",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SenseSight",
+        "SenseSight_Body",
+        "SenseSight_Eyes"
+      ]
+    },
+    "sense_taste": {
+      "key": "Models.FiveSenses.SenseTaste",
+      "source": "assets/figures/five-senses/taste/model/taste_roblox.rbxmx",
+      "displayName": "Five Senses - Taste",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SenseTaste",
+        "SenseTaste_Body",
+        "SenseTaste_Eyes"
+      ]
+    },
+    "sin_lust": {
+      "key": "Models.SevenDeadlySins.SinLust",
+      "source": "assets/figures/seven-deadly-sins/lust/model/lust_roblox.rbxmx",
+      "displayName": "Seven Deadly Sins - Lust",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SinLust",
+        "SinLust_Body",
+        "SinLust_Eyes"
+      ]
+    },
+    "sin_sloth": {
+      "key": "Models.SevenDeadlySins.SinSloth",
+      "source": "assets/figures/seven-deadly-sins/sloth/model/sloth_roblox.rbxmx",
+      "displayName": "Seven Deadly Sins - Sloth",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SinSloth",
+        "SinSloth_Body",
+        "SinSloth_Eyes"
+      ]
+    },
+    "sin_envy": {
+      "key": "Models.SevenDeadlySins.SinEnvy",
+      "source": "assets/figures/seven-deadly-sins/envy/model/envy_roblox.rbxmx",
+      "displayName": "Seven Deadly Sins - Envy",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SinEnvy",
+        "SinEnvy_Body",
+        "SinEnvy_Eyes"
+      ]
+    },
+    "sin_greed": {
+      "key": "Models.SevenDeadlySins.SinGreed",
+      "source": "assets/figures/seven-deadly-sins/greed/model/greed_roblox.rbxmx",
+      "displayName": "Seven Deadly Sins - Greed",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SinGreed",
+        "SinGreed_Body",
+        "SinGreed_Eyes"
+      ]
+    },
+    "sin_gluttony": {
+      "key": "Models.SevenDeadlySins.SinGluttony",
+      "source": "assets/figures/seven-deadly-sins/gluttony/model/gluttony_roblox.rbxmx",
+      "displayName": "Seven Deadly Sins - Gluttony",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SinGluttony",
+        "SinGluttony_Body",
+        "SinGluttony_Eyes"
+      ]
+    },
+    "sin_wrath": {
+      "key": "Models.SevenDeadlySins.SinWrath",
+      "source": "assets/figures/seven-deadly-sins/wrath/model/wrath_roblox.rbxmx",
+      "displayName": "Seven Deadly Sins - Wrath",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SinWrath",
+        "SinWrath_Body",
+        "SinWrath_Eyes"
+      ]
+    },
+    "sin_demon_king": {
+      "key": "Models.SevenDeadlySins.SinDemonKing",
+      "source": "assets/figures/seven-deadly-sins/demon-king/model/demon_king_roblox.rbxmx",
+      "displayName": "Seven Deadly Sins - Demon King",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SinDemonKing",
+        "SinDemonKing_Body",
+        "SinDemonKing_Eyes"
+      ]
+    },
+    "weather_rainbow": {
+      "key": "Models.Weather.WeatherRainbow",
+      "source": "assets/figures/weather/rainbow/model/rainbow_roblox.rbxmx",
+      "displayName": "Weather - Rainbow",
+      "assetType": "Model",
+      "requiredNodes": [
+        "WeatherRainbow",
+        "WeatherRainbow_Body",
+        "WeatherRainbow_Eyes"
+      ]
+    },
+    "weather_lightning": {
+      "key": "Models.Weather.WeatherLightning",
+      "source": "assets/figures/weather/lightning/model/lightning_roblox.rbxmx",
+      "displayName": "Weather - Lightning",
+      "assetType": "Model",
+      "requiredNodes": [
+        "WeatherLightning",
+        "WeatherLightning_Body",
+        "WeatherLightning_Eyes"
+      ]
+    },
+    "weather_snow": {
+      "key": "Models.Weather.WeatherSnow",
+      "source": "assets/figures/weather/snow/model/snow_roblox.rbxmx",
+      "displayName": "Weather - Snow",
+      "assetType": "Model",
+      "requiredNodes": [
+        "WeatherSnow",
+        "WeatherSnow_Body",
+        "WeatherSnow_Eyes"
+      ]
+    },
+    "weather_tornado": {
+      "key": "Models.Weather.WeatherTornado",
+      "source": "assets/figures/weather/tornado/model/tornado_roblox.rbxmx",
+      "displayName": "Weather - Tornado",
+      "assetType": "Model",
+      "requiredNodes": [
+        "WeatherTornado",
+        "WeatherTornado_Body",
+        "WeatherTornado_Eyes"
+      ]
+    },
+    "emotion_serenity": {
+      "key": "Models.HumanEmotions.EmotionSerenity",
+      "source": "assets/figures/human-emotions/serenity/model/serenity_roblox.rbxmx",
+      "displayName": "Human Emotions - Serenity",
+      "assetType": "Model",
+      "requiredNodes": [
+        "EmotionSerenity",
+        "EmotionSerenity_Body",
+        "EmotionSerenity_Eyes"
+      ]
+    },
+    "emotion_sadness": {
+      "key": "Models.HumanEmotions.EmotionSadness",
+      "source": "assets/figures/human-emotions/sadness/model/sadness_roblox.rbxmx",
+      "displayName": "Human Emotions - Sadness",
+      "assetType": "Model",
+      "requiredNodes": [
+        "EmotionSadness",
+        "EmotionSadness_Body",
+        "EmotionSadness_Eyes"
+      ]
+    },
+    "emotion_hope": {
+      "key": "Models.HumanEmotions.EmotionHope",
+      "source": "assets/figures/human-emotions/hope/model/hope_roblox.rbxmx",
+      "displayName": "Human Emotions - Hope",
+      "assetType": "Model",
+      "requiredNodes": [
+        "EmotionHope",
+        "EmotionHope_Body",
+        "EmotionHope_Eyes"
+      ]
+    },
+    "emotion_love": {
+      "key": "Models.HumanEmotions.EmotionLove",
+      "source": "assets/figures/human-emotions/love/model/love_roblox.rbxmx",
+      "displayName": "Human Emotions - Love",
+      "assetType": "Model",
+      "requiredNodes": [
+        "EmotionLove",
+        "EmotionLove_Body",
+        "EmotionLove_Eyes"
+      ]
+    },
+    "chess_queen": {
+      "key": "Models.HumanoidChessPieces.ChessQueen",
+      "source": "assets/figures/humanoid-chess-pieces/queen/model/queen_roblox.rbxmx",
+      "displayName": "Humanoid Chess Pieces - Queen",
+      "assetType": "Model",
+      "requiredNodes": [
+        "ChessQueen",
+        "ChessQueen_Body",
+        "ChessQueen_Eyes"
+      ]
+    },
+    "chess_knight": {
+      "key": "Models.HumanoidChessPieces.ChessKnight",
+      "source": "assets/figures/humanoid-chess-pieces/knight/model/knight_roblox.rbxmx",
+      "displayName": "Humanoid Chess Pieces - Knight",
+      "assetType": "Model",
+      "requiredNodes": [
+        "ChessKnight",
+        "ChessKnight_Body",
+        "ChessKnight_Eyes"
+      ]
+    },
+    "chess_bishop": {
+      "key": "Models.HumanoidChessPieces.ChessBishop",
+      "source": "assets/figures/humanoid-chess-pieces/bishop/model/bishop_roblox.rbxmx",
+      "displayName": "Humanoid Chess Pieces - Bishop",
+      "assetType": "Model",
+      "requiredNodes": [
+        "ChessBishop",
+        "ChessBishop_Body",
+        "ChessBishop_Eyes"
+      ]
+    },
+    "halloween_pumpkin_knight": {
+      "key": "Models.Halloween.HalloweenPumpkinKnight",
+      "source": "assets/figures/halloween/pumpkin-knight/model/pumpkin_knight_roblox.rbxmx",
+      "displayName": "Halloween - Pumpkin Knight",
+      "assetType": "Model",
+      "requiredNodes": [
+        "HalloweenPumpkinKnight",
+        "HalloweenPumpkinKnight_Body",
+        "HalloweenPumpkinKnight_Eyes"
+      ]
+    },
+    "halloween_vampire_prince": {
+      "key": "Models.Halloween.HalloweenVampirePrince",
+      "source": "assets/figures/halloween/vampire-prince/model/vampire_prince_roblox.rbxmx",
+      "displayName": "Halloween - Vampire Prince",
+      "assetType": "Model",
+      "requiredNodes": [
+        "HalloweenVampirePrince",
+        "HalloweenVampirePrince_Body",
+        "HalloweenVampirePrince_Eyes"
+      ]
     }
   },
   "creator": {

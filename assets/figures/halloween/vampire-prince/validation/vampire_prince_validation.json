@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "halloween.vampire-prince",
+  "collection_id": "halloween",
+  "rarity": "Legendary",
+  "root": "HalloweenVampirePrince",
+  "figure": "HalloweenVampirePrince",
+  "title": "Vampire Prince",
+  "face": "HalloweenVampirePrince_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.3695,
+    1.719,
+    3.5539
+  ],
+  "components": [
+    "HalloweenVampirePrince_Body",
+    "HalloweenVampirePrince_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "6532a2c87fedc8a560fb5365b64646bfb65b9413e5aedee6a1287a0447b22545"
+  }
+}

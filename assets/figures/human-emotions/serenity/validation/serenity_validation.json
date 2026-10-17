@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "emotion.serenity",
+  "collection_id": "emotion",
+  "rarity": "Legendary",
+  "root": "EmotionSerenity",
+  "figure": "EmotionSerenity",
+  "title": "Serenity",
+  "face": "EmotionSerenity_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.8864,
+    1.8169,
+    3.5749
+  ],
+  "components": [
+    "EmotionSerenity_Body",
+    "EmotionSerenity_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "23c89f8494a4acb382ca647fbb10d52ad1b3d6d13f5b2e85b50760109d9ccbe4"
+  }
+}

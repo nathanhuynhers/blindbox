@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sin.envy",
+  "collection_id": "sin",
+  "rarity": "Rare",
+  "root": "SinEnvy",
+  "figure": "SinEnvy",
+  "title": "Envy",
+  "face": "SinEnvy_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.27,
+    1.9966,
+    3.5735
+  ],
+  "components": [
+    "SinEnvy_Body",
+    "SinEnvy_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "18efa84f6a343f7bb42ba2e7289be58b836e805fc3c2a817ccbaef183d0b7fe9"
+  }
+}

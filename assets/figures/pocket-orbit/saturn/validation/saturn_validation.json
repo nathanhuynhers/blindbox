@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.saturn",
+  "collection_id": "orbit",
+  "rarity": "Legendary",
+  "root": "OrbitSaturn",
+  "figure": "OrbitSaturn",
+  "title": "Saturn",
+  "face": "OrbitSaturn_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.1076,
+    2.4828,
+    3.5736
+  ],
+  "components": [
+    "OrbitSaturn_Body",
+    "OrbitSaturn_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "807835bbfe32b4a2f6cfb6ee68f4d4c07807b9cf784863f5de9d9f221cf6b744"
+  }
+}

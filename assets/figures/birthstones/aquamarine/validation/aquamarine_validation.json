@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.aquamarine",
+  "collection_id": "birthstone",
+  "rarity": "Legendary",
+  "root": "BirthstoneAquamarine",
+  "figure": "BirthstoneAquamarine",
+  "title": "Aquamarine",
+  "face": "BirthstoneAquamarine_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.6715,
+    2.0687,
+    3.5603
+  ],
+  "components": [
+    "BirthstoneAquamarine_Body",
+    "BirthstoneAquamarine_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "4a42ef2313c20c80ca9decbe31dd1f36d5b6dce2f529c44ca971058414f0af87"
+  }
+}

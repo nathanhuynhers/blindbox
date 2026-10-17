@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.ophiuchus",
+  "collection_id": "astral",
+  "rarity": "Mythical",
+  "root": "AstralOphiuchus",
+  "figure": "AstralOphiuchus",
+  "title": "Ophiuchus",
+  "face": "AstralOphiuchus_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.4605,
+    3.1101,
+    3.5429
+  ],
+  "components": [
+    "AstralOphiuchus_Body",
+    "AstralOphiuchus_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "f245b38d8c923a7379f49742851876541717d161569006863911e5c3ba6cd4d6"
+  }
+}

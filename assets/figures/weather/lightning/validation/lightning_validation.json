@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "weather.lightning",
+  "collection_id": "weather",
+  "rarity": "Legendary",
+  "root": "WeatherLightning",
+  "figure": "WeatherLightning",
+  "title": "Lightning",
+  "face": "WeatherLightning_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5707,
+    1.811,
+    3.572
+  ],
+  "components": [
+    "WeatherLightning_Body",
+    "WeatherLightning_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "4c7a0eb94fcc1a82d56a8167c2a442b8b0e70c1d87c8203e3532ee7fdc960e0c"
+  }
+}

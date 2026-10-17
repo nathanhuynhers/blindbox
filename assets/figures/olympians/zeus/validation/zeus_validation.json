@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "olympian.zeus",
+  "collection_id": "olympian",
+  "rarity": "Legendary",
+  "root": "OlympianZeus",
+  "figure": "OlympianZeus",
+  "title": "Zeus",
+  "face": "OlympianZeus_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2303,
+    2.7875,
+    3.5698
+  ],
+  "components": [
+    "OlympianZeus_Body",
+    "OlympianZeus_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "93f720fe651202b979aa9d1b0de4665ac8c7d9bdb74544045705ca3c90ec09c3"
+  }
+}

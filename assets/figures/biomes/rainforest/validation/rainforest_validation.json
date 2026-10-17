@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "biome.rainforest",
+  "collection_id": "biome",
+  "rarity": "Legendary",
+  "root": "BiomeRainforest",
+  "figure": "BiomeRainforest",
+  "title": "Rainforest",
+  "face": "BiomeRainforest_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.615,
+    1.7963,
+    3.5701
+  ],
+  "components": [
+    "BiomeRainforest_Body",
+    "BiomeRainforest_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "2858f6392bcf2cc052bc08e746a1cf3fd465b589486f575957322cf70e4e5457"
+  }
+}

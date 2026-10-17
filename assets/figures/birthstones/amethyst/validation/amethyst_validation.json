@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.amethyst",
+  "collection_id": "birthstone",
+  "rarity": "Legendary",
+  "root": "BirthstoneAmethyst",
+  "figure": "BirthstoneAmethyst",
+  "title": "Amethyst",
+  "face": "BirthstoneAmethyst_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7875,
+    1.6605,
+    3.5446
+  ],
+  "components": [
+    "BirthstoneAmethyst_Body",
+    "BirthstoneAmethyst_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "3874958da7f84b1d01f2f683688af31477c35fd40730aac2569c8d77ad9d2358"
+  }
+}

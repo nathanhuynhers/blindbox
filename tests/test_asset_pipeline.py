@@ -130,6 +130,21 @@ class PipelineTests(unittest.TestCase):
             with self.assertRaises(pipeline.PipelineError):
                 pipeline.prepare(self.root, entry)
 
+    def test_rbxmx_model_semantic_nodes_and_corruption(self):
+        path = self.root / "assets/figure_roblox.rbxmx"
+        path.write_text('<roblox version="4"><Item class="Model"><Properties><string name="Name">Fig</string>'
+                        '</Properties><Item class="Part"><Properties><string name="Name">Fig_Eyes</string>'
+                        '</Properties></Item></Item></roblox>', encoding="utf-8")
+        entry = {"key": "Models.Test.Fig", "source": "assets/figure_roblox.rbxmx",
+                 "assetType": "Model", "requiredNodes": ["Fig", "Fig_Eyes"]}
+        item = pipeline.prepare(self.root, entry)
+        self.assertEqual((item["mime"], item["nodes"]), ("model/x-rbxm", ["Fig", "Fig_Eyes"]))
+        with self.assertRaisesRegex(pipeline.PipelineError, "missing required semantic nodes"):
+            pipeline.prepare(self.root, {**entry, "requiredNodes": ["Fig_Body"]})
+        path.write_text("<roblox", encoding="utf-8")
+        with self.assertRaisesRegex(pipeline.PipelineError, "not valid XML"):
+            pipeline.prepare(self.root, entry)
+
     def test_reject_escaping_path_invalid_name_key_and_type(self):
         for change in ({"source": "../secret.png"}, {"source": "assets/Bad Name.png"},
                        {"key": 'Collection.Bad"Injection'}, {"assetType": "Model"}):

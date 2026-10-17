@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "chess.queen",
+  "collection_id": "chess",
+  "rarity": "Mythical",
+  "root": "ChessQueen",
+  "figure": "ChessQueen",
+  "title": "Queen",
+  "face": "ChessQueen_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.091,
+    2.1894,
+    3.57
+  ],
+  "components": [
+    "ChessQueen_Body",
+    "ChessQueen_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "a7434dc169157bb3cc21541ae2a802dd92e81af4b5b00d85edaab4710a273fbe"
+  }
+}

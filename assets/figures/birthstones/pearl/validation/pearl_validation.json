@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.pearl",
+  "collection_id": "birthstone",
+  "rarity": "Legendary",
+  "root": "BirthstonePearl",
+  "figure": "BirthstonePearl",
+  "title": "Pearl",
+  "face": "BirthstonePearl_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7423,
+    2.2291,
+    3.567
+  ],
+  "components": [
+    "BirthstonePearl_Body",
+    "BirthstonePearl_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "5cc12a3b638bdb9665cbdb044f4924816ee5268ce11be079c11016cbff54275f"
+  }
+}

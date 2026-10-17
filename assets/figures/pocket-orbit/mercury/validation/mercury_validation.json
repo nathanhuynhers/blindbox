@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.mercury",
+  "collection_id": "orbit",
+  "rarity": "Legendary",
+  "root": "OrbitMercury",
+  "figure": "OrbitMercury",
+  "title": "Mercury",
+  "face": "OrbitMercury_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.8799,
+    2.1793,
+    3.5719
+  ],
+  "components": [
+    "OrbitMercury_Body",
+    "OrbitMercury_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "912caa4d8d63a6807c64363c806b903e9ea0b2dc39f20452f4709f0852e94614"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "biome.ocean",
+  "collection_id": "biome",
+  "rarity": "Mythical",
+  "root": "BiomeOcean",
+  "figure": "BiomeOcean",
+  "title": "Ocean",
+  "face": "BiomeOcean_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.258,
+    2.0973,
+    3.5758
+  ],
+  "components": [
+    "BiomeOcean_Body",
+    "BiomeOcean_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "94648fd31f2e2d7c08ca5491507375f4d8ca403cdb5435d74959ba18cd20d209"
+  }
+}

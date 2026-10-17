@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sense.sight",
+  "collection_id": "sense",
+  "rarity": "Mythical",
+  "root": "SenseSight",
+  "figure": "SenseSight",
+  "title": "Sight",
+  "face": "SenseSight_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.9566,
+    2.056,
+    3.5583
+  ],
+  "components": [
+    "SenseSight_Body",
+    "SenseSight_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "eb537c2a4dfad107006d026972ad03fdbefc64757f509cd777c56a703773a81f"
+  }
+}

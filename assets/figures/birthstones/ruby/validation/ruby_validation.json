@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.ruby",
+  "collection_id": "birthstone",
+  "rarity": "Legendary",
+  "root": "BirthstoneRuby",
+  "figure": "BirthstoneRuby",
+  "title": "Ruby",
+  "face": "BirthstoneRuby_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.8684,
+    1.6552,
+    3.5521
+  ],
+  "components": [
+    "BirthstoneRuby_Body",
+    "BirthstoneRuby_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "a0760537467b0ff6e44ff5276035abad39e2608991e6967ae38e10bd55f0cf0a"
+  }
+}

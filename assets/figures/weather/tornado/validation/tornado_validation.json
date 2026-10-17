@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "weather.tornado",
+  "collection_id": "weather",
+  "rarity": "Legendary",
+  "root": "WeatherTornado",
+  "figure": "WeatherTornado",
+  "title": "Tornado",
+  "face": "WeatherTornado_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.0415,
+    1.9445,
+    3.5671
+  ],
+  "components": [
+    "WeatherTornado_Body",
+    "WeatherTornado_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "4156879741882257bc51da4797904601eb5a752f862a141c7e73647b8255a115"
+  }
+}
