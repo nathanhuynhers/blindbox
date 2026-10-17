@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.libra",
+  "collection_id": "astral",
+  "rarity": "Rare",
+  "root": "AstralLibra",
+  "figure": "AstralLibra",
+  "title": "Libra",
+  "face": "AstralLibra_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5707,
+    2.2579,
+    3.5497
+  ],
+  "components": [
+    "AstralLibra_Body",
+    "AstralLibra_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "376e7073bc92d767f8ce77bf1a65a0af496e4c1e5a919a0db266599b0cd549fa"
+  }
+}

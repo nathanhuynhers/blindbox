@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.pluto",
+  "collection_id": "orbit",
+  "rarity": "Mythical",
+  "root": "OrbitPluto",
+  "figure": "OrbitPluto",
+  "title": "Pluto",
+  "face": "OrbitPluto_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7262,
+    1.881,
+    3.5743
+  ],
+  "components": [
+    "OrbitPluto_Body",
+    "OrbitPluto_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "750bc93bc914700bd87ad840e993d2d917bccc40f7c6926a4a932fa35d182dd4"
+  }
+}

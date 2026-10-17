@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.emerald",
+  "collection_id": "birthstone",
+  "rarity": "Legendary",
+  "root": "BirthstoneEmerald",
+  "figure": "BirthstoneEmerald",
+  "title": "Emerald",
+  "face": "BirthstoneEmerald_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.9299,
+    1.786,
+    3.5634
+  ],
+  "components": [
+    "BirthstoneEmerald_Body",
+    "BirthstoneEmerald_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "1ce5760c2c084d58f77dc966dea0ea315bc989a2cddeed9466523a032285773b"
+  }
+}

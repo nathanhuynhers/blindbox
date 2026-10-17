@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sin.gluttony",
+  "collection_id": "sin",
+  "rarity": "Rare",
+  "root": "SinGluttony",
+  "figure": "SinGluttony",
+  "title": "Gluttony",
+  "face": "SinGluttony_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2699,
+    2.777,
+    3.5701
+  ],
+  "components": [
+    "SinGluttony_Body",
+    "SinGluttony_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "3d9b3f37d953532fe291e1098adffaf629797a018ef82090e15db4d27efaf301"
+  }
+}

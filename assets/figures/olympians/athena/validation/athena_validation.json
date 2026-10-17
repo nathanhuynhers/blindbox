@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "olympian.athena",
+  "collection_id": "olympian",
+  "rarity": "Rare",
+  "root": "OlympianAthena",
+  "figure": "OlympianAthena",
+  "title": "Athena",
+  "face": "OlympianAthena_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.4985,
+    2.1706,
+    3.5696
+  ],
+  "components": [
+    "OlympianAthena_Body",
+    "OlympianAthena_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "900456b6f46dd794b89c6bde96bb18e86e306c2f3c285d89e624b6590164c6da"
+  }
+}

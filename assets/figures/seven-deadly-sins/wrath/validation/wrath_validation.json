@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sin.wrath",
+  "collection_id": "sin",
+  "rarity": "Legendary",
+  "root": "SinWrath",
+  "figure": "SinWrath",
+  "title": "Wrath",
+  "face": "SinWrath_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5689,
+    2.0091,
+    3.3194
+  ],
+  "components": [
+    "SinWrath_Body",
+    "SinWrath_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "d5054c5fad9adf3ed00691067e160d5fe1e1eba93141f0ad45b82b0e58b6889a"
+  }
+}

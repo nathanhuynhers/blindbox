@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "emotion.hope",
+  "collection_id": "emotion",
+  "rarity": "Mythical",
+  "root": "EmotionHope",
+  "figure": "EmotionHope",
+  "title": "Hope",
+  "face": "EmotionHope_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7676,
+    2.2562,
+    3.5737
+  ],
+  "components": [
+    "EmotionHope_Body",
+    "EmotionHope_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "fe77a16c17c2a0f74670a776c1170f2e7f08eb068791ca0dfbacf5f1d5caf953"
+  }
+}

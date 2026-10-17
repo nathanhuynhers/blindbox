@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "weather.rainbow",
+  "collection_id": "weather",
+  "rarity": "Mythical",
+  "root": "WeatherRainbow",
+  "figure": "WeatherRainbow",
+  "title": "Rainbow",
+  "face": "WeatherRainbow_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.6881,
+    1.6007,
+    3.5701
+  ],
+  "components": [
+    "WeatherRainbow_Body",
+    "WeatherRainbow_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "777d9257400dba986e69bb43022f738c63c2c5a30a6e6e868da17bb5d6054f89"
+  }
+}

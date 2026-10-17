@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "dessert.candy-confectioner-princess",
+  "collection_id": "dessert",
+  "rarity": "Mythical",
+  "root": "DessertCandyConfectionerPrincess",
+  "figure": "DessertCandyConfectionerPrincess",
+  "title": "Candy Confectioner Princess",
+  "face": "DessertCandyConfectionerPrincess_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7048,
+    2.3248,
+    3.5727
+  ],
+  "components": [
+    "DessertCandyConfectionerPrincess_Body",
+    "DessertCandyConfectionerPrincess_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "4adb9b061d856ebdfaaef799f5dde1e80647e394cf304ab33c2bc21e34d5aa19"
+  }
+}

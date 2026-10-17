@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.aquarius",
+  "collection_id": "astral",
+  "rarity": "Legendary",
+  "root": "AstralAquarius",
+  "figure": "AstralAquarius",
+  "title": "Aquarius",
+  "face": "AstralAquarius_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2688,
+    2.8853,
+    3.5372
+  ],
+  "components": [
+    "AstralAquarius_Body",
+    "AstralAquarius_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "921f842a8de8ede9e8df61ee8180a18208f49a81be4b38bb3a6077811021db7c"
+  }
+}

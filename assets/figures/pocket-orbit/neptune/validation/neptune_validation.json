@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.neptune",
+  "collection_id": "orbit",
+  "rarity": "Legendary",
+  "root": "OrbitNeptune",
+  "figure": "OrbitNeptune",
+  "title": "Neptune",
+  "face": "OrbitNeptune_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.0321,
+    2.2808,
+    3.5749
+  ],
+  "components": [
+    "OrbitNeptune_Body",
+    "OrbitNeptune_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "cb6dbb77159f5a03fa979d22044e5d61a41c8d7a04dfa58d2749b2c27110572e"
+  }
+}

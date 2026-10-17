@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.diamond",
+  "collection_id": "birthstone",
+  "rarity": "Mythical",
+  "root": "BirthstoneDiamond",
+  "figure": "BirthstoneDiamond",
+  "title": "Diamond",
+  "face": "BirthstoneDiamond_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.1445,
+    2.0167,
+    3.5633
+  ],
+  "components": [
+    "BirthstoneDiamond_Body",
+    "BirthstoneDiamond_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "812b04a27e226f1f5e253a960c68a334beee0d100db863aaf26e13de98655f0e"
+  }
+}

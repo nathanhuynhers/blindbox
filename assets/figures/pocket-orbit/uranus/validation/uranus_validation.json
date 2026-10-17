@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.uranus",
+  "collection_id": "orbit",
+  "rarity": "Legendary",
+  "root": "OrbitUranus",
+  "figure": "OrbitUranus",
+  "title": "Uranus",
+  "face": "OrbitUranus_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.459,
+    2.083,
+    3.5711
+  ],
+  "components": [
+    "OrbitUranus_Body",
+    "OrbitUranus_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "b790e507665baa6fa452d2bd98cf40311ad8f23449c3ad7ebf3016e42099975f"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.jupiter",
+  "collection_id": "orbit",
+  "rarity": "Legendary",
+  "root": "OrbitJupiter",
+  "figure": "OrbitJupiter",
+  "title": "Jupiter",
+  "face": "OrbitJupiter_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2796,
+    2.322,
+    3.5732
+  ],
+  "components": [
+    "OrbitJupiter_Body",
+    "OrbitJupiter_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "a308c0e5757ae5381d019a5e7b7e63d5a92ee54a8c71f5cd3a37360664795cbe"
+  }
+}

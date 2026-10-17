@@ -152,6 +152,24 @@ Display, Shelves, imported PBR and another client's view at desktop and landscap
 The current scale and glass rules are preserved. Asset upload does not publish a live game version;
 that remains a separate explicitly authorized release activity.
 
+## Models exported from Tripo straight into Studio
+
+Tripo's Roblox export uploads the mesh and SurfaceAppearance maps and drops a one-MeshPart model
+into the open place. No GLB exists locally, so these skip the converter above. Read each MeshPart's
+`MeshId`, `MeshSize`, `Size` (at its native import rotation; reset any manual rotation) and its
+ColorMap/NormalMap from Studio into
+[tripo_studio_figures.json](../assets/figures/studio/tripo_studio_figures.json), with the figure's
+identity and rarity, then:
+
+```powershell
+python tools/figures/studio_figures.py            # rbxmx, reports, manifest entries, upload dry run
+python tools/figures/studio_figures.py --upload   # upload and regenerate FigureAssetEntries
+```
+
+Each figure becomes a small `.rbxmx` Model (`<Root>`, `<Root>_Body`, invisible `<Root>_Eyes` at head
+height near the front), uploaded through the normal uploader as `model/x-rbxm`. Tripo's Studio export
+faces -Z; check the front in Studio before adding a figure. Catalog, economy and shop wiring are separate.
+
 ## Offline checks
 
 ```powershell

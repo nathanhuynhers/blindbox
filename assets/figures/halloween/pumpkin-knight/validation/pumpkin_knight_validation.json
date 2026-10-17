@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "halloween.pumpkin-knight",
+  "collection_id": "halloween",
+  "rarity": "Mythical",
+  "root": "HalloweenPumpkinKnight",
+  "figure": "HalloweenPumpkinKnight",
+  "title": "Pumpkin Knight",
+  "face": "HalloweenPumpkinKnight_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5669,
+    2.2764,
+    3.5205
+  ],
+  "components": [
+    "HalloweenPumpkinKnight_Body",
+    "HalloweenPumpkinKnight_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "69435e9de4b6f2090f6cc9dd30336cd019ac585fd0cc4729d8602d07753eb503"
+  }
+}

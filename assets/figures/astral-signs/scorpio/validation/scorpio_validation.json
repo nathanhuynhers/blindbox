@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.scorpio",
+  "collection_id": "astral",
+  "rarity": "Rare",
+  "root": "AstralScorpio",
+  "figure": "AstralScorpio",
+  "title": "Scorpio",
+  "face": "AstralScorpio_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5598,
+    3.2475,
+    3.0406
+  ],
+  "components": [
+    "AstralScorpio_Body",
+    "AstralScorpio_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "609d063fa7a57109098b3faf660b1b1117424ed02dc3260c7bac4d80b628fbc7"
+  }
+}

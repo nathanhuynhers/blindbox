@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "olympian.aphrodite",
+  "collection_id": "olympian",
+  "rarity": "Mythical",
+  "root": "OlympianAphrodite",
+  "figure": "OlympianAphrodite",
+  "title": "Aphrodite",
+  "face": "OlympianAphrodite_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.5347,
+    2.2267,
+    3.5708
+  ],
+  "components": [
+    "OlympianAphrodite_Body",
+    "OlympianAphrodite_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "e745350e1edc6e168cdd2b817428b09faccba21476e351ff9d9a80c3aa2ad580"
+  }
+}

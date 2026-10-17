@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "dessert.caramel-princess",
+  "collection_id": "dessert",
+  "rarity": "Legendary",
+  "root": "DessertCaramelPrincess",
+  "figure": "DessertCaramelPrincess",
+  "title": "Caramel Princess",
+  "face": "DessertCaramelPrincess_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2928,
+    2.6247,
+    3.5739
+  ],
+  "components": [
+    "DessertCaramelPrincess_Body",
+    "DessertCaramelPrincess_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "3a4b91c44b3f85293986777a0c47b8ae1c5d6590a4c667072ec8fcfa255962ec"
+  }
+}

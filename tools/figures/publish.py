@@ -174,7 +174,7 @@ def uploaded_reports(manifest: dict, uploads: dict) -> list[tuple[str, dict]]:
         if entry.get("assetType") != "Model" or not source.startswith("assets/figures/") or key not in uploads:
             continue
         model = ROOT / source
-        report_file = model.parent.parent / "validation" / model.name.replace("_roblox.glb", "_validation.json")
+        report_file = model.parent.parent / "validation" / re.sub(r"_roblox\.(glb|rbxmx)$", "_validation.json", model.name)
         if report_file.is_file():
             report = json.loads(report_file.read_text(encoding="utf-8"))
             if report.get("catalog"):

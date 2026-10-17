@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.venus",
+  "collection_id": "orbit",
+  "rarity": "Legendary",
+  "root": "OrbitVenus",
+  "figure": "OrbitVenus",
+  "title": "Venus",
+  "face": "OrbitVenus_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.9049,
+    2.0654,
+    3.5699
+  ],
+  "components": [
+    "OrbitVenus_Body",
+    "OrbitVenus_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "bb6567532236399147e01857a20bd69201cda3812ab8148fa723985b203cddb0"
+  }
+}

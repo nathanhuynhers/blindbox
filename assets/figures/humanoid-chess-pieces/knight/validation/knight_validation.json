@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "chess.knight",
+  "collection_id": "chess",
+  "rarity": "Rare",
+  "root": "ChessKnight",
+  "figure": "ChessKnight",
+  "title": "Knight",
+  "face": "ChessKnight_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    1.9552,
+    3.5334,
+    2.553
+  ],
+  "components": [
+    "ChessKnight_Body",
+    "ChessKnight_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "3c0c7591c5d3173228738d4d97c5187a6e94334127541e312921456ace329b01"
+  }
+}

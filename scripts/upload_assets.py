@@ -19,6 +19,7 @@ import urllib.error
 import urllib.request
 import uuid
 import wave
+import xml.etree.ElementTree as ET
 import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +29,7 @@ KEY = re.compile(r"[A-Z][A-Za-z0-9]*(?:\.[A-Z][A-Za-z0-9]*)+")
 ID = re.compile(r"[1-9][0-9]*")
 OPERATION = re.compile(r"operations/[A-Za-z0-9_-]+")
 IMAGE_FORMATS = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
-MODEL_FORMATS = {".glb": "model/gltf-binary"}
+MODEL_FORMATS = {".glb": "model/gltf-binary", ".rbxmx": "model/x-rbxm"}
 AUDIO_FORMATS = {".wav": "audio/wav"}
 
 
@@ -155,10 +156,17 @@ def image_info(path: Path) -> tuple[bytes, str, int, int]:
 
 def model_info(path: Path, required_nodes: object) -> tuple[bytes, str, list[str]]:
     if path.suffix.lower() not in MODEL_FORMATS or not path.is_file():
-        raise PipelineError("Model source must be an existing GLB file.")
+        raise PipelineError("Model source must be an existing GLB or RBXMX file.")
     if not 0 < path.stat().st_size <= MAX_BYTES:
         raise PipelineError("Model source must be non-empty and no larger than 20 MB.")
     data = path.read_bytes()
+    if path.suffix.lower() == ".rbxmx":
+        try:
+            names = [node.text for node in ET.fromstring(data).iter("string")
+                     if node.get("name") == "Name" and node.text]
+        except ET.ParseError:
+            raise PipelineError("RBXMX is not valid XML.") from None
+        return data, MODEL_FORMATS[".rbxmx"], check_nodes(names, required_nodes)
     if len(data) < 20 or data[:4] != b"glTF":
         raise PipelineError("GLB signature is invalid.")
     version, declared = struct.unpack_from("<II", data, 4)
@@ -184,14 +192,18 @@ def model_info(path: Path, required_nodes: object) -> tuple[bytes, str, list[str
         raise PipelineError("GLB contains no node hierarchy.")
     names = [node.get("name") for node in nodes if isinstance(node, dict)]
     names = [name for name in names if isinstance(name, str) and name]
+    return data, MODEL_FORMATS[path.suffix.lower()], check_nodes(names, required_nodes)
+
+
+def check_nodes(names: list[str], required_nodes: object) -> list[str]:
     if required_nodes is not None:
         if (not isinstance(required_nodes, list)
                 or any(not isinstance(name, str) or not name for name in required_nodes)):
             raise PipelineError("requiredNodes must be a list of non-empty GLB node names.")
         missing = [name for name in required_nodes if name not in names]
         if missing:
-            raise PipelineError("GLB is missing required semantic nodes: " + ", ".join(missing))
-    return data, MODEL_FORMATS[path.suffix.lower()], names
+            raise PipelineError("Model is missing required semantic nodes: " + ", ".join(missing))
+    return names
 
 
 def audio_info(path: Path) -> tuple[bytes, str, dict]:
@@ -239,11 +251,11 @@ def prepare(root: Path, entry: dict) -> dict:
     if not path.is_relative_to((root / "assets").resolve()):
         raise PipelineError("Source paths must remain inside assets/ (including symlink targets).")
     asset_type = entry.get("assetType", "Image")
-    extension = {"Image": "png|jpe?g", "Model": "glb", "Audio": "wav"}.get(asset_type, "")
+    extension = {"Image": "png|jpe?g", "Model": "glb|rbxmx", "Audio": "wav"}.get(asset_type, "")
     if not re.fullmatch(rf"[a-z0-9]+(?:_[a-z0-9]+)*\.({extension})", path.name):
         raise PipelineError("Use a lowercase snake_case filename supported by its asset type.")
     if asset_type not in ("Image", "Model", "Audio"):
-        raise PipelineError("This pipeline supports Image, GLB Model and PCM WAV Audio assets only.")
+        raise PipelineError("This pipeline supports Image, GLB/RBXMX Model and PCM WAV Audio assets only.")
     display = entry.get("displayName", path.stem)
     if not isinstance(display, str) or not 1 <= len(display) <= 50 or any(ord(c) < 32 for c in display):
         raise PipelineError("Display name must be 1-50 characters without control characters.")

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "orbit.mars",
+  "collection_id": "orbit",
+  "rarity": "Legendary",
+  "root": "OrbitMars",
+  "figure": "OrbitMars",
+  "title": "Mars",
+  "face": "OrbitMars_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.1976,
+    2.0715,
+    3.5673
+  ],
+  "components": [
+    "OrbitMars_Body",
+    "OrbitMars_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "b0477f324d23ac5bd1c93402442cd623014070961303a1867638386862361e3e"
+  }
+}

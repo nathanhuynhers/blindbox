@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.sagittarius",
+  "collection_id": "astral",
+  "rarity": "Rare",
+  "root": "AstralSagittarius",
+  "figure": "AstralSagittarius",
+  "title": "Sagittarius",
+  "face": "AstralSagittarius_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5716,
+    2.9347,
+    3.2061
+  ],
+  "components": [
+    "AstralSagittarius_Body",
+    "AstralSagittarius_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "f26c5d313d8f440d8bce0d9ce6290c66493cea0de87c35d295971b4c5b7bdc86"
+  }
+}

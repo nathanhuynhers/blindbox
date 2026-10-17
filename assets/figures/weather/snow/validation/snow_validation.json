@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "weather.snow",
+  "collection_id": "weather",
+  "rarity": "Mythical",
+  "root": "WeatherSnow",
+  "figure": "WeatherSnow",
+  "title": "Snow",
+  "face": "WeatherSnow_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.1709,
+    1.9602,
+    3.5721
+  ],
+  "components": [
+    "WeatherSnow_Body",
+    "WeatherSnow_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "b516cc79dee0f40e0046f44efab4ee77e380759f00aae942c073a597538ac890"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.pisces",
+  "collection_id": "astral",
+  "rarity": "Legendary",
+  "root": "AstralPisces",
+  "figure": "AstralPisces",
+  "title": "Pisces",
+  "face": "AstralPisces_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5612,
+    2.4391,
+    3.3906
+  ],
+  "components": [
+    "AstralPisces_Body",
+    "AstralPisces_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "22f3c84bab248bc5f15057079499dddbd7382f550ade8bc2dc244cda144c8bcd"
+  }
+}

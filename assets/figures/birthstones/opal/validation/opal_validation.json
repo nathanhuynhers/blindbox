@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.opal",
+  "collection_id": "birthstone",
+  "rarity": "Mythical",
+  "root": "BirthstoneOpal",
+  "figure": "BirthstoneOpal",
+  "title": "Opal",
+  "face": "BirthstoneOpal_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.9589,
+    2.0293,
+    3.5723
+  ],
+  "components": [
+    "BirthstoneOpal_Body",
+    "BirthstoneOpal_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "788482e279bb12665efbd557f801aa172bb77838d3534e43314cd35e79797a1a"
+  }
+}

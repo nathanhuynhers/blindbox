@@ -755,6 +755,177 @@
     "sha256": "b8aae0d01df7c2f5c0b166128822a1739d3038c6d28304d3bc194a86baacd7ad",
     "source": "assets/ui/shop/we-are-all-stars/we_are_all_stars_shop_pattern.png"
   },
+  "Models.AstralSigns.AstralAquarius": {
+    "assetId": "111905346437445",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "921f842a8de8ede9e8df61ee8180a18208f49a81be4b38bb3a6077811021db7c",
+    "source": "assets/figures/astral-signs/aquarius/model/aquarius_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralCancer": {
+    "assetId": "110921687705025",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ac0ca2a57fd886873e6bc2d48558031c8839ac5a70d5c2cd10172a9585082ddd",
+    "source": "assets/figures/astral-signs/cancer/model/cancer_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralGemini": {
+    "assetId": "113013693024953",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f4ff9df70d4a2334ad1b681cb4d9f80764ee14ee4cdf9e9c025250a037f9c281",
+    "source": "assets/figures/astral-signs/gemini/model/gemini_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralLibra": {
+    "assetId": "109854314544661",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "376e7073bc92d767f8ce77bf1a65a0af496e4c1e5a919a0db266599b0cd549fa",
+    "source": "assets/figures/astral-signs/libra/model/libra_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralOphiuchus": {
+    "assetId": "93608408348319",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f245b38d8c923a7379f49742851876541717d161569006863911e5c3ba6cd4d6",
+    "source": "assets/figures/astral-signs/ophiuchus/model/ophiuchus_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralPisces": {
+    "assetId": "121010600621947",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "22f3c84bab248bc5f15057079499dddbd7382f550ade8bc2dc244cda144c8bcd",
+    "source": "assets/figures/astral-signs/pisces/model/pisces_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralSagittarius": {
+    "assetId": "98089794859426",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f26c5d313d8f440d8bce0d9ce6290c66493cea0de87c35d295971b4c5b7bdc86",
+    "source": "assets/figures/astral-signs/sagittarius/model/sagittarius_roblox.rbxmx"
+  },
+  "Models.AstralSigns.AstralScorpio": {
+    "assetId": "74462694863127",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "609d063fa7a57109098b3faf660b1b1117424ed02dc3260c7bac4d80b628fbc7",
+    "source": "assets/figures/astral-signs/scorpio/model/scorpio_roblox.rbxmx"
+  },
+  "Models.Biomes.BiomeOcean": {
+    "assetId": "122372670885158",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "94648fd31f2e2d7c08ca5491507375f4d8ca403cdb5435d74959ba18cd20d209",
+    "source": "assets/figures/biomes/ocean/model/ocean_roblox.rbxmx"
+  },
+  "Models.Biomes.BiomeRainforest": {
+    "assetId": "127045416736036",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "2858f6392bcf2cc052bc08e746a1cf3fd465b589486f575957322cf70e4e5457",
+    "source": "assets/figures/biomes/rainforest/model/rainforest_roblox.rbxmx"
+  },
+  "Models.Biomes.BiomeTundra": {
+    "assetId": "72104582818654",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "dd0bc2fa18c960a9a55f8ed590d840bced4bb3d7820f2cf1008048d3a91f39c5",
+    "source": "assets/figures/biomes/tundra/model/tundra_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstoneAmethyst": {
+    "assetId": "106155350228315",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3874958da7f84b1d01f2f683688af31477c35fd40730aac2569c8d77ad9d2358",
+    "source": "assets/figures/birthstones/amethyst/model/amethyst_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstoneAquamarine": {
+    "assetId": "73502460074230",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4a42ef2313c20c80ca9decbe31dd1f36d5b6dce2f529c44ca971058414f0af87",
+    "source": "assets/figures/birthstones/aquamarine/model/aquamarine_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstoneDiamond": {
+    "assetId": "92831556178299",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "812b04a27e226f1f5e253a960c68a334beee0d100db863aaf26e13de98655f0e",
+    "source": "assets/figures/birthstones/diamond/model/diamond_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstoneEmerald": {
+    "assetId": "84109471767370",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1ce5760c2c084d58f77dc966dea0ea315bc989a2cddeed9466523a032285773b",
+    "source": "assets/figures/birthstones/emerald/model/emerald_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstoneOpal": {
+    "assetId": "75710319423546",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "788482e279bb12665efbd557f801aa172bb77838d3534e43314cd35e79797a1a",
+    "source": "assets/figures/birthstones/opal/model/opal_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstonePearl": {
+    "assetId": "87113015277713",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5cc12a3b638bdb9665cbdb044f4924816ee5268ce11be079c11016cbff54275f",
+    "source": "assets/figures/birthstones/pearl/model/pearl_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstoneRuby": {
+    "assetId": "85768919886530",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a0760537467b0ff6e44ff5276035abad39e2608991e6967ae38e10bd55f0cf0a",
+    "source": "assets/figures/birthstones/ruby/model/ruby_roblox.rbxmx"
+  },
+  "Models.Birthstones.BirthstoneSapphire": {
+    "assetId": "81297203476208",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "60949f8869a776cfd61dff3e2a7447c9926bb726803ada136e4769a8647a1c05",
+    "source": "assets/figures/birthstones/sapphire/model/sapphire_roblox.rbxmx"
+  },
   "Models.BlindBoxBase": {
     "assetId": "79870100381887",
     "assetType": "Model",
@@ -808,6 +979,132 @@
     },
     "sha256": "be32d7ebcb1d1c95485347b326d8ac43a1d1d834d144cb5e077cacc9a8b24c10",
     "source": "assets/figures/concepts/verity-true-form/model/verity_true_form_roblox.glb"
+  },
+  "Models.Desserts.DessertCandyConfectionerPrincess": {
+    "assetId": "139581523045648",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4adb9b061d856ebdfaaef799f5dde1e80647e394cf304ab33c2bc21e34d5aa19",
+    "source": "assets/figures/desserts/candy-confectioner-princess/model/candy_confectioner_princess_roblox.rbxmx"
+  },
+  "Models.Desserts.DessertCaramelPrincess": {
+    "assetId": "119302876793683",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3a4b91c44b3f85293986777a0c47b8ae1c5d6590a4c667072ec8fcfa255962ec",
+    "source": "assets/figures/desserts/caramel-princess/model/caramel_princess_roblox.rbxmx"
+  },
+  "Models.Desserts.DessertTiramisuPrince": {
+    "assetId": "124267987574371",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "cedd3cf4592b45cfd32bc85920e57db342d8efe0a31d1aea3f6d7246fb8d253d",
+    "source": "assets/figures/desserts/tiramisu-prince/model/tiramisu_prince_roblox.rbxmx"
+  },
+  "Models.FiveSenses.SenseSight": {
+    "assetId": "99322231405532",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "eb537c2a4dfad107006d026972ad03fdbefc64757f509cd777c56a703773a81f",
+    "source": "assets/figures/five-senses/sight/model/sight_roblox.rbxmx"
+  },
+  "Models.FiveSenses.SenseTaste": {
+    "assetId": "113008313199633",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "356ec38645d9a78493c1724e14fbc3b1afdc7c7bd689ea3275f927ed3f9e9535",
+    "source": "assets/figures/five-senses/taste/model/taste_roblox.rbxmx"
+  },
+  "Models.Halloween.HalloweenPumpkinKnight": {
+    "assetId": "90577220505492",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "69435e9de4b6f2090f6cc9dd30336cd019ac585fd0cc4729d8602d07753eb503",
+    "source": "assets/figures/halloween/pumpkin-knight/model/pumpkin_knight_roblox.rbxmx"
+  },
+  "Models.Halloween.HalloweenVampirePrince": {
+    "assetId": "87032786640114",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6532a2c87fedc8a560fb5365b64646bfb65b9413e5aedee6a1287a0447b22545",
+    "source": "assets/figures/halloween/vampire-prince/model/vampire_prince_roblox.rbxmx"
+  },
+  "Models.HumanEmotions.EmotionHope": {
+    "assetId": "125752036253911",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fe77a16c17c2a0f74670a776c1170f2e7f08eb068791ca0dfbacf5f1d5caf953",
+    "source": "assets/figures/human-emotions/hope/model/hope_roblox.rbxmx"
+  },
+  "Models.HumanEmotions.EmotionLove": {
+    "assetId": "112827431870677",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "20958cbabf1538b929504a7cf698ff2080a50392e74478a8ef515569077d2d63",
+    "source": "assets/figures/human-emotions/love/model/love_roblox.rbxmx"
+  },
+  "Models.HumanEmotions.EmotionSadness": {
+    "assetId": "111800772597834",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "f436a359173f5c357a6e7eea549e046f464fd9036f3b08547d4e33511cd02fff",
+    "source": "assets/figures/human-emotions/sadness/model/sadness_roblox.rbxmx"
+  },
+  "Models.HumanEmotions.EmotionSerenity": {
+    "assetId": "85685082482168",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "23c89f8494a4acb382ca647fbb10d52ad1b3d6d13f5b2e85b50760109d9ccbe4",
+    "source": "assets/figures/human-emotions/serenity/model/serenity_roblox.rbxmx"
+  },
+  "Models.HumanoidChessPieces.ChessBishop": {
+    "assetId": "97846507714399",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d568b107c660903e99a369fcc4e0b82aaf1ddb6a326b0fac0fc87e0d292e0675",
+    "source": "assets/figures/humanoid-chess-pieces/bishop/model/bishop_roblox.rbxmx"
+  },
+  "Models.HumanoidChessPieces.ChessKnight": {
+    "assetId": "81065205060867",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3c0c7591c5d3173228738d4d97c5187a6e94334127541e312921456ace329b01",
+    "source": "assets/figures/humanoid-chess-pieces/knight/model/knight_roblox.rbxmx"
+  },
+  "Models.HumanoidChessPieces.ChessQueen": {
+    "assetId": "74045277950854",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a7434dc169157bb3cc21541ae2a802dd92e81af4b5b00d85edaab4710a273fbe",
+    "source": "assets/figures/humanoid-chess-pieces/queen/model/queen_roblox.rbxmx"
   },
   "Models.Moonrace.MoonCat": {
     "assetId": "90559133725577",
@@ -926,6 +1223,51 @@
     "sha256": "0076a0227e22a1e3ae19be5ed374e36455389f6210c5ab2024e3657d244cb832",
     "source": "assets/figures/external/moonrace/tiger/4af324528f4a6e11cd04f1770e1287824f44cc5bb4332519065b7201b8c5b905/model/tiger_roblox.glb"
   },
+  "Models.Olympians.OlympianAphrodite": {
+    "assetId": "105417743505187",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e745350e1edc6e168cdd2b817428b09faccba21476e351ff9d9a80c3aa2ad580",
+    "source": "assets/figures/olympians/aphrodite/model/aphrodite_roblox.rbxmx"
+  },
+  "Models.Olympians.OlympianAthena": {
+    "assetId": "93212612704390",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "900456b6f46dd794b89c6bde96bb18e86e306c2f3c285d89e624b6590164c6da",
+    "source": "assets/figures/olympians/athena/model/athena_roblox.rbxmx"
+  },
+  "Models.Olympians.OlympianHades": {
+    "assetId": "138030961268349",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "e3a56ac5667573fd01fff8a1eb0da63f5ef0e155808e2e7636133ce87b6dc5ea",
+    "source": "assets/figures/olympians/hades/model/hades_roblox.rbxmx"
+  },
+  "Models.Olympians.OlympianPoseidon": {
+    "assetId": "107675908010032",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3efe95a713319d064140be3f7a1b6d3d7f116c9faf682804f731f9da81723b39",
+    "source": "assets/figures/olympians/poseidon/model/poseidon_roblox.rbxmx"
+  },
+  "Models.Olympians.OlympianZeus": {
+    "assetId": "110316378816754",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "93f720fe651202b979aa9d1b0de4665ac8c7d9bdb74544045705ca3c90ec09c3",
+    "source": "assets/figures/olympians/zeus/model/zeus_roblox.rbxmx"
+  },
   "Models.PocketGrove.AcornDot": {
     "assetId": "108614572737539",
     "assetType": "Model",
@@ -979,6 +1321,141 @@
     },
     "sha256": "d29dc5b3d2af2ab05e1042ec97b337ed31bdaf5f785f79cef4b0a935b810db27",
     "source": "assets/figures/pocket-grove/sunbeam-sprite/model/sunbeam_sprite_roblox.glb"
+  },
+  "Models.PocketOrbit.OrbitJupiter": {
+    "assetId": "135951897975777",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "a308c0e5757ae5381d019a5e7b7e63d5a92ee54a8c71f5cd3a37360664795cbe",
+    "source": "assets/figures/pocket-orbit/jupiter/model/jupiter_roblox.rbxmx"
+  },
+  "Models.PocketOrbit.OrbitMars": {
+    "assetId": "110306199572856",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b0477f324d23ac5bd1c93402442cd623014070961303a1867638386862361e3e",
+    "source": "assets/figures/pocket-orbit/mars/model/mars_roblox.rbxmx"
+  },
+  "Models.PocketOrbit.OrbitMercury": {
+    "assetId": "103463469126626",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "912caa4d8d63a6807c64363c806b903e9ea0b2dc39f20452f4709f0852e94614",
+    "source": "assets/figures/pocket-orbit/mercury/model/mercury_roblox.rbxmx"
+  },
+  "Models.PocketOrbit.OrbitNeptune": {
+    "assetId": "129973105371059",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "cb6dbb77159f5a03fa979d22044e5d61a41c8d7a04dfa58d2749b2c27110572e",
+    "source": "assets/figures/pocket-orbit/neptune/model/neptune_roblox.rbxmx"
+  },
+  "Models.PocketOrbit.OrbitPluto": {
+    "assetId": "119304242889772",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "750bc93bc914700bd87ad840e993d2d917bccc40f7c6926a4a932fa35d182dd4",
+    "source": "assets/figures/pocket-orbit/pluto/model/pluto_roblox.rbxmx"
+  },
+  "Models.PocketOrbit.OrbitSaturn": {
+    "assetId": "83325038367013",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "807835bbfe32b4a2f6cfb6ee68f4d4c07807b9cf784863f5de9d9f221cf6b744",
+    "source": "assets/figures/pocket-orbit/saturn/model/saturn_roblox.rbxmx"
+  },
+  "Models.PocketOrbit.OrbitUranus": {
+    "assetId": "78480238056862",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b790e507665baa6fa452d2bd98cf40311ad8f23449c3ad7ebf3016e42099975f",
+    "source": "assets/figures/pocket-orbit/uranus/model/uranus_roblox.rbxmx"
+  },
+  "Models.PocketOrbit.OrbitVenus": {
+    "assetId": "71182486180123",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "bb6567532236399147e01857a20bd69201cda3812ab8148fa723985b203cddb0",
+    "source": "assets/figures/pocket-orbit/venus/model/venus_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinDemonKing": {
+    "assetId": "109620370245564",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "28dc5886ba344b3080e461008eda6c4ae4f487a08837baab7ecc89d97d0d4b1f",
+    "source": "assets/figures/seven-deadly-sins/demon-king/model/demon_king_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinEnvy": {
+    "assetId": "139097178112639",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "18efa84f6a343f7bb42ba2e7289be58b836e805fc3c2a817ccbaef183d0b7fe9",
+    "source": "assets/figures/seven-deadly-sins/envy/model/envy_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinGluttony": {
+    "assetId": "100163211069623",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3d9b3f37d953532fe291e1098adffaf629797a018ef82090e15db4d27efaf301",
+    "source": "assets/figures/seven-deadly-sins/gluttony/model/gluttony_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinGreed": {
+    "assetId": "77438174446393",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6e10b97ab915b52892f522e81daf5a5c21347507097838b0991c0b115b62aaed",
+    "source": "assets/figures/seven-deadly-sins/greed/model/greed_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinLust": {
+    "assetId": "100092027550024",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "7828b91f94d417567b8b623e14068aed014e82e5cf22ceed2bedc7b39d84d36e",
+    "source": "assets/figures/seven-deadly-sins/lust/model/lust_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinSloth": {
+    "assetId": "95833503297421",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "1730802106c90e66e63fb36f2bb21f44e16bd08fc964ad386aeb422b1cedb4d4",
+    "source": "assets/figures/seven-deadly-sins/sloth/model/sloth_roblox.rbxmx"
+  },
+  "Models.SevenDeadlySins.SinWrath": {
+    "assetId": "119064285913501",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d5054c5fad9adf3ed00691067e160d5fe1e1eba93141f0ad45b82b0e58b6889a",
+    "source": "assets/figures/seven-deadly-sins/wrath/model/wrath_roblox.rbxmx"
   },
   "Models.TenderEchoes.CrateSpark": {
     "assetId": "91143941429865",
@@ -1357,6 +1834,42 @@
     },
     "sha256": "33c6590252bf221905e4d794b63b891e0fd718aff935dc1e688c0c6007dc5dfc",
     "source": "assets/figures/we-are-all-stars/wishing/model/wishing_roblox.glb"
+  },
+  "Models.Weather.WeatherLightning": {
+    "assetId": "140593474220079",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4c7a0eb94fcc1a82d56a8167c2a442b8b0e70c1d87c8203e3532ee7fdc960e0c",
+    "source": "assets/figures/weather/lightning/model/lightning_roblox.rbxmx"
+  },
+  "Models.Weather.WeatherRainbow": {
+    "assetId": "118381817889880",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "777d9257400dba986e69bb43022f738c63c2c5a30a6e6e868da17bb5d6054f89",
+    "source": "assets/figures/weather/rainbow/model/rainbow_roblox.rbxmx"
+  },
+  "Models.Weather.WeatherSnow": {
+    "assetId": "92413627433938",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "b516cc79dee0f40e0046f44efab4ee77e380759f00aae942c073a597538ac890",
+    "source": "assets/figures/weather/snow/model/snow_roblox.rbxmx"
+  },
+  "Models.Weather.WeatherTornado": {
+    "assetId": "89696313189394",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4156879741882257bc51da4797904601eb5a752f862a141c7e73647b8255a115",
+    "source": "assets/figures/weather/tornado/model/tornado_roblox.rbxmx"
   },
   "Navigation.Daily": {
     "assetId": "100827043771835",

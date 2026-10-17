@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "olympian.poseidon",
+  "collection_id": "olympian",
+  "rarity": "Legendary",
+  "root": "OlympianPoseidon",
+  "figure": "OlympianPoseidon",
+  "title": "Poseidon",
+  "face": "OlympianPoseidon_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2098,
+    3.0073,
+    3.5908
+  ],
+  "components": [
+    "OlympianPoseidon_Body",
+    "OlympianPoseidon_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "3efe95a713319d064140be3f7a1b6d3d7f116c9faf682804f731f9da81723b39"
+  }
+}

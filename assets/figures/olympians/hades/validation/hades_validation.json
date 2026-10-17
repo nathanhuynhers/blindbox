@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "olympian.hades",
+  "collection_id": "olympian",
+  "rarity": "Mythical",
+  "root": "OlympianHades",
+  "figure": "OlympianHades",
+  "title": "Hades",
+  "face": "OlympianHades_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2618,
+    1.4599,
+    3.5478
+  ],
+  "components": [
+    "OlympianHades_Body",
+    "OlympianHades_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "e3a56ac5667573fd01fff8a1eb0da63f5ef0e155808e2e7636133ce87b6dc5ea"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sin.greed",
+  "collection_id": "sin",
+  "rarity": "Rare",
+  "root": "SinGreed",
+  "figure": "SinGreed",
+  "title": "Greed",
+  "face": "SinGreed_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2526,
+    2.2187,
+    3.5539
+  ],
+  "components": [
+    "SinGreed_Body",
+    "SinGreed_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "6e10b97ab915b52892f522e81daf5a5c21347507097838b0991c0b115b62aaed"
+  }
+}

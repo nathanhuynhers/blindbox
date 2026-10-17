@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "emotion.love",
+  "collection_id": "emotion",
+  "rarity": "Legendary",
+  "root": "EmotionLove",
+  "figure": "EmotionLove",
+  "title": "Love",
+  "face": "EmotionLove_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.9909,
+    2.6653,
+    3.5706
+  ],
+  "components": [
+    "EmotionLove_Body",
+    "EmotionLove_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "20958cbabf1538b929504a7cf698ff2080a50392e74478a8ef515569077d2d63"
+  }
+}

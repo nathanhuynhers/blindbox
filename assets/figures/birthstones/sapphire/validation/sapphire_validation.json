@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "birthstone.sapphire",
+  "collection_id": "birthstone",
+  "rarity": "Legendary",
+  "root": "BirthstoneSapphire",
+  "figure": "BirthstoneSapphire",
+  "title": "Sapphire",
+  "face": "BirthstoneSapphire_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.2633,
+    2.2909,
+    3.5674
+  ],
+  "components": [
+    "BirthstoneSapphire_Body",
+    "BirthstoneSapphire_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "60949f8869a776cfd61dff3e2a7447c9926bb726803ada136e4769a8647a1c05"
+  }
+}

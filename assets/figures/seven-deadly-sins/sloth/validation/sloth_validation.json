@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sin.sloth",
+  "collection_id": "sin",
+  "rarity": "Legendary",
+  "root": "SinSloth",
+  "figure": "SinSloth",
+  "title": "Sloth",
+  "face": "SinSloth_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.5335,
+    3.4278,
+    3.172
+  ],
+  "components": [
+    "SinSloth_Body",
+    "SinSloth_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "1730802106c90e66e63fb36f2bb21f44e16bd08fc964ad386aeb422b1cedb4d4"
+  }
+}

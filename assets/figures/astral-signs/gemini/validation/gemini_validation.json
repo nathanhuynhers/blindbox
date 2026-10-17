@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "astral.gemini",
+  "collection_id": "astral",
+  "rarity": "Legendary",
+  "root": "AstralGemini",
+  "figure": "AstralGemini",
+  "title": "Gemini",
+  "face": "AstralGemini_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.4687,
+    1.9039,
+    3.5602
+  ],
+  "components": [
+    "AstralGemini_Body",
+    "AstralGemini_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "f4ff9df70d4a2334ad1b681cb4d9f80764ee14ee4cdf9e9c025250a037f9c281"
+  }
+}
