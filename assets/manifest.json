@@ -2561,6 +2561,61 @@
         "HalloweenVampirePrince_Body",
         "HalloweenVampirePrince_Eyes"
       ]
+    },
+    "halloween_vampire_queen": {
+      "key": "Models.Halloween.HalloweenVampireQueen",
+      "source": "assets/figures/halloween/vampire-queen/model/vampire_queen_roblox.rbxmx",
+      "displayName": "Halloween - Vampire Queen",
+      "assetType": "Model",
+      "requiredNodes": [
+        "HalloweenVampireQueen",
+        "HalloweenVampireQueen_Body",
+        "HalloweenVampireQueen_Eyes"
+      ]
+    },
+    "chess_king": {
+      "key": "Models.HumanoidChessPieces.ChessKing",
+      "source": "assets/figures/humanoid-chess-pieces/king/model/king_roblox.rbxmx",
+      "displayName": "Humanoid Chess Pieces - King",
+      "assetType": "Model",
+      "requiredNodes": [
+        "ChessKing",
+        "ChessKing_Body",
+        "ChessKing_Eyes"
+      ]
+    },
+    "sense_sound": {
+      "key": "Models.FiveSenses.SenseSound",
+      "source": "assets/figures/five-senses/sound/model/sound_roblox.rbxmx",
+      "displayName": "Five Senses - Sound",
+      "assetType": "Model",
+      "requiredNodes": [
+        "SenseSound",
+        "SenseSound_Body",
+        "SenseSound_Eyes"
+      ]
+    },
+    "dessert_chocolate_cherry_queen": {
+      "key": "Models.Desserts.DessertChocolateCherryQueen",
+      "source": "assets/figures/desserts/chocolate-cherry-queen/model/chocolate_cherry_queen_roblox.rbxmx",
+      "displayName": "Desserts - Chocolate Cherry Queen",
+      "assetType": "Model",
+      "requiredNodes": [
+        "DessertChocolateCherryQueen",
+        "DessertChocolateCherryQueen_Body",
+        "DessertChocolateCherryQueen_Eyes"
+      ]
+    },
+    "weather_rain": {
+      "key": "Models.Weather.WeatherRain",
+      "source": "assets/figures/weather/rain/model/rain_roblox.rbxmx",
+      "displayName": "Weather - Rain",
+      "assetType": "Model",
+      "requiredNodes": [
+        "WeatherRain",
+        "WeatherRain_Body",
+        "WeatherRain_Eyes"
+      ]
     }
   },
   "creator": {

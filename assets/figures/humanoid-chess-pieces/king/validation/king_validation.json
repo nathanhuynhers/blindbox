@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "chess.king",
+  "collection_id": "chess",
+  "rarity": "Legendary",
+  "root": "ChessKing",
+  "figure": "ChessKing",
+  "title": "King",
+  "face": "ChessKing_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.147,
+    2.0087,
+    3.5663
+  ],
+  "components": [
+    "ChessKing_Body",
+    "ChessKing_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "10963e7098425c6f67325e903cf1c7636f835c10c5e7cd8e7e1c58e9e4b2794f"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "sense.sound",
+  "collection_id": "sense",
+  "rarity": "Legendary",
+  "root": "SenseSound",
+  "figure": "SenseSound",
+  "title": "Sound",
+  "face": "SenseSound_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.737,
+    2.2323,
+    3.5675
+  ],
+  "components": [
+    "SenseSound_Body",
+    "SenseSound_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "2a8b6dbf6cbbd798f99496ffecdba216cfe40591198b0adba85cd0f527f5b1a4"
+  }
+}

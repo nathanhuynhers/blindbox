@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "halloween.vampire-queen",
+  "collection_id": "halloween",
+  "rarity": "Legendary",
+  "root": "HalloweenVampireQueen",
+  "figure": "HalloweenVampireQueen",
+  "title": "Vampire Queen",
+  "face": "HalloweenVampireQueen_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    3.283,
+    2.146,
+    3.5637
+  ],
+  "components": [
+    "HalloweenVampireQueen_Body",
+    "HalloweenVampireQueen_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "6ca65588468cdec9baaccc57042d9d4758ff7fe45accdff779e5be0faedab78d"
+  }
+}

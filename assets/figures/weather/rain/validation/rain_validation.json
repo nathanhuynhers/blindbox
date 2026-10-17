@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pipeline": "studio_tripo",
+  "catalog": "weather.rain",
+  "collection_id": "weather",
+  "rarity": "Mythical",
+  "root": "WeatherRain",
+  "figure": "WeatherRain",
+  "title": "Rain",
+  "face": "WeatherRain_Eyes",
+  "glass": [],
+  "meshes": 2,
+  "size_xyz_studs": [
+    2.7698,
+    1.9648,
+    3.5721
+  ],
+  "components": [
+    "WeatherRain_Body",
+    "WeatherRain_Eyes"
+  ],
+  "rbxmx": {
+    "sha256": "d556448dfc5a4644660a7e63d0fe5e7f92666856d75eebe4e16f4cec09e7e48a"
+  }
+}

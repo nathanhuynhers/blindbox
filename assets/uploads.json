@@ -998,6 +998,15 @@
     "sha256": "3a4b91c44b3f85293986777a0c47b8ae1c5d6590a4c667072ec8fcfa255962ec",
     "source": "assets/figures/desserts/caramel-princess/model/caramel_princess_roblox.rbxmx"
   },
+  "Models.Desserts.DessertChocolateCherryQueen": {
+    "assetId": "124790152693055",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "4ece0ea688b92cb28f3d945cb61a0fc9b27e22f549b6d431c52d554363b73860",
+    "source": "assets/figures/desserts/chocolate-cherry-queen/model/chocolate_cherry_queen_roblox.rbxmx"
+  },
   "Models.Desserts.DessertTiramisuPrince": {
     "assetId": "124267987574371",
     "assetType": "Model",
@@ -1015,6 +1024,15 @@
     },
     "sha256": "eb537c2a4dfad107006d026972ad03fdbefc64757f509cd777c56a703773a81f",
     "source": "assets/figures/five-senses/sight/model/sight_roblox.rbxmx"
+  },
+  "Models.FiveSenses.SenseSound": {
+    "assetId": "127927976855512",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "2a8b6dbf6cbbd798f99496ffecdba216cfe40591198b0adba85cd0f527f5b1a4",
+    "source": "assets/figures/five-senses/sound/model/sound_roblox.rbxmx"
   },
   "Models.FiveSenses.SenseTaste": {
     "assetId": "113008313199633",
@@ -1042,6 +1060,15 @@
     },
     "sha256": "6532a2c87fedc8a560fb5365b64646bfb65b9413e5aedee6a1287a0447b22545",
     "source": "assets/figures/halloween/vampire-prince/model/vampire_prince_roblox.rbxmx"
+  },
+  "Models.Halloween.HalloweenVampireQueen": {
+    "assetId": "137167733849585",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "6ca65588468cdec9baaccc57042d9d4758ff7fe45accdff779e5be0faedab78d",
+    "source": "assets/figures/halloween/vampire-queen/model/vampire_queen_roblox.rbxmx"
   },
   "Models.HumanEmotions.EmotionHope": {
     "assetId": "125752036253911",
@@ -1087,6 +1114,15 @@
     },
     "sha256": "d568b107c660903e99a369fcc4e0b82aaf1ddb6a326b0fac0fc87e0d292e0675",
     "source": "assets/figures/humanoid-chess-pieces/bishop/model/bishop_roblox.rbxmx"
+  },
+  "Models.HumanoidChessPieces.ChessKing": {
+    "assetId": "82218419968437",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "10963e7098425c6f67325e903cf1c7636f835c10c5e7cd8e7e1c58e9e4b2794f",
+    "source": "assets/figures/humanoid-chess-pieces/king/model/king_roblox.rbxmx"
   },
   "Models.HumanoidChessPieces.ChessKnight": {
     "assetId": "81065205060867",
@@ -1843,6 +1879,15 @@
     },
     "sha256": "4c7a0eb94fcc1a82d56a8167c2a442b8b0e70c1d87c8203e3532ee7fdc960e0c",
     "source": "assets/figures/weather/lightning/model/lightning_roblox.rbxmx"
+  },
+  "Models.Weather.WeatherRain": {
+    "assetId": "94623030106391",
+    "assetType": "Model",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d556448dfc5a4644660a7e63d0fe5e7f92666856d75eebe4e16f4cec09e7e48a",
+    "source": "assets/figures/weather/rain/model/rain_roblox.rbxmx"
   },
   "Models.Weather.WeatherRainbow": {
     "assetId": "118381817889880",

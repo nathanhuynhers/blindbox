@@ -161,6 +161,14 @@ return {
 		size = Vector3.new(2.7802, 3.5683, 1.6893),
 		glass = {},
 	},
+	["chess.king"] = {
+		key = "Models.HumanoidChessPieces.ChessKing",
+		root = "ChessKing",
+		face = "ChessKing_Eyes",
+		parts = 2,
+		size = Vector3.new(3.147, 3.5663, 2.0087),
+		glass = {},
+	},
 	["chess.knight"] = {
 		key = "Models.HumanoidChessPieces.ChessKnight",
 		root = "ChessKnight",
@@ -231,6 +239,14 @@ return {
 		face = "DessertCaramelPrincess_Eyes",
 		parts = 2,
 		size = Vector3.new(3.2928, 3.5739, 2.6247),
+		glass = {},
+	},
+	["dessert.chocolate-cherry-queen"] = {
+		key = "Models.Desserts.DessertChocolateCherryQueen",
+		root = "DessertChocolateCherryQueen",
+		face = "DessertChocolateCherryQueen_Eyes",
+		parts = 2,
+		size = Vector3.new(3.4069, 3.5713, 2.8564),
 		glass = {},
 	},
 	["dessert.tiramisu-prince"] = {
@@ -439,6 +455,14 @@ return {
 		face = "HalloweenVampirePrince_Eyes",
 		parts = 2,
 		size = Vector3.new(3.3695, 3.5539, 1.719),
+		glass = {},
+	},
+	["halloween.vampire-queen"] = {
+		key = "Models.Halloween.HalloweenVampireQueen",
+		root = "HalloweenVampireQueen",
+		face = "HalloweenVampireQueen_Eyes",
+		parts = 2,
+		size = Vector3.new(3.283, 3.5637, 2.146),
 		glass = {},
 	},
 	["moon.cat"] = {
@@ -655,6 +679,14 @@ return {
 		face = "SenseSight_Eyes",
 		parts = 2,
 		size = Vector3.new(2.9566, 3.5583, 2.056),
+		glass = {},
+	},
+	["sense.sound"] = {
+		key = "Models.FiveSenses.SenseSound",
+		root = "SenseSound",
+		face = "SenseSound_Eyes",
+		parts = 2,
+		size = Vector3.new(2.737, 3.5675, 2.2323),
 		glass = {},
 	},
 	["sense.taste"] = {
@@ -879,6 +911,14 @@ return {
 		face = "WeatherLightning_Eyes",
 		parts = 2,
 		size = Vector3.new(3.5707, 3.572, 1.811),
+		glass = {},
+	},
+	["weather.rain"] = {
+		key = "Models.Weather.WeatherRain",
+		root = "WeatherRain",
+		face = "WeatherRain_Eyes",
+		parts = 2,
+		size = Vector3.new(2.7698, 3.5721, 1.9648),
 		glass = {},
 	},
 	["weather.rainbow"] = {
