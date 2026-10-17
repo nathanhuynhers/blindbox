@@ -206,7 +206,7 @@ return {
 		root = "MoonDog",
 		face = "MoonDog_Eyes",
 		parts = 3,
-		size = Vector3.new(2.398619294166565, 2.879999876022339, 3.731189012527466),
+		size = Vector3.new(2.4212241172790527, 2.879999876022339, 3.725278615951538),
 		glass = {},
 	},
 	["moon.dragon"] = {
@@ -221,7 +221,7 @@ return {
 		key = "Models.Moonrace.MoonGoat",
 		root = "MoonGoat",
 		face = "MoonGoat_Eyes",
-		parts = 3,
+		parts = 2,
 		size = Vector3.new(2.8880231380462646, 2.7100000381469727, 2.240067958831787),
 		glass = {},
 	},
@@ -246,7 +246,7 @@ return {
 		root = "MoonOx",
 		face = "MoonOx_Eyes",
 		parts = 3,
-		size = Vector3.new(3.0048346519470215, 3.259999990463257, 2.9885995388031006),
+		size = Vector3.new(3.1129019260406494, 3.259999990463257, 2.9676421880722046),
 		glass = {},
 	},
 	["moon.pig"] = {
@@ -262,7 +262,7 @@ return {
 		root = "MoonRabbit",
 		face = "MoonRabbit_Eyes",
 		parts = 3,
-		size = Vector3.new(2.441381812095642, 3.25, 1.8285940289497375),
+		size = Vector3.new(2.4002296924591064, 3.25, 1.8328030109405518),
 		glass = {},
 	},
 	["moon.rat"] = {
@@ -285,8 +285,8 @@ return {
 		key = "Models.Moonrace.MoonSnake",
 		root = "MoonSnake",
 		face = "MoonSnake_Eyes",
-		parts = 3,
-		size = Vector3.new(2.219778299331665, 2.6500000953674316, 1.9301105737686157),
+		parts = 2,
+		size = Vector3.new(2.230370879173279, 2.6500000953674316, 1.9210355281829834),
 		glass = {},
 	},
 	["moon.tiger"] = {
@@ -294,7 +294,7 @@ return {
 		root = "MoonTiger",
 		face = "MoonTiger_Eyes",
 		parts = 3,
-		size = Vector3.new(3.6884957551956177, 3.0199999809265137, 3.145263195037842),
+		size = Vector3.new(3.6453640460968018, 3.0199999809265137, 3.193027138710022),
 		glass = {},
 	},
 	["star.cloud-rest"] = {
