@@ -48,7 +48,7 @@ for _, product in Config.products do
 	check(Config.byId(product.platformId, product.kind) == product, "Configured identity routes to its retained promise")
 	check(product.salesEnabled and product.integrationReady, "Validated catalog enabled")
 end
-check(#Config.products == 20, "Every retained D1 variant")
+check(#Config.products == 22, "Every retained D1 variant plus the two Display slot passes")
 check(Config.find("offline_double").defaultPrice == 49 and Config.find("offline_double").grant == nil, "Offline credit price approved; no legacy variable grant")
 check(Config.find("pack_huge").grant.coins == 1200000 and Config.find("starter").grant.tokens.Coins2_15 == 1, "D1 promises")
 check(Protocol.parse({ id = "a", action = "Purchase", product = "movement", userId = 42 }) == nil, "Spoofed identity denied")

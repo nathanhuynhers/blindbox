@@ -12,6 +12,7 @@ local TeleportService = game:GetService("TeleportService")
 local AfkReconnect = require(script.AfkReconnect)
 local AfkConfig = require(ReplicatedStorage.Shared.AfkConfig)
 local Types = require(ReplicatedStorage.Shared.Types)
+local DisplayConfig = require(ReplicatedStorage.Shared.DisplayConfig)
 local Rules = require(script.Rules)
 local Economy = require(script.Economy)
 local CollectionEconomy = require(script.CollectionEconomy)
@@ -144,6 +145,10 @@ local offlineIntegration = OfflineRuntime.create(purchaseSession, function(playe
 		purchaseChanged(player)
 	end
 end, paidAllowed)
+local slotPasses: { [string]: boolean } = {}
+for _, key in DisplayConfig.unlockPasses do
+	slotPasses[key] = true
+end
 local purchases = PurchaseRuntime.start(folder, function(player: Player): Storage.Session?
 	return purchaseSession(player)
 end, function(userId)
@@ -161,6 +166,12 @@ end, {
 		-- paid-random policy path; income/Luck offers retain their validation gates.
 		if product.key == "movement" or product.key == "auto_collect" then
 			return owner ~= nil and product.kind == "Pass" and BoostRuntime.ready(owner, os.clock())
+		end
+		if slotPasses[product.key] then
+			return owner ~= nil
+				and product.kind == "Pass"
+				and BoostRuntime.ready(owner, os.clock())
+				and Rules.slotPassEligible(owner.state, product.key)
 		end
 		-- Current policy is rechecked after metadata lookups and before prompting.
 		local eligibility: BoostRuntime.Eligibility = eligibilityFor(userId, owner)
@@ -351,7 +362,12 @@ local function refreshCoinModifiers(player: Player, session: Session, now: numbe
 			storage.state.revision += 1
 		end
 	end
-	if changed or boostsChanged or vipChanged or fundsChanged then
+	local slotsChanged = BoostRuntime.ready(storage, now)
+		and Rules.applySlotPasses(storage.state, function(key)
+			local owned, fresh = purchases.ownership(player.UserId, key)
+			return owned == "Owned" and fresh
+		end)
+	if changed or boostsChanged or vipChanged or fundsChanged or slotsChanged then
 		if storage.handle then
 			storage.status = "Autosave pending"
 		end

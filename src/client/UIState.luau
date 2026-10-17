@@ -127,11 +127,16 @@ function State.unlockPrice(snapshot: Types.Snapshot, slot: number): number?
 		else nil
 end
 
--- Locked-slot copy: a later coin slot unlocks in order; anything else is not available yet.
-function State.lockedText(_snapshot: Types.Snapshot, slot: number): string
-	return if DisplayConfig.unlockMethods[slot] == "Coins"
+-- Locked-slot copy: slots unlock in order; the next pass slot is bought in the Robux Store.
+function State.lockedText(snapshot: Types.Snapshot, slot: number): string
+	local method = DisplayConfig.unlockMethods[slot]
+	if method == nil then
+		return "Coming later"
+	end
+	return if slot > snapshot.unlocked + 1
 		then "Unlock slot " .. math.max(1, slot - 1) .. " first"
-		else "Coming later"
+		elseif method == "Pass" then "Robux pass"
+		else "Unlock with Coins"
 end
 
 function State.goalReward(snapshot: Types.Snapshot): number

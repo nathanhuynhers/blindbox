@@ -2429,6 +2429,213 @@
     "sha256": "fb89b927bef91951e3a785b18da5aee3fdee37c3a872836c401b95e0f633dadf",
     "source": "assets/ui/navigation/plaza_navigation_icon.png"
   },
+  "Store.IconAutoCollect": {
+    "assetId": "89556117857352",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "457d4eec798df69953df96d851fb8bc305048f6b118c7713bd62b76cd7e5ec2b",
+    "source": "assets/ui/store-icons/auto_collect_store_icon.png"
+  },
+  "Store.IconAutoOpen": {
+    "assetId": "83848083063641",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "9664b6183ca4b359dae0f7cc77d97d01bfb6260e179dc3208f652c7311af94e6",
+    "source": "assets/ui/store-icons/auto_open_store_icon.png"
+  },
+  "Store.IconBoostCoins": {
+    "assetId": "90371741071930",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "142051693d9384ec2fab1ab7d796034b90a3f1240f34510a12dadc551bb46676",
+    "source": "assets/ui/store-icons/boost_coins_store_icon.png"
+  },
+  "Store.IconBoostCombo": {
+    "assetId": "107620456491508",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ef23fdfbd90aeb1e3ff35aa3d29dda51ce29e65aa4bfca4c8116d8e5b9bd5cb8",
+    "source": "assets/ui/store-icons/boost_combo_store_icon.png"
+  },
+  "Store.IconBoostLuck2": {
+    "assetId": "71367747832378",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "91d5c368b4fafcbac6b27109b0ddac1bfc723ec817831aef4b47922c91bde527",
+    "source": "assets/ui/store-icons/boost_luck_2_store_icon.png"
+  },
+  "Store.IconBoostLuck4": {
+    "assetId": "71649141431647",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "516477b86f399bbc9f89e3f890ad4237b48b9923e59167aa1190d5fab5c8cfe6",
+    "source": "assets/ui/store-icons/boost_luck_4_store_icon.png"
+  },
+  "Store.IconChest": {
+    "assetId": "112258265180752",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "ed1e58c84fbdf5cb535f6adef5a6decd138120ed21dd5a7fe42e5678c6f0de7d",
+    "source": "assets/ui/store-icons/chest_store_icon.png"
+  },
+  "Store.IconCoins2": {
+    "assetId": "132528528178379",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "10a63a00823ab68a451f8f1f408542e4a5c6c6767edddd28bba4fb2360ae2558",
+    "source": "assets/ui/store-icons/coins_2_store_icon.png"
+  },
+  "Store.IconCoins4": {
+    "assetId": "119861206240709",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "fa803644a9c87be36b9567a89684f5b4bacde1fbe272e83f31d75bd1f5066556",
+    "source": "assets/ui/store-icons/coins_4_store_icon.png"
+  },
+  "Store.IconCoins8": {
+    "assetId": "97759827183422",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5440d9a44a13a0a10484d7c047db739e247343f3061db197790c2726df2b6ced",
+    "source": "assets/ui/store-icons/coins_8_store_icon.png"
+  },
+  "Store.IconDoubleClaim": {
+    "assetId": "99554329211729",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "0efb4c4f99d0a392205c3fe8ce543dd3051c790356f2a3c3e393937c68ed51c5",
+    "source": "assets/ui/store-icons/double_claim_store_icon.png"
+  },
+  "Store.IconLuck": {
+    "assetId": "116550425345335",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "674b3feda108bf6a8dfd5f1b966ea3a06e9b1c43d1307825b87c528cef388548",
+    "source": "assets/ui/store-icons/luck_store_icon.png"
+  },
+  "Store.IconPouch": {
+    "assetId": "96290312889840",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "3b3ae4a805b44177c109f0f00ca03a845211834c5830d504ed1b4c3291eb55d8",
+    "source": "assets/ui/store-icons/pouch_store_icon.png"
+  },
+  "Store.IconSack": {
+    "assetId": "122708133054240",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5b31068e7c0f110d144106688eb017fd8f11ffb198275fd29dfdff712ca7404a",
+    "source": "assets/ui/store-icons/sack_store_icon.png"
+  },
+  "Store.IconSpeed": {
+    "assetId": "91756425081037",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "bb17b19d61c79770d32f4dbbf635ac37f3c8c0a8b917ff01b1c5a5b7f0f65c54",
+    "source": "assets/ui/store-icons/speed_store_icon.png"
+  },
+  "Store.IconStack": {
+    "assetId": "134129631340100",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "d7cb585edb27ed2a39bb34f1724021fe5e435f573eca9087c9d68fa63d8f80c9",
+    "source": "assets/ui/store-icons/stack_store_icon.png"
+  },
+  "Store.IconStarter": {
+    "assetId": "94545900984697",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "30749d63dc85e0bd68d4078ef4b5ce8f275fb07f652b4b8b4786134a06079d63",
+    "source": "assets/ui/store-icons/starter_store_icon.png"
+  },
+  "Store.IconVip": {
+    "assetId": "129967486710059",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "5423117fb9110d8012da4046732c23cfc12f552d6b49a28e5aa4f42e8b94ef25",
+    "source": "assets/ui/store-icons/vip_store_icon.png"
+  },
+  "Store.TabBoosts": {
+    "assetId": "104990292579952",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "979a7e0239840bdb876fde3e2f048a4e8d20bc04b97ca86bf77a82f0a6f0e6fa",
+    "source": "assets/ui/store-tabs/boosts_store_tab_icon.png"
+  },
+  "Store.TabCoins": {
+    "assetId": "128252665053547",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "03e83aa4acde29194b15d087825c610d0bb5bd7c94d3d9449ef800cca1c34788",
+    "source": "assets/ui/store-tabs/coins_store_tab_icon.png"
+  },
+  "Store.TabFeatured": {
+    "assetId": "126207243198328",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "c000efa3df279520b81bcae6a26b864784b1ffd09f2e0d580a379d26547f3b9b",
+    "source": "assets/ui/store-tabs/featured_store_tab_icon.png"
+  },
+  "Store.TabPerks": {
+    "assetId": "124154940976307",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "16386164d0c2f478efc5d4f1f7c64cdcf37133ec5a9fbf3a72b77c0e77bd8e6a",
+    "source": "assets/ui/store-tabs/perks_store_tab_icon.png"
+  },
+  "Store.TabUpgrades": {
+    "assetId": "90494881782099",
+    "assetType": "Image",
+    "creator": {
+      "userId": "103346374"
+    },
+    "sha256": "9a6b213e1ab924f7e33973362e8941a652dac21d0aa89f8dd9f74bc25b0c0030",
+    "source": "assets/ui/store-tabs/upgrades_store_tab_icon.png"
+  },
   "Town.SakuraPetal": {
     "assetId": "110930105901678",
     "assetType": "Image",

@@ -3,6 +3,7 @@
 local Purchase = require(game:GetService("ReplicatedStorage").Shared.PurchaseTypes)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
 local Convenience = require(game:GetService("ReplicatedStorage").Shared.ConvenienceTypes)
+local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Presentation = require(script.Parent.StorePresentation)
 local Client = require(script.Parent.PurchaseClient)
 local Projection = {}
@@ -25,6 +26,8 @@ Projection.keys = table.freeze({
 	stack = "pack_medium",
 	sack = "pack_large",
 	chest = "pack_huge",
+	slot5 = "display_5",
+	slot6 = "display_6",
 }) :: { [string]: string }
 function Projection.key(key: string, minutes: number?): string?
 	if key == "boostCoins" then
@@ -107,6 +110,8 @@ function Projection.make(
 			elseif item.benefits.displayRateBonus and item.benefits.dailyCoins then
 				benefit =
 					`+{item.benefits.displayRateBonus * 100}% Display income and +{item.benefits.dailyCoins} Coins with each daily box`
+			elseif item.benefits.displaySlot then
+				benefit = `Unlocks Display slot {item.benefits.displaySlot} permanently`
 			elseif item.benefits.luckWeight then
 				benefit =
 					`Rare-or-better weights ×{item.benefits.luckWeight}; check the exact odds below`
@@ -185,6 +190,33 @@ function Projection.make(
 		}
 	end
 	if gameplay then
+		-- Saved slots (legacy coin unlocks included) count as owned without the pass, and a
+		-- slot pass only sells for the next slot. The server enforces both; this is the copy.
+		local unlocked = gameplay.unlocked
+		for slot, logical in DisplayConfig.unlockPasses do
+			assert(Projection.keys["slot" .. slot] == logical, "Slot pass key mismatch")
+			local current = input.offers["slot" .. slot]
+			-- Partial fixtures carry no gameplay slot count.
+			if unlocked == nil then
+				continue
+			elseif unlocked >= slot then
+				input.offers["slot" .. slot] = {
+					availability = "owned",
+					outcome = current.outcome,
+					actionText = "UNLOCKED",
+					benefit = current.benefit,
+					reason = `Display slot {slot} is unlocked and yours to keep.`,
+				}
+			elseif unlocked < slot - 1 and current.outcome == "idle" then
+				input.offers["slot" .. slot] = {
+					availability = "ineligible",
+					outcome = "idle",
+					actionText = `Unlock slot {slot - 1} first`,
+					benefit = current.benefit,
+					reason = `Unlock Display slot {slot - 1} first, then this pass opens up.`,
+				}
+			end
+		end
 		local award = gameplay.offlineAward
 		if
 			award

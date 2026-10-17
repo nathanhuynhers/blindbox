@@ -9,6 +9,8 @@ local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
 local Icons = require(script.Parent.UIIcons)
 local Badge = require(script.Parent.UIBadge)
+local Button = require(script.Parent.UIButton)
+local TweenService = game:GetService("TweenService")
 local Context = require(script.Parent.UIContext)
 local Shell = require(script.Parent.ScreenShell)
 local Scope = require(script.Parent.UIScope)
@@ -57,14 +59,48 @@ local function button(parent: Instance, name: string, accessible: string): TextB
 	return made
 end
 
--- Product art until the Store illustration set exists: a frame-drawn icon or a stroked glyph.
+-- Product art: the uploaded custom icon, else a frame-drawn icon or a stroked glyph.
 type Art = { root: Frame, size: (number) -> () }
 local function art(parent: Instance, product: Catalog.Product): Art
 	local root = Kit.frame(parent, "Art")
 	root.AnchorPoint = Vector2.new(0.5, 0.5)
-	local icon: Frame? = nil
+	local icon: GuiObject? = nil
 	local glyph: TextLabel? = nil
-	if product.icon then
+	local disc: Frame? = nil
+	if product.image then
+		local made = Instance.new("ImageLabel")
+		made.Name = "Icon"
+		made.BackgroundTransparency = 1
+		made.Image = "rbxassetid://" .. product.image
+		made.ScaleType = Enum.ScaleType.Fit
+		made.AnchorPoint = Vector2.new(0.5, 0.5)
+		made.Position = UDim2.fromScale(0.5, 0.5)
+		made.Parent = root
+		icon = made
+		if product.tile then
+			-- Full-bleed square art: an app-icon tile with rounded corners and the ink outline.
+			local corner = Instance.new("UICorner")
+			corner.CornerRadius = UDim.new(0.18, 0)
+			corner.Parent = made
+			Kit.stroke(made, Style.ink)
+		end
+		if product.badge then
+			local round = Kit.frame(root, "Badge", Style.violet)
+			round.AnchorPoint = Vector2.new(1, 1)
+			round.Position = UDim2.fromScale(1.04, 1.04)
+			round.Size = UDim2.fromScale(0.42, 0.42)
+			round.ZIndex = 2
+			Kit.round(round)
+			Kit.stroke(round, Style.ink, Style.outlineSmall)
+			local number = Kit.text(round, "Number", product.badge, 20, Style.display())
+			number.Size = UDim2.fromScale(1, 1)
+			number.TextXAlignment = Enum.TextXAlignment.Center
+			number.TextScaled = true
+			number.ZIndex = 3
+			outlined(number, 2)
+			disc = round
+		end
+	elseif product.icon then
 		local made = Icons.create(root, product.icon, product.tint or Style.ink, 64)
 		made.AnchorPoint = Vector2.new(0.5, 0.5)
 		made.Position = UDim2.fromScale(0.5, 0.5)
@@ -87,12 +123,20 @@ local function art(parent: Instance, product: Catalog.Product): Art
 			if glyph then
 				glyph.TextSize = math.floor(size * 0.62)
 			end
+			if disc then
+				disc.Visible = size >= 40
+			end
 		end,
 	}
 end
 
 -- "Coming soon" (or "On welcome back") in the slot a price button will take.
 type Stamp = { root: Frame, label: TextLabel }
+-- A buyable price reads as a live candy-green button; anything else stays a muted stamp.
+local function live(target: Stamp, buyable: boolean)
+	target.root.BackgroundColor3 = if buyable then Style.mint else Style.disabledFill
+	target.label.TextColor3 = if buyable then Style.mintInk else Style.muted
+end
 local function stamp(parent: Instance, text: string): Stamp
 	local root = Kit.frame(parent, "Stamp", Style.disabledFill)
 	Kit.corner(root, 14)
@@ -182,7 +226,9 @@ local function card(
 				ColorSequenceKeypoint.new(1, Style.white),
 			})
 			Kit.rect(divider, 0, top - 1, width, 3)
-			local size = if phone then 52 else 68
+			local size = if product.tile
+				then (if phone then 64 else 84)
+				else (if phone then 52 else 68)
 			picture.size(size)
 			picture.root.Position = UDim2.fromOffset(width / 2, top / 2)
 			name.TextSize = if phone then 17 else 19
@@ -319,7 +365,13 @@ local function tiers(
 		Kit.corner(tierFace, 18)
 		Kit.stroke(tierFace, Style.ink)
 		local medal = Kit.frame(tierFace, "Medal", Style.white)
-		Kit.round(medal)
+		if product.tile then
+			local corner = Instance.new("UICorner")
+			corner.CornerRadius = UDim.new(0.18, 0)
+			corner.Parent = medal
+		else
+			Kit.round(medal)
+		end
 		Kit.stroke(medal, Style.ink)
 		local colors = medals[index] or medals[#medals]
 		gradient(medal, 90, colors)
@@ -327,6 +379,22 @@ local function tiers(
 		glyph.Size = UDim2.fromScale(1, 1)
 		glyph.TextXAlignment = Enum.TextXAlignment.Center
 		outlined(glyph, 2.5)
+		if product.image then
+			-- The tier's own uploaded icon replaces the text medal glyph.
+			local image = Instance.new("ImageLabel")
+			image.Name = "Icon"
+			image.BackgroundTransparency = 1
+			image.Image = "rbxassetid://" .. product.image
+			image.ScaleType = Enum.ScaleType.Fit
+			image.Size = UDim2.fromScale(1, 1)
+			local corner = Instance.new("UICorner")
+			corner.CornerRadius = UDim.new(0.18, 0)
+			corner.Parent = image
+			image.AnchorPoint = Vector2.new(0.5, 0.5)
+			image.Position = UDim2.fromScale(0.5, 0.5)
+			image.Parent = medal
+			glyph.Visible = false
+		end
 		local caption = Kit.text(
 			tierFace,
 			"Caption",
@@ -356,6 +424,7 @@ local function tiers(
 			for _, tier in made do
 				local view = Presentation.view(input, tier.key)
 				tier.footer.label.Text = view.stamp
+				live(tier.footer, Presentation.offer(input, tier.key).buyAllowed == true)
 				tier.footer.label.TextScaled = true
 				tier.footer.label.TextWrapped = true
 				tier.root.Visible = not Presentation.offer(input, tier.key).hidden
@@ -380,7 +449,7 @@ local function tiers(
 				end
 			end
 			local tierWidth = (width - pad * 2 - gap * (count - 1)) / math.max(1, count)
-			local medalSize = if phone then 48 else 62
+			local medalSize = if phone then 50 else 72
 			local visibleIndex = 0
 			for _, tier in made do
 				if not tier.root.Visible then
@@ -395,6 +464,217 @@ local function tiers(
 				tier.glyph.TextSize = if phone then 19 else 24
 				Kit.rect(tier.caption, 4, 12 + medalSize, tierWidth - 8, 18)
 				Kit.rect(tier.footer.root, 8, tierHeight - 52, tierWidth - 16, 44)
+			end
+			return height
+		end,
+	}
+end
+
+-- Hover lift for pointer users: a small UIScale grow, skipped when Motion is off.
+local function hover(target: GuiButton, scope: Scope.Scope, effects: () -> boolean)
+	local scale = Instance.new("UIScale")
+	scale.Parent = target
+	local tween: Tween? = nil
+	local function to(value: number)
+		if tween then
+			tween:Cancel()
+		end
+		if not effects() then
+			scale.Scale = 1
+			return
+		end
+		local made = TweenService:Create(scale, TweenInfo.new(0.12, Enum.EasingStyle.Quad), {
+			Scale = value,
+		})
+		tween = made
+		made:Play()
+	end
+	scope.connect(target.MouseEnter, function()
+		to(1.03)
+	end)
+	scope.connect(target.MouseLeave, function()
+		to(1)
+	end)
+	scope.add(function()
+		if tween then
+			tween:Cancel()
+		end
+	end)
+end
+
+-- Display Slots: Coin slot 4 beside the Robux slot passes, each with its currency chip. A saved
+-- slot shows Unlocked however it was opened (Coins, a pass or a legacy unlock); the server
+-- enforces order, price and ownership either way.
+type Slots = {
+	root: Frame,
+	refresh: (Presentation.Input, Types.Snapshot?) -> (),
+	layout: (width: number, phone: boolean) -> number,
+}
+local function slots(
+	parent: Instance,
+	keys: { string },
+	ctx: Context.Context,
+	open: (string) -> ()
+): Slots
+	local root = Kit.frame(parent, "DisplaySlots")
+	local shadow = Kit.frame(root, "Shadow", Style.ink)
+	Kit.corner(shadow, 24)
+	local face = Kit.frame(root, "Face", Style.white)
+	Kit.corner(face, 24)
+	Kit.stroke(face, Style.ink)
+	gradient(face, 90, { Style.hex(0xF1ECFF), Style.hex(0xDCD2FF) })
+	local title = Kit.text(face, "Title", "Display Slots", 24, Style.display())
+	outlined(title, 3)
+	local hint = Kit.text(
+		face,
+		"Hint",
+		"More slots, more earning figures",
+		14,
+		Style.body(Enum.FontWeight.ExtraBold),
+		Style.muted
+	)
+	hint.TextXAlignment = Enum.TextXAlignment.Right
+	type Tile = {
+		slot: number,
+		key: string?,
+		root: Frame,
+		shadow: Frame,
+		face: Frame,
+		picture: Art,
+		chip: Badge.Badge,
+		action: Button.Button,
+		done: Stamp,
+		note: TextLabel,
+	}
+	local made: { Tile } = {}
+	local products = { Catalog.coinSlot }
+	for _, key in keys do
+		table.insert(products, Catalog.products[key])
+	end
+	for index, product in products do
+		local slot = 3 + index
+		local coin = product == Catalog.coinSlot
+		local key = if coin then nil else product.key
+		local tile = Kit.frame(face, "Slot" .. slot)
+		local tileShadow = Kit.frame(tile, "Shadow", Style.ink)
+		Kit.corner(tileShadow, 18)
+		local tileFace = Kit.frame(tile, "Face", Style.white)
+		Kit.corner(tileFace, 18)
+		Kit.stroke(tileFace, Style.ink)
+		gradient(tileFace, 90, { product.top, Style.white, Style.white })
+		local chip = Badge.create(tileFace, "Currency", if coin then "COINS" else "ROBUX PASS", {
+			fill = if coin then Style.gold else Style.hex(0x2CBF5E),
+			color = if coin then Style.ink else Style.white,
+			height = 22,
+			size = 12,
+			outline = Style.ink,
+			font = Style.display(),
+			icon = if coin then "Coin" else nil,
+		})
+		chip.root.AnchorPoint = Vector2.new(0.5, 0)
+		local action = Button.create(
+			tileFace,
+			"Action",
+			{
+				variant = if coin then "gold" else "mint",
+				text = "Unlock",
+				size = 16,
+				radius = 14,
+				drop = 3,
+				price = coin,
+			},
+			ctx.scope,
+			ctx.effects,
+			function()
+				if key then
+					open(key)
+				elseif ctx.canAct() then
+					ctx.send("Expand", nil, nil, nil)
+				end
+			end
+		)
+		action.button.AnchorPoint = Vector2.new(0.5, 0)
+		local done = stamp(tileFace, "UNLOCKED")
+		done.root.Name = "UnlockedStamp"
+		done.root.BackgroundColor3 = Style.mint
+		done.label.TextColor3 = Style.mintInk
+		local note =
+			Kit.text(tileFace, "Note", "", 12, Style.body(Enum.FontWeight.ExtraBold), Style.muted)
+		note.TextXAlignment = Enum.TextXAlignment.Center
+		note.TextWrapped = true
+		table.insert(made, {
+			slot = slot,
+			key = key,
+			root = tile,
+			shadow = tileShadow,
+			face = tileFace,
+			picture = art(tileFace, product),
+			chip = chip,
+			action = action,
+			done = done,
+			note = note,
+		})
+	end
+	return {
+		root = root,
+		refresh = function(input: Presentation.Input, snapshot: Types.Snapshot?)
+			for _, tile in made do
+				local unlocked = if snapshot then snapshot.unlocked else 0
+				local owned = snapshot ~= nil and unlocked >= tile.slot
+				tile.done.root.Visible = owned
+				tile.action.button.Visible = not owned
+				tile.root:SetAttribute("Unlocked", owned)
+				if owned then
+					tile.note.Text = "Yours to keep"
+				elseif not snapshot then
+					tile.action.set("Unlock", false)
+					tile.note.Text = "Loading…"
+				elseif unlocked < tile.slot - 1 then
+					tile.action.set(`Slot {tile.slot - 1} first`, false)
+					tile.note.Text = `Unlock Display slot {tile.slot - 1} first`
+				elseif tile.key then
+					local view = Presentation.view(input, tile.key)
+					local offer = Presentation.offer(input, tile.key)
+					tile.action.set(view.stamp, offer.buyAllowed == true and ctx.commerce ~= nil)
+					tile.note.Text = "Permanent · bought once"
+				else
+					local price = snapshot.expansionCost
+					local need = State.need(snapshot, price)
+					tile.action.setPrice(State.compact(price))
+					tile.action.set("Unlock", need == nil and ctx.canAct())
+					tile.note.Text = need or "Paid with Coins you earn"
+				end
+			end
+		end,
+		layout = function(width: number, phone: boolean): number
+			local pad = if phone then 10 else 14
+			local tileHeight = if phone then 172 else 198
+			local height = pad + 34 + tileHeight + pad + 8
+			root.Size = UDim2.fromOffset(width, height)
+			Kit.rect(shadow, 0, 6, width, height)
+			Kit.rect(face, 0, 0, width, height)
+			title.TextSize = if phone then 20 else 24
+			Kit.rect(title, pad + 4, pad, 200, 30)
+			Kit.rect(hint, pad + 200, pad, width - pad * 2 - 204, 30)
+			hint.Visible = width >= 460
+			local gap = if phone then 8 else 12
+			local tileWidth = (width - pad * 2 - gap * (#made - 1)) / #made
+			local artSize = if phone then 54 else 68
+			local buttonHeight = if phone then 44 else 48
+			for index, tile in made do
+				local x = pad + (index - 1) * (tileWidth + gap)
+				Kit.rect(tile.root, x, pad + 34, tileWidth, tileHeight)
+				Kit.rect(tile.shadow, 0, 4, tileWidth, tileHeight)
+				Kit.rect(tile.face, 0, 0, tileWidth, tileHeight)
+				tile.picture.size(artSize)
+				tile.picture.root.Position = UDim2.fromOffset(tileWidth / 2, 8 + artSize / 2)
+				tile.chip.root.Position = UDim2.new(0.5, 0, 0, 12 + artSize)
+				local buttonY = tileHeight - buttonHeight - 26
+				tile.action.button.Position = UDim2.new(0.5, 0, 0, buttonY)
+				tile.action.button.Size = UDim2.fromOffset(tileWidth - 16, buttonHeight)
+				tile.action.stack(tileWidth < 150)
+				Kit.rect(tile.done.root, 8, buttonY, tileWidth - 16, buttonHeight)
+				Kit.rect(tile.note, 6, tileHeight - 24, tileWidth - 12, 18)
 			end
 			return height
 		end,
@@ -953,7 +1233,7 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 		shadow: Frame,
 		face: Frame,
 		well: Frame,
-		icon: Frame,
+		icon: GuiObject,
 		label: TextLabel,
 	}
 	local tabs: { TabButton } = {}
@@ -971,9 +1251,26 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 		Kit.stroke(face, Style.ink)
 		gradient(face, 90, { info.top, info.bottom })
 		local well = Kit.frame(face, "Well", Style.white)
-		Kit.corner(well, 12)
-		Kit.stroke(well, Style.ink, Style.outlineSmall)
-		local icon = Icons.create(well, info.icon, info.tint, 28)
+		Kit.round(well)
+		local wellStroke = Kit.stroke(well, Style.ink, Style.outlineSmall)
+		-- Tab art carries its own white sticker border, so it needs no disc behind it.
+		local icon: GuiObject
+		if info.image then
+			well.BackgroundTransparency = 1
+			wellStroke.Enabled = false
+			local tabArt = Instance.new("ImageLabel")
+			tabArt.Name = "Icon"
+			tabArt.BackgroundTransparency = 1
+			tabArt.Image = "rbxassetid://" .. info.image
+			tabArt.ScaleType = Enum.ScaleType.Fit
+			tabArt.ZIndex = 2
+			tabArt.Parent = well
+			icon = tabArt
+		else
+			-- No art (My Perks): a bold white glyph on a disc in the tab's own colour.
+			well.BackgroundColor3 = info.bottom
+			icon = Icons.create(well, info.icon, Style.white, 28)
+		end
 		icon.AnchorPoint = Vector2.new(0.5, 0.5)
 		icon.Position = UDim2.fromScale(0.5, 0.5)
 		local label = Kit.text(face, "Label", info.name, 18, Style.display())
@@ -1015,7 +1312,7 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 	local function open(key: string)
 		if
 			ctx.commerce
-			and (key == "pouch" or key == "stack" or key == "sack" or key == "chest")
+			and (key == "pouch" or key == "stack" or key == "sack" or key == "chest" or key == "slot5" or key == "slot6")
 			and Presentation.offer(input, key).buyAllowed
 		then
 			ctx.commerce.purchase(key, nil)
@@ -1037,6 +1334,7 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 	local notice = Kit.frame(content, "OpeningSoon", Style.white)
 	Kit.corner(notice, 16)
 	Kit.stroke(notice, Style.ink, Style.outlineSmall)
+	gradient(notice, 0, { Style.white, Style.candyPinkLight })
 	local noticeIcon = Icons.create(notice, "Star", Style.candyPink, 22)
 	noticeIcon.Position = UDim2.fromOffset(12, 11)
 	local noticeText = Kit.text(
@@ -1049,6 +1347,7 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 	noticeText.Position = UDim2.fromOffset(42, 0)
 	noticeText.TextWrapped, noticeText.TextTruncate = true, Enum.TextTruncate.None
 	local heading = Kit.text(content, "SectionTitle", "", 22, Style.display())
+	outlined(heading, 2.5)
 	local footnote = Kit.text(
 		content,
 		"Footnote",
@@ -1075,7 +1374,14 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 	emptyText.Position = UDim2.fromOffset(0, 84)
 	emptyText.Size = UDim2.new(1, 0, 0, 44)
 
-	type TabContent = { hero: Card?, tiers: Tiers?, cards: { Card }, title: string }
+	type TabContent = {
+		hero: Card?,
+		slots: Slots?,
+		tiers: Tiers?,
+		cards: { Card },
+		title: string,
+	}
+	local gameplay: Types.Snapshot? = nil
 	local titles: { [string]: string } = {
 		featured = "Featured",
 		upgrades = "Helpers & Luck",
@@ -1092,6 +1398,9 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 			view.hero = hero(content, Catalog.products[key], ctx.scope, function()
 				open(key)
 			end)
+		end
+		if section.slots then
+			view.slots = slots(content, section.slots, ctx, open)
 		end
 		if section.tiers then
 			view.tiers = tiers(content, section.tiers, ctx.scope, open)
@@ -1110,6 +1419,7 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 					end
 				)
 			)
+			hover(view.cards[#view.cards].root, ctx.scope, ctx.effects)
 		end
 		views[info.id] = view
 	end
@@ -1140,16 +1450,18 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 			tab.label.Text = if icons then tab.info.short else tab.info.name
 			if icons then
 				Kit.rect(tab.well, (tabW - 28) / 2, 4, 28, 28)
-				tab.icon.Size = UDim2.fromOffset(20, 20)
+				local artSize = if tab.info.image then 34 else 18
+				tab.icon.Size = UDim2.fromOffset(artSize, artSize)
 				tab.label.TextSize = 11
 				tab.label.TextXAlignment = Enum.TextXAlignment.Center
 				Kit.rect(tab.label, 2, tabHeight - 18, tabW - 4, 14)
 			else
-				Kit.rect(tab.well, 8, (tabHeight - 40) / 2, 40, 40)
-				tab.icon.Size = UDim2.fromOffset(28, 28)
+				Kit.rect(tab.well, 10, (tabHeight - 40) / 2, 40, 40)
+				local artSize = if tab.info.image then 46 else 24
+				tab.icon.Size = UDim2.fromOffset(artSize, artSize)
 				tab.label.TextSize = 18
 				tab.label.TextXAlignment = Enum.TextXAlignment.Left
-				Kit.rect(tab.label, 56, 0, tabW - 62, tabHeight)
+				Kit.rect(tab.label, 62, 0, tabW - 68, tabHeight)
 			end
 		end
 		local contentWidth = width - tabWidth
@@ -1178,6 +1490,9 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 			if view.hero then
 				view.hero.root.Visible = visible
 			end
+			if view.slots then
+				view.slots.root.Visible = visible
+			end
 			if view.tiers then
 				view.tiers.root.Visible = visible
 			end
@@ -1193,6 +1508,10 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 				view.hero.layout(inner, heroHeight, phone)
 				y += heroHeight + 6 + 16
 			end
+		end
+		if view.slots then
+			view.slots.root.Position = UDim2.fromOffset(pad, y)
+			y += view.slots.layout(inner, phone) + 6 + 16
 		end
 		if view.tiers then
 			view.tiers.root.Position = UDim2.fromOffset(pad, y)
@@ -1286,6 +1605,7 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 			end
 			for _, made in cards do
 				made.footer.label.Text = Presentation.view(input, made.key).stamp
+				live(made.footer, Presentation.offer(input, made.key).buyAllowed == true)
 				made.footer.label.TextScaled, made.footer.label.TextWrapped = true, true
 				made.name.Text = Catalog.products[made.key].name
 					.. (if input.longLabels then " · Collector presentation preview" else "")
@@ -1294,6 +1614,9 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 			end
 			if view.tiers then
 				view.tiers.refresh(input)
+			end
+			if view.slots then
+				view.slots.refresh(input, gameplay)
 			end
 		end
 		sheetView.refresh()
@@ -1335,6 +1658,11 @@ function Store.create(parent: Instance, ctx: Context.Context): PresentationScree
 		end,
 		update = function(snapshot: Types.Snapshot)
 			shell.update(snapshot)
+			gameplay = snapshot
+			local view = views.upgrades
+			if visible and view and view.slots then
+				view.slots.refresh(input, snapshot)
+			end
 		end,
 		layout = function(nextWidth: number, nextHeight: number, nextPhone: boolean)
 			width, height = shell.layout(nextWidth, nextHeight, nextPhone)

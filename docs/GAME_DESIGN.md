@@ -23,7 +23,8 @@ for current tuning, probability-budget handling and simultaneous-guarantee prior
 
 Duplicate copies are permanently retained and automatically enhance their figure's income with
 rarity-scaled diminishing returns. Each figure ID can earn in only one Display slot. Display starts
-with three slots; slot 4 costs 1,000,000 Coins. Existing slots 5–6 gamepass handling is unchanged.
+with three slots and expands sequentially to six: slot 4 for 1,000,000 Coins, slots 5 and 6 by
+permanent Robux gamepass (legacy Coin-bought slots 5 and 6 are kept).
 Three distinct displayed figures from one collection grant +10% total income once. Displayed figures
 keep earning offline at half rate for up to 6 hours, claimed from a welcome-back popup. No visitor payouts. Figures bank income until their owner steps on its corresponding plate or clicks/taps that figure;
 removal preserves the bank, while replacement automatically attempts to collect the outgoing
