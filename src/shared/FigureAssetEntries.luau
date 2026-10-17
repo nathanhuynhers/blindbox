@@ -262,7 +262,7 @@ return {
 		root = "MoonRabbit",
 		face = "MoonRabbit_Eyes",
 		parts = 3,
-		size = Vector3.new(2.4002296924591064, 3.25, 1.8328030109405518),
+		size = Vector3.new(2.441381812095642, 3.25, 1.8285940289497375),
 		glass = {},
 	},
 	["moon.rat"] = {

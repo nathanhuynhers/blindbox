@@ -44,6 +44,10 @@ Snake 121455625651964, Goat 103139641039054, Dog 84568453281368). To restore the
 from `3511016~1`.
 **Rolled back 2026-10-16:** after review the user preferred the second-pass versions, so the six figures are
 back on the IDs above. The face-aligned uploads stay unreferenced.
+After the final side-by-side the user kept the face-aligned **Rabbit** (125361255849220). The second-pass **Dog** had a
+black smear from the nose across the muzzle and behind the head; batch
+[tripo_batch_dogfix.json](tripo_batch_dogfix.json) (`moonrace-dogfix-001`) refills those texels from the surrounding fur
+and muzzle cream, keeping the sculpted nose, eyes and mouth, with geometry unchanged (123242742511292).
 
 Thirteen original Chinese-zodiac designer toys reconstructed from the approved character sheets in each
 figure's `reference/` folder (originals kept in `assets/incoming/moonrace_<figure>_sheet.png`). Catalog
@@ -54,14 +58,14 @@ collection `moon`, rarities per the brief. The Cat is the lost thirteenth sign a
 | Rat | `moon.rat` | Common | 2 | 19,932 | 3.41 × 1.96 × 3.12 | Body (Tripo, painted) | 90445507761070 |
 | Ox | `moon.ox` | Common | 3 | 18,870 | 3.11 × 2.97 × 3.26 | Body (Tripo, painted v2) | 77804658314112 |
 | Tiger | `moon.tiger` | Legendary | 3 | 19,830 | 3.65 × 3.19 × 3.02 | Body (Tripo, painted v2) | 128822692503820 |
-| Rabbit | `moon.rabbit` | Common | 3 | 19,058 | 2.40 × 1.83 × 3.25 | Body (Tripo, painted v2) | 79893095696957 |
+| Rabbit | `moon.rabbit` | Common | 3 | 19,058 | 2.40 × 1.83 × 3.25 | Body (Tripo, painted v3) | 125361255849220 |
 | Dragon | `moon.dragon` | Legendary | 2 | 19,126 | 3.56 × 2.87 × 3.34 | Body (Tripo, painted) | 123652325469820 |
 | Snake | `moon.snake` | Uncommon | 2 | 19,720 | 2.23 × 1.92 × 2.65 | Body (Tripo, painted) | 121455625651964 |
 | Horse | `moon.horse` | Uncommon | 2 | 19,384 | 1.81 × 3.59 × 2.93 | Body (Tripo, painted) | 137181243756586 |
 | Goat | `moon.goat` | Common | 2 | 19,036 | 2.89 × 2.24 × 2.71 | Body (Tripo, painted) | 103139641039054 |
 | Monkey | `moon.monkey` | Uncommon | 2 | 19,370 | 2.47 × 2.71 × 2.88 | Body (Tripo, painted) | 138779592435562 |
 | Rooster | `moon.rooster` | Uncommon | 3 | 19,722 | 2.26 × 2.54 × 2.96 | Body (Tripo, painted v2) | 83426922772510 |
-| Dog | `moon.dog` | Rare | 3 | 19,118 | 2.42 × 3.73 × 2.88 | Body (Tripo, painted v2) | 84568453281368 |
+| Dog | `moon.dog` | Rare | 3 | 19,118 | 2.42 × 3.73 × 2.88 | Body (Tripo, painted v2, muzzle cleaned) | 123242742511292 |
 | Pig | `moon.pig` | Rare | 2 | 19,458 | 2.64 × 2.21 × 2.66 | Body (Tripo, painted) | 117858047560206 |
 | Cat | `moon.cat` | Mythical | 9 | 117,592 | 3.52 × 3.92 × 3.40 | Eyes 17,593 | 90559133725577 |
 

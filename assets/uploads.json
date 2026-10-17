@@ -819,13 +819,13 @@
     "source": "assets/figures/external/moonrace/cat/9037115dc3ca9d3c194874d0c4016ff99ef3614ef6f216b5d7daf30451c39261/model/cat_roblox.glb"
   },
   "Models.Moonrace.MoonDog": {
-    "assetId": "84568453281368",
+    "assetId": "123242742511292",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "3266a253eb823c8ca9f958a2c92f24b0f25f6232790525d2fb4b7c5526fb47ec",
-    "source": "assets/figures/external/moonrace/dog/d5ea51166f603ff5dac68cf69c60352d5aa5cb1831704e69d756dc7eafcef7b3/model/dog_roblox.glb"
+    "sha256": "778f8f61fe9d8e9e171b3c1700904918c2c42e678ac2d352016bd2f50ec51130",
+    "source": "assets/figures/external/moonrace/dog/4e2702df1b2e9a5d0d21cfb42b17ad814f30e0ae7d4b39cdefdb4ee6ddb525c7/model/dog_roblox.glb"
   },
   "Models.Moonrace.MoonDragon": {
     "assetId": "123652325469820",
@@ -882,13 +882,13 @@
     "source": "assets/figures/external/moonrace/pig/46f374d4ab62e0b1308497314e2c278fe7da60f0cd58dd8d01affc984f8d4d2d/model/pig_roblox.glb"
   },
   "Models.Moonrace.MoonRabbit": {
-    "assetId": "79893095696957",
+    "assetId": "125361255849220",
     "assetType": "Model",
     "creator": {
       "userId": "103346374"
     },
-    "sha256": "a8a55622a5f722e09a03e85a2b124e473adf8f3365d087e43adc8021882dde20",
-    "source": "assets/figures/external/moonrace/rabbit/125df77f3bdfef7bce2cc930d17cd9fdb9c61f4f393748d1141052646a94c9be/model/rabbit_roblox.glb"
+    "sha256": "a39b9a63a5346b5203ca403e03992ef22faed0799c7e76e62c2f1ebd0fdc73f9",
+    "source": "assets/figures/external/moonrace/rabbit/7434d9d2575861d322fcddd496b39e79043540b9caa5f161ac8dc4acae4d7633/model/rabbit_roblox.glb"
   },
   "Models.Moonrace.MoonRat": {
     "assetId": "90445507761070",

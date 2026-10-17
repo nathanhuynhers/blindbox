@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "batch_id": "moonrace-dogfix-001",
+  "figures": [
+    {
+      "source": "dog.glb",
+      "collection_id": "moon",
+      "figure_id": "moon.dog",
+      "rarity": "Rare",
+      "collection_slug": "moonrace",
+      "figure_slug": "dog",
+      "root": "MoonDog",
+      "alias": "dog",
+      "asset_key": "Models.Moonrace.MoonDog",
+      "height_studs": 2.88,
+      "protected_objects": [],
+      "max_parts": 64,
+      "texture_limit": 4096,
+      "resize_textures": false,
+      "optimization": {},
+      "rotation_degrees": [
+        0,
+        0,
+        5.89
+      ],
+      "eyes": {
+        "object": "Body",
+        "region": [
+          [
+            0.4231,
+            0.0,
+            0.5564
+          ],
+          [
+            0.5831,
+            0.119,
+            0.6964
+          ]
+        ]
+      }
+    }
+  ]
+}
