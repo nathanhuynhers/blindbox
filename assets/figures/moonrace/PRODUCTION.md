@@ -38,6 +38,10 @@ sculpt (Ox nostrils, Snake/Goat eyes, a black smear on the corgi). `reference_pa
 a second frontal camera over the head, fitted to hand-picked landmarks (affine + regularized RBF), with the near
 half of the face mirrored onto the far half. Dragon was repainted too but its fill part fails the lossless
 reimport (one folded vertex's normal comes back zero), so the live Dragon is unchanged for now.
+Rollback: the second-pass assets still exist (Ox 77804658314112, Tiger 128822692503820, Rabbit 79893095696957,
+Snake 121455625651964, Goat 103139641039054, Dog 84568453281368). To restore them, check out
+`assets/manifest.json`, `assets/uploads.json`, `src/shared/AssetIds.luau` and `src/shared/FigureAssetEntries.luau`
+from `3511016~1`.
 
 Thirteen original Chinese-zodiac designer toys reconstructed from the approved character sheets in each
 figure's `reference/` folder (originals kept in `assets/incoming/moonrace_<figure>_sheet.png`). Catalog
