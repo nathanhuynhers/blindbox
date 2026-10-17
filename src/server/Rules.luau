@@ -478,6 +478,28 @@ end
 function Rules.expansionCost(state: Types.State): number
 	return Economy.expansionCosts[state.display.unlocked + 1] or 0
 end
+-- A slot pass is sold only for the next locked slot: the 6th needs the 5th unlocked first.
+function Rules.slotPassEligible(state: Types.State, key: string): boolean
+	return DisplayConfig.unlockPasses[state.display.unlocked + 1] == key
+end
+-- Owned slot passes unlock their slot once the slot before it is unlocked. This only ever
+-- raises the saved count, so legacy slots stay and a pass bought before slot 4 waits for it.
+function Rules.applySlotPasses(state: Types.State, owns: (string) -> boolean): boolean
+	local changed = false
+	while true do
+		local key = DisplayConfig.unlockPasses[state.display.unlocked + 1]
+		if not key or not owns(key) then
+			break
+		end
+		state.display.unlocked += 1
+		state.display.slots[state.display.unlocked] = ""
+		changed = true
+	end
+	if changed then
+		state.revision += 1
+	end
+	return changed
+end
 function Rules.shelfPrice(state: Types.State): number
 	local units = #state.shelves.units
 	if units >= ShelfConfig.maxShelfUnits then
@@ -921,8 +943,11 @@ function Rules.mutate(
 		return true, "Settings saved.", nil
 	elseif action == "Expand" then
 		local cost = Rules.expansionCost(state)
-		if cost == 0 or state.display.unlocked >= DisplayConfig.maxSlots then
+		if state.display.unlocked >= DisplayConfig.maxSlots then
 			return false, "All Display slots are unlocked.", nil
+		end
+		if cost == 0 then
+			return false, "The next Display slot is unlocked with a gamepass.", nil
 		end
 		if Lineage.spendable(state) < cost then
 			return false, string.format("You need %d Coins for the next slot.", cost), nil

@@ -100,8 +100,12 @@ effectiveRate = baseRate * multiplier
 | Legendary | +50% | +150% | 2 |
 | Mythical | +100% | +300% | 2 |
 
-Only one instance of each figure ID may earn in Display. Three slots start unlocked; slots 4, 5
-and 6 cost 40,000, 400,000 and 4,000,000 Coins, respectively, purchased sequentially. Inventory-only
+Only one instance of each figure ID may earn in Display. Three slots start unlocked; slot 4 costs
+1,000,000 Coins, and slots 5 and 6 are permanent Robux gamepasses (`display_5`, `display_6`),
+unlocked sequentially: a pass applies only once the slot before it is unlocked, and the server
+sells a slot pass only for the next locked slot. Saved slot counts are never lowered, so players
+who bought slots 5 or 6 with Coins under the earlier 40,000 / 400,000 / 4,000,000 prices keep them
+without the passes. Pass-unlocked slots are paid lineage (not counted in `earnedSlots`). Inventory-only
 figures earn zero. Shelves remain cosmetic; placements across all persistent Shelf Units are
 limited to owned copies, independently of Display placement. See
 [cosmetic eligibility](PLAYER_PLOTS_AND_SHELVES.md#cosmetic-eligibility-and-permissions).

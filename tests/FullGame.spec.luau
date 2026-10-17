@@ -16,12 +16,10 @@ local function request(action: string, revision: number, choice: string?, figure
 end
 local state=Rules.new(0)
 check(not Rules.mutate(state,request("Expand",0),0,10),"expansion affordability")
-state.coins=4440000
-for slot=4,6 do
- check(Rules.mutate(state,request("Expand",state.revision),0,10),"sequential slot purchase")
- check(state.display.unlocked==slot and #state.display.slots==slot,"dense unlocked slots")
-end
-check(state.coins==0 and not Rules.mutate(state,request("Expand",state.revision),0,10),"six-slot bound")
+state.coins=Economy.expansionCosts[4]
+check(Rules.mutate(state,request("Expand",state.revision),0,10),"slot 4 coin purchase")
+check(state.display.unlocked==4 and #state.display.slots==4,"dense unlocked slots")
+check(state.coins==0 and not Rules.mutate(state,request("Expand",state.revision),0,10),"slot 5 is a gamepass")
 local restored=Rules.new(0)
 restored.owned["grove.pebble"]=2000
 restored.discovered["grove.pebble"]=true
@@ -126,7 +124,7 @@ database["broken"]={foo="bar"}
 check(Persistence.load(update,"broken","server-a",200,0)==nil,"corrupt stored record blocked")
 check((database["broken"] :: {foo:string}).foo=="bar","corrupt data preserved")
 local active=Transactions.new(0)
-active.state.coins=100000
+active.state.coins=Economy.expansionCosts[4]+60000
 local expansion=request("Expand",0)
 local first=Transactions.process(active,expansion,0,true,0,50)
 local repeated=Transactions.process(active,expansion,1,true,0,50)

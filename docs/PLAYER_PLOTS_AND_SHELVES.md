@@ -215,8 +215,8 @@ individual/total rates. The entrance remains at negative Z, facing toward the ba
 Each Display position reserves one owned inventory copy. Placement, replacement and removal stay
 server-authoritative. The sum of effective figure rates receives one 10% bonus when at least three
 distinct displayed figures belong to the same collection. Inventory-only and Shelf figures
-contribute zero. Slots 4, 5 and 6 cost 40,000, 400,000 and 4,000,000 Coins respectively and unlock
-sequentially. See [economy](ECONOMY.md#permanent-duplicates-and-display-income) for the rate and
+contribute zero. Slot 4 costs 1,000,000 Coins; slots 5 and 6 are permanent Robux gamepasses; all
+unlock sequentially and saved slots are never relocked. See [economy](ECONOMY.md#permanent-duplicates-and-display-income) for the rate and
 purchase rules.
 
 Display placement, replacement and removal are authorized while the living owner is anywhere

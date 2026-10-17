@@ -1,9 +1,10 @@
 --!strict
--- One Display slot card: filled (figure, name, rate), empty (+ Choose / Choosing…),
--- slot 4 unlock price, or "Coming later" for slots with no unlock yet.
+-- One Display slot card: filled (figure, name, rate), empty (+ Choose / Choosing…), the
+-- slot 4 Coin unlock price, or a Robux button for the next pass slot (opens the Store).
 local TweenService = game:GetService("TweenService")
 local Catalog = require(game:GetService("ReplicatedStorage").Shared.Catalog)
 local Types = require(game:GetService("ReplicatedStorage").Shared.Types)
+local DisplayConfig = require(game:GetService("ReplicatedStorage").Shared.DisplayConfig)
 local Style = require(script.Parent.UIStyle)
 local Kit = require(script.Parent.UIKit)
 local Icons = require(script.Parent.UIIcons)
@@ -114,6 +115,18 @@ function Slot.create(
 		end
 	)
 	unlock.button.AnchorPoint = Vector2.new(0.5, 0)
+	-- Slots 5 and 6 are Robux passes: this opens the Store's Display Slots panel.
+	local pass = Button.create(
+		button,
+		"UnlockPass",
+		{ variant = "mint", text = "Robux Store", size = 15, radius = 14, drop = 3 },
+		ctx.scope,
+		ctx.effects,
+		function()
+			ctx.navigate("Store", { tab = "upgrades" })
+		end
+	)
+	pass.button.AnchorPoint = Vector2.new(0.5, 0)
 	-- Narrow cards move the shortfall out of the button onto its own wrapped line.
 	local short =
 		Kit.text(button, "Shortfall", "", 13, Style.body(Enum.FontWeight.ExtraBold), Style.muted)
@@ -214,6 +227,8 @@ function Slot.create(
 		)
 		unlock.button.Position = UDim2.new(0.5, 0, 0, buttonY)
 		unlock.button.Size = UDim2.fromOffset(math.min(width - 16, 140), buttonHeight)
+		pass.button.Position = unlock.button.Position
+		pass.button.Size = unlock.button.Size
 		local shortY = buttonY + buttonHeight + 6
 		Kit.rect(short, 6, shortY, width - 12, math.max(16, height - shortY - 4))
 	end
@@ -252,6 +267,9 @@ function Slot.create(
 			local price = if locked then State.unlockPrice(snapshot, index) else nil
 			-- Only the next locked slot with an unlock method can be bought.
 			local buyable = price ~= nil and index == snapshot.unlocked + 1
+			local passable = locked
+				and index == snapshot.unlocked + 1
+				and DisplayConfig.unlockMethods[index] == "Pass"
 			local filled = not locked and id ~= ""
 			local targeted = mode.target == index
 			local landing = mode.landing
@@ -293,13 +311,14 @@ function Slot.create(
 			plus.Visible = not locked and not filled
 			lock.Visible = locked
 			unlock.button.Visible = buyable
+			pass.button.Visible = passable
 			short.Visible = false
 			swap.Visible = placing
 			title.TextColor3 = Style.violetDark
 			hint.TextColor3 = Style.muted
 			if locked then
 				title.Visible = false
-				hint.Visible = not buyable
+				hint.Visible = not buyable and not passable
 				hint.Text = State.lockedText(snapshot, index)
 				if buyable and price then
 					unlock.setPrice(State.compact(price))
@@ -330,6 +349,7 @@ function Slot.create(
 					.. (if locked
 						then (if buyable
 							then "locked, unlock available"
+							elseif passable then "locked, Robux pass in the Store"
 							else string.lower(State.lockedText(snapshot, index)))
 						elseif figure then figure.name
 						else "empty")

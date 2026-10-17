@@ -829,6 +829,18 @@ check(
 		and not within(store, "Footnote").Visible,
 	"Upgrades shows the Coin Multiplier tiers and helpers"
 )
+do
+	local slotsPanel = within(store, "DisplaySlots")
+	local function action(slot: number): Instance
+		return within(within(slotsPanel, "Slot" .. slot), "Action")
+	end
+	check(slotsPanel.Visible and within(slotsPanel, "Slot4").Visible, "Upgrades leads with the Display Slots panel")
+	check(within(within(slotsPanel, "Slot4"), "Currency"):FindFirstChild("Text", true).Text == "COINS", "slot 4 is marked Coins")
+	check(within(within(slotsPanel, "Slot5"), "Currency"):FindFirstChild("Text", true).Text == "ROBUX PASS", "slot 5 is marked Robux")
+	check(action(5):GetAttribute("Enabled") == false and within(action(5), "Label").Text == "Slot 4 first", "slot 5 locked until slot 4")
+	check(action(6):GetAttribute("Enabled") == false and within(action(6), "Label").Text == "Slot 5 first", "slot 6 locked until slot 5")
+	check(within(action(4), "Price").Text == "1M", "slot 4 shows its 1M Coin price")
+end
 Engine.click(within(store, "StoreTab_perks"))
 check(within(store, "PerksEmpty").Visible and not within(store, "CoinTiers").Visible, "My Perks starts empty")
 -- Nothing is for sale yet: every card and tier says Coming soon (Double & Claim lives elsewhere).

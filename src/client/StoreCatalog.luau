@@ -3,6 +3,7 @@
 -- Benefits follow the user-approved D1 values in docs/MONETIZATION.md. This is display text
 -- only, never purchase authority: live promises, prices and availability come from P02.
 local Style = require(script.Parent.UIStyle)
+local AssetIds = require(game:GetService("ReplicatedStorage").Shared.AssetIds)
 local Catalog = {}
 
 export type Tab = "featured" | "upgrades" | "boosts" | "coins" | "perks"
@@ -10,7 +11,8 @@ export type TabInfo = {
 	id: Tab,
 	name: string,
 	short: string, -- icon-rail label (phone / narrow desktop)
-	icon: string, -- UIIcons name
+	icon: string, -- UIIcons name (fallback)
+	image: string?, -- uploaded tab icon (assets/ui/store-tabs), image asset digits
 	tint: Color3,
 	top: Color3,
 	bottom: Color3,
@@ -22,7 +24,11 @@ export type Product = {
 	benefit: string,
 	gets: { string },
 	rules: { string },
-	-- Card art until the Store illustration set exists: a UIIcons name, else a stroked glyph.
+	-- Card art: the product's uploaded Roblox icon (image asset digits), else a UIIcons name,
+	-- else a stroked glyph.
+	image: string?,
+	badge: string?, -- small number disc on the image (the slot passes)
+	tile: boolean?, -- image is a full-bleed square tile: drawn as a rounded, outlined tile
 	icon: string?,
 	tint: Color3?, -- icon colour (default ink)
 	glyph: string?,
@@ -41,6 +47,7 @@ Catalog.tabs = table.freeze({
 		short = "VIP",
 		tint = Style.violet,
 		icon = "Gift",
+		image = AssetIds["Store.TabFeatured"],
 		top = hex(0xFFD3E6),
 		bottom = Style.candyPink,
 	}),
@@ -50,6 +57,7 @@ Catalog.tabs = table.freeze({
 		short = "Upgrade",
 		tint = Style.violet,
 		icon = "Star",
+		image = AssetIds["Store.TabUpgrades"],
 		top = hex(0xDCD2FF),
 		bottom = Style.candyViolet,
 	}),
@@ -59,6 +67,7 @@ Catalog.tabs = table.freeze({
 		short = "Boosts",
 		tint = Style.ink,
 		icon = "Clock",
+		image = AssetIds["Store.TabBoosts"],
 		top = hex(0xFFE0BC),
 		bottom = hex(0xFFA64D),
 	}),
@@ -68,6 +77,7 @@ Catalog.tabs = table.freeze({
 		short = "Coins",
 		tint = Style.ink,
 		icon = "Coin",
+		image = AssetIds["Store.TabCoins"],
 		top = hex(0xFFF0B8),
 		bottom = Style.gold,
 	}),
@@ -77,6 +87,7 @@ Catalog.tabs = table.freeze({
 		short = "Perks",
 		tint = Style.mintText,
 		icon = "Check",
+		image = AssetIds["Store.TabPerks"],
 		top = hex(0xC8F3DC),
 		bottom = hex(0x4FCB8E),
 	}),
@@ -99,7 +110,65 @@ Catalog.luckExamples = table.freeze({
 	"Concepts / Echo / Stars — Common, Uncommon, Rare, Legendary, Mythical:\nBase: 60%, 25%, 13.9%, 1%, 0.1%\nLuck ×2: 52.173913%, 21.739130%, 24.173913%, 1.739130%, 0.173913%\nLuck ×4: 41.379310%, 17.241379%, 38.344828%, 2.758621%, 0.275862%",
 })
 
+-- Product art: the original square pass / developer-product tiles (assets/ui/store-icons,
+-- uploaded as plain images). Roblox crops pass icons to circles, which clipped their text,
+-- so the Store never uses the platform icon IDs. The slot passes reuse the Display navigation
+-- sticker (NavigationAssetIds) with a number badge.
+local display = "75697262694573"
+Catalog.images = table.freeze({
+	starter = AssetIds["Store.IconStarter"],
+	vip = AssetIds["Store.IconVip"],
+	coins2 = AssetIds["Store.IconCoins2"],
+	coins4 = AssetIds["Store.IconCoins4"],
+	coins8 = AssetIds["Store.IconCoins8"],
+	autoOpen = AssetIds["Store.IconAutoOpen"],
+	autoCollect = AssetIds["Store.IconAutoCollect"],
+	speed = AssetIds["Store.IconSpeed"],
+	luck = AssetIds["Store.IconLuck"],
+	doubleClaim = AssetIds["Store.IconDoubleClaim"],
+	boostCoins = AssetIds["Store.IconBoostCoins"],
+	boostLuck2 = AssetIds["Store.IconBoostLuck2"],
+	boostLuck4 = AssetIds["Store.IconBoostLuck4"],
+	boostCombo = AssetIds["Store.IconBoostCombo"],
+	pouch = AssetIds["Store.IconPouch"],
+	stack = AssetIds["Store.IconStack"],
+	sack = AssetIds["Store.IconSack"],
+	chest = AssetIds["Store.IconChest"],
+	slot5 = display,
+	slot6 = display,
+}) :: { [string]: string }
+
+-- Each tile's own background colour (median edge pixel, sampled from the source PNG): the card
+-- header is tinted from it so tile and card read as one piece.
+Catalog.tileColors = table.freeze({
+	starter = hex(0xFEBF42),
+	vip = hex(0x733BE5),
+	coins2 = hex(0x62E9A4),
+	coins4 = hex(0x15C3FE),
+	coins8 = hex(0xC52BF9),
+	autoOpen = hex(0x15A0FE),
+	autoCollect = hex(0x1CD7CC),
+	speed = hex(0xFEB21C),
+	luck = hex(0x2BEFE3),
+	doubleClaim = hex(0x00ADFB),
+	boostCoins = hex(0x15C9FE),
+	boostLuck2 = hex(0x1CDDCE),
+	boostLuck4 = hex(0xA76FE0),
+	boostCombo = hex(0x6BE7CE),
+	pouch = hex(0x52E9AA),
+	stack = hex(0x15CDFE),
+	sack = hex(0xD435FD),
+	chest = hex(0xFEB822),
+}) :: { [string]: Color3 }
+
 local function product(fields: Product): Product
+	fields.image = fields.image or Catalog.images[fields.key]
+	local tile = Catalog.tileColors[fields.key]
+	if tile then
+		fields.tile = true
+		fields.top = tile:Lerp(Style.white, 0.6)
+		fields.bottom = tile:Lerp(Style.white, 0.15)
+	end
 	return table.freeze(fields)
 end
 
@@ -222,6 +291,34 @@ local list: { Product } = {
 		bottom = hex(0x9AD6FF),
 	}),
 	product({
+		key = "slot5",
+		name = "5th Display",
+		kind = "Permanent pass",
+		benefit = "Unlocks Display slot 5 forever",
+		gets = { "A 5th Display slot for another earning figure", "Yours to keep on every server" },
+		rules = {
+			"Unlock Display slot 4 (1M Coins) first",
+			"Already unlocked slot 5? It stays yours; no need to buy",
+		},
+		badge = "5",
+		top = hex(0xDCD2FF),
+		bottom = Style.candyViolet,
+	}),
+	product({
+		key = "slot6",
+		name = "6th Display",
+		kind = "Permanent pass",
+		benefit = "Unlocks Display slot 6 forever",
+		gets = { "A 6th Display slot for another earning figure", "Yours to keep on every server" },
+		rules = {
+			"Unlock Display slot 5 first",
+			"Already unlocked slot 6? It stays yours; no need to buy",
+		},
+		badge = "6",
+		top = hex(0xFFD3E6),
+		bottom = Style.candyPink,
+	}),
+	product({
 		key = "luck",
 		name = "Lucky Charm",
 		kind = "Permanent pass",
@@ -341,6 +438,20 @@ local list: { Product } = {
 		bottom = Style.candyPink,
 	}),
 }
+-- Display slot 4 is bought with Coins in-game, not a Robux product; the Store's Display Slots
+-- panel shows it beside the slot passes so the two currencies read apart.
+Catalog.coinSlot = product({
+	key = "slot4",
+	name = "4th Display",
+	kind = "Coin unlock",
+	benefit = "Unlocks Display slot 4 for Coins",
+	gets = {},
+	rules = {},
+	image = display,
+	badge = "4",
+	top = hex(0xFFF0B8),
+	bottom = Style.gold,
+})
 local byKey: { [string]: Product } = {}
 for _, entry in list do
 	assert(byKey[entry.key] == nil, "Duplicate Store product " .. entry.key)
@@ -350,10 +461,17 @@ Catalog.products = table.freeze(byKey)
 
 -- What each tab shows, in order. "tiers" is the Coin Multiplier panel and "hero" the wide
 -- Starter banner; the rest are ordinary cards. A product may appear in more than one tab.
-export type Section = { hero: string?, tiers: { string }?, cards: { string } }
+export type Section = {
+	hero: string?,
+	tiers: { string }?,
+	-- Display Slots panel: the coin slot 4 plus these Robux slot passes.
+	slots: { string }?,
+	cards: { string },
+}
 Catalog.sections = table.freeze({
 	featured = table.freeze({ hero = "starter", cards = { "vip", "autoCollect", "boostCoins" } }),
 	upgrades = table.freeze({
+		slots = { "slot5", "slot6" },
 		tiers = { "coins2", "coins4", "coins8" },
 		cards = { "autoOpen", "autoCollect", "speed", "luck", "doubleClaim" },
 	}),

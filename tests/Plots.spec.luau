@@ -107,7 +107,7 @@ local groundTop = Layout.groundTop
 local function descendantParts(parent)
 	local found = {}
 	for _, node in parent:GetDescendants() do
-		if node.ClassName == "Part" or node.ClassName == "SpawnLocation" then
+		if node.ClassName == "Part" or node.ClassName == "SpawnLocation" or node.ClassName == "WedgePart" then
 			table.insert(found, node)
 		end
 	end
@@ -963,7 +963,8 @@ check(
 	"Shop returns to its day look at dawn"
 )
 end
--- Upgrade Station: front corner on the Shelves side, clear of every other plot fixture.
+-- Upgrade Station: on the Shop's side near the entrance, facing the plot centre, clear of every
+-- other plot fixture.
 do
 	local function extents(part)
 		local half = part.Size / 2
@@ -986,7 +987,7 @@ do
 	end
 	local station = plot.station
 	local stationParts = descendantParts(station.model)
-	check(#stationParts == 5, "five-part Upgrade Station (base, body, marquee, topper, prompt anchor)")
+	check(#stationParts == 13, "13-part Upgrade Station kiosk (plinth, trim, cabinet, counter, console, screen, pillars, neon, marquee, topper, prompt anchor)")
 	for _, piece in stationParts do
 		check(piece.Anchored and piece.CanTouch == false, "Upgrade Station parts are anchored and never touch-enabled: " .. piece.Name)
 	end
@@ -999,7 +1000,7 @@ do
 	local minX, maxX, minZ, maxZ = box(solid)
 	local walkable = Config.width / 2 - PlotFixture.style.floorInset
 	check(
-		maxX <= walkable and minZ >= -walkable and minX > Config.pathWidth / 2 + 2,
+		minX >= -walkable and minZ >= -walkable and maxX < -(Config.pathWidth / 2 + 2),
 		string.format("Upgrade Station stays on the floor, off the arch path: X %.1f..%.1f, Z %.1f..%.1f", minX, maxX, minZ, maxZ)
 	)
 	check(minZ > PlotFixture.arch.z + 2, "Upgrade Station sits behind the arch line")
@@ -1025,10 +1026,24 @@ do
 		end
 	end
 	check(compared >= 40, "clearance compared the plot's standing fixtures: " .. compared)
-	local facing = plot.transform:VectorToObjectSpace(UpgradeStation.frame(plot.transform).LookVector)
-	check(facing.X < -0.8 and facing.Z < -0.4, "Upgrade Station faces the plot centre and the arch")
+	check(maxX < 0, "Upgrade Station stands on the Shop's (-X) side of the plot")
+	local shopMinZ = math.huge
+	for _, piece in descendantParts(plot.shop.model) do
+		shopMinZ = math.min(shopMinZ, localPosition(plot.transform, piece.Position).Z - extents(piece).Z)
+	end
+	check(maxZ < shopMinZ - 2 and shopMinZ - maxZ < 12, "Upgrade Station sits just in front of the Shop, not on it")
+	local position = UpgradeStation.position
+	local inward = Engine.Vector3.new(-position.X, 0, -position.Z).Unit
+	for index = 1, Config.maxPlots do
+		local transform = Geometry.transform(index)
+		local facing = transform:VectorToObjectSpace(UpgradeStation.frame(transform).LookVector)
+		check(facing.X * inward.X + facing.Z * inward.Z > 0.999 and math.abs(facing.Y) < 1e-6, "Upgrade Station faces its plot centre on plot " .. index)
+	end
 	local openAt = localPosition(plot.transform, station.parts.OpenStore.Position)
-	check(openAt.Y < 1 and openAt.X < minX + 1, "Upgrades prompt anchor sits low in front of the cabinet")
+	local ahead = (openAt.X - position.X) * inward.X + (openAt.Z - position.Z) * inward.Z
+	check(openAt.Y < 1 and ahead > 3.5, "Upgrades prompt anchor sits low in front of the kiosk, toward the plot centre")
+	local shopOpen = localPosition(plot.transform, plot.shop.parts.OpenShop.Position)
+	check((Engine.Vector3.new(openAt.X, 0, openAt.Z) - Engine.Vector3.new(shopOpen.X, 0, shopOpen.Z)).Magnitude > 12, "Shop and Upgrade prompts keep separate approach spots")
 	for _, node in station.model:GetDescendants() do
 		check(not node:IsA("Light"), "Upgrade Station adds no Light instances to the night-light budget")
 	end

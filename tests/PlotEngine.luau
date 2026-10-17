@@ -411,6 +411,11 @@ Engine.NumberRange = {
 		return { Min = a, Max = b or a }
 	end,
 }
+Engine.ColorSequence = {
+	new = function(a, b)
+		return { a, b or a }
+	end,
+}
 Engine.NumberSequence = {
 	new = function(a)
 		return { a }

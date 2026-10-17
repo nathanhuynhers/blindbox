@@ -7,6 +7,7 @@ export type Benefits = {
 	dailyCoins: number?,
 	cadenceSeconds: number?,
 	luckWeight: number?,
+	displaySlot: number?,
 }
 export type Product = {
 	key: string,
@@ -28,6 +29,8 @@ local benefits: { [string]: Benefits } = {
 	auto_open = table.freeze({ cadenceSeconds = 3 }),
 	auto_collect = table.freeze({ cadenceSeconds = 1 }),
 	luck = table.freeze({ luckWeight = 2 }),
+	display_5 = table.freeze({ displaySlot = 5 }),
+	display_6 = table.freeze({ displaySlot = 6 }),
 }
 local products: { Product } = {}
 local function add(
@@ -36,7 +39,7 @@ local function add(
 	permanent: boolean,
 	grant: Types.Grant?,
 	tier: number?,
-	platformId: number
+	platformId: number?
 )
 	local kind: Types.PlatformKind = if permanent then "Pass" else "DeveloperProduct"
 	table.insert(
@@ -86,6 +89,10 @@ add("luck_boost_2", 49, false, reward(0, "Luck2_30"), nil, 3718304296)
 add("luck_boost_4", 99, false, reward(0, "Luck4_30"), nil, 3718304365)
 add("combo_boost", 79, false, reward(0, "Combo2_30"), nil, 3718304403)
 add("offline_double", 49, false, nil, nil, 3718304498)
+-- Display slot passes "Unlock 5th Display" / "Unlock 6th Display", created by the owner and
+-- verified (name, price, on sale, creator 103346374) with GetProductInfoAsync on 2026-10-17.
+add("display_5", 149, true, nil, nil, 2039798932)
+add("display_6", 299, true, nil, nil, 2038047221)
 local Config = {
 	products = table.freeze(products),
 	-- D1 token promises only. Approved D2 activation/clock/stacking await P04 implementation.

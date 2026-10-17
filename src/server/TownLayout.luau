@@ -89,8 +89,9 @@ return table.freeze({
 	-- Six collection plates add twelve parts per active plot; world/light budgets are unchanged.
 	-- The plot Shop adds 19 kiosk parts and an 8-part Peeka stand-in: 180 measured with click
 	-- targets (was 153). The uploaded shopkeeper replacing the stand-in is mesh geometry, excluded
-	-- like figures; the Shop adds no lights. The Upgrade Station adds 5 (177 measured in the spec).
+	-- like figures; the Shop adds no lights. The Upgrade Station kiosk adds 13 parts (was 5), so
+	-- the ceiling rose 189 -> 197 with it: 185 measured without Display slot parts, 197 with.
 	-- Night lights: 53 static + per active plot one arch sign glow and one floor fill = 69 at
 	-- eight plots (was 61 of 64); 72 keeps three spare.
-	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 189, nightLights = 72 }),
+	budgets = table.freeze({ worldParts = 1100, plotRuntimeParts = 197, nightLights = 72 }),
 })
